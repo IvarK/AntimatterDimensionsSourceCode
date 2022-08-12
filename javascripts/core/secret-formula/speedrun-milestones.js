@@ -1,4 +1,4 @@
-import { GameDatabase } from "./game-database.js";
+import { GameDatabase } from "./game-database";
 
 GameDatabase.speedrunMilestones = [
   {
@@ -47,12 +47,12 @@ GameDatabase.speedrunMilestones = [
     name: "Break Infinity",
     description: "Break Infinity for the first time",
     checkRequirement: () => player.break,
-    checkEverokennt: GAME_EVENT.BREAK_INFINITY,
+    checkEvent: GAME_EVENT.BREAK_INFINITY,
   },
   {
     id: 7,
     key: "upgrade5e11IP",
-    name: "5e11 IP Upgrade",
+    get name() { return `${format(5e11)} IP Upgrade`; },
     description: () => `Purchase the ${formatPercents(0.5)} stronger Galaxies upgrade`,
     checkRequirement: () => true,
     // This is checked within BreakInfinityUpgrade.onPurchased
@@ -86,7 +86,7 @@ GameDatabase.speedrunMilestones = [
     key: "allEternityMilestones",
     name: "All Eternity Milestones",
     description: "Unlock all Eternity Milestones",
-    checkRequirement: () => EternityMilestones.all.every(m => m.isReached),
+    checkRequirement: () => EternityMilestone.all.every(m => m.isReached),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
   },
   {
@@ -194,12 +194,11 @@ GameDatabase.speedrunMilestones = [
     // Destabilization isn't a reality reset because it shortcuts gameLoop; this is checked in laitelaRealityTick
   },
   {
-    // TODO: At the time of implementing speedrun mode, full game completion is still unimplemented - update this entry
     id: 25,
     key: "completeFullGame",
     name: "Game Completed!",
     description: "Complete the entire game",
-    checkRequirement: () => true,
-    checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
+    checkRequirement: () => Achievement(188).isUnlocked,
+    checkEvent: GAME_EVENT.ACHIEVEMENT_UNLOCKED,
   },
 ];

@@ -1,12 +1,16 @@
 <script>
 import AutobuyerBox from "./AutobuyerBox";
+import AutobuyerDropdownEntry from "./AutobuyerDropdownEntry";
 import AutobuyerInput from "./AutobuyerInput";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
 
 export default {
   name: "RealityAutobuyerBox",
   components: {
     AutobuyerBox,
-    AutobuyerInput
+    AutobuyerInput,
+    ExpandingControlBox,
+    AutobuyerDropdownEntry
   },
   data() {
     return {
@@ -39,11 +43,6 @@ export default {
       }
       throw new Error("Unknown Auto Reality mode");
     },
-    changeMode(event) {
-      const mode = parseInt(event.target.value, 10);
-      this.autobuyer.mode = mode;
-      this.mode = mode;
-    }
   }
 };
 </script>
@@ -53,23 +52,25 @@ export default {
     :autobuyer="autobuyer"
     name="Automatic Reality"
   >
-    <template slot="intervalSlot">
-      <div class="c-autobuyer-box__small-text" />
-      <select
-        class="c-autobuyer-box__mode-select"
-        @change="changeMode"
-      >
-        <option
-          v-for="optionMode in modes"
-          :key="optionMode"
-          :value="optionMode"
-          :selected="mode === optionMode"
-        >
-          {{ modeName(optionMode) }}
-        </option>
-      </select>
+    <template #intervalSlot>
+      <ExpandingControlBox :auto-close="true">
+        <template #header>
+          <div class="o-primary-btn c-autobuyer-box__mode-select c-autobuyer-box__mode-select-header">
+            ▼ Current Setting: ▼
+            <br>
+            {{ modeName(mode) }}
+          </div>
+        </template>
+        <template #dropdown>
+          <AutobuyerDropdownEntry
+            :autobuyer="autobuyer"
+            :modes="modes"
+            :mode-name-fn="modeName"
+          />
+        </template>
+      </ExpandingControlBox>
     </template>
-    <template slot="toggleSlot">
+    <template #toggleSlot>
       <div>Target Reality Machines:</div>
       <AutobuyerInput
         :autobuyer="autobuyer"
@@ -77,7 +78,7 @@ export default {
         property="rm"
       />
     </template>
-    <template slot="checkboxSlot">
+    <template #checkboxSlot>
       <div>Target glyph level:</div>
       <AutobuyerInput
         :autobuyer="autobuyer"
@@ -85,7 +86,7 @@ export default {
         property="glyph"
       />
       <div v-if="isOverCap">
-        Autobuyer will trigger at the glyph level cap of {{ formatInt(levelCap) }}.
+        Autobuyer will trigger at the Glyph level cap of {{ formatInt(levelCap) }}.
       </div>
     </template>
   </AutobuyerBox>

@@ -1,4 +1,4 @@
-import { PurchasableMechanicState } from "./puchasable.js";
+import { PurchasableMechanicState } from "./puchasable";
 
 /**
  * @abstract

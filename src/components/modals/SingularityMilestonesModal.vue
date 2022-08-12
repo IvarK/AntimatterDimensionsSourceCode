@@ -1,11 +1,12 @@
 <script>
-import "../../../javascripts/components/celestials/subtabs/laitela/singularity-milestone.js";
-import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import ModalWrapper from "@/components/modals/ModalWrapper";
+import SingularityMilestoneComponent from "@/components/tabs/celestial-laitela/SingularityMilestoneComponent";
 
 export default {
   name: "SingularityMilestonesModal",
   components: {
-    ModalWrapperChoice,
+    SingularityMilestoneComponent,
+    ModalWrapper,
   },
   data() {
     return {
@@ -15,23 +16,6 @@ export default {
       completedVal: 0,
       orderVal: 0
     };
-  },
-  beforeDestroy() {
-    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
-  },
-  watch: {
-    resourceVal(newValue) {
-      player.celestials.laitela.singularitySorting.displayResource = newValue;
-    },
-    sortVal(newValue) {
-      player.celestials.laitela.singularitySorting.sortResource = newValue;
-    },
-    completedVal(newValue) {
-      player.celestials.laitela.singularitySorting.showCompleted = newValue;
-    },
-    orderVal(newValue) {
-      player.celestials.laitela.singularitySorting.sortOrder = newValue;
-    },
   },
   computed: {
     resourceStr() {
@@ -51,6 +35,23 @@ export default {
       const states = ["Ascending", "Descending"];
       return states[this.orderVal];
     },
+  },
+  watch: {
+    resourceVal(newValue) {
+      player.celestials.laitela.singularitySorting.displayResource = newValue;
+    },
+    sortVal(newValue) {
+      player.celestials.laitela.singularitySorting.sortResource = newValue;
+    },
+    completedVal(newValue) {
+      player.celestials.laitela.singularitySorting.showCompleted = newValue;
+    },
+    orderVal(newValue) {
+      player.celestials.laitela.singularitySorting.sortOrder = newValue;
+    },
+  },
+  beforeDestroy() {
+    player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
   },
   methods: {
     update() {
@@ -90,16 +91,13 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    :show-cancel="false"
-    :show-confirm="false"
-  >
+  <ModalWrapper>
     <template #header>
       Singularity Milestones
     </template>
     <div class="l-singularity-milestone-modal-container-outer">
       <div class="l-singularity-milestone-modal-container-inner">
-        <singularity-milestone
+        <SingularityMilestoneComponent
           v-for="milestone in milestones"
           :key="milestone.id"
           :milestone="milestone"
@@ -140,5 +138,5 @@ export default {
         {{ orderStr }}
       </button>
     </div>
-  </ModalWrapperChoice>
+  </ModalWrapper>
 </template>

@@ -1,6 +1,10 @@
-import { playFabLogin } from "./core/playfab.js";
-import { DC } from "./core/constants.js";
-import { SpeedrunMilestones } from "./core/speedrun.js";
+import TWEEN from "tween.js";
+
+import { DC } from "./core/constants";
+import { deepmergeAll } from "@/utility/deepmerge";
+import { playFabLogin } from "./core/playfab";
+import { SpeedrunMilestones } from "./core/speedrun";
+import { supportedBrowsers } from "./supported-browsers";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -81,13 +85,11 @@ export function gainedInfinityPoints() {
     Achievement(103),
     TimeStudy(111)
   );
-  const mult = NG.multiplier;
-  const pow = NG.power;
   if (Pelle.isDisabled("IPMults")) {
-    const pelleMults = Pelle.activeGlyphType === "infinity" && PelleRifts.chaos.hasMilestone(1)
-      ? PelleRifts.chaos.milestones[1].effect() : 1;
     return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
-      .timesEffectsOf(PelleRifts.famine).times(pelleMults).times(mult).pow(pow).floor();
+      .timesEffectsOf(PelleRifts.vacuum)
+      .times(Pelle.specialGlyphEffect.infinity)
+      .floor();
   }
   let ip = player.break
     ? Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
@@ -95,7 +97,6 @@ export function gainedInfinityPoints() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
     ip = ip.min(DC.E200);
   }
-  ip = ip.times(mult);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
@@ -108,36 +109,28 @@ export function gainedInfinityPoints() {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
 
-  ip = ip.pow(pow);
   return ip.floor();
 }
 
 function totalEPMult() {
-  return new Decimal(getAdjustedGlyphEffect("cursedEP"))
-    .times(ShopPurchase.EPPurchases.currentMult)
-    .timesEffectsOf(
-      EternityUpgrade.epMult,
-      TimeStudy(61),
-      TimeStudy(122),
-      TimeStudy(121),
-      TimeStudy(123),
-      RealityUpgrade(12),
-      GlyphEffect.epMult
-    );
+  return Pelle.isDisabled("EPMults")
+    ? Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.vacuum.milestones[2])
+    : getAdjustedGlyphEffect("cursedEP")
+      .times(ShopPurchase.EPPurchases.currentMult)
+      .timesEffectsOf(
+        EternityUpgrade.epMult,
+        TimeStudy(61),
+        TimeStudy(122),
+        TimeStudy(121),
+        TimeStudy(123),
+        RealityUpgrade(12),
+        GlyphEffect.epMult
+      );
 }
 
 export function gainedEternityPoints() {
-  const pow = NG.power;
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
-    gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
-
-  ep = ep.times(NG.multiplier);
-  let pelleMults = Pelle.activeGlyphType === "time" && PelleRifts.chaos.hasMilestone(1)
-    ? PelleRifts.chaos.milestones[1].effect() : new Decimal(1);
-
-  if (PelleRifts.famine.hasMilestone(2)) pelleMults = pelleMults.times(PelleRifts.famine.milestones[2].effect());
-
-  if (Pelle.isDisabled("EPMults")) return ep.dividedBy(totalEPMult()).times(pelleMults).pow(pow).floor();
+    gainedInfinityPoints()).log10() / (308 - PelleRifts.recursion.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -150,12 +143,11 @@ export function gainedEternityPoints() {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
 
-  ep = ep.pow(pow);
   return ep.floor();
 }
 
 export function requiredIPForEP(epAmount) {
-  return Decimal.pow10(308 * (Decimal.log(totalEPMult().dividedBy(epAmount).reciprocal(), 5) + 0.7))
+  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(epAmount, totalEPMult()), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
 }
 
@@ -283,10 +275,10 @@ export function gainedInfinities() {
     TimeStudy(32),
     RealityUpgrade(5),
     RealityUpgrade(7),
-    Achievement(164)
+    Achievement(164),
+    Ra.unlocks.continuousTTBoost.effects.infinity
   );
   infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
-  infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
   infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
   return infGain;
 }
@@ -338,17 +330,13 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
         factor *= Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
-        if (V.has(V_UNLOCKS.ACHIEVEMENT_BH)) {
-          factor *= V_UNLOCKS.ACHIEVEMENT_BH.effect();
-        }
+        factor *= VUnlocks.achievementBH.effectOrDefault(1);
       }
     }
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.SINGULARITY_MILESTONE)) {
-    factor *= SingularityMilestone.gamespeedFromSingularities.canBeApplied
-      ? SingularityMilestone.gamespeedFromSingularities.effectValue
-      : 1;
+    factor *= SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1);
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
@@ -374,7 +362,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   }
 
 
-  factor *= PelleRebuyableUpgrade.timeSpeedMult.effectValue.toNumber();
+  factor *= PelleUpgrade.timeSpeedMult.effectValue.toNumber();
 
   // 1e-300 is now possible with max inverted BH, going below it would be possible with
   // an effarig glyph.
@@ -426,12 +414,11 @@ export function gameLoop(passDiff, options = {}) {
   // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
   if (AlchemyResource.momentum.isUnlocked) {
-    player.celestials.ra.momentumTime += realDiff * Achievement(173).effectOrDefault(1);
+    player.celestials.ra.momentumTime += realDiff * Achievement(175).effectOrDefault(1);
   }
 
   // Lai'tela mechanics should bypass stored real time entirely
   DarkMatterDimensions.tick(realDiff);
-  Laitela.autobuyerLoop(realDiff);
 
   // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {
@@ -491,9 +478,7 @@ export function gameLoop(passDiff, options = {}) {
       const reducedTimeFactor = getGameSpeedupFactor();
       const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
         GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE]);
-      const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-        ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
-        : 1;
+      const amplification = Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectOrDefault(1);
       const beforeStore = player.celestials.enslaved.stored;
       player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored +
         diff * (totalTimeFactor - reducedTimeFactor) * amplification, Enslaved.timeCap);
@@ -511,6 +496,7 @@ export function gameLoop(passDiff, options = {}) {
   // These need to all be done consecutively in order to minimize the chance of a reset occurring between real time
   // updating and game time updating.  This is only particularly noticeable when game speed is 1 and the player
   // expects to see identical numbers.
+  player.records.realTimeDoomed += realDiff;
   player.records.realTimePlayed += realDiff;
   player.records.totalTimePlayed += diff;
   player.records.thisInfinity.realTime += realDiff;
@@ -577,14 +563,14 @@ export function gameLoop(passDiff, options = {}) {
 
   updateTachyonGalaxies();
   Currency.timeTheorems.add(getTTPerSecond().times(diff / 1000));
-  tryUnlockInfinityDimensions(true);
+  InfinityDimensions.tryAutoUnlock();
 
   BlackHoles.updatePhases(blackHoleDiff);
 
   // Unlocks dilation at a certain total TT count for free, but we add the cost first in order to make
   // sure that TT count doesn't go negative and that we can actually buy it. This technically bumps the max theorem
   // amount up as well, but at this point of the game 5k TT is insignificant to basically all other sources of TT.
-  if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) &&
+  if (Ra.unlocks.autoUnlockDilation.canBeApplied &&
     Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement) &&
     !isInCelestialReality() &&
     !Pelle.isDoomed) {
@@ -595,13 +581,17 @@ export function gameLoop(passDiff, options = {}) {
   applyAutoUnlockPerks();
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
-  if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP) && !Pelle.isDoomed) rewardTP();
+  // There are some external checks which prevent excessive resource gain with Teresa-25; it may give TP outside of
+  // dilation, but the TP gain function is also coded to behave differently if it's active
+  const teresa1 = player.dilation.active && Ra.unlocks.autoTP.canBeApplied;
+  const teresa25 = !isInCelestialReality() && Ra.unlocks.unlockDilationStartingTP.canBeApplied;
+  if ((teresa1 || teresa25) && !Pelle.isDoomed) rewardTP();
 
   if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
     if (player.celestials.enslaved.hintUnlockProgress >= TimeSpan.fromHours(5).totalMilliseconds) {
       EnslavedProgress.hintsUnlocked.giveProgress();
-      Enslaved.quotes.show(Enslaved.quotes.HINT_UNLOCK);
+      Enslaved.quotes.hintUnlock.show();
     }
   }
 
@@ -611,6 +601,11 @@ export function gameLoop(passDiff, options = {}) {
   AutomatorBackend.update(realDiff);
   Pelle.gameLoop(realDiff);
   GalaxyGenerator.loop(realDiff);
+  GameEnd.gameLoop(realDiff);
+
+  if (!Enslaved.canAmplify) {
+    Enslaved.boostReality = false;
+  }
 
   if (Tabs.current.isPermanentlyHidden) {
     const tab = Tabs.all.reverse().find(t => !t.isPermanentlyHidden && t.id !== 10);
@@ -650,10 +645,10 @@ function passivePrestigeGen() {
       infGen = infGen.plus(0.2 * Time.deltaTimeMs / Math.clampMin(33, player.records.bestInfinity.time));
       infGen = infGen.timesEffectsOf(
         RealityUpgrade(5),
-        RealityUpgrade(7)
+        RealityUpgrade(7),
+        Ra.unlocks.continuousTTBoost.effects.infinity
       );
       infGen = infGen.times(getAdjustedGlyphEffect("infinityinfmult"));
-      infGen = infGen.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
     }
     if (RealityUpgrade(11).isBought) {
       infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
@@ -682,7 +677,7 @@ function applyAutoUnlockPerks() {
   if (Perk.autounlockDilation3.isBought) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
   if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
   if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
-    const secondRow = Object.values(EternityUpgrade).filter(u => u.id > 3);
+    const secondRow = EternityUpgrade.all.filter(u => u.id > 3);
     for (const upgrade of secondRow) {
       if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);
     }
@@ -712,9 +707,9 @@ function laitelaRealityTick(realDiff) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;
       completionText += laitelaBeatText(Laitela.maxAllowedDimension + 1);
-      for (const quote of Object.values(Laitela.quotes)) {
-        if (laitelaInfo.difficultyTier >= quote.destabilize) {
-          Laitela.quotes.show(quote);
+      for (const quote of Laitela.quotes.all) {
+        if (quote.requirement) {
+          quote.show();
         }
       }
     }
@@ -731,7 +726,7 @@ function laitelaRealityTick(realDiff) {
         ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()} to improve your multiplier.`;
     }
     if (Laitela.isFullyDestabilized) SpeedrunMilestones(24).tryComplete();
-    Modal.message.show(completionText);
+    Modal.message.show(completionText, {}, 2);
   }
 }
 
@@ -740,9 +735,10 @@ function laitelaBeatText(disabledDim) {
     case 1: return `<br><br>Lai'tela's Reality will now completely disable production from all Dimensions.
         The Reality can still be entered, but further destabilization is no longer possible.
         For completely destabilizing the Reality, you also get an additional ${formatX(8)} to Dark Energy gain.`;
-    case 2:
-    case 3: return `<br><br>Lai'tela's Reality will now disable production from all
-        ${disabledDim}${disabledDim === 2 ? "nd" : "rd"} Dimensions during
+    case 2: return `<br><br>Lai'tela's Reality will now disable production from all 2nd Dimensions during
+      future runs, but the reward will be ${formatInt(100)} times stronger than before. Completely destabilizing
+      the Reality for the final Dimension will give you an additional ${formatX(8)} to Dark Energy gain.`;
+    case 3: return `<br><br>Lai'tela's Reality will now disable production from all 3rd Dimensions during
         future runs, but the reward will be ${formatInt(100)} times stronger than before.`;
     case 8: return `<br><br>Lai'tela's Reality will now disable production from all 8th Dimensions during
         future runs, but the reward will be ${formatInt(100)} times stronger than before. This boost can be
@@ -757,9 +753,9 @@ function laitelaBeatText(disabledDim) {
 function applyAutoprestige(diff) {
   Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(0));
 
-  if (Teresa.has(TERESA_UNLOCKS.EPGEN) && !Pelle.isDisabled("EPgen")) {
+  if (TeresaUnlocks.epGen.canBeApplied) {
     Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D0_01)
-      .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
+      .times(getGameSpeedupFactor() * diff / 1000).timesEffectOf(Ra.unlocks.continuousTTBoost.effects.autoPrestige));
   }
 
   if (InfinityUpgrade.ipGen.isCharged) {
@@ -769,7 +765,7 @@ function applyAutoprestige(diff) {
     Currency.realityMachines.add(addedRM);
   }
 
-  if (PelleRifts.chaos.hasMilestone(2)) {
+  if (PelleRifts.chaos.milestones[2].canBeApplied) {
     Currency.eternityPoints.add(gainedEternityPoints().times(DC.D0_1).times(diff / 1000));
   }
 }
@@ -796,9 +792,11 @@ function updateTachyonGalaxies() {
 
 export function getTTPerSecond() {
   // All TT multipliers (note that this is equal to 1 pre-Ra)
-  let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
-  ttMult *= Achievement(137).effectOrDefault(1);
-  if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
+  let ttMult = Effects.product(
+    Ra.unlocks.continuousTTBoost.effects.ttGen,
+    Ra.unlocks.achievementTTMult,
+    Achievement(137),
+  );
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
@@ -813,8 +811,8 @@ export function getTTPerSecond() {
 
   // Lai'tela TT power
   let finalTT = dilationTT.add(glyphTT);
-  if (SingularityMilestone.theoremPowerFromSingularities.isUnlocked && finalTT.gt(1) && !Pelle.isDoomed) {
-    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectValue);
+  if (finalTT.gt(1)) {
+    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectOrDefault(1));
   }
 
   return finalTT;
@@ -828,7 +826,7 @@ function recursiveTimeOut(fn, iterations, endFn) {
 
 function afterSimulation(seconds, playerBefore) {
   if (seconds > 600) {
-    const playerAfter = deepmerge.all([{}, player]);
+    const playerAfter = deepmergeAll([{}, player]);
     Modal.awayProgress.show({ playerBefore, playerAfter, seconds });
   }
 
@@ -857,7 +855,7 @@ export function simulateTime(seconds, real, fast) {
     ticks = 50;
   }
 
-  const playerStart = deepmerge.all([{}, player]);
+  const playerStart = deepmergeAll([{}, player]);
 
   let totalGameTime;
 
@@ -1045,15 +1043,20 @@ export function simulateTime(seconds, real, fast) {
 }
 
 window.onload = function() {
-  GameUI.initialized = true;
-  ui.view.initialized = true;
+  const supportedBrowser = browserCheck();
+  GameUI.initialized = supportedBrowser;
+  ui.view.initialized = supportedBrowser;
   setTimeout(() => {
     if (kong.enabled) {
       playFabLogin();
     }
     document.getElementById("loading").style.display = "none";
-    document.body.style.overflowY = "auto";
   }, 500);
+  if (!supportedBrowser) {
+    GameIntervals.stop();
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("browser-warning").style.display = "flex";
+  }
 };
 
 window.onfocus = function() {
@@ -1070,6 +1073,10 @@ export function setShiftKey(isDown) {
 
 export function setHoldingR(x) {
   Replicanti.galaxies.isPlayerHoldingR = x;
+}
+
+export function browserCheck() {
+  return supportedBrowsers.test(navigator.userAgent);
 }
 
 export function init() {

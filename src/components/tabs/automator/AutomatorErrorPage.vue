@@ -6,16 +6,13 @@ export default {
       errors: [],
     };
   },
-  computed: {
-    commands: () => GameDatabase.reality.automator.commands
-  },
   methods: {
     update() {
       this.errors = AutomatorData.currentErrors();
     },
     scrollToLine(line) {
-      AutomatorTextUI.scrollToLine(line);
-      AutomatorTextUI.updateHighlightedLine(line, "Error");
+      AutomatorScroller.scrollToLine(line);
+      AutomatorHighlighter.updateHighlightedLine(line, LineEnum.Error);
     }
   }
 };
@@ -36,7 +33,7 @@ export default {
         <b>On line {{ error.startLine }}:</b>
         <button
           v-tooltip="'Jump to line'"
-          class="fas fa-arrow-circle-right"
+          class="c-automator-docs--button fas fa-arrow-circle-right"
           @click="scrollToLine(error.startLine)"
         />
         <div class="c-automator-docs-page__indented">
@@ -47,8 +44,10 @@ export default {
         </div>
       </span>
       <i>
-        Note: Sometimes errors may cause the automator to be unable to scan the rest of the script.
-        This may result in some errors "disappearing" due to other errors occurring in earlier lines.
+        Note: Sometimes errors may cause the automator to be unable to scan the rest of the script properly.
+        This may result in some errors "disappearing" due to other errors occurring in earlier lines, or
+        errors in a command which has an inner block (eg. commands like IF or WHILE) causing errors to appear
+        on correctly-formatted later commands.
         Additionally, some of the suggested fixes may be potentially misleading due to the cause of
         the error being unclear.
       </i>

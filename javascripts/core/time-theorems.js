@@ -1,4 +1,4 @@
-import { DC } from "./constants.js";
+import { DC } from "./constants";
 
 /**
  * @abstract
@@ -47,8 +47,7 @@ export class TimeTheoremPurchaseType {
   }
 
   purchase(bulk) {
-    if (this.currency.lt(this.cost) ||
-      (Pelle.isDoomed && player.eternities.eq(0))) return false;
+    if (!this.canAfford) return false;
     let purchased = false;
     const amount = this.bulkPossible;
     const buyFn = cost => (Perk.ttFree.isBought ? this.currency.gte(cost) : this.currency.purchase(cost));
@@ -64,8 +63,13 @@ export class TimeTheoremPurchaseType {
       purchased = true;
     }
     if (purchased) player.requirementChecks.reality.noPurchasedTT = false;
-    if (TimeTheorems.totalPurchased() > 115) PelleStrikes.ECs.trigger();
+    if (TimeTheorems.totalPurchased() > 114) PelleStrikes.ECs.trigger();
     return purchased;
+  }
+
+  get canAfford() {
+    return this.currency.gte(this.cost) &&
+      !(Pelle.isDoomed && player.eternities.eq(0));
   }
 
   reset() {
@@ -108,7 +112,8 @@ TimeTheoremPurchaseType.ep = new class extends TimeTheoremPurchaseType {
 export const TimeTheorems = {
   checkForBuying(auto) {
     if (PlayerProgress.realityUnlocked() || TimeDimension(1).bought) return true;
-    if (!auto) Modal.message.show("You need to buy at least 1 Time Dimension before you can purchase Time Theorems.");
+    if (!auto) Modal.message.show(`You need to buy at least ${formatInt(1)} Time Dimension before you can purchase
+      Time Theorems.`, { closeEvent: GAME_EVENT.REALITY_RESET_AFTER });
     return false;
   },
 

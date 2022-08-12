@@ -16,6 +16,8 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
+      isDisabled: false,
       isRunning: false,
       isCompleted: false,
       isBroken: false,
@@ -25,7 +27,7 @@ export default {
   },
   computed: {
     descriptionDisplayConfig() {
-      if (this.challenge.isUnlocked) {
+      if (this.isUnlocked) {
         return this.challenge.config;
       }
       return {
@@ -41,6 +43,7 @@ export default {
   },
   methods: {
     update() {
+      this.isDisabled = this.challenge.isDisabled;
       this.isUnlocked = this.challenge.isUnlocked;
       this.isRunning = this.challenge.isRunning;
       this.lockedAt = this.challenge.config.lockedAt;
@@ -66,7 +69,8 @@ export default {
       <DescriptionDisplay :config="descriptionDisplayConfig" />
     </template>
     <template #bottom>
-      <span>Reward: {{ challenge.config.reward }}</span>
+      <span v-if="isDisabled">There is no reward for completing this challenge</span>
+      <span v-else>Reward: {{ challenge.config.reward }}</span>
     </template>
   </ChallengeBox>
 </template>

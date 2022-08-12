@@ -6,18 +6,21 @@ export default {
   components: {
     ModalWrapperChoice
   },
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
   computed: {
     challenge() {
-      return EternityChallenge(this.modal.id);
+      return EternityChallenge(this.id);
     },
     challengeIsCompleted() {
       return this.challenge.isFullyCompleted;
     },
-    modal() {
-      return this.$viewModel.modal.current;
-    },
     message() {
-      return `You will Eternity (if possible) and start a new Eternity within the Challenge, with all the
+      return `You will Eternity, if possible, and start a new Eternity within the Challenge, with all the
         Challenge-specific restrictions and modifiers active.
         To complete the Challenge${this.challengeIsCompleted ? "" : " and gain its reward"},
         you must reach the Challenge goal of
@@ -25,7 +28,7 @@ export default {
         ${formatInt(5)} times, with increasing goals and bonuses.`;
     },
     entranceLabel() {
-      return `You are about to enter Eternity Challenge ${this.modal.id}`;
+      return `You are about to enter Eternity Challenge ${this.id}`;
     },
     reward() {
       let rewardDescription = this.challenge._config.reward.description;
@@ -49,21 +52,23 @@ export default {
   methods: {
     handleYesClick() {
       this.challenge.start(true);
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="challenges"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ entranceLabel }}
     </template>
     <div class="c-modal-message__text">
       {{ message }}
-    </div>
-    <br>
-    <div class="c-modal-message__text">
+      <br><br>
       {{ condition }}
     </div>
     <div

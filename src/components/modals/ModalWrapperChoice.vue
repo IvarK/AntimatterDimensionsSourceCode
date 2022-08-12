@@ -1,12 +1,14 @@
 <script>
+import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import ModalConfirmationCheck from "@/components/modals/ModalConfirmationCheck";
 import PrimaryButton from "@/components/PrimaryButton";
-import ModalWrapper from "@/components/modals/ModalWrapper";
 
 export default {
   name: "ModalWrapperChoice",
   components: {
     PrimaryButton,
-    ModalWrapper,
+    ModalConfirmationCheck,
+    ModalCloseButton
   },
   props: {
     cancelClass: {
@@ -29,6 +31,11 @@ export default {
       required: false,
       default: true
     },
+    option: {
+      type: String,
+      required: false,
+      default: undefined
+    }
   },
   created() {
     this.on$(GAME_EVENT.ENTER_PRESSED, this.doConfirm);
@@ -42,19 +49,34 @@ export default {
       this.$emit("cancel");
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
+    closeModal() {
+      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+    }
   }
 };
 </script>
 
 <template>
-  <ModalWrapper class="c-modal-message l-modal-content--centered">
-    <template #header>
-      <slot name="header" />
-    </template>
+  <div class="c-modal-message l-modal-content--centered">
+    <span class="c-modal__header">
+      <ModalCloseButton @click="closeModal" />
+      <span
+        v-if="$slots.header"
+        class="c-modal__title"
+      >
+        <slot name="header" />
+      </span>
+    </span>
+
 
     <slot />
 
-    <div class="l-options-grid__row">
+    <ModalConfirmationCheck
+      v-if="option"
+      :option="option"
+    />
+
+    <div class="l-modal-buttons">
       <PrimaryButton
         v-if="showCancel"
         :class="cancelClass"
@@ -64,6 +86,8 @@ export default {
           Cancel
         </slot>
       </PrimaryButton>
+
+      <slot name="extra-buttons" />
 
       <PrimaryButton
         v-if="showConfirm"
@@ -75,5 +99,11 @@ export default {
         </slot>
       </PrimaryButton>
     </div>
-  </ModalWrapper>
+  </div>
 </template>
+
+<style scoped>
+.c-modal__header {
+  margin-bottom: 0.5rem;
+}
+</style>

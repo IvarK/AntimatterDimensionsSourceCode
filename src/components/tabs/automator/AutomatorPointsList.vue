@@ -30,7 +30,7 @@ export default {
 
 <template>
   <div>
-    <div style="font-size: 2rem;">
+    <div class="l-header">
       You have {{ formatInt(totalPoints) }} / {{ formatInt(pointsForAutomator) }}
       Automator Points towards unlocking the Automator.
       <br>
@@ -38,8 +38,9 @@ export default {
     </div>
     <div class="l-automator-points-list-container">
       <div class="l-automator-points-list-side-col c-automator-points-list-col">
+        <span class="c-automator-points-list-symbol fas fa-project-diagram" />
         <span class="c-automator-points-list-ap--large">{{ formatInt(fromPerks) }} AP</span>
-        <span style="font-size: 1.8rem;">
+        <span class="l-large-text">
           Perks
         </span>
         <div
@@ -60,7 +61,7 @@ export default {
           class="c-automator-points-list-cell"
         >
           <span class="c-automator-points-list-ap--large">{{ formatInt(source.automatorPoints()) }} AP</span>
-          <span style="font-size: 1.8rem;">
+          <span class="l-large-text">
             {{ source.name }}
           </span>
           <br>
@@ -75,16 +76,16 @@ export default {
         </div>
       </div>
       <div class="l-automator-points-list-side-col c-automator-points-list-col">
+        <span class="c-automator-points-list-symbol fas fa-arrow-up" />
         <span class="c-automator-points-list-ap--large">{{ formatInt(fromUpgrades) }} AP</span>
-        <span style="font-size: 1.8rem;">
+        <span class="l-large-text">
           Reality Upgrades
         </span>
         <div
           v-for="upgrade in upgradeSources"
           :key="upgrade.id"
-          class="c-automator-points-list-single-entry"
+          class="c-automator-points-list-single-entry l-upgrade-list"
           :style="textColor(upgrade.isBought)"
-          style="font-size: 1.3rem;"
         >
           <b>{{ upgrade.name }}</b>
           <span class="c-automator-points-list-ap">{{ formatInt(upgrade.automatorPoints) }} AP</span>
@@ -95,7 +96,7 @@ export default {
     </div>
     <br>
     <div>
-      The automator uses a custom scripting language which allows (amongst other things) buying full
+      The Automator uses a custom scripting language which allows (amongst other things) buying full
       Time Study Trees, entering Eternity Challenges, or starting Dilation. It can also force prestige
       events on certain conditions independently from your Autobuyers or modify some of your Autobuyer settings.
       <br>
@@ -106,5 +107,15 @@ export default {
 </template>
 
 <style scoped>
+.l-header {
+  font-size: 2rem;
+}
 
+.l-large-text {
+  font-size: 1.8rem;
+}
+
+.l-upgrade-list {
+  font-size: 1.3rem;
+}
 </style>

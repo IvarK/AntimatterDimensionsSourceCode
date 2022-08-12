@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     effectConfig() {
-      return GameDatabase.reality.glyphEffects[this.effect];
+      return GlyphEffects[this.effect];
     },
     boostColor() {
       return (this.effectConfig.alterationType !== undefined &&
@@ -27,9 +27,7 @@ export default {
         : undefined;
     },
     effectStringTemplate() {
-      return typeof this.effectConfig.singleDesc === "function"
-        ? this.effectConfig.singleDesc()
-        : this.effectConfig.singleDesc;
+      return this.effectConfig.singleDesc;
     },
     primaryEffectText() {
       const value = this.effectConfig.formatSingleEffect(this.value);
@@ -52,6 +50,9 @@ export default {
     hasSecondaryValue() {
       return this.textSplits[2] !== undefined;
     },
+    isPelleDisabled() {
+      return this.effectConfig.isDisabledByDoomed;
+    },
     convertedParts() {
       const parts = [];
       for (const text of this.textSplits) parts.push(this.convertToHTML(text));
@@ -65,20 +66,26 @@ export default {
         color: "#76EE76",
       };
     },
+    textShadowColor() {
+      return Theme.current().isDark() ? "white" : "black";
+    },
   },
   methods: {
     convertToHTML(string) {
       return string
         .replace("\n", "<br>")
         .replace("]", "</span>")
-        .replace("[", `<span style="color:${this.additionColor}; text-shadow:#FFFFFF 0 0 0.6rem;">`);
+        .replace("[", `<span style="color: ${this.additionColor}; text-shadow: ${this.textShadowColor} 0 0 0.6rem;">`);
     }
   }
 };
 </script>
 
 <template>
-  <div class="c-glyph-tooltip__effect">
+  <div
+    class="c-glyph-tooltip__effect"
+    :class="{ 'o-pelle-disabled': isPelleDisabled }"
+  >
     <span v-html="convertedParts[0]" />
     <span
       v-if="hasValue"

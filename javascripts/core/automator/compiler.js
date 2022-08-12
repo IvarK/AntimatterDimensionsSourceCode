@@ -1,6 +1,6 @@
-import { AutomatorCommands } from "./automator-commands.js";
-import { AutomatorGrammar } from "./parser.js";
-import { AutomatorLexer } from "./lexer.js";
+import { AutomatorCommands } from "./automator-commands";
+import { AutomatorGrammar } from "./parser";
+import { AutomatorLexer } from "./lexer";
 
 (function() {
   if (AutomatorGrammar === undefined) {
@@ -24,6 +24,16 @@ import { AutomatorLexer } from "./lexer.js";
           if (ownMethod) ownMethod.call(this, ctx);
         };
       }
+
+      const lexResult = AutomatorLexer.lexer.tokenize(rawText);
+      const tokens = lexResult.tokens;
+      parser.input = tokens;
+      this.parseResult = parser.script();
+      this.visit(this.parseResult);
+      this.addLexerErrors(lexResult.errors);
+      this.addParserErrors(parser.errors, tokens);
+      this.modifyErrorMessages();
+      this.errorCount = lexResult.errors.length + this.errors.length + parser.errors.length;
     }
 
     addLexerErrors(errors) {
@@ -154,6 +164,11 @@ import { AutomatorLexer } from "./lexer.js";
         modifiedErrors.push(err);
         lastLine = err.startLine;
       }
+
+      for (const err of modifiedErrors) {
+        err.startLine = AutomatorBackend.translateLineNumber(err.startLine);
+      }
+
       this.errors = modifiedErrors;
     }
 
@@ -175,31 +190,31 @@ import { AutomatorLexer } from "./lexer.js";
 
     lookupVar(identifier, type) {
       const varName = identifier.image;
-      const varInfo = this.variables[varName];
-      if (varInfo === undefined) {
+      const varInfo = {};
+      const value = player.reality.automator.constants[varName];
+      if (value === undefined) {
         this.addError(identifier, `Variable ${varName} has not been defined`,
-          `Use DEFINE to define ${varName} in order to reference it, or check for typos`);
+          `Use the definition panel to define ${varName} in order to reference it, or check for typos`);
         return undefined;
       }
-      if (varInfo.type === AUTOMATOR_VAR_TYPES.UNKNOWN) {
-        varInfo.firstUseLineNumber = identifier.image.startLine;
-        varInfo.type = type;
-        if (type === AUTOMATOR_VAR_TYPES.STUDIES) {
-          // The only time we have an unknown studies is if there was only one listed
+
+      let tree;
+      switch (type) {
+        case AUTOMATOR_VAR_TYPES.NUMBER:
+          varInfo.value = new Decimal(value);
+          break;
+        case AUTOMATOR_VAR_TYPES.STUDIES:
+          tree = new TimeStudyTree(value);
           varInfo.value = {
-            normal: [varInfo.value.toNumber()],
-            ec: 0
+            normal: tree.selectedStudies.map(ts => ts.id),
+            ec: tree.ec
           };
-        }
-      } else if (varInfo.type !== type) {
-        const inferenceMessage = varInfo.firstUseLineNumber
-          ? `\nIts use on line ${varInfo.firstUseLineNumber} identified it as a ${varInfo.type.name}`
-          : "";
-        this.addError(identifier, `Variable ${varName} is not a ${type.name}${inferenceMessage}`,
-          "Defined variables cannot be used as both studies and numbers - define a second variable instead");
-        return undefined;
+          break;
+        case AUTOMATOR_VAR_TYPES.DURATION:
+          varInfo.value = parseInt(1000 * value, 10);
+          break;
       }
-      if (varInfo.value === undefined) throw new Error("Unexpected undefined Automator variable value");
+
       return varInfo;
     }
 
@@ -236,50 +251,6 @@ import { AutomatorLexer } from "./lexer.js";
       }
       ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       return ctx.$value;
-    }
-
-    define(ctx) {
-      const varName = ctx.Identifier[0].image;
-      if (this.variables[varName] !== undefined) {
-        this.addError(ctx.Identifier[0],
-          `Variable ${varName} already defined on line ${this.variables[varName].definitionLineNumber}`,
-          "Variables cannot be defined twice; remove or rename the second DEFINE");
-        return;
-      }
-      if (!ctx.duration && !ctx.studyList) return;
-      const def = {
-        name: varName,
-        definitionLineNumber: ctx.Identifier[0].startLine,
-        firstUseLineNumber: 0,
-        type: AUTOMATOR_VAR_TYPES.UNKNOWN,
-        value: undefined,
-      };
-      this.variables[varName] = def;
-      if (ctx.duration) {
-        def.type = AUTOMATOR_VAR_TYPES.DURATION;
-        def.value = this.visit(ctx.duration);
-        return;
-      }
-      // We don't visit studyList because it might actually be just a number in this case
-      const studies = ctx.studyList[0].children.studyListEntry;
-      if (
-        studies.length > 1 ||
-        studies[0].children.studyRange ||
-        studies[0].children.StudyPath ||
-        studies[0].children.Comma
-      ) {
-        def.type = AUTOMATOR_VAR_TYPES.STUDIES;
-        def.value = this.visit(ctx.studyList);
-        return;
-      }
-
-      // We assume the value is a number; in some cases, we might overwrite it if we see
-      // this variable used in studies
-      def.value = new Decimal(studies[0].children.NumberLiteral[0].image);
-      if (!/^[1-9][0-9]*[1-9]$/u.test(studies[0].children.NumberLiteral[0].image)) {
-        // Study numbers are pretty specific number patterns
-        def.type = AUTOMATOR_VAR_TYPES.NUMBER;
-      }
     }
 
     studyRange(ctx, studiesOut) {
@@ -348,7 +319,7 @@ import { AutomatorLexer } from "./lexer.js";
         ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       } else if (ctx.Identifier) {
         const varLookup = this.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.NUMBER);
-        if (varLookup) ctx.$value = varLookup.value;
+        if (varLookup) ctx.$value = ctx.Identifier[0].image;
       }
     }
 
@@ -364,7 +335,7 @@ import { AutomatorLexer } from "./lexer.js";
       }
       const T = AutomatorLexer.tokenMap;
       if (ctx.ComparisonOperator[0].tokenType === T.OpEQ || ctx.ComparisonOperator[0].tokenType === T.EqualSign) {
-        this.addError(ctx, "Please use an inequality comparison (>,<,>=,<=)",
+        this.addError(ctx, "Please use an inequality comparison (>, <, >=, <=)",
           "Comparisons cannot be done with equality, only with inequality operators");
       }
     }
@@ -438,9 +409,12 @@ import { AutomatorLexer } from "./lexer.js";
     }
 
     comparison(ctx) {
-      const getters = ctx.compareValue.map(cv => (
-        cv.children.AutomatorCurrency ? cv.children.AutomatorCurrency[0].tokenType.$getter : () => cv.children.$value
-      ));
+      const getters = ctx.compareValue.map(cv => {
+        if (cv.children.AutomatorCurrency) return cv.children.AutomatorCurrency[0].tokenType.$getter;
+        const val = cv.children.$value;
+        if (typeof val === "string") return () => player.reality.automator.constants[val];
+        return () => val;
+      });
       const compareFun = ctx.ComparisonOperator[0].tokenType.$compare;
       return () => compareFun(getters[0](), getters[1]());
     }
@@ -469,48 +443,34 @@ import { AutomatorLexer } from "./lexer.js";
         // eslint-disable-next-line no-loop-func
         this[cmd.id] = (ctx, output) => {
           if (ownMethod && ownMethod !== super[cmd.id]) ownMethod.call(this, ctx, output);
-          const block = blockify(ctx, this);
-          output.push({
-            ...block,
-            id: UIID.next()
-          });
+          try {
+            const block = blockify(ctx, this);
+            output.push({
+              ...block,
+              id: UIID.next()
+            });
+          } catch {
+            // If a command is invalid, it will throw an exception in blockify and fail to assign a value to block
+            // We can't, generally, make good guesses to fill in any missing values in order to avoid the exception,
+            // so we instead just ignore that block
+          }
         };
       }
       this.validateVisitor();
     }
 
     comparison(ctx) {
-      const isCurrency = ctx.compareValue.map(cv => Boolean(cv.children.AutomatorCurrency));
-      // eslint-disable-next-line no-bitwise
-      if (!(isCurrency[0] ^ isCurrency[1])) {
-        throw new Error("arbitrary comparisons are not supported in block mode yet");
-      }
-      const currencyIndex = isCurrency[0] ? 0 : 1;
-      const flipped = currencyIndex === 1;
-      const valueChildren = ctx.compareValue[1 - currencyIndex].children;
-      const isDecimalValue = Boolean(valueChildren.$value);
-      const value = isDecimalValue ? valueChildren.$value.toString() : valueChildren.NumberLiteral[0].image;
-      let operator = ctx.ComparisonOperator[0].image;
-      if (flipped) {
-        switch (operator) {
-          case ">":
-            operator = "<";
-            break;
-          case "<":
-            operator = ">";
-            break;
-          case ">=":
-            operator = "<=";
-            break;
-          case "<=":
-            operator = ">=";
-            break;
-        }
-      }
+      const parseInput = index => {
+        const comp = ctx.compareValue[index];
+        const isCurrency = Boolean(comp.children.AutomatorCurrency);
+        if (isCurrency) return comp.children.AutomatorCurrency[0].image;
+        return comp.children.$value;
+      };
+
       return {
-        target: ctx.compareValue[currencyIndex].children.AutomatorCurrency[0].image,
-        secondaryTarget: operator,
-        inputValue: value,
+        compOperator: ctx.ComparisonOperator[0].image,
+        genericInput1: parseInput(0),
+        genericInput2: parseInput(1),
       };
     }
 
@@ -532,18 +492,10 @@ import { AutomatorLexer } from "./lexer.js";
   function compile(input, validateOnly = false) {
     // The lexer and codemirror choke on the last line of the script, so we pad it with an invisible newline
     const script = `${input}\n `;
-    const lexResult = AutomatorLexer.lexer.tokenize(script);
-    const tokens = lexResult.tokens;
-    parser.input = tokens;
-    const parseResult = parser.script();
     const validator = new Validator(script);
-    validator.visit(parseResult);
-    validator.addLexerErrors(lexResult.errors);
-    validator.addParserErrors(parser.errors, tokens);
-    validator.modifyErrorMessages();
     let compiled;
-    if (validator.errors.length === 0 && !validateOnly) {
-      compiled = new Compiler().visit(parseResult);
+    if (validator.errorCount === 0 && !validateOnly) {
+      compiled = new Compiler().visit(validator.parseResult);
     }
     return {
       errors: validator.errors,
@@ -553,33 +505,49 @@ import { AutomatorLexer } from "./lexer.js";
   AutomatorGrammar.compile = compile;
 
   function blockifyTextAutomator(input) {
-    const lexResult = AutomatorLexer.lexer.tokenize(input);
-    const tokens = lexResult.tokens;
-
-    AutomatorGrammar.parser.input = tokens;
-    const parseResult = AutomatorGrammar.parser.script();
     const validator = new Validator(input);
-    validator.visit(parseResult);
-    if (lexResult.errors.length === 0 && AutomatorGrammar.parser.errors.length === 0 && validator.errors.length === 0) {
-      const b = new Blockifier();
-      const blocks = b.visit(parseResult);
-      return blocks;
-    }
+    const blockifier = new Blockifier();
+    const blocks = blockifier.visit(validator.parseResult);
 
-    return null;
+    // The Validator grabs all the lines from the visible script, but the Blockifier will fail to visit any lines
+    // associated with unparsable commands. This results in a discrepancy in line count whenever a line can't be
+    // parsed as a specific command, and in general this is a problem we can't try to guess a fix for, so we just
+    // don't convert it at all. In both cases nested commands are stored recursively, but with different structure.
+    const validatedCount = entry => {
+      if (!entry) return 0;
+      const commandDepth = entry.children;
+      let foundChildren = 0;
+      // Inner nested commands are found within a prop given the same name as the command itself - this should only
+      // actually evaluate to nonzero for at most one key, and will be undefined for all others
+      for (const key of Object.keys(commandDepth)) {
+        const nestedBlock = commandDepth[key][0]?.children?.block;
+        const nestedCommands = nestedBlock ? nestedBlock[0].children.command : [];
+        foundChildren += nestedCommands
+          ? nestedCommands.map(c => validatedCount(c) + 1).reduce((sum, val) => sum + val, 0)
+          : 0;
+
+        // Trailing newlines get turned into a command with a single EOF argument; we return -1 because one level up
+        // on the recursion this looks like an otherwise valid command and would be counted as such
+        if (key === "EOF") return -1;
+      }
+      return foundChildren;
+    };
+    const visitedCount = block => {
+      if (!block.nest) return 1;
+      return 1 + block.nest.map(b => visitedCount(b)).reduce((sum, val) => sum + val, 0);
+    };
+    // Note: top-level structure is slightly different than the nesting structure
+    const validatedBlocks = validator.parseResult.children.block[0].children.command
+      .map(c => validatedCount(c) + 1)
+      .reduce((sum, val) => sum + val, 0);
+    const visitedBlocks = blocks.map(b => visitedCount(b)).reduce((sum, val) => sum + val, 0);
+
+    return { blocks, validatedBlocks, visitedBlocks };
   }
   AutomatorGrammar.blockifyTextAutomator = blockifyTextAutomator;
 
   function validateLine(input) {
-    const lexResult = AutomatorLexer.lexer.tokenize(input);
-    const tokens = lexResult.tokens;
-    AutomatorGrammar.parser.input = tokens;
-    const parseResult = AutomatorGrammar.parser.script();
     const validator = new Validator(input);
-    validator.visit(parseResult);
-    validator.addLexerErrors(lexResult.errors);
-    validator.addParserErrors(parser.errors, tokens);
-    validator.modifyErrorMessages();
     return validator;
   }
 

@@ -1,4 +1,4 @@
-import { Autobuyer } from "./autobuyer.js";
+import { Autobuyer } from "./autobuyer";
 
 export const Autobuyers = (function() {
   const antimatterDimensions = Autobuyer.antimatterDimension.zeroIndexed;
@@ -13,19 +13,23 @@ export const Autobuyers = (function() {
     Autobuyer.reality,
   ];
 
-  const singleBinary = [
+  const single = [
+    Autobuyer.sacrifice,
     Autobuyer.replicantiGalaxy,
     Autobuyer.timeTheorem,
     Autobuyer.ipMult,
     Autobuyer.epMult,
+    Autobuyer.darkMatterDims,
+    Autobuyer.darkMatterDimsAscension,
+    Autobuyer.singularity,
+    Autobuyer.annihilation,
   ];
 
-  const single = [
+  const singleComplex = [
     Autobuyer.tickspeed,
-    Autobuyer.sacrifice,
     Autobuyer.galaxy,
     Autobuyer.dimboost,
-  ].concat(singleBinary);
+  ].concat(single);
 
   const arrays = [
     Autobuyer.replicantiUpgrade.zeroIndexed,
@@ -34,7 +38,7 @@ export const Autobuyers = (function() {
     Autobuyer.realityUpgrade.zeroIndexed,
     Autobuyer.imaginaryUpgrade.zeroIndexed,
   ];
-  const all = dimensions.concat(prestige, single, arrays);
+  const all = dimensions.concat(prestige, singleComplex, arrays);
   const multiple = [
     Autobuyer.antimatterDimension,
     Autobuyer.infinityDimension,
@@ -48,7 +52,7 @@ export const Autobuyers = (function() {
 
   return {
     all: all.flat(),
-    display: [multiple, singleBinary],
+    display: [multiple, single],
     upgradeable: antimatterDimensions.concat(
       Autobuyer.tickspeed,
       Autobuyer.dimboost,
@@ -65,12 +69,13 @@ export const Autobuyers = (function() {
     },
 
     tick() {
+      if (!player.auto.autobuyersOn) return;
       PerformanceStats.start("Autobuyers");
 
-      const autobuyers = Autobuyers.all.filter(a => a.canTick);
-
-      for (const autobuyer of autobuyers) {
-        autobuyer.tick();
+      // The canTick condition must be checked after the previous autobuyer has triggered
+      // in order to avoid slow dimension autobuyers.
+      for (const autobuyer of Autobuyers.all) {
+        if (autobuyer.canTick) autobuyer.tick();
       }
 
       PerformanceStats.end();
@@ -96,6 +101,6 @@ EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => Autobuyers.reset());
 
 EventHub.logic.on(GAME_EVENT.DIMBOOST_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.DIMENSION_BOOST));
 EventHub.logic.on(GAME_EVENT.GALAXY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.ANTIMATTER_GALAXY));
-EventHub.logic.on(GAME_EVENT.INFINITY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.INFINITY));
+EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.INFINITY));
 EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.ETERNITY));
 EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.REALITY));

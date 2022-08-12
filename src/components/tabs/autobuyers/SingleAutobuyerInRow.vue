@@ -1,12 +1,12 @@
 <script>
-import AutobuyerToggleLabel from "./AutobuyerToggleLabel";
 import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
 import AutobuyerModeButton from "./AutobuyerModeButton";
+import AutobuyerSingleToggleLabel from "./AutobuyerSingleToggleLabel";
 
 export default {
   name: "SingleAutobuyerInRow",
   components: {
-    AutobuyerToggleLabel,
+    AutobuyerSingleToggleLabel,
     AutobuyerIntervalLabel,
     AutobuyerModeButton
   },
@@ -20,6 +20,7 @@ export default {
     // also for the sunk costs fallacy after trying to fully integrate ADs into this system
     showInterval: Boolean,
     showBulk: Boolean,
+    parentDisabled: Boolean,
   },
   data() {
     return {
@@ -48,7 +49,10 @@ export default {
     v-if="isVisible"
     class="c-autobuyer-box-slot"
   >
-    <AutobuyerToggleLabel :autobuyer="autobuyer" />
+    <AutobuyerSingleToggleLabel
+      :autobuyer="autobuyer"
+      :parent-disabled="parentDisabled"
+    />
     {{ name }}
     <AutobuyerIntervalLabel
       :autobuyer="autobuyer"

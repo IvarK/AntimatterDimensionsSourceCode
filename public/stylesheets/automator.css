@@ -1,20 +1,64 @@
-._-automator-split-pane-fix {
-  width: 100%;
+:root {
+  --color-automator-controls-background: #d3d3d3;
+  --color-automator-controls-active: #0ba00e;
+  --color-automator-controls-inactive: #eeeeee;
+  --color-automator-controls-border: #767676;
+  --color-automator-active-line-background: #d8caeb;
+  --color-automator-active-line-outline: #7a49ff;
+  --color-automator-event-background: #9afa9a;
+  --color-automator-event-outline: #094e09;
+  --color-automator-error-background: #ac0617;
+  --color-automator-error-outline: #440108;
+  --color-automator-docs-font: black;
+  --color-blockmator-block-border: #cfcfcf;
+  --color-blockmator-block-background: #f5f5f5;
+  --color-blockmator-block-command: #401090;
+  --color-blockmator-block-required: #50aaaa;
+  --color-blockmator-block-optional: #684700;
+  --color-blockmator-editor-background: white;
+}
+
+:root .s-base--dark {
+  --color-automator-controls-background: #262626;
+  --color-automator-controls-active: #007c00;
+  --color-automator-controls-inactive: #273757;
+  --color-automator-controls-border: #929292;
+  --color-automator-active-line-background: #2b065c;
+  --color-automator-active-line-outline: #4400ff;
+  --color-automator-event-background: #004b00;
+  --color-automator-docs-font: white;
+  --color-blockmator-block-border: #353535;
+  --color-blockmator-block-background: #000115;
+  --color-blockmator-block-command: #a142ff;
+  --color-blockmator-block-required: #005050;
+  --color-blockmator-block-optional: #684700;
+  --color-blockmator-editor-background: black;
 }
 
 .c-automator-tab {
-  height: 50rem;
-  width: 100rem;
+  width: 80%;
+  min-width: 100rem;
 }
 
-.c-automator-tab > div {
-  height: 50rem;
-  width: 100rem;
+.c-automator-split-pane {
+  width: 100%;
+  height: 57rem;
+  background-color: #bbbbbb;
 }
 
-.c-automator-tab--full-screen {
-  height: auto;
-  width: auto;
+.s-base--dark .c-automator-split-pane {
+  width: 100%;
+  background-color: #474747;
+}
+
+.c-automator-tab--full-screen .c-automator-split-pane {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  margin-top: 0;
+  padding-bottom: 0;
 }
 
 .l-automator-tab {
@@ -28,14 +72,16 @@
   flex-direction: row;
   justify-content: space-between;
   margin-top: 1rem;
+  -webkit-user-select: none;
   user-select: none;
 }
 
 .c-automator-points-list-col {
   position: relative;
-  border: 0.15rem solid var(--color-text);
-  padding: 1rem;
   text-align: left;
+  border: var(--var-border-width, 0.15rem) solid var(--color-text);
+  border-radius: var(--var-border-radius, 0.5rem);
+  padding: 1rem;
 }
 
 .l-automator-points-list-side-col {
@@ -53,27 +99,28 @@
 }
 
 .c-automator-points-list-cell {
-  position: relative;
+  overflow: hidden;
   width: 100%;
   height: 48%;
-  padding: 1rem;
-  border: 0.15rem solid var(--color-text);
+  position: relative;
   text-align: left;
-  overflow: hidden;
+  border: var(--var-border-width, 0.15rem) solid var(--color-text);
+  border-radius: var(--var-border-radius, 0.5rem);
+  padding: 1rem;
 }
 
 .c-automator-points-list-symbol {
-  position: absolute;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
   top: 0;
   left: 0;
+  justify-content: center;
+  align-items: center;
   font-size: 15rem;
   opacity: 0.2;
   text-shadow: 0 0 2rem;
-  width: 100%;
-  height: 100%;
   pointer-events: none;
 }
 
@@ -101,21 +148,6 @@
   opacity: 0.6;
 }
 
-.l-automator-tab--full-screen {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: -6.5rem;
-  bottom: 0;
-  margin-top: 0;
-  z-index: 4;
-}
-
-.l-automator-tab--full-screen > div {
-  height: calc(100% - 6.5rem);
-  width: 100%;
-}
-
 .l-automator-pane {
   display: flex;
   flex-direction: column;
@@ -126,149 +158,130 @@
   flex: 1 1 auto;
 }
 
-.l-automator-pane__controls {
-  flex: 0 0 auto;
+.s-base--metro .l-automator-pane__content::-webkit-scrollbar-thumb {
+  border-radius: 0;
 }
 
 .c-automator__controls {
-  background-color: #262626;
+  background-color: var(--color-automator-controls-background);
+  border-bottom: 0.3rem solid var(--color-automator-active-line-outline);
 }
 
 .l-automator__controls {
   display: flex;
+  flex: none;
+  flex-direction: column;
+}
+
+.l-automator-button-row {
+  display: flex;
   flex-direction: row;
+  height: 3rem;
   align-items: center;
-  justify-content: flex-start;
-  /* for corner buttons */
-  position: relative;
 }
 
 .l-automator__button {
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 0.3rem 0.8rem 0.3rem 0.8rem;
+  align-items: center;
+  padding: 0.3rem 0.8rem;
 }
 
 .l-automator__button--corner {
   position: absolute;
+  top: 0;
   right: 0;
-  top: 0
-}
-
-.c-automator__button {
-  margin: 0.4rem;
-  border-radius: 0.3rem;
-}
-
-.c-automator__button-play--active {
-  border-color: #45a047;
-  color: #45a047;
-}
-
-.c-automator__button--active {
-  border-color: #45a047;
-  color: #45a047;
-}
-
-.l-automator__script-names {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-.l-automator__scripts-dropdown {
-  width: 90%;
-  height: 90%;
-  padding: 0.1rem;
-}
-
-.l-automator__rename-input {
-  width: 90%;
-  height: 90%;
-  padding: 0.1rem;
 }
 
 .c-automator-editor__active-line {
-  background: rgb(43, 6, 92);
-  outline: 0.1rem solid rgb(68, 0, 255);
+  background: var(--color-automator-active-line-background);
+  outline: 0.1rem solid var(--color-automator-active-line-outline);
 }
 
 .c-automator-editor__active-line-gutter {
   font-weight: bold;
-  background: rgb(43, 6, 92);
+  background: var(--color-automator-active-line-background);
+  outline: 0.1rem solid var(--color-automator-active-line-outline);
   filter: brightness(200%);
-  outline: 0.1rem solid rgb(68, 0, 255);
 }
 
 .c-automator-editor__event-line {
-  background: rgb(0, 127, 0);
-  outline: 0.1rem solid rgb(25, 200, 25);
+  background: var(--color-automator-event-background);
+  outline: 0.1rem solid var(--color-automator-event-outline);
 }
 
 .c-automator-editor__event-line-gutter {
   font-weight: bold;
-  background: rgb(0, 127, 0);
+  background: var(--color-automator-event-background);
+  outline: 0.1rem solid var(--color-automator-event-outline);
   filter: brightness(200%);
-  outline: 0.1rem solid rgb(25, 200, 25);
 }
 
 .c-automator-editor__error-line {
-  background: rgb(172, 6, 23);
-  outline: 0.1rem solid rgb(255, 0, 64);
+  background: var(--color-automator-error-background);
+  outline: 0.1rem solid var(--color-automator-error-outline);
 }
 
 .c-automator-editor__error-line-gutter {
   font-weight: bold;
-  background: rgb(172, 6, 23);
+  background: var(--color-automator-error-background);
+  outline: 0.1rem solid var(--color-automator-error-outline);
   filter: brightness(200%);
-  outline: 0.1rem solid rgb(255, 0, 64);
 }
 
 .c-automator-editor {
+  text-align: left;
   font-family: Typewriter, serif;
   font-size: 1.4rem;
-  text-align: left;
-  border-bottom: 0.15rem solid #262626;
+  border-bottom: 0.15rem solid var(--color-automator-controls-background);
 }
 
 .l-automator-editor {
   display: flex;
-  flex-direction: column;
   flex: 1 1 auto;
+  flex-direction: column;
 }
 
 .l-automator-editor__codemirror-container {
   display: flex;
-  flex-direction: column;
   flex: 1 1 auto;
+  flex-direction: column;
+  z-index: 1;
 }
 
 .CodeMirror-hint {
-  font-size: 1rem;
   font-family: Typewriter, serif;
+  font-size: 1rem;
+}
+
+.s-base--metro .CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+  border-radius: 0;
 }
 
 .cm-s-liquibyte.CodeMirror,
 .cm-s-panda-syntax.CodeMirror {
-  font-size: 1.4rem;
-  font-family: Typewriter, serif;
-  line-height: 1.6rem;
+
   /* required for expanding into pane */
   flex: 1 1 auto;
+  font-family: Typewriter, serif;
+  font-size: 1.4rem;
+  line-height: 1.6rem;
 }
 
 .c-automator-docs {
-  border-right: 0.15rem solid #262626;
-  border-bottom: 0.15rem solid #262626;
-  background-color: lightgray;
-  padding-left: 1rem;
-  font-size: 1.4rem;
-  color: black;
-  text-align: left;
   overflow: auto;
+  text-align: left;
+  font-size: 1.4rem;
+  color: var(--color-automator-docs-font);
+  background-color: white;
+  border-right: 0.15rem solid var(--color-automator-controls-background);
+  border-bottom: 0.15rem solid var(--color-automator-controls-background);
+  padding: 1rem;
+}
+
+.s-base--dark .c-automator-docs {
+  color: var(--color-automator-docs-font);
+  background-color: black;
 }
 
 .c-automator-docs-page {
@@ -286,21 +299,60 @@
   margin-left: 2rem;
 }
 
+.c-automator-docs--button {
+  width: 2.8rem;
+  height: 2.2rem;
+  border-width: 0.1rem;
+  border-radius: var(--var-border-radius, 0.3rem);
+  margin: 0.1rem;
+  cursor: pointer;
+}
+
+.c-automator-docs-script-select {
+  height: 2.2rem;
+  width: 100%;
+  padding: 0 0.5rem;
+  text-align: left;
+  font-family: Typewriter, serif;
+  font-size: 1.2rem;
+  color: var(--color-automator-docs-font);
+  background-color: var(--color-automator-controls-inactive);
+  border: var(--var-border-width, 0.2rem) solid var(--color-automator-controls-border);
+  border-radius: var(--var-border-radius, 0.4rem);
+  cursor: pointer;
+}
 
 .o-automator-error-underline {
   display: inline-block;
   position: relative;
 }
 
-.o-automator-error-underline:before {
+.o-automator-error-underline::before {
   content: "~~~~~~~~~~~~";
-  font-size: 0.6em;
-  font-weight: 700;
-  font-family: Times New Roman, Serif;
-  color: red;
+  overflow: hidden;
   width: 100%;
   position: absolute;
   top: 12px;
   left: -1px;
-  overflow: hidden;
+  color: red;
+}
+
+.c-automator-input-required {
+  background: var(--color-blockmator-block-required);
+}
+
+.c-automator-input-optional {
+  background: var(--color-blockmator-block-optional);
+}
+
+.c-automator-block-row-active {
+  background: var(--color-automator-active-line-background);
+}
+
+.c-automator-block-row-event {
+  background: var(--color-automator-event-background);
+}
+
+.c-automator-block-row-error {
+  background: var(--color-automator-error-background);
 }

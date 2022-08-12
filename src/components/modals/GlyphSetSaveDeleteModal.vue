@@ -1,6 +1,6 @@
 <script>
-import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
   name: "GlyphSetSaveDeleteModal",
@@ -9,8 +9,8 @@ export default {
     GlyphSetPreview
   },
   props: {
-    modalConfig: {
-      type: Object,
+    glyphSetId: {
+      type: Number,
       required: true
     }
   },
@@ -21,10 +21,10 @@ export default {
   },
   methods: {
     update() {
-      this.glyphSet = Glyphs.copyForRecords(player.reality.glyphs.sets[this.modalConfig.glyphSetId]);
+      this.glyphSet = Glyphs.copyForRecords(player.reality.glyphs.sets[this.glyphSetId].glyphs);
     },
     handleYesClick() {
-      player.reality.glyphs.sets[this.modalConfig.glyphSetId] = [];
+      player.reality.glyphs.sets[this.glyphSetId].glyphs = [];
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
   },
@@ -32,7 +32,10 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="deleteGlyphSetSave"
+    @confirm="handleYesClick"
+  >
     <template #header>
       Delete this Glyph Set
     </template>

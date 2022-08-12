@@ -7,41 +7,39 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    bulk: {
+      type: Boolean,
       required: true,
     }
   },
   computed: {
-    bulk() { return this.modalConfig.bulk; },
     topLabel() {
       return `You are about to do a Dimension Boost Reset`;
     },
     message() {
-      const areDimensionsReset = Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked
+      const areDimensionsReset = (Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) &&
+      (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought)
         ? `not reset anything because you have ${Perk.antimatterNoReset.isBought ? "Perk ANR" : "Achievement 111"}`
         : `reset your Antimatter and Antimatter Dimensions`;
 
       return `This will ${areDimensionsReset}. Are you sure you want to do this?`;
     },
   },
-  created() {
-    this.on$(GAME_EVENT.DIMBOOST_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-  },
   methods: {
     handleYesClick() {
       requestDimensionBoost(this.bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="dimensionBoost"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ topLabel }}
     </template>

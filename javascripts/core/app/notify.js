@@ -35,9 +35,11 @@ export const notify = (function() {
     success: (text, duration) => showNotification(text, "o-notification--success", duration),
     error: (text, duration) => showNotification(text, "o-notification--error", duration),
     info: (text, duration) => showNotification(text, "o-notification--info", duration),
+    infinity: (text, duration) => showNotification(text, "o-notification--infinity", duration),
     eternity: (text, duration) => showNotification(text, "o-notification--eternity", duration),
     reality: (text, duration) => showNotification(text, "o-notification--reality", duration),
     blackHole: (text, duration) => showNotification(text, "o-notification--black-hole", duration),
+    strike: (text, duration) => showNotification(text, "o-notification--strike", duration),
     showBlackHoles: true
   };
 }());

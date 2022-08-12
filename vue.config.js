@@ -7,4 +7,5 @@ module.exports = {
   configureWebpack: {
     devtool: "eval-source-map",
   },
+  runtimeCompiler: true
 };

@@ -1,4 +1,4 @@
-import { GameDatabase } from "../game-database.js";
+import { GameDatabase } from "../game-database";
 
 // Used for UI purposes to give different theming for different kinds of upgrades
 export const LAITELA_UPGRADE_DIRECTION = {
@@ -121,7 +121,7 @@ GameDatabase.celestials.singularityMilestones = {
     start: 1500,
     repeat: 10000,
     limit: 6,
-    description: "Dark Energy multiplier based on Lai'tela Reality completions",
+    description: "Dark Energy multiplier based on disabled Dimension count within Lai'tela",
     effect: completions => Math.pow(1 + 0.05 * completions, Laitela.difficultyTier),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
@@ -177,7 +177,7 @@ GameDatabase.celestials.singularityMilestones = {
     start: 3e6,
     repeat: 0,
     limit: 1,
-    description: "Boost Dark Matter and Dark Energy production based on highest glyph level",
+    description: "Boost Dark Matter and Dark Energy production based on highest Glyph level",
     effect: () => Math.pow(Math.clampMin((player.records.bestReality.glyphLevel - 15000) / 2000, 1), 0.5),
     effectFormat: x => formatX(x, 2, 2),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_LAITELA,

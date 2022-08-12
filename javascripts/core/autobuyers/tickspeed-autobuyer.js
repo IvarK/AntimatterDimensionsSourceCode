@@ -1,5 +1,6 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
 
 Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
@@ -28,7 +29,7 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
   }
 
   get canBeBought() {
-    return true;
+    return !Pelle.isDoomed;
   }
 
   get disabledByContinuum() {

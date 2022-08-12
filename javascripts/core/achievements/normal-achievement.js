@@ -1,13 +1,11 @@
-import { GameMechanicState } from "../game-mechanics/index.js";
+import { GameMechanicState } from "../game-mechanics/index";
 
 class AchievementState extends GameMechanicState {
   constructor(config) {
     super(config);
     this._row = Math.floor(this.id / 10);
     this._column = this.id % 10;
-    // eslint-disable-next-line no-bitwise
     this._bitmask = 1 << (this.column - 1);
-    // eslint-disable-next-line no-bitwise
     this._inverseBitmask = ~this._bitmask;
     this.registerEvents(config.checkEvent, args => this.tryUnlock(args));
   }
@@ -28,8 +26,11 @@ class AchievementState extends GameMechanicState {
     return this.row < 14;
   }
 
+  get isPrePelle() {
+    return this.row < 18;
+  }
+
   get isUnlocked() {
-    // eslint-disable-next-line no-bitwise
     return (player.achievementBits[this.row - 1] & this._bitmask) !== 0;
   }
 
@@ -48,21 +49,22 @@ class AchievementState extends GameMechanicState {
   }
 
   lock() {
-    // eslint-disable-next-line no-bitwise
     player.achievementBits[this.row - 1] &= this._inverseBitmask;
   }
 
   unlock(auto) {
     if (this.isUnlocked) return;
-    // eslint-disable-next-line no-bitwise
     player.achievementBits[this.row - 1] |= this._bitmask;
     if (this.id === 85 || this.id === 93) {
       Autobuyer.bigCrunch.bumpAmount(4);
     }
     if (this.id === 55 && !PlayerProgress.realityUnlocked()) {
-      Modal.message.show(`Since you performed an Infinity in under a minute, the UI changed on the screen. 
-      Instead of the Dimensions disappearing, they stay and the Big Crunch button appears on top of them. 
-      This is purely visual, and is there to prevent flickering.`);
+      Modal.message.show(`Since you performed an Infinity in under a minute, the UI changed on the screen.
+        Instead of the Dimensions disappearing, they stay and the Big Crunch button appears on top of them.
+        This is purely visual, and is there to prevent flickering.`, {}, 3);
+    }
+    if (this.id === 148 || this.id === 166) {
+      GameCache.staticGlyphWeights.invalidate();
     }
     if (auto) {
       GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
@@ -93,6 +95,13 @@ export const Achievements = {
     return Achievements.all.filter(ach => ach.isPreReality);
   },
 
+  /**
+   * @type {AchievementState[]}
+   */
+  get prePelle() {
+    return Achievements.all.filter(ach => ach.isPrePelle);
+  },
+
   get allRows() {
     const count = Achievements.all.map(a => a.row).max();
     return Achievements.rows(1, count);
@@ -100,6 +109,11 @@ export const Achievements = {
 
   get preRealityRows() {
     const count = Achievements.preReality.map(a => a.row).max();
+    return Achievements.rows(1, count);
+  },
+
+  get prePelleRows() {
+    const count = Achievements.prePelle.map(a => a.row).max();
     return Achievements.rows(1, count);
   },
 
@@ -152,8 +166,7 @@ export const Achievements = {
     const unlockedRows = Achievements.allRows
       .countWhere(row => row.every(ach => ach.isUnlocked));
     const basePower = Math.pow(1.25, unlockedRows) * Math.pow(1.03, Achievements.effectiveCount);
-    let exponent = getAdjustedGlyphEffect("effarigachievement");
-    if (Ra.has(RA_UNLOCKS.ACHIEVEMENT_POW)) exponent *= 1.5;
+    const exponent = getAdjustedGlyphEffect("effarigachievement") * Ra.unlocks.achievementPower.effectOrDefault(1);
     return Math.pow(basePower, exponent);
   }),
 

@@ -54,7 +54,12 @@ export class TimeStudyTree {
   // formatting separately from verifying existence allows us to produce more useful in-game error messages for
   // import strings which are formatted correctly but aren't entirely valid
   static isValidImportString(input) {
-    return /^(\d+)(,(\d+))*(\|\d+)?$/u.test(input);
+    if (input.trim() === "") {
+      return false;
+    }
+    let test = input.replaceAll(/ +/gu, "");
+    TimeStudyTree.sets.forEach((_, x) => test = test.replaceAll(new RegExp(`${x},?`, "gu"), ""));
+    return /^,?((\d{2,3}(-\d{2,3})?)\b,?)*(\|\d{0,2})?$/iu.test(test);
   }
 
   // Getter for all the studies in the current game state
@@ -69,43 +74,110 @@ export class TimeStudyTree {
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
   // This method attempts to take the parameter array and purchase all the studies specified, using the current game
   // state to determine if they are affordable. Input array may be either an id array or a TimeStudyState array
-  static commitToGameState(studyArray) {
+  static commitToGameState(studyArray, auto = true) {
     for (const item of studyArray) {
       const study = typeof item === "number" ? TimeStudy(item) : item;
-      if (study && !study.isBought) study.purchase(true);
+      if (study && !study.isBought) study.purchase(auto);
     }
     GameCache.currentStudyTree.invalidate();
+  }
+
+  static get sets() {
+    // Grouping of studies. The key followed by an array of the studies the key is a shorthand for.
+    return new Map([
+      ["antimatter", [71, 81, 91, 101]],
+      ["infinity", [72, 82, 92, 102]],
+      ["time", [73, 83, 93, 103]],
+      ["active", [121, 131, 141]],
+      ["passive", [122, 132, 142]],
+      ["idle", [123, 133, 143]],
+      ["light", [221, 223, 225, 227, 231, 233]],
+      ["dark", [222, 224, 226, 228, 232, 234]],
+      ...(Ra.unlocks.unlockHardV.canBeApplied
+        ? [["triad", [301, 302, 303, 304].slice(0, Ra.unlocks.unlockHardV.effectOrDefault(0))]]
+        : [])
+    ]);
+  }
+
+  static truncateInput(input) {
+    let internal = input.toLowerCase();
+    // Convert every name into the ids it is a shorthand for
+    this.sets.forEach((ids, name) => (internal = internal.replace(name, ids.join())));
+    return internal
+      .replace(/[|,]$/u, "")
+      .replaceAll(" ", "")
+      // Allows 11,,21 to be parsed as 11,21 and 11,|1 to be parsed as 11|1
+      .replace(/,{2,}/gu, ",")
+      .replace(/,\|/gu, "|");
+  }
+
+  static formatStudyList(input) {
+    const internal = input.toLowerCase().replaceAll(" ", "");
+    return internal.replaceAll(",", ", ").replace("|", " | ");
   }
 
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
   // to invalid studies for additional information to present to the player
   parseStudyImport(input) {
-    const treeStudies = input.split("|")[0].split(",");
     const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
-    const studyArray = [];
-    for (const study of treeStudies) {
-      if (studyDB.includes(parseInt(study, 10))) {
-        const tsObject = TimeStudy(study);
-        this.selectedStudies.push(tsObject);
-        studyArray.push(tsObject);
-      } else this.invalidStudies.push(study);
+    const output = [];
+    const studiesString = TimeStudyTree.truncateInput(input).split("|")[0];
+    if (studiesString.length) {
+      const studyCluster = studiesString.split(",");
+      for (const studyRange of studyCluster) {
+        const studyRangeSplit = studyRange.split("-");
+        const studyArray = studyRangeSplit[1]
+          ? this.studyRangeToArray(studyRangeSplit[0], studyRangeSplit[1])
+          : studyRangeSplit;
+        for (const study of studyArray) {
+          if (studyDB.includes(parseInt(study, 10))) {
+            const tsObject = TimeStudy(study);
+            this.selectedStudies.push(tsObject);
+            output.push(tsObject);
+          } else {
+            this.invalidStudies.push(study);
+          }
+        }
+      }
     }
 
     // If the string has an EC indicated in it, append that to the end of the study array
     const ecString = input.split("|")[1];
     if (!ecString) {
       // Study strings without an ending "|##" are still valid, but will result in ecString being undefined
-      return studyArray;
+      return output;
     }
     const ecID = parseInt(ecString, 10);
     const ecDB = GameDatabase.eternity.timeStudies.ec;
     // Specifically exclude 0 because saved presets will contain it by default
     if (!ecDB.map(c => c.id).includes(ecID) && ecID !== 0) {
       this.invalidStudies.push(`EC${ecID}`);
-      return studyArray;
+      return output;
     }
-    if (ecID !== 0) studyArray.push(TimeStudy.eternityChallenge(ecID));
-    return studyArray;
+    if (ecID !== 0) output.push(TimeStudy.eternityChallenge(ecID));
+    return output;
+  }
+
+  studyRangeToArray(firstNumber, lastNumber) {
+    const studiesArray = [];
+    const first = this.checkTimeStudyNumber(firstNumber);
+    const last = this.checkTimeStudyNumber(lastNumber);
+    if ((first !== 0) && (last !== 0)) {
+      for (let id = first; id <= last; id++) {
+        if (TimeStudy(id)) {
+          studiesArray.push(id);
+        }
+      }
+    }
+    return studiesArray;
+  }
+
+  checkTimeStudyNumber(token) {
+    const tsNumber = parseFloat(token);
+    if (!TimeStudy(tsNumber) || (TimeStudy(tsNumber).isTriad && !Ra.canBuyTriad)) {
+      return 0;
+    }
+    return tsNumber;
   }
 
   // Attempt to purchase all studies specified in the array which may be either study IDs (which get converted) or
@@ -125,6 +197,8 @@ export class TimeStudyTree {
     // Import strings can contain repeated or undefined entries
     if (!study || this.purchasedStudies.includes(study)) return false;
 
+    // Because the player data may not reflect the state of the TimeStudyTree object's purchasedStudies,
+    // we have to do all the checks here with purchasedStudies. study.isBought and similar functions cannot be used.
     const check = req => (typeof req === "number"
       ? this.purchasedStudies.includes(TimeStudy(req))
       : req());
@@ -145,21 +219,22 @@ export class TimeStudyTree {
     }
     if (study instanceof ECTimeStudyState) {
       if (this.purchasedStudies.some(s => s instanceof ECTimeStudyState)) return false;
-      const forbiddenStudies = study.config.secondary.forbiddenStudies ?? [];
-      const buyCheck = checkOnlyStructure ? study.isAccessible : study.canBeBought;
-      const hasForbiddenStudies = Perk.studyECRequirement.isBought
-        ? false
-        : forbiddenStudies.some(s => this.purchasedStudies.includes(TimeStudy(s)));
-      reqSatisfied = reqSatisfied && buyCheck && !hasForbiddenStudies;
+      const hasForbiddenStudies = !Perk.studyECRequirement.isBought &&
+        study.config.secondary.forbiddenStudies?.some(s => check(s));
+      // We want to only check the structure for script template error instructions
+      if (checkOnlyStructure) {
+        return reqSatisfied && !hasForbiddenStudies;
+      }
+      const hasEnoughTT = Currency.timeTheorems.value.subtract(this.spentTheorems[0]).gte(study.cost);
+      return reqSatisfied && !hasForbiddenStudies && (study.isBought || (study.isEntryGoalMet && hasEnoughTT));
     }
-    if (!reqSatisfied) return false;
-    return true;
+    return reqSatisfied;
   }
 
   // Buys the specified study; no requirement verification beyond cost, use hasRequirements() to verify proper structure
   buySingleStudy(study, checkCosts) {
     const config = study.config;
-    const stDiscount = V.has(V_UNLOCKS.RA_UNLOCK) ? 2 : 0;
+    const stDiscount = VUnlocks.raUnlock.effectOrDefault(0);
     const stNeeded = config.STCost && config.requiresST.some(s => this.purchasedStudies.includes(TimeStudy(s)))
       ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;

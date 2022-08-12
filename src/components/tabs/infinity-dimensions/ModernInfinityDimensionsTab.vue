@@ -1,6 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import InfinityDimensionRow from "./ModernInfinityDimensionRow";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "ModernInfinityDimensionsTab",
@@ -68,8 +68,7 @@ export default {
       this.extraTesseracts = Tesseracts.extra;
     },
     maxAll() {
-      tryUnlockInfinityDimensions(false);
-      buyMaxInfinityDimensions();
+      InfinityDimensions.buyMax();
     },
     toggleAllAutobuyers() {
       toggleAllInfDims();

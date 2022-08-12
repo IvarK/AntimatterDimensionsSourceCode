@@ -1,9 +1,9 @@
-import { GameDatabase } from "./game-database.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { GameDatabase } from "./game-database";
 
 // A = always there
 // L = locked
-// J = joke/unreasonable condition
 // R = random chance condition
 // P = patreon
 // AI = created with gpt2
@@ -459,7 +459,9 @@ GameDatabase.news = [
   },
   {
     id: "a93",
-    text: "Do antimatter people with suicidal thoughts get depressants?"
+    text:
+      `On a scale of 1 to 10, I rate this game a solid
+      <span style='color: red'>java.lang.IndexOutOfBoundsException</span>`
   },
   {
     id: "a94",
@@ -477,7 +479,7 @@ GameDatabase.news = [
   },
   {
     id: "a97",
-    text: "Nobody once told me the anti-world wasn’t gonna roll me."
+    text: "Nobody once told me the anti-world wasn't gonna roll me."
   },
   {
     id: "a98",
@@ -552,21 +554,21 @@ GameDatabase.news = [
   {
     id: "a112",
     text:
-      `What the f*ck did you just f*cking say about me, you little b*tch? I’ll have you know I graduated top of my
-      class in the Antimatter Seals, and I’ve been involved in numerous secret raids on the 9th Dimension, and I
-      have over 300 NNnNeMI-NNnNe confirmed kills. I am trained in potato warfare and I’m the top sniper in the
+      `What the f*ck did you just f*cking say about me, you little b*tch? I'll have you know I graduated top of my
+      class in the Antimatter Seals, and I've been involved in numerous secret raids on the 9th Dimension, and I
+      have over 300 NNnNeMI-NNnNe confirmed kills. I am trained in potato warfare and I'm the top sniper in the
       entire Antimatter Galactic armed forces. You are nothing to me but just another infinity. I will wipe you
       the f*ck out with Max All mashing the likes of which has never been seen before in this dimension, mark my
       f*cking words. You think you can get away with saying that shit to me over the Interdimensional network?
       Think again, f*cker. As we speak I am contacting my secret network of autobuyers across the galaxy and your
       IP is being traced right now so you better prepare for the Big Crunch, maggot. The Big Crunch that wipes out
-      the pathetic little thing you call your life. You’re f*cking dead, kid. I can be anywhere, anytime, and I can
-      kill you in over seven 😠💩 different ways, and that’s just with my mouse. Not only am I extensively trained
+      the pathetic little thing you call your life. You're f*cking dead, kid. I can be anywhere, anytime, and I can
+      kill you in over seven 😠💩 different ways, and that's just with my mouse. Not only am I extensively trained
       in dimension shift combat, but I have access to the entire arsenal of the Antimatter Marine Corps and I will
       use it to its full extent to wipe your miserable ass off the face of the universe, you little shit. If only
       you could have known what unhevi retribution your little “clever” comment was about to bring down upon you,
-      maybe you would have held your f*cking tongue. But you couldn’t, you didn’t, and now you’re buying until 10,
-      you goddamn idiot. I will shit antimatter shit all over you and you will drown in it. You’re f*cking dead,
+      maybe you would have held your f*cking tongue. But you couldn't, you didn't, and now you're buying until 10,
+      you goddamn idiot. I will shit antimatter shit all over you and you will drown in it. You're f*cking dead,
       kiddo.`
   },
   {
@@ -645,7 +647,7 @@ GameDatabase.news = [
   },
   {
     id: "a123",
-    text: "Finland declares that it's starting to import Cancer."
+    text: "Finland declares that it's starting to import Design."
   },
   {
     id: "a124",
@@ -690,15 +692,15 @@ GameDatabase.news = [
     id: "a131",
     text:
       `Warning - We have just been informed that there is a chance of infection with a mind-virus of the Basilisk
-      type, similar to the infamous winking parrot. This particular example is known as 'Fractal Cancer Type III'.
+      type, similar to the infamous winking parrot. This particular example is known as 'Fractal Disease Type III'.
       This is believed to cause a 'crashing' of the mind, similar to a computer crash, due to the mathematical
       complexity of the image causing mathematical ideas that the mind can't comprehend, a Gondelian shock input
       eventually leading to crashing through Gondelian spoilers. All who have researched it have eventually died
       the same way, so it is impossible to tell exactly, but this is the common belief. Regardless, with the
-      introduction of 'cancer' mode, as well as reports of it's spontaneous appearance, sufficient repetition
-      of this mode's appearance may lead to an image forming in the mind similar to 'Fractal Cancer Type III'.
+      introduction of 'design' mode, as well as reports of it's spontaneous appearance, sufficient repetition
+      of this mode's appearance may lead to an image forming in the mind similar to 'Fractal Disease Type III'.
       With this in mind, we have some suggestions if you find yourself plagued with it. First, refresh immediately
-      and see if that fixes the issue. If not, navigate to options, and change the theme from cancer to literally
+      and see if that fixes the issue. If not, navigate to options, and change the theme from design to literally
       anything else. And above all else, Godspeed. We can't afford to lose anymore viewers.`
   },
   {
@@ -913,7 +915,7 @@ GameDatabase.news = [
     id: "a174",
     text:
       `<span style='font-family: runescape; color: yellow; text-shadow: 0.1rem 0.1rem black; letter-spacing: 0.1rem;
-      font-size: 2rem; line-height: 0; animation: text-flash 1s steps(1, end) infinite;'
+      font-size: 2rem; line-height: 0; animation: a-text-flash 1s steps(1, end) infinite;'
       >FREE RUNE ARMOR TRIMMING</span>`,
   },
   {
@@ -928,7 +930,7 @@ GameDatabase.news = [
   },
   {
     id: "a176",
-    text: "I've been using cancer notation so long that I can actually read it now, please send help."
+    text: "I've been using emoji notation so long that I can actually read it now, please send help."
   },
   {
     id: "a177",
@@ -978,7 +980,7 @@ GameDatabase.news = [
     id: "a182",
     text:
       `With the final update, Antimatter Dimensions has been finished. Thank you for playing. However, in the very
-      near future, ANTIMATTER DIMENSIONS will be released. And before you ask, it’s not a sequel, it’s a reboot.
+      near future, ANTIMATTER DIMENSIONS will be released. And before you ask, it's not a sequel, it's a reboot.
       Look forward to it in 5 hours!`
   },
   {
@@ -990,12 +992,12 @@ GameDatabase.news = [
   {
     id: "a184",
     text:
-      `<span style='animation: text-grow 1s infinite'>R̵̬̙͋͂̀̋͑̈́̇͠Ê̵͇͎͂̂̍̓̌̐̋̋̀̀̔M̶̨̲̯̘͙̬̥̮̣͚̱̫͛̽̃͌̚͝
-      "Ą̴͍̝͐Į̷̛̲̯̫̘͌́̄̏͌̀̈́͝͝Ṅ̶̛̻̠̠̤̦̞̞͗̎̊̌̊͝͠</span><span style='animation: text-shrink 1s infinite'>
+      `<span style='animation: a-text-grow 1s infinite'>R̵̬̙͋͂̀̋͑̈́̇͠Ê̵͇͎͂̂̍̓̌̐̋̋̀̀̔M̶̨̲̯̘͙̬̥̮̣͚̱̫͛̽̃͌̚͝
+      "Ą̴͍̝͐Į̷̛̲̯̫̘͌́̄̏͌̀̈́͝͝Ṅ̶̛̻̠̠̤̦̞̞͗̎̊̌̊͝͠</span><span style='animation: a-text-shrink 1s infinite'>
       Ḁ̷̛͂̈́͗̎̃̓͛́͘ͅW̶̡̖͓̗̦̃̇̌̀͝A̵͇̭͉̓̎̈̿̊́̄̚͜R̶̝͚̲̭͎͇͎͓͖͚͇̀̈́͗̃̏̂̌͝͝Ę̴̡̤͙͈̝̬̰͒͘</span><span style
-      ='animation: text-grow 1s infinite'> ̶̺̈́́̆̓͘͘Ồ̸̢̢̮͓̯̗͙͚̬̉͊̿F̶̠̤̱̱̱͊̂̍̔̃͆̆̑̿͘</span><span style='animation:
-      text-shrink 1s infinite'> ̴̨̞̠̮͚̱͉͋̔͗̽̈́́́̅ͅỴ̶̣̙̹͚̲͔̲̼̬̥̀͌̒̾͘͘O̵̪̠̗̝̗̘̜͚̮̊͒͆̃̀̌̒͝ͅU̸͎͗̍̑̎̅̅͝R̵̗͑̽̏̓͆͒̈́͌͘̕
-      </span><span style='animation: text-grow 1s infinite'> ̸̑̽̇̆͊̔̍̊̈́̈́͘ͅS̸̘͐͝U̴̥̭̚͘R̸̖̜͍͒́̋͆̈́̓
+      ='animation: a-text-grow 1s infinite'> ̶̺̈́́̆̓͘͘Ồ̸̢̢̮͓̯̗͙͚̬̉͊̿F̶̠̤̱̱̱͊̂̍̔̃͆̆̑̿͘</span><span style='animation:
+      a-text-shrink 1s infinite'> ̴̨̞̠̮͚̱͉͋̔͗̽̈́́́̅ͅỴ̶̣̙̹͚̲͔̲̼̬̥̀͌̒̾͘͘O̵̪̠̗̝̗̘̜͚̮̊͒͆̃̀̌̒͝ͅU̸͎͗̍̑̎̅̅͝R̵̗͑̽̏̓͆͒̈́͌͘̕
+      </span><span style='animation: a-text-grow 1s infinite'> ̸̑̽̇̆͊̔̍̊̈́̈́͘ͅS̸̘͐͝U̴̥̭̚͘R̸̖̜͍͒́̋͆̈́̓
       R̸̡̛̛̪̝̟̱̣̹̭̟̣̀̈̀̏̉̌͝͠Õ̶͙͈͖̠͇̬͍̟̰U̵̩̫͉̝͔̼͎̦̔̓̽͌͊̏̇̓̀̓̀Ņ̸͍͇̘̙̥̰͉̲͕͈̥̍͛̃̑͝Ḑ̵̤̻̖̱̘̯̝̖̈̌̄̕͝
       Ī̶̜̱̈́̑̃̉̄̋̔͐͋͠Ṅ̴͎̞͍̽͊͛̈́̅͛̈̅̚͠Ģ̸̢̾͊S̷̫̼̜̼͇̋͛̎͑͆̅̓̇</span>`,
   },
@@ -1012,10 +1014,10 @@ GameDatabase.news = [
   {
     id: "a186",
     text:
-      `<span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span style='animation: text-grow 1s infinite
-      '>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span style='animation:
-      text-grow 1s infinite'>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span
-      style='animation: text-grow 1s infinite'>\\(^_^)\\</span>`,
+      `<span style='animation: a-text-shrink 1s infinite'>/(^_^)/</span> <span style='animation: a-text-grow 1s infinite
+      '>\\(^_^)\\</span> <span style='animation: a-text-shrink 1s infinite'>/(^_^)/</span> <span style='animation:
+      a-text-grow 1s infinite'>\\(^_^)\\</span> <span style='animation: a-text-shrink 1s infinite'>/(^_^)/</span> <span
+      style='animation: a-text-grow 1s infinite'>\\(^_^)\\</span>`,
   },
   {
     id: "a187",
@@ -1041,10 +1043,10 @@ GameDatabase.news = [
   },
   {
     id: "a192",
-    text:
-      `17976931348623159077293051907890247336179769789423065727343008115773267580550096313270847732240753602112011
-      38798713933576587897688144166224928474306394741243777678934248654852763022196012460941194530829520850057688
-      38150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216`
+    // This ticker needs to be an unbroken string; using backtick strings and linebreaking will add spaces in the
+    // ticker itself where the linebreaks are
+    // eslint-disable-next-line max-len
+    text: "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216"
   },
   {
     id: "a193",
@@ -1081,7 +1083,7 @@ GameDatabase.news = [
       random *= 255;
       const color = `hsl(${random}, 90%, 60%)`;
       return `<span style='color: ${color}; text-shadow: 0 0 0.5rem ${color};
-        animation: text-grow 0.4s infinite;'>Disco Time!</span>`;
+        animation: a-text-grow 0.4s infinite;'>Disco Time!</span>`;
     },
   },
   {
@@ -1092,7 +1094,7 @@ GameDatabase.news = [
     id: "a198",
     text:
       `Hey there! Just to let you know, there a speck of dust on your screen. Can you help wipe it off?
-      It bothers me when l’m not clean. Thanks a lot!`
+      It bothers me when l'm not clean. Thanks a lot!`
   },
   {
     id: "a199",
@@ -1350,8 +1352,8 @@ GameDatabase.news = [
     id: "a238",
     get text() {
       return `AD Player: "How many orders of magnitude are you on?" Normal person: "Like, maybe 5 or 6 right now, my
-      dude." AD Player: "You are like a little baby. Watch this: <span style='animation: text-crunch ${newsAnimSpd(22)}s
-      1; font-size: 0;'>C R O N C H</span>"`;
+      dude." AD Player: "You are like a little baby. Watch this: <span style='animation: a-text-crunch
+      ${newsAnimSpd(22)}s 1; font-size: 0;'>C R O N C H</span>"`;
     },
   },
   {
@@ -1439,7 +1441,7 @@ GameDatabase.news = [
   },
   {
     id: "a246",
-    text: "<span style='animation: fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
+    text: "<span style='animation: a-fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
   },
   (function() {
     let isFlipped = false;
@@ -1503,7 +1505,7 @@ GameDatabase.news = [
   {
     id: "a252",
     get text() {
-      return `<span style='animation: text-stretch ${newsAnimSpd(30)}s 1'>This message is dilated.</span>`;
+      return `<span style='animation: a-text-stretch ${newsAnimSpd(35)}s 1 forwards'>This message is dilated.</span>`;
     },
   },
   {
@@ -1544,12 +1546,12 @@ GameDatabase.news = [
   {
     id: "a259",
     text:
-      `Now hold on, I know what you’re thinking, "An M press is an M press, you can’t say it’s only a half!" Well,
+      `Now hold on, I know what you're thinking, "An M press is an M press, you can't say it's only a half!" Well,
       TJ "Slabdrill" Yoshi, hear me out. An M press actually has three parts to it: when M is pressed, when M is
-      held, and when M is released. Now, usually is the pressing that’s useful because that’s the only part that
-      matters; however, sometimes it’s sufficient to just use the holding part, which also buys dimensions and
-      tickspeed upgrades. And as for the release, well, there are currently no cases where that’s useful or
-      important, so don’t worry about that part. Now, if we map out the required presses for challenge 2 it would
+      held, and when M is released. Now, usually is the pressing that's useful because that's the only part that
+      matters; however, sometimes it's sufficient to just use the holding part, which also buys dimensions and
+      tickspeed upgrades. And as for the release, well, there are currently no cases where that's useful or
+      important, so don't worry about that part. Now, if we map out the required presses for challenge 2 it would
       look like this: /¯\\. We merely need to hold (¯) M to reach the first galaxy, we need to press (/) M to
       finish the challenge, and we need to press M again to start another challenge. So, how many presses is that
       total? Well, it appears to be three, and if we were doing this Eternity in isolation then yes, it would be
@@ -1560,8 +1562,8 @@ GameDatabase.news = [
       three by simply holding out the first M press to be used for the half M press, because the half M press only
       required M to be held, not actually pressed, so in this fashion, Challenge 2 only adds on an additional two M
       presses to the run, since the first M press just leeches off the previous M press. So to capture this
-      phenomenon, we call it 2.5 M presses. On a single Eternity basis, you’d round up that up to three, but in
-      a full game run, you’d round it down to two. So, in conclusion, since that first M press counts in other
+      phenomenon, we call it 2.5 M presses. On a single Eternity basis, you'd round up that up to three, but in
+      a full game run, you'd round it down to two. So, in conclusion, since that first M press counts in other
       contexts, but adds no additional presses in other contexts, we refer to it as a "Half M Press".`
   },
   {
@@ -2004,7 +2006,7 @@ GameDatabase.news = [
   {
     id: "a321",
     text:
-      `It must be hard being on your phone all alone. But don't worry; we are still here.
+      `It must be hard being on your PC all alone. But don't worry; we are still here.
       Listening and watching your every step.`
   },
   {
@@ -2021,7 +2023,7 @@ GameDatabase.news = [
     id: "a324",
     text:
       `If you have an idea for a news message, shout it into the void.
-      It won’t get your message into the game, but it’s fun!`
+      It won't get your message into the game, but it's fun!`
   },
   {
     id: "a325",
@@ -2110,8 +2112,8 @@ GameDatabase.news = [
       `Technological convergence is the concept that all technologies will converge into a single technology. It is
       a commonly expressed idea since the dawn of the Information Age, and can be seen in many places and devices
       such as smartphones, or the internet. Antimatter Dimensions is an example of technological convergence,
-      specifically within media. Using a genius idea called ‘not caring’ mixed in with the innovative solution of
-      ‘blind luck’, it merges together a subpar game, and a subpar news ticker, to create a mediocre experience
+      specifically within media. Using a genius idea called 'not caring' mixed in with the innovative solution of
+      'blind luck', it merges together a subpar game, and a subpar news ticker, to create a mediocre experience
       that despite being mostly a game, occasionally acts as a news source slightly above the Matter Dimensions
       Newsticker. Truly, an achievement for all businesses to aspire to strive towards, and hopefully actually beat.`
   },
@@ -2241,6 +2243,201 @@ GameDatabase.news = [
     }
   },
   {
+    id: "a350",
+    text:
+      `Alexander wept, for he had just watched a pop-culture lecture on quantum mechanics by Anaxarchus and
+      realised that there are infinite worlds to conquer, and that he couldn't even be the lord of one without
+      a mutiny or 6 stopping him.`
+  },
+  {
+    id: "a351",
+    text: "Hi, I'm here to complain about the poor quality of the copper that has just been delivered to me."
+  },
+  {
+    id: "a352",
+    get text() {
+      return `<span style='opacity: 0; animation: a-disappear ${newsAnimSpd(20)}s 1'>
+      This news message is antimemetic. You will forget that it exists shortly.</span>`;
+    }
+  },
+  (function() {
+    let wasClicked = false;
+    const normal = "<span style='cursor: pointer'>💣</span>";
+    const clicked = "💥";
+    return {
+      id: "a353",
+      get text() {
+        return wasClicked ? clicked : normal;
+      },
+      reset() {
+        wasClicked = false;
+      },
+      onClick() {
+        if (wasClicked) return undefined;
+        wasClicked = true;
+        return this.text;
+      }
+    };
+  }()),
+  // Blob from the blob font
+  {
+    id: "a354",
+    text:
+      `<span style='color: #FBC21B; text-shadow: 0px 1px 0px black, 1px 0px 0px black, 1px 1px 0px black,
+      0px -1px 0px black, -1px 0px 0px black, -1px -1px 0px black, 1px -1px 0px black, -1px 1px 0px black'>
+      \uE010</span>`
+  },
+  {
+    id: "a355",
+    text:
+      `<div style='background: url("../images/unsmith.png"); width: 2.3rem; height: 2.5rem; margin-top: -0.1rem'></div>`
+  },
+  {
+    id: "a356",
+    text: `Press "Choose save" to explore the other 2 parallel universes.`
+  },
+  {
+    id: "a357",
+    text:
+      `The Scientific Community remains baffled over the meaning of 286,078. "We're certain it's related to potatoes,
+      but we need to do more tests." one researcher notes.`
+  },
+  {
+    id: "a358",
+    text: `Press "Choose save" to explore the other 2 parallel universes.`
+  },
+  {
+    id: "a359",
+    text:
+      `Local incremental game dev makes physicists unhappy again. They claim
+      "the physics violations and blatant use of technobabble has gone too far".`
+  },
+  {
+    id: "a360",
+    text: `Press "Choose save" to explore the other 2 parallel universes.`
+  },
+  // Discord contest winner #1
+  {
+    id: "a361",
+    text: "We're having a sale of top quality waterproof towels! Be sure to get some on your way out!"
+  },
+  // Discord contest winner #2
+  {
+    id: "a362",
+    text:
+      `Hevipelle Incorporated is proud to present a new brand of cereal: The Big Crunch! This nutritious breakfast
+      meal contains crunchy antimatter O's, pocket dimensions, Infinity-flavored Sugar Cubes, exponentially-growing
+      Replicanti, and Eternity-flavored Marshmallows. Now you can experience Antimatter Dimensions inside of your
+      stomach! Warning: Side effects may include spontaneous combustion, nausea, vomiting, diarrhea,
+      dematerialization, vaporization, heart failure, the end of the world, or death. If you are not made out of
+      antimatter, consult an educated professional on Antimatter Consumption before eating 'The Big Crunch'.`
+  },
+  {
+    id: "a363",
+    text:
+      `The most expensive thing about a dragon isn't the gold you need to fill the nest, the magic you sacrifice
+      entire empires for, or the billions of wars you need to supply the decillions of adamantium. No, it is the
+      dirt. It's always the dirt. Don't ask the royal treasurers why we have more creatures on the plane than
+      molecules of dirt. Just keep summoning bulldozers through arcane rituals and keep looking through the
+      earth's core for more scraps of dirt.`
+  },
+  {
+    id: "a364",
+    get text() {
+      const products = [
+        `Illustration 320-A - True Office Graphics Wall. One of our senior consultants will observe your business,
+        and come up with a list of words to be added to a hallway, to remind all employees of the values of their
+        company. Known to decrease employee motivation by at least 25%! Past walls include words such as Black
+        Hole, Catastrophic, Haphazard, compromising, Inferior, Delusional, Inefficient and Collapsed! Order now!`,
+        `Furniture 150-A (2034 edition) - 3-person seating device. A revolutionary new design for office waiting
+        areas, it consists of a large 3 legged stool, placed upside down for aesthetic benefits. Perfect for
+        getting employees back to work, in a new set of shoes, or pants. It isn't tied down or glued to the
+        floor like other editions, but we do make sure that other employees look at you funny if you edit our
+        art. No need to order, it comes as a complimentary service for any customer!`,
+        `Furniture 0853 - "The Rack" - this revolutionary new workspace, from the inventors of the crawling
+        desk, helps your employees overcome their limits and ensure that your whole business is screaming -
+        in agony! At times chosen by our revolutionary "pAIn AI", it will suggest mandatory stretchers for all
+        users. Recommended by your local gaol, order now! *Warning, AOS&C only takes responsibility for acts
+        of god such as lightning or merciful purifications by deities.`
+      ];
+      const product = products.randomElement();
+      return `Antimatter Office Supplies and Co present their new "Modern Office" catalogue! Each template
+        design can be customised for your business, and offers a unique way to promote business synergy! Here
+        is a sneak preview of one of their newest items: ${product}`;
+    },
+  },
+  {
+    id: "a365",
+    text: "I don't like Replicanti. They're coarse and rough and irritating and they replicate everywhere."
+  },
+  {
+    id: "a366",
+    text:
+      `Stage magic, such as illusions, has an interesting history. A mix of charlatans attempting to scam people,
+      and actors acting out performances using illusions or slight of hand. Altering styles of magic, and continued
+      discourse and disagreements over whether it should be stated that it is an illusion, and whether people will
+      magically realise that it is fake and that it does not need to be stated. A schism a century ago split magic
+      into 2 types - gentle, simplistic utilitarian tricks and grand spectacles involving the flashy machinery and
+      beautiful assistants - originating from the popularisation of a single trick involving sawing a person in
+      half. Much more interesting than watching some TV psychic pretending to pull a lottery ticket out from a news
+      ticker, at any rate. Speaking of which, tonight's lottery numbers are 23, 10, 81, 106.4, 3 + 2i, and e.`
+  },
+  {
+    id: "a367",
+    text:
+      `Snakes look scary, and they absolutely are and you should run, calmly, from every snake you see. But, luckily
+      for you, snakes don't often take the initiative to bite - excluding the really mean ones. If they've gone out
+      of their way to bite you, there's generally 4 reasons. 1- The Snake is Mean. 2- You scared the snake. Snakes
+      are scary to you, but you are scary to snakes. Be the bigger lizard when you meet a snake. 3- You entered the
+      territory of the snake. Often, a snake will warn you if you do this - this is why rattle snakes rattle. If you
+      don't listen to the warning, they'll bite you. And the most important reason, 4- the snake finds you ugly.
+      This is the fault of the snake's ocular system, but is the most common form of bites in at least 2
+      jurisdictions. And if you get bitten by a snake, by virtue of being a scarily ugly lizard who keeps stumbling
+      into the wrong bushes, there's 3 main things you can do. First, calm down, again, and stay calm. Secondly,
+      immobilise the area around site that was bitten, and try using a compression bandage. Snake venom vision is
+      entirely based on movement of the object it's currently in. And third, calmly, call for help from other
+      lizards. Excluding the snake. The snake's too mean to help you.`
+  },
+  {
+    id: "a368",
+    text:
+      `I suspect more people would press the hard reset button if genuine effort was done to make the process as
+      miserable as possible. A slow removal of resources, with unique nerfs just to stop you from progressing. The
+      destruction of UI, turning from usable to unusable, arcane and unwieldy, requiring memory and luck to even
+      continue this quest. Randomness, against the player for even the simplest actions, to punish the thought of
+      progression. Hooks and traps and disasters and low rolls for a chance see progression, which entirely consists
+      of putting the state of the game further from anything deemed reasonable. A situation where the character is
+      broken just to tell you to leave… but the damage is already done, if it is even possible to turn back. And…
+      from there, a hard reset probably isn't enough. It would have to be… harder. Not just a hard reset, but a
+      cookie, something in local storage designed specifically to make it impossible to actually start a new game.
+      Or, something more malicious? And despite this, people would still throw themselves into this nightmare, for
+      humanity knows no bounds in its endless curiosity. No amount of warnings will stop everyone. They will find
+      a way to proceed, given it exists, and may even complain when it isn't as punishing as expected. So, do you
+      want to push the button, and experience the depths of despair, willingly? Hopefully not, because it isn't here.`
+  },
+  {
+    id: "a369",
+    text:
+      `An empire-building project is one of the most difficult things to implement. Thousands of hours of time,
+      planning, effort, consultation, and political manoeuvring to create truly airbreaking endeavours. Take the
+      Realmway Revitalisation Roadmap, a revolutionary program referred to by the 3 R's, which is known as the
+      pinnacle of the most famous of the empire's bureaucratic infrastructure committees - the EMIF (empire magic
+      infrastructure foundation) - not to be confused with the EAIF (Electric airship investment fund) or the
+      NMIC (National Magical Infrrastructure Coalition). The goal of the three R's, set out by the EMIF, was to
+      reinstate a mana trade corridor for SMSS (Small-Medium Steam Shuttles), a vital part of the burgeoning
+      consolidated states after their unfortunate pillaging during the NELC (ninth empire liberation crusade).
+      The three R's was a multi stage project - stage 1 was a survey glyph in the air - all big things start with
+      a small step. Stage 2, the unveiling of the EMOF (Empire Mechanical Obliteration Forcefield) had over 50
+      dignitaries - multiple emperors (from federated states to organisational leaders), foreign rulers, EMDF
+      (Effluent Manifested Destiny Families) who currently own the land, and even some of the forecast witches,
+      all gathered together to unveil the project in a show of EOSF (Empire Official Solidarity Friendships).
+      Sadly, the project was eventually cancelled at stage 215, as the creation of the EMTF (Excrement Material
+      Transmutation Facility) for the contractors exploded after coming into contact with a SMEA (Small-Medium
+      Electric Airship) placing the last survey peg from stage 459 due to a time vortex created by an argument
+      at the WAIC (Witches Annual Infrastructure Committee) as part of stage 56. Truly, tragic stuff - 3 award
+      nominations and 2 wins during that process due to EBIF (Efficient Bureaucracy In (the) Field).`
+  },
+  {
     id: "l1",
     text: "You just made your 1,000,000,000,000,000th antimatter. This one tastes like chicken.",
     get unlocked() { return Currency.antimatter.exponent === 15; }
@@ -2280,7 +2477,7 @@ GameDatabase.news = [
   {
     id: "l8",
     text: "A new group for the standardisation of numbers have come forward with a novel new format involving emoji's.",
-    get unlocked() { return player.requirementChecks.permanent.cancerGalaxies > 0; }
+    get unlocked() { return player.requirementChecks.permanent.emojiGalaxies > 0; }
   },
   {
     id: "l9",
@@ -2396,7 +2593,7 @@ GameDatabase.news = [
   {
     id: "l22",
     text: "Anti Emoji Movie a huge hit!",
-    get unlocked() { return player.requirementChecks.permanent.cancerGalaxies >= 5; }
+    get unlocked() { return player.requirementChecks.permanent.emojiGalaxies >= 5; }
   },
   {
     id: "l23",
@@ -2521,7 +2718,7 @@ GameDatabase.news = [
   {
     id: "l45",
     text: "Anti Emoji Movie MMMCMXCIX is a major hit!",
-    get unlocked() { return player.requirementChecks.permanent.cancerGalaxies >= 3999; }
+    get unlocked() { return player.requirementChecks.permanent.emojiGalaxies >= 3999; }
   },
   {
     id: "l46",
@@ -2630,7 +2827,7 @@ GameDatabase.news = [
     id: "l58",
     text:
       `The Holy trinity of Hevipelle, Antimatter, Infinity Points, and Eternity Points. These 3 resources let us
-      access Hevi’s gift, Time Theorems. And with these Time Theorems, we reach out to Hevi, and call, “Hevi, bless
+      access Hevi's gift, Time Theorems. And with these Time Theorems, we reach out to Hevi, and call, “Hevi, bless
       us on this fine day!” And Hevi does. He give us the blessing of Time Studies. These Time Studies were
       blessings so powerful, Hevi restricted their power. He said, “I will give you a choice of three paths” and
       then humanity chose. The short, cheap route of Antimatter Dimensions, giving instant gratification, the
@@ -2638,11 +2835,11 @@ GameDatabase.news = [
       wait, and struggle, of humanity. Then, as humanity chose, a crack broke the earth. A serpent snaked out and
       sneered to humanity, “I will offer the powerful choice of a ninth dimension! I am Slabdrill, lord of all
       Unhevi. Humanity rose and said “ Begone Slabdrill! We want none of your foul Heresy!” And Hevi rose as well,
-      and smote Slabdrill with his godlike power. As Slabdrill’s corpse fell into the earth, he cried “ this will
+      and smote Slabdrill with his godlike power. As Slabdrill's corpse fell into the earth, he cried “ this will
       not be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with
       Eternity upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest
-      gift. EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times.
-      Use them wisely. And Humanity journeyed off with their new power, as Slabdrill’s words echoed in their heads.`,
+      gift. EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 50 times.
+      Use them wisely. And Humanity journeyed off with their new power, as Slabdrill's words echoed in their heads.`,
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
@@ -2798,95 +2995,82 @@ GameDatabase.news = [
     get unlocked() { return PlayerProgress.realityUnlocked(); }
   },
   {
-    id: "j1",
-    text: "How dare you actually get zero deaths on a first run?",
-    get unlocked() {
-      return Achievement(64).isUnlocked &&
-      Currency.infinities.eq(1) &&
-      !PlayerProgress.eternityUnlocked();
-    }
+    id: "l75",
+    text:
+      `Here at Antimatter Dimensions, we pride ourselves in the quality of our products. For example: Did you know
+      that every Infinity Point is unique? That's right! They all have different personalities, their own feelings,
+      their own thoughts... I hope you can sleep well tonight, knowing this... Remember all of those Infinity
+      points you've spent? They had families, and they miss them... Look at what you've done. You're a monster.`,
+    get unlocked() { return PlayerProgress.infinityUnlocked(); }
   },
   {
-    id: "j2",
-    text: "Legend says the ninth dimension is supposed to be found here, but I don't see anything.",
-    get unlocked() {
-      return Currency.antimatter.exponent >= 41900 &&
-      !Replicanti.areUnlocked &&
-      !PlayerProgress.eternityUnlocked();
-    }
+    id: "l76",
+    text: "So, you've reached the prestige layer after Infinity? It's about time...",
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
-    id: "j3",
-    text: "Person with money likes to support this game.",
-    get unlocked() { return player.IAP.totalSTD > 1; }
+    id: "l77",
+    text: "Improve your perks through selective breeding and cutting edge epigenetics technology.",
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
   },
   {
-    id: "j4",
-    text: "Whale is bad at making smart purchases.",
-    get unlocked() {
-      return ShopPurchase.IPPurchases.currentMult > 500 &&
-      ShopPurchase.dimPurchases.currentMult < 5e307;
-    }
+    id: "l78",
+    text:
+      `Warning - Genetically Modified Perk Points are not suitable for; consumption, physical contact, inhalation,
+      exhalation, mental contact and scouring by both seen and unseen eyes. Do not put near a flammable,
+      inflammable, conducting, insulating, variable, biological or mechanical substance. Existence at your own risk.`,
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
   },
   {
-    id: "j5",
-    text: "Whale complains that the game broke.",
-    get unlocked() { return ShopPurchase.dimPurchases.currentMult > 5e307; }
+    id: "l79",
+    text:
+      `The Intergalactic Antimatter Revenue Service, contrary to popular belief, does have the ability to pay taxes
+      on AM gained through non-scrupulous methods, ie anything not done via legally-mandated dimensions or modified
+      through challenge courses. Section NY-8N lists 3 specific methodologies - illegal news ticker giveaways,
+      unrecognised dimensions, and modifications to the fabric of space time - as well as a miscellaneous for any
+      unique AM methods that may pop up in the future. And although you will have to pay the top AM tax rate of 99%,
+      it can save you money in the long run - if you are forced to switch realities due to a celestial decision you
+      can gain a portion of the tax you paid back from the IARS as a tax deduction, as well as make a deduction to
+      pay for the arbiters who represent you. Of course, any [PLAYER REFERENCE NOT FOUND] worth their RM knows that
+      the real way to hide illegal profits of crime is  in personalised pocket dimensions, hyperspliced waveform
+      banks and nanoshells, which requires extensive R&D to implement. As such, reporting illegal AM gain is only
+      recommended if you're too rich to hide your gains, but too poor to hide your gains.`,
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
   },
   {
-    id: "j6",
-    text: "Whale complains that their buying isn't doing anything.",
-    get unlocked() { return ShopPurchase.IPPurchases.currentMult > 1.8e16; }
+    id: "l80",
+    get text() {
+      return `"Average person produces ${format("3e999999996", 2)} antimatter a year" factoid actually just statistical
+      error. Average person produces 0 antimatter per year. "Developer Dimension" Georg, who lives in a cave &
+      produces over ${format("1e1000000000", 2)} each day, is an outlier and should not have been counted.`;
+    },
+    get unlocked() { return PlayerProgress.hasBroken(); }
+  },
+  {
+    id: "l81",
+    text:
+      `The world is in chaos as the laws of math have been rewritten! Many things that were thought
+      to be infinite are now just really big numbers!`,
+    get unlocked() { return PlayerProgress.hasBroken(); }
+  },
+  {
+    id: "l82",
+    get text() {
+      return `The Great Scribes of Antia have labored intensively for years. They were given a mammoth task from the
+      gods; write out an incomprehensibly long number. These scribes took turns, each writing out a few numbers a
+      second, writing day and night, for what seemed like an eternity. At last, after
+      ${TimeSpan.fromSeconds(Currency.antimatter.value.log10() / 3).toString()}, they finally accomplished
+      the impossible. That week, when they went to worship their gods, they sent them a simple message: "What was
+      the purpose? What made our years of labor significant?" The gods responded duly: "We wanted to know how long
+      it would take to write out, for a statistic in our game."`;
+    },
+    // 3 years of time to write
+    get unlocked() { return Currency.antimatter.value.gte("1e777600"); }
   },
   {
     id: "r1",
-    text: "This news message is 1000x rarer than all the others.",
-    get unlocked() { return Math.random() < 0.001; }
-  },
-  {
-    id: "r2",
-    text: "You just won a small prize in the lottery.",
-    get unlocked() { return Math.random() < 1e-4; }
-  },
-  {
-    id: "r3",
-    text: "You just won a moderate prize in the lottery.",
-    get unlocked() { return Math.random() < 1e-5; }
-  },
-  {
-    id: "r4",
-    text: "You just won a large prize in the lottery.",
-    get unlocked() { return Math.random() < 1e-6; }
-  },
-  {
-    id: "r5",
-    text: "You just won a huge prize in the lottery.",
-    get unlocked() { return Math.random() < 1e-7; }
-  },
-  {
-    id: "r6",
-    text: "You just won a massive prize in the lottery.",
-    get unlocked() { return Math.random() < 1e-8; }
-  },
-  {
-    id: "r7",
-    text: "You just won a very massive prize in the lottery.",
-    get unlocked() { return Math.random() < 1e-9; }
-  },
-  {
-    id: "r8",
-    text: "You just won the lottery.",
-    get unlocked() { return Math.random() < 1e-10; }
-  },
-  {
-    id: "r9",
-    text: "Just how lucky are you?",
-    get unlocked() { return Math.random() < 1e-11; }
-  },
-  {
-    id: "r10",
-    text: "This news message is 1000000000000x rarer than all the others.",
-    get unlocked() { return Math.random() < 1e-12; }
+    text: "This news message is 100x rarer than all the others.",
+    get unlocked() { return Math.random() < 0.01; }
   },
   {
     id: "p1",
@@ -3964,7 +4148,7 @@ GameDatabase.news = [
   },
   {
     id: "ai262",
-    text: "Hey you, you’re finally awake. You were trying to buy a dimension, but it's impossible."
+    text: "Hey you, you're finally awake. You were trying to buy a dimension, but it's impossible."
   },
   {
     id: "ai263",
@@ -4809,7 +4993,7 @@ GameDatabase.news = [
   },
   {
     id: "ai473",
-    text: "I'm gonna type for an eternity... HINT: it’s gonna be pretty boring lmao"
+    text: "I'm gonna type for an eternity... HINT: it's gonna be pretty boring lmao"
   },
   {
     id: "ai474",
@@ -5034,7 +5218,7 @@ GameDatabase.news = [
   },
   {
     id: "ai529",
-    text: "Cancer is said to be America's new measuring system for everything. What does this mean for us? We don't know. But we will know in 5 hours."
+    text: "Emoji is said to be America's new measuring system for everything. What does this mean for us? We don't know. But we will know in 5 hours."
   },
   {
     id: "ai530",
@@ -5973,7 +6157,7 @@ GameDatabase.news = [
   },
   {
     id: "ai762",
-    text: "Hey check this out! We have some good news: it’s raining antimatter!"
+    text: "Hey check this out! We have some good news: it's raining antimatter!"
   },
   {
     id: "ai763",

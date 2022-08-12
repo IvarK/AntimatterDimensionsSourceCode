@@ -1,5 +1,5 @@
-import { GameDatabase } from "./game-database.js";
 import { AutobuyerInputFunctions } from "@/components/tabs/autobuyers/AutobuyerInput";
+import { GameDatabase } from "./game-database";
 
 GameDatabase.reality.automator.templates = {
   /**
@@ -18,8 +18,11 @@ GameDatabase.reality.automator.templates = {
       name: "tree",
       isValidString: str => {
         const validImport = TimeStudyTree.isValidImportString(str);
-        const presetName = str.match(/^PRESET (.{1,4})$/u);
-        const validPreset = presetName ? player.timestudy.presets.map(p => p.name).includes(presetName[1]) : false;
+        const preset = str.match(/^(NAME (.{1,4})|ID (\d))$/u);
+        const validPreset = preset ? (
+          player.timestudy.presets.some(p => p.name === preset[2]) ||
+          (Number(preset[3]) > 0 && Number(preset[3]) < 7)
+        ) : false;
         return validImport || validPreset;
       },
     },

@@ -20,10 +20,15 @@ export default {
   },
   computed: {
     entry() {
-      return ConfirmationTypes[this.index];
+      return ConfirmationTypes.index[this.index];
     },
     name() {
       return `${this.entry.name}:`;
+    },
+    styleObject() {
+      return {
+        "background-color": this.option ? "var(--color-good)" : "var(--color-gh-purple)",
+      };
     },
   },
   watch: {
@@ -48,5 +53,6 @@ export default {
     v-if="isUnlocked"
     v-model="option"
     :text="name"
+    :style="styleObject"
   />
 </template>

@@ -6,24 +6,28 @@ export default {
   components: {
     ModalWrapperChoice
   },
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
   computed: {
     challenge() {
-      return NormalChallenge(this.modal.id);
+      return NormalChallenge(this.id);
     },
     challengeIsCompleted() {
       return this.challenge.isCompleted;
     },
-    modal() {
-      return this.$viewModel.modal.current;
-    },
     message() {
-      return `You will Big Crunch (if possible) and start a new Infinity within the Challenge, with all the
+      return `You will Big Crunch, if possible, and start a new Infinity within the Challenge, with all the
         Challenge-specific restrictions and modifiers active.
         To complete the Challenge${this.challengeIsCompleted ? "" : " and gain its reward"},
-        you must reach Infinity again. You do not start with any Dimensions or Galaxies, regardless of upgrades.`;
+        you must reach Infinity again.
+        You do not start with any Dimension Boosts or Galaxies, regardless of upgrades.`;
     },
     entranceLabel() {
-      return `You are about to enter Challenge ${this.modal.id}`;
+      return `You are about to enter Challenge ${this.id}`;
     },
     reward() {
       return `The reward for completing this challenge is: ${this.challenge._config.reward}`;
@@ -49,15 +53,16 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="challenges"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ entranceLabel }}
     </template>
     <div class="c-modal-message__text">
       {{ message }}
-    </div>
-    <br>
-    <div class="c-modal-message__text">
+      <br><br>
       {{ condition }}
     </div>
     <div

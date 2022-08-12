@@ -61,15 +61,23 @@ export default {
   },
   data() {
     return {
+      sortedOrder: [],
       realityGlyphBoost: 0,
     };
+  },
+  created() {
+    const standardOrder = ["reality", "effarig", "power", "infinity", "replication", "time", "dilation",
+      "cursed", "companion"];
+    this.sortedOrder = Glyphs.copyForRecords(this.glyphs);
+    // Technically doesn't stable sort between glyphs of the same type, probably fine though
+    this.sortedOrder.sort((a, b) => standardOrder.indexOf(a.type) - standardOrder.indexOf(b.type));
   },
   methods: {
     update() {
       // There should only be one reality glyph; this picks one pseudo-randomly if multiple are cheated/glitched in
       const realityGlyph = this.glyphs.filter(g => g.type === "reality")[0];
       this.realityGlyphBoost = realityGlyph
-        ? GameDatabase.reality.glyphEffects.realityglyphlevel.effect(realityGlyph.level)
+        ? GlyphEffects.realityglyphlevel.effect(realityGlyph.level)
         : 0;
     },
     showModal() {
@@ -78,8 +86,6 @@ export default {
         name: this.text,
         glyphSet: this.glyphs,
         closeOn: GAME_EVENT.GLYPH_SET_SAVE_CHANGE,
-        isGlyphSelection: false,
-        showSetName: true,
         displaySacrifice: this.showSacrifice,
       });
     }
@@ -95,7 +101,7 @@ export default {
     </span>
     <span
       v-if="glyphs.length !== 0"
-      class="l-glyph-set-preview"
+      :class="{ 'l-glyph-set-preview': !isInModal}"
       @click="showModal"
     >
       <GlyphSetName
@@ -104,9 +110,9 @@ export default {
         :force-color="forceNameColor"
       />
       <GlyphComponent
-        v-for="(g, idx) in glyphs"
+        v-for="(g, idx) in sortedOrder"
         :key="idx"
-        style="margin: 0.2rem;"
+        class="l-preview"
         :glyph="g"
         :show-sacrifice="showSacrifice"
         :draggable="false"
@@ -115,15 +121,25 @@ export default {
         :reality-glyph-boost="realityGlyphBoost"
         :flip-tooltip="flipTooltip"
         :is-in-modal="isInModal"
-        size="2.8rem"
-        :text-proportion="0.6"
+        size="3rem"
+        :text-proportion="0.5"
         glow-blur="0.2rem"
         glow-spread="0.1rem"
-        bottom-padding="0.4rem"
       />
     </span>
     <span v-else>
+      <GlyphSetName
+        v-if="showName"
+        :glyph-set="glyphs"
+        :force-color="forceNameColor"
+      />
       {{ noneText }}
     </span>
   </div>
 </template>
+
+<style scoped>
+.l-preview {
+  margin: 0.2rem;
+}
+</style>

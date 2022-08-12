@@ -43,11 +43,10 @@ export default {
     name="Tickspeed Autobuyer"
     show-interval
   >
-    <AutobuyerIntervalButton
-      slot="intervalSlot"
-      :autobuyer="autobuyer"
-    />
-    <template slot="toggleSlot">
+    <template #intervalSlot>
+      <AutobuyerIntervalButton :autobuyer="autobuyer" />
+    </template>
+    <template #toggleSlot>
       <button
         v-if="isUnlocked"
         class="o-autobuyer-btn"

@@ -19,7 +19,8 @@ export class AutobuyerState {
   get id() { return this._id; }
 
   get canTick() {
-    return this.isActive && player.auto.autobuyersOn && (this.isUnlocked || this.isBought);
+    const isDisabled = !player.auto.autobuyersOn || !this.constructor.isActive;
+    return this.isActive && !isDisabled && (this.isUnlocked || this.isBought);
   }
 
   get isActive() {
@@ -46,7 +47,6 @@ export class AutobuyerState {
   // eslint-disable-next-line no-empty-function
   reset() { }
 
-  /** @returns {number} */
   static get entryCount() { return 1; }
 
   /**
@@ -54,6 +54,9 @@ export class AutobuyerState {
    * @returns {string}
    */
   static get autobuyerGroupName() { throw new NotImplementedError(); }
+  static get isActive() { return true; }
+  /** @abstract */
+  static set isActive(value) { throw new NotImplementedError(); }
 
   static createAccessor() {
     const entryCount = this.entryCount;
@@ -62,16 +65,20 @@ export class AutobuyerState {
     const oneIndexed = [null, ...zeroIndexed];
     /** @param {number} id */
     const accessor = id => oneIndexed[id];
-    accessor.oneIndexed = oneIndexed;
-    accessor.zeroIndexed = zeroIndexed;
-    accessor.entryCount = entryCount;
-    accessor.groupName = this.autobuyerGroupName;
-    /** @returns {boolean} */
-    accessor.anyUnlocked = () => zeroIndexed.some(x => x.isUnlocked);
-    /** @returns {boolean} */
-    accessor.allUnlocked = () => zeroIndexed.every(x => x.isUnlocked);
-    /** @returns {boolean} */
-    accessor.allActive = () => zeroIndexed.every(x => x.isActive);
+    Object.defineProperties(accessor, {
+      oneIndexed: { get: () => oneIndexed },
+      zeroIndexed: { get: () => zeroIndexed },
+      entryCount: { get: () => entryCount },
+      anyUnlocked: { get: () => zeroIndexed.some(x => x.isUnlocked) },
+      allUnlocked: { get: () => zeroIndexed.every(x => x.isUnlocked) },
+      allActive: { get: () => zeroIndexed.every(x => x.isActive) },
+      groupName: { get: () => this.autobuyerGroupName },
+      isActive: {
+        get: () => this.isActive,
+        set: value => { this.isActive = value; },
+      },
+    });
+    accessor.toggle = () => this.isActive = !this.isActive;
     return accessor;
   }
 }
@@ -100,7 +107,7 @@ export class IntervaledAutobuyerState extends AutobuyerState {
   /**
    * @abstract
    */
-  get resetTickOn() { throw new NotImplementedError(); }
+  get resetTickOn() { return undefined; }
 
   resetTick(prestigeEvent) {
     if (prestigeEvent >= this.resetTickOn) this.data.lastTick = 0;
@@ -157,8 +164,9 @@ export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
 
   static createAccessor() {
     const accessor = super.createAccessor();
-    /** @returns {boolean} */
-    accessor.allMaxedInterval = () => accessor.zeroIndexed.every(x => x.hasMaxedInterval);
+    Object.defineProperty(accessor, "allMaxedInterval", {
+      get: () => accessor.zeroIndexed.every(x => x.hasMaxedInterval)
+    });
     return accessor;
   }
 }

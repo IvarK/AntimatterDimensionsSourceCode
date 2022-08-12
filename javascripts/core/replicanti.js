@@ -1,4 +1,4 @@
-import { DC } from "./constants.js";
+import { DC } from "./constants";
 
 // Slowdown parameters for replicanti growth, interval will increase by scaleFactor for every scaleLog10
 // OoM past the cap (default is 308.25 (log10 of 1.8e308), 1.2, Number.MAX_VALUE)
@@ -32,6 +32,12 @@ export function replicantiGalaxy() {
     ? Decimal.pow10(Replicanti.amount.log10() - LOG10_MAX_VALUE * galaxyGain)
     : DC.D1;
   addReplicantiGalaxies(galaxyGain);
+}
+
+export function replicantiGalaxyRequest() {
+  if (!Replicanti.galaxies.canBuyMore) return;
+  if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
+  else replicantiGalaxy();
 }
 
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
@@ -91,11 +97,8 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
     }
   }
 
-  interval = interval.div(PelleRifts.pestilence.effectValue);
-
-  if (Pelle.activeGlyphType === "replication" && PelleRifts.chaos.hasMilestone(1)) {
-    interval = interval.div(PelleRifts.chaos.milestones[1].effect());
-  }
+  interval = interval.div(PelleRifts.decay.effectValue);
+  interval = interval.div(Pelle.specialGlyphEffect.replication);
 
   if (Pelle.isDisabled("replicantiIntervalMult")) return new Decimal(interval);
 
@@ -117,8 +120,7 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
   interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
   if (GlyphAlteration.isAdded("replication")) interval = interval.divide(
     Math.clampMin(Decimal.log10(Replicanti.amount) * getSecondaryGlyphEffect("replicationdtgain"), 1));
-  interval = interval.divide(RA_UNLOCKS.TT_BOOST.effect.replicanti());
-  interval = interval.dividedByEffectOf(AlchemyResource.replication);
+  interval = interval.dividedByEffectsOf(AlchemyResource.replication, Ra.unlocks.continuousTTBoost.effects.replicanti);
   if (V.isRunning) {
     // This is a boost if interval < 1, but that only happens in EC12
     // and handling it would make the replicanti code a lot more complicated.
@@ -143,10 +145,21 @@ export function replicantiLoop(diff) {
   EventHub.dispatch(GAME_EVENT.REPLICANTI_TICK_BEFORE);
   // This gets the pre-cap interval (above the cap we recalculate the interval).
   const interval = getReplicantiInterval(false);
-  const isUncapped = TimeStudy(192).isBought || PelleRifts.famine.hasMilestone(1);
+  const isUncapped = Replicanti.isUncapped;
   const areRGsBeingBought = Replicanti.galaxies.areBeingBought;
-  if (diff > 500 || interval.lessThan(diff) || isUncapped) {
-    // Gain code for sufficiently fast or large amounts of replicanti (growth per tick == chance * amount)
+
+  // Figure out how many ticks to calculate for and roll over any leftover time to the next tick. The rollover
+  // calculation is skipped if there's more than 100 replicanti ticks per game tick to reduce round-off problems.
+  let tickCount = Decimal.divide(diff + player.replicanti.timer, interval);
+  if (tickCount.lt(100)) player.replicanti.timer = tickCount.minus(tickCount.floor()).times(interval).toNumber();
+  else player.replicanti.timer = 0;
+  tickCount = tickCount.floor();
+
+  const singleTickAvg = Replicanti.amount.times(player.replicanti.chance);
+  if (tickCount.gte(100) || (singleTickAvg.gte(10) && tickCount.gte(1))) {
+    // Fast gain: If we're doing a very large number of ticks or each tick produces a lot, then continuous growth
+    // is a good approximation and less intensive than distribution samples. This path will always happen above 1000
+    // replicanti due to how singleTickAvg is calculated, so the over-cap math is only present on this path
     let postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
     if (V.isRunning) {
       postScale *= 2;
@@ -169,15 +182,29 @@ export function replicantiLoop(diff) {
         Decimal.exp(remainingGain.div(LOG10_E).times(postScale).plus(1).ln() / postScale +
         Replicanti.amount.clampMin(1).ln());
     }
-    player.replicanti.timer = 0;
-  } else if (interval.lte(player.replicanti.timer)) {
+  } else if (tickCount.gt(1)) {
+    // Multiple ticks but "slow" gain: This happens at low replicanti chance and amount with a fast interval, which
+    // can happen often in early cel7. In this case we "batch" ticks together as full doubling events and then draw
+    // from a Poisson distribution for how many times to do that. Any leftover ticks are used as binomial samples
+    const batchTicks = Math.floor(tickCount.toNumber() * Math.log2(1 + player.replicanti.chance));
+    const binomialTicks = tickCount.toNumber() - batchTicks / Math.log2(1 + player.replicanti.chance);
+
+    Replicanti.amount = Replicanti.amount.times(DC.D2.pow(poissonDistribution(batchTicks)));
+    for (let t = 0; t < Math.floor(binomialTicks); t++) {
+      const reproduced = binomialDistribution(Replicanti.amount, player.replicanti.chance);
+      Replicanti.amount = Replicanti.amount.plus(reproduced);
+    }
+
+    // The batching might use partial ticks; we add the rest back to the timer so it gets used next loop
+    const leftover = binomialTicks - Math.floor(binomialTicks);
+    player.replicanti.timer += interval.times(leftover).toNumber();
+  } else if (tickCount.eq(1)) {
+    // Single tick: Take a single binomial sample to properly simulate replicanti growth with randomness
     const reproduced = binomialDistribution(Replicanti.amount, player.replicanti.chance);
     Replicanti.amount = Replicanti.amount.plus(reproduced);
-    if (!isUncapped) Replicanti.amount = Decimal.min(replicantiCap(), Replicanti.amount);
-    player.replicanti.timer += diff - interval.toNumber();
-  } else {
-    player.replicanti.timer += diff;
   }
+
+  if (!isUncapped) Replicanti.amount = Decimal.min(replicantiCap(), Replicanti.amount);
 
   if (Pelle.isDoomed && Replicanti.amount.log10() - replicantiBeforeLoop.log10() > 308) {
     Replicanti.amount = replicantiBeforeLoop.times(1e308);
@@ -263,7 +290,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return player.replicanti.chanceCost.div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+      return player.replicanti.chanceCost.dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.chanceCost; }
@@ -314,7 +341,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return player.replicanti.intervalCost.div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+      return player.replicanti.intervalCost.dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.intervalCost; }
@@ -349,7 +376,7 @@ export const ReplicantiUpgrade = {
     }
 
     get cost() {
-      return this.baseCost.dividedByEffectOf(TimeStudy(233)).div(PelleRifts.famine.hasMilestone(1) ? 1e130 : 1);
+      return this.baseCost.dividedByEffectsOf(TimeStudy(233), PelleRifts.vacuum.milestones[1]);
     }
 
     get baseCost() { return player.replicanti.galCost; }
@@ -382,9 +409,7 @@ export const ReplicantiUpgrade = {
     }
 
     get extra() {
-      let extra = 0;
-      if (PelleRifts.pestilence.hasMilestone(2)) extra += PelleRifts.pestilence.milestones[2].effect();
-      return Effects.max(0, TimeStudy(131)) + extra;
+      return Effects.max(0, TimeStudy(131)) + PelleRifts.decay.milestones[2].effectOrDefault(0);
     }
 
     autobuyerTick() {
@@ -446,7 +471,7 @@ export const Replicanti = {
     };
   },
   unlock(freeUnlock = false) {
-    const cost = PelleRifts.famine.hasMilestone(1) ? DC.E10 : DC.E140;
+    const cost = DC.E140.dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
     if (player.replicanti.unl) return;
     if (freeUnlock || Currency.infinityPoints.gte(cost)) {
       if (!freeUnlock) Currency.infinityPoints.subtract(cost);
@@ -487,7 +512,9 @@ export const Replicanti = {
     },
     get areBeingBought() {
       const buyer = Autobuyer.replicantiGalaxy;
-      return (buyer.canTick && buyer.isEnabled) || this.isPlayerHoldingR;
+      // If the confirmation is enabled, we presume the player wants to confirm each Replicanti Galaxy purchase
+      return (buyer.canTick && buyer.isEnabled) ||
+        (!player.options.confirmations.replicantiGalaxy && this.isPlayerHoldingR);
     },
     get gain() {
       if (!this.canBuyMore) return 0;
@@ -498,5 +525,8 @@ export const Replicanti = {
       }
       return 1;
     },
+  },
+  get isUncapped() {
+    return TimeStudy(192).isBought || PelleRifts.vacuum.milestones[1].canBeApplied;
   }
 };

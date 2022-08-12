@@ -1,3 +1,4 @@
+/* eslint-disable import/newline-after-import, import/first, import/order */
 function mergeIntoGlobal(object) {
   for (const key in object) {
     if (key === "default") {
@@ -17,8 +18,6 @@ function mergeIntoGlobal(object) {
 import * as Utils from "../javascripts/core/utils";
 mergeIntoGlobal(Utils);
 
-import "../javascripts/components";
-
 import * as GameDB from "../javascripts/core/secret-formula";
 mergeIntoGlobal(GameDB);
 
@@ -37,7 +36,7 @@ import * as AutomatorTextEditor from "@/components/tabs/automator/AutomatorTextE
 mergeIntoGlobal(AutomatorTextEditor);
 
 // Spec, reeee
-import * as PerksTab from "../javascripts/components/reality/perks-tab";
+import * as PerksTab from "@/components/tabs/perks/PerksTab";
 mergeIntoGlobal(PerksTab);
 
 // End of bullshit

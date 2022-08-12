@@ -1,10 +1,10 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   get _upgradeName() { return ["dtGain", "galaxyThreshold", "tachyonGain"][this.id - 1]; }
 
   get data() {
-    return player.auto.dilationUpgrades[this.id - 1];
+    return player.auto.dilationUpgrades.all[this.id - 1];
   }
 
   get name() {
@@ -35,6 +35,8 @@ class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
 
   static get entryCount() { return 3; }
   static get autobuyerGroupName() { return "Dilation Upgrade"; }
+  static get isActive() { return player.auto.dilationUpgrades.isActive; }
+  static set isActive(value) { player.auto.dilationUpgrades.isActive = value; }
 }
 
 Autobuyer.dilationUpgrade = DilationUpgradeAutobuyerState.createAccessor();

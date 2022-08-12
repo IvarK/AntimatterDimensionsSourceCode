@@ -1,8 +1,8 @@
-window.format = function format(value, places, placesUnder1000) {
+window.format = function format(value, places = 0, placesUnder1000 = 0) {
   if (Pelle.isDoomed) {
-    if ((Pelle.endState - 2.5) / 2 > Math.random()) return "END";
+    if ((GameEnd.endState - 2.5) / 2 > Math.random()) return "END";
   }
-  return Notations.current.format(value, places, placesUnder1000);
+  return Notations.current.format(value, places, placesUnder1000, 3);
 };
 
 window.formatInt = function formatInt(value) {
@@ -67,7 +67,7 @@ window.formatRarity = function formatRarity(value) {
 };
 
 // We assume 2/2 decimal places to keep parameter count sensible; this is used very rarely
-window.formatComplex = function formatComplex(realPart, imagPart) {
+window.formatMachines = function formatMachines(realPart, imagPart) {
   const parts = [];
   if (Decimal.neq(realPart, 0)) parts.push(format(realPart, 2, 2));
   if (Decimal.neq(imagPart, 0)) parts.push(`${format(imagPart, 2, 2)}i`);
@@ -118,6 +118,7 @@ const PLURAL_HELPER = new Map([
 // Some terms require specific (or no) handling when plural. These terms should be added, in Word Case, to this Map.
 // Words will be added to this Map when a valid plural for it is found on being run through the pluralize function.
 const pluralDatabase = new Map([
+  ["Antimatter", "Antimatter"],
   ["Dilated Time", "Dilated Time"],
 ]);
 

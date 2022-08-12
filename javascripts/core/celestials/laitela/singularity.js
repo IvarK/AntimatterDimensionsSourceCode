@@ -1,9 +1,11 @@
-import { GameMechanicState } from "../../game-mechanics/index.js";
+import { GameMechanicState } from "../../game-mechanics/index";
+
+import { deepmergeAll } from "@/utility/deepmerge";
 
 class SingularityMilestoneState extends GameMechanicState {
   constructor(config) {
     const effect = config.effect;
-    const configCopy = deepmerge.all([{}, config]);
+    const configCopy = deepmergeAll([{}, config]);
     configCopy.effect = () => effect(this.completions);
     super(configCopy);
     this._rawEffect = effect;
@@ -29,14 +31,18 @@ class SingularityMilestoneState extends GameMechanicState {
     return Currency.singularities.gte(this.start);
   }
 
+  get increaseThreshold() {
+    return this.config.increaseThreshold;
+  }
+
   nerfCompletions(completions) {
-    const softcap = this.config.increaseThreshold;
+    const softcap = this.increaseThreshold;
     if (!softcap || (completions < softcap)) return completions;
     return softcap + (completions - softcap) / 3;
   }
 
   unnerfCompletions(completions) {
-    const softcap = this.config.increaseThreshold;
+    const softcap = this.increaseThreshold;
     if (!softcap || (completions < softcap)) return completions;
     return softcap + (completions - softcap) * 3;
   }
@@ -93,42 +99,13 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 }
 
-export const SingularityMilestone = (function() {
-  const db = GameDatabase.celestials.singularityMilestones;
-  return {
-    continuumMult: new SingularityMilestoneState(db.continuumMult),
-    darkMatterMult: new SingularityMilestoneState(db.darkMatterMult),
-    darkEnergyMult: new SingularityMilestoneState(db.darkEnergyMult),
-    darkDimensionCostReduction: new SingularityMilestoneState(db.darkDimensionCostReduction),
-    singularityMult: new SingularityMilestoneState(db.singularityMult),
-    darkDimensionIntervalReduction: new SingularityMilestoneState(db.darkDimensionIntervalReduction),
-    ascensionIntervalScaling: new SingularityMilestoneState(db.ascensionIntervalScaling),
-    autoCondense: new SingularityMilestoneState(db.autoCondense),
-    darkDimensionAutobuyers: new SingularityMilestoneState(db.darkDimensionAutobuyers),
-    darkAutobuyerSpeed: new SingularityMilestoneState(db.darkAutobuyerSpeed),
-    improvedSingularityCap: new SingularityMilestoneState(db.improvedSingularityCap),
-    darkFromTesseracts: new SingularityMilestoneState(db.darkFromTesseracts),
-    dilatedTimeFromSingularities: new SingularityMilestoneState(db.dilatedTimeFromSingularities),
-    darkFromGlyphLevel: new SingularityMilestoneState(db.darkFromGlyphLevel),
-    gamespeedFromSingularities: new SingularityMilestoneState(db.gamespeedFromSingularities),
-    darkFromTheorems: new SingularityMilestoneState(db.darkFromTheorems),
-    dim4Generation: new SingularityMilestoneState(db.dim4Generation),
-    darkFromDM4: new SingularityMilestoneState(db.darkFromDM4),
-    theoremPowerFromSingularities: new SingularityMilestoneState(db.theoremPowerFromSingularities),
-    darkFromGamespeed: new SingularityMilestoneState(db.darkFromGamespeed),
-    glyphLevelFromSingularities: new SingularityMilestoneState(db.glyphLevelFromSingularities),
-    darkFromDilatedTime: new SingularityMilestoneState(db.darkFromDilatedTime),
-    tesseractMultFromSingularities: new SingularityMilestoneState(db.tesseractMultFromSingularities),
-    improvedAscensionDM: new SingularityMilestoneState(db.improvedAscensionDM),
-    realityDEMultiplier: new SingularityMilestoneState(db.realityDEMultiplier),
-    intervalCostScalingReduction: new SingularityMilestoneState(db.intervalCostScalingReduction),
-    multFromInfinitied: new SingularityMilestoneState(db.multFromInfinitied),
-    infinitiedPow: new SingularityMilestoneState(db.infinitiedPow),
-  };
-}());
+export const SingularityMilestone = mapGameDataToObject(
+  GameDatabase.celestials.singularityMilestones,
+  config => new SingularityMilestoneState(config)
+);
 
 export const SingularityMilestones = {
-  all: Object.values(SingularityMilestone),
+  all: SingularityMilestone.all,
   lastNotified: player.celestials.laitela.lastCheckedMilestones,
 
   get sorted() {
@@ -226,7 +203,7 @@ export const SingularityMilestones = {
 
 // Sorted list of all the values where a singularity milestone exists, used for "new milestone" styling
 const SingularityMilestoneThresholds = (function() {
-  return Object.values(GameDatabase.celestials.singularityMilestones)
+  return SingularityMilestones.all
     .map(m => Array.range(0, Math.min(50, m.limit))
       .filter(r => !m.increaseThreshold || r <= m.increaseThreshold ||
         (r > m.increaseThreshold && ((r - m.increaseThreshold) % 3) === 2))
@@ -242,7 +219,7 @@ export const Singularity = {
   },
 
   get gainPerCapIncrease() {
-    return SingularityMilestone.improvedSingularityCap.effectValue;
+    return SingularityMilestone.improvedSingularityCap.effectOrDefault(11);
   },
 
   get singularitiesGained() {
@@ -263,7 +240,7 @@ export const Singularity = {
 
   // Total additional time auto-condense will wait after reaching the condensing requirement
   get timeDelayFromAuto() {
-    return this.timePerCondense * (SingularityMilestone.autoCondense.effectValue - 1);
+    return this.timePerCondense * (SingularityMilestone.autoCondense.effectOrDefault(Infinity) - 1);
   },
 
   get capIsReached() {
@@ -288,9 +265,9 @@ export const Singularity = {
     Currency.darkEnergy.reset();
     Currency.singularities.add(this.singularitiesGained);
 
-    for (const quote of Object.values(Laitela.quotes)) {
-      if (Currency.singularities.value >= quote.singularities) {
-        Laitela.quotes.show(quote);
+    for (const quote of Laitela.quotes.all) {
+      if (quote.requirement) {
+        quote.show();
       }
     }
 
@@ -306,4 +283,5 @@ EventHub.logic.on(GAME_EVENT.SINGULARITY_RESET_AFTER, () => {
   if (newMilestones === 1) GameUI.notify.blackHole(`You reached a Singularity milestone!`);
   else GameUI.notify.blackHole(`You reached ${formatInt(newMilestones)} Singularity milestones!`);
   SingularityMilestones.lastNotified = Currency.singularities.value;
+  if (SingularityMilestones.all.every(x => x.completions > 0)) Achievement(177).unlock();
 });

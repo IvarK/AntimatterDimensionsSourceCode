@@ -1,4 +1,4 @@
-import { TimeStudy } from "./normal-time-study.js";
+import { TimeStudy } from "./normal-time-study";
 
 export class TimeStudyConnection {
   constructor(from, to, override) {
@@ -35,7 +35,7 @@ TimeStudy.allConnections = (function() {
     [TS(11), TS(22)],
 
     [TS(21), TS(31)],
-    [TS(21), TS(33)],
+    [TS(22), TS(33)],
     [TS(22), TS(32)],
 
     [TS(31), TS(41)],

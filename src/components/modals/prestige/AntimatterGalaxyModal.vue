@@ -7,8 +7,8 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    bulk: {
+      type: Boolean,
       required: true,
     }
   },
@@ -17,17 +17,17 @@ export default {
       newGalaxies: 0,
       keepAntimatter: false,
       perkANRBought: false,
-      keepDimBoost: false,
+      keepDimBoost: false
     };
   },
   computed: {
-    bulk() { return this.modalConfig.bulk; },
     topLabel() {
       if (this.bulk) return `You are about to purchase ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}`;
       return `You are about to purchase an Antimatter Galaxy`;
     },
     message() {
       const resetResouces = [];
+      if (Pelle.isDoomed) resetResouces.push("Antimatter", "Antimatter Dimensions", "Tickspeed");
       if (!this.perkANRBought) resetResouces.push("Antimatter Dimensions", "Tickspeed");
       if (!this.keepDimBoost) resetResouces.push("Dimension Boosts");
       if (!this.keepAntimatter && !this.perkANRBought) resetResouces.push("Antimatter");
@@ -39,8 +39,8 @@ export default {
         tickspeedFixed = `${Ra.displayName}'s Reality`;
       }
       const tickspeedInfo = (tickspeedFixed === "")
-        ? "you will receive a small boost to Tickspeed upgrades."
-        : `you will not receive a boost to Tickspeed upgrades, because you are in ${tickspeedFixed}.`;
+        ? "you will receive a small boost to Tickspeed Upgrades."
+        : `you will not receive a boost to Tickspeed Upgrades, because you are in ${tickspeedFixed}.`;
       const message = (resetList === "")
         ? `This will reset nothing, and ${tickspeedInfo}`
         : `This will reset your ${resetList}. However, ${tickspeedInfo}`;
@@ -53,9 +53,6 @@ export default {
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, () =>
       (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought ? undefined : this.emitClose()));
-    this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
     update() {
@@ -72,18 +69,23 @@ export default {
       }
       this.keepAntimatter = Achievement(111).isUnlocked;
       this.perkANRBought = Perk.antimatterNoReset.isBought;
-      this.keepDimBoost = Achievement(143).isUnlocked;
+      this.keepDimBoost = (Achievement(143).isUnlocked && !Pelle.isDoomed) ||
+        PelleUpgrade.galaxyNoResetDimboost.canBeApplied;
     },
     handleYesClick() {
       requestGalaxyReset(this.bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="antimatterGalaxy"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ topLabel }}
     </template>

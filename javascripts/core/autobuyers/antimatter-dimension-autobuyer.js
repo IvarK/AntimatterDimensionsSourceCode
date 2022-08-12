@@ -1,5 +1,6 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
 
 class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   get tier() {
@@ -15,11 +16,11 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get data() {
-    return player.auto.antimatterDims[this.tier - 1];
+    return player.auto.antimatterDims.all[this.tier - 1];
   }
 
   get baseInterval() {
-    return Player.defaultStart.auto.antimatterDims[this.tier - 1].interval;
+    return Player.defaultStart.auto.antimatterDims.all[this.tier - 1].interval;
   }
 
   get isUnlocked() {
@@ -36,7 +37,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get canBeBought() {
-    return true;
+    return !Pelle.isDisabled(`antimatterDimAutobuyer${this.tier}`);
   }
 
   get disabledByContinuum() {
@@ -93,7 +94,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
         buyOneDimension(tier);
         break;
       case AUTOBUYER_MODE.BUY_10:
-        buyMaxDimension(tier, player.auto.bulkOn ? this.bulk : 1);
+        buyMaxDimension(tier, this.bulk);
         break;
     }
   }
@@ -126,13 +127,17 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
 
   static get entryCount() { return 8; }
   static get autobuyerGroupName() { return "Antimatter Dimension"; }
+  static get isActive() { return player.auto.antimatterDims.isActive; }
+  static set isActive(value) { player.auto.antimatterDims.isActive = value; }
+
   static createAccessor() {
     const accessor = super.createAccessor();
-    /** @returns {boolean} */
-    accessor.allBought = () => accessor.zeroIndexed.some(x => x.isBought);
-    /** @returns {boolean} */
-    accessor.allUnlimitedBulk = () => accessor.zeroIndexed.some(x => x.hasUnlimitedBulk);
-    accessor.bulkCap = accessor.zeroIndexed[0].bulkCap;
+    Object.defineProperties(accessor, {
+      allBought: { get: () => accessor.zeroIndexed.every(x => x.isBought) },
+      // We can get away with this since allUnlimitedBulk is the same for all AD autos
+      allUnlimitedBulk: { get: () => accessor.zeroIndexed[0].hasUnlimitedBulk },
+      bulkCap: { get: () => accessor.zeroIndexed[0].bulkCap }
+    });
     return accessor;
   }
 }

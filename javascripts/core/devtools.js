@@ -1,4 +1,7 @@
-import { DC } from "./constants.js";
+import { sha512_256 } from "js-sha512";
+
+import { DC } from "./constants";
+import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
 /* eslint-disable no-console */
 // Disabling no-console here seems
@@ -91,23 +94,22 @@ dev.tripleEverything = function() {
 };
 
 dev.barrelRoll = function() {
-  document.body.style.animation = "barrelRoll 5s 1";
-  setTimeout(() => document.body.style.animation = "", 5000);
+  FullScreenAnimationHandler.display("a-barrel-roll", 5);
 };
 
 dev.spin3d = function() {
-  if (document.body.style.animation === "") document.body.style.animation = "spin3d 3s infinite";
+  if (document.body.style.animation === "") document.body.style.animation = "a-spin3d 3s infinite";
   else document.body.style.animation = "";
 };
 
 dev.spin4d = function() {
-  if (document.body.style.animation === "") document.body.style.animation = "spin4d 3s infinite";
+  if (document.body.style.animation === "") document.body.style.animation = "a-spin4d 3s infinite";
   else document.body.style.animation = "";
 };
 
 dev.cancerize = function() {
-  Theme.tryUnlock("Cancer");
-  Notation.cancer.setAsCurrent();
+  Theme.tryUnlock("Design");
+  Notation.emoji.setAsCurrent();
 };
 
 dev.fixSave = function() {
@@ -164,8 +166,8 @@ dev.resetDilation = function() {
 // when making a special glyph, so no max-params
 // eslint-disable-next-line max-params
 dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
-  if (!specialGlyphSymbols.hasOwnProperty(symbol)) return;
-  if (Glyphs.freeInventorySpace === 0) return;
+  if (!Object.prototype.hasOwnProperty.call(specialGlyphSymbols, symbol)) return;
+  if (GameCache.glyphInventorySpace.value === 0) return;
   const glyph = GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel });
   glyph.symbol = symbol;
   glyph.color = color;
@@ -173,12 +175,12 @@ dev.giveSpecialGlyph = function(color, symbol, level, rawLevel = level) {
 };
 
 dev.giveGlyph = function(level, rawLevel = level) {
-  if (Glyphs.freeInventorySpace === 0) return;
+  if (GameCache.glyphInventorySpace.value === 0) return;
   Glyphs.addToInventory(GlyphGenerator.randomGlyph({ actualLevel: level, rawLevel }));
 };
 
 dev.giveRealityGlyph = function(level) {
-  if (Glyphs.freeInventorySpace === 0) return;
+  if (GameCache.glyphInventorySpace.value === 0) return;
   Glyphs.addToInventory(GlyphGenerator.realityGlyph(level));
 };
 
@@ -348,11 +350,11 @@ dev.printResourceTotals = function() {
 };
 
 dev.unlockCelestialQuotes = function(celestial) {
-  const quotes = Celestials[celestial].quotes;
-  for (const q of quotes.quotesById) {
-    if (q === undefined) continue;
-    quotes.show(q);
-  }
+  Quotes[celestial].all.forEach(x => x.show());
+};
+
+dev.presentCelestialQuotes = function(celestial) {
+  Quotes[celestial].all.forEach(x => x.present());
 };
 
 // This doesn't check everything but hopefully it gets some of the more obvious ones.
@@ -415,19 +417,16 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[8] |= 16;
       }
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[12] |= 8;
       }
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[12] |= 128;
       }
     ],
@@ -457,7 +456,6 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.reality.upgReqs = (1 << 6);
         player.reality.upgradeBits = 64;
       }

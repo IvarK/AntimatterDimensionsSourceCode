@@ -7,25 +7,34 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    idx: {
+      type: Number,
       required: true
     }
   },
+  data() {
+    return {
+      confirmedDelete: false
+    };
+  },
   computed: {
     glyph() {
-      return Glyphs.findByInventoryIndex(this.modalConfig.idx);
+      return Glyphs.findByInventoryIndex(this.idx);
     },
   },
   methods: {
     update() {
-      const newGlyph = Glyphs.findByInventoryIndex(this.modalConfig.idx);
-      if (this.glyph !== newGlyph) {
+      const newGlyph = Glyphs.findByInventoryIndex(this.idx);
+      if (this.glyph !== newGlyph && this.confirmedDelete) {
+
+        // Why is confirmedDelete here: refer to SacrificeGlyphModal.vue
+
         this.emitClose();
         Modal.message.show("The selected Glyph changed position or was otherwise changed!");
       }
     },
     handleYesClick() {
+      this.confirmedDelete = true;
       Glyphs.removeFromInventory(this.glyph);
     },
   },

@@ -7,19 +7,14 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    scriptID: {
+      type: [String, Number],
       required: true
     }
   },
-  computed: {
-    modal() {
-      return this.$viewModel.modal.current;
-    },
-  },
   methods: {
     handleYesClick() {
-      const script = this.modalConfig.scriptID;
+      const script = this.scriptID;
       const runningScriptID = AutomatorBackend.state.topLevelScript;
 
       AutomatorBackend.deleteScript(script);
@@ -34,17 +29,6 @@ export default {
         // AutomatorBackend.deleteScript will create an empty script if necessary
         player.reality.automator.state.editorScript = scriptList[0].id;
       }
-
-      // Deleting a script leaves a gap in ids, shift all of them down to fill it
-      let newID = 0;
-      const shiftedScripts = {};
-      for (const id of Object.keys(player.reality.automator.scripts)) {
-        shiftedScripts[newID] = player.reality.automator.scripts[id];
-        shiftedScripts[newID].id = newID;
-        newID++;
-      }
-      player.reality.automator.scripts = shiftedScripts;
-
       EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
     },
   },

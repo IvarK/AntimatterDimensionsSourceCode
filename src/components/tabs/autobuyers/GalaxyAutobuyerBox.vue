@@ -1,7 +1,7 @@
 <script>
 import AutobuyerBox from "./AutobuyerBox";
-import AutobuyerIntervalButton from "./AutobuyerIntervalButton";
 import AutobuyerInput from "./AutobuyerInput";
+import AutobuyerIntervalButton from "./AutobuyerIntervalButton";
 
 export default {
   name: "GalaxyAutobuyerBox",
@@ -12,13 +12,17 @@ export default {
   },
   data() {
     return {
+      hasMaxedInterval: false,
       limitGalaxies: false,
       isBuyMaxUnlocked: false,
       buyMax: false
     };
   },
   computed: {
-    autobuyer: () => Autobuyer.galaxy
+    autobuyer: () => Autobuyer.galaxy,
+    limitGalaxiesSlot() {
+      return this.hasMaxedInterval && !this.isBuyMaxUnlocked ? "intervalSlot" : "toggleSlot";
+    }
   },
   watch: {
     limitGalaxies(newValue) {
@@ -27,6 +31,7 @@ export default {
   },
   methods: {
     update() {
+      this.hasMaxedInterval = this.autobuyer.hasMaxedInterval;
       this.isBuyMaxUnlocked = this.autobuyer.isBuyMaxUnlocked;
       this.limitGalaxies = this.autobuyer.limitGalaxies;
     }
@@ -40,13 +45,15 @@ export default {
     name="Automatic Antimatter Galaxies"
     :show-interval="!isBuyMaxUnlocked"
   >
-    <AutobuyerIntervalButton
-      slot="intervalSlot"
-      :autobuyer="autobuyer"
-    />
     <template
-      v-if="isBuyMaxUnlocked"
-      slot="intervalSlot"
+      v-if="!hasMaxedInterval"
+      #intervalSlot
+    >
+      <AutobuyerIntervalButton :autobuyer="autobuyer" />
+    </template>
+    <template
+      v-else-if="isBuyMaxUnlocked"
+      #intervalSlot
     >
       <div class="c-autobuyer-box__small-text">
         Activates every X seconds:
@@ -57,17 +64,17 @@ export default {
         property="buyMaxInterval"
       />
     </template>
-    <template :slot=" isBuyMaxUnlocked ? 'toggleSlot' : 'intervalSlot' ">
-      <div
-        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-        @click="limitGalaxies = !limitGalaxies"
+    <template #[limitGalaxiesSlot]>
+      <label
+        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text o-clickable"
       >
         <input
+          v-model="limitGalaxies"
           type="checkbox"
-          :checked="limitGalaxies"
+          class="o-clickable"
         >
-        <span>Limit Antimatter Galaxies to:</span>
-      </div>
+        Limit Antimatter Galaxies to:
+      </label>
       <AutobuyerInput
         :autobuyer="autobuyer"
         type="int"
@@ -78,5 +85,7 @@ export default {
 </template>
 
 <style scoped>
-
+.o-clickable {
+  cursor: pointer;
+}
 </style>

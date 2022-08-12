@@ -1,49 +1,14 @@
-import { GameDatabase } from "../secret-formula/game-database.js";
-import { RebuyableMechanicState } from "../game-mechanics/index.js";
-import { CelestialQuotes } from "./quotes.js";
+import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics/index";
+import { GameDatabase } from "../secret-formula/game-database";
 
-export const TERESA_UNLOCKS = {
-  RUN: {
-    id: 0,
-    price: 1e14,
-    description: "Unlock Teresa's Reality.",
-  },
-  EPGEN: {
-    id: 1,
-    price: 1e18,
-    get description() {
-      if (Pelle.isDoomed) return "This has no effect while in Doomed.";
-      return "Unlock passive Eternity Point generation.";
-    },
-  },
-  EFFARIG: {
-    id: 2,
-    price: 1e21,
-    description: "Unlock Effarig, Celestial of Ancient Relics.",
-  },
-  SHOP: {
-    id: 3,
-    price: 1e24,
-    description: "Unlock the Perk Point Shop.",
-  },
-  UNDO: {
-    id: 4,
-    price: 1e10,
-    description: "Unlock \"Undo\" of equipping a glyph.",
-  },
-  START_EU: {
-    id: 5,
-    price: 1e6,
-    description: "You start Reality with all Eternity Upgrades unlocked.",
-  }
-};
+import { Quotes } from "./quotes";
 
 export const Teresa = {
   timePoured: 0,
-  unlockInfo: TERESA_UNLOCKS,
-  lastUnlock: "SHOP",
+  lastUnlock: "shop",
   pouredAmountCap: 1e24,
   displayName: "Teresa",
+  possessiveName: "Teresa's",
   get isUnlocked() {
     return Achievement(147).isUnlocked;
   },
@@ -57,18 +22,9 @@ export const Teresa = {
     this.checkForUnlocks();
   },
   checkForUnlocks() {
-    for (const info of Object.values(Teresa.unlockInfo)) {
-      if (!this.has(info) && this.pouredAmount >= info.price) {
-        // eslint-disable-next-line no-bitwise
-        player.celestials.teresa.unlockBits |= (1 << info.id);
-        EventHub.dispatch(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, this, info);
-      }
+    for (const info of TeresaUnlocks.all) {
+      info.unlock();
     }
-  },
-  has(info) {
-    if (!info.hasOwnProperty("id")) throw "Pass in the whole TERESA UNLOCK object";
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.teresa.unlockBits & (1 << info.id));
   },
   initializeRun() {
     clearCelestialRuns();
@@ -101,31 +57,7 @@ export const Teresa = {
   get runCompleted() {
     return player.celestials.teresa.bestRunAM.gt(0);
   },
-  quotes: new CelestialQuotes("teresa", {
-    INITIAL: {
-      id: 1,
-      lines: [
-        "We have been observing you.",
-        "You have shown promise with your bending of Reality.",
-        "We are the Celestials, and we want you to join us.",
-        "My name is Teresa, the Celestial Of Reality.",
-        "Prove your worth.",
-      ]
-    },
-    UNLOCK_REALITY: CelestialQuotes.singleLine(
-      2, "I will let you inside my Reality, mortal. Do not get crushed by it."
-    ),
-    COMPLETE_REALITY: CelestialQuotes.singleLine(
-      3, "Why are you still here... you were supposed to fail."
-    ),
-    EFFARIG: {
-      id: 4,
-      lines: [
-        "You are still no match for us.",
-        "I hope the others succeed where I have failed."
-      ]
-    }
-  }),
+  quotes: Quotes.teresa,
   symbol: "Ϟ"
 };
 
@@ -157,12 +89,15 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   }
 
   onPurchased() {
+    if (this.id === 0) {
+      GameCache.staticGlyphWeights.invalidate();
+    }
     if (this.id === 1) {
       Autobuyer.reality.bumpAmount(2);
     }
     // Give a single music glyph
     if (this.id === 4) {
-      if (Glyphs.freeInventorySpace === 0) {
+      if (GameCache.glyphInventorySpace.value === 0) {
         // Refund the perk point if they didn't actually get a glyph
         Currency.perkPoints.add(1);
         GameUI.notify.error("You have no empty inventory space!");
@@ -173,34 +108,54 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
     }
     // Fill the inventory with music glyphs
     if (this.id === 5) {
-      const toCreate = Glyphs.freeInventorySpace;
+      const toCreate = GameCache.glyphInventorySpace.value;
       for (let count = 0; count < toCreate; count++) Glyphs.addToInventory(GlyphGenerator.musicGlyph());
       GameUI.notify.success(`Created ${quantifyInt("Music Glyph", toCreate)}`);
     }
   }
 }
 
-export const PerkShopUpgrade = (function() {
-  const db = GameDatabase.celestials.perkShop;
-  return {
-    glyphLevel: new PerkShopUpgradeState(db.glyphLevel),
-    rmMult: new PerkShopUpgradeState(db.rmMult),
-    bulkDilation: new PerkShopUpgradeState(db.bulkDilation),
-    autoSpeed: new PerkShopUpgradeState(db.autoSpeed),
-    musicGlyph: new PerkShopUpgradeState(db.musicGlyph),
-    fillMusicGlyph: new PerkShopUpgradeState(db.fillMusicGlyph),
-  };
-}());
+class TeresaUnlockState extends BitUpgradeState {
+  get bits() { return player.celestials.teresa.unlockBits; }
+  set bits(value) { player.celestials.teresa.unlockBits = value; }
+
+  get price() {
+    return this.config.price;
+  }
+
+  get pelleDisabled() {
+    return Pelle.isDoomed && this.config.isDisabledInDoomed;
+  }
+
+  get isEffectActive() {
+    return !this.pelleDisabled;
+  }
+
+  get canBeUnlocked() {
+    return !this.isUnlocked && Teresa.pouredAmount >= this.price;
+  }
+
+  get description() {
+    return typeof this.config.description === "function" ? this.config.description() : this.config.description;
+  }
+
+  onUnlock() {
+    this.config.onUnlock?.();
+  }
+}
+
+export const TeresaUnlocks = mapGameDataToObject(
+  GameDatabase.celestials.teresa.unlocks,
+  config => new TeresaUnlockState(config)
+);
+
+export const PerkShopUpgrade = mapGameDataToObject(
+  GameDatabase.celestials.perkShop,
+  config => new PerkShopUpgradeState(config)
+);
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);
-});
-
-EventHub.logic.on(GAME_EVENT.CELESTIAL_UPGRADE_UNLOCKED, ([celestial, upgradeInfo]) => {
-  if (celestial === Teresa) {
-    if (upgradeInfo === TERESA_UNLOCKS.RUN) Teresa.quotes.show(Teresa.quotes.UNLOCK_REALITY);
-    if (upgradeInfo === TERESA_UNLOCKS.EFFARIG) Teresa.quotes.show(Teresa.quotes.EFFARIG);
-  }
+  if (Tab.celestials.teresa.isOpen) Teresa.quotes.initial.show();
 });
 
 EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

@@ -47,18 +47,14 @@ export default {
     level() {
       return this.glyph.level;
     },
-    displayLevel() {
-      if (BASIC_GLYPH_TYPES.includes(this.type)) return this.level + this.realityGlyphBoost;
-      return this.level;
-    },
     effectiveLevel() {
-      return this.displayLevel ? this.displayLevel : this.level;
+      return getAdjustedGlyphLevel(this.glyph, this.realityGlyphBoost);
     },
     isLevelCapped() {
-      return this.displayLevel && this.displayLevel < this.level;
+      return this.effectiveLevel && this.effectiveLevel < this.level;
     },
     isLevelBoosted() {
-      return this.displayLevel && this.displayLevel > this.level;
+      return this.effectiveLevel && this.effectiveLevel > this.level;
     },
     levelText() {
       if (this.type === "companion") return "";
@@ -87,11 +83,8 @@ export default {
       };
     },
     rarityStyle() {
-      let color;
-      if (this.glyph.type === "companion") color = GlyphTypes[this.type].color;
-      else color = getRarity(this.glyph.strength).color;
       return {
-        "color": `${color}`,
+        "color": this.glyph.type === "companion" ? GlyphTypes[this.type].color : getColor(this.glyph.strength),
         "font-weight": "bold"
       };
     },
@@ -102,8 +95,9 @@ export default {
       };
     },
     glyphEffectList() {
-      const db = GameDatabase.reality.glyphEffects;
-      const effects = getGlyphEffectValuesFromBitmask(this.glyph.effects, this.level, this.glyph.strength)
+      const db = GlyphEffects;
+      const effects =
+      getGlyphEffectValuesFromBitmask(this.glyph.effects, this.effectiveLevel, this.glyph.strength, this.type)
         .filter(e => db[e.id].isGenerated === generatedTypes.includes(this.type));
       const effectStrings = effects
         .map(e => this.formatEffectString(db[e.id], e.value));
@@ -129,19 +123,20 @@ export default {
       return heights[effects - 1];
     },
     formatEffectString(dbEntry, value) {
-      const rawDesc = typeof dbEntry.shortDesc === "function"
-        ? dbEntry.shortDesc()
-        : dbEntry.shortDesc;
+      const rawDesc = dbEntry.shortDesc;
       const singleValue = dbEntry.formatSingleEffect
         ? dbEntry.formatSingleEffect(value)
         : dbEntry.formatEffect(value);
       const alteredValue = dbEntry.conversion
         ? dbEntry.formatSecondaryEffect(dbEntry.conversion(value))
         : "";
-      return `${rawDesc}`
-        .replace("{value}", singleValue)
-        .replace("{value2}", alteredValue);
-    },
+      return {
+        text: `${rawDesc}`
+          .replace("{value}", singleValue)
+          .replace("{value2}", alteredValue),
+        isPelleDisabled: dbEntry.isDisabledByDoomed
+      };
+    }
   },
 };
 </script>
@@ -156,7 +151,7 @@ export default {
       />
       <GlyphComponent
         :key="idx"
-        style="margin: 0.1rem;"
+        class="c-glyph-component-container"
         :glyph="glyph"
         :show-sacrifice="showSacrifice && canSacrifice"
         :draggable="false"
@@ -178,11 +173,18 @@ export default {
       :style="effectStyle"
     >
       <div
-        v-for="(effectText, index) in glyphEffectList"
+        v-for="(effectObj, index) in glyphEffectList"
         :key="index"
+        :class="{ 'o-pelle-disabled': effectObj.isPelleDisabled }"
       >
-        {{ effectText }}
+        {{ effectObj.text }}
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-glyph-component-container {
+  margin: 0.1rem;
+}
+</style>

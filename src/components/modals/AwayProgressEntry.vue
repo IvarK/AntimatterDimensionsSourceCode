@@ -38,7 +38,7 @@ export default {
     },
     classObject() {
       return {
-        [this.item.classObject]: true,
+        [this.item.classObject]: !this.removed,
         "c-modal-away-progress__disabled": this.removed,
       };
     },
@@ -82,10 +82,15 @@ export default {
     formatPseudo(number) {
       // Sometimes it's undefined and that throws errors, because this method is also used to determine whether or
       // not any text is even shown at all and sometimes this gets checked on variables which don't have values yet
-      if (!number) return "";
+      if (number === undefined) return "";
       // Surrounding text is formatted differently to specify that this is log10
       if (this.isVeryLarge) return formatInt(Math.floor(number.log10()));
-      if (Decimal.lt(number, 1e9)) return formatInt(number);
+      if (Decimal.lt(number, 1e9)) {
+        // Both numbers and decimals get passed in here so this is needed
+        // Not a fan of this solution but whatever
+        const numberAsDecimal = new Decimal(number);
+        return formatInt(numberAsDecimal.floor());
+      }
       return format(number, 2, 2);
     },
     hideEntry() {

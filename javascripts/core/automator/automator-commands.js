@@ -1,4 +1,4 @@
-import { AutomatorLexer } from "./lexer.js";
+import { AutomatorLexer } from "./lexer";
 
 /**
  * Note: the $ shorthand for the parser object is required by Chevrotain. Don't mess with it.
@@ -6,10 +6,8 @@ import { AutomatorLexer } from "./lexer.js";
 
 export const AutomatorCommands = ((() => {
   const T = AutomatorLexer.tokenMap;
-  // The splitter tries to get a number 1 through 6, or anything else. Note: eslint complains
-  // about lack of u flag here for some reason.
-  // eslint-disable-next-line require-unicode-regexp
-  const presetSplitter = new RegExp(/preset[ \t]+(?:([1-6]$)|(.+$))/ui);
+  const presetSplitter = /name[ \t]+(.+$)/ui;
+  const idSplitter = /id[ \t]+(\d)/ui;
 
   function prestigeNotify(flag) {
     if (!AutomatorBackend.isOn) return;
@@ -28,13 +26,13 @@ export const AutomatorCommands = ((() => {
     return {
       run: () => {
         if (!evalComparison()) {
-          AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false),
-            exiting loop at line ${ctx.RCurly[0].startLine + 1} (end of loop)`, ctx.startLine);
+          AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false), exiting loop at
+            line ${AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1)} (end of loop)`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
         AutomatorBackend.push(commands);
-        AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true),
-          moving to line ${ctx.LCurly[0].startLine + 1} (start of loop)`, ctx.startLine);
+        AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true), moving to
+          line ${AutomatorBackend.translateLineNumber(ctx.LCurly[0].startLine + 1)} (start of loop)`, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
       },
       blockCommands: commands,
@@ -44,11 +42,12 @@ export const AutomatorCommands = ((() => {
   // Extracts the conditional out of a command and returns it as text
   function parseConditionalIntoText(ctx) {
     const comp = ctx.comparison[0].children;
-    const getters = comp.compareValue.map(cv => (
-      cv.children.AutomatorCurrency
-        ? () => cv.children.AutomatorCurrency[0].image
-        : () => format(cv.children.$value, 2, 2)
-    ));
+    const getters = comp.compareValue.map(cv => {
+      if (cv.children.AutomatorCurrency) return () => cv.children.AutomatorCurrency[0].image;
+      const val = cv.children.$value;
+      if (typeof val === "string") return () => val;
+      return () => format(val, 2, 2);
+    });
     const compareFn = comp.ComparisonOperator[0].image;
     return `${getters[0]()} ${compareFn} ${getters[1]()}`;
   }
@@ -91,12 +90,6 @@ export const AutomatorCommands = ((() => {
       // eslint-disable-next-line complexity
       validate: (ctx, V) => {
         ctx.startLine = ctx.Auto[0].startLine;
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && (ctx.duration || ctx.xHighest)) {
-          V.addError((ctx.duration || ctx.xHighest)[0],
-            "Auto Reality cannot be set to a duration or x highest",
-            "Use RM for Auto Reality");
-          return false;
-        }
         if (ctx.PrestigeEvent && ctx.currencyAmount) {
           const desired$ = ctx.PrestigeEvent[0].tokenType.$prestigeCurrency;
           const specified$ = ctx.currencyAmount[0].children.AutomatorCurrency[0].tokenType.name;
@@ -107,41 +100,51 @@ export const AutomatorCommands = ((() => {
           }
         }
 
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity &&
-          (ctx.duration || ctx.xHighest) && !EternityMilestone.bigCrunchModes.isReached) {
-          V.addError((ctx.duration || ctx.xHighest)[0],
-            "Advanced Infinity autobuyer settings are not unlocked",
-            `Reach ${quantifyInt("Eternity", EternityMilestone.bigCrunchModes.config.eternities)} to use this command`);
-          return false;
+        if (!ctx.PrestigeEvent) return true;
+        const advSetting = ctx.duration || ctx.xHighest;
+        // Do not change to switch statement; T.XXX are Objects, not primitive values
+        if (ctx.PrestigeEvent[0].tokenType === T.Infinity) {
+          if (!Autobuyer.bigCrunch.isUnlocked) {
+            V.addError(ctx.PrestigeEvent, "Infinity autobuyer is not unlocked",
+              "Complete the Big Crunch Autobuyer challenge to use this command");
+            return false;
+          }
+          if (advSetting && !EternityMilestone.bigCrunchModes.isReached) {
+            V.addError((ctx.duration || ctx.xHighest)[0],
+              "Advanced Infinity autobuyer settings are not unlocked",
+              `Reach ${quantifyInt("Eternity", EternityMilestone.bigCrunchModes.config.eternities)}
+              to use this command`);
+            return false;
+          }
+        }
+        if (ctx.PrestigeEvent[0].tokenType === T.Eternity) {
+          if (!EternityMilestone.autobuyerEternity.isReached) {
+            V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
+              `Reach ${quantifyInt("Eternity", EternityMilestone.autobuyerEternity.config.eternities)}
+              to use this command`);
+            return false;
+          }
+          if (advSetting && !RealityUpgrade(13).isBought) {
+            V.addError((ctx.duration || ctx.xHighest)[0],
+              "Advanced Eternity autobuyer settings are not unlocked",
+              "Purchase the Reality Upgrade which unlocks advanced Eternity autobuyer settings");
+            return false;
+          }
+        }
+        if (ctx.PrestigeEvent[0].tokenType === T.Reality) {
+          if (!RealityUpgrade(25).isBought) {
+            V.addError(ctx.PrestigeEvent, "Reality autobuyer is not unlocked",
+              "Purchase the Reality Upgrade which unlocks the Reality autobuyer");
+            return false;
+          }
+          if (advSetting) {
+            V.addError((ctx.duration || ctx.xHighest)[0],
+              "Auto Reality cannot be set to a duration or x highest",
+              "Use RM for Auto Reality");
+            return false;
+          }
         }
 
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
-          (ctx.duration || ctx.xHighest) && !RealityUpgrade(13).isBought) {
-          V.addError((ctx.duration || ctx.xHighest)[0],
-            "Advanced Eternity autobuyer settings are not unlocked",
-            "Purchase the Reality Upgrade which unlocks advanced Eternity autobuyer settings");
-          return false;
-        }
-
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Eternity &&
-          !EternityMilestone.autobuyerEternity.isReached) {
-          V.addError(ctx.PrestigeEvent, "Eternity autobuyer is not unlocked",
-            `Reach ${quantifyInt("Eternity", EternityMilestone.autobuyerEternity.config.eternities)}
-            to use this command`);
-          return false;
-        }
-
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Infinity && !NormalChallenge(12).isCompleted) {
-          V.addError(ctx.PrestigeEvent, "Infinity autobuyer is not unlocked",
-            "Complete the Big Crunch Autobuyer challenge to use this command");
-          return false;
-        }
-
-        if (ctx.PrestigeEvent && ctx.PrestigeEvent[0].tokenType === T.Reality && !RealityUpgrade(25).isBought) {
-          V.addError(ctx.PrestigeEvent, "Reality autobuyer is not unlocked",
-            "Purchase the Reality Upgrade which unlocks the Reality autobuyer");
-          return false;
-        }
         return true;
       },
       compile: ctx => {
@@ -190,8 +193,8 @@ export const AutomatorCommands = ((() => {
           : undefined;
         const xHighest = ctx.xHighest ? ctx.xHighest[0].children.$value : undefined;
         const fixedAmount = ctx.currencyAmount
-          ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}
-            ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image}`
+          ? `${ctx.currencyAmount[0].children.NumberLiteral[0].image}` +
+            ` ${ctx.currencyAmount[0].children.AutomatorCurrency[0].image.toUpperCase()}`
           : undefined;
         const on = Boolean(ctx.On);
         let input = "";
@@ -202,8 +205,8 @@ export const AutomatorCommands = ((() => {
         else input = (on ? "ON" : "OFF");
 
         return {
-          target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
-          inputValue: input,
+          singleSelectionInput: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+          singleTextInput: input,
           ...automatorBlocksMap.AUTO
         };
       }
@@ -235,7 +238,7 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: ctx.On ? "ON" : "OFF",
+        singleSelectionInput: ctx.On ? "ON" : "OFF",
         ...automatorBlocksMap["BLACK HOLE"]
       })
     },
@@ -249,7 +252,7 @@ export const AutomatorCommands = ((() => {
         return true;
       },
       // This is an easter egg, it shouldn't do anything
-      compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
+      compile: () => () => AUTOMATOR_COMMAND_STATUS.SKIP_INSTRUCTION,
       blockify: () => ({
         ...automatorBlocksMap.BLOB,
       })
@@ -264,57 +267,11 @@ export const AutomatorCommands = ((() => {
         return true;
       },
       // Comments should be no-ops
-      compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
+      compile: () => () => AUTOMATOR_COMMAND_STATUS.SKIP_INSTRUCTION,
       blockify: ctx => ({
         ...automatorBlocksMap.COMMENT,
-        inputValue: ctx.Comment[0].image.replace(/(#|\/\/)\s?/u, ""),
+        singleTextInput: ctx.Comment[0].image.replace(/(#|\/\/)\s?/u, ""),
       })
-    },
-    {
-      id: "define",
-      block: null,
-      rule: $ => () => {
-        $.CONSUME(T.Define);
-        $.CONSUME(T.Identifier);
-        $.CONSUME(T.EqualSign);
-        $.OR([
-          { ALT: () => $.SUBRULE($.duration) },
-          { ALT: () => $.SUBRULE($.studyList) },
-        ]);
-      },
-      validate: (ctx, V) => {
-        ctx.startLine = ctx.Define[0].startLine;
-        if (!ctx.Identifier || ctx.Identifier[0].isInsertedInRecovery || ctx.Identifier[0].image === "") {
-          V.addError(ctx.Define, "Missing variable name",
-            "Provide a variable name that isn't a command name between DEFINE and =");
-          return false;
-        }
-        return true;
-      },
-      // Since define creates constants, they are all resolved at compile. The actual define instruction
-      // doesn't have to do anything.
-      compile: () => () => AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION,
-      blockify: ctx => {
-        const studyListData = ctx.studyList[0].children.studyListEntry;
-        const studyList = [];
-        for (const entry of studyListData) {
-          if (entry.children.NumberLiteral) {
-            // Single study ID or numerical value
-            studyList.push(entry.children.NumberLiteral[0].image);
-          } else if (entry.children.StudyPath) {
-            // Study path (eg. "time")
-            studyList.push(entry.children.StudyPath[0].image);
-          } else {
-            // Study range (eg. "41-71")
-            const range = entry.children.studyRange[0].children;
-            studyList.push(`${range.firstStudy[0].image}-${range.lastStudy[0].image}`);
-          }
-        }
-        return {
-          ...automatorBlocksMap.DEFINE,
-          inputValue: `${ctx.Identifier[0].image} = ${studyList.join(",")}`,
-        };
-      }
     },
     {
       id: "ifBlock",
@@ -344,7 +301,7 @@ export const AutomatorCommands = ((() => {
             };
             if (!evalComparison()) {
               AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false),
-                skipping to line ${ctx.RCurly[0].startLine + 1}`, ctx.startLine);
+                skipping to line ${AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1)}`, ctx.startLine);
               return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             }
             AutomatorBackend.push(commands);
@@ -363,7 +320,8 @@ export const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.IF,
           ...comparison,
-          target: standardizeAutomatorCurrencyName(comparison.target)
+          genericInput1: standardizeAutomatorValues(comparison.genericInput1),
+          genericInput2: standardizeAutomatorValues(comparison.genericInput2)
         };
       }
     },
@@ -387,7 +345,7 @@ export const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         ...automatorBlocksMap.NOTIFY,
-        inputValue: ctx.StringLiteral[0].image,
+        singleTextInput: ctx.StringLiteral[0].image,
       })
     },
     {
@@ -415,8 +373,14 @@ export const AutomatorCommands = ((() => {
       compile: ctx => {
         const duration = ctx.$duration;
         return S => {
-          const dur = ctx.duration[0].children;
-          const timeString = `${dur.NumberLiteral[0].image} ${dur.TimeUnit[0].image.replace("\\s", "")}`;
+          let timeString;
+          if (ctx.duration) {
+            const c = ctx.duration[0].children;
+            timeString = `${c.NumberLiteral[0].image} ${c.TimeUnit[0].image}`;
+          } else {
+            // This is the case for a defined constant; its value was parsed out during validation
+            timeString = TimeSpan.fromMilliseconds(duration);
+          }
           if (S.commandState === null) {
             S.commandState = { timeMs: 0 };
             AutomatorData.logCommandEvent(`Pause started (waiting ${timeString})`, ctx.startLine);
@@ -432,10 +396,16 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => {
-        const c = ctx.duration[0].children;
+        let blockArg;
+        if (ctx.duration) {
+          const c = ctx.duration[0].children;
+          blockArg = `${c.NumberLiteral[0].image} ${c.TimeUnit[0].image}`;
+        } else {
+          blockArg = `${ctx.Identifier[0].image}`;
+        }
         return {
           ...automatorBlocksMap.PAUSE,
-          inputValue: `${c.NumberLiteral[0].image} ${c.TimeUnit[0].image}`
+          singleTextInput: blockArg
         };
       }
     },
@@ -477,21 +447,25 @@ export const AutomatorCommands = ((() => {
           const available = prestigeToken.$prestigeAvailable();
           if (!available) {
             if (!nowait) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
-            AutomatorData.logCommandEvent(`Auto-${ctx.PrestigeEvent.image} attempted, but skipped due to NOWAIT`,
+            AutomatorData.logCommandEvent(`${ctx.PrestigeEvent.image} attempted, but skipped due to NOWAIT`,
               ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
           if (respec) prestigeToken.$respec();
           prestigeToken.$prestige();
           const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
-          AutomatorData.logCommandEvent(`Auto-${prestigeName} triggered
-            (${findLastPrestigeRecord(prestigeName)})`, ctx.startLine);
+          AutomatorData.logCommandEvent(`${prestigeName} triggered (${findLastPrestigeRecord(prestigeName)})`,
+            ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         };
       },
-      blockify: ctx => automatorBlocksMap[
-        ctx.PrestigeEvent[0].tokenType.name.toUpperCase()
-      ]
+      blockify: ctx => ({
+        ...automatorBlocksMap[
+          ctx.PrestigeEvent[0].tokenType.name.toUpperCase()
+        ],
+        nowait: ctx.Nowait !== undefined,
+        respec: ctx.Respec !== undefined
+      })
     },
     {
       id: "startDilation",
@@ -515,7 +489,7 @@ export const AutomatorCommands = ((() => {
         }
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       },
-      blockify: () => ({ target: "DILATION", ...automatorBlocksMap.START })
+      blockify: () => ({ singleSelectionInput: "DILATION", ...automatorBlocksMap.START })
     },
     {
       id: "startEC",
@@ -549,15 +523,15 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: "EC",
-        inputValue: ctx.eternityChallenge[0].children.$ecNumber,
+        singleSelectionInput: "EC",
+        singleTextInput: ctx.eternityChallenge[0].children.$ecNumber,
         ...automatorBlocksMap.START
       })
     },
     {
-      id: "storeTime",
+      id: "storeGameTime",
       rule: $ => () => {
-        $.CONSUME(T.StoreTime);
+        $.CONSUME(T.StoreGameTime);
         $.OR([
           { ALT: () => $.CONSUME(T.On) },
           { ALT: () => $.CONSUME(T.Off) },
@@ -565,10 +539,10 @@ export const AutomatorCommands = ((() => {
         ]);
       },
       validate: (ctx, V) => {
-        ctx.startLine = ctx.StoreTime[0].startLine;
+        ctx.startLine = ctx.StoreGameTime[0].startLine;
         if (!Enslaved.isUnlocked) {
-          V.addError(ctx.StoreTime[0], "You do not yet know how to store time",
-            "Unlock the ability to store time");
+          V.addError(ctx.StoreGameTime[0], "You do not yet know how to store game time",
+            "Unlock the ability to store game time");
           return false;
         }
         return true;
@@ -577,9 +551,9 @@ export const AutomatorCommands = ((() => {
         if (ctx.Use) return () => {
           if (Enslaved.isUnlocked) {
             Enslaved.useStoredTime(false);
-            AutomatorData.logCommandEvent(`Stored time used`, ctx.startLine);
+            AutomatorData.logCommandEvent(`Stored game time used`, ctx.startLine);
           } else {
-            AutomatorData.logCommandEvent(`Attempted to use stored time, but failed (not unlocked yet)`,
+            AutomatorData.logCommandEvent(`Attempted to use stored game time, but failed (not unlocked yet)`,
               ctx.startLine);
           }
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
@@ -587,14 +561,14 @@ export const AutomatorCommands = ((() => {
         const on = Boolean(ctx.On);
         return () => {
           if (on !== player.celestials.enslaved.isStoring) Enslaved.toggleStoreBlackHole();
-          AutomatorData.logCommandEvent(`Storing time toggled ${ctx.On ? "ON" : "OFF"}`, ctx.startLine);
+          AutomatorData.logCommandEvent(`Storing game time toggled ${ctx.On ? "ON" : "OFF"}`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         };
       },
       blockify: ctx => ({
         // eslint-disable-next-line no-nested-ternary
-        target: ctx.Use ? "USE" : (ctx.On ? "ON" : "OFF"),
-        ...automatorBlocksMap["STORE TIME"]
+        singleSelectionInput: ctx.Use ? "USE" : (ctx.On ? "ON" : "OFF"),
+        ...automatorBlocksMap["STORE GAME TIME"]
       })
     },
     {
@@ -602,6 +576,7 @@ export const AutomatorCommands = ((() => {
       rule: $ => () => {
         $.CONSUME(T.Studies);
         $.OPTION(() => $.CONSUME(T.Nowait));
+        $.CONSUME(T.Purchase);
         $.OR([
           { ALT: () => $.SUBRULE($.studyList) },
           { ALT: () => $.CONSUME1(T.Identifier) },
@@ -621,25 +596,31 @@ export const AutomatorCommands = ((() => {
       compile: ctx => {
         const studies = ctx.$studies;
         if (ctx.Nowait === undefined) return () => {
+          let prePurchasedStudies = 0;
           let purchasedStudies = 0;
+          let finalPurchasedTS;
           for (const tsNumber of studies.normal) {
-            if (TimeStudy(tsNumber).isBought) continue;
-            if (!TimeStudy(tsNumber).purchase()) {
-              if (purchasedStudies > 0) {
-                AutomatorData.logCommandEvent(`Purchased ${quantifyInt("Time Study", purchasedStudies)}
-                and stopped at study ${tsNumber}, waiting to attempt to purchase more studies`, ctx.startLine);
-              }
-              return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+            if (TimeStudy(tsNumber).isBought) prePurchasedStudies++;
+            else if (TimeStudy(tsNumber).purchase()) purchasedStudies++;
+            else finalPurchasedTS = finalPurchasedTS ?? tsNumber;
+          }
+          if (prePurchasedStudies + purchasedStudies < studies.normal.length) {
+            if (prePurchasedStudies + purchasedStudies === 0) {
+              AutomatorData.logCommandEvent(`Could not purchase any of the specified Time Studies`, ctx.startLine);
             }
-            purchasedStudies++;
+            if (purchasedStudies > 0 && finalPurchasedTS) {
+              AutomatorData.logCommandEvent(`Purchased ${quantifyInt("Time Study", purchasedStudies)} and stopped at
+              Time Study ${finalPurchasedTS}, waiting to attempt to purchase more Time Studies`, ctx.startLine);
+            }
+            return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
           }
           if (!studies.ec || TimeStudy.eternityChallenge(studies.ec).isBought) {
-            AutomatorData.logCommandEvent(`Purchased all specified time studies`, ctx.startLine);
+            AutomatorData.logCommandEvent(`Purchased all specified Time Studies`, ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
           const unlockedEC = TimeStudy.eternityChallenge(studies.ec).purchase(true);
           if (unlockedEC) {
-            AutomatorData.logCommandEvent(`Purchased all specified time studies and unlocked Eternity Challenge
+            AutomatorData.logCommandEvent(`Purchased all specified Time Studies and unlocked Eternity Challenge
               ${studies.ec}`, ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
           }
@@ -655,8 +636,9 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        inputValue: ctx.$studies.image,
-        ...automatorBlocksMap.STUDIES
+        singleTextInput: ctx.$studies.image,
+        nowait: ctx.Nowait !== undefined,
+        ...automatorBlocksMap["STUDIES PURCHASE"]
       })
     },
     {
@@ -665,38 +647,53 @@ export const AutomatorCommands = ((() => {
         $.CONSUME(T.Studies);
         $.OPTION(() => $.CONSUME(T.Nowait));
         $.CONSUME(T.Load);
-        $.CONSUME(T.Preset);
+        $.OR([
+          { ALT: () => $.CONSUME1(T.Id) },
+          { ALT: () => $.CONSUME1(T.Name) },
+        ]);
       },
       validate: (ctx, V) => {
         ctx.startLine = ctx.Studies[0].startLine;
-        if (!ctx.Preset || ctx.Preset[0].isInsertedInRecovery || ctx.Preset[0].image === "") {
-          V.addError(ctx, "Missing preset and preset name",
-            `Provide the name of a saved study preset from the Time Studies page. Note this command will not work
-              with presets with purely numerical names.`);
-          return false;
+
+        if (ctx.Id) {
+          const split = idSplitter.exec(ctx.Id[0].image);
+
+          if (!split || ctx.Id[0].isInsertedInRecovery) {
+            V.addError(ctx, "Missing preset id",
+              "Provide the id of a saved study preset slot from the Time Studies page");
+            return false;
+          }
+
+          const id = parseInt(split[1], 10);
+          if (id < 1 || id > 6) {
+            V.addError(ctx.Id[0], `Could not find a preset with an id of ${id}`,
+              "Type in a valid id (1 - 6) for your study preset");
+            return false;
+          }
+          ctx.$presetIndex = id;
+          return true;
         }
-        const split = presetSplitter.exec(ctx.Preset[0].image);
-        if (!split) {
-          V.addError(ctx.Preset[0], "Missing preset name or number",
-            "Provide the name or index (1-6) of a saved study preset from the Time Studies page");
-          return false;
-        }
-        ctx.Preset[0].splitPresetResult = split;
-        let presetIndex;
-        if (split[2]) {
-          // We don't need to do any verification if it's a number; if it's a name, we
-          // check to make sure it exists:
-          presetIndex = player.timestudy.presets.findIndex(e => e.name === split[2]) + 1;
+
+        if (ctx.Name) {
+          const split = presetSplitter.exec(ctx.Name[0].image);
+
+          if (!split || ctx.Name[0].isInsertedInRecovery) {
+            V.addError(ctx, "Missing preset name",
+              "Provide the name of a saved study preset from the Time Studies page");
+            return false;
+          }
+
+          // If it's a name, we check to make sure it exists:
+          const presetIndex = player.timestudy.presets.findIndex(e => e.name === split[1]) + 1;
           if (presetIndex === 0) {
-            V.addError(ctx.Preset[0], `Could not find preset named ${split[2]} (Note: Names are case-sensitive)`,
+            V.addError(ctx.Name[0], `Could not find preset named ${split[1]} (Note: Names are case-sensitive)`,
               "Check to make sure you typed in the correct name for your study preset");
             return false;
           }
-        } else {
-          presetIndex = parseInt(split[1], 10);
+          ctx.$presetIndex = presetIndex;
+          return true;
         }
-        ctx.$presetIndex = presetIndex;
-        return true;
+        return false;
       },
       compile: ctx => {
         const presetIndex = ctx.$presetIndex;
@@ -709,10 +706,13 @@ export const AutomatorCommands = ((() => {
           // if there are then we keep trying on this line until there aren't, unless we are given nowait
           const missingStudyCount = imported.purchasedStudies
             .filter(s => !GameCache.currentStudyTree.value.purchasedStudies.includes(s)).length;
+
+          const presetRepresentation = ctx.Name ? ctx.Name[0].image : ctx.Id[0].image;
+
           if (missingStudyCount === 0) {
-            AutomatorData.logCommandEvent(`Fully loaded study preset ${ctx.Preset[0].image}`, ctx.startLine);
+            AutomatorData.logCommandEvent(`Fully loaded study preset ${presetRepresentation}`, ctx.startLine);
           } else if (afterCount > beforeCount) {
-            AutomatorData.logCommandEvent(`Partially loaded study preset ${ctx.Preset[0].image} 
+            AutomatorData.logCommandEvent(`Partially loaded study preset ${presetRepresentation}
               (missing ${quantifyInt("study", missingStudyCount)})`, ctx.startLine);
           }
           return ctx.Nowait !== undefined || missingStudyCount === 0
@@ -721,8 +721,10 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        inputValue: ctx.$presetIndex,
-        ...automatorBlocksMap.LOAD
+        singleSelectionInput: ctx.Name ? "NAME" : "ID",
+        singleTextInput: ctx.Name ? player.timestudy.presets[ctx.$presetIndex - 1].name : ctx.$presetIndex,
+        nowait: ctx.Nowait !== undefined,
+        ...automatorBlocksMap["STUDIES LOAD"]
       })
     },
     {
@@ -740,37 +742,7 @@ export const AutomatorCommands = ((() => {
         AutomatorData.logCommandEvent(`Turned study respec ON`, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       },
-      blockify: () => automatorBlocksMap.RESPEC
-    },
-    {
-      id: "tt",
-      rule: $ => () => {
-        $.OPTION(() => $.CONSUME(T.Buy));
-        $.CONSUME(T.TT);
-        $.CONSUME(T.TTCurrency);
-      },
-      validate: ctx => {
-        ctx.startLine = (ctx.Buy || ctx.TT)[0].startLine;
-        return true;
-      },
-      compile: ctx => {
-        const buyFunction = ctx.TTCurrency[0].tokenType.$buyTT;
-        return () => {
-          const boughtTT = buyFunction();
-          if (boughtTT) {
-            AutomatorData.logCommandEvent(`${formatInt(boughtTT)} TT purchased with ${ctx.TTCurrency[0].image}`,
-              ctx.startLine);
-            return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
-          }
-          AutomatorData.logCommandEvent(`Attempted to purchase TT with ${ctx.TTCurrency[0].image}
-            but could not afford any`, ctx.startLine);
-          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
-        };
-      },
-      blockify: ctx => ({
-        target: ctx.TTCurrency[0].tokenType.name.toUpperCase(),
-        ...automatorBlocksMap.TT
-      })
+      blockify: () => automatorBlocksMap["STUDIES RESPEC"]
     },
     {
       id: "unlockDilation",
@@ -803,8 +775,9 @@ export const AutomatorCommands = ((() => {
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         };
       },
-      blockify: () => ({
-        target: "DILATION",
+      blockify: ctx => ({
+        singleSelectionInput: "DILATION",
+        nowait: ctx.Nowait !== undefined,
         ...automatorBlocksMap.UNLOCK
       })
     },
@@ -840,8 +813,9 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: "EC",
-        inputValue: ctx.eternityChallenge[0].children.$ecNumber,
+        singleSelectionInput: "EC",
+        singleTextInput: ctx.eternityChallenge[0].children.$ecNumber,
+        nowait: ctx.Nowait !== undefined,
         ...automatorBlocksMap.UNLOCK
       })
     },
@@ -894,8 +868,9 @@ export const AutomatorCommands = ((() => {
               return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
             }
             AutomatorBackend.push(commands);
-            AutomatorData.logCommandEvent(`${prestigeName} prestige has not occurred yet,
-              moving to line ${ctx.LCurly[0].startLine + 1} (start of until loop)`, ctx.startLine);
+            AutomatorData.logCommandEvent(`${prestigeName} prestige has not occurred yet, moving to line
+              ${AutomatorBackend.translateLineNumber(ctx.LCurly[0].startLine + 1)} (start of until loop)`,
+            ctx.startLine);
             return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
           },
           blockCommands: commands
@@ -910,11 +885,12 @@ export const AutomatorCommands = ((() => {
             nest: commands,
             ...automatorBlocksMap.UNTIL,
             ...comparison,
-            target: standardizeAutomatorCurrencyName(comparison.target)
+            genericInput1: standardizeAutomatorValues(comparison.genericInput1),
+            genericInput2: standardizeAutomatorValues(comparison.genericInput2)
           };
         }
         return {
-          target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+          genericInput1: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
           nest: commands,
           ...automatorBlocksMap.UNTIL
         };
@@ -960,7 +936,8 @@ export const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.WAIT,
           ...comparison,
-          target: standardizeAutomatorCurrencyName(comparison.target)
+          genericInput1: standardizeAutomatorValues(comparison.genericInput1),
+          genericInput2: standardizeAutomatorValues(comparison.genericInput2)
         };
       }
     },
@@ -998,7 +975,7 @@ export const AutomatorCommands = ((() => {
         };
       },
       blockify: ctx => ({
-        target: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
+        genericInput1: ctx.PrestigeEvent[0].tokenType.name.toUpperCase(),
         ...automatorBlocksMap.WAIT
       })
     },
@@ -1025,7 +1002,8 @@ export const AutomatorCommands = ((() => {
           nest: commands,
           ...automatorBlocksMap.WHILE,
           ...comparison,
-          target: standardizeAutomatorCurrencyName(comparison.target)
+          genericInput1: standardizeAutomatorValues(comparison.genericInput1),
+          genericInput2: standardizeAutomatorValues(comparison.genericInput2)
         };
       }
     }

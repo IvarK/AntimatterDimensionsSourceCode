@@ -1,87 +1,102 @@
 <script>
-import EffectDisplay from "../../EffectDisplay.vue";
+import wordShift from "../../../../javascripts/core/wordShift";
+
+import PelleRiftBar from "./PelleRiftBar";
+import PelleStrike from "./PelleStrike";
+
 export default {
-  components: { EffectDisplay },
+  name: "PelleRift",
+  components: {
+    PelleStrike,
+    PelleRiftBar
+  },
   props: {
-    rift: Object,
-    compact: Boolean,
+    strike: {
+      type: Object,
+      required: true
+    },
   },
   data() {
     return {
-      active: false,
-      percentage: 0,
-      effect: new Decimal(),
-      totalFill: new Decimal()
+      isActive: false,
+      isMaxed: false,
+      totalFill: new Decimal(),
+      resource: new Decimal(),
+      hasEffectiveFill: false,
+      effects: []
     };
+  },
+  computed: {
+    rift() {
+      return this.strike.rift;
+    }
   },
   methods: {
     update() {
-      this.active = this.rift.isActive;
-      this.percentage = this.rift.percentage;
-      this.effect.copyFrom(this.rift.effectValue);
-      this.totalFill.copyFrom(this.rift.totalFill);
+      const rift = this.rift;
+      this.effects = this.rift.effects;
+      this.isActive = rift.isActive;
+      this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
+      this.setValue("totalFill", rift.totalFill);
+      this.setValue("resource", rift.fillCurrency.value);
+      this.hasEffectiveFill = rift.key === "decay" && PelleRifts.chaos.milestones[0].canBeApplied;
     },
-    hasMilestone(idx) {
-      return this.rift.hasMilestone(idx);
+    // One rift has a number and the others are all Decimals; this reduces boilerplate for setting multiple values
+    setValue(key, value) {
+      if (typeof value === "number") this[key] = value;
+      else this[key].copyFrom(value);
     },
+    // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
+    formatRift(value) {
+      return typeof value === "number" ? `${formatInt(100 * value)}%` : format(value, 2);
+    },
+    riftName() {
+      return wordShift.wordCycle(this.rift.name, true);
+    },
+    drainResource() {
+      if (this.rift.id !== 3) return this.rift.drainResource;
+
+      return wordShift.wordCycle(this.rift.drainResource);
+    }
   },
 };
 </script>
 
 <template>
   <div class="c-pelle-rift">
-    <h2>{{ rift.name }}</h2>
-    <div
-      class="c-pelle-rift-bar"
-      :class="{ 'c-pelle-rift-bar--compact': compact }"
-    >
-      <div class="o-pelle-rift-bar-percentage">
-        {{ formatPercents(percentage, 3) }}
+    <div class="c-pelle-rift-row">
+      <div class="c-pelle-rift-column c-pelle-rift-status">
+        <h2 class="c-pelle-rift-name-header">
+          {{ riftName() }}
+        </h2>
+        <div class="c-pelle-rift-rift-info-container">
+          <div
+            v-for="(effect, idx) in effects"
+            :key="idx"
+          >
+            {{ effect || "" }}
+          </div>
+        </div>
       </div>
-      <div
-        class="o-pelle-rift-bar-fill"
-        :style="{
-          height: !compact ? `${percentage * 100}%` : '100%',
-          width: compact ? `${percentage * 100}%` : '100%',
-        }"
-      />
-      <div
-        v-for="(milestone, idx) in rift.milestones"
-        :key="'milestone-line-' + idx"
-        class="o-pelle-rift-bar-milestone-line"
-        :class="{ 'o-pelle-rift-bar-milestone-line--compact': compact }"
-        :style="{
-          bottom: !compact ? `${milestone.requirement * 100}%` : 0,
-          left: compact ? `${milestone.requirement * 100}%` : 0,
-          display: milestone.requirement === 1 ? 'none' : 'block',
-        }"
-      />
-    </div>
-    <button
-      class="o-pelle-rift-toggle"
-      :class="{ 'o-pelle-rift-toggle--active': active }"
-      @click="rift.toggle()"
-    >
-      {{ active ? "Filling" : "Idle" }}
-    </button>
-    <div
-      class="c-pelle-rift-description"
-      :class="{ 'c-pelle-rift-description--compact': compact }"
-    >
-      <span v-if="!compact">{{ rift.description }}<br><br></span>
-      <span v-if="!compact">Reach {{ format(rift.totalFill, 2, 2) }} to gain more<br><br></span>
-      <span class="highlight">{{ rift.effectDescription }}</span>
-    </div>
-    <div v-if="!compact">
-      <div
-        v-for="(milestone, idx) in rift.milestones"
-        :key="'milestone-' + idx"
-        class="o-pelle-rift-milestone"
-        :class="{ 'o-pelle-rift-milestone--unlocked': hasMilestone(idx) }"
-      >
-        {{ formatPercents(milestone.requirement) }}:
-        {{ typeof milestone.description === "function" ? milestone.description() : milestone.description }}<br>
-        <EffectDisplay :config="milestone" />
+      <div class="c-pelle-rift-column">
+        <PelleStrike :strike="strike" />
+        <PelleRiftBar :rift="rift" />
+      </div>
+      <div class="c-pelle-rift-status">
+        <div class="c-pelle-rift-fill-status">
+          <h2 class="c-pelle-rift-name-header">
+            {{ riftName() }}
+          </h2>
+          <div class="c-pelle-rift-rift-info-container">
+            Drains {{ drainResource() }} to fill.
+            <br>
+            <template v-if="!isMaxed">
+              Current Amount: {{ formatRift(resource) }}
+            </template>
+            <br>
+            Total Filled: {{ formatRift(rift.totalFill) }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -92,99 +107,46 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+
+  /* transparent crimson */
+  box-shadow: inset 0 0 1rem 0.1rem rgba(237, 20, 61, 45%), 0 0 1rem 0.1rem rgba(237, 20, 61, 45%);
+  margin-top: 1rem;
 }
 
-.c-pelle-rift-bar {
-  height: 20rem;
-  border: 2px solid var(--color-pelle-secondary);
-  width: 15rem;
-  border-radius: 5px;
-  position: relative;
-  margin-bottom: 1rem;
+.t-s1 .c-pelle-rift {
+  box-shadow: none;
+}
+
+.c-pelle-rift-row {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #1e1e1e;
 }
 
-.c-pelle-rift-bar--compact {
+.c-pelle-rift-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.c-pelle-rift-rift-info-container {
   height: 5rem;
+  font-weight: 400;
+  color: var(--color-text);
 }
 
-.o-pelle-rift-bar-percentage {
-  font-size: 1.5rem;
-  color: white;
-  text-shadow: 1px 1px 2px var(--color-pelle--base);
-  z-index: 3;
+.c-pelle-rift-status {
+  display: flex;
+  flex-direction: column;
+  width: 26rem;
+  align-items: center;
 }
 
-.o-pelle-rift-bar-fill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  background: var(--color-pelle-secondary);
-  z-index: 2;
-}
-
-.o-pelle-rift-bar-milestone-line {
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  background: var(--color-pelle--base);
-  z-index: 1;
-}
-
-.o-pelle-rift-bar-milestone-line--compact {
-  width: 2px;
-  height: 100%;
-}
-
-.o-pelle-rift-toggle {
-  padding: 0.5rem;
-  background: black;
-  border: 1px solid var(--color-pelle-secondary);
-  font-family: Typewriter;
-  color: white;
-  cursor: pointer;
-  border-radius: 5px;
-  width: 8rem;
-  margin-bottom: 1rem;
-}
-
-.c-pelle-rift-description {
-  margin-bottom: 2rem;
-  width: 25rem;
-}
-
-.o-pelle-rift-toggle:hover {
-  box-shadow: 1px 1px 3px var(--color-pelle-secondary);
-  transition-duration: 0.12s;
-}
-
-.o-pelle-rift-toggle--active {
-  background: var(--color-pelle-secondary);
-  color: black;
-}
-
-.o-pelle-rift-milestone {
-  padding: 1rem;
-  background: black;
-  width: 20rem;
-  margin-bottom: 1rem;
-  color: white;
-  border: 1px solid var(--color-pelle-secondary);
-  border-radius: 5px;
-}
-
-.o-pelle-rift-milestone--unlocked {
-  padding: 1rem;
-  background: var(--color-pelle-secondary);
-  color: black;
-}
-
-h2,
-.highlight {
+.c-pelle-rift-name-header {
+  font-weight: bold;
   color: var(--color-pelle--base);
-  text-shadow: 1px 1px 2px black;
+  padding: 0.2rem;
 }
 </style>

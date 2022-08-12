@@ -1,6 +1,3 @@
-import Decimal from "break_infinity.js";
-window.Decimal = Decimal;
-
 Array.prototype.distinct = function() {
     return this.filter(function (value, index, self) {
         return self.indexOf(value) === index;
@@ -268,13 +265,11 @@ Array.prototype.compact = function() {
 };
 
 Array.prototype.toBitmask = function() {
-  // eslint-disable-next-line no-bitwise
   return this.reduce((prev, val) => prev | (1 << val), 0);
 };
 
 Set.prototype.toBitmask = function() {
   let mask = 0;
-  // eslint-disable-next-line no-bitwise
   for (const id of this) mask |= (1 << id);
   return mask;
 };
@@ -283,9 +278,8 @@ Array.fromBitmask = function(mask) {
   const bitIndices = [];
   let currentIndex = 0;
   while (mask !== 0) {
-    // eslint-disable-next-line no-bitwise
     if (mask & 1) bitIndices.push(currentIndex);
-    // eslint-disable-next-line no-bitwise, no-param-reassign
+    // eslint-disable-next-line no-param-reassign
     mask >>= 1;
     ++currentIndex;
   }

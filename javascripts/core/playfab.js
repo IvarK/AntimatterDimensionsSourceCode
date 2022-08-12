@@ -1,3 +1,5 @@
+import LZString from "lz-string";
+
 export function playFabLogin() {
   try {
     var authTicket = kongregate.services.getGameAuthToken();

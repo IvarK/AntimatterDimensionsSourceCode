@@ -1,16 +1,18 @@
 <script>
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import AutosaveIntervalSlider from "./AutosaveIntervalSlider";
 import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import OptionsButton from "@/components/OptionsButton";
-import AutosaveIntervalSlider from "./AutosaveIntervalSlider";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import SaveFileName from "./SaveFileName";
 
 export default {
   name: "OptionsSavingTab",
   components: {
-    PrimaryToggleButton,
+    AutosaveIntervalSlider,
     OpenModalHotkeysButton,
     OptionsButton,
-    AutosaveIntervalSlider
+    PrimaryToggleButton,
+    SaveFileName
   },
   data() {
     return {
@@ -40,6 +42,8 @@ export default {
       this.userName = Cloud.user.displayName;
     },
     importAsFile(event) {
+      // This happens if the file dialog is canceled instead of a file being selected
+      if (event.target.files.length === 0) return;
       const reader = new FileReader();
       reader.onload = function() {
         GameStorage.import(reader.result);
@@ -107,11 +111,10 @@ export default {
           label="Display time since save:"
         />
       </div>
-      <div
-        v-if="canSpeedrun"
-        class="l-options-grid__row"
-      >
+      <div class="l-options-grid__row">
+        <SaveFileName />
         <OptionsButton
+          v-if="canSpeedrun"
           class="o-primary-btn--option_font-x-large"
           onclick="Modal.enterSpeedrun.show()"
         >

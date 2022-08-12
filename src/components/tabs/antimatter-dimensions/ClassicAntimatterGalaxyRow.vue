@@ -34,7 +34,7 @@ export default {
         : this.lockText;
     },
     sumText() {
-      const parts = [this.galaxies.normal];
+      const parts = [Math.max(this.galaxies.normal, 0)];
       if (this.galaxies.replicanti > 0) parts.push(this.galaxies.replicanti);
       if (this.galaxies.dilation > 0) parts.push(this.galaxies.dilation);
       const sum = parts.map(formatInt).join(" + ");
@@ -85,12 +85,7 @@ export default {
     },
     buyGalaxy(bulk) {
       if (!this.canBeBought) return;
-      if (player.options.confirmations.antimatterGalaxy) {
-        const buyBulk = this.canBulkBuy && bulk;
-        Modal.antimatterGalaxy.show({ bulk: buyBulk });
-        return;
-      }
-      requestGalaxyReset(bulk);
+      manualRequestGalaxyReset(this.canBulkBuy && bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
     },
   }
@@ -98,20 +93,19 @@ export default {
 </script>
 
 <template>
-  <div class="c-antimatter-dim-row">
+  <div class="c-antimatter-dim-row c-antimatter-prestige-row">
     <div
-      class="c-dim-row__label c-dim-row__label--growable"
-      style="height: 6rem;"
+      class="l-dim-row__prestige-text c-dim-row__label c-dim-row__label--amount l-text-wrapper"
     >
       {{ typeName }} ({{ sumText }}):
       requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
-      <div style="height: 2rem;">
+      <div class="l-scaling-text-wrapper">
         {{ hasIncreasedScaling ? costScalingText : "" }}
       </div>
     </div>
     <PrimaryButton
       :enabled="canBeBought"
-      class="o-primary-btn--galaxy l-dim-row__button l-dim-row__button--right-offset"
+      class="o-primary-btn--galaxy l-dim-row__prestige-button"
       :class="tutorialClass"
       @click.exact="buyGalaxy(true)"
       @click.shift.exact="buyGalaxy(false)"
@@ -120,3 +114,13 @@ export default {
     </PrimaryButton>
   </div>
 </template>
+
+<style scoped>
+.l-text-wrapper {
+  height: 6rem;
+}
+
+.l-scaling-text-wrapper {
+  height: 2rem;
+}
+</style>

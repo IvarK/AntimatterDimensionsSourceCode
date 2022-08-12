@@ -1,6 +1,6 @@
 <script>
-import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 import ConfirmationOptionsEntry from "@/components/modals/options/ConfirmationOptionsEntry";
+import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 
 export default {
   name: "ConfirmationOptionsModal",
@@ -10,10 +10,10 @@ export default {
   },
   computed: {
     count() {
-      return ConfirmationTypes.length;
+      return ConfirmationTypes.index.length;
     },
     noConfirmations() {
-      return ConfirmationTypes.every(x => !x.isUnlocked());
+      return ConfirmationTypes.index.every(x => !x.isUnlocked());
     }
   }
 };

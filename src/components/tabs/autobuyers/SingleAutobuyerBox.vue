@@ -1,12 +1,14 @@
 <script>
-import AutobuyerToggleLabel from "./AutobuyerToggleLabel";
+import AutobuyerInput from "./AutobuyerInput";
 import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
+import AutobuyerSingleToggleLabel from "./AutobuyerSingleToggleLabel";
 
 export default {
   name: "SingleAutobuyerBox",
   components: {
-    AutobuyerToggleLabel,
-    AutobuyerIntervalLabel
+    AutobuyerSingleToggleLabel,
+    AutobuyerIntervalLabel,
+    AutobuyerInput
   },
   props: {
     autobuyer: {
@@ -37,10 +39,23 @@ export default {
     v-if="isUnlocked"
     class="c-autobuyer-box-row"
   >
-    <AutobuyerToggleLabel :autobuyer="autobuyer" />
+    <AutobuyerSingleToggleLabel :autobuyer="autobuyer" />
     <div>
       {{ name }}
       <AutobuyerIntervalLabel :autobuyer="autobuyer" />
+
+      <span
+        v-if="autobuyer.hasInput"
+        class="c-autobuyer-box__small-text"
+      >
+        Multiplier:
+        <AutobuyerInput
+          class="c-small-autobuyer-input"
+          :autobuyer="autobuyer"
+          :type="autobuyer.inputType"
+          :property="autobuyer.inputEntry"
+        />
+      </span>
     </div>
   </span>
 </template>

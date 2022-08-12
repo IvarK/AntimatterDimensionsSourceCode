@@ -1,3 +1,7 @@
+import { sha512_256 } from "js-sha512";
+
+import FullScreenAnimationHandler from "../full-screen-animation-handler";
+
 export class GameOptions {
 
   static toggleNews() {
@@ -9,6 +13,9 @@ export class GameOptions {
   static toggleUI() {
     player.options.newUI = !player.options.newUI;
     ui.view.newUI = player.options.newUI;
+    // This is needed because .s-base--dark is on newUI/normal but not on oldUI/normal
+    // So the classes on body need to be updated
+    Themes.find(player.options.theme).set();
     GameStorage.save(true);
   }
 
@@ -60,10 +67,9 @@ export function isSecretImport(data) {
 
 export function tryImportSecret(data) {
   const index = secretImportIndex(data);
-  if (index === 0 && document.body.style.animation === "") {
-    document.body.style.animation = "barrelRoll 5s 1";
+  if (index === 0) {
+    FullScreenAnimationHandler.display("a-barrel-roll", 5);
     SecretAchievement(15).unlock();
-    setTimeout(() => document.body.style.animation = "", 5000);
     return true;
   }
   if (index === 1) {

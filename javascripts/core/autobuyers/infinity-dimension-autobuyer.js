@@ -1,12 +1,18 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { InfinityDimensions } from "../globals";
+
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   get tier() {
     return this.id;
   }
 
+  get dimension() {
+    return InfinityDimension(this.tier);
+  }
+
   get name() {
-    return InfinityDimension(this.tier).displayName;
+    return this.dimension.displayName;
   }
 
   get fullName() {
@@ -14,7 +20,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get data() {
-    return player.auto.infinityDims[this.tier - 1];
+    return player.auto.infinityDims.all[this.tier - 1];
   }
 
   get interval() {
@@ -22,7 +28,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get isUnlocked() {
-    return EternityMilestone.autobuyerID(this.tier).isReached || PelleUpgrade.IDAutobuyers.canBeApplied;
+    return EternityMilestone[`autobuyerID${this.tier}`].isReached || PelleUpgrade.IDAutobuyers.canBeApplied;
   }
 
   get resetTickOn() {
@@ -33,13 +39,19 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
     return true;
   }
 
+  get canTick() {
+    return InfinityDimensions.canAutobuy() && this.dimension.isAvailableForPurchase && super.canTick;
+  }
+
   tick() {
-    if (EternityChallenge(8).isRunning) return;
-    if (buyMaxInfDims(this.tier)) super.tick();
+    super.tick();
+    this.dimension.buyMax();
   }
 
   static get entryCount() { return 8; }
   static get autobuyerGroupName() { return "Infinity Dimension"; }
+  static get isActive() { return player.auto.infinityDims.isActive; }
+  static set isActive(value) { player.auto.infinityDims.isActive = value; }
 }
 
 Autobuyer.infinityDimension = InfinityDimensionAutobuyerState.createAccessor();

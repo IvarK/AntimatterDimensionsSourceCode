@@ -1,5 +1,10 @@
-import { GameDatabase } from "../game-database.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { GameDatabase } from "../game-database";
+
+// This is supposed to be in ./navigation.js but importing doesn't work for some stupid reason
+function emphasizeEnd(fraction) {
+  return Math.pow(fraction, 10);
+}
 
 export const V_REDUCTION_MODE = {
   SUBTRACTION: 1,
@@ -191,4 +196,61 @@ GameDatabase.celestials.v = {
       isHard: true
     }
   ],
+  unlocks: {
+    vAchievementUnlock: {
+      id: 0,
+      reward: "Unlock V, The Celestial Of Achievements",
+      description: "Meet all the above requirements simultaneously",
+      requirement: () => Object.values(GameDatabase.celestials.v.mainUnlock).every(e => e.progress() >= 1)
+    },
+    shardReduction: {
+      id: 1,
+      reward: `You can spend Perk Points to reduce the goal requirement of all tiers of each V-Achievement.`,
+      description: () => `Have ${formatInt(2)} V-Achievements`,
+      requirement: () => V.spaceTheorems >= 2
+    },
+    adPow: {
+      id: 2,
+      reward: "Antimatter Dimension power based on total Space Theorems.",
+      description: () => `Have ${formatInt(5)} V-Achievements`,
+      effect: () => 1 + Math.sqrt(V.spaceTheorems) / 100,
+      format: x => formatPow(x, 3, 3),
+      requirement: () => V.spaceTheorems >= 5
+    },
+    fastAutoEC: {
+      id: 3,
+      reward: "Achievement multiplier reduces Auto-EC completion time.",
+      description: () => `Have ${formatInt(10)} V-Achievements`,
+      effect: () => Achievements.power,
+      // Base rate is 60 ECs at 20 minutes each
+      format: x => (Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied
+        ? "Instant (Ra upgrade)"
+        : `${TimeSpan.fromMinutes(60 * 20 / x).toStringShort()} for full completion`),
+      requirement: () => V.spaceTheorems >= 10
+    },
+    autoAutoClean: {
+      id: 4,
+      reward: "Unlock the ability to Automatically Purge on Reality.",
+      description: () => `Have ${formatInt(16)} V-Achievements`,
+      requirement: () => V.spaceTheorems >= 16
+    },
+    achievementBH: {
+      id: 5,
+      reward: "Achievement multiplier affects Black Hole power.",
+      description: () => `Have ${formatInt(30)} V-Achievements`,
+      effect: () => Achievements.power,
+      format: x => formatX(x, 2, 0),
+      requirement: () => V.spaceTheorems >= 30
+    },
+    raUnlock: {
+      id: 6,
+      reward() {
+        return `Reduce the Space Theorem cost of Time Studies by ${formatInt(2)}.
+                Unlock Ra, Celestial of the Forgotten.`;
+      },
+      description: () => `Have ${formatInt(36)} V-Achievements`,
+      effect: 2,
+      requirement: () => V.spaceTheorems >= 36
+    }
+  }
 };

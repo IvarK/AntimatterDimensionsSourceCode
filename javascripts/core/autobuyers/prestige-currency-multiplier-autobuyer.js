@@ -1,4 +1,4 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer.js";
+import { Autobuyer, AutobuyerState } from "./autobuyer";
 
 Autobuyer.ipMult = new class IPMultAutobuyerState extends AutobuyerState {
   get data() {
@@ -10,7 +10,7 @@ Autobuyer.ipMult = new class IPMultAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return EternityMilestone.autobuyerIPMult.isReached;
+    return EternityMilestone.autobuyerIPMult.isReached && !Pelle.isDoomed;
   }
 
   get hasUnlimitedBulk() {
@@ -32,7 +32,7 @@ Autobuyer.epMult = new class EPMultAutobuyerState extends AutobuyerState {
   }
 
   get isUnlocked() {
-    return RealityUpgrade(13).isBought;
+    return RealityUpgrade(13).isBought && !Pelle.isDoomed;
   }
 
   get hasUnlimitedBulk() {

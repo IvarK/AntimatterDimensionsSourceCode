@@ -61,7 +61,8 @@ export const AutoGlyphProcessor = {
       // to make them picked last, because we can't refine them.
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY: {
         const resource = AlchemyResource[glyph.type];
-        return resource.isUnlocked && !resource.capped
+        const refinementGain = GlyphSacrificeHandler.glyphRefinementGain(glyph);
+        return resource.isUnlocked && refinementGain > 0
           ? -resource.amount
           : Number.NEGATIVE_INFINITY;
       }
@@ -123,6 +124,12 @@ export const AutoGlyphProcessor = {
       default:
         throw new Error("Unknown auto Glyph Sacrifice mode");
     }
+  },
+  // Generally only used for UI in order to notify the player that they might end up retroactively getting rid of
+  // some glyphs they otherwise want to keep
+  hasNegativeEffectScore() {
+    return this.scoreMode === AUTO_GLYPH_SCORE.EFFECT_SCORE &&
+      Object.values(this.types).map(t => Object.values(t.effectScores)).flat().some(v => v < 0);
   }
 };
 
@@ -130,10 +137,27 @@ export function autoAdjustGlyphWeights() {
   const sources = getGlyphLevelSources();
   const f = x => Math.pow(Math.clampMin(1, Math.log(5 * x)), 3 / 2);
   const totalWeight = Object.values(sources).map(s => f(s.value)).sum();
-  player.celestials.effarig.glyphWeights.ep = 100 * f(sources.ep.value) / totalWeight;
-  player.celestials.effarig.glyphWeights.repl = 100 * f(sources.repl.value) / totalWeight;
-  player.celestials.effarig.glyphWeights.dt = 100 * f(sources.dt.value) / totalWeight;
-  player.celestials.effarig.glyphWeights.eternities = 100 * f(sources.eternities.value) / totalWeight;
+  const scaledWeight = key => 100 * f(sources[key].value) / totalWeight;
+
+  // Adjust all weights to be integer, while maintaining that they must sum to 100. We ensure it's within 1 on the
+  // weights by flooring and then taking guesses on which ones would give the largest boost when adding the lost
+  // amounts. This isn't necessarily the best integer weighting, but gives a result that's quite literally within
+  // 99.97% of the non-integer optimal settings and prevents the total from exceeding 100.
+  const weightKeys = ["ep", "repl", "dt", "eternities"];
+  const weights = [];
+  for (const key of weightKeys) {
+    weights.push({
+      key,
+      percent: scaledWeight(key)
+    });
+  }
+  const fracPart = x => x - Math.floor(x);
+  const priority = weights.sort((a, b) => fracPart(b.percent) - fracPart(a.percent)).map(w => w.key);
+  const missingPercent = 100 - weights.map(w => Math.floor(w.percent)).reduce((a, b) => a + b);
+  for (let i = 0; i < weightKeys.length; i++) {
+    const key = priority[i];
+    player.celestials.effarig.glyphWeights[key] = Math.floor(scaledWeight(key)) + (i < missingPercent ? 1 : 0);
+  }
 }
 
 function getGlyphLevelSources() {
@@ -183,6 +207,7 @@ function getGlyphLevelSources() {
 
 export function getGlyphLevelInputs() {
   const sources = getGlyphLevelSources();
+  const staticFactors = GameCache.staticGlyphWeights.value;
   // If the nomial blend of inputs is a * b * c * d, then the contribution can be tuend by
   // changing the exponents on the terms: aⁿ¹ * bⁿ² * cⁿ³ * dⁿ⁴
   // If n1..n4 just add up to 4, then the optimal strategy is to just max out the one over the
@@ -221,55 +246,65 @@ export function getGlyphLevelInputs() {
   adjustFactor(sources.repl, weights.repl / 100);
   adjustFactor(sources.dt, weights.dt / 100);
   adjustFactor(sources.eternities, weights.eternities / 100);
-  const perkShopEffect = Effects.max(1, PerkShopUpgrade.glyphLevel);
-  const shardFactor = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) ? RA_UNLOCKS.SHARD_LEVEL_BOOST.effect() : 0;
+  const shardFactor = Ra.unlocks.relicShardGlyphLevelBoost.effectOrDefault(0);
   let baseLevel = sources.ep.value * sources.repl.value * sources.dt.value * sources.eternities.value *
-    perkShopEffect + shardFactor;
+    staticFactors.perkShop + shardFactor;
 
-  const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.isUnlocked
-    ? SingularityMilestone.glyphLevelFromSingularities.effectValue
-    : 1;
+  const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.effectOrDefault(1);
   baseLevel *= singularityEffect;
 
   let scaledLevel = baseLevel;
-  // With begin = 1000 and rate = 250, a base level of 2000 turns into 1500; 4000 into 2000
-  const instabilityScaleBegin = Glyphs.instabilityThreshold;
-  const instabilityScaleRate = 500;
-  if (scaledLevel > instabilityScaleBegin) {
-    const excess = (scaledLevel - instabilityScaleBegin) / instabilityScaleRate;
-    scaledLevel = instabilityScaleBegin + 0.5 * instabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
-  }
-  const hyperInstabilityScaleBegin = Glyphs.hyperInstabilityThreshold;
-  const hyperInstabilityScaleRate = 400;
-  if (scaledLevel > hyperInstabilityScaleBegin) {
-    const excess = (scaledLevel - hyperInstabilityScaleBegin) / hyperInstabilityScaleRate;
-    scaledLevel = hyperInstabilityScaleBegin + 0.5 * hyperInstabilityScaleRate * (Math.sqrt(1 + 4 * excess) - 1);
-  }
+  // The softcap starts at begin and rate determines how quickly level scales after the cap, turning a linear pre-cap
+  // increase to a quadratic post-cap increase with twice the scaling. For example, with begin = 1000 and rate = 400:
+  // - Scaled level 1400 requires +800 more base levels from the start of the cap (ie. level 1800)
+  // - Scaled level 1800 requires +1600 more base levels from scaled 1400 (ie. level 3400)
+  // - Each additional 400 scaled requires another +800 on top of the already-existing gap for base
+  // This is applied twice in a stacking way, using regular instability first and then again with hyperinstability
+  // if the newly reduced level is still above the second threshold
+  const instabilitySoftcap = (level, begin, rate) => {
+    if (level < begin) return level;
+    const excess = (level - begin) / rate;
+    return begin + 0.5 * rate * (Math.sqrt(1 + 4 * excess) - 1);
+  };
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.instability, 500);
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.hyperInstability, 400);
+
   const scalePenalty = scaledLevel > 0 ? baseLevel / scaledLevel : 1;
-  const rowFactor = [Array.range(1, 5).every(x => RealityUpgrade(x).boughtAmount > 0)]
-    .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
-    .filter(x => x)
-    .length;
-  const achievementFactor = Effects.sum(Achievement(148), Achievement(166));
-  baseLevel += rowFactor + achievementFactor;
-  scaledLevel += rowFactor + achievementFactor;
-  // Temporary runaway prevention (?)
-  const levelHardcap = 1000000;
-  const levelCapped = scaledLevel > levelHardcap;
-  scaledLevel = Math.min(scaledLevel, levelHardcap);
+  const incAfterInstability = staticFactors.realityUpgrades + staticFactors.achievements;
+  baseLevel += incAfterInstability;
+  scaledLevel += incAfterInstability;
   return {
     ep: sources.ep,
     repl: sources.repl,
     dt: sources.dt,
     eter: sources.eternities,
-    perkShop: perkShopEffect,
+    perkShop: staticFactors.perkShop,
     scalePenalty,
-    rowFactor,
-    achievementFactor,
+    rowFactor: staticFactors.realityUpgrades,
+    achievementFactor: staticFactors.achievements,
     shardFactor,
     singularityEffect,
     rawLevel: baseLevel,
     actualLevel: Math.max(1, scaledLevel),
-    capped: levelCapped
+  };
+}
+
+// Calculates glyph weights which don't change over the course of a reality unless particular events occur; this is
+// stored in the GameCache and only invalidated as needed
+export function staticGlyphWeights() {
+  const perkShop = Effects.max(1, PerkShopUpgrade.glyphLevel);
+  const instability = Glyphs.instabilityThreshold;
+  const hyperInstability = Glyphs.hyperInstabilityThreshold;
+  const realityUpgrades = [Array.range(1, 5).every(x => RealityUpgrade(x).boughtAmount > 0)]
+    .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
+    .filter(x => x)
+    .length;
+  const achievements = Effects.sum(Achievement(148), Achievement(166));
+  return {
+    perkShop,
+    instability,
+    hyperInstability,
+    realityUpgrades,
+    achievements
   };
 }

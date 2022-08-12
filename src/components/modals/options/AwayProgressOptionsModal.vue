@@ -17,7 +17,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperOptions style="width: 75rem">
+  <ModalWrapperOptions class="l-wrapper">
     <template #header>
       Away Progress Options
     </template>
@@ -31,3 +31,9 @@ export default {
     Note: Selected resources will only show if they've increased.
   </ModalWrapperOptions>
 </template>
+
+<style scoped>
+.l-wrapper {
+  width: 75rem;
+}
+</style>

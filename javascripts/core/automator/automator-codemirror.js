@@ -1,12 +1,12 @@
-import { AutomatorGrammar } from "./parser.js";
-import { AutomatorLexer } from "./lexer.js";
+import { AutomatorGrammar } from "./parser";
+import { AutomatorLexer } from "./lexer";
 
 (function() {
   function walkSuggestion(suggestion, prefix, output) {
-    if (suggestion.$autocomplete &&
-      suggestion.$autocomplete.startsWith(prefix) && suggestion.$autocomplete !== prefix) {
-      output.add(suggestion.$autocomplete);
-    }
+    const hasAutocomplete = suggestion.$autocomplete &&
+      suggestion.$autocomplete.startsWith(prefix) && suggestion.$autocomplete !== prefix;
+    const isUnlocked = suggestion.$unlocked ? suggestion.$unlocked() : true;
+    if (hasAutocomplete && isUnlocked) output.add(suggestion.$autocomplete);
     for (const s of suggestion.categoryMatches) {
       walkSuggestion(AutomatorLexer.tokenIds[s], prefix, output);
     }
@@ -60,14 +60,9 @@ import { AutomatorLexer } from "./lexer.js";
       { regex: /blob\s\s/ui, token: "blob" },
       {
         // eslint-disable-next-line max-len
-        regex: /auto\s|if\s|pause\s|studies\s|tt\s|time theorems\s|until\s|wait\s|while\s|black[ \t]+hole\s|stored?[ \t]time\s|notify/ui,
+        regex: /(auto|if|pause|studies|time[ \t]+theorems?|until|wait|while|black[ \t]+hole|stored?[ \t]+game[ \t]+time|notify)\s/ui,
         token: "keyword",
         next: "commandArgs"
-      },
-      {
-        regex: /define\s/ui,
-        token: "keyword",
-        next: "defineIdentifier"
       },
       {
         regex: /start\s|unlock\s/ui,
@@ -85,8 +80,8 @@ import { AutomatorLexer } from "./lexer.js";
       { sol: true, next: "start" },
       { regex: /load(\s+|$)/ui, token: "variable-2", next: "studiesLoad" },
       { regex: /respec/ui, token: "variable-2", next: "commandDone" },
+      { regex: /purchase/ui, token: "variable-2", next: "studiesList" },
       { regex: /nowait(\s+|$)/ui, token: "property" },
-      { regex: /(?=\S)/ui, next: "studiesList" },
     ],
     studiesList: [
       commentRule,
@@ -94,14 +89,21 @@ import { AutomatorLexer } from "./lexer.js";
       { regex: /t[1-4]/ui, token: "number" },
       { regex: /(antimatter|infinity|time)(?=[\s,]|$)/ui, token: "variable-2" },
       { regex: /(active|passive|idle)(?=[\s,]|$)/ui, token: "variable-2" },
+      { regex: /(light|dark)(?=[\s,]|$)/ui, token: "variable-2" },
       { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandDone" },
       { regex: /[1-9][0-9]+/ui, token: "number" },
     ],
     studiesLoad: [
       commentRule,
       { sol: true, next: "start" },
-      { regex: /preset(\s+|$)/ui, token: "variable-2", next: "studiesLoadPreset" },
+      { regex: /id(\s+|$)/ui, token: "variable-2", next: "studiesLoadId" },
+      { regex: /name(\s+|$)/ui, token: "variable-2", next: "studiesLoadPreset" },
       { regex: /\S+/ui, token: "error" },
+    ],
+    studiesLoadId: [
+      commentRule,
+      { sol: true, next: "start" },
+      { regex: /\d/ui, token: "qualifier", next: "commandDone" },
     ],
     studiesLoadPreset: [
       commentRule,
@@ -121,11 +123,6 @@ import { AutomatorLexer } from "./lexer.js";
       { regex: /\}/ui, dedent: true },
       { regex: /\S+/ui, token: "error" },
     ],
-    defineIdentifier: [
-      commentRule,
-      { sol: true, next: "start" },
-      { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandArgs" },
-    ],
     startUnlock: [
       commentRule,
       { sol: true, next: "start" },
@@ -143,14 +140,15 @@ import { AutomatorLexer } from "./lexer.js";
       { regex: /nowait(\s|$)/ui, token: "property" },
       { regex: /".*"/ui, token: "string", next: "commandDone" },
       { regex: /(on|off|dilation|load|respec)(\s|$)/ui, token: "variable-2" },
-      { regex: /(preset|eternity|reality|use)(\s|$)/ui, token: "variable-2" },
+      { regex: /(eternity|reality|use)(\s|$)/ui, token: "variable-2" },
       { regex: /(antimatter|infinity|time)(\s|$|(?=,))/ui, token: "variable-2" },
       { regex: /(active|passive|idle)(\s|$|(?=,))/ui, token: "variable-2" },
+      { regex: /(light|dark)(\s|$|(?=,))/ui, token: "variable-2" },
       { regex: /x[\t ]+highest(\s|$)/ui, token: "variable-2" },
       { regex: /pending[\t ]+(completions|ip|ep|tp|rm|glyph[\t ]+level)(\s|$)/ui, token: "variable-2" },
       { regex: /total[\t ]+(completions|tt)(\s|$)/ui, token: "variable-2" },
       { regex: /ec(1[0-2]|[1-9])[\t ]+completions(\s|$)/ui, token: "variable-2" },
-      { regex: /(am|ip|ep|max)(\s|$)/ui, token: "variable-2" },
+      { regex: /(am|ip|ep|all)(\s|$)/ui, token: "variable-2" },
       {
         regex: /(rm|rg|dt|tp|tt|(banked )?infinities|eternities|realities|rep(licanti)?)(\s|$)/ui,
         token: "variable-2",
@@ -158,6 +156,7 @@ import { AutomatorLexer } from "./lexer.js";
       { regex: / sec(onds ?) ?| min(utes ?) ?| hours ?/ui, token: "variable-2" },
       { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9]|t[1-4])/ui, token: "number" },
       { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui, token: "number" },
+      { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable" },
       { regex: /\{/ui, indent: true, next: "commandDone" },
       // This seems necessary to have a closing curly brace de-indent automatically in some cases
       { regex: /\}/ui, dedent: true },

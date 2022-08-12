@@ -1,5 +1,6 @@
-import { GameMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
+import { DC } from "./constants";
+import { deepmergeAll } from "@/utility/deepmerge";
+import { GameMechanicState } from "./game-mechanics/index";
 
 export function startEternityChallenge() {
   initializeChallengeCompletions();
@@ -27,7 +28,7 @@ export function startEternityChallenge() {
 class EternityChallengeRewardState extends GameMechanicState {
   constructor(config, challenge) {
     const effect = config.effect;
-    const configCopy = deepmerge.all([{}, config]);
+    const configCopy = deepmergeAll([{}, config]);
     configCopy.effect = () => effect(challenge.completions);
     super(configCopy);
     this._challenge = challenge;
@@ -94,6 +95,7 @@ export class EternityChallengeState extends GameMechanicState {
   get gainedCompletionStatus() {
     const status = {
       gainedCompletions: 0,
+      hasMoreCompletions: false,
       totalCompletions: this.completions,
     };
     if (this.isFullyCompleted) return status;
@@ -192,7 +194,7 @@ export class EternityChallengeState extends GameMechanicState {
     }
     if (Enslaved.isRunning) {
       if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.giveProgress();
-      if (EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
+      if (!auto && EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
     }
     startEternityChallenge();
     return true;
@@ -231,7 +233,8 @@ export class EternityChallengeState extends GameMechanicState {
       reason = restriction => `spending more than ${quantify("in-game second", restriction, 0, 1)} in it`;
     }
     Modal.message.show(`You failed Eternity Challenge ${this.id} due to
-      ${reason(this.config.restriction(this.completions))}; you have now exited it.`);
+      ${reason(this.config.restriction(this.completions))}; you have now exited it.`,
+    { closeEvent: GAME_EVENT.REALITY_RESET_AFTER }, 1);
     EventHub.dispatch(GAME_EVENT.CHALLENGE_FAILED);
   }
 
@@ -290,7 +293,7 @@ export const EternityChallenges = {
   autoComplete: {
     tick() {
       if (!player.reality.autoEC || Pelle.isDisabled("autoec")) return;
-      if (Ra.has(RA_UNLOCKS.AUTO_RU_AND_INSTANT_EC)) {
+      if (Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied) {
         let next = this.nextChallenge;
         while (next !== undefined) {
           while (!next.isFullyCompleted) {
@@ -322,7 +325,7 @@ export const EternityChallenges = {
         Perk.autocompleteEC2,
         Perk.autocompleteEC3
       );
-      if (V.has(V_UNLOCKS.FAST_AUTO_EC)) minutes /= V_UNLOCKS.FAST_AUTO_EC.effect();
+      minutes /= VUnlocks.fastAutoEC.effectOrDefault(1);
       return TimeSpan.fromMinutes(minutes).totalMilliseconds;
     }
   }

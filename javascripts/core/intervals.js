@@ -30,7 +30,10 @@ export const GameIntervals = (function() {
     // Not a getter because getter will cause stack overflow
     all() {
       return Object.values(GameIntervals)
-        .filter(i => i.hasOwnProperty("start") && i.hasOwnProperty("stop"));
+        .filter(i =>
+          Object.prototype.hasOwnProperty.call(i, "start") &&
+          Object.prototype.hasOwnProperty.call(i, "stop")
+        );
     },
     start() {
       // eslint-disable-next-line no-shadow
@@ -57,19 +60,6 @@ export const GameIntervals = (function() {
     checkCloudSave: interval(() => {
       if (player.options.cloudEnabled && Cloud.loggedIn) Cloud.saveCheck();
     }, 300000),
-    submitKongStats: interval(() => {
-      kong.submitStats("Log10 of total antimatter", player.records.totalAntimatter.e);
-      kong.submitStats("Log10 of Infinity Points", player.infinityPoints.e);
-      kong.submitStats("Log10 of Eternity Points", player.eternityPoints.e);
-      kong.submitStats("NormalChallenge 9 time record (ms)", Math.floor(player.challenge.normal.bestTimes[8]));
-      kong.submitStats("Fastest Infinity time (ms)", Math.floor(player.records.bestInfinity.time));
-      // FIXME: Infinitified is now Decimal so decide what happens here!
-      // kong.submitStats('Infinitied', Currency.infinitiesTotal);
-      // FIXME: Eternity count is now a Decimal.
-      // kong.submitStats("Eternities", Currency.eternities);
-      kong.submitStats("Achievements", Achievements.effectiveCount +
-        SecretAchievements.all.countWhere(a => a.isUnlocked));
-    }, 60000),
     randomSecretAchievement: interval(() => {
       if (Math.random() < 0.00001) SecretAchievement(18).unlock();
     }, 1000),
@@ -79,7 +69,7 @@ export const GameIntervals = (function() {
         .then(response => response.json())
         .then(json => {
           if (json.version > player.version) {
-            Modal.message.show(json.message, updateRefresh);
+            Modal.message.show(json.message, { callback: updateRefresh }, 3);
           }
         });
     }, 60000)

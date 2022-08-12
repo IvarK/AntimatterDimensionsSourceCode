@@ -1,5 +1,7 @@
 import * as ADNotations from "@antimatter-dimensions/notations";
 
+import { deepmergeAll } from "@/utility/deepmerge";
+
 export const GameStorage = {
   currentSlot: 0,
   saves: {
@@ -50,7 +52,7 @@ export const GameStorage = {
     this.currentSlot = slot;
     // Save current slot to make sure no changes are lost
     this.save(true);
-    this.loadPlayerObject(this.saves[slot]);
+    this.loadPlayerObject(this.saves[slot] ?? Player.defaultStart);
     Tabs.all.find(t => t.id === player.options.lastOpenTab).show(true);
     GameUI.notify.info("Game loaded");
   },
@@ -65,9 +67,16 @@ export const GameStorage = {
       return;
     }
     Modal.hideAll();
+    Quote.clearAll();
     this.loadPlayerObject(player, overrideLastUpdate);
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
+
+    // This is to fix a very specific exploit: When the game is ending, some tabs get hidden
+    // The options tab is the first one of those, which makes the player redirect to the Pelle tab
+    // You can doom your reality even if you haven't unlocked infinity yet if you import while the Pelle tab
+    // is showing
+    Tab.options.subtabs[0].show();
     GameUI.notify.info("Game imported");
   },
 
@@ -132,6 +141,12 @@ export const GameStorage = {
   },
 
   save(silent = false, manual = false) {
+    if (GameEnd.endState >= 4 && !GameEnd.removeAdditionalEnd) return;
+    if (GameEnd.endState >= 2.5) {
+      // Fade-out starts at 2.5
+      GameUI.notify.error("There is nothing left to save");
+      return;
+    }
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();
@@ -156,21 +171,23 @@ export const GameStorage = {
   exportAsFile() {
     player.options.exportedFileCount++;
     this.save(true);
+    const saveFileName = player.options.saveFileName ? ` - ${player.options.saveFileName},` : "";
     const dateObj = new Date();
     const y = dateObj.getFullYear();
     const m = dateObj.getMonth() + 1;
     const d = dateObj.getDate();
     const segmented = player.speedrun.isSegmented;
     Speedrun.setSegmented(true);
-    download(`AD Save ${GameStorage.currentSlot + 1} #${player.options.exportedFileCount} (${y}-${m}-${d}).txt`,
-      GameSaveSerializer.serialize(player));
+    download(
+      `AD Save, Slot ${GameStorage.currentSlot + 1}${saveFileName} #${player.options.exportedFileCount} \
+(${y}-${m}-${d}).txt`, GameSaveSerializer.serialize(player));
     Speedrun.setSegmented(segmented);
     GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 
   hardReset() {
     this.loadPlayerObject(Player.defaultStart);
-    this.save();
+    this.save(true);
     Tab.dimensions.antimatter.show();
   },
 
@@ -184,7 +201,7 @@ export const GameStorage = {
         // eslint-disable-next-line no-console
         console.log(`Savefile was invalid and has been reset - ${checkString}`);
       }
-      player = deepmerge.all([{}, Player.defaultStart]);
+      player = deepmergeAll([{}, Player.defaultStart]);
       player.records.gameCreatedTime = Date.now();
       player.lastUpdate = Date.now();
       if (isDevEnvironment()) this.devMigrations.setLatestTestVersion(player);
@@ -214,6 +231,7 @@ export const GameStorage = {
     checkPerkValidity();
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;
+    GameEnd.additionalEnd = 0;
     Theme.set(player.options.theme);
     Notations.find(player.options.notation).setAsCurrent(true);
     ADNotations.Settings.exponentCommas.show = player.options.commas;
@@ -225,8 +243,9 @@ export const GameStorage = {
     if (overrideLastUpdate) {
       player.lastUpdate = overrideLastUpdate;
     }
+    const rawDiff = Date.now() - player.lastUpdate;
     if (player.options.offlineProgress && !Speedrun.isPausedAtStart()) {
-      let diff = Date.now() - player.lastUpdate;
+      let diff = rawDiff;
       player.speedrun.offlineTimeUsed += diff;
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {
         diff = Enslaved.autoStoreRealTime(diff);
@@ -247,6 +266,15 @@ export const GameStorage = {
       if (!Speedrun.isPausedAtStart()) Achievement(35).tryUnlock();
       player.lastUpdate = Date.now();
       this.postLoadStuff();
+    }
+
+    // 2-week threshold for showing the catchup modal. We want to show this even if offline progress is disabled
+    // because its presence and usefulness is tied to what the player experiences, not the game. setTimeout seems to be
+    // the only way to get this to display, as it won't display even if called after init() entirely nor is it getting
+    // actively hidden by Modal.hideAll(), so delaying it asynchronously gets past whatever is causing it to not appear.
+    // Delay time is relatively long to make it more likely to work on much slower computers.
+    if (rawDiff > 1000 * 86400 * 14) {
+      setTimeout(() => Modal.catchup.show(rawDiff), 5000);
     }
   },
   postLoadStuff() {

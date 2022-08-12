@@ -1,14 +1,72 @@
+<script>
+import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
+import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
+import PelleBarPanel from "./PelleBarPanel";
+import PelleUpgradePanel from "./PelleUpgradePanel";
+
+export default {
+  name: "PelleTab",
+  components: {
+    PelleBarPanel,
+    PelleUpgradePanel,
+    GalaxyGeneratorPanel,
+    CelestialQuoteHistory
+  },
+  data() {
+    return {
+      isDoomed: false,
+      canEnterPelle: false,
+      completedRows: 0,
+      cappedResources: 0,
+      hasStrike: false,
+      hasGalaxyGenerator: false
+    };
+  },
+  computed: {
+    symbol() {
+      return Pelle.symbol;
+    },
+    totalRows() {
+      return Achievements.prePelleRows.length;
+    },
+    totalAlchemyResources() {
+      return AlchemyResources.all.length;
+    }
+  },
+  methods: {
+    update() {
+      this.isDoomed = Pelle.isDoomed;
+      if (!this.isDoomed) {
+        this.completedRows = Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked));
+        this.cappedResources = AlchemyResources.all.countWhere(r => r.capped);
+        this.canEnterPelle = this.completedRows === this.totalRows &&
+          this.cappedResources === this.totalAlchemyResources;
+      }
+      this.hasStrike = PelleStrikes.all.some(s => s.hasStrike);
+      this.hasGalaxyGenerator = PelleRifts.recursion.milestones[2].canBeApplied || GalaxyGenerator.spentGalaxies > 0;
+    },
+    toggleBought() {
+      Pelle.cel.showBought = !Pelle.cel.showBought;
+      this.$recompute("upgrades");
+    },
+    showModal() {
+      Modal.pelleEffects.show();
+    },
+    enterDoomModal() {
+      Modal.armageddon.show();
+    }
+  }
+};
+</script>
+
 <template>
   <div class="l-pelle-celestial-tab">
-    <div v-if="isDoomed">
+    <div
+      v-if="isDoomed"
+      class="l-pelle-all-content-container"
+    >
+      <CelestialQuoteHistory celestial="pelle" />
       <div class="button-container">
-        <button
-          v-if="strikes.length"
-          class="o-pelle-button"
-          @click="toggleCompact"
-        >
-          {{ compact ? "Show all Strikes and Rifts" : "Condense Strikes and Rifts" }}
-        </button>
         <button
           class="o-pelle-button"
           @click="showModal"
@@ -16,209 +74,132 @@
           Show effects in Doomed Reality
         </button>
       </div>
-      <div class="c-pelle-upgrade-container">
-        <PelleStrike
-          v-for="strike in strikes"
-          :key="strike.config.id"
-          :strike="strike"
-          :compact="compact"
-        />
-      </div>
-      <GalaxyGeneratorVue v-if="hasGalaxyGenerator" />
-      You have <span class="c-remnants-amount">{{ format(remnants, 2, 0) }}</span> remnants <br>
-      You have <span class="c-remnants-amount">{{ format(realityShards, 2, 0) }}</span> Reality Shards
-      <span
-        @mouseover="isHovering = true"
-        @mouseleave="isHovering = false"
-      >
-        <ArmageddonButton />
-      </span>
-      <div class="c-pelle-upgrade-container">
-        <PelleUpgradeVue
-          v-for="upgrade in rebuyables"
-          :key="upgrade.config.id"
-          :upgrade="upgrade"
-          :show-improved-estimate="isHovering"
-        />
-      </div>
-      <button
-        class="o-pelle-button"
-        @click="toggleBought"
-      >
-        {{ !showBought ? "Show bought upgrades" : "Hide bought upgrades" }}
-      </button>
-      <div class="c-pelle-upgrade-container">
-        <PelleUpgradeVue
-          v-for="upgrade in allUpgrades"
-          :key="upgrade.config.id"
-          :upgrade="upgrade"
-          :show-improved-estimate="isHovering"
-        />
-        <PelleUpgradeVue
-          v-for="upgrade in fadedUpgrades"
-          :key="upgrade.config.id"
-          :upgrade="upgrade"
-          faded
-        />
-      </div>
+      <br>
+      <GalaxyGeneratorPanel v-if="hasGalaxyGenerator" />
+      <PelleBarPanel v-if="hasStrike" />
+      <PelleUpgradePanel />
     </div>
     <button
-      v-else
+      v-else-if="canEnterPelle"
       class="pelle-doom-button"
-      @click="getDoomedScrub"
+      @click="enterDoomModal"
     >
       Doom<br>Your<br>Reality
       <div class="pelle-icon-container">
-        <span class="pelle-icon">♅</span>
+        <span class="pelle-icon">{{ symbol }}</span>
       </div>
     </button>
+    <div
+      v-else
+      class="pelle-unlock-requirements"
+    >
+      You must have {{ formatInt(totalRows) }} rows of achievements
+      and all of your Glyph Alchemy resources capped to unlock Pelle.
+      <br>
+      <br>
+      {{ formatInt(completedRows) }} / {{ formatInt(totalRows) }} Achievement rows
+      <br>
+      {{ formatInt(cappedResources) }} / {{ formatInt(totalAlchemyResources) }} Capped resources
+    </div>
   </div>
 </template>
 
-<script>
-import ArmageddonButton from "./ArmageddonButton";
-import PelleStrike from "./PelleStrike.vue";
-import PelleUpgradeVue from "./PelleUpgrade.vue";
-import GalaxyGeneratorVue from "./GalaxyGenerator.vue";
-export default {
-  components: {
-    ArmageddonButton,
-    PelleUpgradeVue,
-    PelleStrike,
-    GalaxyGeneratorVue
-  },
-  data() {
-    return {
-      isDoomed: false,
-      remnants: 0,
-      realityShards: new Decimal(0),
-      compact: false,
-      showBought: false,
-      hasGalaxyGenerator: false,
-      isHovering: false,
-    };
-  },
-  methods: {
-    update() {
-      this.isDoomed = Pelle.isDoomed;
-      this.remnants = Pelle.cel.remnants;
-      this.realityShards.copyFrom(Pelle.cel.realityShards);
-      this.compact = Pelle.cel.compact;
-      this.showBought = Pelle.cel.showBought;
-      this.hasGalaxyGenerator = PelleRifts.war.hasMilestone(2) || GalaxyGenerator.spentGalaxies > 0;
-    },
-    toggleCompact() {
-      Pelle.cel.compact = !Pelle.cel.compact;
-    },
-    toggleBought() {
-      Pelle.cel.showBought = !Pelle.cel.showBought;
-      this.$recompute("upgrades");
-    },
-    getDoomedScrub() {
-      player.celestials.pelle.doomed = true;
-      Pelle.armageddon(false);
-      Glyphs.unequipAll();
-      respecTimeStudies(true);
-      Currency.infinityPoints.reset();
-      player.infMult = 0;
-      Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
-      disChargeAll();
-    },
-    showModal() {
-      Modal.pelleEffects.show();
-    }
-  },
-  computed: {
-    rebuyables: () => PelleRebuyableUpgrade.all,
-    upgrades() { return PelleUpgrade.all.filter(u => !u.isBought); },
-    boughtUpgrades() { return PelleUpgrade.all.filter(u => u.isBought); },
-    visibleUpgrades() { return this.upgrades.slice(0, 5); },
-    fadedUpgrades() { return this.upgrades.slice(5, 10); },
-    allUpgrades() {
-      let upgrades = [];
-      if (this.showBought) upgrades = this.boughtUpgrades;
-      upgrades = upgrades.concat(this.visibleUpgrades);
-      return upgrades;
-    },
-    strikes: () => PelleStrikes.all.filter(s => s.hasStrike),
-  }
-};
-</script>
-
 <style scoped>
-  .o-pelle-button {
-    background: black;
-    color: white;
-    border: 1px solid var(--color-pelle--base);
-    border-radius: 5px;
-    padding: 1rem;
-    font-family: Typewriter;
-    margin: 0 1rem;
-    margin-bottom: 1rem;
-    cursor: pointer;
-    transition-duration: 0.12s;
-  }
+.l-pelle-celestial-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .o-pelle-button:hover {
-    box-shadow: 1px 1px 3px var(--color-pelle--base);
-  }
-  .c-remnants-amount {
-    font-weight: bold;
-    font-size: 2rem;
-    color: var(--color-pelle--base);
-  }
+.l-pelle-all-content-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
 
-  .c-pelle-upgrade-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+.o-pelle-button {
+  font-family: Typewriter;
+  color: var(--color-text);
+  background: var(--color-text-inverted);
+  border: 0.1rem solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin-bottom: 1rem;
+  padding: 1rem;
+  transition-duration: 0.12s;
+  cursor: pointer;
+}
 
-  .pelle-doom-button {
-    font-family: Typewriter;
-    padding: 1rem;
-    background: black;
-    color: var(--color-pelle--base);
-    font-size: 3rem;
-    border: 2px solid var(--color-pelle--base);
-    border-radius: 5px;
-    width: 20rem;
-    cursor: pointer;
-    transition-duration: 0.4s;
-  }
+.o-pelle-button:hover {
+  box-shadow: 0.1rem 0.1rem 0.3rem var(--color-pelle--base);
+}
 
-  .pelle-doom-button:hover {
-    box-shadow: 0px 0px 20px var(--color-pelle--base);
-  }
+.o-pelle-quotes-button {
+  display: flex;
+  width: 7rem;
+  height: 7rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+  font-weight: 900;
+  color: var(--color-pelle--base);
+}
 
+.pelle-unlock-requirements {
+  width: 50rem;
+  padding: 0.5rem;
+  font-size: 3rem;
+  color: var(--color-pelle--base);
+  background: black;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+}
 
-  .pelle-icon-container {
-    background: white;
-    border-radius: 50%;
-    height: 15rem;
-    width: 15rem;
-    margin: auto;
-    margin-top: 3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 4px solid var(--color-pelle--base);
-    font-size: 10rem;
-    transition-duration: 0.4s;
-    text-shadow: 0px 0px 15px #9b0101;
-    box-shadow: 0px 0px 15px #9b0101;
-  }
+.pelle-doom-button {
+  width: 20rem;
+  align-self: center;
+  font-family: Typewriter;
+  font-size: 3rem;
+  color: var(--color-pelle--base);
+  background: black;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+  padding: 1rem;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
 
-  .pelle-doom-button:hover .pelle-icon-container {
-    background: black;
-    color: var(--color-pelle--base);
-  }
+.pelle-doom-button:hover {
+  box-shadow: 0 0 2rem var(--color-pelle--base);
+}
 
-  @keyframes roll {
-    100% { transform: rotateY(360deg) }
-  }
+.pelle-icon-container {
+  display: flex;
+  width: 15rem;
+  height: 15rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 10rem;
+  text-shadow: 0 0 1.5rem #9b0101;
+  background: white;
+  border: var(--var-border-width, 0.4rem) solid var(--color-pelle--base);
+  border-radius: 50%;
+  box-shadow: 0 0 1.5rem #9b0101;
+  margin: auto;
+  margin-top: 3rem;
+  transition-duration: 0.4s;
+}
 
-  .pelle-icon {
-    animation: roll infinite 8s linear;
-  }
+.pelle-doom-button:hover .pelle-icon-container {
+  color: var(--color-pelle--base);
+  background: black;
+}
+
+@keyframes a-roll {
+  100% { transform: rotateY(360deg); }
+}
+
+.pelle-icon {
+  animation: a-roll infinite 8s linear;
+}
 </style>

@@ -66,6 +66,12 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      showChaosText: false,
+      chaosDescription: ""
+    };
+  },
   computed: {
     onTouchDevice() {
       return GameUI.touchDevice;
@@ -74,23 +80,35 @@ export default {
       return this.displayLevel ? this.displayLevel : this.level;
     },
     sortedEffects() {
-      return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength)
+      return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength, this.type)
         .filter(effect =>
-          GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
+          GlyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
       return getRarity(this.strength);
     },
+    textShadowColor() {
+      return Theme.current().isDark() ? "black" : "white";
+    },
+    cursedColor() {
+      return Theme.current().isDark() ? "black" : "white";
+    },
+    cursedColorInverted() {
+      return Theme.current().isDark() ? "white" : "black";
+    },
+    mainBorderColor() {
+      if (this.type === "cursed") return this.cursedColor;
+      if (this.type === "companion") return GlyphTypes[this.type].color;
+      return getColor(this.strength);
+    },
     descriptionStyle() {
-      let color = this.rarityInfo.color;
-      if (this.type === "cursed") color = "black";
-      if (this.type === "companion") color = GlyphTypes[this.type].color;
+      const color = this.mainBorderColor;
       return {
         color,
         "text-shadow": this.type === "cursed"
           ? undefined
-          : `-0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0.1rem black,
-            -0.1rem -0.1rem 0.1rem black, 0.1rem -0.1rem 0.1rem black,
+          : `-0.1rem 0.1rem 0.1rem ${this.textShadowColor}, 0.1rem 0.1rem 0.1rem ${this.textShadowColor},
+            -0.1rem -0.1rem 0.1rem ${this.textShadowColor}, 0.1rem -0.1rem 0.1rem ${this.textShadowColor},
             0 0 0.3rem ${color}`,
         animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
       };
@@ -116,8 +134,9 @@ export default {
     },
     rarityText() {
       if (!GlyphTypes[this.type].hasRarity) return "";
+      const strength = Pelle.isDoomed ? Pelle.glyphStrength : this.strength;
       return `| Rarity:
-        <span style="color: ${this.rarityInfo.color}">${formatRarity(strengthToRarity(this.strength))}</span>`;
+        <span style="color: ${this.rarityInfo.color}">${formatRarity(strengthToRarity(strength))}</span>`;
     },
     levelText() {
       if (this.type === "companion") return "";
@@ -148,23 +167,23 @@ export default {
         "border-color": GlyphTypes[this.type].color,
         "box-shadow": `0 0 0.5rem ${GlyphTypes[this.type].color}, 0 0 0.5rem ${GlyphTypes[this.type].color} inset`,
         animation: this.type === "reality" ? "a-reality-glyph-tooltip-cycle 10s infinite" : undefined,
-        color: this.type === "cursed" ? "black" : undefined,
-        background: this.type === "cursed" ? "white" : undefined
+        color: this.type === "cursed" ? this.cursedColor : undefined,
+        background: this.type === "cursed" ? this.cursedColorInverted : undefined
       };
     },
     glyphHeaderStyle() {
       const isCursed = this.type === "cursed";
       const isReality = this.type === "reality";
 
-      let color = this.rarityInfo.color;
-      if (isCursed) color = "black";
+      let color = Theme.current().isDark() ? this.rarityInfo.darkColor : this.rarityInfo.lightColor;
+      if (isCursed) color = this.cursedColor;
       if (this.type === "companion") color = GlyphTypes[this.type].color;
       return {
         "border-color": color,
         "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,
         animation: isReality ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined,
-        color: isCursed ? "black" : undefined,
-        background: isCursed ? "white" : undefined
+        color: isCursed ? this.cursedColor : undefined,
+        background: isCursed ? this.cursedColorInverted : undefined
       };
     }
   },
@@ -188,6 +207,12 @@ export default {
     }
   },
   methods: {
+    update() {
+      this.showChaosText = Pelle.specialGlyphEffect.isUnlocked;
+      if (this.showChaosText) {
+        this.chaosDescription = Pelle.getSpecialGlyphEffectDescription(this.type);
+      }
+    },
     touchStart() {
       // We _don't_ preventDefault here because we want the event to turn into a local
       // dragstart that we can intercept
@@ -205,11 +230,15 @@ export default {
     removeGlyph() {
       GlyphSacrificeHandler.removeGlyph(Glyphs.findById(this.id), false);
     },
+    getFontColor() {
+      return Theme.current().isDark() ? "#cccccc" : "black";
+    },
     sacrificeText() {
       if (this.type === "companion" || this.type === "cursed") return "";
       const powerText = `${format(this.sacrificeReward, 2, 2)}`;
       const isCurrentAction = this.currentAction === "sacrifice";
-      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};
+              color: ${isCurrentAction ? this.getFontColor() : ""}">
               Sacrifice: ${powerText}
               </span>`;
     },
@@ -221,7 +250,8 @@ export default {
         refinementText += ` (Actual value due to cap: ${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]})`;
       }
       const isCurrentAction = this.currentAction === "refine";
-      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};
+              color: ${isCurrentAction ? this.getFontColor() : ""}">
               Refine: ${refinementText}
               </span>`;
     },
@@ -273,6 +303,12 @@ export default {
         :effect="e.id"
         :value="e.value"
       />
+      <div
+        v-if="showChaosText"
+        class="pelle-current-glyph-effects c-glyph-tooltip__effect"
+      >
+        {{ chaosDescription }}
+      </div>
     </div>
   </div>
 </template>

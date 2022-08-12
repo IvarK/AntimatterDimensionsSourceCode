@@ -10,18 +10,16 @@ export default {
   },
   data() {
     return {
+      isDoomed: false,
       autobuyersOn: false,
-      bulkOn: false,
       showContinuum: false,
       disableContinuum: false,
+      allAutobuyersDisabled: false
     };
   },
   watch: {
     autobuyersOn(newValue) {
       player.auto.autobuyersOn = newValue;
-    },
-    bulkOn(newValue) {
-      player.auto.bulkOn = newValue;
     },
     disableContinuum(newValue) {
       Laitela.setContinuum(!newValue);
@@ -29,21 +27,15 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.autobuyersOn = player.auto.autobuyersOn;
-      this.bulkOn = player.auto.bulkOn;
       this.showContinuum = Laitela.isUnlocked;
       this.disableContinuum = player.auto.disableContinuum;
+      this.allAutobuyersDisabled = Autobuyers.unlocked.every(autobuyer => !autobuyer.isActive);
     },
     toggleAllAutobuyers() {
-      const allAutobuyersDisabled = Autobuyers.unlocked.every(autobuyer => !autobuyer.isActive);
-      if (allAutobuyersDisabled) {
-        for (const autobuyer of Autobuyers.unlocked) {
-          autobuyer.isActive = true;
-        }
-      } else {
-        for (const autobuyer of Autobuyers.unlocked) {
-          autobuyer.isActive = false;
-        }
+      for (const autobuyer of Autobuyers.unlocked) {
+        autobuyer.isActive = this.allAutobuyersDisabled;
       }
     }
   }
@@ -54,29 +46,33 @@ export default {
   <div class="c-subtab-option-container">
     <PrimaryToggleButton
       v-model="autobuyersOn"
-      on="Disable autobuyers"
-      off="Enable autobuyers"
+      on="Pause autobuyers"
+      off="Resume autobuyers"
       class="o-primary-btn--subtab-option"
     />
     <PrimaryButton
       class="o-primary-btn--subtab-option"
       @click="toggleAllAutobuyers()"
     >
-      Toggle all autobuyers
+      {{ allAutobuyersDisabled ? "Enable" : "Disable" }} all autobuyers
     </PrimaryButton>
-    <PrimaryToggleButton
-      v-model="bulkOn"
-      on="Disable bulk buy"
-      off="Enable bulk buy"
-      class="o-primary-btn--subtab-option"
-    />
-    <PrimaryToggleButton
-      v-if="showContinuum"
-      v-model="disableContinuum"
-      on="Enable Continuum"
-      off="Disable Continuum"
-      class="o-primary-btn--subtab-option"
-    />
+    <span v-if="isDoomed">
+      <PrimaryButton
+        v-if="showContinuum"
+        class="o-primary-btn--subtab-option"
+      >
+        Continuum is disabled
+      </PrimaryButton>
+    </span>
+    <span v-else>
+      <PrimaryToggleButton
+        v-if="showContinuum"
+        v-model="disableContinuum"
+        on="Enable Continuum"
+        off="Disable Continuum"
+        class="o-primary-btn--subtab-option"
+      />
+    </span>
   </div>
 </template>
 

@@ -1,11 +1,11 @@
-import { GameDatabase } from "../game-database.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.challenges.infinity = [
   {
     id: 1,
     description: `all Normal Challenges, with the exception of
-    Tickspeed (C9) and Big Crunch (C11) Challenges, are active at the same time.`,
+    Tickspeed (C9) and Big Crunch (C12) Challenges, are active at the same time.`,
     goal: DC.E650,
     isQuickResettable: true,
     reward: {
@@ -86,7 +86,7 @@ GameDatabase.challenges.infinity = [
     effect: () => Currency.matter.value.clampMin(1),
     formatEffect: value => `/${format(value, 1, 2)}`,
     reward: {
-      description: "Infinity Dimension multiplier based on Tickspeed",
+      description: "Infinity Dimension multiplier based on tickspeed",
       effect: () => Tickspeed.perSecond.pow(0.0005),
       formatEffect: value => formatX(value, 2, 2)
     },

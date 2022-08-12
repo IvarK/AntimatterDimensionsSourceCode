@@ -16,8 +16,21 @@ export default {
 
 <template>
   <div>
-    <ModalCloseButton @click="closeModal" />
-    <h3><slot name="header" /></h3>
+    <div class="c-modal__header">
+      <ModalCloseButton @click="closeModal" />
+      <span
+        v-if="$slots.header"
+        class="c-modal__title"
+      >
+        <slot name="header" />
+      </span>
+    </div>
     <slot />
   </div>
 </template>
+
+<style scoped>
+.c-modal__header {
+  margin-bottom: 0.5rem;
+}
+</style>

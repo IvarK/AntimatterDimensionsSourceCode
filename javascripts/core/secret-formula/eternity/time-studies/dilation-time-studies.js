@@ -1,4 +1,4 @@
-import { GameDatabase } from "../../game-database.js";
+import { GameDatabase } from "../../game-database";
 
 GameDatabase.eternity.timeStudies.dilation = [
   {
@@ -6,8 +6,9 @@ GameDatabase.eternity.timeStudies.dilation = [
     description: "Unlock Time Dilation",
     cost: 5000,
     requirement: () => {
-      if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) &&
-          Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement) &&
+      const ttRequirement = Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement);
+      if (Ra.unlocks.autoUnlockDilation.canBeApplied &&
+          ttRequirement &&
           !isInCelestialReality() && !Pelle.isDoomed
       ) {
         return true;
@@ -15,7 +16,6 @@ GameDatabase.eternity.timeStudies.dilation = [
       const tsRequirement = [231, 232, 233, 234].some(id => TimeStudy(id).isBought);
       if (Perk.bypassECDilation.isBought && !Pelle.isDoomed) return tsRequirement;
       const ecRequirement = EternityChallenge(11).isFullyCompleted && EternityChallenge(12).isFullyCompleted;
-      const ttRequirement = Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement);
       return tsRequirement && ecRequirement && ttRequirement;
     }
   },
@@ -45,10 +45,13 @@ GameDatabase.eternity.timeStudies.dilation = [
   },
   {
     id: 6,
-    description: "Unlock Reality",
+    description: () => (Pelle.isDoomed
+      ? "You cannot escape a Doomed Reality"
+      : "Unlock Reality"),
     cost: () => 1,
     requirement: () => TimeStudy.timeDimension(8).isBought &&
       player.records.thisReality.maxEP.exponent >= 4000 &&
-      (Perk.firstPerk.isBought ? true : Achievements.preReality.every(a => a.isUnlocked))
+      (Perk.firstPerk.isBought ? true : Achievements.preReality.every(a => a.isUnlocked)) &&
+      !Pelle.isDoomed
   }
 ];

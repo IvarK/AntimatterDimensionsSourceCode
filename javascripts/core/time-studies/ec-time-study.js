@@ -1,5 +1,5 @@
-import { TimeStudyState } from "./time-studies.js";
-import { TimeStudy } from "./normal-time-study.js";
+import { TimeStudy } from "./normal-time-study";
+import { TimeStudyState } from "./time-studies";
 
 export class ECTimeStudyState extends TimeStudyState {
   constructor(config) {
@@ -33,7 +33,7 @@ export class ECTimeStudyState extends TimeStudyState {
       if (!auto) {
         Tab.challenges.eternity.show();
       }
-      if (this.id !== 11 && this.id !== 12) player.etercreq = this.id;
+      player.challenge.eternity.requirementBits |= 1 << this.id;
       Currency.timeTheorems.subtract(this.cost);
       TimeStudyTree.commitToGameState([TimeStudy.eternityChallenge(this.id)]);
       return true;
@@ -47,24 +47,20 @@ export class ECTimeStudyState extends TimeStudyState {
       171, 171, 171,
       143, 42, 121,
       111, 123, 151,
-      181, 212, 214
+      181, 181, 181
     ];
-    TimeStudyTree.commitToGameState(buyStudiesUntil(studiesToBuy[this.id]));
-    // For EC 11 and 12, we can't choose between light and dark, but we can buy the
-    // pair of row 21 things
+    // If the player shift clicks an EC study that is immediately buyable, we try to
+    // buy it first - in case buying studies up to that point renders it unaffordable.
+    this.purchase();
+    TimeStudyTree.commitToGameState(buyStudiesUntil(studiesToBuy[this.id], this.id));
+    // For EC 11 and 12, we can't choose between light and dark,
+    // but we can buy the 191/193
     if (this.id === 11) {
-      TimeStudy(211).purchase();
+      TimeStudy(191).purchase();
     } else if (this.id === 12) {
-      TimeStudy(213).purchase();
+      TimeStudy(193).purchase();
     }
     this.purchase();
-  }
-
-  // For TimeStudyTree purposes, we want to be able to check structure without secondary requirements
-  get isAccessible() {
-    // We'd have a switch case here if we wanted to generalize, but in our case it doesn't matter because all ECs have
-    // the same study restriction of type TS_REQUIREMENT_TYPE.AT_LEAST_ONE - so we just assume that behavior instead
-    return this.config.requirement.some(s => TimeStudy(s).isBought);
   }
 
   get canBeBought() {
@@ -74,16 +70,10 @@ export class ECTimeStudyState extends TimeStudyState {
     if (player.challenge.eternity.unlocked !== 0) {
       return false;
     }
-    if (!this.isAccessible) {
+    if (!this.config.requirement.some(s => TimeStudy(s).isBought)) {
       return false;
     }
-    if (player.etercreq === this.id && this.id !== 11 && this.id !== 12) {
-      return true;
-    }
-    if (!Perk.studyECRequirement.isBought) {
-      return this.isSecondaryRequirementMet;
-    }
-    return true;
+    return this.allSecondaryRequirementsMet;
   }
 
   /**
@@ -109,13 +99,25 @@ export class ECTimeStudyState extends TimeStudyState {
     return this.cachedCurrentRequirement;
   }
 
-  get isSecondaryRequirementMet() {
-    if (this.config.secondary.forbiddenStudies) {
-      return !this.config.secondary.forbiddenStudies.some(s => TimeStudy(s).isBought);
-    }
+  get allSecondaryRequirementsMet() {
+    return Perk.studyECRequirement.isBought || !this.hasForbiddenStudies && this.isEntryGoalMet;
+  }
+
+  get hasForbiddenStudies() {
+    return this.config.secondary.forbiddenStudies?.some(s => TimeStudy(s).isBought);
+  }
+
+  get isEntryGoalMet() {
+    if (this.wasRequirementPreviouslyMet) return true;
+    if (this.config.secondary.forbiddenStudies) return true;
     const current = this.requirementCurrent;
     const total = this.requirementTotal;
     return typeof current === "number" ? current >= total : current.gte(total);
+  }
+
+  get wasRequirementPreviouslyMet() {
+    if (this.id === 11 || this.id === 12) return false;
+    return (player.challenge.eternity.requirementBits & (1 << this.id)) !== 0;
   }
 
   invalidateRequirement() {

@@ -1,33 +1,92 @@
-import { CelestialQuotes } from "../quotes.js";
+import { BitUpgradeState, GameMechanicState } from "../../game-mechanics/index";
+import { Quotes } from "../quotes";
 
-class RaPetState {
-  /**
-   * @abstract
-   */
-  get data() { throw new NotImplementedError(); }
+class RaUnlockState extends BitUpgradeState {
+  get bits() { return player.celestials.ra.unlockBits; }
+  set bits(value) { player.celestials.ra.unlockBits = value; }
 
-  /**
-   * @abstract
-   */
-  get name() { throw new NotImplementedError(); }
+  get disabledByPelle() {
+    return Pelle.isDoomed && this.config.disabledByPelle;
+  }
 
-  /**
-   * @abstract
-   */
-  get chunkGain() { throw new NotImplementedError(); }
+  get isEffectActive() {
+    return this.isUnlocked && !this.disabledByPelle;
+  }
 
-  /**
-   * @abstract
-   */
-  get memoryGain() { throw new NotImplementedError(); }
+  get requirementText() {
+    const pet = this.pet.name;
+    return this.level === 1
+      ? `Unlock ${pet}`
+      : `Get ${pet} to level ${this.level}`;
+  }
 
-  /**
-   * @abstract
-   */
-  get requiredUnlock() { throw new NotImplementedError(); }
+  get reward() {
+    return typeof this.config.reward === "function"
+      ? this.config.reward()
+      : this.config.reward;
+  }
+
+  get displayIcon() {
+    return this.disabledByPelle ? `<span class="fas fa-ban"></span>` : this.config.displayIcon;
+  }
+
+  get pet() {
+    return Ra.pets[this.config.pet];
+  }
+
+  get level() {
+    return this.config.level;
+  }
+
+  get canBeUnlocked() {
+    return this.pet.level >= this.level && !this.isUnlocked;
+  }
+
+  onUnlock() {
+    this.config.onUnlock?.();
+  }
+}
+
+const unlocks = mapGameDataToObject(
+  GameDatabase.celestials.ra.unlocks,
+  config => new RaUnlockState(config)
+);
+
+class RaPetState extends GameMechanicState {
+  get data() {
+    return player.celestials.ra.pets[this.id];
+  }
+
+  get name() {
+    return this.config.name;
+  }
+
+  get chunkGain() {
+    return this.config.chunkGain;
+  }
+
+  get memoryGain() {
+    return this.config.memoryGain;
+  }
+
+  get color() {
+    return this.config.color;
+  }
+
+  get requiredUnlock() {
+    return this.config.requiredUnlock?.();
+  }
+
+  get rawMemoryChunksPerSecond() {
+    return this.config.rawMemoryChunksPerSecond();
+  }
+
+  get memoryProductionMultiplier() {
+    return this.config.memoryProductionMultiplier();
+  }
 
   get isUnlocked() {
-    return this.requiredUnlock === undefined || Ra.has(this.requiredUnlock);
+    return this.requiredUnlock === undefined || this.requiredUnlock.isUnlocked;
   }
 
   get isCapped() {
@@ -35,7 +94,7 @@ class RaPetState {
   }
 
   get level() {
-    return this.data.level;
+    return this.isUnlocked ? this.data.level : 0;
   }
 
   set level(value) {
@@ -62,21 +121,12 @@ class RaPetState {
     return Ra.requiredMemoriesForLevel(this.level);
   }
 
-  /**
-   * @abstract
-   */
-  get rawMemoryChunksPerSecond() { throw new NotImplementedError(); }
-
-  /**
-   * @abstract
-   */
-  get color() { throw new NotImplementedError(); }
-
   get memoryChunksPerSecond() {
-    let res = this.canGetMemoryChunks ? this.rawMemoryChunksPerSecond : 0;
-    res *= RA_UNLOCKS.TT_BOOST.effect.memoryChunks();
-    res *= this.chunkUpgradeCurrentMult;
-    if (this.hasRecollection) res *= RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
+    if (!this.canGetMemoryChunks) return 0;
+    let res = this.rawMemoryChunksPerSecond * this.chunkUpgradeCurrentMult *
+      Effects.product(Ra.unlocks.continuousTTBoost.effects.memoryChunks, GlyphSacrifice.reality);
+    if (this.hasRemembrance) res *= Ra.remembrance.multiplier;
+    else if (Ra.petWithRemembrance) res *= Ra.remembrance.nerf;
     return res;
   }
 
@@ -84,8 +134,8 @@ class RaPetState {
     return this.isUnlocked && Ra.isRunning;
   }
 
-  get hasRecollection() {
-    return Ra.petWithRecollection === this.name;
+  get hasRemembrance() {
+    return Ra.petWithRemembrance === this.name;
   }
 
   get memoryUpgradeCurrentMult() {
@@ -94,7 +144,6 @@ class RaPetState {
 
   get chunkUpgradeCurrentMult() {
     return Math.pow(1.5, this.data.chunkUpgrades);
-
   }
 
   get memoryUpgradeCost() {
@@ -143,6 +192,12 @@ class RaPetState {
     Ra.checkForUnlocks();
   }
 
+  get unlocks() {
+    return Ra.unlocks.all
+      .filter(x => x.pet === this)
+      .sort((a, b) => a.level - b.level);
+  }
+
   tick(realDiff, generateChunks) {
     const seconds = realDiff / 1000;
     const newMemoryChunks = generateChunks
@@ -165,65 +220,23 @@ class RaPetState {
   }
 }
 
+const pets = mapGameDataToObject(
+  GameDatabase.celestials.ra.pets,
+  config => new RaPetState(config)
+);
+
 export const Ra = {
   displayName: "Ra",
-  pets: {
-    teresa: new class TeresaRaPetState extends RaPetState {
-      get name() { return "Teresa"; }
-      get chunkGain() { return "Eternity Points"; }
-      get memoryGain() { return "current Reality Machines"; }
-      get data() { return player.celestials.ra.pets.teresa; }
-      get requiredUnlock() { return undefined; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.eternityPoints.value.pLog10() / 1e4, 3); }
-      get color() { return "#8596ea"; }
-      get memoryProductionMultiplier() {
-        return Ra.has(RA_UNLOCKS.TERESA_XP)
-          ? 1 + Math.pow(Currency.realityMachines.value.pLog10() / 100, 0.5)
-          : 1;
-      }
-    }(),
-    effarig: new class EffarigRaPetState extends RaPetState {
-      get name() { return "Effarig"; }
-      get chunkGain() { return "Relic Shards gained"; }
-      get memoryGain() { return "best Glyph level"; }
-      get data() { return player.celestials.ra.pets.effarig; }
-      get requiredUnlock() { return RA_UNLOCKS.EFFARIG_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Effarig.shardsGained, 0.1); }
-      get color() { return "#ea8585"; }
-      get memoryProductionMultiplier() {
-        return Ra.has(RA_UNLOCKS.EFFARIG_XP)
-          ? 1 + player.records.bestReality.glyphLevel / 7000
-          : 1;
-      }
-    }(),
-    enslaved: new class EnslavedRaPetState extends RaPetState {
-      get name() { return "Enslaved"; }
-      get chunkGain() { return "Time Shards"; }
-      get memoryGain() { return "total time played"; }
-      get data() { return player.celestials.ra.pets.enslaved; }
-      get requiredUnlock() { return RA_UNLOCKS.ENSLAVED_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.timeShards.value.pLog10() / 3e5, 2); }
-      get color() { return "#f1aa7f"; }
-      get memoryProductionMultiplier() {
-        return Ra.has(RA_UNLOCKS.ENSLAVED_XP)
-          ? 1 + Math.log10(player.records.totalTimePlayed) / 200
-          : 1;
-      }
-    }(),
-    v: new class VRaPetState extends RaPetState {
-      get name() { return "V"; }
-      get chunkGain() { return "Infinity Power"; }
-      get memoryGain() { return "total Memory levels"; }
-      get data() { return player.celestials.ra.pets.v; }
-      get requiredUnlock() { return RA_UNLOCKS.V_UNLOCK; }
-      get rawMemoryChunksPerSecond() { return 4 * Math.pow(Currency.infinityPower.value.pLog10() / 1e7, 1.5); }
-      get color() { return "#ead584"; }
-      get memoryProductionMultiplier() {
-        return Ra.has(RA_UNLOCKS.V_XP)
-          ? 1 + Ra.totalPetLevel / 50
-          : 1;
-      }
-    }(),
+  possessiveName: "Ra's",
+  unlocks,
+  pets,
+  remembrance: {
+    multiplier: 5,
+    nerf: 0.5,
+    requiredLevels: 20,
+    get isUnlocked() {
+      return Ra.totalPetLevel >= this.requiredLevels;
+    }
   },
   // Dev/debug function for easier testing
   reset() {
@@ -247,7 +260,7 @@ export const Ra = {
     for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
   },
   get productionPerMemoryChunk() {
-    let res = RA_UNLOCKS.TT_BOOST.effect.memories() * Achievement(168).effectOrDefault(1);
+    let res = Effects.product(Ra.unlocks.continuousTTBoost.effects.memories, Achievement(168));
     for (const pet of Ra.pets.all) {
       if (pet.isUnlocked) res *= pet.memoryProductionMultiplier;
     }
@@ -258,7 +271,7 @@ export const Ra = {
     for (const pet of Ra.pets.all) {
       if (pet.memoryProductionMultiplier !== 1) boostList.push(pet.memoryGain);
     }
-    if (Ra.has(RA_UNLOCKS.TT_BOOST)) boostList.push("current Time Theorems");
+    if (Ra.unlocks.continuousTTBoost.canBeApplied) boostList.push("current Time Theorems");
 
     if (boostList.length === 1) return `${boostList[0]}`;
     if (boostList.length === 2) return `${boostList[0]} and ${boostList[1]}`;
@@ -288,55 +301,34 @@ export const Ra = {
     return this.levelCap * this.pets.all.length;
   },
   checkForUnlocks() {
-    if (!V.has(V_UNLOCKS.RA_UNLOCK)) return;
-    for (const unl of Object.values(RA_UNLOCKS)) {
-      const isUnlockable = unl.totalLevels === undefined
-        ? unl.pet.isUnlocked && unl.pet.level >= unl.level
-        : this.totalPetLevel >= unl.totalLevels;
-      if (isUnlockable && !this.has(unl)) {
-        // eslint-disable-next-line no-bitwise
-        player.celestials.ra.unlockBits |= (1 << unl.id);
-        if (unl.id === RA_UNLOCKS.ALWAYS_GAMESPEED.id) {
-          const allGlyphs = player.reality.glyphs.active
-            .concat(player.reality.glyphs.inventory);
-          for (const glyph of allGlyphs) {
-            Glyphs.applyGamespeed(glyph);
-          }
-        }
-      }
+    if (!VUnlocks.raUnlock.canBeApplied) return;
+    for (const unl of Ra.unlocks.all) {
+      unl.unlock();
     }
 
-    for (const quote of Object.values(Ra.quotes)) {
-      // Quotes without requirements will be shown in other ways - need to check if it exists before calling though
-      if (quote.requirement && quote.requirement()) {
-        // TODO If multiple quotes show up simultaneously, this only seems to actually show one of them and skips the
-        // rest. This might be related to the modal stacking issue
-        Ra.quotes.show(quote);
+    Ra.checkForQuotes();
+  },
+  checkForQuotes() {
+    for (const quote of Ra.quotes.all) {
+      // Quotes without requirements will be shown in other ways
+      if (quote.requirement) {
+        quote.show();
       }
     }
-  },
-  has(info) {
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.ra.unlockBits & (1 << info.id));
   },
   initializeRun() {
     clearCelestialRuns();
     player.celestials.ra.run = true;
-    this.quotes.show(this.quotes.REALITY_ENTER);
+    this.quotes.realityEnter.show();
   },
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
-  },
-  gamespeedDTMult() {
-    if (!Ra.has(RA_UNLOCKS.PEAK_GAMESPEED)) return 1;
-    return Math.max(Math.pow(Math.log10(player.celestials.ra.peakGamespeed) - 90, 3), 1);
   },
   // This gets widely used in lots of places since the relevant upgrade is "all forms of continuous non-dimension
   // production", which in this case is infinities, eternities, replicanti, dilated time, and time theorem generation.
   // It also includes the 1% IP time study, Teresa's 1% EP upgrade, and the charged RM generation upgrade. Note that
   // removing the hardcap of 10 may cause runaways.
   theoremBoostFactor() {
-    if (!Ra.has(RA_UNLOCKS.TT_BOOST)) return 0;
     return Math.min(10, Math.max(0, Currency.timeTheorems.value.pLog10() - 350) / 50);
   },
   get isUnlocked() {
@@ -346,22 +338,19 @@ export const Ra = {
     return player.celestials.ra.run;
   },
   get totalCharges() {
-    return Math.min(12, Math.floor(Ra.pets.teresa.level / 2));
+    return Ra.unlocks.chargedInfinityUpgrades.effectOrDefault(0);
   },
   get chargesLeft() {
     return this.totalCharges - player.celestials.ra.charged.size;
   },
-  get chargeUnlocked() {
-    return V.has(V_UNLOCKS.RA_UNLOCK) && Ra.pets.teresa.level > 1;
-  },
   get canBuyTriad() {
-    return this.pets.v.level >= 5;
+    return Ra.unlocks.unlockHardV.canBeApplied;
   },
-  get petWithRecollection() {
-    return player.celestials.ra.petWithRecollection;
+  get petWithRemembrance() {
+    return player.celestials.ra.petWithRemembrance;
   },
-  set petWithRecollection(name) {
-    player.celestials.ra.petWithRecollection = name;
+  set petWithRemembrance(name) {
+    player.celestials.ra.petWithRemembrance = name;
   },
   updateAlchemyFlow(realityRealTime) {
     const perSecond = 1000 / realityRealTime;
@@ -371,7 +360,7 @@ export const Ra = {
     }
   },
   applyAlchemyReactions(realityRealTime) {
-    if (!Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK)) return;
+    if (!Ra.unlocks.effarigUnlock.canBeApplied) return;
     const sortedReactions = AlchemyReactions.all
       .compact()
       .sort((r1, r2) => r2.priority - r1.priority);
@@ -387,136 +376,7 @@ export const Ra = {
     const hoursFromUnlock = TimeSpan.fromMilliseconds(player.celestials.ra.momentumTime).totalHours;
     return Math.clampMax(1 + 0.002 * hoursFromUnlock, AlchemyResource.momentum.effectValue);
   },
-  quotes: new CelestialQuotes("ra", {
-    UNLOCK: {
-      id: 1,
-      lines: [
-        "A... visitor?",
-        "I am here! I am the one you are looking for... I think...",
-        "What even was I again?",
-        "Oh right, the Celestial of Memories.",
-      ]
-    },
-    REALITY_ENTER: {
-      id: 2,
-      lines: [
-        "I have not seen the others in so long...",
-        "Can you help me remember them?",
-        "I could give you powers in exchange.",
-      ]
-    },
-    TERESA_START: {
-      id: 3,
-      requirement: () => Ra.pets.teresa.level >= 2,
-      lines: [
-        "Te... re... sa...",
-        "I think I remember.",
-      ]
-    },
-    TERESA_LATE: {
-      id: 4,
-      requirement: () => Ra.pets.teresa.level >= 15,
-      lines: [
-        "Teresa dealt with machines, I believe.",
-        "I remember visiting Teresa’s shop a few times.",
-        "Wait, someone else had a shop too, right?",
-      ]
-    },
-    EFFARIG_START: {
-      id: 5,
-      requirement: () => Ra.pets.effarig.level >= 2,
-      lines: [
-        "Eff... a... rig",
-        "I remember Effarig being friendly.",
-      ]
-    },
-    EFFARIG_LATE: {
-      id: 6,
-      requirement: () => Ra.pets.effarig.level >= 15,
-      lines: [
-        "Effarig was very particular?",
-        "And I also remember a frightening Reality...",
-        "It was about... suffering?",
-      ]
-    },
-    ENSLAVED_START: {
-      id: 7,
-      requirement: () => Ra.pets.enslaved.level >= 2,
-      lines: [
-        "I cannot remember this one completely...",
-      ]
-    },
-    ENSLAVED_LATE: {
-      id: 8,
-      requirement: () => Ra.pets.enslaved.level >= 15,
-      lines: [
-        "I am starting to remember...",
-        "Why I am here...",
-        "Why I am alone...",
-        "Help me.",
-      ]
-    },
-    V_START: {
-      id: 9,
-      requirement: () => Ra.pets.v.level >= 2,
-      lines: [
-        "Had I met this one?",
-        "So lonely, yet willingly so...",
-      ]
-    },
-    V_LATE: {
-      id: 10,
-      requirement: () => Ra.pets.v.level >= 15,
-      lines: [
-        "I think I met V once...",
-        "I can remember the achievements.",
-      ]
-    },
-    RECOLLECTION: {
-      id: 11,
-      requirement: () => Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK),
-      lines: [
-        "I remembered something!",
-        "Watch this!",
-        "Recollection!",
-        "I can focus even harder on remembering them now!",
-      ]
-    },
-    MID_MEMORIES: {
-      id: 12,
-      requirement: () => Ra.totalPetLevel >= 50,
-      lines: [
-        "Realities are my homes, yet I cannot make my own Reality.",
-        "I can only copy the ones of my friends.",
-        "But... why am I hearing voices?",
-        "Are they asking for help?",
-      ]
-    },
-    LATE_MEMORIES: {
-      id: 13,
-      requirement: () => Ra.totalPetLevel >= 80,
-      lines: [
-        "I think they are telling me to stop.",
-        "You... whatever you are?",
-        "What is happening?",
-        "Am I doing something wrong?",
-      ]
-    },
-    MAX_LEVELS: {
-      id: 14,
-      requirement: () => Ra.totalPetLevel === Ra.maxTotalPetLevel,
-      lines: [
-        "Finally, I remember everything.",
-        "This darkness that banished me.",
-        "Lai'tela...",
-        "They were right to banish me.",
-        "My powers...",
-        "They steal, they corrupt.",
-        "Please leave.",
-        "I do not want to hurt you too.",
-      ]
-    },
-  }),
+  quotes: Quotes.ra,
   symbol: "<i class='fas fa-sun'></i>"
 };
 
@@ -543,7 +403,7 @@ export const GlyphAlteration = {
   },
   get isUnlocked() {
     if (Pelle.isDisabled("alteration")) return false;
-    return Ra.has(RA_UNLOCKS.ALTERED_GLYPHS);
+    return Ra.unlocks.alteredGlyphs.canBeApplied;
   },
   isAdded(type) {
     return this.isUnlocked && this.getSacrificePower(type) >= this.additionThreshold;
@@ -559,290 +419,19 @@ export const GlyphAlteration = {
     return Math.log10(Math.clampMin(capped / this.boostingThreshold, 1)) / 2;
   },
   getAdditionColor(type) {
-    return this.isAdded(type)
-      ? "#CCCCCC"
-      : undefined;
+    const color = Theme.current().isDark() ? "#CCCCCC" : "black";
+    return this.isAdded(type) ? color : undefined;
   },
   getEmpowermentColor(type) {
-    return this.isEmpowered(type)
-      ? "#EEEE30"
-      : undefined;
+    const color = Theme.current().isDark() ? "#EEEE30" : "#C6C610";
+    return this.isEmpowered(type) ? color : undefined;
   },
   getBoostColor(type) {
-    return this.isBoosted(type)
-      ? "#60DDDD"
-      : undefined;
+    const color = Theme.current().isDark() ? "#60DDDD" : "#28BDBD";
+    return this.isBoosted(type) ? color : undefined;
   },
-};
-
-/**
- * @type {RaPetState[]}
- */
-Ra.pets.all = [Ra.pets.teresa, Ra.pets.effarig, Ra.pets.enslaved, Ra.pets.v];
-
-export const RA_UNLOCKS = {
-  AUTO_TP: {
-    id: 0,
-    description: "Unlock Teresa",
-    reward: "Tachyon Particles are given immediately when Time Dilation is active",
-    pet: Ra.pets.teresa,
-    level: 1,
-    displayIcon: `<span class="fas fa-atom"></span>`
-  },
-  CHARGE: {
-    id: 1,
-    description: "Get Teresa to level 2",
-    reward: () => `Unlock Charged Infinity Upgrades. You get one more maximum
-      Charged Infinity Upgrade every ${formatInt(2)} levels`,
-    pet: Ra.pets.teresa,
-    level: 2,
-    displayIcon: `<span class="fas fa-infinity"></span>`
-  },
-  TERESA_XP: {
-    id: 2,
-    description: "Get Teresa to level 5",
-    reward: "All Memory Chunks produce more Memories based on Reality Machines",
-    pet: Ra.pets.teresa,
-    level: 5,
-    displayIcon: `Δ`
-  },
-  ALTERED_GLYPHS: {
-    id: 3,
-    description: "Get Teresa to level 8",
-    reward: "Unlock Altered Glyphs, which grant new effects to Glyphs based on Glyph Sacrifice",
-    pet: Ra.pets.teresa,
-    level: 10,
-    displayIcon: `<span class="fas fa-bolt"></span>`
-  },
-  EFFARIG_UNLOCK: {
-    id: 4,
-    description: "Get Teresa to level 10",
-    reward: "Unlock Effarig's Memories",
-    pet: Ra.pets.teresa,
-    level: 8,
-    displayIcon: `Ϙ`
-  },
-  PERK_SHOP_INCREASE: {
-    id: 5,
-    description: "Get Teresa to level 15",
-    reward: "Perk shop caps are raised",
-    pet: Ra.pets.teresa,
-    level: 15,
-    displayIcon: `<span class="fas fa-project-diagram"></span>`
-  },
-  START_TP: {
-    id: 6,
-    description: "Get Teresa to level 25",
-    reward: `When unlocking Time Dilation in non-celestial Realities, gain Tachyon Particles as if you reached
-      the square root of your total antimatter in Dilation`,
-    effect: () => player.records.totalAntimatter.pow(0.5),
-    pet: Ra.pets.teresa,
-    level: 25,
-    displayIcon: `<i class="far fa-dot-circle"></i>`
-  },
-  EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX: {
-    id: 7,
-    description: "Unlock Effarig",
-    reward: () => `Get ${formatX(2)} Glyph choices and the bonus to Glyph rarity from Relic Shards
-      is always its maximum value`,
-    pet: Ra.pets.effarig,
-    level: 1,
-    displayIcon: `<i class="fas fa-grip-horizontal"></i>`
-  },
-  GLYPH_ALCHEMY: {
-    id: 8,
-    description: "Get Effarig to level 2",
-    reward: `Unlock Glyph Alchemy, which adds alchemical resources you can increase by Refining Glyphs. You unlock
-      more resources through Effarig levels. Access through a new Reality tab.`,
-    pet: Ra.pets.effarig,
-    level: 2,
-    displayIcon: `<span class="fas fa-vial"></span>`
-  },
-  EFFARIG_XP: {
-    id: 9,
-    description: "Get Effarig to level 5",
-    reward: "All Memory Chunks produce more Memories based on highest Glyph level",
-    pet: Ra.pets.effarig,
-    level: 5,
-    displayIcon: `<span class="fas fa-clone"></span>`
-  },
-  GLYPH_EFFECT_COUNT: {
-    id: 10,
-    description: "Get Effarig to level 8",
-    reward: () => `Glyphs always have ${formatInt(4)} effects, and Effarig Glyphs can now have up to ${formatInt(7)}`,
-    pet: Ra.pets.effarig,
-    level: 10,
-    displayIcon: `<span class="fas fa-braille"></span>`
-  },
-  ENSLAVED_UNLOCK: {
-    id: 11,
-    description: "Get Effarig to level 10",
-    reward: "Unlock Enslaved's Memories",
-    pet: Ra.pets.effarig,
-    level: 8,
-    displayIcon: `<span class="fas fa-link"></span>`
-  },
-  SHARD_LEVEL_BOOST: {
-    id: 12,
-    description: "Get Effarig to level 15",
-    reward: "Glyph level is increased based on Relic Shards gained",
-    effect: () => 100 * Math.pow(Math.log10(Math.max(Effarig.shardsGained, 1)), 2),
-    pet: Ra.pets.effarig,
-    level: 15,
-    displayIcon: `<span class="fas fa-fire"></span>`
-  },
-  MAX_RARITY_AND_SHARD_SACRIFICE_BOOST: {
-    id: 13,
-    description: "Get Effarig to level 25",
-    reward: () => `Glyphs are always generated with ${formatPercents(1)} rarity and ` +
-      `Glyph Sacrifice gain is raised to a power based on Relic Shards`,
-    pet: Ra.pets.effarig,
-    level: 25,
-    displayIcon: `<i class="fas fa-ankh"></i>`
-  },
-  AUTO_BLACK_HOLE_POWER: {
-    id: 14,
-    description: "Unlock Enslaved",
-    reward: "Unlock Black Hole power upgrade autobuyers",
-    pet: Ra.pets.enslaved,
-    level: 1,
-    displayIcon: `<span class="fas fa-circle"></span>`
-  },
-  IMPROVED_STORED_TIME: {
-    id: 15,
-    description: "Get Enslaved to level 2",
-    reward: "Stored game time is amplified and you can store more real time, increasing with Enslaved levels",
-    effect: {
-      gameTimeAmplification: () => Math.pow(20, Math.clampMax(Ra.pets.enslaved.level, Ra.levelCap)),
-      realTimeCap: () => 1000 * 3600 * Ra.pets.enslaved.level,
-    },
-    pet: Ra.pets.enslaved,
-    level: 2,
-    displayIcon: `<span class="fas fa-history"></span>`
-  },
-  ENSLAVED_XP: {
-    id: 16,
-    description: "Get Enslaved to level 5",
-    reward: "All Memory Chunks produce more Memories based on total time played",
-    pet: Ra.pets.enslaved,
-    level: 5,
-    displayIcon: `<span class="fas fa-stopwatch"></span>`
-  },
-  ADJUSTABLE_STORED_TIME: {
-    id: 17,
-    description: "Get Enslaved to level 8",
-    reward: () => `Black Hole charging can be done at an adjustable rate and automatically
-      pulsed every ${formatInt(5)} ticks. You can change these in the Black Hole and The Enslaved Ones' tabs`,
-    pet: Ra.pets.enslaved,
-    level: 10,
-    displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`
-  },
-  V_UNLOCK: {
-    id: 18,
-    description: "Get Enslaved to level 10",
-    reward: "Unlock V's Memories",
-    pet: Ra.pets.enslaved,
-    level: 8,
-    displayIcon: `⌬`
-  },
-  PEAK_GAMESPEED: {
-    id: 19,
-    description: "Get Enslaved to level 15",
-    reward: "Gain more Dilated Time based on peak game speed in each Reality",
-    pet: Ra.pets.enslaved,
-    level: 15,
-    displayIcon: `<span class="fas fa-tachometer-alt"></span>`
-  },
-  ALWAYS_GAMESPEED: {
-    id: 20,
-    description: "Get Enslaved to level 25",
-    reward: `All basic Glyphs gain the increased game speed effect from Time Glyphs,
-      and Time Glyphs gain an additional effect`,
-    pet: Ra.pets.enslaved,
-    level: 25,
-    displayIcon: `<span class="fas fa-clock"></span>`
-  },
-  AUTO_RU_AND_INSTANT_EC: {
-    id: 21,
-    description: "Unlock V",
-    reward: "The rebuyable Reality upgrades are bought automatically and Auto-Eternity Challenges happen instantly",
-    pet: Ra.pets.v,
-    level: 1,
-    displayIcon: `<span class="fas fa-sync-alt"></span>`
-  },
-  AUTO_DILATION_UNLOCK: {
-    id: 22,
-    description: "Get V to level 2",
-    reward: () => `Time Dilation is unlocked automatically for free at
-      ${formatInt(TimeStudy.dilation.totalTimeTheoremRequirement)} Time Theorems outside of Celestial Realities`,
-    pet: Ra.pets.v,
-    level: 2,
-    displayIcon: `<span class="fas fa-fast-forward"></span>`
-  },
-  V_XP: {
-    id: 23,
-    description: "Get V to level 5",
-    reward: () => `All Memory Chunks produce more Memories based on total Celestial levels,
-      and unlock a Triad Study every ${formatInt(5)} levels.
-      Triad Studies are located at the bottom of the Time Studies page`,
-    pet: Ra.pets.v,
-    level: 5,
-    displayIcon: `<span class="fas fa-book"></span>`
-  },
-  HARD_V: {
-    id: 24,
-    description: "Get V to level 8",
-    reward: "Unlock Hard V-Achievements",
-    pet: Ra.pets.v,
-    level: 8,
-    displayIcon: `<span class="fas fa-trophy"></span>`
-  },
-  TT_BOOST: {
-    id: 25,
-    description: "Get V to level 10",
-    reward: "Time Theorems boost all forms of continuous non-dimension production",
-    effect: {
-      // All of these are accessed directly from RA_UNLOCKS across much of the game, but are effectively dummied out
-      // before the upgrade itself is unlocked due to theoremBoostFactor evaluating to zero if the upgrade is missing.
-      ttGen: () => Math.pow(10, 5 * Ra.theoremBoostFactor()),
-      eternity: () => Math.pow(10, 2 * Ra.theoremBoostFactor()),
-      infinity: () => Math.pow(10, 15 * Ra.theoremBoostFactor()),
-      replicanti: () => Math.pow(10, 20 * Ra.theoremBoostFactor()),
-      dilatedTime: () => Math.pow(10, 3 * Ra.theoremBoostFactor()),
-      memories: () => 1 + Ra.theoremBoostFactor() / 50,
-      memoryChunks: () => 1 + Ra.theoremBoostFactor() / 50,
-      autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
-    },
-    pet: Ra.pets.v,
-    level: 10,
-    displayIcon: `<span class="fas fa-university"></span>`
-  },
-  TT_ACHIEVEMENT: {
-    id: 26,
-    description: "Get V to level 15",
-    reward: "Achievement multiplier applies to Time Theorem generation",
-    effect: () => Achievements.power,
-    pet: Ra.pets.v,
-    level: 15,
-    displayIcon: `<span class="fas fa-graduation-cap"></span>`
-  },
-  ACHIEVEMENT_POW: {
-    id: 27,
-    description: "Get V to level 25",
-    reward: () => `Achievement multiplier is raised ${formatPow(1.5, 1, 1)}`,
-    pet: Ra.pets.v,
-    level: 25,
-    displayIcon: `<i class="fab fa-buffer"></i>`
-  },
-  RA_RECOLLECTION_UNLOCK: {
-    id: 28,
-    description: "Get 20 total Celestial Memory levels",
-    reward: "Unlock Recollection",
-    effect: 3,
-    totalLevels: 20,
-  }
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.ra.isOpen) Ra.quotes.show(Ra.quotes.UNLOCK);
+  if (Tab.celestials.ra.isOpen) Ra.quotes.unlock.show();
 });

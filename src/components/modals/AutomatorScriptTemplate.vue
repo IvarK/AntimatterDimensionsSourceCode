@@ -7,9 +7,21 @@ export default {
     ModalWrapper,
   },
   props: {
-    modalConfig: {
-      type: Object,
-      required: true
+    warnings: {
+      type: Function,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    inputs: {
+      type: Array,
+      required: true,
     }
   },
   data() {
@@ -19,19 +31,20 @@ export default {
       invalidInputCount: 0,
       templateProps: null,
       currentPreset: "",
+      isBlock: false,
     };
   },
   computed: {
     presets: () => player.timestudy.presets,
     params: () => GameDatabase.reality.automator.templates.paramTypes,
-    warnings() {
+    validWarnings() {
       return this.invalidInputCount === 0
-        ? this.modalConfig.warnings().concat(this.templateScript?.warnings)
-        : this.modalConfig.warnings();
+        ? this.warnings().concat(this.templateScript?.warnings)
+        : this.warnings();
     },
     templateScript() {
       if (this.invalidInputCount !== 0) return null;
-      return new ScriptTemplate(this.templateProps, this.modalConfig.name);
+      return new ScriptTemplate(this.templateProps, this.name);
     }
   },
   // Many props in this component are generated dynamically from a GameDB entry, but Vue can only give reactive
@@ -39,7 +52,7 @@ export default {
   // specifically $set them here on initialization; additionally we give them a default value so that later function
   // calls don't error out from undefined inputs.
   created() {
-    for (const input of this.modalConfig.inputs) {
+    for (const input of this.inputs) {
       const boolProp = this.paramTypeObject(input.type).boolDisplay;
       if (boolProp) {
         this.$set(this.templateInputs, input.name, false);
@@ -51,6 +64,9 @@ export default {
     }
   },
   methods: {
+    update() {
+      this.isBlock = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
+    },
     paramTypeObject(name) {
       return this.params.find(p => p.name === name);
     },
@@ -66,8 +82,8 @@ export default {
         ? undefined
         : "c-automator-template-textbox--invalid";
     },
-    loadPreset(name) {
-      this.templateInputs.treeStudies = `PRESET ${name}`;
+    loadPreset(name, id) {
+      this.templateInputs.treeStudies = name ? `NAME ${name}` : `ID ${id}`;
       this.updateTemplateProps();
     },
     loadCurrent() {
@@ -77,17 +93,25 @@ export default {
     updateTemplateProps() {
       this.templateProps = {};
       this.invalidInputCount = 0;
-      for (const input of this.modalConfig.inputs) {
+      for (const input of this.inputs) {
         const typeObj = this.paramTypeObject(input.type);
         const mapFn = x => (typeObj.map ? typeObj.map(x) : x);
         this.templateProps[input.name] = mapFn(this.templateInputs[input.name]);
         if (!this.isValid(input)) this.invalidInputCount++;
       }
 
-      // We treat treeStudies as a special prop which will set treePreset iff it matches the format "PRESET [name]"
-      const presetMatch = this.templateProps.treeStudies.match(/^PRESET (.{1,4})$/u);
-      const presetStr = presetMatch ? presetMatch[1] : "";
-      this.currentPreset = this.presets.some(p => p.name === presetStr) ? presetStr : "";
+      // We treat treeStudies as a special prop which will set treePreset if it matches the format "NAME [name]"
+      const nameMatch = this.templateProps.treeStudies.match(/^NAME (.{1,4})$/u);
+      const idMatch = this.templateProps.treeStudies.match(/^ID (\d)$/u);
+
+      if (nameMatch) {
+        const nameStr = nameMatch ? nameMatch[1] : "";
+        this.currentPreset = this.presets.find(x => x.name === nameStr).name;
+      } else if (idMatch) {
+        const idStr = idMatch ? idMatch[1] : "";
+        this.currentPreset = this.presets.some((x, y) => y === idStr - 1) ? idStr : "";
+      }
+
       this.templateProps.treePreset = this.currentPreset === "" ? null : this.currentPreset;
     },
     updateButton(input) {
@@ -97,8 +121,17 @@ export default {
       this.updateTemplateProps();
     },
     copyAndClose() {
-      copyToClipboard(this.templateScript.script);
-      GameUI.notify.info("Template copied to clipboard");
+      if (this.isBlock) {
+        const newTemplateBlock = {
+          name: `Template: ${this.name}`,
+          blocks: AutomatorGrammar.blockifyTextAutomator(this.templateScript.script).blocks
+        };
+        AutomatorData.blockTemplates.push(newTemplateBlock);
+        GameUI.notify.info("Custom template block created");
+      } else {
+        copyToClipboard(this.templateScript.script);
+        GameUI.notify.info("Template copied to clipboard");
+      }
       this.emitClose();
     }
   }
@@ -108,31 +141,31 @@ export default {
 <template>
   <ModalWrapper class="c-automator-template-container">
     <template #header>
-      {{ modalConfig.name }} Template
+      {{ name }} Template
     </template>
     <div class="c-automator-template-description">
-      {{ modalConfig.description }}
+      {{ description }}
     </div>
     <div class="c-automator-template-inputs">
       <b>Required Information:</b>
       <br>
       Use a preset Study Tree:
       <button
-        v-for="preset in presets"
+        v-for="(preset, presetNumber) in presets"
         :key="preset.name"
-        class="o-primary-btn"
-        @click="loadPreset(preset.name)"
+        class="o-primary-btn o-load-preset-button-margin"
+        @click="loadPreset(preset.name, presetNumber + 1)"
       >
-        {{ preset.name }}
+        {{ preset.name ? preset.name : presetNumber + 1 }}
       </button>
       <button
-        class="o-primary-btn"
+        class="o-primary-btn o-load-preset-button-margin"
         @click="loadCurrent"
       >
         <i>Current Tree</i>
       </button>
       <div
-        v-for="input in modalConfig.inputs"
+        v-for="input in inputs"
         :key="input.name"
         class="c-automator-template-entry"
       >
@@ -159,9 +192,9 @@ export default {
     </div>
     <div class="c-automator-template-warnings">
       <b>Possible things to consider:</b>
-      <div v-if="warnings.length !== 0">
+      <div v-if="validWarnings.length !== 0">
         <div
-          v-for="warning in warnings"
+          v-for="warning in validWarnings"
           :key="warning"
           class="c-automator-template-entry"
         >
@@ -179,7 +212,7 @@ export default {
       class="o-primary-btn"
       @click="copyAndClose"
     >
-      Copy this template to your clipboard and close this modal
+      {{ isBlock ? "Create custom template block" : "Copy this template to your clipboard" }} and close this modal
     </button>
     <button
       v-else
@@ -189,3 +222,9 @@ export default {
     </button>
   </ModalWrapper>
 </template>
+
+<style scoped>
+.o-load-preset-button-margin {
+  margin-right: 0.3rem;
+}
+</style>

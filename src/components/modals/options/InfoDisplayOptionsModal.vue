@@ -61,7 +61,7 @@ export default {
       this.infinityUnlocked = progress.isInfinityUnlocked;
       this.eternityUnlocked = progress.isEternityUnlocked;
       this.realityUnlocked = progress.isRealityUnlocked;
-      this.alchemyUnlocked = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
+      this.alchemyUnlocked = Ra.unlocks.effarigUnlock.canBeApplied;
 
       const options = player.options.showHintText;
       this.achievements = options.achievements;

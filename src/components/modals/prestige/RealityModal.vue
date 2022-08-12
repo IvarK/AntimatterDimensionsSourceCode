@@ -1,19 +1,17 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
-import ModalWrapper from "@/components/modals/ModalWrapper";
 import GlyphComponent from "@/components/GlyphComponent";
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "RealityModal",
   components: {
     PrimaryButton,
-    ModalWrapper,
+    ModalWrapperChoice,
     GlyphComponent,
   },
   data() {
     return {
-      showReality: false,
-      showGlyphSelection: false,
       firstPerk: false,
       hasFilter: false,
       glyphs: [],
@@ -25,7 +23,7 @@ export default {
       simRealities: 0,
       realityMachines: new Decimal(),
       shardsGained: 0,
-      effarigUnlocked: false,
+      effarigUnlocked: false
     };
   },
   computed: {
@@ -61,6 +59,9 @@ export default {
         ${quantifyInt("level", this.levelDifference)}
         ${this.level > this.bestLevel ? "higher" : "lower"} than`} your best.`;
     },
+    confirmationToDisable() {
+      return ConfirmationTypes.glyphSelection.isUnlocked() ? "glyphSelection" : undefined;
+    },
   },
   created() {
     this.on$(GAME_EVENT.ENTER_PRESSED, () => this.confirmModal(false));
@@ -74,16 +75,13 @@ export default {
     this.on$(GAME_EVENT.GLYPH_CHOICES_GENERATED, () => {
       this.canRefresh = false;
     });
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
     this.getGlyphs();
     GlyphSelection.realityProps = getRealityProps(false, false);
   },
   methods: {
     update() {
-      this.showReality = player.options.confirmations.reality;
-      this.showGlyphSelection = player.options.confirmations.glyphSelection;
       this.firstPerk = Perk.firstPerk.isEffectActive;
-      this.effarigUnlocked = Teresa.has(TERESA_UNLOCKS.EFFARIG);
+      this.effarigUnlocked = TeresaUnlocks.effarig.canBeApplied;
       this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.level = gainedGlyphLevel().actualLevel;
       this.simRealities = 1 + simulatedRealityCount(false);
@@ -118,31 +116,36 @@ export default {
       this.selectedGlyph = index;
     },
     confirmModal(sacrifice) {
+      if (sacrifice) {
+        // Sac isn't passed through confirm so we have to close it manually
+        this.emitClose();
+      }
       processManualReality(sacrifice, this.selectedGlyph);
-    },
+    }
   },
 };
 </script>
 
 <template>
-  <ModalWrapper class="c-modal-message l-modal-content--centered">
+  <ModalWrapperChoice
+    :option="confirmationToDisable"
+    @confirm="confirmModal(false)"
+  >
     <template #header>
       You are about to Reality
     </template>
-    <span v-if="showReality">
-      <div
-        v-if="!firstPerk"
-        class="c-modal-message__text"
-      >
-        {{ firstReality }}
-      </div>
-
-      <div class="c-modal-message__text">
-        {{ gained }}
-      </div>
-    </span>
     <div
-      v-if="firstPerk && showGlyphSelection"
+      v-if="!firstPerk"
+      class="c-modal-message__text"
+    >
+      {{ firstReality }}
+    </div>
+
+    <div class="c-modal-message__text">
+      {{ gained }}
+    </div>
+    <div
+      v-if="firstPerk"
       class="l-glyph-selection__row"
     >
       <GlyphComponent
@@ -159,35 +162,25 @@ export default {
     <div v-if="firstPerk">
       {{ levelStats }}
       <br>
-      <span v-if="showGlyphSelection">{{ selectInfo }}</span>
+      {{ selectInfo }}
     </div>
     <div v-if="simRealities > 1">
       <br>
-      After choosing this glyph the game will simulate the rest of your Realities,
+      After choosing this Glyph the game will simulate the rest of your Realities,
       <br>
       automatically choosing another {{ quantifyInt("Glyph", simRealities - 1) }}
       based on your Glyph filter settings.
     </div>
-    <div class="l-options-grid__row">
+    <template
+      v-if="canSacrifice"
+      #extra-buttons
+    >
       <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn"
-        @click="emitClose"
-      >
-        Cancel
-      </PrimaryButton>
-      <PrimaryButton
-        v-if="canSacrifice"
         class="o-primary-btn--width-medium c-modal-message__okay-btn"
         @click="confirmModal(true)"
       >
         Sacrifice
       </PrimaryButton>
-      <PrimaryButton
-        class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
-        @click="confirmModal(false)"
-      >
-        Confirm
-      </PrimaryButton>
-    </div>
-  </ModalWrapper>
+    </template>
+  </ModalWrapperChoice>
 </template>

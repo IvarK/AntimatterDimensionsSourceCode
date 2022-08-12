@@ -1,7 +1,7 @@
 <script>
+import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import CostDisplay from "@/components/CostDisplay";
 
 export default {
   name: "InfinityUpgradeButton",
@@ -18,6 +18,7 @@ export default {
   },
   data() {
     return {
+      showWorstChallenge: false,
       isUseless: false,
       canBeBought: false,
       chargePossible: false,
@@ -25,37 +26,42 @@ export default {
       isBought: false,
       isCharged: false,
       isDisabled: false,
-      showingCharged: false
+      showingCharged: false,
+      hasTS31: false
     };
   },
   computed: {
+    isBasedOnInfinities() {
+      return /(18|27|36|45)Mult/u.test(this.upgrade.id);
+    },
     shiftDown() {
       return ui.view.shiftDown;
     },
+    showChargedEffect() {
+      return this.chargePossible && (this.isCharged || this.showingCharged || this.shiftDown);
+    },
     config() {
       const config = this.upgrade.config;
-      return (this.chargePossible && (this.isCharged || this.showingCharged || this.shiftDown))
+      return this.showChargedEffect
         ? config.charged
         : config;
     },
     classObject() {
       return {
         "o-infinity-upgrade-btn": true,
-        "o-infinity-upgrade-btn--bought": this.isBought,
-        "o-infinity-upgrade-btn--available": !this.isBought && this.canBeBought,
-        "o-infinity-upgrade-btn--unavailable": !this.isBought && !this.canBeBought,
+        "o-infinity-upgrade-btn--bought": !this.isUseless && this.isBought,
+        "o-infinity-upgrade-btn--available": !this.isUseless && !this.isBought && this.canBeBought,
+        "o-infinity-upgrade-btn--unavailable": !this.isUseless && !this.isBought && !this.canBeBought,
+        "o-infinity-upgrade-btn--useless-bought": this.isUseless && this.isBought,
+        "o-infinity-upgrade-btn--useless-available": this.isUseless && !this.isBought && this.canBeBought,
+        "o-infinity-upgrade-btn--useless-unavailable": this.isUseless && !this.isBought && !this.canBeBought,
         "o-infinity-upgrade-btn--chargeable": !this.isCharged && this.chargePossible &&
           (this.showingCharged || this.shiftDown),
         "o-infinity-upgrade-btn--charged": this.isCharged,
-        "c-pelle-useless": this.isDisabledInDoomed,
       };
     },
-    isDisabledInDoomed() {
-      const description = this.config.description;
-      if (typeof description === "function") {
-        return description().includes("has no effect");
-      }
-      return description.includes("has no effect");
+    isImprovedByTS31() {
+      return this.hasTS31 && this.isBasedOnInfinities && !this.showChargedEffect;
     }
   },
   methods: {
@@ -65,7 +71,8 @@ export default {
       // seems more likely to be read).
       const upgrade = this.upgrade;
       this.isBought = upgrade.isBought || upgrade.isCapped;
-      this.chargePossible = Ra.chargeUnlocked && upgrade.hasChargeEffect && !Pelle.isDoomed;
+      this.chargePossible = Ra.unlocks.chargedInfinityUpgrades.canBeApplied &&
+        upgrade.hasChargeEffect && !Pelle.isDoomed;
       this.canBeBought = upgrade.canBeBought;
       this.canBeCharged = upgrade.canCharge;
       this.isCharged = upgrade.isCharged;
@@ -79,6 +86,13 @@ export default {
       // rebuyables, should never hide their effect.
       this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled(upgrade.config.effect());
       this.isUseless = Pelle.uselessInfinityUpgrades.includes(upgrade.id) && Pelle.isDoomed;
+      this.hasTS31 = TimeStudy(31).canBeApplied;
+      if (upgrade.id !== "challengeMult") return;
+      this.showWorstChallenge = upgrade.effectValue !== upgrade.cap &&
+        player.challenge.normal.bestTimes.sum() < Number.MAX_VALUE;
+      const worstChallengeTime = GameCache.worstChallengeTime.value;
+      const worstChallengeIndex = 2 + player.challenge.normal.bestTimes.indexOf(worstChallengeTime);
+      this.worstChallengeString = `(Challenge ${worstChallengeIndex}: ${timeDisplayShort(worstChallengeTime)})`;
     }
   }
 };
@@ -91,18 +105,23 @@ export default {
     @mouseleave="showingCharged = false"
     @click="upgrade.purchase()"
   >
-    <span v-if="isUseless">
-      This upgrade has no effect while in Doomed
-    </span>
-    <span v-else>
+    <span :class="{ 'o-pelle-disabled': isUseless }">
       <DescriptionDisplay
         :config="config"
       />
+      <span v-if="showWorstChallenge">
+        <br>
+        {{ worstChallengeString }}
+      </span>
       <EffectDisplay
         v-if="!isDisabled"
         br
         :config="config"
       />
+      <template v-if="!isDisabled && isImprovedByTS31">
+        <br>
+        After TS31: {{ formatX(config.effect().pow(4), 2, 2) }}
+      </template>
     </span>
     <CostDisplay
       v-if="!isBought"

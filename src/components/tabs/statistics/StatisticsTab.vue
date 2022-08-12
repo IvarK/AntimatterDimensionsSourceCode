@@ -1,10 +1,16 @@
 <script>
 import { MatterScale } from "./matter-scale";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "StatisticsTab",
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
+      isDoomed: false,
+      realTimeDoomed: TimeSpan.zero,
       totalAntimatter: new Decimal(0),
       realTimePlayed: TimeSpan.zero,
       uniqueNews: 0,
@@ -121,6 +127,9 @@ export default {
         reality.bestRarity = Math.max(strengthToRarity(bestReality.glyphStrength), 0);
       }
       this.matterScale = MatterScale.estimate(Currency.antimatter.value);
+
+      this.isDoomed = Pelle.isDoomed;
+      this.realTimeDoomed.setFrom(player.records.realTimeDoomed);
     },
     formatDecimalAmount(value) {
       return value.gt(1e9) ? format(value, 3, 0) : formatInt(value.toNumber());
@@ -132,6 +141,9 @@ export default {
 <template>
   <div class="c-stats-tab">
     <div>
+      <PrimaryButton onclick="Modal.catchup.show(0)">
+        View Content Summary
+      </PrimaryButton>
       <div class="c-stats-tab-general">
         General
       </div>
@@ -139,6 +151,9 @@ export default {
       <div>You have played for {{ realTimePlayed }}. (real time)</div>
       <div v-if="reality.isUnlocked">
         Your existence has spanned {{ reality.totalTimePlayed }} of time. (game time)
+      </div>
+      <div v-if="isDoomed">
+        You have been doomed for {{ realTimeDoomed }}. (real time)
       </div>
       <div>
         You have seen {{ quantifyInt("news message", totalNews) }} in total.
@@ -151,7 +166,7 @@ export default {
       </div>
       <div>
         <br>
-        <div style="height: 5rem;">
+        <div class="c-matter-scale-container">
           <div
             v-for="(line, i) in matterScale"
             :key="i"
@@ -251,8 +266,14 @@ export default {
       <div>
         Your best Reality Machines per minute is {{ format(reality.bestRate, 2, 2) }}.
       </div>
-      <div>Your best glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
+      <div>Your best Glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
       <br>
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-matter-scale-container {
+  height: 5rem;
+}
+</style>

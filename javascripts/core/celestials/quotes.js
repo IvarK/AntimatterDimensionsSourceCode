@@ -1,44 +1,178 @@
-export class CelestialQuotes {
-  constructor(celestialName, quoteData) {
-    this.quotesById = [];
-    for (const quoteKey of Object.keys(quoteData)) {
-      if (this[quoteKey] !== undefined) {
-        throw new Error(`Celestial quote keys should not replace existing properties (${quoteKey})`);
-      }
-      const quote = quoteData[quoteKey];
-      this[quoteKey] = quote;
-      this.quotesById[quote.id] = quote;
+import { BitUpgradeState } from "../game-mechanics/index";
+import wordShift from "../wordShift";
+
+export const Quote = {
+  addToQueue(quote) {
+    ui.view.quotes.queue.push(quote);
+    if (!ui.view.quotes.current) this.advanceQueue();
+  },
+  advanceQueue() {
+    ui.view.quotes.current = ui.view.quotes.queue.shift();
+  },
+  showHistory(history) {
+    ui.view.quotes.history = history;
+  },
+  clearQueue() {
+    ui.view.quotes.queue = [];
+    ui.view.quotes.current = undefined;
+  },
+  clearHistory() {
+    ui.view.quotes.history = undefined;
+  },
+  clearAll() {
+    this.clearQueue();
+    this.clearHistory();
+  },
+  get isOpen() {
+    return ui.view.quotes.current !== undefined;
+  },
+  get isHistoryOpen() {
+    return ui.view.quotes.history !== undefined;
+  }
+};
+
+// Gives an array specifying proportions of celestials to blend together on the modal, as a function of time, to
+// provide a smoother transition between different celestials to reduce potential photosensitivity issues
+function blendCel(cels) {
+  const totalTime = cels.map(cel => cel[1]).sum();
+  const tick = (Date.now() / 1000) % totalTime;
+
+  // Blend the first blendTime seconds with the previous celestial and the last blendTime seconds with the next;
+  // note that this results in a total transition time of 2*blendTime. We specifically set this to be half the duration
+  // of the first entry - this is because in the case of all intervals having the same duration, this guarantees two
+  // blended entries at all points in time.
+  const blendTime = cels[0][1] / 2;
+  let start = 0;
+  for (let index = 0; index < cels.length; index++) {
+    const prevCel = cels[(index + cels.length - 1) % cels.length], currCel = cels[index],
+      nextCel = cels[(index + 1) % cels.length];
+
+    // Durations of time from after last transition and after next transition. May be negative, which is how we
+    // check to see if we're in the correct time interval (last should be positive, next should be negative)
+    const lastTime = tick - start, nextTime = lastTime - currCel[1];
+    if (nextTime > 0) {
+      start += currCel[1];
+      continue;
     }
-    this._celestial = celestialName;
+
+    if (lastTime <= blendTime) {
+      const t = 0.5 * lastTime / blendTime;
+      return [[prevCel[0], 0.5 - t], [currCel[0], 0.5 + t]];
+    }
+    if (-nextTime <= blendTime) {
+      const t = 0.5 * nextTime / blendTime;
+      return [[currCel[0], 0.5 - t], [nextCel[0], 0.5 + t]];
+    }
+
+    // In principle the animation properties should never get to this return case, but we leave it here just in case -
+    // the worst side-effect of reaching here is that some UI elements may appear to lose click detection for a
+    // fraction of a second when transitioning from two blended entries to one
+    return [[currCel[0], 1]];
+  }
+  throw new Error("Could not blend celestial fractions in Quote modal");
+}
+
+class QuoteLine {
+  constructor(line, parent) {
+    this._parent = parent;
+    this._showCelestialName = line.showCelestialName ?? true;
+
+    this._celestialArray = line.background
+      ? () => blendCel(line.background)
+      : [[parent.celestial, 1]];
+
+    const replacementMatch = /\$(\d+)/gu;
+
+    this._line = typeof line === "string"
+      ? line
+      // This matches each digit after a $ and replaces it with the wordCycle of an array with the digit it matched.
+      : () => line.text.replaceAll(replacementMatch, (_, i) => wordShift.wordCycle(line[i]));
   }
 
-  static singleLine(id, line) {
-    return {
-      id,
-      lines: [line]
-    };
+  get line() {
+    return typeof this._line === "function" ? this._line() : this._line;
   }
 
-  fromID(id) {
-    return this.quotesById[id];
+  get celestials() {
+    return typeof this._celestialArray === "function" ? this._celestialArray() : this._celestialArray;
   }
 
-  get seenArray() {
-    return player.celestials[this._celestial].quotes;
+  get celestialSymbols() {
+    return this.celestials.map(c => Celestials[c[0]].symbol);
   }
 
-  seen(data) {
-    return this.seenArray.includes(data.id);
+  get showCelestialName() {
+    return this._showCelestialName;
   }
 
-  show(data) {
-    if (this.seen(data)) return;
-    this.seenArray.push(data.id);
-    Modal.celestialQuote.show(this._celestial, data.lines);
-  }
-
-  forget(data) {
-    const index = this.seenArray.indexOf(data.id);
-    if (index >= 0) this.seenArray.splice(index, 1);
+  get celestialName() {
+    return Celestials[this._parent.celestial].displayName;
   }
 }
+
+class CelQuotes extends BitUpgradeState {
+  constructor(config, celestial) {
+    super(config);
+    this._celestial = celestial;
+    this._lines = config.lines.map(line => new QuoteLine(line, this));
+  }
+
+  get bits() { return player.celestials[this._celestial].quoteBits; }
+  set bits(value) { player.celestials[this._celestial].quoteBits = value; }
+
+  get requirement() {
+    // If requirement is defined, it is always a function returning a boolean.
+    return this.config.requirement?.();
+  }
+
+  get celestial() {
+    return this._celestial;
+  }
+
+  line(id) {
+    return this._lines[id];
+  }
+
+  get totalLines() {
+    return this._lines.length;
+  }
+
+  show() { this.unlock(); }
+  onUnlock() { this.present(); }
+
+  present() {
+    Quote.addToQueue(this);
+  }
+}
+
+
+export const Quotes = {
+  teresa: mapGameDataToObject(
+    GameDatabase.celestials.quotes.teresa,
+    config => new CelQuotes(config, "teresa")
+  ),
+  effarig: mapGameDataToObject(
+    GameDatabase.celestials.quotes.effarig,
+    config => new CelQuotes(config, "effarig")
+  ),
+  enslaved: mapGameDataToObject(
+    GameDatabase.celestials.quotes.enslaved,
+    config => new CelQuotes(config, "enslaved")
+  ),
+  v: mapGameDataToObject(
+    GameDatabase.celestials.quotes.v,
+    config => new CelQuotes(config, "v")
+  ),
+  ra: mapGameDataToObject(
+    GameDatabase.celestials.quotes.ra,
+    config => new CelQuotes(config, "ra")
+  ),
+  laitela: mapGameDataToObject(
+    GameDatabase.celestials.quotes.laitela,
+    config => new CelQuotes(config, "laitela")
+  ),
+  pelle: mapGameDataToObject(
+    GameDatabase.celestials.quotes.pelle,
+    config => new CelQuotes(config, "pelle")
+  ),
+};

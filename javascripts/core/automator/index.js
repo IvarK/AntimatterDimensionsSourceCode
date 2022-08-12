@@ -1,5 +1,5 @@
-import "./compiler.js";
-import "./automator-codemirror.js";
+import "./compiler";
+import "./automator-codemirror";
 
-export { AutomatorGrammar } from "./parser.js";
-export { standardizeAutomatorCurrencyName } from "./lexer.js";
+export { AutomatorGrammar } from "./parser";
+export { allowedConstantPatterns, standardizeAutomatorValues } from "./lexer";

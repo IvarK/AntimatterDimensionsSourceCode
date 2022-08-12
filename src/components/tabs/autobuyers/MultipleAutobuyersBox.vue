@@ -1,12 +1,14 @@
 <script>
-import SingleAutobuyerInRow from "./SingleAutobuyerInRow";
+import AutobuyerGroupToggleLabel from "./AutobuyerGroupToggleLabel";
 import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
+import SingleAutobuyerInRow from "./SingleAutobuyerInRow";
 
 export default {
   name: "MultipleAutobuyersBox",
   components: {
-    SingleAutobuyerInRow,
     AutobuyerIntervalLabel,
+    AutobuyerGroupToggleLabel,
+    SingleAutobuyerInRow,
   },
   props: {
     type: {
@@ -20,6 +22,7 @@ export default {
       anyUnlocked: false,
       displayIntervalAsGroup: false,
       displayBulkAsGroup: false,
+      parentActive: false,
     };
   },
   computed: {
@@ -55,10 +58,14 @@ export default {
     update() {
       this.continuumActive = Laitela.continuumActive;
       const type = this.type;
-      this.anyUnlocked = type.anyUnlocked();
-      this.displayIntervalAsGroup = type.allMaxedInterval?.() ?? true;
-      this.displayBulkAsGroup = type.allUnlimitedBulk?.() ?? true;
+      this.anyUnlocked = type.anyUnlocked;
+      this.displayIntervalAsGroup = type.allMaxedInterval ?? true;
+      this.displayBulkAsGroup = type.allUnlimitedBulk ?? true;
+      this.parentActive = type.isActive;
     },
+    toggleGroup() {
+      this.type.toggle();
+    }
   }
 };
 </script>
@@ -68,6 +75,11 @@ export default {
     v-if="showAutobuyers && !(isADBox && continuumActive)"
     class="c-autobuyer-box-row"
   >
+    <AutobuyerGroupToggleLabel
+      :is-active="parentActive"
+      :name="name"
+      @click="toggleGroup"
+    />
     <div class="l-autobuyer-box__title">
       {{ name }}<br>Autobuyers
       <AutobuyerIntervalLabel
@@ -87,6 +99,7 @@ export default {
           :autobuyer="autobuyer"
           :show-interval="!displayIntervalAsGroup"
           :show-bulk="!displayBulkAsGroup"
+          :parent-disabled="!parentActive"
         />
         <br
           v-if="id % entryCountPerRow === entryCountPerRow"
@@ -101,7 +114,7 @@ export default {
   >
     Continuum replaces your Antimatter Dimension and Tickspeed Autobuyers, as your production multipliers
     <br>
-    now automatically and continuously scale to how many purchases you would have had otherwise.
+    now automatically and continuously scale based on how many purchases you would have had otherwise.
   </span>
 </template>
 

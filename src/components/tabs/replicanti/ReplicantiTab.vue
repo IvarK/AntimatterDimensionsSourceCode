@@ -1,9 +1,9 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
+import ReplicantiUpgradeButton, { ReplicantiUpgradeButtonSetup } from "./ReplicantiUpgradeButton";
 import PrimaryButton from "@/components/PrimaryButton";
 import ReplicantiGainText from "./ReplicantiGainText";
-import ReplicantiUpgradeButton, {
-  ReplicantiUpgradeButtonSetup,
-} from "./ReplicantiUpgradeButton";
 import ReplicantiGalaxyButton from "./ReplicantiGalaxyButton";
 
 export default {
@@ -26,6 +26,8 @@ export default {
       multTD: new Decimal(),
       hasDTMult: false,
       multDT: new Decimal(),
+      hasIPMult: false,
+      multIP: new Decimal(),
       hasRaisedCap: false,
       replicantiCap: new Decimal(),
       distantRG: 0,
@@ -38,11 +40,12 @@ export default {
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     replicantiChanceSetup() {
       return new ReplicantiUpgradeButtonSetup(
         ReplicantiUpgrade.chance,
-        (value) => `Replicate chance: ${formatPercents(value)}`,
-        (cost) => `+${formatPercents(0.01)} Costs: ${format(cost)} IP`
+        value => `Replicate chance: ${formatPercents(value)}`,
+        cost => `+${formatPercents(0.01)} Costs: ${format(cost)} IP`
       );
     },
     replicantiIntervalSetup() {
@@ -65,8 +68,8 @@ export default {
       }
       return new ReplicantiUpgradeButtonSetup(
         upgrade,
-        (value) => `Interval: ${formatInterval(value)}`,
-        (cost) =>
+        value => `Interval: ${formatInterval(value)}`,
+        cost =>
           `➜ ${formatInterval(upgrade.nextValue)} Costs: ${format(cost)} IP`
       );
     },
@@ -74,56 +77,44 @@ export default {
       const upgrade = ReplicantiUpgrade.galaxies;
       return new ReplicantiUpgradeButtonSetup(
         upgrade,
-        (value) => {
+        value => {
           let description = `Max Replicanti Galaxies: ${formatInt(value)}`;
           const extra = upgrade.extra;
           if (extra > 0) {
-            description += `+${formatInt(extra)}`;
+            const total = value + extra;
+            description += ` + ${formatInt(extra)} = ${formatInt(total)}`;
           }
           return description;
         },
-        (cost) => `+${formatInt(1)} Costs: ${format(cost)} IP`
+        cost => `+${formatInt(1)} Costs: ${format(cost)} IP`
       );
     },
     boostText() {
       const boostList = [];
-      boostList.push(`a <span class="c-replicanti-description__accent">${formatX(
-        this.mult,
-        2,
-        2
-      )}</span>
+      boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.mult, 2, 2)}</span>
         multiplier on all Infinity Dimensions`);
       if (this.hasTDMult) {
-        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(
-          this.multTD,
-          2,
-          2
-        )}</span>
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multTD, 2, 2)}</span>
           multiplier on all Time Dimensions from a Dilation Upgrade`);
       }
       if (this.hasDTMult) {
-        const additionalEffect = GlyphAlteration.isAdded("replication")
-          ? "and Replicanti speed "
-          : "";
-        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(
-          this.multDT,
-          2,
-          2
-        )}</span>
+        const additionalEffect = GlyphAlteration.isAdded("replication") ? "and Replicanti speed " : "";
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multDT, 2, 2)}</span>
           multiplier to Dilated Time ${additionalEffect}from Glyphs`);
       }
+      if (this.hasIPMult) {
+        boostList.push(`a <span class="c-replicanti-description__accent">${formatX(this.multIP)}</span>
+          multiplier to Infinity Points from Glyph Alchemy`);
+      }
       if (boostList.length === 1) return `${boostList[0]}.`;
-      if (boostList.length === 2)
-        return `${boostList[0]}<br> and ${boostList[1]}.`;
-      return `${boostList.slice(0, -1).join(",<br>")},<br> and ${
-        boostList[boostList.length - 1]
-      }.`;
+      if (boostList.length === 2) return `${boostList[0]}<br> and ${boostList[1]}.`;
+      return `${boostList.slice(0, -1).join(",<br>")},<br> and ${boostList[boostList.length - 1]}.`;
     },
   },
   methods: {
     update() {
       this.isUnlocked = Replicanti.areUnlocked;
-      this.unlockCost = PelleRifts.famine.hasMilestone(1) ? 1e10 : 1e140;
+      this.unlockCost = new Decimal(1e140).dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
       if (!this.isUnlocked) {
         this.isUnlockAffordable = Currency.infinityPoints.gte(this.unlockCost);
         return;
@@ -136,13 +127,15 @@ export default {
       this.mult.copyFrom(replicantiMult());
       this.hasTDMult = DilationUpgrade.tdMultReplicanti.isBought;
       this.multTD.copyFrom(DilationUpgrade.tdMultReplicanti.effectValue);
-      this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain") !== 0;
+      this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain") !== 0 && !Pelle.isDoomed;
       this.multDT = Math.clampMin(
         Decimal.log10(Replicanti.amount) *
           getAdjustedGlyphEffect("replicationdtgain"),
         1
       );
-      this.isUncapped = PelleRifts.pestilence.hasMilestone(2);
+      this.hasIPMult = AlchemyResource.exponential.amount > 0 && !this.isDoomed;
+      this.multIP = Replicanti.amount.powEffectOf(AlchemyResource.exponential);
+      this.isUncapped = PelleRifts.vacuum.milestones[1].canBeApplied;
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;
       this.replicantiCap.copyFrom(replicantiCap());
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
@@ -154,6 +147,9 @@ export default {
       this.canSeeGalaxyButton =
         Replicanti.galaxies.max >= 1 || PlayerProgress.eternityUnlocked();
     },
+    vacuumText() {
+      return wordShift.wordCycle(PelleRifts.vacuum.name);
+    }
   },
 };
 </script>
@@ -175,12 +171,13 @@ export default {
       <div v-if="isInEC8">
         You have {{ quantifyInt("purchase", ec8Purchases) }} left.
       </div>
-      <div v-if="isUncapped">
-        Your Replicanti cap has been removed due to the second Famine milestone.
-        <br>
+      <div v-if="isDoomed">
+        <div v-if="isUncapped">
+          Your Replicanti cap has been removed due to the second {{ vacuumText() }} milestone.
+        </div>
         Any rewards from Effarig's Infinity have been disabled.
       </div>
-      <div v-if="hasRaisedCap">
+      <div v-else-if="hasRaisedCap">
         Your Replicanti cap without Time Study 192 has been raised to {{ format(replicantiCap, 2) }}
         and is giving you {{ quantifyInt("extra Replicanti Galaxy", effarigInfinityBonusRG) }}
         <br>
@@ -214,4 +211,5 @@ export default {
 </template>
 
 <style scoped>
+
 </style>

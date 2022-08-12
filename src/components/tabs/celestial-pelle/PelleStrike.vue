@@ -1,50 +1,78 @@
-<template>
-  <div>
-    <div
-      class="c-pelle-strike"
-      :class="{'c-pelle-strike--compact': compact }"
-    >
-      {{ strike.requirement }}<br><br>
-      Penalty: {{ strike.penalty }}<br><br>
-      Reward: {{ strike.reward }}
-    </div>
-    <PelleRift
-      :rift="strike.rift"
-      :compact="compact"
-    />
-  </div>
-</template>
-
 <script>
-import PelleRift from "./PelleRift.vue";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
+
 export default {
+  name: "PelleStrike",
   components: {
-    PelleRift
+    ExpandingControlBox
   },
   props: {
-    strike: Object,
-    compact: Boolean
+    strike: {
+      type: Object,
+      required: true
+    },
   },
+  data() {
+    return {
+      strikeReward: ""
+    };
+  },
+  methods: {
+    update() {
+      this.strikeReward = this.strike.reward();
+    }
+  }
 };
 </script>
 
-<style>
-  .c-pelle-strike {
-    background: var(--color-pelle--base);
-    color: black;
-    padding: 2rem;
-    font-size: 1.3rem;
-    border: 2px solid black;
-    border-radius: 0.5rem;
-    font-weight: bold;
-    width: 25rem;
-    margin: 0 0.5rem;
-    margin-bottom: 2rem;
-    height: 18rem;
-  }
+<template>
+  <div class="c-pelle-strike-container">
+    <ExpandingControlBox container-class="c-pelle-strike">
+      <template #header>
+        <div class="c-pelle-strike-text-padding c-pelle-strike-requirement-header">
+          ▼ {{ strike.requirement }} ▼
+        </div>
+      </template>
+      <template #dropdown>
+        <div class="c-pelle-strike-text-padding c-pelle-strike-description">
+          Penalty: {{ strike.penalty }}
+          <br><br>
+          Reward: {{ strikeReward }}
+          <br>
+        </div>
+      </template>
+    </ExpandingControlBox>
+  </div>
+</template>
 
-  .c-pelle-strike--compact {
-    overflow: hidden;
-    height: 6rem;
-  }
+<style>
+.c-pelle-strike {
+  min-height: 3.8rem;
+  z-index: 3;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: black;
+  background: var(--color-pelle--base);
+  border: var(--var-border-width, 0.2rem) solid black;
+  border-radius: var(--var-border-radius, 0.5rem);
+}
+
+.c-pelle-strike-container {
+  width: 26rem;
+  height: 5rem;
+  z-index: 3;
+  padding: 0.5rem 0.5rem 2rem;
+}
+
+.c-pelle-strike-description {
+  font-size: 1.1rem;
+}
+
+.c-pelle-strike-text-padding {
+  padding: 0.7rem;
+}
+
+.c-pelle-strike-requirement-header {
+  cursor: pointer;
+}
 </style>

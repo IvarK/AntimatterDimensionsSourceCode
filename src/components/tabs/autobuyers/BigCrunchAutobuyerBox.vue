@@ -1,18 +1,24 @@
 <script>
 import AutobuyerBox from "./AutobuyerBox";
-import AutobuyerIntervalButton from "./AutobuyerIntervalButton";
+import AutobuyerDropdownEntry from "./AutobuyerDropdownEntry";
 import AutobuyerInput from "./AutobuyerInput";
+import AutobuyerIntervalButton from "./AutobuyerIntervalButton";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
 
 export default {
   name: "BigCrunchAutobuyerBox",
   components: {
     AutobuyerBox,
     AutobuyerIntervalButton,
-    AutobuyerInput
+    AutobuyerInput,
+    ExpandingControlBox,
+    AutobuyerDropdownEntry
   },
   data() {
     return {
+      isDoomed: false,
       postBreak: false,
+      hasMaxedInterval: false,
       mode: AUTO_CRUNCH_MODE.AMOUNT,
       hasAdditionalModes: false,
       increaseWithMult: true,
@@ -33,7 +39,9 @@ export default {
   },
   methods: {
     update() {
+      this.isDoomed = Pelle.isDoomed;
       this.postBreak = player.break;
+      this.hasMaxedInterval = this.autobuyer.hasMaxedInterval;
       this.mode = this.autobuyer.mode;
       this.hasAdditionalModes = this.autobuyer.hasAdditionalModes;
       this.increaseWithMult = this.autobuyer.increaseWithMult;
@@ -64,11 +72,9 @@ export default {
       }
       throw new Error("Unknown Auto Crunch mode");
     },
-    changeMode(event) {
-      const mode = parseInt(event.target.value, 10);
-      this.autobuyer.mode = mode;
-      this.mode = mode;
-    }
+    modeName(mode) {
+      return this.modeProps(mode).title;
+    },
   }
 };
 </script>
@@ -79,53 +85,69 @@ export default {
     :show-interval="!postBreak"
     name="Automatic Big Crunch"
   >
-    <AutobuyerIntervalButton
-      slot="intervalSlot"
-      :autobuyer="autobuyer"
-    />
-    <template v-if="postBreak">
-      <template slot="intervalSlot">
-        <select
-          v-if="hasAdditionalModes"
-          class="c-autobuyer-box__mode-select"
-          @change="changeMode"
+    <template
+      v-if="!hasMaxedInterval"
+      #intervalSlot
+    >
+      <AutobuyerIntervalButton :autobuyer="autobuyer" />
+    </template>
+    <template
+      v-else-if="postBreak"
+      #intervalSlot
+    >
+      <ExpandingControlBox
+        v-if="hasAdditionalModes"
+        :auto-close="true"
+      >
+        <template #header>
+          <div class="o-primary-btn c-autobuyer-box__mode-select c-autobuyer-box__mode-select-header">
+            ▼ Current Setting: ▼
+            <br>
+            {{ modeName(mode) }}
+          </div>
+        </template>
+        <template #dropdown>
+          <AutobuyerDropdownEntry
+            :autobuyer="autobuyer"
+            :modes="modes"
+            :mode-name-fn="modeName"
+          />
+        </template>
+      </ExpandingControlBox>
+      <span v-else>
+        {{ modeProps(mode).title }}:
+      </span>
+    </template>
+    <template
+      v-if="postBreak"
+      #toggleSlot
+    >
+      <AutobuyerInput
+        :key="mode"
+        :autobuyer="autobuyer"
+        v-bind="modeProps(mode).input"
+      />
+    </template>
+    <template
+      v-if="postBreak"
+      #checkboxSlot
+    >
+      <label
+        class="o-autobuyer-toggle-checkbox o-clickable"
+      >
+        <input
+          v-model="increaseWithMult"
+          type="checkbox"
+          class="o-clickable"
         >
-          <option
-            v-for="optionMode in modes"
-            :key="optionMode"
-            :value="optionMode"
-            :selected="mode === optionMode"
-          >
-            {{ modeProps(optionMode).title }}
-          </option>
-        </select>
-        <span v-else>
-          {{ modeProps(mode).title }}:
-        </span>
-      </template>
-      <template slot="toggleSlot">
-        <AutobuyerInput
-          :key="mode"
-          :autobuyer="autobuyer"
-          v-bind="modeProps(mode).input"
-        />
-      </template>
-      <template slot="checkboxSlot">
-        <span>Dynamic amount:</span>
-        <div
-          class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-          @click="increaseWithMult = !increaseWithMult"
-        >
-          <input
-            type="checkbox"
-            :checked="increaseWithMult"
-          >
-        </div>
-      </template>
+        Dynamic amount
+      </label>
     </template>
   </AutobuyerBox>
 </template>
 
 <style scoped>
-
+.o-clickable {
+  cursor: pointer;
+}
 </style>

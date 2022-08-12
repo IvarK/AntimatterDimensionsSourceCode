@@ -46,7 +46,7 @@ export default {
     indicatorClassObject() {
       return {
         "o-achievement__indicator": true,
-        "o-achievement__indicator--secret": !this.isUnlocked
+        "o-achievement__indicator--locked": !this.isUnlocked
       };
     },
   },

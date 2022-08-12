@@ -1,3 +1,7 @@
+/* eslint-disable import/extensions */
+import pako from "pako/dist/pako.esm.mjs";
+/* eslint-enable import/extensions */
+
 export const GameSaveSerializer = {
   serialize(save) {
     const json = JSON.stringify(save, this.jsonConverter);

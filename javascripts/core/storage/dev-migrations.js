@@ -1,8 +1,7 @@
-import { GameStorage } from "./storage.js";
+import { GameStorage } from "./storage";
 
 function arrayToBits(array) {
   let bits = 0;
-  // eslint-disable-next-line no-bitwise
   for (const id of array) bits |= (1 << id);
   return bits;
 }
@@ -288,7 +287,6 @@ GameStorage.devMigrations = {
         player.reality.upgradeBits = arrayToBits(player.reality.upg);
         delete player.reality.upg;
       }
-      // eslint-disable-next-line no-bitwise
       if ((player.reality.upgradeBits & (1 << 25)) === 0) {
         player.realityBuyer.isOn = false;
       }
@@ -358,8 +356,7 @@ GameStorage.devMigrations = {
         for (const effect of orderedEffectList) {
           const typeEffect = separateEffectKey(effect);
           if (glyph.type === typeEffect[0] && glyph.effects[typeEffect[1]] !== undefined) {
-            // eslint-disable-next-line no-bitwise
-            effectBitmask += 1 << GameDatabase.reality.glyphEffects[effect].bitmaskIndex;
+            effectBitmask += 1 << GlyphEffects[effect].bitmaskIndex;
           }
         }
         glyph.effects = effectBitmask;
@@ -600,7 +597,7 @@ GameStorage.devMigrations = {
         pet.level = Math.clampMax(pet.level, 25);
       }
       delete player.celestials.ra.compression;
-      if (Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) {
+      if (Ra.unlocks.allGamespeedGlyphs.canBeApplied) {
         const allGlyphs = player.reality.glyphs.active
           .concat(player.reality.glyphs.inventory);
         for (const glyph of allGlyphs) {
@@ -751,7 +748,6 @@ GameStorage.devMigrations = {
       }
     },
     player => {
-      // eslint-disable-next-line no-bitwise
       player.celestials.ra.unlockBits &= ~(1 << 29);
     },
     player => {
@@ -975,7 +971,6 @@ GameStorage.devMigrations = {
 
       let reqBitmask = 0;
       for (let i = 0; i <= player.reality.upgReqs.length; i++) {
-        // eslint-disable-next-line no-bitwise
         if (player.reality.upgReqs[i]) reqBitmask |= (1 << i);
       }
       player.reality.upgReqs = reqBitmask;
@@ -1192,6 +1187,257 @@ GameStorage.devMigrations = {
       };
       delete player.options.showCondenseToMilestone;
     },
+    () => {
+      // This is just an empty patch because some orders got really messed up. Sorry -Scar
+    },
+    player => {
+      player.reality.glyphs.sets = player.reality.glyphs.sets.map(glyphs => ({ glyphs, name: "" }));
+    },
+    player => {
+      // Remove any accidental recursion that may have been introduced by the above patch
+      while (!Array.isArray(player.reality.glyphs.sets[0].glyphs)) {
+        player.reality.glyphs.sets = player.reality.glyphs.sets.map(glyphs => (glyphs.glyphs));
+      }
+    },
+    player => {
+      // For saves before cel7 existed, it will first add this prop (as a number) and then run this migration code. For
+      // saves which are already in cel7, this prop will already exist as a Decimal. This workaround handles both cases
+      player.celestials.pelle.rifts.chaos.fill = new Decimal(player.celestials.pelle.rifts.chaos.fill).toNumber();
+
+      delete player.celestials.pelle.compact;
+      player.celestials.pelle.collapsed = {
+        upgrades: false,
+        rifts: false,
+        galaxies: false
+      };
+      player.celestials.pelle.galaxyGenerator.unlocked = player.celestials.pelle.galaxyGenerator.generatedGalaxies > 0;
+    },
+    player => {
+      if (player.celestials.pelle.doomed) player.achievementBits[17] |= 1;
+      if (player.celestials.pelle.upgrades.has(4)) player.achievementBits[17] |= 2;
+      if (player.celestials.pelle.doomed && player.challenge.infinity.completedBits === 510) {
+        player.achievementBits[17] |= (1 << 2);
+      }
+      if (player.timestudy.studies.compact().includes(181)) player.achievementBits[17] |= (1 << 5);
+    },
+    player => {
+      player.achievementBits[16] |= (player.achievementBits[16] & (1 << 4)) << 3;
+      player.achievementBits[16] &= ~(1 << 4);
+      player.achievementBits[16] |= (player.achievementBits[16] & (1 << 2)) << 2;
+      player.achievementBits[16] &= ~(1 << 2);
+    },
+    player => {
+      player.achievementBits[17] &= ~(1 << 5);
+      if (player.timestudy.studies.compact().includes(181) && player.celestials.pelle.doomed) {
+        player.achievementBits[17] |= (1 << 5);
+      }
+    },
+    player => {
+      if (player.celestials.pelle.doomed && (player.challenge.infinity.completedBits & (1 << 5)) !== 0) {
+        player.achievementBits[17] |= (1 << 2);
+      } else {
+        player.achievementBits[17] &= ~(1 << 2);
+      }
+    },
+    player => {
+      player.celestials.pelle.collapsed = player.celestials.collapsed;
+      player.celestials.pelle.showBought = player.celestials.showBought;
+      delete player.celestials.collapsed;
+      delete player.celestials.showBought;
+    },
+    GameStorage.migrations.infMultNameConversion,
+    player => {
+      if (player.celestials.pelle.collapsed === undefined) {
+        player.celestials.pelle.collapsed = {
+          upgrades: false,
+          rifts: false,
+          galaxies: false
+        };
+      }
+    },
+    player => {
+      const from = player.celestials.laitela;
+      if (from.automation) {
+        player.auto.darkMatterDims.isActive = from.automation.dimensions;
+        player.auto.ascension.isActive = from.automation.ascension;
+        player.auto.annihilation.isActive = from.automation.singularity;
+        player.auto.singularity.isActive = from.automation.annihilation;
+
+        delete player.celestials.laitela.automation.dimensions;
+        delete player.celestials.laitela.automation.ascension;
+        delete player.celestials.laitela.automation.singularity;
+        delete player.celestials.laitela.automation.annihilation;
+      }
+
+      player.auto.darkMatterDims.lastTick = from.darkAutobuyerTimer;
+      player.auto.ascension.lastTick = from.darkAutobuyerTimer;
+      player.auto.annihilation.multiplier = from.autoAnnihilationSetting;
+
+      delete player.celestials.laitela.darkAutobuyerTimer;
+      delete player.celestials.laitela.darkAutobuyerTimer;
+      delete player.celestials.laitela.autoAnnihilationSetting;
+    },
+    GameStorage.migrations.etercreqConversion,
+    player => {
+      delete player.options.confirmations.reality;
+    },
+    player => {
+      const hasDimboost = player.celestials.pelle.upgrades.has(19);
+      const hasDilUpg = player.celestials.pelle.upgrades.has(18);
+      player.celestials.pelle.upgrades.delete(18);
+      player.celestials.pelle.upgrades.delete(19);
+      if (hasDimboost) player.celestials.pelle.upgrades.add(18);
+      if (hasDilUpg) player.celestials.pelle.upgrades.add(19);
+    },
+    player => {
+      delete player.auto.bulkOn;
+    },
+    player => {
+      player.requirementChecks.permanent.emojiGalaxies = player.requirementChecks.permanent.cancerGalaxies;
+      delete player.requirementChecks.permanent.cancerGalaxies;
+    },
+    player => {
+      delete player.celestials.effarig.unlocksBits;
+      delete player.celestials.ra.unlocksBits;
+    },
+    player => {
+      for (const script of Object.values(player.reality.automator.scripts)) {
+        script.id = parseInt(script.id, 10);
+      }
+    },
+    player => {
+      player.secretUnlocks.themes.delete("S4Cancer");
+      player.secretUnlocks.themes.add("S4Design");
+    },
+    player => {
+      player.reality.automator.state.editorScript = Number(player.reality.automator.state.editorScript);
+      // I'm not sure if there's any error with the type of topLevelScript, but better safe than sorry
+      player.reality.automator.state.topLevelScript = Number(player.reality.automator.state.topLevelScript);
+    },
+    player => {
+      // Move dil upg no reset and tachyon particles no reset
+      if (player.celestials.pelle.upgrades.delete(20)) player.celestials.pelle.upgrades.add(21);
+      if (player.celestials.pelle.upgrades.delete(19)) player.celestials.pelle.upgrades.add(20);
+
+      // Dimboost upgrade id was moved from 18 to 7 -- Make the corresponding change
+      // Galaxy upgrade was inserted at 11. 7-10 should only be moved forward 1 place
+      // and 10-17 2 places forward.
+      const hasDimboostsResetNothing = player.celestials.pelle.upgrades.delete(18);
+      for (let i = 17; i >= 10; i--) {
+        if (player.celestials.pelle.upgrades.delete(i)) player.celestials.pelle.upgrades.add(i + 2);
+      }
+      for (let i = 9; i >= 7; i--) {
+        if (player.celestials.pelle.upgrades.delete(i)) player.celestials.pelle.upgrades.add(i + 1);
+      }
+      if (hasDimboostsResetNothing) player.celestials.pelle.upgrades.add(7);
+    },
+    player => {
+      const cel = player.celestials;
+      const convToBit = x => x.toBitmask() >> 1;
+      if (cel.teresa.quotes) player.celestials.teresa.quoteBits = convToBit(cel.teresa.quotes);
+      if (cel.effarig.quotes) player.celestials.effarig.quoteBits = convToBit(cel.effarig.quotes);
+      if (cel.enslaved.quotes) player.celestials.enslaved.quoteBits = convToBit(cel.enslaved.quotes);
+      if (cel.v.quotes) player.celestials.v.quoteBits = convToBit(cel.v.quotes);
+      if (cel.ra.quotes) player.celestials.ra.quoteBits = convToBit(cel.ra.quotes);
+      if (cel.laitela.quotes) player.celestials.laitela.quoteBits = convToBit(cel.laitela.quotes);
+      if (cel.pelle.quotes) player.celestials.pelle.quoteBits = convToBit(cel.pelle.quotes);
+
+      delete player.celestials.teresa.quotes;
+      delete player.celestials.effarig.quotes;
+      delete player.celestials.enslaved.quotes;
+      delete player.celestials.v.quotes;
+      delete player.celestials.ra.quotes;
+      delete player.celestials.laitela.quotes;
+      delete player.celestials.pelle.quotes;
+    },
+    player => {
+      if (player.celestials.pelle.rifts.famine) {
+        player.celestials.pelle.rifts.vacuum = {
+          ...player.celestials.pelle.rifts.famine,
+          fill: new Decimal(player.celestials.pelle.rifts.famine.fill)
+        };
+        delete player.celestials.pelle.rifts.famine;
+      }
+
+      if (player.celestials.pelle.rifts.pestilence) {
+        player.celestials.pelle.rifts.decay = {
+          ...player.celestials.pelle.rifts.pestilence,
+          fill: new Decimal(player.celestials.pelle.rifts.pestilence.fill)
+        };
+        delete player.celestials.pelle.rifts.pestilence;
+      }
+
+      if (player.celestials.pelle.rifts.war) {
+        player.celestials.pelle.rifts.recursion = {
+          ...player.celestials.pelle.rifts.war,
+          fill: new Decimal(player.celestials.pelle.rifts.war.fill)
+        };
+        delete player.celestials.pelle.rifts.war;
+      }
+
+      if (player.celestials.pelle.rifts.death) {
+        player.celestials.pelle.rifts.paradox = {
+          ...player.celestials.pelle.rifts.death,
+          fill: new Decimal(player.celestials.pelle.rifts.death.fill)
+        };
+        delete player.celestials.pelle.rifts.death;
+      }
+    },
+    player => {
+      delete player.newGame;
+    },
+    GameStorage.migrations.moveTS33,
+    player => {
+      const toMove = ["antimatterDims", "infinityDims", "timeDims", "replicantiUpgrades", "dilationUpgrades",
+        "blackHolePower", "realityUpgrades", "imaginaryUpgrades"];
+      for (const x of toMove) {
+        const all = player.auto[x];
+        delete player.auto[x];
+        player.auto[x] = { all, isActive: true };
+      }
+    },
+    player => {
+      player.celestials.ra.petWithRemembrance = player.celestials.ra.petWithRecollection;
+      delete player.celestials.ra.petWithRecollection;
+    },
+    player => {
+      for (const key of Object.keys(player.reality.automator.scripts)) {
+        const lines = player.reality.automator.scripts[key].content.split("\n");
+        for (let num = 0; num < lines.length; num++) {
+          let rawLine = lines[num];
+          // TT command removed
+          rawLine = rawLine.replace(/^\s*tt.*$/ui, "");
+          // Changes to "studies" commands
+          // For some reason `studies nowait load` would get caught by the following system without explicitly defining
+          // that "nowait load" should not be captured. Probably because it treats nowait as nonexisting and then sees
+          // that nowait is neither respec nor load. I tried consuming the nowait if it existed but that messed up the
+          // replace function so this is the best I've got for now
+          rawLine = rawLine.replace(/studies( nowait)? (?!respec|load|nowait respec|nowait load)(\S.+)$/ui,
+            "studies$1 purchase $2");
+          rawLine = rawLine.replace(/studies( nowait)? load preset ([1-6])/ui, "studies$1 load id $2");
+          rawLine = rawLine.replace(/studies( nowait)? load preset (\S+)/ui, "studies$1 load name $2");
+          // Autobuyer mode change (this is a much older change which wasn't migrated at the time)
+          rawLine = rawLine.replace(/x current/ui, "x highest");
+          // Variable definitions
+          const defineMatch = rawLine.match(/define (\S*)\s*=\s*(\S*)/ui);
+          if (defineMatch) {
+            player.reality.automator.constants[defineMatch[1]] = defineMatch[2];
+            rawLine = "";
+          }
+          lines[num] = rawLine;
+        }
+        player.reality.automator.scripts[key].content = lines.join("\n");
+      }
+
+      // Migrate IDs for all saves made during wave 3 testing, to prevent odd overwriting behavior on importing
+      const newScripts = {};
+      const oldScriptKeys = Object.keys(player.reality.automator.scripts);
+      for (let newID = 1; newID <= oldScriptKeys.length; newID++) {
+        newScripts[newID] = player.reality.automator.scripts[oldScriptKeys[newID - 1]];
+        newScripts[newID].id = newID;
+      }
+      player.reality.automator.scripts = newScripts;
+    }
   ],
 
   patch(player) {

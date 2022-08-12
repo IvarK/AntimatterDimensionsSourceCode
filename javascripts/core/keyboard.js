@@ -1,3 +1,5 @@
+import Mousetrap from "mousetrap";
+
 class KeySpin {
   constructor(key, action) {
     this.key = key;
@@ -67,7 +69,7 @@ export class GameKeyboard {
 GameKeyboard.spins = [];
 
 function executeKey(action) {
-  if (ui.$viewModel.modal.progressBar !== undefined) {
+  if (ui.$viewModel.modal.progressBar !== undefined || GameEnd.endState >= 2.5) {
     return undefined;
   }
   return action();

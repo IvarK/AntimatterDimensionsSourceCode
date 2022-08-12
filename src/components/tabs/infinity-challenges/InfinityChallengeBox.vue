@@ -63,7 +63,7 @@ export default {
         <span>Goal: {{ format(config.goal) }} antimatter</span>
         <DescriptionDisplay
           :config="config.reward"
-          label="Reward:"
+          title="Reward:"
         />
         <EffectDisplay
           v-if="isCompleted"

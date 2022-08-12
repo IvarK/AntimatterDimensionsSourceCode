@@ -1,5 +1,5 @@
-import { GameDatabase } from "../game-database.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.achievements.normal = [
   {
@@ -702,7 +702,7 @@ GameDatabase.achievements.normal = [
     id: 102,
     name: "This mile took an eternity",
     description: "Get all Eternity milestones.",
-    checkRequirement: () => EternityMilestones.all.every(m => m.isReached),
+    checkRequirement: () => EternityMilestone.all.every(m => m.isReached),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -731,7 +731,7 @@ GameDatabase.achievements.normal = [
     get description() { return `Have ${formatInt(308)} Tickspeed upgrades from Time Dimensions.`; },
     checkRequirement: () => player.totalTickGained >= 308,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Time Dimensions gain a multiplier based on Tickspeed.",
+    reward: "Time Dimensions gain a multiplier based on tickspeed.",
     effect: () => Tickspeed.perSecond.pow(0.000005),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },
@@ -947,7 +947,7 @@ GameDatabase.achievements.normal = [
     },
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
-      player.infMult === 0 &&
+      player.IPMultPurchases === 0 &&
       Currency.infinityPoints.exponent >= 200000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "You start Eternities with all Infinity Challenges unlocked and completed."
@@ -1024,7 +1024,8 @@ GameDatabase.achievements.normal = [
     name: "How does this work?",
     description: "Unlock the automator.",
     checkRequirement: () => Player.automatorUnlocked,
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
+    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_BOUGHT, GAME_EVENT.PERK_BOUGHT,
+      GAME_EVENT.BLACK_HOLE_BOUGHT],
     get reward() { return `Dimension Boosts are ${formatPercents(0.5)} stronger.`; },
     effect: 1.5,
   },
@@ -1252,12 +1253,10 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 173,
-    name: "The First Antihistorian",
-    get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
-    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
-    get reward() { return `Momentum increases ${formatX(10)} faster.`; },
-    effect: 10,
+    name: "Cet accomplissement n'existe pas III",
+    get description() { return `Reach ${formatPostBreak(DC.D9_99999E999, 5, 0)} Reality Machines.`; },
+    checkRequirement: () => player.reality.realityMachines.gte(DC.D9_99999E999),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 174,
@@ -1268,6 +1267,27 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 175,
+    name: "The First Antihistorian",
+    get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
+    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
+    get reward() {
+      return `Synergism can go above ${formatPercents(1)} and Momentum increases ${formatX(10)} faster.`;
+    },
+    effect: 10,
+  },
+  {
+    id: 176,
+    name: "Mom counted to 3",
+    description: "Annihilate your Dark Matter Dimensions.",
+  },
+  {
+    id: 177,
+    name: "This mile took a celestial",
+    description: "Complete all Singularity Milestones at least once.",
+  },
+  {
+    id: 178,
     name: "Destroyer of Worlds",
     get description() { return `Get ${formatInt(100000)} Antimatter Galaxies.`; },
     checkRequirement: () => player.galaxies >= 100000,
@@ -1276,24 +1296,71 @@ GameDatabase.achievements.normal = [
     effect: 1.01
   },
   {
-    id: 176,
-    name: "dummy achievement 1",
-    description: "This one isn't implemented yet.",
-    checkRequirement: () => false,
-    checkEvent: []
+    id: 181,
+    displayId: 666,
+    name: "Antimatter Dimensions Eternal",
+    description: "Doom your Reality.",
+    checkRequirement: () => Pelle.isDoomed,
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
   },
   {
-    id: 177,
-    name: "dummy achievement 2",
-    description: "Neither is this one.",
-    checkRequirement: () => false,
-    checkEvent: []
+    id: 182,
+    name: "One more time",
+    description: "Permanently gain back all Antimatter Dimension autobuyers.",
+    checkRequirement: () => PelleUpgrade.antimatterDimAutobuyers1.canBeApplied &&
+      PelleUpgrade.antimatterDimAutobuyers2.canBeApplied,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
-    id: 178,
-    name: "dummy achievement 3",
-    description: "And this last one isn't either.",
-    checkRequirement: () => false,
-    checkEvent: []
+    id: 183,
+    name: "Déjà vOoM",
+    description: "Complete Infinity Challenge 5 while Doomed.",
+    checkRequirement: () => Pelle.isDoomed && InfinityChallenge(5).isCompleted,
+    checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED,
+    // Weirdly specific reward? Yes, its V's ST bonus because we forgot to disable it
+    // when balancing Pelle and only realised too late.
+    get reward() { return `All Antimatter Dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
+    effect: 1.0812403840463596
+  },
+  {
+    id: 184,
+    name: "You're out!",
+    description: "Encounter the third Pelle Strike.",
+    checkRequirement: () => PelleStrikes.eternity.hasStrike,
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
+  },
+  {
+    id: 185,
+    name: "Four score and seven years ago",
+    description: "Encounter the fourth Pelle Strike.",
+    checkRequirement: () => PelleStrikes.ECs.hasStrike,
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED
+  },
+  {
+    id: 186,
+    displayId: 181,
+    name: "An unhealthy obsession",
+    description: `Purchase Time Study 181 while Doomed.`,
+  },
+  {
+    id: 187,
+    name: "The One with Dilated Time",
+    description: "Unlock Dilation while Doomed.",
+    checkRequirement: () => PelleStrikes.dilation.hasStrike,
+    checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED,
+    // We forgot to disable a singularity milestone while balancing Pelle; now it's disabled
+    // and this upgrade has the same effect as it used to.
+    get reward() {
+      return `Increase the multiplier per repeatable Dilated Time
+      multiplier upgrade by ${formatX(1.35, 0, 2)}.`;
+    },
+    effect: 1.35
+  },
+  {
+    id: 188,
+    name: "The End",
+    description: "Beat the game.",
+    checkRequirement: () => GameEnd.endState > 1 && !GameEnd.removeAdditionalEnd,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
 ];

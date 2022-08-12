@@ -6,25 +6,37 @@ export default {
   components: {
     ModalWrapperChoice
   },
-  created() {
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+  data() {
+    return {
+      isDoomed: false
+    };
+  },
+  computed: {
+    resetTerm() { return this.isDoomed ? "Armageddon" : "Reality"; },
   },
   methods: {
+    update() {
+      this.isDoomed = Pelle.isDoomed;
+    },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="resetReality"
+    @confirm="handleYesClick"
+  >
     <template #header>
-      You are about to reset your Reality
+      You are about to reset your {{ resetTerm }}
     </template>
     <div class="c-modal-message__text">
-      This will put you at the start of your Reality,
-      giving you no rewards from your progress in your current Reality.
+      This will reset you to the start of your {{ resetTerm }},
+      giving you no rewards from your progress in your current {{ resetTerm }}.
       <br>
       <br>
       Are you sure you want to do this?

@@ -50,3 +50,5 @@ import "./celestials/quotes/index";
 import "./h2p";
 
 import "./credits";
+
+import "./changelog";

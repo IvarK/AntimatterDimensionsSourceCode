@@ -41,6 +41,7 @@ import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
 import CatchupModal from "@/components/modals/catchup/CatchupModal";
+import ChangelogModal from "@/components/modals/ChangelogModal";
 import CreditsModal from "@/components/modals/CreditsModal";
 import DeleteAutomatorScriptModal from "@/components/modals/DeleteAutomatorScriptModal";
 import EnslavedHintsModal from "@/components/modals/EnslavedHintsModal";
@@ -223,6 +224,7 @@ Modal.uiChoice = new Modal(UiChoiceModal);
 Modal.h2p = new Modal(H2PModal);
 Modal.information = new Modal(InformationModal);
 Modal.credits = new Modal(CreditsModal, 1);
+Modal.changelog = new Modal(ChangelogModal, 1);
 Modal.awayProgress = new Modal(AwayProgressModal);
 Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);

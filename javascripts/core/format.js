@@ -1,5 +1,6 @@
 window.format = function format(value, places = 0, placesUnder1000 = 0) {
-  if (Pelle.isDoomed) {
+  // Using the Pelle.isDoomed getter here causes this to not update properly after a game restart
+  if (player.celestials.pelle.isDoomed) {
     if ((GameEnd.endState - 2.5) / 2 > Math.random()) return "END";
   }
   return Notations.current.format(value, places, placesUnder1000, 3);

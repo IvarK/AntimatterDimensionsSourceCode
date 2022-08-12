@@ -86,7 +86,7 @@ export default {
 .c-mute-button {
   position: fixed;
   left: 2rem;
-  font-size: 5rem;
+  font-size: 2rem;
   opacity: 0.5;
   pointer-events: auto;
   cursor: pointer;

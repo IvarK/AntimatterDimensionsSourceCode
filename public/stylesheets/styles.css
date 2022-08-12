@@ -2681,7 +2681,7 @@ br {
 }
 
 .c-file-import {
-  width: 20rem;
+  width: 100%;
   height: 5.5rem;
   position: absolute;
   opacity: 0;
@@ -6887,11 +6887,6 @@ kbd {
 
 .c-enslaved-run-button__icon:hover .c-enslaved-run-button__icon__glitch {
   background-image: linear-gradient(rgba(0, 0, 0, 0%) 0%, black 20%, black 80%, rgba(0, 0, 0, 0%) 100%);
-}
-
-.o-enslaved-release-header-button {
-  width: 20rem;
-  font-size: 1rem;
 }
 
 @keyframes a-enslaved-run-button--spin {

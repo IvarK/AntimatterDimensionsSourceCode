@@ -34,6 +34,7 @@ export default {
     canChangeStoreTime: false,
     canChangeStoreRealTime: false,
     canDischarge: false,
+    canAutoRelease: false,
   }),
   computed: {
     storedRealEfficiencyDesc() {
@@ -133,6 +134,7 @@ export default {
       this.canChangeStoreTime = Enslaved.canModifyGameTimeStorage;
       this.canChangeStoreRealTime = Enslaved.canModifyRealTimeStorage;
       this.canDischarge = Enslaved.canRelease(false);
+      this.canAutoRelease = Enslaved.canRelease(true);
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -198,6 +200,7 @@ export default {
       class="c-subtab-option-container"
     >
       <PrimaryToggleButton
+        v-if="canAutoRelease"
         v-model="autoRelease"
         class="o-primary-btn--subtab-option"
         label="Pulse Black Hole:"

@@ -30,6 +30,7 @@ export default {
       continuumValue: 0,
       isShown: false,
       isCostsAD: false,
+      amountDisplay: "",
     };
   },
   computed: {
@@ -38,9 +39,6 @@ export default {
     },
     costDisplay() {
       return this.buyUntil10 ? format(this.until10Cost) : format(this.singleCost);
-    },
-    amountDisplay() {
-      return this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
     },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
@@ -97,6 +95,7 @@ export default {
       this.isShown =
         (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
       this.isCostsAD = NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
+      this.amountDisplay = this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
     },
     buy() {
       if (this.isContinuumActive) return;

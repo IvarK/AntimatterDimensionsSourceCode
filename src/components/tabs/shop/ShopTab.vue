@@ -9,7 +9,6 @@ export default {
   data() {
     return {
       STD: 0,
-      kongEnabled: false,
     };
   },
   computed: {
@@ -17,17 +16,15 @@ export default {
       return ShopPurchase.all;
     },
     buySTDText() {
-      return this.kongEnabled ? "Buy More" : "Play in Kongregate to buy STDs";
+      return "Buy More";
     }
   },
   methods: {
     update() {
       this.STD = player.IAP.totalSTD - player.IAP.spentSTD;
-      this.kongEnabled = kong.enabled;
     },
     showStore() {
       SecretAchievement(33).unlock();
-      if (!this.kongEnabled) return;
       Modal.shop.show();
     },
     buyTimeSkip() {

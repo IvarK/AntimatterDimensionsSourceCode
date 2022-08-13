@@ -186,7 +186,9 @@ export const GameStorage = {
   },
 
   hardReset() {
+    const IAP = JSON.parse(JSON.stringify(player.IAP));
     this.loadPlayerObject(Player.defaultStart);
+    player.IAP = IAP;
     this.save(true);
     Tab.dimensions.antimatter.show();
   },

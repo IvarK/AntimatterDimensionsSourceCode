@@ -27,9 +27,9 @@ GameDatabase.shopPurchases = {
   },
   replicantiPurchases: {
     key: "replicantiPurchases",
-    cost: 40,
-    description: "Triple your Replicanti gain. (additive)",
-    multiplier: purchases => (purchases === 0 ? 1 : 3 * purchases),
+    cost: 60,
+    description: "Double your Replicanti gain. (additive)",
+    multiplier: purchases => (purchases === 0 ? 1 : 2 * purchases),
   },
   dilatedTimePurchases: {
     key: "dilatedTimePurchases",

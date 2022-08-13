@@ -1,14 +1,22 @@
 <script>
+import "vue-loading-overlay/dist/vue-loading.css";
+
+import Loading from "vue-loading-overlay";
+
+import Payments from "../../../../javascripts/core/payments";
+
 import ShopButton from "./ShopButton";
 
 export default {
   name: "ShopTab",
   components: {
-    ShopButton
+    ShopButton,
+    Loading
   },
   data() {
     return {
       STD: 0,
+      isLoading: false
     };
   },
   computed: {
@@ -22,11 +30,15 @@ export default {
   methods: {
     update() {
       this.STD = player.IAP.totalSTD - player.IAP.spentSTD;
+      this.isLoading = Boolean(player.IAP.checkoutSession.id);
     },
     showStore() {
       SecretAchievement(33).unlock();
       Modal.shop.show();
     },
+    onCancel() {
+      Payments.cancelPurchase();
+    }
   },
 };
 </script>
@@ -57,6 +69,12 @@ export default {
         :purchase="purchase"
       />
     </div>
+    <loading
+      :active="isLoading"
+      :can-cancel="true"
+      :on-cancel="onCancel"
+      :is-full-page="true"
+    />
   </div>
 </template>
 

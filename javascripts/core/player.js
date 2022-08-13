@@ -881,7 +881,10 @@ window.player = {
     IPPurchases: 0,
     EPPurchases: 0,
     dimPurchases: 0,
-    allDimPurchases: 0
+    allDimPurchases: 0,
+    checkoutSession: {
+      id: false,
+    }
   },
   // TODO: Remove everything with devMode in it, we (probably?) don't want this in release
   devMode: false,

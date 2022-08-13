@@ -5,6 +5,7 @@ import { deepmergeAll } from "@/utility/deepmerge";
 import { playFabLogin } from "./core/playfab";
 import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
+import Payments from "./core/payments";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -1085,6 +1086,7 @@ export function init() {
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   kong.init();
+  Payments.init();
 }
 
 window.tweenTime = 0;

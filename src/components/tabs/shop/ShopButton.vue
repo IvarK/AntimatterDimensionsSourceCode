@@ -27,7 +27,10 @@ export default {
     <div class="o-shop-button-description">
       {{ purchase.description }}
       <br>
-      <span class="o-shop-button-multiplier">
+      <span
+        v-if="purchase.displayMult"
+        class="o-shop-button-multiplier"
+      >
         Currently {{ formatX(currentMult, 2, 0) }}, next: {{ formatX(nextMult, 2, 0) }}
       </span>
     </div>

@@ -114,6 +114,7 @@ export function getDilationGainPerSecond() {
     const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.paradox.milestones[1].effectOrDefault(1));
     return new Decimal(tachyonEffect)
       .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
+      .times(ShopPurchase.dilatedTimePurchases.currentMult ** 0.5)
       .times(Pelle.specialGlyphEffect.dilation).div(3e4);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
@@ -127,6 +128,7 @@ export function getDilationGainPerSecond() {
       Ra.unlocks.peakGamespeedDT
     );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
+  dtRate = dtRate.times(ShopPurchase.dilatedTimePurchases.currentMult);
   dtRate = dtRate.times(
     Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
   if (Enslaved.isRunning && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);

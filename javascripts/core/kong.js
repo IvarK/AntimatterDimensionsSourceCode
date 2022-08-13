@@ -5,10 +5,6 @@ export const kong = {};
 kong.enabled = false;
 
 kong.init = function() {
-  // We have unfinished checkouts
-  if (player.IAP.checkoutSession.id) {
-    kong.pollForPurchases();
-  }
   if (document.referrer.indexOf("kongregate") === -1)
     return;
   kong.enabled = true;
@@ -47,18 +43,28 @@ class ShopPurchaseState extends RebuyableMechanicState {
     player.IAP[this.config.key] = value;
   }
 
+  get displayMult() {
+    return Boolean(this.config.multiplier);
+  }
+
   get currentMult() {
+    if (!this.displayMult) return "";
     return this.config.multiplier(this.purchases);
   }
 
   get nextMult() {
+    if (!this.displayMult) return "";
     return this.config.multiplier(this.purchases + 1);
   }
 
   purchase() {
     if (!this.canBeBought) return false;
     player.IAP.spentSTD += this.cost;
-    this.purchases++;
+    if (this.config.singleUse) {
+      this.config.onPurchase();
+    } else {
+      this.purchases++;
+    }
     GameUI.update();
     return true;
   }
@@ -80,71 +86,6 @@ kong.purchaseLongerTimeSkip = function(cost) {
   player.IAP.spentSTD += cost;
   simulateTime(3600 * 24);
 };
-
-kong.buyMoreSTD = async STD => {
-  const res = await fetch("http://localhost:3000/purchase", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ amount: STD })
-  });
-  const data = await res.json();
-  const windowReference = window.open(
-    data.url,
-    "antimatterDimensionsPurchase",
-    "popup,width=500,height=500,left=100,top=100"
-  );
-  player.IAP.checkoutSession = { id: data.id, amount: STD };
-  GameStorage.save();
-  kong.pollForPurchases(windowReference);
-
-};
-
-kong.pollForPurchases = (windowReference = undefined) => {
-  console.log("Polling for purchases...")
-  const { id, amount } = player.IAP.checkoutSession;
-  let pollAmount = 0;
-  const polling = setInterval(async() => {
-    pollAmount++;
-    const statusRes = await fetch(`http://localhost:3000/validate?sessionId=${id}`);
-    const { completed, failure } = await statusRes.json();
-
-    if (completed) {
-      windowReference?.close();
-      player.IAP.totalSTD += amount;
-      GameUI.notify.success(`Purchase of ${amount} STDs was successful, thank you for your support! ❤️`, 10000);
-      clearInterval(polling);
-      player.IAP.checkoutSession = { id: false };
-      GameStorage.save();
-      Modal.hide();
-    }
-
-    // 30 minutes of polling is the maximum
-    if (!completed && (windowReference?.closed || pollAmount >= 20 * 30)) {
-      clearInterval(polling);
-      await fetch("http://localhost:3000/expire", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ sessionId: id })
-      });
-      GameUI.notify.error(`Purchase failed!`, 10000);
-      player.IAP.checkoutSession = { id: false };
-      GameStorage.save();
-    }
-
-    if (failure) {
-      windowReference?.close();
-      clearInterval(polling);
-      GameUI.notify.error(`Purchase failed!`, 10000);
-      player.IAP.checkoutSession = { id: false };
-      GameStorage.save();
-    }
-  }, 3000);
-};
-
 
 kong.updatePurchases = function() {
   if (!kong.enabled) return;

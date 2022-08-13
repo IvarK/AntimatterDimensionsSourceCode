@@ -27,12 +27,6 @@ export default {
       SecretAchievement(33).unlock();
       Modal.shop.show();
     },
-    buyTimeSkip() {
-      kong.purchaseTimeSkip(10);
-    },
-    buyLongerTimeSkip() {
-      kong.purchaseLongerTimeSkip(20);
-    },
   },
 };
 </script>
@@ -41,7 +35,7 @@ export default {
   <div class="tab shop">
     <div class="c-shop-disclaimer">
       Disclaimer: These are not required to progress in the game, they are just for supporting the developer.
-      The game is balanced without the use of any microtranactions.
+      The game is balanced without the use of any microtransactions.
     </div>
     <div class="c-shop-header">
       <span>You have {{ STD }}</span>
@@ -62,36 +56,6 @@ export default {
         :key="purchase.key"
         :purchase="purchase"
       />
-      <div class="l-shop-buttons-container">
-        <div class="o-shop-button-description">
-          Get 6 hours worth of offline production. (Autobuyers don't work full speed)
-        </div>
-        <button
-          class="o-shop-button-button"
-          @click="buyTimeSkip()"
-        >
-          Cost: 10
-          <img
-            src="images/std_coin.png"
-            class="c-shop-header__img"
-          >
-        </button>
-      </div>
-      <div class="l-shop-buttons-container">
-        <div class="o-shop-button-description">
-          Get 24 hours worth of offline production. (Autobuyers don't work full speed)
-        </div>
-        <button
-          class="o-shop-button-button"
-          @click="buyLongerTimeSkip()"
-        >
-          Cost: 20
-          <img
-            src="images/std_coin.png"
-            class="c-shop-header__img"
-          >
-        </button>
-      </div>
     </div>
   </div>
 </template>

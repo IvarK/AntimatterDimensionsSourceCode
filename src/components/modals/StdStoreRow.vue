@@ -1,4 +1,6 @@
 <script>
+import Payments from "../../../javascripts/core/payments";
+
 export default {
   name: "StdStoreRow",
   props: {
@@ -13,7 +15,7 @@ export default {
   },
   methods: {
     purchase() {
-      kong.buyMoreSTD(this.amount, this.cost);
+      Payments.buyMoreSTD(this.amount, this.cost);
     }
   },
 

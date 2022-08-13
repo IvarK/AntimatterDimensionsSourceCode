@@ -882,6 +882,8 @@ window.player = {
     EPPurchases: 0,
     dimPurchases: 0,
     allDimPurchases: 0,
+    replicantiPurchases: 0,
+    dilatedTimePurchases: 0,
     checkoutSession: {
       id: false,
     }

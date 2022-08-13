@@ -5,6 +5,24 @@
   user-select: none;
 }
 
+/* These are needed for the shop not to be blind */
+.c-shop-header > span,
+.o-shop-button-description,
+.o-shop-button-multiplier,
+.c-shop-modal .c-modal__title,
+.c-shop-modal .c-modal__close-btn,
+.o-modal-store-label {
+  color: white !important;
+}
+
+.c-shop-header > button,
+.o-shop-button-button,
+.o-modal-store-btn,
+.o-modal-store-btn > span,
+.c-shop-disclaimer {
+  color: black !important;
+}
+
 [ach-tooltip]::before {
   color: transparent;
 }

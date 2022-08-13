@@ -12,7 +12,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper>
+  <ModalWrapper class="c-shop-modal">
     <template #header>
       Support The Developer -coins
     </template>

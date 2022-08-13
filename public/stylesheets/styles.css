@@ -5869,6 +5869,7 @@ br {
 .c-modal-store-btn-container {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   margin-bottom: 1.5rem;
 }
 

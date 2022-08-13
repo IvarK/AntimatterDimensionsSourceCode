@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     name() {
-      return `${DarkMatterDimension(this.tier).shortDisplayName} Dark Matter Dimension`;
+      return `${DarkMatterDimension(this.tier).displayName} Dark Matter Dimension`;
     },
     ascensionText() {
       return `(⯅${formatInt(this.ascension)})`;

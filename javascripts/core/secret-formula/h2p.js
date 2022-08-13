@@ -180,12 +180,12 @@ with ${formatInt(10)} antimatter when you first open the game. And you can
 spend it to buy the 1st Antimatter Dimension to start the game.
 <br>
 <br>
-Antimatter Dimensions are your production units in game. The first Antimatter Dimension produces your antimatter.
+Antimatter Dimensions are your production units in game. The 1st Antimatter Dimension produces your antimatter.
 Each consecutive Antimatter Dimension produces the previous one, allowing you to have steady growth.
 There are eight Antimatter Dimensions total.
 <br>
 <br>
-<b>Dimension Multiplier:</b> Beside the Dimension there is a multiplier (example: First Dimension ${formatX(1, 1, 1)}).
+<b>Dimension Multiplier:</b> Beside the Dimension there is a multiplier (example: 1st Dimension ${formatX(1, 1, 1)}).
 The base production of each Dimension is multiplied by this number.
 This multiplier increases by ${formatX(2)} for every ${formatInt(10)} of that Dimension purchased.
 Each time this occurs, the price of the dimension will increase.
@@ -213,7 +213,7 @@ Alternatively, if the Until ${formatInt(10)} button is highlighted,
 you can buy whatever quantity gets you to that Dimension's next Dimension multiplier.
 <br>
 <br>
-<b>Max all:</b> Max all will buy until ${formatInt(10)} of the first Antimatter Dimension until it can't anymore,
+<b>Max all:</b> Max all will buy until ${formatInt(10)} of the 1st Antimatter Dimension until it can't anymore,
 then second, and so on until the 8th Antimatter Dimension, and then buy max Tickspeed Upgrades.
 <br>
 <br>
@@ -319,7 +319,7 @@ multiplier or the current cost. In return, it will multiply the Eighth Dimension
 It will take time to get back to the production you previously had, but you'll end up with a net increase.
 <br>
 <br>
-The Dimensional Sacrifice multiplier scales with the number of First Dimensions you had at the time of sacrifice,
+The Dimensional Sacrifice multiplier scales with the number of 1st Dimensions you had at the time of sacrifice,
 and the scaling can be improved by completing certain Achievements and challenges. The multiplier is kept between
 sacrifices, meaning that sacrificing once at ${formatX(10)} and then once at ${formatX(4)} will be the same as
 ${formatX(8)} then ${formatX(5)}; in both cases you'll end up with a total sacrifice multiplier of ${formatX(40)}.
@@ -512,7 +512,7 @@ of Infinity Dimensions doesn't carry between crunches, all the multipliers you g
     .join(", ")}
 <br>
 <br>
-Instead of antimatter, the First Infinity Dimension produces Infinity Power, which gives a multiplier applied
+Instead of antimatter, the 1st Infinity Dimension produces Infinity Power, which gives a multiplier applied
 to all Antimatter Dimensions equal to (power<sup>${formatInt(7)}</sup>). Infinity Dimensions are not
 affected by Tickspeed Upgrades.
 `,
@@ -629,7 +629,7 @@ their cost. Time Dimensions, Time Shards, and the Tickspeed upgrades they provid
 but reset every Eternity.
 <br>
 <br>
-Similarly to the other dimensions, Second Time Dimensions produce First Time Dimensions and so on. Similarly to Infinity
+Similarly to the other dimensions, Second Time Dimensions produce 1st Time Dimensions and so on. Similarly to Infinity
 Dimensions, your production will be reset to the amount you purchased after every Eternity, but you'll keep any
 upgrades to your multipliers you purchased.
 <br>

@@ -117,6 +117,7 @@ kong.pollForPurchases = (windowReference = undefined) => {
       clearInterval(polling);
       player.IAP.checkoutSession = { id: false };
       GameStorage.save();
+      Modal.hide();
     }
 
     // 30 minutes of polling is the maximum

@@ -58,9 +58,9 @@ export default {
       <div>
         Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph.
         Rarity will always be {{ formatPercents(1) }} and
-        level scales on your current Reality resource amount (which is all consumed). All other alchemy resources will
+        level scales on your current Reality resource amount (which is all consumed). All other Alchemy Resources will
         be unaffected. Reality Glyphs have unique effects, some of which are only available with higher level Glyphs.
-        Reality Glyphs can also be sacrificed to increase all Memory gain. Like Effarig Glyphs,
+        Reality Glyphs can also be sacrificed to increase all Memory Chunk gain. Like Effarig Glyphs,
         you cannot equip more than one at the same time.
       </div>
       <div class="o-available-effects-container">

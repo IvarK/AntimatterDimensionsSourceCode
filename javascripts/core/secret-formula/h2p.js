@@ -241,7 +241,8 @@ you can make your Antimatter Dimensions produce faster, as if multiple ticks occ
 <br>
 <br>
 <b>Tickspeed:</b> This states how many game ticks are occurring every second. Fractional ticks are accounted for,
-boosting production as if part of a game tick has passed.
+boosting production as if part of a game tick has passed. Note that the actual tickspeed time is simulated and the
+game always runs calculations at the update rate you've chosen in the Options tab.
 <br>
 <br>
 <b>Cost:</b> The cost of antimatter for multiplying ticks/sec by the displayed multiplier.
@@ -253,8 +254,7 @@ with your current amount of antimatter.
 <br>
 <br>
 <b>Hotkeys: T</b> will purchase as many Tickspeed Upgrades as possible, or <b>Shift+T</b> to buy a single upgrade.
-Note that the actual tickspeed time is simulated and the game always runs calculations at the update rate you've chosen
-in the Options tab.
+<b>M</b> for Max all.
 `,
       isUnlocked: () => Tickspeed.isUnlocked,
       tags: ["dimension", "earlygame", "time"],
@@ -262,7 +262,7 @@ in the Options tab.
     }, {
       name: "Dimension Boosts",
       info: () => `
-<b>Dimension Boost:</b> This resets your Antimatter and all of your Antimatter Dimensions, but unlocks another
+<b>Dimension Boost:</b> This resets your antimatter and all of your Antimatter Dimensions, but unlocks another
 Antimatter Dimension for you to purchase and boosts your Dimension multipliers.
 The 1st Dimension Boost requires ${formatInt(20)} 4th Dimensions, the 2nd requires ${formatInt(20)} 5th Dimensions, etc.
 After unlocking all ${formatInt(8)} Dimensions,
@@ -335,7 +335,7 @@ ${formatX(8)} then ${formatX(5)}; in both cases you'll end up with a total sacri
       name: "Achievements",
       // This one could use some work!
       info: () => `
-Each Achievement has requirements to unlock. Once unlocked, some achievements give a reward.
+Each Achievement has requirements to unlock. Once unlocked, some Achievements give a reward.
 Requirements and rewards vary in difficulty and benefit significantly.
 <br>
 <br>
@@ -350,7 +350,7 @@ well as an additional ${formatX(1.25, 2, 2)} for each fully completed row.
       info: () => `
 Once you have too much antimatter for the world to handle (${formatInt(2)}<sup>${formatInt(1024)}</sup>
 or about ${formatPostBreak(Number.MAX_VALUE, 6)},
-sometimes called "Infinity"), you'll be forced to do a “Big Crunch”. This will reset your Antimatter, Antimatter
+sometimes called "Infinity"), you'll be forced to do a “Big Crunch”. This will reset your antimatter, Antimatter
 Dimensions, Dimension Boosts, and your Antimatter Galaxies. Doing a Big Crunch is also sometimes referred to as
 "Infinitying".
 <br>
@@ -423,7 +423,7 @@ This can be disabled.
 or until ${formatInt(10)}. Bulk buy is disabled when the autobuyer is set to singles.
 <br>
 <br>
-<b>Tickspeed Autobuyer Buy Quantity:</b> The Tickspeed autobuyer can be set to buy a single upgrade per activation
+<b>Tickspeed Autobuyer Buy Quantity:</b> The tickspeed autobuyer can be set to buy a single upgrade per activation
 or to buy the max possible once the Tickspeed Challenge (C9) has been beaten.
 <br>
 <br>
@@ -709,7 +709,7 @@ to buy your preferred path and continue on instead of stopping completely at the
 for the Dimension split in this dialog if you have purchased the relevant Time Study.
 <br>
 <br>
-<b>Respecs:</b> A Respec allows you to reset the upgrades you have in the tree to retreive all of the Time Theorems
+<b>Respecs:</b> A respec allows you to reset the upgrades you have in the tree to retreive all of the Time Theorems
 spent on them. It can be done for free, but only triggers on finishing an Eternity; you can't respec Time Studies in
 the middle of an Eternity.
 <br>
@@ -1308,7 +1308,7 @@ Tesseracts allow you to raise this cap by spending Infinity Points.
 <br>
 The cost of Tesseracts increases super-exponentially, but each successive Tesseract is significantly stronger than
 the last in order to make up for that. Tesseract count is never reset, meaning that once purchased, you don't need
-to reach the IP cost again in order to take advantage of the raised cap in later realities.
+to reach the IP cost again in order to take advantage of the raised cap in later Realities.
 <br>
 <br>
 You can see additional information about your current Tesseract count and the cost of the next one in the Infinity
@@ -1361,8 +1361,8 @@ ${VUnlocks.vAchievementUnlock.isUnlocked
       <br>
       <br>
       Space Theorems allow you to purchase Time Studies which are normally forbidden, such as multiple paths in the
-      split after the improved IP formula, or both Time Studies within a dark/light pair near the bottom. Like Time
-      Theorems, they are freely given back every time you respec your studies.
+      Pace Split after the improved IP formula, or both Time Studies within a dark/light pair near the bottom.
+      Like Time Theorems, they are freely given back every time you respec your studies.
       With enough Space Theorems you'll eventually be able to purchase every single Time Study at once!
       <br>
       <br>
@@ -1415,9 +1415,9 @@ ${Ra.unlocks.enslavedUnlock.canBeApplied
 <br>
 V unlocks
 ${Ra.unlocks.vUnlock.canBeApplied
-    ? "Triad Studies, which are new Studies near the bottom of the tree which cost Space Theorems. Each Triad Study " +
+    ? "Triad Studies, which are new studies near the bottom of the tree which cost Space Theorems. Each Triad Study " +
       "requires you to also have the three nearby studies as well in order to purchase them. They also unlock a " +
-      "smaller set of more difficult V Achievements to complete for additional Space Theorems."
+      "smaller set of more difficult V-Achievements to complete for additional Space Theorems."
     : "<span style='color: var(--color-bad);'>(unlock V within Ra to see unlock details)</span>"}
 <br>
 <br>
@@ -1502,7 +1502,7 @@ Imaginary Machine upgrades will unlock the final two Celestials.
       name: "Lai'tela, Celestial of Dimensions",
       alias: "Lai'tela",
       info: () => `
-Lai'tela is the sixth Celestial, unlocked by purchasing the appropriate Imaginary upgrade for
+Lai'tela is the sixth Celestial, unlocked by purchasing the appropriate Imaginary Upgrade for
 ${format(ImaginaryUpgrade(15).cost)} iM.
 <br>
 <br>
@@ -1518,7 +1518,7 @@ Each Dark Matter Dimension, after a certain interval of time, generates two thin
 Dark Matter Dimension and another resource called Dark Energy. Dark Matter and Dark Matter Dimension production
 per interval is equal to the product of your Dark Matter multiplier and the number of dimensions you have, while
 Dark Energy production is independent of your dimension amount. Dark Energy is used to produce Singularities, which
-have their own How to Play entry.
+have their own How To Play entry.
 <br>
 <br>
 Dark Matter Dimensions can have their intervals upgraded down to a minimum of ${formatInt(10)}ms, at which point
@@ -1531,7 +1531,7 @@ again. Reaching ${formatInt(10)}ms again allows you to ascend again if you choos
 An Imaginary Upgrade allows you to unlock a prestige called Annihilation. Annihilation resets your Dark Matter
 and Dark Matter Dimensions, but adds to a permanent multiplier to Dark Matter that applies to all Dark Matter
 Dimensions. You can Annihilate multiple times; the additions to the multiplier stack additively, and there is
-no need to annihilate for a greater addition each time. You must have at least
+no need to Annihilate for a greater addition each time. You must have at least
 ${format(Laitela.annihilationDMRequirement)} Dark Matter in order to Annihilate.
 <br>
 <br>
@@ -1558,7 +1558,7 @@ an appropriate portion of their multiplier.
 <br>
 The purchase buttons for Antimatter Dimensions and Tickspeed Upgrades become modified to display the number of upgrades
 you would be able to purchase if Continuum was inactive, and the purchase count is scaled smoothly with antimatter.
-For example, having ${format(2e7)} antimatter will give you a Continuum value of ${format(5.3, 0, 1)} for Tickspeed
+For example, having ${format(2e7)} antimatter will give you a Continuum value of ${format(5.3, 0, 1)} for tickspeed
 (initial cost of ${format(1e3)} and increase of ${formatX(10)}) since you can purchase it ${formatInt(5)} times and
 are roughly ${formatPercents(0.3)} of the way to the next. Tickspeed Continuum in this case will then
 give a production boost equal to (upgrade multiplier)<sup>${format(5.3, 0, 1)}</sup>.
@@ -1612,7 +1612,7 @@ Independently of the milestone type, milestones also have an icon indicating wha
       alias: "Pelle",
       info: () => `
 When you purchase the last Imaginary Upgrade and unlock Pelle, you unlock their tab, where you can find a button to
-"Doom your Reality". In order to Doom your Reality, you must have completed all ${formatInt(17)} rows of achievements
+"Doom your Reality". In order to Doom your Reality, you must have completed all ${formatInt(17)} rows of Achievements
 available to you at this point, and attained ${formatInt(25000)} of each Alchemy Resource.
 <br>
 <br>
@@ -1627,7 +1627,7 @@ ${Pelle.isDoomed
       You can view the "Show effects in Doomed Reality" in Pelle tab for further information.
       <br>
       <br>
-      Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever Antimatter,
+      Remnants are a new currency gained on Armageddon resets. Remnant gain is based on your best ever antimatter,
       Infinity Points, and Eternity Points across all Doomed Realities. Remnants produce Reality Shards which can be
       spent on Pelle Upgrades.
       <br>
@@ -1665,7 +1665,7 @@ Rift bars can be filled by clicking them to toggle between "Idle" and "Filling",
 Rift offers a Rift-specific effect which are based on the total amount filled.
 ${PelleStrikes.eternity.hasStrike
     ? `An exception for this is Decay/Collapse/Disarray, whose effect gets capped once you have drained a total of
-    ${formatPostBreak(DC.E2000)} replicanti.`
+    ${formatPostBreak(DC.E2000)} Replicanti.`
     : ""}
 In addition, each Rift offers three milestone rewards for filling them up to a certain percentage.
 `,
@@ -1677,9 +1677,9 @@ In addition, each Rift offers three milestone rewards for filling them up to a c
       info: () => `
 When you reach ${formatInt(100)}% Recursion/Dispersion/Destruction, you unlock the <b>Galaxy Generator</b>, which can 
 passively generate Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect 
-Tickspeed as if they were Antimatter Galaxies, but they don't increase the cost of your next Antimatter Galaxy. You
+tickspeed as if they were Antimatter Galaxies, but they don't increase the cost of your next Antimatter Galaxy. You
 also unlock five new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four
-upgrades then give a multiplier to this base amount. The first two upgrades can be bought by spending Antimatter and
+upgrades then give a multiplier to this base amount. The first two upgrades can be bought by spending antimatter and
 Generated Galaxies. Replicanti or Tachyon Galaxies can't be spent for purchasing those upgrades.
 <br>
 <br>

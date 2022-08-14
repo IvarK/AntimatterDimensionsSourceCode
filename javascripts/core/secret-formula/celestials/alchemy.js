@@ -48,7 +48,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 1,
     uiOrder: 4,
     unlockedAt: 5,
-    description: `increases Replication Speed`,
+    description: `increases Replication speed`,
     formatEffect: value => `Replication speed is increased by ${formatX(value, 2, 2)}`
   },
   "dilation": {
@@ -206,7 +206,7 @@ GameDatabase.celestials.alchemy.resources = {
     unlockedAt: 13,
     description: "increases the yield of Alchemy Reactions",
     formatEffect(value) {
-      return `Alchemy reaction efficiency ${formatPercents(0.3)} ➜ ${formatPercents(value, 2, 2)}
+      return `Alchemy Reaction efficiency ${formatPercents(0.3)} ➜ ${formatPercents(value, 2, 2)}
         ${(!Achievement(175).isUnlocked && value >= 1) ? " (Capped)" : ""}`;
     },
     reagents: [
@@ -403,7 +403,7 @@ GameDatabase.celestials.alchemy.resources = {
     uiOrder: 4,
     unlockedAt: 21,
     description: "makes each Alchemy Reaction have a chance to happen twice",
-    formatEffect: value => `Any alchemy reaction has a ${formatPercents(value, 2, 2)}
+    formatEffect: value => `Any Alchemy Reaction has a ${formatPercents(value, 2, 2)}
       chance of triggering again`,
     reagents: [
       {
@@ -431,7 +431,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 5,
     unlockedAt: 25,
     description: "can be consumed to create Reality Glyphs",
-    formatEffect: value => `Consume all Reality resource to create a level ${formatInt(value)} Reality Glyph`,
+    formatEffect: value => `Consume all Reality Resource to create a level ${formatInt(value)} Reality Glyph`,
     reagents: [
       {
         resource: ALCHEMY_RESOURCE.EXPONENTIAL,

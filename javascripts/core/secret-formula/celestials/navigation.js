@@ -75,7 +75,11 @@ function riftFillStage(name) {
 function pelleRiftFill(name, index, textAngle) {
   return {
     visible: () => Pelle.isDoomed && riftFillStage(name) === FILL_STATE.FILL,
-    complete: () => PelleRifts[name.toLowerCase()].realPercentage,
+    // The logarithmic curve code sometimes throws errors if you attempt to draw with complete === 0, so we cheat and
+    // make it a really tiny number that should format to 0 in most notations. We also do a pow in order to make it
+    // visually smoother, because the generator spiral blocks the bottom bit and makes it look static near the end of
+    // the drain
+    complete: () => Math.clamp(PelleRifts[name.toLowerCase()].realPercentage, 1e-6, 1),
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: Positions[`pelle${name}`],
@@ -104,9 +108,6 @@ function pelleRiftFill(name, index, textAngle) {
 function pelleRiftDrain(name, index, textAngle) {
   return {
     visible: () => Pelle.isDoomed && riftFillStage(name) >= FILL_STATE.DRAIN,
-    // The logarithmic curve code throws errors if you attempt to draw with complete === 0, so we cheat and make it
-    // a really tiny number that should format to 0 in most notations. We also do a pow in order to make it visually
-    // smoother, because the generator spiral blocks the bottom bit and makes it look static near the end of the drain
     complete: () => Math.clamp(Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo), 1e-6, 1),
     node: {
       incompleteClass: "c-celestial-nav__drained-rift",
@@ -1878,10 +1879,10 @@ GameDatabase.celestials.navigation = {
       ring: {
         rMajor: 20,
       },
+      forceLegend: () => Pelle.isUnlocked && !Pelle.hasGalaxyGenerator,
       legend: {
-        forceLegend: () => Pelle.isUnlocked && !Pelle.hasGalaxyGenerator,
         text: complete => {
-          if (complete >= 1) return "Doomed Reality";
+          if (complete >= 1) return Pelle.isDoomed ? "Doomed Reality" : "Doom your Reality";
           const achievements = [Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked)),
             Achievements.prePelleRows.length];
           const alchemy = [AlchemyResources.all.countWhere(r => r.capped), AlchemyResources.all.length];
@@ -1950,8 +1951,7 @@ GameDatabase.celestials.navigation = {
       const riftCaps = PelleRifts.all.map(r => r.config.galaxyGeneratorThreshold);
       const brokenRifts = riftCaps.countWhere(n => GalaxyGenerator.generatedGalaxies >= n);
       if (brokenRifts === 5) return 1;
-      let prevRift = riftCaps.filter(n => GalaxyGenerator.generatedGalaxies >= n).max();
-      if (prevRift === 0) prevRift = 1;
+      const prevRift = riftCaps.filter(n => GalaxyGenerator.generatedGalaxies >= n).max();
       const nextRift = riftCaps.filter(n => GalaxyGenerator.generatedGalaxies < n).min();
       const currRiftProp = Math.sqrt((GalaxyGenerator.generatedGalaxies - prevRift) / (nextRift - prevRift));
       return (brokenRifts + currRiftProp) / 5;

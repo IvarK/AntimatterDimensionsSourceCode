@@ -14,7 +14,8 @@ export default {
       isUnlocked: false,
       bulkUnlimited: false,
       bulk: 1,
-      cost: 1
+      cost: 1,
+      isAffordable: false
     };
   },
   computed: {
@@ -24,6 +25,12 @@ export default {
       }
       const newBulk = Math.min(this.bulk * 2, this.autobuyer.bulkCap);
       return `${formatX(this.bulk, 2, 0)} ➜ ${formatX(newBulk, 2, 0)} bulk buy`;
+    },
+    classObject() {
+      return {
+        "o-autobuyer-btn": true,
+        "o-non-clickable": !this.isAffordable || this.hasMaxedBulk
+      };
     }
   },
   methods: {
@@ -35,6 +42,7 @@ export default {
       this.bulkUnlimited = autobuyer.hasUnlimitedBulk;
       this.bulk = autobuyer.bulk;
       this.cost = autobuyer.cost;
+      this.isAffordable = Currency.infinityPoints.gte(this.cost);
     },
     upgradeBulk() {
       this.autobuyer.upgradeBulk();
@@ -46,7 +54,7 @@ export default {
 <template>
   <button
     v-if="hasMaxedInterval && !bulkUnlimited && isUnlocked"
-    class="o-autobuyer-btn"
+    :class="classObject"
     @click="upgradeBulk"
   >
     <span>{{ bulkDisplay }}</span>
@@ -57,12 +65,14 @@ export default {
   </button>
   <button
     v-else-if="hasMaxedInterval && !bulkUnlimited"
-    class="o-autobuyer-btn l-autobuyer-box__button"
+    class="o-autobuyer-btn l-autobuyer-box__button o-non-clickable"
   >
     Complete the challenge to upgrade bulk
   </button>
 </template>
 
 <style scoped>
-
+.o-non-clickable {
+  cursor: auto;
+}
 </style>

@@ -6,6 +6,7 @@
 }
 
 /* These are needed for the shop not to be blind */
+/* new UI */
 .c-shop-header > span,
 .o-shop-button-description,
 .o-shop-button-multiplier,
@@ -20,6 +21,14 @@
 .o-modal-store-btn,
 .o-modal-store-btn > span,
 .c-shop-disclaimer {
+  color: black !important;
+}
+
+/* classic UI */
+.l-old-ui .c-shop-header > span,
+.old-ui .c-shop-modal .c-modal__title,
+.old-ui .o-modal-store-label,
+.old-ui .c-shop-modal .c-modal__close-btn {
   color: black !important;
 }
 

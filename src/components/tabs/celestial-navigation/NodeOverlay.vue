@@ -37,6 +37,11 @@ export default {
       default: undefined
     }
   },
+  data() {
+    return {
+      legendLines: [],
+    };
+  },
   computed: {
     LEGEND_FONT_SIZE: () => 16,
     baseTransform() {
@@ -67,11 +72,6 @@ export default {
       const angle = (this.legend.angle + 360) % 360;
       return angle > 90 && angle < 270 ? "end" : "start";
     },
-    legendLines() {
-      const data = typeof (this.legend.text) === "function"
-        ? this.legend.text(this.complete) : this.legend.text;
-      return typeof (data) === "string" ? [data] : data;
-    },
     nodeClass() {
       return {
         "o-celestial-nav__force-hover": this.alwaysShowLegend,
@@ -80,11 +80,20 @@ export default {
     },
   },
   methods: {
+    update() {
+      this.legendLines = this.getLines();
+    },
     legendLineY(idx) {
       const spacing = Math.round(this.LEGEND_FONT_SIZE * 1.25 / 2);
       const num = this.legendLines.length;
       return (2 * idx - (num - 1)) * spacing;
-    }
+    },
+    getLines() {
+      if (!this.legend) return null;
+      const data = typeof (this.legend.text) === "function"
+        ? this.legend.text(this.complete) : this.legend.text;
+      return typeof (data) === "string" ? [data] : data;
+    },
   }
 };
 </script>

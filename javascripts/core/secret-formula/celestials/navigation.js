@@ -132,6 +132,8 @@ const Positions = Object.freeze({
   pelleChaos: pelleStarPosition(2, 150),
   pelleRecursion: pelleStarPosition(3, 150),
   pelleParadox: pelleStarPosition(4, 150),
+
+  pelleGalaxyGen: pelleStarPosition(0, 0),
 });
 
 GameDatabase.celestials.navigation = {
@@ -1786,9 +1788,10 @@ GameDatabase.celestials.navigation = {
       incompleteWidth: 4,
     },
   },
-  "pelle-achievement-requirement": {
+  "pelle-doomed-requirement": {
     visible: () => Pelle.isUnlocked,
     complete: () => {
+      if (Pelle.isDoomed) return 1;
       const achievements = Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked)) /
         Achievements.prePelleRows.length;
       const alchemy = AlchemyResources.all.countWhere(r => r.capped) / AlchemyResources.all.length;
@@ -1833,5 +1836,58 @@ GameDatabase.celestials.navigation = {
   "pelle-decay": pelleRiftObject("Decay", 1, 315),
   "pelle-chaos": pelleRiftObject("Chaos", 2, 45),
   "pelle-recursion": pelleRiftObject("Recursion", 3, 135),
-  "pelle-paradox": pelleRiftObject("Paradox", 4, 135)
+  "pelle-paradox": pelleRiftObject("Paradox", 4, 135),
+  // Needs a separate node in order to color the background of the galaxy generator not-gray. Note that this node gets
+  // placed on top of the "main" Doomed node once it's visible
+  "pelle-galaxy-generator-start-node": {
+    visible: () => Pelle.hasGalaxyGenerator,
+    complete: () => (Pelle.hasGalaxyGenerator ? 1 : 0),
+    node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "🌌",
+      fill: "black",
+      position: Positions.pelleAchievementRequirement,
+      ring: {
+        rMajor: 20,
+      },
+      alwaysShowLegend: true,
+      legend: {
+        text: () => [
+          "Galaxy Generator:",
+          `${format(GalaxyGenerator.generatedGalaxies, 2)} Galaxies Generated`
+        ],
+        angle: 20,
+        diagonal: 35,
+        horizontal: 16,
+      },
+    },
+  },
+  "pelle-galaxy-generator-path": {
+    visible: () => Pelle.hasGalaxyGenerator,
+    complete: () => {
+      const riftCaps = PelleRifts.all.map(r => r.config.galaxyGeneratorThreshold);
+      const brokenRifts = riftCaps.countWhere(n => GalaxyGenerator.generatedGalaxies >= n);
+      if (brokenRifts === 5) return 1;
+      let prevRift = riftCaps.filter(n => GalaxyGenerator.generatedGalaxies >= n).max();
+      if (prevRift === 0) prevRift = 1;
+      const nextRift = riftCaps.filter(n => GalaxyGenerator.generatedGalaxies < n).min();
+      const currRiftProp = Math.sqrt((GalaxyGenerator.generatedGalaxies - prevRift) / (nextRift - prevRift));
+      return (brokenRifts + currRiftProp) / 5;
+    },
+    connector: (function() {
+      const pathStart = 0.5 * Math.PI;
+      const pathEnd = pathStart + 10 * Math.PI;
+      const path = LogarithmicSpiral.fromPolarEndpoints(pelleStarPosition(0, 0),
+        pathStart, 18, pathEnd, 150);
+      return {
+        pathStart,
+        pathEnd,
+        path,
+        pathPadStart: 0,
+        pathPadEnd: 0,
+        fill: "#00eeee",
+      };
+    }()),
+  }
 };

@@ -84,7 +84,7 @@ const Payments = {
   },
   clearInterval() {
     clearInterval(Payments.interval);
-    window.onbeforeunload = () => true;
+    window.onbeforeunload = null;
   }
 };
 

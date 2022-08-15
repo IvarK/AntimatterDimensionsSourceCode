@@ -9427,6 +9427,10 @@ input.o-automator-block-input {
   fill: #888888;
 }
 
+.c-celestial-nav__drained-rift {
+  fill: #111111;
+}
+
 .o-celestial-nav__symbol {
   text-anchor: middle;
   font-family: "Font Awesome", Typewriter;

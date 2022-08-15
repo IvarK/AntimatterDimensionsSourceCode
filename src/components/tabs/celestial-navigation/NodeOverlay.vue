@@ -31,6 +31,11 @@ export default {
       required: false,
       default: false
     },
+    forceLegend: {
+      type: Function,
+      required: false,
+      default: undefined
+    },
     clickAction: {
       type: Function,
       required: false,
@@ -40,6 +45,7 @@ export default {
   data() {
     return {
       legendLines: [],
+      hoverOverride: false,
     };
   },
   computed: {
@@ -74,7 +80,7 @@ export default {
     },
     nodeClass() {
       return {
-        "o-celestial-nav__force-hover": this.alwaysShowLegend,
+        "o-celestial-nav__force-hover": this.hoverOverride,
         "o-celestial-nav__clickable": this.clickAction !== undefined
       };
     },
@@ -82,6 +88,7 @@ export default {
   methods: {
     update() {
       this.legendLines = this.getLines();
+      this.hoverOverride = this.alwaysShowLegend || (this.forceLegend && this.forceLegend());
     },
     legendLineY(idx) {
       const spacing = Math.round(this.LEGEND_FONT_SIZE * 1.25 / 2);

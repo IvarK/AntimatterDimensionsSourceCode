@@ -16,6 +16,11 @@ export default {
       required: false,
       default: 6,
     },
+    noBG: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     fill: {
       type: String,
       required: false,
@@ -150,7 +155,10 @@ export default {
 
 <template>
   <g>
-    <g :transform="incompleteTransform">
+    <g
+      v-if="!noBG"
+      :transform="incompleteTransform"
+    >
       <path
         :d="incompleteFadePath"
         fill="url(#incompleteFade)"

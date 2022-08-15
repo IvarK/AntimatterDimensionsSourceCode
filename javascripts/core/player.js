@@ -884,6 +884,7 @@ window.player = {
     allDimPurchases: 0,
     replicantiPurchases: 0,
     dilatedTimePurchases: 0,
+    disabled: false,
     checkoutSession: {
       id: false,
     }

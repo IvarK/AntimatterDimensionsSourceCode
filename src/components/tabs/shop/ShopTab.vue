@@ -5,18 +5,22 @@ import Loading from "vue-loading-overlay";
 
 import Payments from "../../../../javascripts/core/payments";
 
+import PrimaryToggleButton from "../../PrimaryToggleButton";
+
 import ShopButton from "./ShopButton";
 
 export default {
   name: "ShopTab",
   components: {
     ShopButton,
-    Loading
+    Loading,
+    PrimaryToggleButton
   },
   data() {
     return {
       STD: 0,
-      isLoading: false
+      isLoading: false,
+      IAPsDisabled: false,
     };
   },
   computed: {
@@ -27,10 +31,16 @@ export default {
       return "Buy More";
     }
   },
+  watch: {
+    IAPsDisabled(newValue) {
+      player.IAP.disabled = newValue;
+    }
+  },
   methods: {
     update() {
       this.STD = player.IAP.totalSTD - player.IAP.spentSTD;
       this.isLoading = Boolean(player.IAP.checkoutSession.id);
+      this.IAPsDisabled = player.IAP.disabled;
     },
     showStore() {
       SecretAchievement(33).unlock();
@@ -49,6 +59,11 @@ export default {
       Disclaimer: These are not required to progress in the game, they are just for supporting the developer.
       The game is balanced without the use of any microtransactions.
     </div>
+    <PrimaryToggleButton
+      v-model="IAPsDisabled"
+      class="o-primary-btn--subtab-option"
+      label="Disable in-app-purchases:"
+    />
     <div class="c-shop-header">
       <span>You have {{ STD }}</span>
       <img

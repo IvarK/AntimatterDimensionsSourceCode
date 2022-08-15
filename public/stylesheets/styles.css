@@ -5775,6 +5775,12 @@ br {
   width: 45rem;
 }
 
+.c-modal-IAP__warning {
+  color: #ff6666;
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
 /* #endregion c-modal-import */
 
 /* #region c-modal-import-tree */

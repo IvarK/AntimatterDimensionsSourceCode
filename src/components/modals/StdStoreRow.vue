@@ -31,7 +31,7 @@ export default {
       class="o-modal-store-btn"
       @click="purchase"
     >
-      <span>{{ cost }}</span> $
+      $<span>{{ cost }}</span>
     </button>
   </div>
 </template>

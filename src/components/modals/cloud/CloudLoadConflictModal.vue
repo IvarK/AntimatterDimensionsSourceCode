@@ -8,6 +8,11 @@ export default {
     ModalWrapperChoice,
     CloudConflictRecordModal,
   },
+  data() {
+    return {
+      overwriteCounter: 0,
+    };
+  },
   computed: {
     conflict() {
       return this.$viewModel.modal.cloudConflict;
@@ -17,11 +22,20 @@ export default {
     },
     farther() {
       return this.conflict.saveComparison.farther === 1;
+    },
+    hasLessSTDs() {
+      return this.conflict.local.totalSTD > this.conflict.cloud.totalSTD;
+    },
+    clicksLeft() {
+      return 5 - this.overwriteCounter;
     }
   },
   methods: {
     confirm() {
+      this.overwriteCounter++;
+      if (this.hasLessSTDs && this.clicksLeft > 0) return;
       this.conflict.onAccept?.();
+      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     }
   }
 };
@@ -32,7 +46,7 @@ export default {
     class="c-modal-options__large"
     :cancel-class="'c-modal-message__okay-btn'"
     :confirm-class="'c-modal-message__okay-btn c-modal__confirm-btn'"
-    @confirm="confirm"
+    :confirm-fn="confirm"
   >
     <template #header>
       Load Game from Cloud
@@ -61,11 +75,18 @@ export default {
       :save-id="conflict.saveId"
       save-type="Cloud Save"
     />
+    <div
+      v-if="hasLessSTDs"
+      class="c-modal-IAP__warning"
+    >
+      CLOUD SAVE HAS LESS STDs BOUGHT, YOU WILL LOSE THEM IF YOU OVERWRITE.
+      <b />CLICK THE BUTTON 5 TIMES TO CONFIRM.
+    </div>
     <template #cancel-text>
       Keep Local Save
     </template>
     <template #confirm-text>
-      Overwrite Local with Cloud Save
+      Overwrite Local with Cloud Save <span v-if="hasLessSTDs">({{ clicksLeft }})</span>
     </template>
   </ModalWrapperChoice>
 </template>

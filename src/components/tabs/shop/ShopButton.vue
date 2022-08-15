@@ -56,6 +56,10 @@ export default {
   border-radius: var(--var-border-radius, 0.5rem);
   margin: 0.5rem;
   padding: 1rem;
+  height: 16rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .o-shop-button-button {
@@ -65,8 +69,7 @@ export default {
   background: turquoise;
   border: none;
   border-radius: var(--var-border-radius, 0.5rem);
-  margin: auto;
-  margin-top: 1rem;
+  margin: 0 auto;
   padding: 0.5rem 2rem;
   cursor: pointer;
 }

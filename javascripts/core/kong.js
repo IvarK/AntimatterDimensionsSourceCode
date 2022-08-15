@@ -49,12 +49,12 @@ class ShopPurchaseState extends RebuyableMechanicState {
 
   get currentMult() {
     if (!this.displayMult) return "";
-    return this.config.multiplier(this.purchases);
+    return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases);
   }
 
   get nextMult() {
     if (!this.displayMult) return "";
-    return this.config.multiplier(this.purchases + 1);
+    return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases + 1);
   }
 
   purchase() {

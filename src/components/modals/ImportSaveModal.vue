@@ -52,7 +52,7 @@ export default {
       return isSecretImport(this.input) || Theme.isSecretTheme(this.input);
     },
     hasLessSTDs() {
-      return player.IAP.totalSTD > (this.player?.IAP?.totalSTD ?? 0);
+      return player.IAP.totalSTD > (this.player?.IAP?.totalSTD ?? 0) && !this.inputIsSecret;
     },
     clicksLeft() {
       return 5 - this.importCounter;
@@ -115,7 +115,7 @@ export default {
           class="c-modal-IAP__warning"
         >
           IMPORTED SAVE HAS LESS STDs BOUGHT, YOU WILL LOSE THEM WITH YOUR SAVE.
-          <b />CLICK THE BUTTON 5 TIMES TO CONFIRM.
+          <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
         </div>
       </template>
       <div v-else-if="hasInput">

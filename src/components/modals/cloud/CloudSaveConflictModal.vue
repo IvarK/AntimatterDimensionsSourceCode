@@ -91,7 +91,7 @@ export default {
       class="c-modal-IAP__warning"
     >
       LOCAL SAVE HAS LESS STDs BOUGHT, YOU WILL LOSE THEM IF YOU OVERWRITE.
-      <b />CLICK THE BUTTON 5 TIMES TO CONFIRM.
+      <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
     </div>
     <template #cancel-text>
       Overwrite Cloud Save <span v-if="hasLessSTDs">({{ clicksLeft }})</span>

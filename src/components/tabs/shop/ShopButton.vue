@@ -10,13 +10,15 @@ export default {
   data() {
     return {
       currentMult: 0,
-      nextMult: 0
+      nextMult: 0,
+      canAfford: false,
     };
   },
   methods: {
     update() {
       this.currentMult = this.purchase.currentMult;
       this.nextMult = this.purchase.nextMult;
+      this.canAfford = this.purchase.canBeBought;
     }
   },
 };
@@ -36,6 +38,7 @@ export default {
     </div>
     <button
       class="o-shop-button-button"
+      :class="{ 'o-shop-button-button--disabled': !canAfford }"
       @click="purchase.purchase()"
     >
       Cost: {{ purchase.cost }}
@@ -72,6 +75,11 @@ export default {
   margin: 0 auto;
   padding: 0.5rem 2rem;
   cursor: pointer;
+}
+
+.o-shop-button-button--disabled {
+  cursor: default;
+  background: rgb(150, 150, 150);
 }
 
 .o-shop-button-button__img {

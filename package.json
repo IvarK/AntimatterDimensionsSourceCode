@@ -27,6 +27,7 @@
     "vis-util": "^4.0.0",
     "vue": "^2.6.11",
     "vue-gtag": "^1.16.1",
+    "vue-loading-overlay": "^3.4.2",
     "vue-splitpane": "^1.0.6",
     "vuedraggable": "^2.24.3"
   },

@@ -10,7 +10,8 @@ export default {
   },
   data() {
     return {
-      input: ""
+      input: "",
+      importCounter: 0,
     };
   },
   computed: {
@@ -49,6 +50,12 @@ export default {
     },
     inputIsSecret() {
       return isSecretImport(this.input) || Theme.isSecretTheme(this.input);
+    },
+    hasLessSTDs() {
+      return player.IAP.totalSTD > (this.player?.IAP?.totalSTD ?? 0) && !this.inputIsSecret;
+    },
+    clicksLeft() {
+      return 5 - this.importCounter;
     }
   },
   mounted() {
@@ -56,6 +63,8 @@ export default {
   },
   methods: {
     importSave() {
+      this.importCounter++;
+      if (this.hasLessSTDs && this.clicksLeft > 0) return;
       if (!this.inputIsValid) return;
       this.emitClose();
       GameStorage.import(this.input);
@@ -101,6 +110,13 @@ export default {
         <div class="c-modal-import__warning">
           (your current save file will be overwritten!)
         </div>
+        <div
+          v-if="hasLessSTDs"
+          class="c-modal-IAP__warning"
+        >
+          IMPORTED SAVE HAS LESS STDs BOUGHT, YOU WILL LOSE THEM WITH YOUR SAVE.
+          <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
+        </div>
       </template>
       <div v-else-if="hasInput">
         Not a valid save:
@@ -114,7 +130,7 @@ export default {
       class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
       @click="importSave"
     >
-      Import
+      Import <span v-if="hasLessSTDs">({{ clicksLeft }})</span>
     </PrimaryButton>
   </ModalWrapperChoice>
 </template>

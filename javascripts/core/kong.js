@@ -43,18 +43,28 @@ class ShopPurchaseState extends RebuyableMechanicState {
     player.IAP[this.config.key] = value;
   }
 
+  get displayMult() {
+    return Boolean(this.config.multiplier);
+  }
+
   get currentMult() {
-    return this.config.multiplier(this.purchases);
+    if (!this.displayMult) return "";
+    return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases);
   }
 
   get nextMult() {
-    return this.config.multiplier(this.purchases + 1);
+    if (!this.displayMult) return "";
+    return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases + 1);
   }
 
   purchase() {
     if (!this.canBeBought) return false;
     player.IAP.spentSTD += this.cost;
-    this.purchases++;
+    if (this.config.singleUse) {
+      this.config.onPurchase();
+    } else {
+      this.purchases++;
+    }
     GameUI.update();
     return true;
   }
@@ -75,15 +85,6 @@ kong.purchaseLongerTimeSkip = function(cost) {
   if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
   player.IAP.spentSTD += cost;
   simulateTime(3600 * 24);
-};
-
-kong.buyMoreSTD = function(STD, kreds) {
-  if (!kong.enabled) return;
-  kongregate.mtx.purchaseItems([`${kreds}worthofstd`], result => {
-    if (result.success) {
-      player.IAP.totalSTD += STD;
-    }
-  });
 };
 
 kong.updatePurchases = function() {

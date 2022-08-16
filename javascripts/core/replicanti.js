@@ -99,6 +99,7 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
 
   interval = interval.div(PelleRifts.decay.effectValue);
   interval = interval.div(Pelle.specialGlyphEffect.replication);
+  interval = interval.div(ShopPurchase.replicantiPurchases.currentMult);
 
   if (Pelle.isDisabled("replicantiIntervalMult")) return new Decimal(interval);
 
@@ -107,7 +108,7 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
     TimeStudy(213),
     RealityUpgrade(2),
     RealityUpgrade(6),
-    RealityUpgrade(23)
+    RealityUpgrade(23),
   );
   interval = Decimal.divide(interval, preCelestialEffects);
   if (TimeStudy(132).isBought && Perk.studyPassive.isBought) {

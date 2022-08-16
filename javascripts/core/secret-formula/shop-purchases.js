@@ -23,7 +23,7 @@ GameDatabase.shopPurchases = {
     key: "allDimPurchases",
     cost: 60,
     description: "Double ALL Dimension multipliers (Antimatter, Infinity, Time) (multiplicative until 32x). Forever. ",
-    multiplier: purchases => (purchases > 4 ? 32 * (purchases - 4) : Math.pow(2, purchases)),
+    multiplier: purchases => (purchases > 4 ? 32 + (purchases - 5) * 2 : Math.pow(2, purchases)),
   },
   replicantiPurchases: {
     key: "replicantiPurchases",

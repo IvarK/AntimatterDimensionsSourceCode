@@ -7,12 +7,12 @@ GameDatabase.catchupResources = [
     name: "Antimatter Dimensions",
     requiredStage: PROGRESS_STAGE.PRE_INFINITY,
     description: `Every Antimatter Dimension continuously produces Dimensions of the next tier down. The lowest
-      Antimatter Dimension produces Antimatter.`
+      Antimatter Dimension produces antimatter.`
   },
   {
     name: "Tickspeed Upgrades",
     requiredStage: PROGRESS_STAGE.PRE_INFINITY,
-    description: `Tickspeed upgrades make Antimatter Dimensions produce other Antimatter Dimensions or Antimatter
+    description: `Tickspeed Upgrades make Antimatter Dimensions produce other Antimatter Dimensions or antimatter
       as if time were passing faster.`
   },
   {
@@ -24,7 +24,7 @@ GameDatabase.catchupResources = [
   {
     name: "Dimension Boosts",
     requiredStage: PROGRESS_STAGE.PRE_INFINITY,
-    description: `Dimension Boosts are gained by resetting all your Antimatter Dimensions and Tickspeed after
+    description: `Dimension Boosts are gained by resetting all your Antimatter Dimensions and tickspeed after
       reaching a certain amount of the highest available Antimatter Dimension. They provide a multiplier to your
       Antimatter Dimensions.`
   },
@@ -32,12 +32,12 @@ GameDatabase.catchupResources = [
     name: "Antimatter Galaxies",
     requiredStage: PROGRESS_STAGE.PRE_INFINITY,
     description: `Antimatter Galaxies are gained by resetting your Antimatter Dimensions and Dimension Boosts. They
-      improve the effectiveness of your Tickspeed upgrades in a compounding way.`
+      improve the effectiveness of your Tickspeed Upgrades in a compounding way.`
   },
   {
     name: "Infinity",
     requiredStage: PROGRESS_STAGE.EARLY_INFINITY,
-    description: () => `Infinity is the first main reset layer. Reaching ${format(Number.MAX_VALUE, 2)} Antimatter
+    description: () => `Infinity is the first main reset layer. Reaching ${format(Number.MAX_VALUE, 2)} antimatter
       allows you to reset everything up to this point in exchange for unlocking new content and resources.`
   },
   {
@@ -49,14 +49,14 @@ GameDatabase.catchupResources = [
   {
     name: "Challenges",
     requiredStage: PROGRESS_STAGE.EARLY_INFINITY,
-    description: () => `Challenges require you to reach ${format(Number.MAX_VALUE, 2)} Antimatter under more difficult
-      conditions. Completing Challenges allows you to upgrade your Autobuyers.`
+    description: () => `Challenges require you to reach ${format(Number.MAX_VALUE, 2)} antimatter under more difficult
+      conditions. Completing challenges allows you to upgrade your Autobuyers.`
   },
   {
     name: "Break Infinity",
     requiredStage: PROGRESS_STAGE.BREAK_INFINITY,
     description: () => `Upgrading your Big Crunch Autobuyer to the maximum allows you to surpass
-      ${format(Number.MAX_VALUE, 2)} Antimatter, giving increasing amounts of Infinity Points with more Antimatter.`
+      ${format(Number.MAX_VALUE, 2)} antimatter, giving increasing amounts of Infinity Points with more antimatter.`
   },
   {
     name: "Infinity Dimensions",
@@ -67,7 +67,7 @@ GameDatabase.catchupResources = [
   {
     name: "Infinity Challenges",
     requiredStage: PROGRESS_STAGE.BREAK_INFINITY,
-    description: () => `Infinity Challenges are new Challenges with an Antimatter goal above
+    description: () => `Infinity Challenges are new challenges with an antimatter goal above
       ${format(Number.MAX_VALUE, 2)}. Completing them rewards upgrades and production boosts.`
   },
   {
@@ -106,8 +106,8 @@ GameDatabase.catchupResources = [
     name: "Time Dimensions",
     requiredStage: PROGRESS_STAGE.EARLY_ETERNITY,
     description: `Time Dimensions also produce each other in a cascading manner, with the lowest tier producing Time
-      Shards. Time Shards give you additional Tickspeed upgrades which do not increase the cost of the Tickspeed
-      upgrades purchased with Antimatter.`
+      Shards. Time Shards give you additional Tickspeed Upgrades which do not increase the cost of the Tickspeed
+      Upgrades purchased with antimatter.`
   },
   {
     name: "Eternity Challenges",
@@ -119,14 +119,14 @@ GameDatabase.catchupResources = [
   {
     name: "Time Dilation",
     requiredStage: PROGRESS_STAGE.EARLY_DILATION,
-    description: () => `Time Dilation is a modified Eternity where Tickspeed and all Dimension multipliers are
+    description: () => `Time Dilation is a modified Eternity where tickspeed and all Dimension multipliers are
       severely reduced. Completing Dilated Eternities gives Tachyon Particles.`
   },
   {
     name: "Tachyon Particles",
     requiredStage: PROGRESS_STAGE.EARLY_DILATION,
     description: () => `Tachyon Particles are a resource which cannot be farmed and require you to get a higher amount
-      of Antimatter in a Dilated Eternity in order to increase your amount. Tachyon Particles produce Dilated Time.`
+      of antimatter in a Dilated Eternity in order to increase your amount. Tachyon Particles produce Dilated Time.`
   },
   {
     name: "Reality",
@@ -198,8 +198,8 @@ GameDatabase.catchupResources = [
   {
     name: "Tesseracts",
     requiredStage: PROGRESS_STAGE.ENSLAVED,
-    description: `Infinity Dimensions cannot be upgraded indefinitely and all but the 8th have a hard limit for how many
-      times they can be upgraded. Each Tesseract permanently increases this limit by a large amount.`
+    description: `Infinity Dimensions cannot be purchased indefinitely and all but the 8th have a hard limit for how
+      many times they can be purchased. Each Tesseract permanently increases this limit by a large amount.`
   },
   {
     name: "V",
@@ -225,7 +225,7 @@ GameDatabase.catchupResources = [
   {
     name: "Charged Infinity Upgrades",
     requiredStage: PROGRESS_STAGE.RA,
-    description: `Teresa's Memories allow you to Charge your Infinity Upgrades, maintaining a similar effect but
+    description: `Teresa's Memories allow you to charge your Infinity Upgrades, maintaining a similar effect but
       strengthening them significantly. Which upgrades are charged can only be changed between Realities.`
   },
   {

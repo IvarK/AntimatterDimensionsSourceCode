@@ -31,14 +31,16 @@ class PelleStrikeState extends BitUpgradeState {
   }
 
   trigger() {
-    this.unlock();
+    // Delay the strike if animating, else it triggers immediately before the animation starts (which looks weird)
+    const infinity = this.id === 1 && player.options.animations.bigCrunch;
+    const eternity = this.id === 3 && player.options.animations.eternity;
+    const dilation = this.id === 5 && player.options.animations.dilation;
+    setTimeout(() => this.unlock(), (infinity || eternity || dilation) ? 1000 : 1);
   }
 
   onUnlock() {
     GameUI.notify.strike(`You encountered a Pelle Strike: ${this.requirement}`);
     player.celestials.pelle.collapsed.rifts = false;
-    Tab.celestials.pelle.show();
-    EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
 
     // If it's paradox, reset the records
     if (this.id === 5) {
@@ -52,7 +54,8 @@ class PelleStrikeState extends BitUpgradeState {
       // softlocked, or starting it too late and getting not-softlocked.
       Pelle.cel.records.totalEternityPoints = new Decimal("1e1050");
     }
-
+    Tab.celestials.pelle.show();
+    EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
   }
 }
 

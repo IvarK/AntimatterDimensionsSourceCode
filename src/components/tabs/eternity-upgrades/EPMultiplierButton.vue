@@ -28,8 +28,8 @@ export default {
       if (this.isDoomed) {
         return {
           "o-eternity-upgrade": true,
-          "o-eternity-upgrade--useless-available": this.isAffordable,
-          "o-eternity-upgrade--useless-unavailable": !this.isAffordable
+          "o-eternity-upgrade--useless": !this.isAffordable,
+          "o-pelle-disabled-pointer": true
         };
       }
       return {

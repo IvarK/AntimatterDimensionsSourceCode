@@ -46,7 +46,8 @@ export default {
         "c-effarig-run-button": true,
         "c-effarig-run-button--running": this.isRunning,
         "c-effarig-run-button--not-running": !this.isRunning,
-        "c-celestial-run-button--clickable": !this.isDoomed
+        "c-celestial-run-button--clickable": !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed
       };
     },
     runButtonInnerClass() {
@@ -162,15 +163,9 @@ export default {
         class="l-effarig-run"
       >
         <div class="c-effarig-run-description">
-          <div v-if="isRunning">
-            You are in Effarig's Reality - give up?
-          </div>
-          <br>
           <span :class="{ 'o-pelle-disabled': isDoomed }">
             Enter Effarig's Reality.
           </span>
-          <br>
-          {{ runDescription }}
         </div>
         <div
           :class="runButtonOuterClass"
@@ -182,6 +177,9 @@ export default {
           >
             {{ symbol }}
           </div>
+        </div>
+        <div class="c-effarig-run-description">
+          {{ runDescription }}
         </div>
         <EffarigRunUnlockReward
           v-for="(unlock, i) in runUnlocks"

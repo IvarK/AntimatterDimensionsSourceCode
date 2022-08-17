@@ -55,7 +55,8 @@ export default {
       return {
         "c-teresa-run-button__icon": true,
         "c-teresa-run-button__icon--running": this.isRunning,
-        "c-celestial-run-button--clickable": !this.isDoomed
+        "c-celestial-run-button--clickable": !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed
       };
     },
     pourButtonClassObject() {
@@ -147,15 +148,15 @@ export default {
         class="l-teresa-mechanic-container"
       >
         <div class="c-teresa-unlock c-teresa-run-button">
+          <span :class="{ 'o-pelle-disabled': isDoomed }">
+            Start Teresa's Reality.
+          </span>
           <div
             :class="runButtonClassObject"
             @click="startRun()"
           >
             Ϟ
           </div>
-          <span :class="{ 'o-pelle-disabled': isDoomed }">
-            Start Teresa's Reality.
-          </span>
           {{ runDescription }}
           <br><br>
           <div v-if="bestAM.gt(0)">

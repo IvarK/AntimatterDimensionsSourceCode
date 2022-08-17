@@ -58,6 +58,7 @@ export default {
         "o-infinity-upgrade-btn--chargeable": !this.isCharged && this.chargePossible &&
           (this.showingCharged || this.shiftDown),
         "o-infinity-upgrade-btn--charged": this.isCharged,
+        "o-pelle-disabled-pointer": this.isUseless
       };
     },
     isImprovedByTS31() {

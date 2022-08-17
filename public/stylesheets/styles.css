@@ -4718,28 +4718,10 @@ br {
   cursor: pointer;
 }
 
-.o-eternity-upgrade--useless-available {
+.o-eternity-upgrade--useless {
   color: black;
   background-color: var(--color-pelle--base);
   border-color: black;
-}
-
-.o-eternity-upgrade--useless-available:hover {
-  color: black;
-  background-color: var(--color-pelle--secondary);
-}
-
-.o-eternity-upgrade--useless-unavailable {
-  color: black;
-  background-color: var(--color-pelle--base);
-  border-color: black;
-  filter: grayscale(90%);
-}
-
-.o-eternity-upgrade--useless-unavailable:hover {
-  background-color: var(--color-bad);
-  filter: grayscale(0%);
-  cursor: default;
 }
 
 .o-eternity-upgrade--available {
@@ -5175,24 +5157,6 @@ br {
   transition-duration: 0.2s;
 }
 
-.o-dilation-upgrade--useless-available {
-  color: var(--color-pelle--base);
-  border-color: var(--color-dilation);
-  animation: a-dilation-btn-glow 10s infinite;
-  cursor: pointer;
-}
-
-.o-dilation-upgrade--useless-available:hover {
-  color: var(--color-pelle--secondary);
-}
-
-.o-dilation-upgrade--useless-bought {
-  color: black;
-  background-color: var(--color-pelle--base) !important;
-  border-color: black;
-  filter: grayscale(50%);
-}
-
 .o-dilation-upgrade--available {
   color: var(--color-dilation);
   border-color: var(--color-dilation);
@@ -5216,17 +5180,9 @@ br {
   border-color: black;
 }
 
-.o-dilation-upgrade--useless-unavailable {
+.o-dilation-upgrade--useless {
   color: black;
-  background-color: var(--color-pelle--base) !important;
-  border-color: black;
-  filter: grayscale(90%);
-}
-
-.o-dilation-upgrade--useless-unavailable:hover {
-  background-color: var(--color-bad);
-  filter: grayscale(0%);
-  cursor: default;
+  background-color: var(--color-pelle--base);
 }
 
 .o-dilation-upgrade--unavailable {
@@ -6658,11 +6614,14 @@ kbd {
   width: 520px;
   align-items: center;
   margin-left: 3rem;
+  padding: 1rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-effarig--base);
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .c-effarig-run-description {
   font-size: larger;
-  margin-top: 1rem;
+  margin: 0.5rem 0;
 }
 
 .l-effarig-tab__reward {
@@ -9594,6 +9553,14 @@ input.o-automator-block-input {
   text-decoration: line-through;
 }
 
+.o-pelle-disabled-pointer {
+  cursor: not-allowed;
+}
+
+.o-pelle-disabled-pointer:active {
+  pointer-events: none;
+}
+
 .c-pelle-panel-title {
   position: relative;
   font-size: 3rem;
@@ -9620,4 +9587,5 @@ input.o-automator-block-input {
 .l-fill-container {
   width: 100%;
   height: 100%;
+}
 }

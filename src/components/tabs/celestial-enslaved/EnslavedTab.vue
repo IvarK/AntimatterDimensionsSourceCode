@@ -57,7 +57,8 @@ export default {
       return {
         "c-enslaved-run-button__icon": true,
         "c-enslaved-run-button__icon--running": this.isRunning,
-        "c-celestial-run-button--clickable": !this.isDoomed
+        "c-celestial-run-button--clickable": !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed
       };
     },
     runDescription() {
@@ -76,7 +77,7 @@ export default {
         "o-enslaved-mechanic-button": true,
         "o-enslaved-mechanic-button--storing-time": this.isStoringBlackHole,
         "l-fixed-setting": !this.canChangeStoreTime,
-        "o-pelle-disabled": this.isDoomed
+        "o-pelle-disabled": this.isDoomed,
       };
     },
     storeRealTimeClass() {

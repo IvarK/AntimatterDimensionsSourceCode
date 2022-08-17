@@ -64,6 +64,7 @@ export default {
       player.records.realTimeDoomed = 0;
       for (const res of AlchemyResources.all) res.amount = 0;
       AutomatorBackend.stop();
+      player.options.hiddenSubtabBits = Array.repeat(0, 11);
       Pelle.quotes.initial.show();
     },
   },

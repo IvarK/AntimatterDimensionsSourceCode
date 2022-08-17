@@ -140,7 +140,7 @@ GameDatabase.celestials.pelle.rifts = {
         description: () => `You gain ${formatPercents(0.01)} of your EP gained on Eternity per second`,
       },
     ],
-    galaxyGeneratorText: "The Galaxies/Realities you have are too fragmented, you must stabilize the $value"
+    galaxyGeneratorText: "Your Galaxies are too fragmented, you must stabilize the $value"
   },
   recursion: {
     id: 4,

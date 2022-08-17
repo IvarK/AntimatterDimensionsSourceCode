@@ -90,7 +90,7 @@ export default {
     },
     challengeDisplay() {
       if (this.inPelle && this.activeChallengeNames.length > 0) {
-        return `a Doomed Reality + ${this.activeChallengeNames.join(" + ")}. Good luck.`;
+        return `${this.activeChallengeNames.join(" + ")} in a Doomed Reality. Good luck.`;
       }
       if (this.inPelle) return "a Doomed Reality. Good luck.";
       if (this.activeChallengeNames.length === 0) {

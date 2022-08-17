@@ -33,10 +33,10 @@ export class DilationTimeStudyState extends TimeStudyState {
       if (!quiet) {
         Tab.eternity.dilation.show();
       }
-      if (Perk.autounlockDilation1.isBought && !Pelle.isDoomed) {
+      if (Perk.autounlockDilation1.canBeApplied) {
         for (const id of [4, 5, 6]) player.dilation.upgrades.add(id);
       }
-      if (Perk.autounlockDilation2.isBought && !Pelle.isDoomed) {
+      if (Perk.autounlockDilation2.canBeApplied) {
         for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
       }
       if (!Pelle.isDoomed) Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));

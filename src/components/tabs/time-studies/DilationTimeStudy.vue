@@ -51,7 +51,7 @@ export default {
     update() {
       if (this.id === 1) {
         this.maxTT.copyFrom(Currency.timeTheorems.max);
-        this.showRequirement = !this.study.isBought && (!Perk.bypassECDilation.isBought || Pelle.isDoomed);
+        this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.canBeApplied;
       }
       if (this.id === 6) {
         this.showRequirement = !Pelle.isDoomed;

@@ -318,7 +318,7 @@ export const EternityChallenges = {
     },
 
     get interval() {
-      if (!Perk.autocompleteEC1.isBought || Pelle.isDisabled("autoec")) return Infinity;
+      if (!Perk.autocompleteEC1.canBeApplied) return Infinity;
       let minutes = Effects.min(
         Number.MAX_VALUE,
         Perk.autocompleteEC1,

@@ -35,7 +35,7 @@ export default {
       this.showAllChallenges = player.options.showAllChallenges;
       this.isInChallenge = Player.isInAnyChallenge;
       this.isShowAllVisible = PlayerProgress.eternityUnlocked();
-      this.isAutoECVisible = Perk.autocompleteEC1.isBought && !Pelle.isDoomed;
+      this.isAutoECVisible = Perk.autocompleteEC1.canBeApplied;
       this.autoEC = player.reality.autoEC;
     },
     restartChallenge() {

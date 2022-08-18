@@ -1,12 +1,12 @@
 <script>
-import CloudConflictRecordModal from "@/components/modals/cloud/CloudConflictRecordModal";
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import SaveInfoEntry from "@/components/modals/cloud/SaveInfoEntry";
 
 export default {
   name: "CloudSaveConflictModal",
   components: {
     ModalWrapperChoice,
-    CloudConflictRecordModal,
+    SaveInfoEntry,
   },
   data() {
     return {
@@ -79,13 +79,13 @@ export default {
       </span>
     </b>
     <br>
-    <CloudConflictRecordModal
+    <SaveInfoEntry
       :save-data="conflict.local"
       :save-id="conflict.saveId"
       :show-name="hasDifferentName"
       save-type="Local Save"
     />
-    <CloudConflictRecordModal
+    <SaveInfoEntry
       :save-data="conflict.cloud"
       :save-id="conflict.saveId"
       :show-name="hasDifferentName"

@@ -44,9 +44,22 @@ export default {
     importAsFile(event) {
       // This happens if the file dialog is canceled instead of a file being selected
       if (event.target.files.length === 0) return;
+
       const reader = new FileReader();
       reader.onload = function() {
-        GameStorage.import(reader.result);
+        const contents = reader.result;
+        const toImport = GameSaveSerializer.deserialize(contents);
+        const showWarning = toImport?.IAP?.totalSTD < player.IAP.totalSTD;
+        if (showWarning) {
+          Modal.addImportConflict(toImport, GameStorage.saves[GameStorage.currentSlot]);
+          Modal.importWarning.show({
+            rawInput: contents,
+            saveToImport: toImport,
+            warningMessage: "The Imported Save has less STDs than your Current Save.",
+          });
+        } else {
+          GameStorage.import(contents);
+        }
       };
       reader.readAsText(event.target.files[0]);
     }

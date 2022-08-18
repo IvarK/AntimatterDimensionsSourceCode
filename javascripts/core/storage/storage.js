@@ -63,7 +63,7 @@ export const GameStorage = {
     }
     const player = GameSaveSerializer.deserialize(saveData);
     if (this.checkPlayerObject(player) !== "") {
-      Modal.message.show("Could not load the save");
+      Modal.message.show("Could not load the save (format unrecognized or invalid).");
       return;
     }
     Modal.hideAll();

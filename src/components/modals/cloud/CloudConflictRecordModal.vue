@@ -48,6 +48,12 @@ export default {
       if (data.dilatedTime.gt(0)) return `Dilated Time: ${format(data.dilatedTime, 2)}`;
       return "";
     },
+    name() {
+      return this.saveData.saveName;
+    },
+    stdCount() {
+      return this.saveData.totalSTD;
+    }
   },
   methods: {
     formatSmall(number) {
@@ -62,10 +68,20 @@ export default {
   <div class="l-modal-options__save-record">
     <h3>{{ saveType }} (Slot #{{ saveId + 1 }}):</h3>
     <span v-if="showName">
-      Save Name: {{ data }}
+      <span v-if="name">
+        Save Name: {{ name }}
+      </span>
+      <span v-else>
+        Unnamed Save
+      </span>
+      <br>
+    </span>
+    <span v-if="stdCount">
+      STD: {{ formatInt(stdCount) }}
       <br>
     </span>
     {{ timePlayed }}
+    <br>
     <br>
     {{ antimatter }}
     <br>

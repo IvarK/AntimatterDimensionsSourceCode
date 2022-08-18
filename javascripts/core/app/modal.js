@@ -265,7 +265,8 @@ Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, 
       imaginaryMachines: 0,
       dilatedTime: new Decimal(0),
       bestLevel: 0,
-      totalSTD: 0
+      totalSTD: 0,
+      saveName: "",
     };
     resources.realTimePlayed = save.records.realTimePlayed;
     resources.totalAntimatter.copyFrom(new Decimal(save.records.totalAntimatter));
@@ -279,6 +280,7 @@ Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, 
     resources.dilatedTime.copyFrom(new Decimal(save.dilation.dilatedTime));
     resources.bestLevel = save.records.bestReality.glyphLevel;
     resources.totalSTD = save?.IAP?.totalSTD ?? 0;
+    resources.saveName = save.options.saveFileName;
 
     return resources;
   }

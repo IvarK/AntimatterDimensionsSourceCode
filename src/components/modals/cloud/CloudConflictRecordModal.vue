@@ -10,6 +10,10 @@ export default {
       type: Object,
       required: true,
     },
+    showName: {
+      type: Boolean,
+      required: true,
+    },
     saveType: {
       type: String,
       required: true,
@@ -57,6 +61,10 @@ export default {
 <template>
   <div class="l-modal-options__save-record">
     <h3>{{ saveType }} (Slot #{{ saveId + 1 }}):</h3>
+    <span v-if="showName">
+      Save Name: {{ data }}
+      <br>
+    </span>
     {{ timePlayed }}
     <br>
     {{ antimatter }}

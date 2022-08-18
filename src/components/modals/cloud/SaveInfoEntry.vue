@@ -26,23 +26,16 @@ export default {
     }
   },
   computed: {
-    lessHTMLTag() {
-      return `<span style="color:#${getComputedStyle(document.body).getPropertyValue("--color-bad").split("#")[1]}">`;
-    },
-    moreHTMLTag() {
-      return `<span style="color:#${getComputedStyle(document.body).getPropertyValue("--color-good").split("#")[1]}">`;
-    },
     timePlayed() {
       return `Time Played: ${TimeSpan.fromMilliseconds(this.saveData.realTimePlayed).toString()}`;
     },
     antimatter() {
-      if (this.saveData.totalAntimatter.eq(this.otherData.totalAntimatter)) {
-        return `Total Antimatter: ${format(this.saveData.totalAntimatter, 2, 1)}`;
-      }
-      const colorTag = this.saveData.totalAntimatter.gt(this.otherData.totalAntimatter)
-        ? this.moreHTMLTag
-        : this.lessHTMLTag;
-      return `Total Antimatter: ${colorTag}${format(this.saveData.totalAntimatter, 2, 1)}</span>`;
+      return this.compareLayeredValues(
+        ["totalAntimatter"],
+        ["Total Antimatter:"],
+        [format],
+        ""
+      );
     },
     prestigeCount() {
       return this.compareLayeredValues(
@@ -85,7 +78,10 @@ export default {
       if (Decimal.gt(number, 1e4)) return format(number, 2);
       return formatInt(number);
     },
-    // Compares a list of properties in order, going through the
+    // Compares a list of properties in order, going through the array parameters until one of them is nonzero.
+    // If they're both the same number, don't add any styling. If they're both nonzero, then they're on the same
+    // layer and we only style the number. If one of them is zero, then they're different layers and we color the
+    // whole line instead. If every layer results in zero, we default to a given fallback string.
     // eslint-disable-next-line max-params
     compareLayeredValues(propArray, nameArray, formatArray, fallbackString) {
       // Determine if they're on the same layer and if it's better or worse
@@ -119,7 +115,7 @@ export default {
         const prop = propArray[index];
         if (Decimal.gt(this.saveData[prop], 0)) {
           layerName = nameArray[index];
-          // This is often called with format(), so wew supply a default 2 decimal places
+          // This is often called with format(), so we supply a default 2 decimal places
           layerValue = formatArray[index](this.saveData[prop], 2);
           break;
         }
@@ -127,7 +123,8 @@ export default {
 
       // Style it appropriately
       if (isBetter === 0) return `${layerName} ${layerValue}`;
-      const colorTag = isBetter === 1 ? this.moreHTMLTag : this.lessHTMLTag;
+      const parseColor = color => getComputedStyle(document.body).getPropertyValue(`--color-${color}`).split("#")[1];
+      const colorTag = `<span style="color:#${parseColor(isBetter === 1 ? "good" : "bad")}">`;
       return isSameLayer
         ? `${layerName} ${colorTag}${layerValue}</span>`
         : `${colorTag}${layerName} ${layerValue}</span>`;

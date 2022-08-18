@@ -56,24 +56,26 @@ export default {
       Possible Import Conflict
     </template>
     <div class="c-modal-message__text">
-      You may not necessarily want to proceed with importing in this case due to STD purchases.
+      You may not want to proceed with importing, as you may lose STD purchases.
     </div>
     <br>
     <SaveInfoEntry
       :save-data="conflict.importingSave"
+      :other-data="conflict.currentSave"
       save-type="Save to Import"
     />
     <br>
     <SaveInfoEntry
       :save-data="conflict.currentSave"
+      :other-data="conflict.importingSave"
       save-type="Current Save"
     />
     <span class="c-modal-IAP__warning">
       {{ warningMessage }}
     </span>
-    Do you still wish to import this save? Your purchased
+    Your purchased STDs will not carry over to the imported save.
     <br>
-    STDs will not carry over to the imported save.
+    Click Import five times if you still wish to import.
     <template #cancel-text>
       Keep Current
     </template>

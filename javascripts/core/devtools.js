@@ -599,3 +599,16 @@ dev.devMode = function() {
 dev.unlockAutomator = function() {
   player.reality.automator.forceUnlock = true;
 };
+
+// This bypasses any conflict checking and forces the current save to overwrite the cloud save. This largely exists
+// because normal cloud saving checks for a conflict and then always shows a modal if a conflict is found, only actually
+// saving if the player says to in the modal. The check can fail if the cloud save is somehow malformed and missing
+// props. This can lead to the check always failing, the modal never showing up, and cloud saving never occurring. That
+// should in principle only show up in dev, as migrations aren't run on cloud saves, but this allows fixing in case.
+dev.forceCloudSave = async function() {
+  const save = await Cloud.load();
+  const root = GameSaveSerializer.deserialize(save);
+  const saveId = GameStorage.currentSlot;
+  root.saves[saveId] = GameStorage.saves[saveId];
+  Cloud.save(saveId);
+};

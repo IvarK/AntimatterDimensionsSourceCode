@@ -1,10 +1,11 @@
 <script>
 export default {
-  name: "CloudConflictRecordModal",
+  name: "SaveInfoEntry",
   props: {
     saveId: {
       type: Number,
-      required: true,
+      required: false,
+      default: 0,
     },
     saveData: {
       type: Object,
@@ -12,7 +13,8 @@ export default {
     },
     showName: {
       type: Boolean,
-      required: true,
+      required: false,
+      default: true,
     },
     saveType: {
       type: String,
@@ -66,7 +68,7 @@ export default {
 
 <template>
   <div class="l-modal-options__save-record">
-    <h3>{{ saveType }} (Slot #{{ saveId + 1 }}):</h3>
+    <h3>{{ saveType }} <span v-if="saveId">(Slot #{{ saveId + 1 }}):</span></h3>
     <span v-if="showName">
       <span v-if="name">
         Save Name: {{ name }}
@@ -76,10 +78,8 @@ export default {
       </span>
       <br>
     </span>
-    <span v-if="stdCount">
-      STD: {{ formatInt(stdCount) }}
-      <br>
-    </span>
+    STDs Purchased: {{ formatInt(saveData.totalSTD) }}
+    <br>
     {{ timePlayed }}
     <br>
     <br>

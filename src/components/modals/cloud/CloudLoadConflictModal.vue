@@ -1,12 +1,12 @@
 <script>
-import CloudConflictRecordModal from "@/components/modals/cloud/CloudConflictRecordModal";
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import SaveInfoEntry from "@/components/modals/cloud/SaveInfoEntry";
 
 export default {
   name: "CloudLoadConflictModal",
   components: {
     ModalWrapperChoice,
-    CloudConflictRecordModal,
+    SaveInfoEntry,
   },
   data() {
     return {
@@ -70,14 +70,14 @@ export default {
       Please select the save you want to load.
     </b>
     <br>
-    <CloudConflictRecordModal
+    <SaveInfoEntry
       :save-data="conflict.local"
       :save-id="conflict.saveId"
       :show-name="hasDifferentName"
       save-type="Local Save"
     />
     <br>
-    <CloudConflictRecordModal
+    <SaveInfoEntry
       :save-data="conflict.cloud"
       :save-id="conflict.saveId"
       :show-name="hasDifferentName"

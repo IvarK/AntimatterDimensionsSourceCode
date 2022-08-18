@@ -49,6 +49,7 @@ import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal
 import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal";
 import H2PModal from "@/components/modals/H2PModal";
 import ImportAutomatorScriptModal from "@/components/modals/ImportAutomatorScriptModal";
+import ImportFileWarningModal from "@/components/modals/ImportFileWarningModal";
 import ImportSaveModal from "@/components/modals/ImportSaveModal";
 import InformationModal from "@/components/modals/InformationModal";
 import LoadGameModal from "@/components/modals/LoadGameModal";
@@ -228,6 +229,7 @@ Modal.changelog = new Modal(ChangelogModal, 1);
 Modal.awayProgress = new Modal(AwayProgressModal);
 Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);
+Modal.importWarning = new Modal(ImportFileWarningModal);
 Modal.importScript = new Modal(ImportAutomatorScriptModal);
 Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
 Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);
@@ -251,40 +253,48 @@ Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, 
     local: getSaveInfo(localSave),
     onAccept
   };
-
-  function getSaveInfo(save) {
-    const resources = {
-      realTimePlayed: 0,
-      totalAntimatter: new Decimal(0),
-      infinities: new Decimal(0),
-      eternities: new Decimal(0),
-      realities: 0,
-      infinityPoints: new Decimal(0),
-      eternityPoints: new Decimal(0),
-      realityMachines: new Decimal(0),
-      imaginaryMachines: 0,
-      dilatedTime: new Decimal(0),
-      bestLevel: 0,
-      totalSTD: 0,
-      saveName: "",
-    };
-    resources.realTimePlayed = save.records.realTimePlayed;
-    resources.totalAntimatter.copyFrom(new Decimal(save.records.totalAntimatter));
-    resources.infinities.copyFrom(new Decimal(save.infinities));
-    resources.eternities.copyFrom(new Decimal(save.eternities));
-    resources.realities = save.realities;
-    resources.infinityPoints.copyFrom(new Decimal(save.infinityPoints));
-    resources.eternityPoints.copyFrom(new Decimal(save.eternityPoints));
-    resources.realityMachines.copyFrom(new Decimal(save.reality.realityMachines));
-    resources.imaginaryMachines = save.reality.iMCap;
-    resources.dilatedTime.copyFrom(new Decimal(save.dilation.dilatedTime));
-    resources.bestLevel = save.records.bestReality.glyphLevel;
-    resources.totalSTD = save?.IAP?.totalSTD ?? 0;
-    resources.saveName = save.options.saveFileName;
-
-    return resources;
-  }
 };
+
+Modal.addImportConflict = function(importingSave, currentSave) {
+  Modal.hide();
+  ui.view.modal.cloudConflict = {
+    importingSave: getSaveInfo(importingSave),
+    currentSave: getSaveInfo(currentSave)
+  };
+};
+
+function getSaveInfo(save) {
+  const resources = {
+    realTimePlayed: 0,
+    totalAntimatter: new Decimal(0),
+    infinities: new Decimal(0),
+    eternities: new Decimal(0),
+    realities: 0,
+    infinityPoints: new Decimal(0),
+    eternityPoints: new Decimal(0),
+    realityMachines: new Decimal(0),
+    imaginaryMachines: 0,
+    dilatedTime: new Decimal(0),
+    bestLevel: 0,
+    totalSTD: 0,
+    saveName: "",
+  };
+  resources.realTimePlayed = save.records.realTimePlayed;
+  resources.totalAntimatter.copyFrom(new Decimal(save.records.totalAntimatter));
+  resources.infinities.copyFrom(new Decimal(save.infinities));
+  resources.eternities.copyFrom(new Decimal(save.eternities));
+  resources.realities = save.realities;
+  resources.infinityPoints.copyFrom(new Decimal(save.infinityPoints));
+  resources.eternityPoints.copyFrom(new Decimal(save.eternityPoints));
+  resources.realityMachines.copyFrom(new Decimal(save.reality.realityMachines));
+  resources.imaginaryMachines = save.reality.iMCap;
+  resources.dilatedTime.copyFrom(new Decimal(save.dilation.dilatedTime));
+  resources.bestLevel = save.records.bestReality.glyphLevel;
+  resources.totalSTD = save?.IAP?.totalSTD ?? 0;
+  resources.saveName = save.options.saveFileName;
+
+  return resources;
+}
 
 Modal.message = new class extends Modal {
   show(text, props = {}, messagePriority = 0) {

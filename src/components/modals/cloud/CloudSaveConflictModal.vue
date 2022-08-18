@@ -23,6 +23,9 @@ export default {
     farther() {
       return this.conflict.saveComparison.farther === -1;
     },
+    hasDifferentName() {
+      return this.conflict.cloud.saveName !== this.conflict.local.saveName;
+    },
     hasLessSTDs() {
       return this.conflict.cloud.totalSTD > this.conflict.local.totalSTD;
     },
@@ -62,7 +65,10 @@ export default {
       Save Game to Cloud
     </template>
     <b>
-      <span v-if="older">
+      <span v-if="hasDifferentName">
+        Your Local and Cloud Saves have different names.
+      </span>
+      <span v-else-if="older">
         Your Cloud Save appears to be older than your Local Save.
       </span>
       <span v-else-if="farther">
@@ -76,11 +82,13 @@ export default {
     <CloudConflictRecordModal
       :save-data="conflict.local"
       :save-id="conflict.saveId"
+      :show-name="hasDifferentName"
       save-type="Local Save"
     />
     <CloudConflictRecordModal
       :save-data="conflict.cloud"
       :save-id="conflict.saveId"
+      :show-name="hasDifferentName"
       save-type="Cloud Save"
     />
     <br>

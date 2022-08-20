@@ -39,12 +39,10 @@ export default {
   },
   methods: {
     handleClick() {
-      if (this.clicksLeft > 0) {
-        this.importCounter++;
-      } else {
-        this.emitClose();
-        GameStorage.import(this.rawInput);
-      }
+      this.importCounter++;
+      if (this.clicksLeft > 0) return;
+      this.emitClose();
+      GameStorage.import(this.rawInput);
     },
   },
 };

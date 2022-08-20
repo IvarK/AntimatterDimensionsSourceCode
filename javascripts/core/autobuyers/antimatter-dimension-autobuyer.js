@@ -8,7 +8,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   }
 
   get name() {
-    return AntimatterDimension(this.tier).displayName;
+    return AntimatterDimension(this.tier).shortDisplayName;
   }
 
   get fullName() {

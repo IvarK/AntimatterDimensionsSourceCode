@@ -12,7 +12,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get name() {
-    return this.dimension.displayName;
+    return this.dimension.shortDisplayName;
   }
 
   get fullName() {

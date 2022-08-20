@@ -241,28 +241,6 @@ Modal.pelleEffects = new Modal(PelleEffectsModal);
 Modal.sacrifice = new Modal(SacrificeModal, 1, GAME_EVENT.DIMBOOST_AFTER);
 Modal.breakInfinity = new Modal(BreakInfinityModal, 1, GAME_EVENT.ETERNITY_RESET_AFTER);
 
-Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
-Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
-// eslint-disable-next-line max-params
-Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, onAccept) {
-  Modal.hide();
-  ui.view.modal.cloudConflict = {
-    saveId,
-    saveComparison,
-    cloud: getSaveInfo(cloudSave),
-    local: getSaveInfo(localSave),
-    onAccept
-  };
-};
-
-Modal.addImportConflict = function(importingSave, currentSave) {
-  Modal.hide();
-  ui.view.modal.cloudConflict = {
-    importingSave: getSaveInfo(importingSave),
-    currentSave: getSaveInfo(currentSave)
-  };
-};
-
 function getSaveInfo(save) {
   const resources = {
     realTimePlayed: 0,
@@ -297,6 +275,28 @@ function getSaveInfo(save) {
 
   return resources;
 }
+
+Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
+Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
+// eslint-disable-next-line max-params
+Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, onAccept) {
+  Modal.hide();
+  ui.view.modal.cloudConflict = {
+    saveId,
+    saveComparison,
+    cloud: getSaveInfo(cloudSave),
+    local: getSaveInfo(localSave),
+    onAccept
+  };
+};
+
+Modal.addImportConflict = function(importingSave, currentSave) {
+  Modal.hide();
+  ui.view.modal.cloudConflict = {
+    importingSave: getSaveInfo(importingSave),
+    currentSave: getSaveInfo(currentSave)
+  };
+};
 
 Modal.message = new class extends Modal {
   show(text, props = {}, messagePriority = 0) {

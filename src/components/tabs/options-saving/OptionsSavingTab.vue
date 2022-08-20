@@ -49,7 +49,7 @@ export default {
       reader.onload = function() {
         const contents = reader.result;
         const toImport = GameSaveSerializer.deserialize(contents);
-        const showWarning = toImport?.IAP?.totalSTD < player.IAP.totalSTD;
+        const showWarning = (toImport?.IAP?.totalSTD ?? 0) < player.IAP.totalSTD;
         if (showWarning) {
           Modal.addImportConflict(toImport, GameStorage.saves[GameStorage.currentSlot]);
           Modal.importWarning.show({

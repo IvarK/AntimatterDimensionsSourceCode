@@ -52,9 +52,7 @@ export default {
         "o-infinity-upgrade-btn--bought": !this.isUseless && this.isBought,
         "o-infinity-upgrade-btn--available": !this.isUseless && !this.isBought && this.canBeBought,
         "o-infinity-upgrade-btn--unavailable": !this.isUseless && !this.isBought && !this.canBeBought,
-        "o-infinity-upgrade-btn--useless-bought": this.isUseless && this.isBought,
-        "o-infinity-upgrade-btn--useless-available": this.isUseless && !this.isBought && this.canBeBought,
-        "o-infinity-upgrade-btn--useless-unavailable": this.isUseless && !this.isBought && !this.canBeBought,
+        "o-infinity-upgrade-btn--useless": this.isUseless,
         "o-infinity-upgrade-btn--chargeable": !this.isCharged && this.chargePossible &&
           (this.showingCharged || this.shiftDown),
         "o-infinity-upgrade-btn--charged": this.isCharged,

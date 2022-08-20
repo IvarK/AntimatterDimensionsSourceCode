@@ -3806,16 +3806,6 @@ br {
   background-color: #a53b98;
 }
 
-.o-infinity-upgrade-btn--useless-available {
-  color: black;
-  background-color: var(--color-pelle--base);
-}
-
-.o-infinity-upgrade-btn--useless-available:hover {
-  color: black;
-  background-color: var(--color-pelle--secondary);
-}
-
 .t-dark .o-infinity-upgrade-btn--available:hover,
 .t-s6 .o-infinity-upgrade-btn--available:hover,
 .t-s10 .o-infinity-upgrade-btn--available:hover {
@@ -3888,16 +3878,6 @@ br {
   filter: grayscale(25%);
 }
 
-.o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--useless-available {
-  color: black;
-  background-color: var(--color-pelle--base);
-}
-
-.o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--useless-available:hover {
-  color: black;
-  background-color: var(--color-pelle--secondary);
-}
-
 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
   color: #c93a3a;
   border-color: #17b3b5;
@@ -3945,16 +3925,6 @@ br {
 /* #endregion o-infinity-upgrade-btn--multiplier */
 
 /* #region o-infinity-upgrade-btn--unavailable */
-
-.o-infinity-upgrade-btn--useless-unavailable {
-  color: #f7f7f7;
-  background-color: var(--color-pelle--base);
-  filter: grayscale(90%);
-}
-
-.o-infinity-upgrade-btn--useless-unavailable:hover {
-  cursor: default;
-}
 
 .o-infinity-upgrade-btn--unavailable {
   color: black;
@@ -4025,14 +3995,14 @@ br {
   color: black;
 }
 
-.o-infinity-upgrade-btn--useless-bought {
+.o-infinity-upgrade-btn--useless {
   color: black;
   background-color: var(--color-pelle--base);
   filter: grayscale(50%);
   cursor: default;
 }
 
-.o-infinity-upgrade-btn--useless-bought:hover {
+.o-infinity-upgrade-btn--useless:hover {
   color: black;
 }
 
@@ -9536,19 +9506,6 @@ input.o-automator-block-input {
   height: 6.2rem;
 }
 
-.c-pelle-useless--available {
-  color: var(--color-pelle--secondary);
-}
-
-.c-pelle-useless--available:hover {
-  filter: grayscale(50%);
-}
-
-.c-pelle-useless--bought {
-  background-color: var(--color-pelle--base);
-  filter: grayscale(50%);
-}
-
 .o-pelle-disabled {
   text-decoration: line-through;
 }
@@ -9587,5 +9544,4 @@ input.o-automator-block-input {
 .l-fill-container {
   width: 100%;
   height: 100%;
-}
 }

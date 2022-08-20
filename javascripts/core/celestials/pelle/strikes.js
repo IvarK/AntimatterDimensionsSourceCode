@@ -31,11 +31,7 @@ class PelleStrikeState extends BitUpgradeState {
   }
 
   trigger() {
-    // Delay the strike if animating, else it triggers immediately before the animation starts (which looks weird)
-    const infinity = this.id === 1 && player.options.animations.bigCrunch;
-    const eternity = this.id === 3 && player.options.animations.eternity;
-    const dilation = this.id === 5 && player.options.animations.dilation;
-    setTimeout(() => this.unlock(), (infinity || eternity || dilation) ? 1000 : 1);
+    this.unlock();
   }
 
   onUnlock() {

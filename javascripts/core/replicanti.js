@@ -157,17 +157,20 @@ export function replicantiLoop(diff) {
   tickCount = tickCount.floor();
 
   const singleTickAvg = Replicanti.amount.times(player.replicanti.chance);
+  // Note that code inside this conditional won't necessarily run every game tick; when game ticks are slower than
+  // replicanti ticks, then tickCount will look like [0, 0, 0, 1, 0, 0, ...] on successive game ticks
   if (tickCount.gte(100) || (singleTickAvg.gte(10) && tickCount.gte(1))) {
     // Fast gain: If we're doing a very large number of ticks or each tick produces a lot, then continuous growth
-    // is a good approximation and less intensive than distribution samples. This path will always happen above 1000
-    // replicanti due to how singleTickAvg is calculated, so the over-cap math is only present on this path
+    // every replicanti tick is a good approximation and less intensive than distribution samples. This path will
+    // always happen above 1000 replicanti due to how singleTickAvg is calculated, so the over-cap math is only
+    // present on this path
     let postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
     if (V.isRunning) {
       postScale *= 2;
     }
 
     // Note that remainingGain is in log10 terms.
-    let remainingGain = Decimal.divide(diff * Math.log(player.replicanti.chance + 1), interval).times(LOG10_E);
+    let remainingGain = tickCount.times(Math.log(player.replicanti.chance + 1)).times(LOG10_E);
     // It is intended to be possible for both of the below conditionals to trigger.
     if (!isUncapped || Replicanti.amount.lte(replicantiCap())) {
       // Some of the gain is "used up" below e308, but if replicanti are uncapped

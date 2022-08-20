@@ -279,19 +279,21 @@ function getSaveInfo(save) {
     totalSTD: 0,
     saveName: "",
   };
-  resources.realTimePlayed = save.records.realTimePlayed;
-  resources.totalAntimatter.copyFrom(new Decimal(save.records.totalAntimatter));
+  // This code ends up getting run on raw save data before any migrations are applied, so we need to default to props
+  // which only exist on the pre-reality version when applicable. Note that new Decimal(undefined) gives zero.
+  resources.realTimePlayed = save.records?.realTimePlayed ?? 100 * save.totalTimePlayed;
+  resources.totalAntimatter.copyFrom(new Decimal(save.records?.totalAntimatter));
   resources.infinities.copyFrom(new Decimal(save.infinities));
   resources.eternities.copyFrom(new Decimal(save.eternities));
-  resources.realities = save.realities;
+  resources.realities = save.realities ?? 0;
   resources.infinityPoints.copyFrom(new Decimal(save.infinityPoints));
   resources.eternityPoints.copyFrom(new Decimal(save.eternityPoints));
-  resources.realityMachines.copyFrom(new Decimal(save.reality.realityMachines));
-  resources.imaginaryMachines = save.reality.iMCap;
+  resources.realityMachines.copyFrom(new Decimal(save.reality?.realityMachines));
+  resources.imaginaryMachines = save.reality?.iMCap ?? 0;
   resources.dilatedTime.copyFrom(new Decimal(save.dilation.dilatedTime));
-  resources.bestLevel = save.records.bestReality.glyphLevel;
+  resources.bestLevel = save.records?.bestReality.glyphLevel ?? 0;
   resources.totalSTD = save?.IAP?.totalSTD ?? 0;
-  resources.saveName = save.options.saveFileName;
+  resources.saveName = save.options.saveFileName ?? "";
 
   return resources;
 }

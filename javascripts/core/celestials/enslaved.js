@@ -45,7 +45,7 @@ export const Enslaved = {
     }
   },
   toggleStoreReal() {
-    if (!this.canModifyRealTimeStorage) return;
+    if (!this.canModifyRealTimeStorage && !this.isStoredRealTimeCapped) return;
     player.celestials.enslaved.isStoringReal = !player.celestials.enslaved.isStoringReal;
     player.celestials.enslaved.isStoring = false;
   },
@@ -58,7 +58,10 @@ export const Enslaved = {
       !Enslaved.isRunning && !Laitela.isRunning;
   },
   get canModifyRealTimeStorage() {
-    return Enslaved.isUnlocked && !Pelle.isDoomed && player.celestials.enslaved.storedReal < this.storedRealTimeCap;
+    return Enslaved.isUnlocked && !Pelle.isDoomed;
+  },
+  get isStoredRealTimeCapped() {
+    return player.celestials.enslaved.storedReal < this.storedRealTimeCap;
   },
   // We assume that the situations where you can't modify time storage settings (of either type) are exactly the cases
   // where they have also been explicitly disabled via other game mechanics. This also reduces UI boilerplate code.

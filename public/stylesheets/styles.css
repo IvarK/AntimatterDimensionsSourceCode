@@ -3806,16 +3806,6 @@ br {
   background-color: #a53b98;
 }
 
-.o-infinity-upgrade-btn--useless-available {
-  color: black;
-  background-color: var(--color-pelle--base);
-}
-
-.o-infinity-upgrade-btn--useless-available:hover {
-  color: black;
-  background-color: var(--color-pelle--secondary);
-}
-
 .t-dark .o-infinity-upgrade-btn--available:hover,
 .t-s6 .o-infinity-upgrade-btn--available:hover,
 .t-s10 .o-infinity-upgrade-btn--available:hover {
@@ -3888,16 +3878,6 @@ br {
   filter: grayscale(25%);
 }
 
-.o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--useless-available {
-  color: black;
-  background-color: var(--color-pelle--base);
-}
-
-.o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--useless-available:hover {
-  color: black;
-  background-color: var(--color-pelle--secondary);
-}
-
 .o-infinity-upgrade-btn--multiplier.o-infinity-upgrade-btn--available {
   color: #c93a3a;
   border-color: #17b3b5;
@@ -3945,16 +3925,6 @@ br {
 /* #endregion o-infinity-upgrade-btn--multiplier */
 
 /* #region o-infinity-upgrade-btn--unavailable */
-
-.o-infinity-upgrade-btn--useless-unavailable {
-  color: #f7f7f7;
-  background-color: var(--color-pelle--base);
-  filter: grayscale(90%);
-}
-
-.o-infinity-upgrade-btn--useless-unavailable:hover {
-  cursor: default;
-}
 
 .o-infinity-upgrade-btn--unavailable {
   color: black;
@@ -4025,14 +3995,14 @@ br {
   color: black;
 }
 
-.o-infinity-upgrade-btn--useless-bought {
+.o-infinity-upgrade-btn--useless {
   color: black;
   background-color: var(--color-pelle--base);
   filter: grayscale(50%);
   cursor: default;
 }
 
-.o-infinity-upgrade-btn--useless-bought:hover {
+.o-infinity-upgrade-btn--useless:hover {
   color: black;
 }
 
@@ -4728,28 +4698,10 @@ br {
   cursor: pointer;
 }
 
-.o-eternity-upgrade--useless-available {
+.o-eternity-upgrade--useless {
   color: black;
   background-color: var(--color-pelle--base);
   border-color: black;
-}
-
-.o-eternity-upgrade--useless-available:hover {
-  color: black;
-  background-color: var(--color-pelle--secondary);
-}
-
-.o-eternity-upgrade--useless-unavailable {
-  color: black;
-  background-color: var(--color-pelle--base);
-  border-color: black;
-  filter: grayscale(90%);
-}
-
-.o-eternity-upgrade--useless-unavailable:hover {
-  background-color: var(--color-bad);
-  filter: grayscale(0%);
-  cursor: default;
 }
 
 .o-eternity-upgrade--available {
@@ -5185,24 +5137,6 @@ br {
   transition-duration: 0.2s;
 }
 
-.o-dilation-upgrade--useless-available {
-  color: var(--color-pelle--base);
-  border-color: var(--color-dilation);
-  animation: a-dilation-btn-glow 10s infinite;
-  cursor: pointer;
-}
-
-.o-dilation-upgrade--useless-available:hover {
-  color: var(--color-pelle--secondary);
-}
-
-.o-dilation-upgrade--useless-bought {
-  color: black;
-  background-color: var(--color-pelle--base) !important;
-  border-color: black;
-  filter: grayscale(50%);
-}
-
 .o-dilation-upgrade--available {
   color: var(--color-dilation);
   border-color: var(--color-dilation);
@@ -5226,17 +5160,9 @@ br {
   border-color: black;
 }
 
-.o-dilation-upgrade--useless-unavailable {
+.o-dilation-upgrade--useless {
   color: black;
-  background-color: var(--color-pelle--base) !important;
-  border-color: black;
-  filter: grayscale(90%);
-}
-
-.o-dilation-upgrade--useless-unavailable:hover {
-  background-color: var(--color-bad);
-  filter: grayscale(0%);
-  cursor: default;
+  background-color: var(--color-pelle--base);
 }
 
 .o-dilation-upgrade--unavailable {
@@ -6668,11 +6594,14 @@ kbd {
   width: 520px;
   align-items: center;
   margin-left: 3rem;
+  padding: 1rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-effarig--base);
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .c-effarig-run-description {
   font-size: larger;
-  margin-top: 1rem;
+  margin: 0.5rem 0;
 }
 
 .l-effarig-tab__reward {
@@ -9587,21 +9516,16 @@ input.o-automator-block-input {
   height: 6.2rem;
 }
 
-.c-pelle-useless--available {
-  color: var(--color-pelle--secondary);
-}
-
-.c-pelle-useless--available:hover {
-  filter: grayscale(50%);
-}
-
-.c-pelle-useless--bought {
-  background-color: var(--color-pelle--base);
-  filter: grayscale(50%);
-}
-
 .o-pelle-disabled {
   text-decoration: line-through;
+}
+
+.o-pelle-disabled-pointer {
+  cursor: not-allowed;
+}
+
+.o-pelle-disabled-pointer:active {
+  pointer-events: none;
 }
 
 .c-pelle-panel-title {

@@ -37,6 +37,7 @@ export default {
       nextEffarigRGThreshold: 0,
       canSeeGalaxyButton: false,
       unlockCost: new Decimal(),
+      scrambledText: "",
     };
   },
   computed: {
@@ -115,6 +116,7 @@ export default {
     update() {
       this.isUnlocked = Replicanti.areUnlocked;
       this.unlockCost = new Decimal(1e140).dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
+      if (this.isDoomed) this.scrambledText = this.vacuumText();
       if (!this.isUnlocked) {
         this.isUnlockAffordable = Currency.infinityPoints.gte(this.unlockCost);
         return;
@@ -172,10 +174,7 @@ export default {
         You have {{ quantifyInt("purchase", ec8Purchases) }} left.
       </div>
       <div v-if="isDoomed">
-        <div v-if="isUncapped">
-          Your Replicanti cap has been removed due to the second {{ vacuumText() }} milestone.
-        </div>
-        Any rewards from Effarig's Infinity have been disabled.
+        Your Replicanti cap has been removed due to the second {{ scrambledText }} milestone.
       </div>
       <div v-else-if="hasRaisedCap">
         Your Replicanti cap without Time Study 192 has been raised to {{ format(replicantiCap, 2) }}

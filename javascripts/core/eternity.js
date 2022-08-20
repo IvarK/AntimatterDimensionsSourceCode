@@ -180,8 +180,7 @@ export function initializeResourcesAfterEternity() {
 }
 
 function applyRealityUpgradesAfterEternity() {
-  if (Pelle.isDoomed) return;
-  if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
+  if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.canBeApplied) {
     for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
   }
 }

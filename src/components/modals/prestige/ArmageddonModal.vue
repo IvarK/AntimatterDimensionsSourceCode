@@ -64,6 +64,18 @@ export default {
       player.records.realTimeDoomed = 0;
       for (const res of AlchemyResources.all) res.amount = 0;
       AutomatorBackend.stop();
+
+      // Force-unhide all tabs except for the shop tab, for which we retain the hide state instead
+      const shopTab = ~1 & (1 << GameDatabase.tabs.find(t => t.key === "shop").id);
+      player.options.hiddenTabBits &= shopTab;
+
+      // Force unhide MOST subtabs, although some of the tabs get ignored since they don't contain any
+      // meaningful interactable gameplay elements in Doomed
+      const tabsToIgnore = ["statistics", "achievements", "reality", "celestials"];
+      const ignoredIDs = GameDatabase.tabs.filter(t => tabsToIgnore.includes(t.key)).map(t => t.id);
+      for (let tabIndex = 0; tabIndex < GameDatabase.tabs.length; tabIndex++) {
+        player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.includes(tabIndex) ? -1 : 0;
+      }
       Pelle.quotes.initial.show();
     },
   },

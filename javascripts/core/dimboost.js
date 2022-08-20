@@ -146,7 +146,7 @@ export class DimBoost {
     else boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 
     if (boostEffects === "") return "Dimension Boosts are currently useless";
-    const areDimensionsKept = (Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) &&
+    const areDimensionsKept = (Perk.antimatterNoReset.isBought || Achievement(111).canBeApplied) &&
       (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought);
     if (areDimensionsKept) return boostEffects[0].toUpperCase() + boostEffects.substring(1);
     return `Reset your Dimensions to ${boostEffects}`;
@@ -171,17 +171,18 @@ export function softReset(tempBulk, forcedNDReset = false, forcedAMReset = false
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
   resetChallengeStuff();
-  if (
-    forcedNDReset ||
-    !Perk.antimatterNoReset.isBought ||
-    (Pelle.isDoomed && !PelleUpgrade.dimBoostResetsNothing.canBeApplied)
-  ) {
+  const canKeepDimensions = Pelle.isDoomed
+    ? PelleUpgrade.dimBoostResetsNothing.canBeApplied
+    : Perk.antimatterNoReset.canBeApplied;
+  if (forcedNDReset || !canKeepDimensions) {
     AntimatterDimensions.reset();
     player.sacrificed = DC.D0;
     resetTickspeed();
   }
   skipResetsIfPossible();
-  const canKeepAntimatter = (Achievement(111).isUnlocked || Perk.antimatterNoReset.isBought) && !Pelle.isDoomed;
+  const canKeepAntimatter = Pelle.isDoomed
+    ? PelleUpgrade.dimBoostResetsNothing.canBeApplied
+    : (Achievement(111).isUnlocked || Perk.antimatterNoReset.canBeApplied);
   if (!forcedAMReset && canKeepAntimatter) {
     Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
   } else {

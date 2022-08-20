@@ -33,7 +33,7 @@ export default {
       this.unlockedCount = EternityChallenges.all
         .filter(this.isChallengeVisible)
         .length;
-      this.isAutoECVisible = Perk.autocompleteEC1.isBought && !Pelle.isDoomed;
+      this.isAutoECVisible = Perk.autocompleteEC1.canBeApplied;
       this.autoEC = player.reality.autoEC;
       const remainingCompletions = EternityChallenges.remainingCompletions;
       this.remainingECTiers = remainingCompletions;

@@ -32,9 +32,6 @@ export function startDilatedEternityRequest() {
   } else {
     startDilatedEternity();
   }
-  if (Pelle.isDoomed && !player.options.confirmations.dilation) {
-    PelleStrikes.dilation.trigger();
-  }
 }
 
 export function startDilatedEternity(auto) {
@@ -46,6 +43,7 @@ export function startDilatedEternity(auto) {
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
+  if (Pelle.isDoomed) PelleStrikes.dilation.trigger();
   return true;
 }
 

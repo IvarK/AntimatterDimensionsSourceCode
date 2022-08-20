@@ -97,7 +97,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get canUnlock() {
-    return ((Perk.bypassIDAntimatter.isBought && !Pelle.isDoomed) || this.antimatterRequirementReached) &&
+    return (Perk.bypassIDAntimatter.canBeApplied || this.antimatterRequirementReached) &&
       this.ipRequirementReached;
   }
 

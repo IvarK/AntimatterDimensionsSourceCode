@@ -531,7 +531,7 @@ export function gameLoop(passDiff, options = {}) {
   Currency.realities.add(uncountabilityGain);
   Currency.perkPoints.add(uncountabilityGain);
 
-  if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
+  if (Perk.autocompleteEC1.canBeApplied && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 
   EternityChallenge(12).tryFail();
   Achievements._power.invalidate();
@@ -671,13 +671,12 @@ function passivePrestigeGen() {
 
 // Applies all perks which automatically unlock things when passing certain thresholds, needs to be checked every tick
 function applyAutoUnlockPerks() {
-  if (Pelle.isDoomed) return;
-  if (!TimeDimension(8).isUnlocked && Perk.autounlockTD.isBought) {
+  if (!TimeDimension(8).isUnlocked && Perk.autounlockTD.canBeApplied) {
     for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
   }
-  if (Perk.autounlockDilation3.isBought) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
-  if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
-  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
+  if (Perk.autounlockDilation3.canBeApplied) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
+  if (Perk.autounlockReality.canBeApplied) TimeStudy.reality.purchase(true);
+  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.canBeApplied) {
     const secondRow = EternityUpgrade.all.filter(u => u.id > 3);
     for (const upgrade of secondRow) {
       if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);

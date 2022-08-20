@@ -14,7 +14,7 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends AutobuyerSta
   }
 
   get hasUnlimitedBulk() {
-    return Perk.ttBuyMax.isBought;
+    return Perk.ttBuyMax.canBeApplied;
   }
 
   tick() {

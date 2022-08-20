@@ -20,7 +20,7 @@ export default {
       return {
         "o-autobuyer-btn": true,
         "l-autobuyer-box__button": true,
-        "o-non-clickable": !this.isAffordable
+        "o-autobuyer-btn--unavailable": !this.isAffordable
       };
     }
   },
@@ -50,14 +50,12 @@ export default {
   </button>
   <button
     v-else-if="!isMaxed"
-    class="o-autobuyer-btn l-autobuyer-box__button o-non-clickable"
+    class="o-autobuyer-btn l-autobuyer-box__button o-autobuyer-btn--unavailable"
   >
     Complete the challenge to upgrade interval
   </button>
 </template>
 
 <style scoped>
-.o-non-clickable {
-  cursor: auto;
-}
+
 </style>

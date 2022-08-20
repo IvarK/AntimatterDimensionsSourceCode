@@ -5,6 +5,11 @@ export default {
     purchase: {
       type: Object,
       required: true
+    },
+    disabled: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
@@ -32,6 +37,7 @@ export default {
       <span
         v-if="purchase.displayMult"
         class="o-shop-button-multiplier"
+        :class="{ 'o-shop-button-multiplier--disabled': disabled }"
       >
         Currently {{ formatX(currentMult, 2, 0) }}, next: {{ formatX(nextMult, 2, 0) }}
       </span>
@@ -92,5 +98,10 @@ export default {
   font-size: 1.5rem;
   font-weight: bold;
   margin: 0.5rem 0;
+}
+
+.o-shop-button-multiplier--disabled {
+  color: red;
+  text-decoration: line-through;
 }
 </style>

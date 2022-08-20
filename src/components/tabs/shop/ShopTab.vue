@@ -82,6 +82,7 @@ export default {
         v-for="purchase in purchases"
         :key="purchase.key"
         :purchase="purchase"
+        :disabled="IAPsDisabled"
       />
     </div>
     <loading

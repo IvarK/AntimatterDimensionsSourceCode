@@ -304,7 +304,7 @@ export default {
             <button
               :class="[mechanicButtonClass,
                        {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled,
-                        'l-fixed-setting': isDoomed},
+                        'l-fixed-setting': !canChangeStoreRealTime},
                        doomedDisabledClass]"
               @click="toggleAutoStoreReal"
             >

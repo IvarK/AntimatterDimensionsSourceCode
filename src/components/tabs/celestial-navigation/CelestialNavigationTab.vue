@@ -2,6 +2,7 @@
 import svgPanZoom from "svg-pan-zoom";
 
 import { CELESTIAL_NAV_DRAW_ORDER } from "../../../../javascripts/core/secret-formula/celestials/navigation";
+import { sigilProgress } from "../../../../javascripts/core/secret-formula/celestials/pelle-sigil";
 
 import NodeBackground from "./NodeBackground";
 import NodeOverlay from "./NodeOverlay";
@@ -17,18 +18,17 @@ export default {
     ProgressConnector
   },
   data: () => ({
-    nodeState: Object.keys(GameDatabase.celestials.navigation).mapToObject(
-      name => name,
-      () => ({
-        visible: false,
-        complete: 0,
-      })
-    ),
+    nodeState: null,
   }),
   computed: {
-    db: () => GameDatabase.celestials.navigation,
-    drawOrder: () => {
-      const db = GameDatabase.celestials.navigation;
+    db() {
+      return {
+        ...GameDatabase.celestials.navigation,
+        ...GameDatabase.celestials.navSigil
+      };
+    },
+    drawOrder() {
+      const db = this.db;
       const order = [];
       for (const nodeId of Object.keys(db)) {
         const node = db[nodeId];
@@ -74,6 +74,15 @@ export default {
       return order;
     }
   },
+  created() {
+    this.nodeState = Object.keys(this.db).mapToObject(
+      name => name,
+      () => ({
+        visible: false,
+        complete: 0,
+      })
+    );
+  },
   mounted() {
     // eslint-disable-next-line no-unused-vars
     const panLimiter = function(oldPan, newPan) {
@@ -113,6 +122,9 @@ export default {
   methods: {
     update() {
       for (const key of Object.keys(this.db)) {
+        // The GameUI code forces update() to be called upon its initialization, which may force this to be called
+        // before created() on this component is actually called; this suppresses any initial errors on-creation
+        if (!this.nodeState) continue;
         this.nodeState[key].visible = this.db[key].visible();
         this.nodeState[key].complete = this.db[key].complete();
       }

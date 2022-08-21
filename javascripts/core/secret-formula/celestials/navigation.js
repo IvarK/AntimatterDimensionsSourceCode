@@ -42,7 +42,8 @@ function pelleStarConnector(index, fillColor, noBG) {
     const pathEnd = pathStart + 2;
     const path = LogarithmicSpiral.fromPolarEndpoints(pelleStarPosition(index + 0.5, pelleSize),
       pathStart, pelleSize, pathEnd, 4 / 3 * pelleSize);
-    const pathPadStart = path.angleFromRadius(pelleSize) - pathStart;
+    // The +0.01 prevents curve decomposition errors from happening
+    const pathPadStart = path.angleFromRadius(pelleSize + 0.01) - pathStart;
     const pathPadEnd = pathEnd - path.angleFromRadius(4 / 3 * pelleSize);
     return {
       pathStart,
@@ -65,7 +66,7 @@ const FILL_STATE = {
 
 function riftFillStage(name) {
   const rift = PelleRifts[name.toLowerCase()];
-  if (rift.realPercentage === 0) return FILL_STATE.LOCKED;
+  if (!rift.canBeApplied) return FILL_STATE.LOCKED;
   if (!Pelle.hasGalaxyGenerator || rift.reducedTo === 1) return FILL_STATE.FILL;
   if (rift.reducedTo < 1) return FILL_STATE.DRAIN;
   return FILL_STATE.OVERFILL;
@@ -75,11 +76,9 @@ function riftFillStage(name) {
 function pelleRiftFill(name, index, textAngle) {
   return {
     visible: () => Pelle.isDoomed && riftFillStage(name) === FILL_STATE.FILL,
-    // The logarithmic curve code sometimes throws errors if you attempt to draw with complete === 0, so we cheat and
-    // make it a really tiny number that should format to 0 in most notations. We also do a pow in order to make it
-    // visually smoother, because the generator spiral blocks the bottom bit and makes it look static near the end of
-    // the drain
-    complete: () => Math.clamp(PelleRifts[name.toLowerCase()].realPercentage, 1e-6, 1),
+    // The curve starts inside of the node, so we give the completion variable a bit of a headstart so that we can
+    // immediately see some filling even when it's pretty much still empty
+    complete: () => Math.clamp(0.1 + PelleRifts[name.toLowerCase()].realPercentage / 0.9, 1e-6, 1),
     node: {
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: Positions[`pelle${name}`],
@@ -89,7 +88,7 @@ function pelleRiftFill(name, index, textAngle) {
       },
       legend: {
         text: complete => {
-          const formattedPercent = complete >= 1 ? formatPercents(1) : formatPercents(complete, 1);
+          const formattedPercent = complete >= 1 ? formatPercents(1) : formatPercents((complete - 0.1) / 0.9, 1);
           return [
             `${formattedPercent} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`
           ];
@@ -108,6 +107,10 @@ function pelleRiftFill(name, index, textAngle) {
 function pelleRiftDrain(name, index, textAngle) {
   return {
     visible: () => Pelle.isDoomed && riftFillStage(name) >= FILL_STATE.DRAIN,
+    // The logarithmic curve code sometimes throws errors if you attempt to draw with complete === 0, so we cheat and
+    // make it a really tiny number that should format to 0 in most notations. We also do a pow in order to make it
+    // visually smoother, because the generator spiral blocks the bottom bit and makes it look static near the end of
+    // the drain
     complete: () => Math.clamp(Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo), 1e-6, 1),
     node: {
       incompleteClass: "c-celestial-nav__drained-rift",
@@ -158,10 +161,12 @@ function pelleRiftOverfill(name, index, textAngle) {
 export const CELESTIAL_NAV_DRAW_ORDER = {
   // Node background is a black fuzzy circle drawn behind nodes. It can help show their
   // outline in some cases, and can be used in cases where a connector passes under a node
+  SIGIL_BG: -1000,
   NODE_BG: 0,
   CONNECTORS: 1000,
   NODES: 2000,
   NODE_OVERLAYS: 3000,
+  CANVAS_OVERLAY: 4000,
 };
 
 const Positions = Object.freeze({
@@ -1834,7 +1839,7 @@ GameDatabase.celestials.navigation = {
               "The Celestial of Antimatter"
             ];
           }
-          let laitelaString = `${format(Currency.imaginaryMachines.value)} / ${format("1e4000")} EP`;
+          let laitelaString = `${format(Currency.eternityPoints.value)} / ${format("1e4000")} EP`;
           if (!Laitela.isRunning || Laitela.difficultyTier !== 8) {
             laitelaString = "Lai'tela's Reality is still intact";
           } else if (ImaginaryUpgrade(25).isAvailableForPurchase) {
@@ -1937,7 +1942,7 @@ GameDatabase.celestials.navigation = {
       legend: {
         text: () => [
           "Galaxy Generator:",
-          `${format(GalaxyGenerator.generatedGalaxies, 2)} / ${format(GalaxyGenerator.generationCap)} Galaxies`
+          `${format(GalaxyGenerator.generatedGalaxies, 2)} / ${format(GalaxyGenerator.generationCap, 2)} Galaxies`
         ],
         angle: 290,
         diagonal: 40,
@@ -1995,6 +2000,7 @@ GameDatabase.celestials.navigation = {
         path,
         pathPadStart: 0,
         pathPadEnd: 0,
+        drawOrder: CELESTIAL_NAV_DRAW_ORDER.CANVAS_OVERLAY,
         fill: "#00eeee",
         noBG: true,
       };

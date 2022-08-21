@@ -1,5 +1,7 @@
 import { GameDatabase } from "../game-database";
 
+import { CELESTIAL_NAV_DRAW_ORDER } from "./navigation";
+
 // Exporting this forces this file to be loaded, hmm. That's apparently how the existing navigation is loaded in.
 // TODO Replace this debug function with something based on generated galaxies once placement is finalized.
 export function sigilProgress() {
@@ -9,7 +11,7 @@ export function sigilProgress() {
 // Determines styling, overall visibility, and placement/scaling of the sigil. Center and size are defined such that
 // keeping the sigil within internal coordinates of ±1 will keep the sigil within a ±size box of the center coordinates
 const SigilAttributes = {
-  visible: () => true,
+  visible: () => Pelle.hasGalaxyGenerator,
   center: new Vector(500, 850),
   size: 200,
   color: "crimson"
@@ -76,6 +78,7 @@ function sigilShape(type, att, fill, colorOverride) {
     connector: {
       pathStart,
       pathEnd,
+      drawOrder: CELESTIAL_NAV_DRAW_ORDER.SIGIL_BG,
       path,
       fill: colorOverride ?? SigilAttributes.color,
       completeWidth: 6,

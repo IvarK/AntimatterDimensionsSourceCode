@@ -23,6 +23,7 @@ export default {
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     classObject() {
       return {
         "o-teresa-shop-button": true,
@@ -32,7 +33,6 @@ export default {
           (this.upgrade === PerkShopUpgrade.musicGlyph || this.upgrade === PerkShopUpgrade.fillMusicGlyph)
       };
     },
-    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {

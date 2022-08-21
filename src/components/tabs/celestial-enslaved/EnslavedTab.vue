@@ -31,6 +31,7 @@ export default {
     quote: "",
     currentSpeedUp: 0,
     hintsUnlocked: false,
+    canModifyGameTimeStorage: false,
     canChangeStoreTime: false,
     canChangeStoreRealTime: false,
     canDischarge: false,
@@ -75,9 +76,10 @@ export default {
     storeGameTimeClass() {
       return {
         "o-enslaved-mechanic-button": true,
+        "o-enslaved-mechanic-button--clickable": this.canModifyGameTimeStorage,
         "o-enslaved-mechanic-button--storing-time": this.isStoringBlackHole,
-        "l-fixed-setting": !this.canChangeStoreTime,
-        "o-pelle-disabled": this.isDoomed,
+        "l-fixed-setting": !this.canModifyGameTimeStorage,
+        "o-pelle-disabled": this.isDoomed
       };
     },
     storeRealTimeClass() {
@@ -132,6 +134,7 @@ export default {
       this.autoReleaseSpeed = Enslaved.isAutoReleasing ? Enslaved.autoReleaseSpeed : 0;
       this.currentSpeedUp = Enslaved.currentBlackHoleStoreAmountPerMs;
       this.hintsUnlocked = EnslavedProgress.hintsUnlocked.hasProgress;
+      this.canModifyGameTimeStorage = Enslaved.canModifyGameTimeStorage;
       this.canChangeStoreTime = Enslaved.canModifyGameTimeStorage;
       this.canChangeStoreRealTime = Enslaved.canModifyRealTimeStorage;
       this.canDischarge = Enslaved.canRelease(false);
@@ -300,7 +303,8 @@ export default {
             </button>
             <button
               :class="[mechanicButtonClass,
-                       {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled},
+                       {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled,
+                        'l-fixed-setting': isDoomed},
                        doomedDisabledClass]"
               @click="toggleAutoStoreReal"
             >

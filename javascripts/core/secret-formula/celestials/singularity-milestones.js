@@ -105,7 +105,7 @@ GameDatabase.celestials.singularityMilestones = {
     limit: 4,
     description: "Dark Matter Dimension Autobuyers",
     effect: completions => completions,
-    effectFormat: x => ((x === 0) ? "No autobuyers" : `Autobuy up to DMD ${x}`),
+    effectFormat: x => ((x === 0) ? "No autobuyers" : `Autobuy up to the ${["1st", "2nd", "3rd", "4th"][x - 1]} DMD`),
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,
   },
   darkAutobuyerSpeed: {

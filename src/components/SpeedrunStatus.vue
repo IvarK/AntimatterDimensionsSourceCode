@@ -42,6 +42,7 @@ export default {
   methods: {
     update() {
       const speedrun = player.speedrun;
+      const db = GameDatabase.speedrunMilestones;
       this.isActive = speedrun.isActive;
       this.isSegmented = speedrun.isSegmented;
       this.hasStarted = speedrun.hasStarted;
@@ -55,6 +56,8 @@ export default {
       this.mostRecent = speedrun.milestones.length === 0
         ? 0
         : speedrun.milestones[speedrun.milestones.length - 1];
+      this.timeSince = Time.realTimePlayed.minus(TimeSpan
+        .fromMilliseconds(speedrun.records[db.find(m => m.id === this.mostRecent).key])).toStringShort();
     },
     milestoneName(id) {
       const db = GameDatabase.speedrunMilestones;
@@ -97,7 +100,7 @@ export default {
       <br>
       Offline Progress: <span v-html="offlineText" />
       <br>
-      Most Recent Milestone: {{ milestoneName(mostRecent) }}
+      Most Recent Milestone: {{ milestoneName(mostRecent) }} ({{ timeSince }} ago)
       <br>
     </div>
     <div

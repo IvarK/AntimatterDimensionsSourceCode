@@ -34,7 +34,9 @@ export default {
       requirementReached: false,
       realityUnlocked: false,
       showTTCost: false,
-      ttCost: 0
+      ttCost: 0,
+      ttGen: new Decimal(),
+      currTT: new Decimal(),
     };
   },
   computed: {
@@ -51,7 +53,7 @@ export default {
       return this.formattedEPCost;
     },
     tooltipContents() {
-      if (this.showTTCost) return this.formattedEPCost;
+      if (this.showTTCost) return `${this.formattedEPCost}<br>${this.timeEstimate}`;
       if (this.isCapped) return `Enslaved prevents the purchase of more than ${format(1)} Time Dimension`;
       return `Purchased ${quantifyInt("time", this.bought)}`;
     },
@@ -69,6 +71,11 @@ export default {
     },
     showCostTitle() {
       return this.cost.exponent < 1e6;
+    },
+    timeEstimate() {
+      if (!this.showTTCost || this.ttGen.eq(0)) return null;
+      const time = Decimal.sub(this.ttCost, this.currTT).dividedBy(this.ttGen);
+      return time.gt(0) ? `Enough TT in ${TimeSpan.fromSeconds(time.toNumber()).toStringShort()}` : null;
     }
   },
   watch: {
@@ -98,6 +105,8 @@ export default {
       this.realityUnlocked = PlayerProgress.realityUnlocked();
       this.showTTCost = !this.isUnlocked && !this.shiftDown;
       if (this.tier > 4) this.ttCost = TimeStudy.timeDimension(this.tier).cost;
+      this.currTT.copyFrom(Currency.timeTheorems.value);
+      this.ttGen.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
     },
     buyTimeDimension() {
       if (!this.isUnlocked) {

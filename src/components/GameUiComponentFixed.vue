@@ -96,7 +96,6 @@ export default {
     <CreditsContainer v-if="rollingCredits" />
     <SpectateGame />
     <NewGame v-if="rollingCredits" />
-    <SpectateGame />
   </div>
 </template>
 

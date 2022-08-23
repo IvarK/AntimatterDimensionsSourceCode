@@ -1,9 +1,9 @@
 <script>
-import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "SpectateGame",
-  components: { ModalCloseButton },
+  components: { PrimaryButton },
   data() {
     return {
       showSpectate: Boolean
@@ -23,14 +23,25 @@ export default {
 <template>
   <div
     v-if="showSpectate"
-    class="c-spectate-game-container"
   >
-    <ModalCloseButton @click="swap" />
+    <PrimaryButton
+      class="c-swap-button o-primary-btn--modal-close c-modal__close-btn"
+      @click="swap"
+    >
+      &times;
+    </PrimaryButton>
   </div>
 </template>
 
 <style scoped>
-.c-spectate-game-container {
-  z-index: 9999;
+.c-swap-button {
+  position: fixed;
+  top: 1rem;
+  right: 4.5rem;
+  font-size: 2rem;
+  opacity: 0.8;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 10;
 }
 </style>

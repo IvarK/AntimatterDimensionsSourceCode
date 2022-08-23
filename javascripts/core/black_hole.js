@@ -156,15 +156,20 @@ class BlackHoleState {
       if (BlackHole(1).isCharged) return Math.min(remainingTime, BlackHole(1).timeToNextStateChange);
       return BlackHole(1).timeToNextStateChange;
     }
-    if (BlackHole(1).isCharged) {
-      if (remainingTime < BlackHole(1).timeToNextStateChange) return remainingTime;
-      remainingTime -= BlackHole(1).timeToNextStateChange;
+    return BlackHole(1).timeUntilTimeActive(remainingTime);
+  }
+  
+  // Given x, return time it takes for this black hole to get x time active
+  timeUntilTimeActive(timeActive) {
+    if (this.isCharged) {
+      if (timeActive < this.timeToNextStateChange) return timeActive;
+      timeActive -= this.timeToNextStateChange;
     }
-    let totalTime = BlackHole(1).isCharged
-      ? BlackHole(1).timeToNextStateChange + BlackHole(1).interval
-      : BlackHole(1).timeToNextStateChange;
-    totalTime += Math.floor(remainingTime / BlackHole(1).duration) * BlackHole(1).cycleLength;
-    totalTime += remainingTime % BlackHole(1).duration;
+    let totalTime = this.isCharged
+      ? this.timeToNextStateChange + this.interval
+      : this.timeToNextStateChange;
+    totalTime += Math.floor(timeActive / this.duration) * this.cycleLength;
+    totalTime += timeActive % this.duration;
     return totalTime;
   }
 
@@ -233,37 +238,6 @@ class BlackHoleState {
     // This used to always use the period of blackHole[0], now it doesn't,
     // will this cause other bugs?
     this._data.phase += activePeriod;
-
-    // This conditional is a bit convoluted because the more straightforward check of just pausing if it activates
-    // soon will result in it pausing every tick, including the tick it gets manually unpaused. This is unintuitive
-    // because it forces the player to change auto-pause modes every time it reaches activation again. Instead, we
-    // check if before the conditional is false before this tick and true afterwards; this ensures it only ever pauses
-    // once per cycle, right at the activation threshold. We give it a buffer equal to the acceleration time so that
-    // it's at full speed once by the time it actually activates.
-    const beforeTick = this.phase - activePeriod, afterTick = this.phase;
-    const threhold = this.interval - BlackHoles.ACCELERATION_TIME;
-    const willActivateOnUnpause = !this.isActive && beforeTick < threhold && afterTick >= threhold;
-    switch (player.blackHoleAutoPauseMode) {
-      case BLACK_HOLE_PAUSE_MODE.NO_PAUSE:
-        break;
-      case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH1:
-        if (this.id === 1 && willActivateOnUnpause) {
-          BlackHoles.togglePause();
-          GameUI.notify.blackHole(`${RealityUpgrade(20).isBought ? "Black Holes" : "Black Hole"}
-            automatically paused.`);
-          return;
-        }
-        break;
-      case BLACK_HOLE_PAUSE_MODE.PAUSE_BEFORE_BH2:
-        if (willActivateOnUnpause && (this.id === 2 || (this.id === 1 && BlackHole(2).isCharged))) {
-          BlackHoles.togglePause();
-          GameUI.notify.blackHole(`Black Holes automatically paused.`);
-          return;
-        }
-        break;
-      default:
-        throw new Error("Unrecognized BH offline pausing mode");
-    }
 
     if (this.phase >= this.cycleLength) {
       // One activation for each full cycle.
@@ -371,13 +345,15 @@ export const BlackHoles = {
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UNLOCKED);
   },
 
-  togglePause: () => {
+  togglePause: (automatic=false) => {
     if (!BlackHoles.areUnlocked) return;
     if (player.blackHolePause) player.requirementChecks.reality.slowestBH = 1;
     player.blackHolePause = !player.blackHolePause;
     player.blackHolePauseTime = player.records.realTimePlayed;
-    const pauseType = BlackHoles.areNegative ? "inverted" : "paused";
-    GameUI.notify.blackHole(player.blackHolePause ? `Black Hole ${pauseType}` : "Black Hole unpaused");
+    const blackHoleString = RealityUpgrade(20).isBought ? "Black Holes" : "Black Hole";
+    const pauseType = player.blackHolePause ? (BlackHoles.areNegative ? "inverted" : "paused") : 'unpaused';
+    const automaticString = automatic ? "automatically " : "";
+    GameUI.notify.blackHole(`${blackHoleString} ${automaticString}${pauseType}`);
   },
 
   get unpauseAccelerationFactor() {
@@ -402,11 +378,16 @@ export const BlackHoles = {
     if (!this.areUnlocked || this.arePaused) return;
     // This code is intended to successfully update the black hole phases
     // even for very large values of blackHoleDiff.
-    const seconds = blackHoleDiff / 1000;
-    const activePeriods = this.realTimePeriodsWithBlackHoleActive(seconds);
+    // With auto-pause settings, this code also has to take account of that.
+    const rawSeconds = blackHoleDiff / 1000;
+    const [autoPause, seconds] = this.autoPauseData(rawSeconds);
+    const activePeriods = this.realTimePeriodsWithBlackHoleActive(seconds, true);
     for (const blackHole of this.list) {
       if (!blackHole.isUnlocked) break;
       blackHole.updatePhase(activePeriods[blackHole.id - 1]);
+    }
+    if (autoPause) {
+      BlackHoles.togglePause(true);
     }
   },
 
@@ -497,6 +478,7 @@ export const BlackHoles = {
     const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider);
     const speedups = [1];
     effectsToConsider.push(GAME_SPEED_EFFECT.BLACK_HOLE);
+    // Crucial thing: this works even if the black holes are paused, it's just that the speedups will be 1.
     for (const blackHole of this.list) {
       if (!blackHole.isUnlocked) break;
       speedups.push(getGameSpeedupFactor(effectsToConsider, blackHole.id) / speedupWithoutBlackHole);
@@ -505,7 +487,10 @@ export const BlackHoles = {
   },
 
   calculateGameTimeFromRealTime(realTime, speedups) {
-    const effectivePeriods = this.realTimePeriodsWithBlackHoleEffective(realTime, speedups);
+    const [_, realerTime] = this.autoPauseData(realTime);
+    const effectivePeriods = this.realTimePeriodsWithBlackHoleEffective(realerTime, speedups);
+    // This adds in time with black holes paused at the end of the list.
+    effectivePeriods[0] += realTime - realerTime;
     return effectivePeriods
       .map((period, i) => period * speedups[i])
       .sum();
@@ -549,5 +534,74 @@ export const BlackHoles = {
       activePeriods.push(activeTime);
     }
     return activePeriods;
+  },
+  
+  timeToNextPause(bhNum) {
+    if (bhNum === 1) {
+      // This is the warm-up case for the much, much more complicated case of Black Hole 2.
+      let bh = BlackHole(1);
+      // In general, if no blackhole gaps are as long as the warmup time, we're fine.
+      if (bh.interval <= BlackHoles.ACCELERATION_TIME) {
+        return null;
+      }
+      // Find the time until next activation.
+      let t = (bh.isCharged ? bh.duration : 0) + bh.interval - bh.phase;
+      // If the time until next activation is less than the acceleration time, we have to wait until the activation after that.
+      return (t < BlackHoles.ACCELERATION_TIME) ?
+      t + bh.duration + bh.interval - BlackHoles.ACCELERATION_TIME : t - BlackHoles.ACCELERATION_TIME;
+    }
+    // Now the actual code starts
+    let bh1 = BlackHole(1);
+    let bh2 = BlackHole(2);
+    // If the intervals are too small we don't pause.
+    if (bh1.interval <= BlackHoles.ACCELERATION_TIME && bh2.interval <= BlackHoles.ACCELERATION_TIME) {
+      return null;
+    }
+    // There are two times we could use here: the next BH2 activation (if there's a gap of at least 5 seconds before it),
+    // or the next time BH2 is active after a BH1 activation
+    // OK, now we calculate the BH1 active time until bh2 becomes charged...
+    let t2 = (bh2.isCharged ? bh2.duration : 0) + bh2.interval - bh2.phase;
+    // Then we transform that BH1 active time to an actual real amount of time...
+    let t1 = bh1.timeUntilTimeActive(t2);
+    // And then we need to recalculate it if it's less than 5 seconds from now, to take the time BH2 becomes charged after next
+    // rather than the too-imminent next one.
+    let t3 = (t1 < BlackHoles.ACCELERATION_TIME) ?
+    bh1.timeUntilTimeActive(t2 + bh2.duration + bh2.interval) - BlackHoles.ACCELERATION_TIME : t1 - BlackHoles.ACCELERATION_TIME;
+    // But we're not done! We might be able to stop at a BH1 activation while BH2 is charged, which might be sooner than the next
+    // time BH2 becomes charged. If BH2 isn't charged, or the gaps between BH1 activations aren't large enough, we are done, though.
+    if ((bh2.interval >= BlackHoles.ACCELERATION_TIME && t1 >= BlackHoles.ACCELERATION_TIME && !bh2.isCharged) ||
+    bh1.interval <= BlackHoles.ACCELERATION_TIME) {
+      return t3;
+    }
+    // We can determine that *if* we stop at a BH1 activation, it has to be the next one that's not in the next 5 seconds.
+    // This is because whichever BH1 activation we use, either BH2 has to be active for it. If not, we should stop 
+    // This is the BH1 time until the next BH1 activation.
+    let s1 = (bh1.isCharged ? bh1.duration : 0) + bh1.interval - bh1.phase;
+    // This is the time BH1 will spend active until the next usable BH1 activation.
+    let bh1Active = ((s1 < BlackHoles.ACCELERATION_TIME) ? bh1.duration : 0) + (bh1.isCharged ? bh1.duration - bh1.phase : 0);
+    let bh2Left = (bh2.isCharged ? 0 : bh2.interval) + bh2.duration - bh2.phase;
+    let strictposmod = (a, b) => (a % b === 0) ? b : ((a % b + b) % b);
+    let adjustment = Math.max(strictposmod(bh2Left - bh1Active, bh2.interval + bh2.duration) - bh2.duration, 0);
+    s1 += adjustment;
+    let s2 = (s1 < BlackHoles.ACCELERATION_TIME) ?
+    s1 + bh1.duration + bh1.interval - BlackHoles.ACCELERATION_TIME : s1 - BlackHoles.ACCELERATION_TIME;
+    return (bh1Active < bh2Left || bh2.interval < BlackHoles.ACCELERATION_TIME) ? s2 : t3;
+  },
+  
+  
+  autoPauseData(realTime) {
+    // This can be called when determining offline time if the black holes are already paused.
+    // In that case we don't need to pause them (need to pause = false), but they're already paused (0 time).
+    // This saves us some computation.
+    if (this.arePaused) return [false, 0];
+    if (player.blackHoleAutoPauseMode === BLACK_HOLE_PAUSE_MODE.NO_PAUSE) {
+      return [false, realTime];
+    }
+    let timeLeft = this.timeToNextPause(player.blackHoleAutoPauseMode);
+    // Probably rounding error
+    if (timeLeft === null || timeLeft < 1e-9 || timeLeft > realTime) {
+      return [false, realTime];
+    }
+    return [true, timeLeft];
   }
 };

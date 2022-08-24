@@ -551,7 +551,7 @@ export const BlackHoles = {
     }
     return activePeriods;
   },
-  
+
   /**
    * Takes BH number (1 or 2) and number of steps to do in an internal BH simulation.
    * Returns real time until we can pause before given BH (i.e., we have a gap of at least 5 seconds before it),
@@ -641,7 +641,7 @@ export const BlackHoles = {
     // We didn't activate so we return null.
     return null;
   },
-  
+
   /**
    * Takes amount of real time.
    * Returns 2-item array:

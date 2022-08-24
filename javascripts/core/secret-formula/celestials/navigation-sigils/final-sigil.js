@@ -9,7 +9,7 @@ function sigilProgress() {
 
 // Determines styling, overall visibility, and placement/scaling of the sigil. Center and size are defined such that
 // keeping the sigil within internal coordinates of ±1 will keep the sigil within a ±size box of the center coordinates
-export const SigilAttributes = {
+const SigilAttributes = {
   visible: () => Pelle.hasGalaxyGenerator,
   center: new Vector(400, 300),
   size: 400,

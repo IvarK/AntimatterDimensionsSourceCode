@@ -24,7 +24,7 @@ export function vUnlockLegendLabel(complete, index) {
 // Angle is defined/rescaled so that 0 is the first rift, 4 is the last one, and all 5 are equally spaced around
 // a circle. Starts at top-left and goes clockwise, reference point is that 3 is directly down. It's allowed to be
 // non-integer since it's also used for off-center curve control points
-function pelleStarPosition(angle, scale) {
+export function pelleStarPosition(angle, scale) {
   const pelleCenter = new Vector(750, 550);
   const theta = (0.7 - 0.4 * angle) * Math.PI;
   return new Vector(scale * Math.cos(theta), -scale * Math.sin(theta)).plus(pelleCenter);
@@ -1852,8 +1852,8 @@ GameDatabase.celestials.navigation = {
             laitelaString
           ];
         },
-        angle: 60,
-        diagonal: 40,
+        angle: 105,
+        diagonal: 90,
         horizontal: 10,
       },
     },
@@ -1932,7 +1932,6 @@ GameDatabase.celestials.navigation = {
     node: {
       clickAction: () => Tab.celestials.pelle.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
-      symbol: "🌌",
       fill: "black",
       position: Positions.pelleAchievementRequirement,
       ring: {
@@ -1972,7 +1971,7 @@ GameDatabase.celestials.navigation = {
         path,
         pathPadStart: 0,
         pathPadEnd: 0,
-        fill: "#00eeee",
+        fill: "#00bbbb",
       };
     }()),
   },
@@ -2001,7 +2000,7 @@ GameDatabase.celestials.navigation = {
         pathPadStart: 0,
         pathPadEnd: 0,
         drawOrder: CELESTIAL_NAV_DRAW_ORDER.CANVAS_OVERLAY,
-        fill: "#00eeee",
+        fill: "#00bbbb",
         noBG: true,
       };
     }()),

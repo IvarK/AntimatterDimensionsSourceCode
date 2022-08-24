@@ -1,20 +1,20 @@
-import { GameDatabase } from "../game-database";
+import { GameDatabase } from "../../game-database";
 
-import { CELESTIAL_NAV_DRAW_ORDER } from "./navigation";
+import { CELESTIAL_NAV_DRAW_ORDER } from "../navigation";
 
-// Exporting this forces this file to be loaded, hmm. That's apparently how the existing navigation is loaded in.
 // TODO Replace this debug function with something based on generated galaxies once placement is finalized.
-export function sigilProgress() {
+function sigilProgress() {
   return Math.clampMax((Date.now() % 4000) / 3000, 1);
 }
 
 // Determines styling, overall visibility, and placement/scaling of the sigil. Center and size are defined such that
 // keeping the sigil within internal coordinates of ±1 will keep the sigil within a ±size box of the center coordinates
-const SigilAttributes = {
+export const SigilAttributes = {
   visible: () => Pelle.hasGalaxyGenerator,
-  center: new Vector(500, 850),
-  size: 200,
-  color: "crimson"
+  center: new Vector(400, 300),
+  size: 400,
+  color: "crimson",
+  canvasLayer: CELESTIAL_NAV_DRAW_ORDER.SIGIL_BG,
 };
 
 function scaledPos(x, y) {
@@ -78,10 +78,10 @@ function sigilShape(type, att, fill, colorOverride) {
     connector: {
       pathStart,
       pathEnd,
-      drawOrder: CELESTIAL_NAV_DRAW_ORDER.SIGIL_BG,
+      drawOrder: SigilAttributes.canvasLayer,
       path,
       fill: colorOverride ?? SigilAttributes.color,
-      completeWidth: 6,
+      completeWidth: SigilAttributes.size / 20,
       noBG: true
     },
   };
@@ -102,7 +102,7 @@ const Positions = Object.freeze({
   mid: scaledPos(0.08, 0.05),
   arm1: scaledPos(0.5, 0.05),
   arm2: scaledPos(0.5, -0.15),
-  arm3: scaledPos(0.35, -0.15),
+  arm3: scaledPos(0.4, -0.15),
   lowC: scaledPos(0, 0.22),
   low1: scaledPos(0.42, 0.22),
   botC: scaledPos(0, 0.31),
@@ -199,4 +199,7 @@ for (let arcIndex = 0; arcIndex < arcSegments; arcIndex++) {
     "#7055bb");
 }
 
-GameDatabase.celestials.navSigil = Object.values(Shapes).mapToObject((key, idx) => `pelle-sigil-${idx}`, val => val);
+GameDatabase.celestials.navSigils = {
+  ...GameDatabase.celestials.navSigils,
+  ...Object.values(Shapes).mapToObject((key, idx) => `final-sigil-${idx}`, val => val)
+};

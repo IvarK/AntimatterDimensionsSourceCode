@@ -2007,3 +2007,6 @@ GameDatabase.celestials.navigation = {
     }()),
   },
 };
+
+// This will get populated as needed in files within the navigation-sigils folder
+GameDatabase.celestials.navSigils = {};

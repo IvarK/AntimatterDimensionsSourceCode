@@ -833,12 +833,6 @@ function afterSimulation(seconds, playerBefore) {
   GameUI.notify.showBlackHoles = true;
 }
 
-const OFFLINE_BH_PAUSE_STATE = {
-  ACTIVE: 0,
-  INACTIVE: 1,
-  PAUSED: 2,
-};
-
 export function simulateTime(seconds, real, fast) {
   // The game is simulated at a base 50ms update rate, with a max of
   // player.options.offlineTicks ticks. additional ticks are converted
@@ -907,7 +901,7 @@ export function simulateTime(seconds, real, fast) {
         i, 0.0001);
       remainingRealSeconds -= realTickTime;
       gameLoop(1000 * realTickTime, { blackHoleSpeedup });
-    }
+    };
   }
 
   // We don't show the offline modal here or bother with async if doing a fast simulation

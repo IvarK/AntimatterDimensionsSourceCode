@@ -147,7 +147,7 @@ class BlackHoleState {
 
   // When inactive, returns time until active; when active, returns time until inactive (or paused for hole 2)
   get timeToNextStateChange() {
-    let remainingTime = this.timeWithPreviousActiveToNextStateChange;
+    const remainingTime = this.timeWithPreviousActiveToNextStateChange;
 
     if (this.id === 1) return remainingTime;
 
@@ -158,17 +158,26 @@ class BlackHoleState {
     }
     return BlackHole(1).timeUntilTimeActive(remainingTime);
   }
-  
+
   // Given x, return time it takes for this black hole to get x time active
-  timeUntilTimeActive(timeActive) {
+  timeUntilTimeActive(inputTimeActive) {
+    // Avoid error about reassigning parameter.
+    let timeActive = inputTimeActive;
     if (this.isCharged) {
+      // We start at the next full activation, so if we have a partial activation
+      // then that reduces the time required.
+      // Make sure to handle the case when the current partial activation is enough.
       if (timeActive < this.timeToNextStateChange) return timeActive;
+      // If it's not enough, we can subtract it from our time.
       timeActive -= this.timeToNextStateChange;
     }
+    // Determine the time until the next full activation.
     let totalTime = this.isCharged
       ? this.timeToNextStateChange + this.interval
       : this.timeToNextStateChange;
+    // This is the number of full cycles needed...
     totalTime += Math.floor(timeActive / this.duration) * this.cycleLength;
+    // And the time from a partial cycle.
     totalTime += timeActive % this.duration;
     return totalTime;
   }
@@ -345,12 +354,16 @@ export const BlackHoles = {
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UNLOCKED);
   },
 
-  togglePause: (automatic=false) => {
+  togglePause: (automatic = false) => {
     if (!BlackHoles.areUnlocked) return;
     if (player.blackHolePause) player.requirementChecks.reality.slowestBH = 1;
     player.blackHolePause = !player.blackHolePause;
     player.blackHolePauseTime = player.records.realTimePlayed;
     const blackHoleString = RealityUpgrade(20).isBought ? "Black Holes" : "Black Hole";
+    // If black holes are going unpaused -> paused, use "inverted" or "paused" depending o
+    // whether the player's using negative BH (i.e. BH inversion); if going paused -> unpaused,
+    // use "unpaused".
+    // eslint-disable-next-line no-nested-ternary
     const pauseType = player.blackHolePause ? (BlackHoles.areNegative ? "inverted" : "paused") : 'unpaused';
     const automaticString = automatic ? "automatically " : "";
     GameUI.notify.blackHole(`${blackHoleString} ${automaticString}${pauseType}`);
@@ -487,6 +500,9 @@ export const BlackHoles = {
   },
 
   calculateGameTimeFromRealTime(realTime, speedups) {
+    // We could do this.autoPauseData(realTime)[1] here but that seems less clear.
+    // Using _ as an unused variable should be reasonable.
+    // eslint-disable-next-line no-unused-vars
     const [_, realerTime] = this.autoPauseData(realTime);
     const effectivePeriods = this.realTimePeriodsWithBlackHoleEffective(realerTime, speedups);
     // This adds in time with black holes paused at the end of the list.
@@ -535,21 +551,22 @@ export const BlackHoles = {
     }
     return activePeriods;
   },
-  
-  timeToNextPause(bhNum, steps=100) {
+
+  timeToNextPause(bhNum, steps = 100) {
     if (bhNum === 1) {
       // This is a simple case that we can do mathematically.
-     let bh = BlackHole(1);
+     const bh = BlackHole(1);
      // If no blackhole gaps are as long as the warmup time, we never pause.
      if (bh.interval <= BlackHoles.ACCELERATION_TIME) {
        return null;
      }
      // Find the time until next activation.
-     let t = (bh.isCharged ? bh.duration : 0) + bh.interval - bh.phase;
-     // If the time until next activation is less than the acceleration time, we have to wait until the activation after that;
+     const t = (bh.isCharged ? bh.duration : 0) + bh.interval - bh.phase;
+     // If the time until next activation is less than the acceleration time,
+     // we have to wait until the activation after that;
      // otherwise, we can just use the next activation.
-     return (t < BlackHoles.ACCELERATION_TIME) ?
-     t + bh.duration + bh.interval - BlackHoles.ACCELERATION_TIME : t - BlackHoles.ACCELERATION_TIME;
+     return (t < BlackHoles.ACCELERATION_TIME)
+     ? t + bh.duration + bh.interval - BlackHoles.ACCELERATION_TIME : t - BlackHoles.ACCELERATION_TIME;
     }
     // Look at the next 100 black hole transitions.
     // This is called every tick if BH pause setting is set to BH2, so we try to optimize it.
@@ -559,22 +576,25 @@ export const BlackHoles = {
     // can be 20 seconds (so it's fairly OK not to pause).
     // Precalculate some stuff that won't change (or in the case of charged and phases, stuff we'll change ourself
     // but just in this simulation) while we call this function.
-    let charged = [BlackHole(1).isCharged, BlackHole(2).isCharged];
-    let phases = [BlackHole(1).phase, BlackHole(2).phase];
-    let durations = [BlackHole(1).duration, BlackHole(2).duration];
-    let intervals = [BlackHole(1).interval, BlackHole(2).interval];
+    const charged = [BlackHole(1).isCharged, BlackHole(2).isCharged];
+    const phases = [BlackHole(1).phase, BlackHole(2).phase];
+    const durations = [BlackHole(1).duration, BlackHole(2).duration];
+    const intervals = [BlackHole(1).interval, BlackHole(2).interval];
     // Make a list of things to bound phase by.
-    let phaseBoundList = [[intervals[0]], [durations[0], intervals[1]], [durations[0], durations[1]]];
+    const phaseBoundList = [[intervals[0]], [durations[0], intervals[1]], [durations[0], durations[1]]];
     // Time tracking.
     let inactiveTime = 0;
     let totalTime = 0;
     for (let i = 0; i < steps; i++) {
-      // Currently active BH.
-      let current = charged[0] ? (charged[1] ? 2 : 1) : 0;
+      // Currently active BH (if BH1 and BH2 are both charged, 2,
+      // if only BH1 is, 1, if BH1 isn't, 0 regardless of BH2).
+      // eslint-disable-next-line no-nested-ternary
+      const current = charged[0] ? (charged[1] ? 2 : 1) : 0;
       // Get the list of phase bounds.
-      let phaseBounds = phaseBoundList[current];
+      const phaseBounds = phaseBoundList[current];
       // Compute time until some phase reaches its bound.
-      let minTime = current > 0 ? Math.min(phaseBounds[0] - phases[0], phaseBounds[1] - phases[1]) : phaseBounds[0] - phases[0];
+      const minTime = current > 0 ? Math.min(phaseBounds[0] - phases[0], phaseBounds[1] - phases[1])
+      : phaseBounds[0] - phases[0];
       if (current === 2) {
         // Check if there was enough time before this activation to pause.
         if (inactiveTime >= BlackHoles.ACCELERATION_TIME) {
@@ -606,8 +626,7 @@ export const BlackHoles = {
     // We didn't activate so we return null.
     return null;
   },
-  
-  
+
   autoPauseData(realTime) {
     // This can be called when determining offline time if the black holes are already paused.
     // In that case we don't need to pause them (need to pause = false), but they're already paused (0 time).
@@ -616,7 +635,7 @@ export const BlackHoles = {
     if (player.blackHoleAutoPauseMode === BLACK_HOLE_PAUSE_MODE.NO_PAUSE) {
       return [false, realTime];
     }
-    let timeLeft = this.timeToNextPause(player.blackHoleAutoPauseMode);
+    const timeLeft = this.timeToNextPause(player.blackHoleAutoPauseMode);
     // Probably rounding error
     if (timeLeft === null || timeLeft < 1e-9 || timeLeft > realTime) {
       return [false, realTime];

@@ -417,7 +417,7 @@ GameDatabase.tabs = [
       },
       {
         key: "enslaved",
-        name: "The Enslaved Ones",
+        name: "The Nameless Ones",
         symbol: "<div class='o-tab-btn--cel3'>\uf0c1</div>",
         component: "EnslavedTab",
         condition: () => EffarigUnlock.eternity.isUnlocked,

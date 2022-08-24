@@ -181,9 +181,9 @@ GameDatabase.catchupResources = [
       filtering the large number of Glyphs you are receiving, purchased with a new resource called Relic Shards.`
   },
   {
-    name: "The Enslaved Ones",
+    name: "The Nameless Ones",
     requiredStage: PROGRESS_STAGE.ENSLAVED,
-    description: `The Enslaved Ones are the third Celestial, whose Reality is extremely punishing with a long list of
+    description: `The Nameless Ones are the third Celestial, whose Reality is extremely punishing with a long list of
       nerfs, but unlocks Tesseracts for those who can figure out how to prevail. They also modify your Black Hole to
       allow it to store time.`
   },
@@ -238,7 +238,7 @@ GameDatabase.catchupResources = [
   {
     name: "Amplified Black Hole",
     requiredStage: PROGRESS_STAGE.RA,
-    description: `Enslaved's Memories amplify charging so that the amount of game time stored is larger than the actual
+    description: `Nameless's Memories amplify charging so that the amount of game time stored is larger than the actual
       game time elapsed. Discharging can now also be done repeatedly and automatically.`
   },
   {

@@ -23,7 +23,7 @@ export default {
       return `color: ${this.pet.color}`;
     },
     gainText() {
-      // We need to special-case the grammar for Enslaved
+      // We need to special-case the grammar for Nameless
       const isPlural = this.pet.id === "enslaved";
       const gain = isPlural ? "gain" : "gains";
       const has = isPlural ? "have" : "has";

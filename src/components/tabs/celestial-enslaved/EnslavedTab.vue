@@ -51,8 +51,8 @@ export default {
       return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
     },
     realityTitle() {
-      if (this.isRunning) return "You are inside The Enslaved Ones' Reality";
-      return "Start The Enslaved Ones' Reality";
+      if (this.isRunning) return "You are inside The Nameless Ones' Reality";
+      return "Start The Nameless Ones' Reality";
     },
     runButtonClassObject() {
       return {
@@ -70,7 +70,7 @@ export default {
       if (this.autoStoreReal) return "Offline time stored";
       return "Offline time used for production";
     },
-    // Use this here since Enslaved has a fairly non-standard character, and SFCs don't support using \uf0c1
+    // Use this here since Nameless has a fairly non-standard character, and SFCs don't support using \uf0c1
     enslavedSymbol: () => Enslaved.symbol,
     isDoomed: () => Pelle.isDoomed,
     storeGameTimeClass() {
@@ -164,7 +164,7 @@ export default {
     },
     startRun() {
       if (this.isDoomed) return;
-      Modal.celestials.show({ name: "The Enslaved Ones'", number: 2 });
+      Modal.celestials.show({ name: "The Nameless Ones'", number: 2 });
     },
     hasUnlock(info) {
       return Enslaved.has(info);
@@ -172,7 +172,7 @@ export default {
     canBuyUnlock(info) {
       // This (rather than just using Enslaved.canBuy(info) and removing this.buyableUnlocks)
       // is needed for proper reactivity of button styles (e.g., if you get a level 5000 glyph
-      // while on the Enslaved tab).
+      // while on the Nameless tab).
       return this.buyableUnlocks[info.id];
     },
     unlockClassObject(info) {

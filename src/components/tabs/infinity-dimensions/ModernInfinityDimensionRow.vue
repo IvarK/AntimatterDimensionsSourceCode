@@ -61,7 +61,7 @@ export default {
       return this.costDisplay.length > 15;
     },
     capTooltip() {
-      if (this.enslavedRunning) return `Enslaved prevents the purchase of more than ${format(10)} Infinity Dimensions`;
+      if (this.enslavedRunning) return `Nameless prevents the purchase of more than ${format(10)} Infinity Dimensions`;
       if (this.isCapped) return `Cap reached at ${format(this.capIP)} IP`;
       return `Purchased ${quantifyInt("time", this.purchases)}`;
     },

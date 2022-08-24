@@ -432,7 +432,7 @@ export function gameLoop(passDiff, options = {}) {
     return;
   }
 
-  // Ra-Enslaved auto-release stored time (once every 5 ticks)
+  // Ra-Nameless auto-release stored time (once every 5 ticks)
   if (Enslaved.isAutoReleasing) {
     Enslaved.autoReleaseTick++;
   }

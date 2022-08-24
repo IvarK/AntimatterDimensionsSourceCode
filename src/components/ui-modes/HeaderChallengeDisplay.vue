@@ -32,7 +32,7 @@ export default {
       return [
         celestialReality(Teresa, "Teresa's"),
         celestialReality(Effarig, "Effarig's"),
-        celestialReality(Enslaved, "The Enslaved Ones'"),
+        celestialReality(Enslaved, "The Nameless Ones'"),
         celestialReality(V, "V's"),
         celestialReality(Ra, "Ra's"),
         celestialReality(Laitela, "Lai'tela's"),

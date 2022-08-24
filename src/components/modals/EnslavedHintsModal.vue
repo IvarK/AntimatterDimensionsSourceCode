@@ -94,7 +94,7 @@ export default {
 <template>
   <ModalWrapper>
     <template #header>
-      Cracks in The Enslaved Ones' Reality
+      Cracks in The Nameless Ones' Reality
     </template>
     <div class="c-enslaved-hint-modal">
       <div>

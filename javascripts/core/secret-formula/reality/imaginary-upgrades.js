@@ -133,7 +133,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     id: 13,
     cost: 5e7,
     requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} projected Reality Machines within
-    The Enslaved Ones' Reality`,
+    The Nameless Ones' Reality`,
     hasFailed: () => !Enslaved.isRunning,
     checkRequirement: () => Enslaved.isRunning && MachineHandler.uncappedRM.gte(Number.MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,

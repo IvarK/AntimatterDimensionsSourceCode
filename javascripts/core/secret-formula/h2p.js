@@ -1261,15 +1261,15 @@ in order to bring up a modal summarizing the whole set of Glyphs.
         "endgame"],
       tab: "celestials/glyphfilter"
     }, {
-      name: "The Enslaved Ones, Celestial of Time",
-      alias: "Enslaved Ones",
+      name: "The Nameless Ones, Celestial of Time",
+      alias: "Nameless Ones",
       info: () => `
-The Enslaved Ones are the third Celestial, unlocked by completing Effarig's Eternity.
+The Nameless Ones are the third Celestial, unlocked by completing Effarig's Eternity.
 <br>
 <br>
-When unlocking The Enslaved Ones, you immediately gain access to two new mechanics related to time. You can store
+When unlocking The Nameless Ones, you immediately gain access to two new mechanics related to time. You can store
 "game time" by charging your Black Hole, and you can store "real time" by intentionally halting your production.
-Stored game time is also used as a currency for purchasing unlocks from The Enslaved Ones.
+Stored game time is also used as a currency for purchasing unlocks from The Nameless Ones.
 <br>
 <br>
 Charging your Black Hole gives you stored game time, which it does at the expense of setting your game speed to
@@ -1305,23 +1305,23 @@ by ${format(1e5)} Tickspeed Upgrades.
 <br>
 <br>
 At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years of stored game time, you are able
-to finally unlock their Reality. The reward for completing The Enslaved Ones' Reality is
+to finally unlock their Reality. The reward for completing The Nameless Ones' Reality is
 ${Enslaved.isCompleted
     ? "unlocking Tesseracts, which have their own How To Play entry."
-    : "<span style='color: var(--color-bad);'>(complete The Enslaved Ones' Reality to see reward details)</span>"}
+    : "<span style='color: var(--color-bad);'>(complete The Nameless Ones' Reality to see reward details)</span>"}
 <br>
 <br>
-The Enslaved Ones won't directly unlock the next Celestial.
+The Nameless Ones won't directly unlock the next Celestial.
 `,
       isUnlocked: () => EffarigUnlock.eternity.isUnlocked,
       // TODO Add the rest of the testers here too before release; this is all only pre wave 1
       tags: ["reality", "time", "blackhole", "lategame", "endgame", "testers", "celestial",
         "ikerstream", "realrapidjazz", "saturnus", "earth", "garnet", "pichusuperlover"],
-      tab: "celestials/enslaved"
+      tab: "celestials/nameless"
     }, {
       name: "Tesseracts",
       info: () => `
-Tesseracts are a new resource you unlock for completing The Enslaved Ones' Reality.
+Tesseracts are a new resource you unlock for completing The Nameless Ones' Reality.
 <br>
 <br>
 Infinity Dimensions are normally capped at ${format(InfinityDimensions.HARDCAP_PURCHASES)} total purchases,
@@ -1430,10 +1430,10 @@ ${Ra.unlocks.effarigUnlock.canBeApplied
     : "<span style='color: var(--color-bad);'>(unlock Effarig within Ra to see unlock details)</span>"}
 <br>
 <br>
-The Enslaved Ones unlocks
+The Nameless Ones unlocks
 ${Ra.unlocks.enslavedUnlock.canBeApplied
     ? "additional mechanics related to charging the Black Holes, as well as making them significantly stronger."
-    : "<span style='color: var(--color-bad);'>(unlock The Enslaved Ones within Ra to see unlock details)</span>"}
+    : "<span style='color: var(--color-bad);'>(unlock The Nameless Ones within Ra to see unlock details)</span>"}
 <br>
 <br>
 V unlocks
@@ -1447,7 +1447,7 @@ ${Ra.unlocks.vUnlock.canBeApplied
 Ra won't directly unlock the next Celestial.`,
       isUnlocked: () => VUnlocks.raUnlock.isUnlocked,
       tags: ["reality", "memories", "razenpok", "levels", "glyphs", "lategame", "endgame",
-        "effarig", "teresa", "enslaved", "v", "celestial"],
+        "effarig", "teresa", "nameless", "v", "celestial"],
       tab: "celestials/ra"
     }, {
       name: "Glyph Alchemy",

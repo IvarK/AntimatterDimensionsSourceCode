@@ -36,7 +36,7 @@ GameDatabase.celestials.descriptions = [
     }
   },
   {
-    name: "The Enslaved Ones",
+    name: "The Nameless Ones",
     effects() {
       return `Glyph levels are boosted to a minimum of ${formatInt(5000)}.
       Infinity, Time, and 8th Antimatter Dimension purchases are limited to ${formatInt(1)} each.

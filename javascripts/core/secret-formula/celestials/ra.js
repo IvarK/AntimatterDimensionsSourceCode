@@ -24,7 +24,7 @@ GameDatabase.celestials.ra = {
     },
     enslaved: {
       id: "enslaved",
-      name: "The Enslaved Ones",
+      name: "The Nameless Ones",
       color: "#f1aa7f",
       chunkGain: "Time Shards",
       memoryGain: "total time played",
@@ -134,7 +134,7 @@ GameDatabase.celestials.ra = {
     },
     enslavedUnlock: {
       id: 11,
-      reward: "Unlock Enslaved's Memories",
+      reward: "Unlock Nameless's Memories",
       pet: "effarig",
       level: 8,
       displayIcon: `<span class="c-ra-pet-milestones-effarig-link">\uf0c1</span>`
@@ -166,7 +166,7 @@ GameDatabase.celestials.ra = {
     },
     improvedStoredTime: {
       id: 15,
-      reward: "Stored game time is amplified and you can store more real time, increasing with Enslaved levels",
+      reward: "Stored game time is amplified and you can store more real time, increasing with Nameless levels",
       effects: {
         gameTimeAmplification: () => Math.pow(20, Math.clampMax(Ra.pets.enslaved.level, Ra.levelCap)),
         realTimeCap: () => 1000 * 3600 * Ra.pets.enslaved.level,
@@ -187,7 +187,7 @@ GameDatabase.celestials.ra = {
     adjustableStoredTime: {
       id: 17,
       reward: () => `Black Hole charging can be done at an adjustable rate and automatically
-        pulsed every ${formatInt(5)} ticks. You can change these in the Black Hole and The Enslaved Ones' tabs`,
+        pulsed every ${formatInt(5)} ticks. You can change these in the Black Hole and The Nameless Ones' tabs`,
       pet: "enslaved",
       level: 10,
       displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`,

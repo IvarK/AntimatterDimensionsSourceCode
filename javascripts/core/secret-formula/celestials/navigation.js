@@ -80,6 +80,7 @@ function pelleRiftFill(name, index, textAngle) {
     // immediately see some filling even when it's pretty much still empty
     complete: () => Math.clamp(0.1 + PelleRifts[name.toLowerCase()].realPercentage / 0.9, 1e-6, 1),
     node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
       position: Positions[`pelle${name}`],
       fill: "crimson",
@@ -113,6 +114,7 @@ function pelleRiftDrain(name, index, textAngle) {
     // the drain
     complete: () => Math.clamp(Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo), 1e-6, 1),
     node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
       incompleteClass: "c-celestial-nav__drained-rift",
       position: Positions[`pelle${name}`],
       fill: "crimson",
@@ -139,6 +141,7 @@ function pelleRiftOverfill(name, index, textAngle) {
     visible: () => Pelle.isDoomed && riftFillStage(name) === FILL_STATE.OVERFILL,
     complete: () => Math.clamp(PelleRifts[name.toLowerCase()].percentage - 1, 1e-6, 1),
     node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
       position: Positions[`pelle${name}`],
       fill: "#ff7700",
       ring: {
@@ -1770,6 +1773,7 @@ GameDatabase.celestials.navigation = {
     visible: () => DarkMatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
     complete: () => Laitela.difficultyTier / 8,
     node: {
+      clickAction: () => Tab.celestials.laitela.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
       symbolScale: 1.6,
       symbolOffset: "0.6",
@@ -1825,6 +1829,7 @@ GameDatabase.celestials.navigation = {
       return (imCost + laitelaProgress) / 2;
     },
     node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
       fill: "crimson",
       position: Positions.pelleUnlock,

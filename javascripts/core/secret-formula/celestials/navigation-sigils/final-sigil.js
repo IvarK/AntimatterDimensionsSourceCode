@@ -2,15 +2,16 @@ import { GameDatabase } from "../../game-database";
 
 import { CELESTIAL_NAV_DRAW_ORDER } from "../navigation";
 
-// TODO Replace this debug function with something based on generated galaxies once placement is finalized.
 function sigilProgress() {
-  return Math.clampMax((Date.now() % 4000) / 3000, 1);
+  const riftProgress = PelleRifts.all.map(r => Math.clamp(r.realPercentage, 0, 1)).min();
+  const generatorProgress = Math.log10(1 + GalaxyGenerator.generatedGalaxies) / 11;
+  return Math.clampMax(0.2 * riftProgress + 0.8 * generatorProgress, 1);
 }
 
 // Determines styling, overall visibility, and placement/scaling of the sigil. Center and size are defined such that
 // keeping the sigil within internal coordinates of ±1 will keep the sigil within a ±size box of the center coordinates
 const SigilAttributes = {
-  visible: () => Pelle.hasGalaxyGenerator,
+  visible: () => PelleRifts.all.map(r => Math.clamp(r.realPercentage, 0, 1)).min() > 0,
   center: new Vector(400, 300),
   size: 400,
   color: "crimson",

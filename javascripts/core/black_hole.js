@@ -536,62 +536,36 @@ export const BlackHoles = {
     return activePeriods;
   },
   
-  timeToNextPause(bhNum) {
-    if (bhNum === 1) {
-      // This is the warm-up case for the much, much more complicated case of Black Hole 2.
-      let bh = BlackHole(1);
-      // In general, if no blackhole gaps are as long as the warmup time, we're fine.
-      if (bh.interval <= BlackHoles.ACCELERATION_TIME) {
-        return null;
+  timeToNextPause(bhNum, steps=100) {
+    let bhs = BlackHole(2).isUnlocked ? [BlackHole(1), BlackHole(2)] : [BlackHole(1)];
+    let charged = bhs.map(i => i.isCharged);
+    let phases = bhs.map(i => i.phase);
+    let durations = bhs.map(i => i.duration);
+    let intervals = bhs.map(i => i.interval);
+    let inactiveTime = 0;
+    let totalTime = 0;
+    for (let i = 0; i < steps; i++) {
+      let current = charged.concat([false]).indexOf(false);
+      let mods = durations.slice(0, current).concat((current < bhs.length) ? intervals[current] : []);
+      let minTime = Math.min(...phases.slice(0, current + 1).map((p, j) => mods[j] - p));
+      if (current >= bhNum) {
+        if (inactiveTime >= BlackHoles.ACCELERATION_TIME) {
+          return totalTime - BlackHoles.ACCELERATION_TIME;
+        }
+        inactiveTime = 0;
+      } else {
+        inactiveTime += minTime;
       }
-      // Find the time until next activation.
-      let t = (bh.isCharged ? bh.duration : 0) + bh.interval - bh.phase;
-      // If the time until next activation is less than the acceleration time, we have to wait until the activation after that.
-      return (t < BlackHoles.ACCELERATION_TIME) ?
-      t + bh.duration + bh.interval - BlackHoles.ACCELERATION_TIME : t - BlackHoles.ACCELERATION_TIME;
+      totalTime += minTime;
+      for (let j = Math.min(current, phases.length - 1); j >= 0; j--) {
+        phases[j] += minTime;
+        if (phases[j] >= mods[j]) {
+          charged[j] = !charged[j];
+          phases[j] %= mods[j];
+        }
+      }
     }
-    // Now the actual code starts
-    let bh1 = BlackHole(1);
-    let bh2 = BlackHole(2);
-    // If the intervals are too small we don't pause.
-    if (bh1.interval <= BlackHoles.ACCELERATION_TIME && bh2.interval <= BlackHoles.ACCELERATION_TIME) {
-      return null;
-    }
-    // There are two times we could use here: the next BH2 activation (if there's a gap of at least 5 seconds before it),
-    // or the next time BH2 is active after a BH1 activation
-    // OK, now we calculate the BH1 active time until bh2 becomes charged...
-    let t2 = (bh2.isCharged ? bh2.duration : 0) + bh2.interval - bh2.phase;
-    // Then we transform that BH1 active time to an actual real amount of time...
-    let t1 = bh1.timeUntilTimeActive(t2);
-    // And then we need to recalculate it if it's less than 5 seconds from now, to take the time BH2 becomes charged after next
-    // rather than the too-imminent next one.
-    let t3 = (t1 < BlackHoles.ACCELERATION_TIME) ?
-    bh1.timeUntilTimeActive(t2 + bh2.duration + bh2.interval) - BlackHoles.ACCELERATION_TIME : t1 - BlackHoles.ACCELERATION_TIME;
-    // But we're not done! We might be able to stop at a BH1 activation while BH2 is charged, which might be sooner than the next
-    // time BH2 becomes charged. If BH2 isn't charged, or the gaps between BH1 activations aren't large enough, we are done, though.
-    if ((bh2.interval >= BlackHoles.ACCELERATION_TIME && t1 >= BlackHoles.ACCELERATION_TIME && !bh2.isCharged) ||
-    bh1.interval <= BlackHoles.ACCELERATION_TIME) {
-      return t3;
-    }
-    // We can determine that *if* we stop at a BH1 activation, it has to be the next one that's not in the next 5 seconds.
-    // This is because whichever BH1 activation we use, either BH2 has to be active for it, or BH2 activations are too sh
-    let s1 = (bh1.isCharged ? bh1.duration : 0) + bh1.interval - bh1.phase;
-    // This is whether we need to wait another BH1 activation.
-    let wait = s1 < BlackHoles.ACCELERATION_TIME;
-    // This is the time BH1 will spend active until the next usable BH1 activation.
-    let bh1Active = (wait ? bh1.duration : 0) + (bh1.isCharged ? bh1.duration - bh1.phase : 0);
-    // This is the time BH2 has left until its next *de*activation.
-    let bh2Left = (bh2.isCharged ? 0 : bh2.interval) + bh2.duration - bh2.phase;
-    // This is *strictly* positive mod (if it would be 0, it's instead b)
-    let strictposmod = (a, b) => (a % b === 0) ? b : ((a % b + b) % b);
-    // This is an adjustment for extra time BH2 will take to activate when BH1 activates.
-    // (wait = false but having a nonzero adjustment is handled by the "next BH2 activation" case).
-    let adjustment = Math.max(strictposmod(bh2Left - bh1Active, bh2.interval + bh2.duration) - bh2.duration, 0);
-    s1 += adjustment;
-    // This is the actual time we need to wait.
-    let s2 = wait ? s1 + bh1.duration + bh1.interval - BlackHoles.ACCELERATION_TIME : s1 - BlackHoles.ACCELERATION_TIME;
-    // Use whichever is smaller and usable.
-    return (bh1Active < bh2Left || bh2.interval < BlackHoles.ACCELERATION_TIME) ? s2 : t3;
+    return null;
   },
   
   

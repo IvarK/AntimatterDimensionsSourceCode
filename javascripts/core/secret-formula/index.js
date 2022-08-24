@@ -38,6 +38,8 @@ import "./celestials/rifts";
 import "./celestials/galaxy-generator";
 import "./celestials/ra";
 import "./celestials/enslaved";
+import "./celestials/navigation";
+import "./celestials/navigation-sigils/final-sigil";
 export * from "./celestials/v";
 import "./celestials/alchemy";
 import "./shop-purchases";

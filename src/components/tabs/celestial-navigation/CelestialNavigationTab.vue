@@ -2,7 +2,6 @@
 import svgPanZoom from "svg-pan-zoom";
 
 import { CELESTIAL_NAV_DRAW_ORDER } from "../../../../javascripts/core/secret-formula/celestials/navigation";
-import { sigilProgress } from "../../../../javascripts/core/secret-formula/celestials/pelle-sigil";
 
 import NodeBackground from "./NodeBackground";
 import NodeOverlay from "./NodeOverlay";
@@ -24,7 +23,7 @@ export default {
     db() {
       return {
         ...GameDatabase.celestials.navigation,
-        ...GameDatabase.celestials.navSigil
+        ...GameDatabase.celestials.navSigils
       };
     },
     drawOrder() {

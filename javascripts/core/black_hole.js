@@ -656,9 +656,10 @@ export const BlackHoles = {
       return [false, realTime];
     }
     const timeLeft = this.timeToNextPause(player.blackHoleAutoPauseMode);
+    // Cases in which we don't pause in the given amount of real time:
     // null = no pause, (timeLeft < 1e-9) = we auto-paused and there was maybe rounding error,
-    // now the player's unpaused at this exact point, (timeLeft > realTime) = we will pause but
-    // it'll take longer than the given time.
+    // now the player's unpaused at this exact point (so we shouldn't pause again),
+    // (timeLeft > realTime) = we will pause but it'll take longer than the given time.
     if (timeLeft === null || timeLeft < 1e-9 || timeLeft > realTime) {
       return [false, realTime];
     }

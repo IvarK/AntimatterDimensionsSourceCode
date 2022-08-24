@@ -31,7 +31,7 @@ export function pelleStarPosition(angle, scale) {
 }
 
 // Makes curved spokes connecting the center of Pelle to all the outer nodes corresponding to rifts
-function pelleStarConnector(index, fillColor, noBG) {
+function pelleStarConnector(index, fillColor, isOverfill) {
   return (function() {
     // This should be half of the second argument used in pelleStarPosition when used to define rift node positions
     const pelleSize = 75;
@@ -52,7 +52,8 @@ function pelleStarConnector(index, fillColor, noBG) {
       pathPadStart,
       pathPadEnd,
       fill: fillColor,
-      noBG,
+      drawOrder: isOverfill ? CELESTIAL_NAV_DRAW_ORDER.NODE_OVERLAYS : undefined,
+      noBG: isOverfill,
     };
   }());
 }
@@ -70,95 +71,6 @@ function riftFillStage(name) {
   if (!Pelle.hasGalaxyGenerator || rift.reducedTo === 1) return FILL_STATE.FILL;
   if (rift.reducedTo < 1) return FILL_STATE.DRAIN;
   return FILL_STATE.OVERFILL;
-}
-
-// Reduces some boilerplate for rift line objects - used for initial rift filling
-function pelleRiftFill(name, index, textAngle) {
-  return {
-    visible: () => Pelle.isDoomed && riftFillStage(name) === FILL_STATE.FILL,
-    // The curve starts inside of the node, so we give the completion variable a bit of a headstart so that we can
-    // immediately see some filling even when it's pretty much still empty
-    complete: () => Math.clamp(0.1 + PelleRifts[name.toLowerCase()].realPercentage / 0.9, 1e-6, 1),
-    node: {
-      clickAction: () => Tab.celestials.pelle.show(true),
-      incompleteClass: "c-celestial-nav__test-incomplete",
-      position: Positions[`pelle${name}`],
-      fill: "crimson",
-      ring: {
-        rMajor: 8,
-      },
-      legend: {
-        text: complete => {
-          const formattedPercent = complete >= 1 ? formatPercents(1) : formatPercents((complete - 0.1) / 0.9, 1);
-          return [
-            `${formattedPercent} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`
-          ];
-        },
-        angle: textAngle,
-        diagonal: 30,
-        horizontal: 16,
-      },
-    },
-    connector: pelleStarConnector(index, "crimson"),
-  };
-}
-
-// Reduces some boilerplate for rift line objects - used for altered styling when rifts are being drained. Note that
-// this object remains visible during overfill to provide a background that stays behind the spiral
-function pelleRiftDrain(name, index, textAngle) {
-  return {
-    visible: () => Pelle.isDoomed && riftFillStage(name) >= FILL_STATE.DRAIN,
-    // The logarithmic curve code sometimes throws errors if you attempt to draw with complete === 0, so we cheat and
-    // make it a really tiny number that should format to 0 in most notations. We also do a pow in order to make it
-    // visually smoother, because the generator spiral blocks the bottom bit and makes it look static near the end of
-    // the drain
-    complete: () => Math.clamp(Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo), 1e-6, 1),
-    node: {
-      clickAction: () => Tab.celestials.pelle.show(true),
-      incompleteClass: "c-celestial-nav__drained-rift",
-      position: Positions[`pelle${name}`],
-      fill: "crimson",
-      ring: {
-        rMajor: 8,
-      },
-      forceLegend: () => riftFillStage(name) === FILL_STATE.DRAIN && PelleRifts[name.toLowerCase()].reducedTo < 1,
-      legend: {
-        text: complete => [
-          `${formatPercents(complete, 1)} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`
-        ],
-        angle: textAngle,
-        diagonal: 30,
-        horizontal: 16,
-      },
-    },
-    connector: pelleStarConnector(index, "#550919"),
-  };
-}
-
-// Reduces some boilerplate for rift line objects - used for an additional overlay when rifts are filled past 100%
-function pelleRiftOverfill(name, index, textAngle) {
-  return {
-    visible: () => Pelle.isDoomed && riftFillStage(name) === FILL_STATE.OVERFILL,
-    complete: () => Math.clamp(PelleRifts[name.toLowerCase()].percentage - 1, 1e-6, 1),
-    node: {
-      clickAction: () => Tab.celestials.pelle.show(true),
-      position: Positions[`pelle${name}`],
-      fill: "#ff7700",
-      ring: {
-        rMajor: 8,
-      },
-      alwaysShowLegend: true,
-      legend: {
-        text: complete => [
-          `${formatPercents(complete + 1, 1)} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`
-        ],
-        angle: textAngle,
-        diagonal: 30,
-        horizontal: 16,
-      },
-    },
-    connector: pelleStarConnector(index, "#ff9900", true),
-  };
 }
 
 export const CELESTIAL_NAV_DRAW_ORDER = {
@@ -216,6 +128,85 @@ const Positions = Object.freeze({
 
   pelleGalaxyGen: pelleStarPosition(0, 0),
 });
+
+// Reduces boilerplate for rift line objects, but needs quite a few parameters to do so since there are three separate
+// elements that render for filling - the initial fill, the drain, and then the overfill
+// eslint-disable-next-line max-params
+function pelleRiftFill(name, index, textAngle, fillType) {
+  let visibleCheck, progressFn, legendFn, percentFn, incompleteClass, nodeFill, connectorFill;
+  switch (fillType) {
+    case FILL_STATE.FILL:
+      // The curve starts inside of the node, so we give the completion variable a bit of a headstart so that we can
+      // immediately see some filling even when it's pretty much still empty
+      visibleCheck = () => riftFillStage(name) === FILL_STATE.FILL;
+      progressFn = () => Math.clamp(0.1 + PelleRifts[name.toLowerCase()].realPercentage / 0.9, 1e-6, 1);
+      legendFn = () => false;
+      percentFn = x => (x - 0.1) / 0.9;
+      incompleteClass = "c-celestial-nav__test-incomplete";
+      nodeFill = "crimson";
+      connectorFill = "crimson";
+      break;
+    case FILL_STATE.DRAIN:
+      // The logarithmic curve code sometimes throws errors if you attempt to draw with complete === 0, so we cheat and
+      // make it a really tiny number that should format to 0 in most notations. We also do a pow in order to make it
+      // visually smoother, because the generator spiral blocks the bottom bit and makes it look static near the end of
+      // the drain
+      visibleCheck = () => riftFillStage(name) >= FILL_STATE.DRAIN;
+      progressFn = () => Math.clamp(Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo), 1e-6, 1);
+      legendFn = () => riftFillStage(name) === FILL_STATE.DRAIN && PelleRifts[name.toLowerCase()].reducedTo < 1;
+      percentFn = x => x;
+      incompleteClass = "c-celestial-nav__drained-rift";
+      nodeFill = "crimson";
+      connectorFill = "#550919";
+      break;
+    case FILL_STATE.OVERFILL:
+      visibleCheck = () => riftFillStage(name) === FILL_STATE.OVERFILL;
+      progressFn = () => Math.clamp(PelleRifts[name.toLowerCase()].percentage - 1, 1e-6, 1);
+      percentFn = x => x + 1;
+      legendFn = () => true;
+      incompleteClass = undefined;
+      nodeFill = "#ff7700";
+      connectorFill = "#ff9900";
+      break;
+  }
+
+  return {
+    visible: () => Pelle.isDoomed && visibleCheck(),
+    complete: () => progressFn(),
+    node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
+      incompleteClass,
+      position: Positions[`pelle${name}`],
+      fill: nodeFill,
+      ring: {
+        rMajor: 8,
+      },
+      forceLegend: () => legendFn(),
+      legend: {
+        text: complete => [
+          `${formatPercents(percentFn(complete), 1)} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`
+        ],
+        angle: textAngle,
+        diagonal: 30,
+        horizontal: 16,
+      },
+    },
+    connector: pelleStarConnector(index, connectorFill, fillType === FILL_STATE.OVERFILL),
+  };
+}
+
+// Slightly reduces boilerplate; there are a total of 15 rift elements which are largely duplicated code
+const fillStates = ["fill", "drain", "overfill"];
+const riftNames = ["Vacuum", "Decay", "Chaos", "Recursion", "Paradox"];
+const angles = [225, 315, 45, 135, 135];
+const riftFillElements = {};
+for (const fill of fillStates) {
+  for (let index = 0; index < riftNames.length; index++) {
+    const name = riftNames[index];
+    riftFillElements[`pelle-${name}-${fill}`] = pelleRiftFill(name, index, angles[index],
+      FILL_STATE[fill.toUpperCase()]);
+  }
+}
 
 GameDatabase.celestials.navigation = {
   "teresa-base": {
@@ -1916,18 +1907,8 @@ GameDatabase.celestials.navigation = {
     },
   },
 
-  // We need duplicated entries here because the filling and draining styles are different, show under different
-  // conditions, and have slightly different fill scaling due to occlusion from the galaxy generator spiral
-  "pelle-vacuum-fill": pelleRiftFill("Vacuum", 0, 225),
-  "pelle-decay-fill": pelleRiftFill("Decay", 1, 315),
-  "pelle-chaos-fill": pelleRiftFill("Chaos", 2, 45),
-  "pelle-recursion-fill": pelleRiftFill("Recursion", 3, 135),
-  "pelle-paradox-fill": pelleRiftFill("Paradox", 4, 135),
-  "pelle-vacuum-drain": pelleRiftDrain("Vacuum", 0, 225),
-  "pelle-decay-drain": pelleRiftDrain("Decay", 1, 315),
-  "pelle-chaos-drain": pelleRiftDrain("Chaos", 2, 45),
-  "pelle-recursion-drain": pelleRiftDrain("Recursion", 3, 135),
-  "pelle-paradox-drain": pelleRiftDrain("Paradox", 4, 135),
+  // All the fill elements are generated outside of here as a loop, and then unpacked here with the spread operator
+  ...riftFillElements,
 
   // Needs a separate node in order to color the background of the galaxy generator not-gray. Note that this node gets
   // placed on top of the "main" Doomed node once it's visible
@@ -1980,14 +1961,6 @@ GameDatabase.celestials.navigation = {
       };
     }()),
   },
-
-  // These entries are duplicated again, for the third set of styles on the final refill and in order to draw
-  // the refilling rifts on top of the galaxy spiral
-  "pelle-vacuum-overfill": pelleRiftOverfill("Vacuum", 0, 225),
-  "pelle-decay-overfill": pelleRiftOverfill("Decay", 1, 315),
-  "pelle-chaos-overfill": pelleRiftOverfill("Chaos", 2, 45),
-  "pelle-recursion-overfill": pelleRiftOverfill("Recursion", 3, 135),
-  "pelle-paradox-overfill": pelleRiftOverfill("Paradox", 4, 135),
 
   // The path BG is invisible, but we want to make sure it extends far enough that it expands out "forever"
   "pelle-galaxy-generator-infinite": {

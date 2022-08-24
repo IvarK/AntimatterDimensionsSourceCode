@@ -551,7 +551,12 @@ export const BlackHoles = {
     }
     return activePeriods;
   },
-
+  
+  /**
+   * Takes BH number (1 or 2) and number of steps to do in an internal BH simulation.
+   * Returns real time until we can pause before given BH (i.e., we have a gap of at least 5 seconds before it),
+   * or null if we can't pause before it.
+   */
   timeToNextPause(bhNum, steps = 100) {
     if (bhNum === 1) {
       // This is a simple case that we can do mathematically.
@@ -580,6 +585,16 @@ export const BlackHoles = {
     const phases = [BlackHole(1).phase, BlackHole(2).phase];
     const durations = [BlackHole(1).duration, BlackHole(2).duration];
     const intervals = [BlackHole(1).interval, BlackHole(2).interval];
+    // This is technically somewhat incorrect, because assuming durations aren't tiny, the maximum
+    // possible gap between BH2 activations is the *sum* of the intervals. However, that's still 10 seconds
+    // if this conditional is true, and pausing the BH because of a 10-second activation gap
+    // doesn't seem to make much sense. If this is an issue, we could use the sum of the intervals.
+    // This should also stop this function from being relatively computationally expensive
+    // if both intervals are 3 seconds (so the next pause would be when they happen to align,
+    // which is rare and will probably lead to a full 100 steps).
+    if (intervals[0] <= BlackHoles.ACCELERATION_TIME && intervals[1] <= BlackHoles.ACCELERATION_TIME) {
+      return null;
+    }
     // Make a list of things to bound phase by.
     const phaseBoundList = [[intervals[0]], [durations[0], intervals[1]], [durations[0], durations[1]]];
     // Time tracking.
@@ -626,7 +641,12 @@ export const BlackHoles = {
     // We didn't activate so we return null.
     return null;
   },
-
+  
+  /**
+   * Takes amount of real time.
+   * Returns 2-item array:
+   * [will BH be paused in the given amount of real time, real time until pause if so].
+   */
   autoPauseData(realTime) {
     // This can be called when determining offline time if the black holes are already paused.
     // In that case we don't need to pause them (need to pause = false), but they're already paused (0 time).
@@ -636,7 +656,9 @@ export const BlackHoles = {
       return [false, realTime];
     }
     const timeLeft = this.timeToNextPause(player.blackHoleAutoPauseMode);
-    // Probably rounding error
+    // null = no pause, (timeLeft < 1e-9) = we auto-paused and there was maybe rounding error,
+    // now the player's unpaused at this exact point, (timeLeft > realTime) = we will pause but
+    // it'll take longer than the given time.
     if (timeLeft === null || timeLeft < 1e-9 || timeLeft > realTime) {
       return [false, realTime];
     }

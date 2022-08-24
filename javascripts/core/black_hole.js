@@ -537,34 +537,73 @@ export const BlackHoles = {
   },
   
   timeToNextPause(bhNum, steps=100) {
-    let bhs = BlackHole(2).isUnlocked ? [BlackHole(1), BlackHole(2)] : [BlackHole(1)];
-    let charged = bhs.map(i => i.isCharged);
-    let phases = bhs.map(i => i.phase);
-    let durations = bhs.map(i => i.duration);
-    let intervals = bhs.map(i => i.interval);
+    if (bhNum === 1) {
+      // This is a simple case that we can do mathematically.
+     let bh = BlackHole(1);
+     // If no blackhole gaps are as long as the warmup time, we never pause.
+     if (bh.interval <= BlackHoles.ACCELERATION_TIME) {
+       return null;
+     }
+     // Find the time until next activation.
+     let t = (bh.isCharged ? bh.duration : 0) + bh.interval - bh.phase;
+     // If the time until next activation is less than the acceleration time, we have to wait until the activation after that;
+     // otherwise, we can just use the next activation.
+     return (t < BlackHoles.ACCELERATION_TIME) ?
+     t + bh.duration + bh.interval - BlackHoles.ACCELERATION_TIME : t - BlackHoles.ACCELERATION_TIME;
+    }
+    // Look at the next 100 black hole transitions.
+    // This is called every tick if BH pause setting is set to BH2, so we try to optimize it.
+    // I think the bound of 100 means it can fail only in the case one black hole interval is under 5s
+    // and the other isn't. In practice, by this point the other interval is usually about 15 seconds
+    // and both durations are fairly long (a few minutes), making the longest that a gap between activations
+    // can be 20 seconds (so it's fairly OK not to pause).
+    // Precalculate some stuff that won't change (or in the case of charged and phases, stuff we'll change ourself
+    // but just in this simulation) while we call this function.
+    let charged = [BlackHole(1).isCharged, BlackHole(2).isCharged];
+    let phases = [BlackHole(1).phase, BlackHole(2).phase];
+    let durations = [BlackHole(1).duration, BlackHole(2).duration];
+    let intervals = [BlackHole(1).interval, BlackHole(2).interval];
+    // Make a list of things to bound phase by.
+    let phaseBoundList = [[intervals[0]], [durations[0], intervals[1]], [durations[0], durations[1]]];
+    // Time tracking.
     let inactiveTime = 0;
     let totalTime = 0;
     for (let i = 0; i < steps; i++) {
-      let current = charged.concat([false]).indexOf(false);
-      let mods = durations.slice(0, current).concat((current < bhs.length) ? intervals[current] : []);
-      let minTime = Math.min(...phases.slice(0, current + 1).map((p, j) => mods[j] - p));
-      if (current >= bhNum) {
+      // Currently active BH.
+      let current = charged[0] ? (charged[1] ? 2 : 1) : 0;
+      // Get the list of phase bounds.
+      let phaseBounds = phaseBoundList[current];
+      // Compute time until some phase reaches its bound.
+      let minTime = current > 0 ? Math.min(phaseBounds[0] - phases[0], phaseBounds[1] - phases[1]) : phaseBounds[0] - phases[0];
+      if (current === 2) {
+        // Check if there was enough time before this activation to pause.
         if (inactiveTime >= BlackHoles.ACCELERATION_TIME) {
-          return totalTime - BlackHoles.ACCELERATION_TIME;
+         return totalTime - BlackHoles.ACCELERATION_TIME;
         }
+        // Not enough time, reset inactive time to 0.
         inactiveTime = 0;
       } else {
+        // BH2 is inactive, add to inactive time.
         inactiveTime += minTime;
       }
+      // Add to total time in any case.
       totalTime += minTime;
-      for (let j = Math.min(current, phases.length - 1); j >= 0; j--) {
-        phases[j] += minTime;
-        if (phases[j] >= mods[j]) {
-          charged[j] = !charged[j];
-          phases[j] %= mods[j];
+      // If BH1 is active we should update BH2.
+      if (current > 0) {
+        phases[1] += minTime;
+        if (phases[1] >= phaseBounds[1]) {
+          charged[1] = !charged[1];
+          phases[1] -= phaseBounds[1];
         }
       }
+      // Update BH1 no matter what.
+      phases[0] += minTime;
+      if (phases[0] >= phaseBounds[0]) {
+        charged[0] = !charged[0];
+        phases[0] -= phaseBounds[0];
+      }
     }
+    // We didn't activate so we return null.
     return null;
   },
   

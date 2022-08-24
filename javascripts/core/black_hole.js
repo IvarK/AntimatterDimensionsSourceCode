@@ -574,17 +574,23 @@ export const BlackHoles = {
       return t3;
     }
     // We can determine that *if* we stop at a BH1 activation, it has to be the next one that's not in the next 5 seconds.
-    // This is because whichever BH1 activation we use, either BH2 has to be active for it. If not, we should stop 
-    // This is the BH1 time until the next BH1 activation.
+    // This is because whichever BH1 activation we use, either BH2 has to be active for it, or BH2 activations are too sh
     let s1 = (bh1.isCharged ? bh1.duration : 0) + bh1.interval - bh1.phase;
+    // This is whether we need to wait another BH1 activation.
+    let wait = s1 < BlackHoles.ACCELERATION_TIME;
     // This is the time BH1 will spend active until the next usable BH1 activation.
-    let bh1Active = ((s1 < BlackHoles.ACCELERATION_TIME) ? bh1.duration : 0) + (bh1.isCharged ? bh1.duration - bh1.phase : 0);
+    let bh1Active = (wait ? bh1.duration : 0) + (bh1.isCharged ? bh1.duration - bh1.phase : 0);
+    // This is the time BH2 has left until its next *de*activation.
     let bh2Left = (bh2.isCharged ? 0 : bh2.interval) + bh2.duration - bh2.phase;
+    // This is *strictly* positive mod (if it would be 0, it's instead b)
     let strictposmod = (a, b) => (a % b === 0) ? b : ((a % b + b) % b);
+    // This is an adjustment for extra time BH2 will take to activate when BH1 activates.
+    // (wait = false but having a nonzero adjustment is handled by the "next BH2 activation" case).
     let adjustment = Math.max(strictposmod(bh2Left - bh1Active, bh2.interval + bh2.duration) - bh2.duration, 0);
     s1 += adjustment;
-    let s2 = (s1 < BlackHoles.ACCELERATION_TIME) ?
-    s1 + bh1.duration + bh1.interval - BlackHoles.ACCELERATION_TIME : s1 - BlackHoles.ACCELERATION_TIME;
+    // This is the actual time we need to wait.
+    let s2 = wait ? s1 + bh1.duration + bh1.interval - BlackHoles.ACCELERATION_TIME : s1 - BlackHoles.ACCELERATION_TIME;
+    // Use whichever is smaller and usable.
     return (bh1Active < bh2Left || bh2.interval < BlackHoles.ACCELERATION_TIME) ? s2 : t3;
   },
   

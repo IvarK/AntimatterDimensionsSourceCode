@@ -31,15 +31,15 @@ export default {
       this.decodeSave();
     },
     decodeSave() {
-      const imported = AutomatorBackend.importScriptContents(this.rawDecoded);
+      const imported = AutomatorBackend.importScriptContents(this.input);
       if (!imported) {
         this.isValid = false;
         return;
       }
       this.scriptName = imported.name;
       this.scriptContent = imported.content;
-      this.updateScriptInfo();
       this.isValid = true;
+      this.updateScriptInfo();
     },
     updateScriptInfo() {
       this.lineCount = this.scriptContent.split("\n").length;

@@ -431,8 +431,14 @@ export const AutomatorBackend = {
   },
 
   // This imports script contents only
-  importScriptContents(toImport) {
-    const parts = toImport.split("||");
+  importScriptContents(rawInput) {
+    let decoded;
+    try {
+      decoded = GameSaveSerializer.decodeText(rawInput, "automator script");
+    } catch (e) {
+      return null;
+    }
+    const parts = decoded.split("||");
 
     // TODO Remove this 3-length conditional before release; this is only here to maintain compatability with scripts
     // exported from older test versions and will never be called on scripts exported post-release
@@ -449,6 +455,89 @@ export const AutomatorBackend = {
     return {
       name: parts[0],
       content: parts[1],
+    };
+  },
+
+  // This exports the currently-visible script along with any constants and study presets it uses or references
+  exportFullScriptData() {
+    // Cut off leading and trailing whitespace
+    const trimmed = AutomatorData.currentScriptText().replace(/^\s*(.*?)\s*$/u, "$1");
+    if (trimmed.length === 0) return null;
+
+    const foundPresets = new Set();
+    const foundConstants = new Set();
+    const lines = trimmed.split("\n");
+    for (let num = 0; num < lines.length; num++) {
+      const rawLine = lines[num];
+
+      // We find just the keys first, the rest of the associated data is serialized later
+      const matchPresetID = rawLine.match(/studies( nowait)? load id ([1-6])/ui);
+      if (matchPresetID) foundPresets.add(Number(matchPresetID[2]));
+      const matchPresetName = rawLine.match(/studies( nowait)? load name (\S+)/ui);
+      if (matchPresetName) foundPresets.add(player.timestudy.presets.findIndex(p => p.name === matchPresetName[2]));
+      const availableConstants = Object.keys(player.reality.automator.constants);
+      for (const key of availableConstants) if (rawLine.includes(key)) foundConstants.add(key);
+    }
+
+    // Serialize presets
+    const presets = [];
+    for (const id of Array.from(foundPresets)) {
+      const preset = player.timestudy.presets[id];
+      presets.push(`${id}:${preset.name}:${preset.studies}`);
+    }
+
+    // Serialize constants
+    const constants = [];
+    for (const name of Array.from(foundConstants)) {
+      constants.push(`${name}:${player.reality.automator.constants[name]}`);
+    }
+
+    // Append the script name, study presets, and constants to the script contents, separating all of them with "||"
+    const name = AutomatorData.currentScriptName();
+    return GameSaveSerializer.encodeText(
+      `${name}||${presets.join("::")}||${constants.join("::")}||${trimmed}`,
+      "automator data");
+  },
+
+  // This imports scripts which also have attached information in the form of associated constants and study presets
+  importFullScriptData(rawInput) {
+    let decoded;
+    try {
+      decoded = GameSaveSerializer.decodeText(rawInput, "automator data");
+    } catch (e) {
+      return null;
+    }
+    const parts = decoded.split("||");
+    if (parts.length !== 4) return null;
+
+    // Parse preset data
+    const presetData = parts[1];
+    const presets = [];
+    for (const preset of presetData.split("::")) {
+      const props = preset.split(":");
+      presets.push({
+        id: Number(props[0]),
+        name: props[1],
+        studies: props[2],
+      });
+    }
+
+    // Parse constant data
+    const constantData = parts[2];
+    const constants = [];
+    for (const constant of constantData.split("::")) {
+      const props = constant.split(":");
+      constants.push({
+        key: props[0],
+        value: props[1],
+      });
+    }
+
+    return {
+      name: parts[0],
+      presets,
+      constants,
+      content: parts[3],
     };
   },
 

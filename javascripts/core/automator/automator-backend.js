@@ -422,13 +422,20 @@ export const AutomatorBackend = {
 
   // Finds which study presets are referenced within the specified script
   getUsedPresets(scriptID) {
+    const script = this.findRawScriptObject(scriptID);
+    if (!script) return null;
+
     const foundPresets = new Set();
-    const lines = this.findRawScriptObject(scriptID).content.split("\n");
+    const lines = script.content.split("\n");
     for (const rawLine of lines) {
       const matchPresetID = rawLine.match(/studies( nowait)? load id ([1-6])/ui);
-      if (matchPresetID) foundPresets.add(Number(matchPresetID[2]));
+      if (matchPresetID) foundPresets.add(Number(matchPresetID[2]) - 1);
       const matchPresetName = rawLine.match(/studies( nowait)? load name (\S+)/ui);
-      if (matchPresetName) foundPresets.add(player.timestudy.presets.findIndex(p => p.name === matchPresetName[2]));
+      if (matchPresetName) {
+        // A script might pass the regex match, but actually be referencing a preset which doesn't exist by name
+        const presetID = player.timestudy.presets.findIndex(p => p.name === matchPresetName[2]);
+        if (presetID !== -1) foundPresets.add(presetID);
+      }
     }
     const presets = Array.from(foundPresets);
     presets.sort();
@@ -437,8 +444,11 @@ export const AutomatorBackend = {
 
   // Finds which constants are referenced within the specified script
   getUsedConstants(scriptID) {
+    const script = this.findRawScriptObject(scriptID);
+    if (!script) return null;
+
     const foundConstants = new Set();
-    const lines = this.findRawScriptObject(scriptID).content.split("\n");
+    const lines = script.content.split("\n");
     for (const rawLine of lines) {
       const availableConstants = Object.keys(player.reality.automator.constants);
       for (const key of availableConstants) if (rawLine.includes(key)) foundConstants.add(key);
@@ -458,8 +468,8 @@ export const AutomatorBackend = {
     return GameSaveSerializer.encodeText(`${name}||${trimmed}`, "automator script");
   },
 
-  // This imports script contents only
-  importScriptContents(rawInput) {
+  // This parses script content from an encoded export string; does not actually import anything
+  parseScriptContents(rawInput) {
     let decoded;
     try {
       decoded = GameSaveSerializer.decodeText(rawInput, "automator script");
@@ -486,10 +496,17 @@ export const AutomatorBackend = {
     };
   },
 
-  // This exports the currently-visible script along with any constants and study presets it uses or references
+  // Creates a new script from the supplied import string
+  importScriptContents(rawInput) {
+    const parsed = this.parseScriptContents(rawInput);
+    AutomatorData.createNewScript(parsed.content, parsed.name);
+    this.initializeFromSave();
+  },
+
+  // This exports the selected script along with any constants and study presets it uses or references
   exportFullScriptData(scriptID) {
-    // Cut off leading and trailing whitespace
-    const trimmed = this.findRawScriptObject(scriptID).content.replace(/^\s*(.*?)\s*$/u, "$1");
+    const script = this.findRawScriptObject(scriptID);
+    const trimmed = script.content.replace(/^\s*(.*?)\s*$/u, "$1");
     if (trimmed.length === 0) return null;
 
     const foundPresets = new Set();
@@ -500,7 +517,11 @@ export const AutomatorBackend = {
       const matchPresetID = rawLine.match(/studies( nowait)? load id ([1-6])/ui);
       if (matchPresetID) foundPresets.add(Number(matchPresetID[2]));
       const matchPresetName = rawLine.match(/studies( nowait)? load name (\S+)/ui);
-      if (matchPresetName) foundPresets.add(player.timestudy.presets.findIndex(p => p.name === matchPresetName[2]));
+      if (matchPresetName) {
+        // A script might pass the regex match, but actually be referencing a preset which doesn't exist by name
+        const presetID = player.timestudy.presets.findIndex(p => p.name === matchPresetName[2]);
+        if (presetID !== -1) foundPresets.add(presetID);
+      }
       const availableConstants = Object.keys(player.reality.automator.constants);
       for (const key of availableConstants) if (rawLine.includes(key)) foundConstants.add(key);
     }
@@ -509,7 +530,7 @@ export const AutomatorBackend = {
     const presets = [];
     for (const id of Array.from(foundPresets)) {
       const preset = player.timestudy.presets[id];
-      presets.push(`${id}:${preset.name}:${preset.studies}`);
+      presets.push(`${id}:${preset?.name ?? ""}:${preset?.studies ?? ""}`);
     }
 
     // Serialize constants
@@ -519,13 +540,13 @@ export const AutomatorBackend = {
     }
 
     // Append the script name, study presets, and constants to the script contents, separating all of them with "||"
-    const name = AutomatorData.currentScriptName();
     return GameSaveSerializer.encodeText(
-      `${name}||${presets.join("::")}||${constants.join("::")}||${trimmed}`,
+      `${script.name}||${presets.join("*")}||${constants.join("*")}||${trimmed}`,
       "automator data");
   },
 
-  // This parses scripts which also have attached information in the form of associated constants and study presets
+  // This parses scripts which also have attached information in the form of associated constants and study presets.
+  // Note that it doesn't actually import or assign the data to the save file at this point.
   parseFullScriptData(rawInput) {
     let decoded;
     try {
@@ -539,7 +560,7 @@ export const AutomatorBackend = {
     // Parse preset data
     const presetData = parts[1];
     const presets = [];
-    for (const preset of presetData.split("::")) {
+    for (const preset of presetData.split("*")) {
       const props = preset.split(":");
       presets.push({
         id: Number(props[0]),
@@ -551,7 +572,8 @@ export const AutomatorBackend = {
     // Parse constant data
     const constantData = parts[2];
     const constants = [];
-    for (const constant of constantData.split("::")) {
+    for (const constant of constantData.split("*")) {
+      if (constant === "") continue;
       const props = constant.split(":");
       constants.push({
         key: props[0],
@@ -565,6 +587,33 @@ export const AutomatorBackend = {
       constants,
       content: parts[3],
     };
+  },
+
+  // This imports a given script, with options supplied for ignoring or overwriting included presets and constants
+  // within the import data.
+  importFullScriptData(rawInput, ignoreData, overwriteData) {
+    const parsed = this.parseFullScriptData(rawInput);
+    AutomatorData.createNewScript(parsed.content, parsed.name);
+
+    if (!ignoreData.presets) {
+      for (const preset of parsed.presets) {
+        const existingPreset = player.timestudy.presets[preset.id];
+        if (existingPreset.studies === "" || overwriteData.presets) {
+          player.timestudy.presets[preset.id] = { name: preset.name, studies: preset.studies };
+        }
+      }
+    }
+
+    if (!ignoreData.constants) {
+      for (const constant of parsed.constants) {
+        const existingConstant = player.reality.automator.constants[constant.key];
+        if (!existingConstant || overwriteData.constants) {
+          player.reality.automator.constants[constant.key] = constant.value;
+        }
+      }
+    }
+
+    this.initializeFromSave();
   },
 
   update(diff) {

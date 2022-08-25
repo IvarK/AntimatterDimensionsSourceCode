@@ -515,7 +515,7 @@ export const AutomatorBackend = {
     // We find just the keys first, the rest of the associated data is serialized later
     for (const rawLine of lines) {
       const matchPresetID = rawLine.match(/studies( nowait)? load id ([1-6])/ui);
-      if (matchPresetID) foundPresets.add(Number(matchPresetID[2]));
+      if (matchPresetID) foundPresets.add(Number(matchPresetID[2]) - 1);
       const matchPresetName = rawLine.match(/studies( nowait)? load name (\S+)/ui);
       if (matchPresetName) {
         // A script might pass the regex match, but actually be referencing a preset which doesn't exist by name
@@ -589,25 +589,24 @@ export const AutomatorBackend = {
     };
   },
 
-  // This imports a given script, with options supplied for ignoring or overwriting included presets and constants
+  // This imports a given script, with options supplied for ignoring included presets and constants
   // within the import data.
-  importFullScriptData(rawInput, ignoreData, overwriteData) {
+  importFullScriptData(rawInput, ignore) {
     const parsed = this.parseFullScriptData(rawInput);
     AutomatorData.createNewScript(parsed.content, parsed.name);
 
-    if (!ignoreData.presets) {
+    if (!ignore.presets) {
       for (const preset of parsed.presets) {
-        const existingPreset = player.timestudy.presets[preset.id];
-        if (existingPreset.studies === "" || overwriteData.presets) {
-          player.timestudy.presets[preset.id] = { name: preset.name, studies: preset.studies };
-        }
+        player.timestudy.presets[preset.id] = { name: preset.name, studies: preset.studies };
       }
     }
 
-    if (!ignoreData.constants) {
+    if (!ignore.constants) {
       for (const constant of parsed.constants) {
-        const existingConstant = player.reality.automator.constants[constant.key];
-        if (!existingConstant || overwriteData.constants) {
+        const alreadyExists = player.reality.automator.constants[constant.key];
+        const canMakeNew = Object.keys(player.reality.automator.constants).length <
+          AutomatorData.MAX_ALLOWED_CONSTANT_COUNT;
+        if (alreadyExists || canMakeNew) {
           player.reality.automator.constants[constant.key] = constant.value;
         }
       }
@@ -783,6 +782,7 @@ export const AutomatorBackend = {
       this.stop();
       this.state.topLevelScript = this._scripts[0].id;
     }
+    EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
 
   toggleRepeat() {

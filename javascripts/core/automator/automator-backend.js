@@ -420,6 +420,38 @@ export const AutomatorBackend = {
     return this.currentRawText.split("\n").length;
   },
 
+  // This exports only the text contents of the currently-visible script
+  exportCurrentScriptContents() {
+    // Cut off leading and trailing whitespace
+    const trimmed = AutomatorData.currentScriptText().replace(/^\s*(.*?)\s*$/u, "$1");
+    if (trimmed.length === 0) return null;
+    // Append the script name into the beginning of the string and separate it from the script content with "||"
+    const name = AutomatorData.currentScriptName();
+    return GameSaveSerializer.encodeText(`${name}||${trimmed}`, "automator script");
+  },
+
+  // This imports script contents only
+  importScriptContents(toImport) {
+    const parts = toImport.split("||");
+
+    // TODO Remove this 3-length conditional before release; this is only here to maintain compatability with scripts
+    // exported from older test versions and will never be called on scripts exported post-release
+    if (parts.length === 3 && parts[1].length !== parseInt(parts[0], 10)) {
+      return {
+        name: parts[1],
+        content: parts[2],
+      };
+    }
+
+    if (parts.length !== 2) {
+      return null;
+    }
+    return {
+      name: parts[0],
+      content: parts[1],
+    };
+  },
+
   update(diff) {
     if (!this.isOn) return;
     let stack;

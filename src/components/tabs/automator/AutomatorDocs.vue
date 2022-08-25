@@ -1,6 +1,7 @@
 <script>
 import AutomatorBlocks from "./AutomatorBlocks";
 import AutomatorButton from "./AutomatorButton";
+import AutomatorDataTransferPage from "./AutomatorDataTransferPage";
 import AutomatorDefinePage from "./AutomatorDefinePage";
 import AutomatorDocsCommandList from "./AutomatorDocsCommandList";
 import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
@@ -13,9 +14,10 @@ export const AutomatorPanels = {
   COMMANDS: 1,
   ERRORS: 2,
   EVENTS: 3,
-  CONSTANTS: 4,
-  TEMPLATES: 5,
-  BLOCKS: 6
+  DATA_TRANSFER: 4,
+  CONSTANTS: 5,
+  TEMPLATES: 6,
+  BLOCKS: 7
 };
 
 export default {
@@ -25,6 +27,7 @@ export default {
     AutomatorDocsCommandList,
     AutomatorErrorPage,
     AutomatorEventLog,
+    AutomatorDataTransferPage,
     AutomatorBlocks,
     AutomatorDocsTemplateList,
     AutomatorDefinePage,
@@ -229,6 +232,12 @@ export default {
           @click="infoPaneID = panelEnum.ERRORS"
         />
         <AutomatorButton
+          v-tooltip="'Extended Data Transfer'"
+          class="fa-window-restore"
+          :class="activePanelClass(panelEnum.DATA_TRANSFER)"
+          @click="infoPaneID = panelEnum.DATA_TRANSFER"
+        />
+        <AutomatorButton
           v-tooltip="'View recently executed commands'"
           class="fa-eye"
           :class="activePanelClass(panelEnum.EVENTS)"
@@ -321,6 +330,7 @@ export default {
       <AutomatorDocsCommandList v-if="infoPaneID === panelEnum.COMMANDS" />
       <AutomatorErrorPage v-else-if="infoPaneID === panelEnum.ERRORS" />
       <AutomatorEventLog v-else-if="infoPaneID === panelEnum.EVENTS" />
+      <AutomatorDataTransferPage v-else-if="infoPaneID === panelEnum.DATA_TRANSFER" />
       <AutomatorDefinePage v-else-if="infoPaneID === panelEnum.CONSTANTS" />
       <AutomatorDocsTemplateList v-else-if="infoPaneID === panelEnum.TEMPLATES" />
       <AutomatorBlocks v-else-if="infoPaneID === panelEnum.BLOCKS" />

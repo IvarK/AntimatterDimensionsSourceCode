@@ -1,0 +1,103 @@
+<script>
+export default {
+  name: "AutomatorDataTransferSingleEntry",
+  props: {
+    script: {
+      type: Object,
+      required: true,
+    }
+  },
+  data() {
+    return {
+      presets: [],
+      constants: [],
+      hidePresets: true,
+      hideConstants: true,
+    };
+  },
+  computed: {
+    presetData: () => player.timestudy.presets,
+    constantData: () => player.reality.automator.constants,
+  },
+  methods: {
+    update() {
+      this.presets = AutomatorBackend.getUsedPresets(this.script.id);
+      this.constants = AutomatorBackend.getUsedConstants(this.script.id);
+    },
+    iconClass(state) {
+      return state ? "far fa-plus-square" : "far fa-minus-square";
+    },
+    exportData(id) {
+      const toExport = AutomatorBackend.exportFullScriptData(id);
+      if (toExport) {
+        copyToClipboard(toExport);
+        GameUI.notify.info("Exported all data associated with your current script to your clipboard", 6000);
+      } else {
+        GameUI.notify.error("Could not export data from blank Automator script!");
+      }
+    }
+  }
+};
+</script>
+
+<template>
+  <div class="l-entry-padding">
+    <button
+      v-tooltip="'Export Full Script Data'"
+      class="l-button-margin fas fa-file-export"
+      @click="exportData(script.id)"
+    />
+    <b>Script name: {{ script.name }}</b>
+    <br>
+    <span v-if="presets.length !== 0">
+      <span
+        :class="iconClass(hidePresets)"
+        @click="hidePresets = !hidePresets"
+      />
+      References {{ quantifyInt("study preset", presets.length) }}
+      <span v-if="!hidePresets">
+        <div
+          v-for="id in presets"
+          :key="id"
+        >
+          "{{ presetData[id].name }}" (ID {{ id }}): {{ presetData[id].studies }}
+        </div>
+      </span>
+    </span>
+    <span v-else>
+      Does not reference any study presets.
+    </span>
+    <br>
+    <span v-if="constants.length !== 0">
+      <span
+        :class="iconClass(hideConstants)"
+        @click="hideConstants = !hideConstants"
+      />
+      References {{ quantifyInt("defined constant", constants.length) }}
+      <span v-if="!hideConstants">
+        <div
+          v-for="name in constants"
+          :key="name"
+        >
+          "{{ name }}": {{ constantData[name] }}
+        </div>
+      </span>
+    </span>
+    <span v-else>
+      Does not reference any defined constants.
+    </span>
+  </div>
+</template>
+
+<style scoped>
+.l-entry-padding {
+  border: solid 0.1rem var(--color-automator-docs-font);
+  border-radius: var(--var-border-radius, 0.5rem);
+  overflow-wrap: break-word;
+  padding: 1rem 1.5rem;
+}
+
+.l-button-margin {
+  margin-right: 1rem;
+}
+</style>

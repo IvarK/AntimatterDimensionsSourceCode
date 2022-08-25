@@ -373,9 +373,9 @@ export const AutomatorBackend = {
   },
 
   findRawScriptObject(id) {
-    const auto = player.reality.automator;
-    const index = Object.values(auto.scripts).findIndex(s => s.id === id);
-    return auto.scripts[parseInt(Object.keys(auto.scripts)[index], 10)];
+    const scripts = player.reality.automator.scripts;
+    const index = Object.values(scripts).findIndex(s => s.id === id);
+    return scripts[parseInt(Object.keys(scripts)[index], 10)];
   },
 
   get currentRunningScript() {
@@ -420,6 +420,34 @@ export const AutomatorBackend = {
     return this.currentRawText.split("\n").length;
   },
 
+  // Finds which study presets are referenced within the specified script
+  getUsedPresets(scriptID) {
+    const foundPresets = new Set();
+    const lines = this.findRawScriptObject(scriptID).content.split("\n");
+    for (const rawLine of lines) {
+      const matchPresetID = rawLine.match(/studies( nowait)? load id ([1-6])/ui);
+      if (matchPresetID) foundPresets.add(Number(matchPresetID[2]));
+      const matchPresetName = rawLine.match(/studies( nowait)? load name (\S+)/ui);
+      if (matchPresetName) foundPresets.add(player.timestudy.presets.findIndex(p => p.name === matchPresetName[2]));
+    }
+    const presets = Array.from(foundPresets);
+    presets.sort();
+    return presets;
+  },
+
+  // Finds which constants are referenced within the specified script
+  getUsedConstants(scriptID) {
+    const foundConstants = new Set();
+    const lines = this.findRawScriptObject(scriptID).content.split("\n");
+    for (const rawLine of lines) {
+      const availableConstants = Object.keys(player.reality.automator.constants);
+      for (const key of availableConstants) if (rawLine.includes(key)) foundConstants.add(key);
+    }
+    const constants = Array.from(foundConstants);
+    constants.sort();
+    return constants;
+  },
+
   // This exports only the text contents of the currently-visible script
   exportCurrentScriptContents() {
     // Cut off leading and trailing whitespace
@@ -459,18 +487,16 @@ export const AutomatorBackend = {
   },
 
   // This exports the currently-visible script along with any constants and study presets it uses or references
-  exportFullScriptData() {
+  exportFullScriptData(scriptID) {
     // Cut off leading and trailing whitespace
-    const trimmed = AutomatorData.currentScriptText().replace(/^\s*(.*?)\s*$/u, "$1");
+    const trimmed = this.findRawScriptObject(scriptID).content.replace(/^\s*(.*?)\s*$/u, "$1");
     if (trimmed.length === 0) return null;
 
     const foundPresets = new Set();
     const foundConstants = new Set();
     const lines = trimmed.split("\n");
-    for (let num = 0; num < lines.length; num++) {
-      const rawLine = lines[num];
-
-      // We find just the keys first, the rest of the associated data is serialized later
+    // We find just the keys first, the rest of the associated data is serialized later
+    for (const rawLine of lines) {
       const matchPresetID = rawLine.match(/studies( nowait)? load id ([1-6])/ui);
       if (matchPresetID) foundPresets.add(Number(matchPresetID[2]));
       const matchPresetName = rawLine.match(/studies( nowait)? load name (\S+)/ui);
@@ -499,8 +525,8 @@ export const AutomatorBackend = {
       "automator data");
   },
 
-  // This imports scripts which also have attached information in the form of associated constants and study presets
-  importFullScriptData(rawInput) {
+  // This parses scripts which also have attached information in the form of associated constants and study presets
+  parseFullScriptData(rawInput) {
     let decoded;
     try {
       decoded = GameSaveSerializer.decodeText(rawInput, "automator data");

@@ -60,7 +60,7 @@ export default {
           v-for="id in presets"
           :key="id"
         >
-          "{{ presetData[id].name }}" (ID {{ id }}): {{ presetData[id].studies }}
+          "{{ presetData[id].name }}" (slot {{ id + 1 }}): {{ presetData[id].studies }}
         </div>
       </span>
     </span>

@@ -12,11 +12,19 @@ export default {
   },
   computed: {
     scripts: () => Object.values(player.reality.automator.scripts),
+    maxScriptCount: () => AutomatorData.MAX_ALLOWED_SCRIPT_COUNT,
   },
   created() {
     this.on$(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.$recompute("scripts"));
   },
   methods: {
+    update() {
+      this.canMakeNewScript = this.scripts.length < this.maxScriptCount;
+    },
+    importData() {
+      if (!this.canMakeNewScript) return;
+      Modal.importScriptData.show();
+    },
   }
 };
 </script>
@@ -27,13 +35,21 @@ export default {
     for any Time Study presets or constants used within the script. This will allow you to more easily transfer working
     scripts between different save files, but you may have to overwrite existing data in the process.
     <br>
-    Import button goes here
+    <button
+      class="o-primary-btn c-import-button l-automator__button"
+      @click="importData"
+    >
+      Import script with additional data
+    </button>
     <br>
     <div
       v-for="(script, id) in scripts"
       :key="id"
     >
-      <AutomatorDataTransferSingleEntry :script="script" />
+      <AutomatorDataTransferSingleEntry
+        class="l-entry-margin"
+        :script="script"
+      />
     </div>
   </div>
 </template>
@@ -41,5 +57,16 @@ export default {
 <style scoped>
 .l-panel-padding {
   padding: 0.5rem 2rem 1rem 0;
+}
+
+.l-entry-margin {
+  margin-bottom: 1rem;
+}
+
+.c-import-button {
+  margin: 1rem 1rem -1rem;
+  border-radius: var(--var-border-radius, 0.4rem);
+  border-width: var(--var-border-width, 0.2rem);
+  cursor: pointer;
 }
 </style>

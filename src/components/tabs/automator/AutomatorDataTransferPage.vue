@@ -13,6 +13,9 @@ export default {
   computed: {
     scripts: () => Object.values(player.reality.automator.scripts),
   },
+  created() {
+    this.on$(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.$recompute("scripts"));
+  },
   methods: {
   }
 };

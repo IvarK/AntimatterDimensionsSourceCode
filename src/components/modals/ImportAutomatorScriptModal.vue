@@ -9,7 +9,6 @@ export default {
   data() {
     return {
       input: "",
-      rawDecoded: "",
       isValid: false,
       scriptName: "",
       lineCount: 0,
@@ -23,32 +22,24 @@ export default {
   methods: {
     update() {
       try {
-        this.rawDecoded = GameSaveSerializer.decodeText(this.input, "automator script");
+        const parsed = AutomatorBackend.parseScriptContents(this.input);
+        if (!parsed) {
+          this.isValid = false;
+          return;
+        }
+        this.scriptName = parsed.name;
+        this.scriptContent = parsed.content;
+        this.lineCount = this.scriptContent.split("\n").length;
+        this.hasErrors = AutomatorGrammar.compile(this.scriptContent).errors.length !== 0;
+        this.isValid = true;
       } catch (e) {
         // Improperly encoded scripts will cause decodeText() to throw an exception
         this.isValid = false;
       }
-      this.decodeSave();
-    },
-    decodeSave() {
-      const imported = AutomatorBackend.importScriptContents(this.input);
-      if (!imported) {
-        this.isValid = false;
-        return;
-      }
-      this.scriptName = imported.name;
-      this.scriptContent = imported.content;
-      this.isValid = true;
-      this.updateScriptInfo();
-    },
-    updateScriptInfo() {
-      this.lineCount = this.scriptContent.split("\n").length;
-      this.hasErrors = AutomatorGrammar.compile(this.scriptContent).errors.length !== 0;
     },
     importSave() {
       if (!this.isValid) return;
-      AutomatorData.createNewScript(this.scriptContent, this.scriptName);
-      AutomatorBackend.initializeFromSave();
+      AutomatorBackend.importScriptContents(this.input);
       this.emitClose();
     },
   },

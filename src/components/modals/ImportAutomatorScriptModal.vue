@@ -31,13 +31,13 @@ export default {
       this.decodeSave();
     },
     decodeSave() {
-      const parts = this.rawDecoded.split("||");
-      if (parts.length !== 3 || parts[1].length !== parseInt(parts[0], 10)) {
+      const imported = AutomatorBackend.importScriptContents(this.rawDecoded);
+      if (!imported) {
         this.isValid = false;
         return;
       }
-      this.scriptName = parts[1];
-      this.scriptContent = parts[2];
+      this.scriptName = imported.name;
+      this.scriptContent = imported.content;
       this.updateScriptInfo();
       this.isValid = true;
     },

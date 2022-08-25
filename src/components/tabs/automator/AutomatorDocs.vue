@@ -131,16 +131,12 @@ export default {
       this.currentScriptID = player.reality.automator.state.editorScript;
     },
     exportScript() {
-      // Cut off leading and trailing whitespace
-      const trimmed = AutomatorData.currentScriptText().replace(/^\s*(.*?)\s*$/u, "$1");
-      if (trimmed.length === 0) {
-        GameUI.notify.error("Could not export blank Automator script!");
-      } else {
-        // Append the script name into the beginning of the string as "name_length||name||"
-        const name = AutomatorData.currentScriptName();
-        copyToClipboard(GameSaveSerializer.encodeText(
-          `${name.length}||${name}||${trimmed}`, "automator script"));
+      const toExport = AutomatorBackend.exportCurrentScriptContents();
+      if (toExport) {
+        copyToClipboard(toExport);
         GameUI.notify.info("Exported current Automator script to your clipboard");
+      } else {
+        GameUI.notify.error("Could not export blank Automator script!");
       }
     },
     importScript() {

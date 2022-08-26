@@ -250,7 +250,7 @@ export class EternityChallengeState extends GameMechanicState {
       `spending more than ${quantify("in-game second", restriction, 0, 1)} in it`;
     }
     Modal.message.show(`${reason(this.config.restriction(this.completions))}; ` +
-    `you have now exited ${auto ? "that challenge" : "it"}.`,
+    `which has caused you to exit it.`;
     { closeEvent: GAME_EVENT.REALITY_RESET_AFTER }, 1);
     EventHub.dispatch(GAME_EVENT.CHALLENGE_FAILED);
   }

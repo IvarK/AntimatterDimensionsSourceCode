@@ -308,6 +308,13 @@ export const EternityChallenges = {
       while (player.reality.lastAutoEC - interval > 0 && next !== undefined) {
         player.reality.lastAutoEC -= interval;
         next.addCompletion();
+        // This checks if the newly current tier of the player's current EC should now be failed
+        // (e.g. due to EC4's infinity maximum going down).
+        // Eternity Challenge 12 is checked on every game tick, so is not an issue;
+        // other eternity challenges can't be failed at all.
+        if (next.id === 4) {
+          next.tryFail();
+        }
         next = this.nextChallenge;
       }
       player.reality.lastAutoEC %= interval;

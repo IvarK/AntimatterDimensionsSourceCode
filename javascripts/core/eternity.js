@@ -25,11 +25,11 @@ function giveEternityRewards(auto) {
 
   if (EternityChallenge.isRunning) {
     const challenge = EternityChallenge.current;
-    challenge.addCompletion();
+    challenge.addCompletion(false);
     if (Perk.studyECBulk.isBought) {
       let completionCount = 0;
       while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
-        challenge.addCompletion();
+        challenge.addCompletion(false);
         completionCount++;
       }
       AutomatorData.lastECCompletionCount = completionCount;

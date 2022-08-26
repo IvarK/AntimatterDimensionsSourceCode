@@ -230,21 +230,24 @@ export class EternityChallengeState extends GameMechanicState {
   fail(auto = false) {
     this.exit();
     let reason;
-    let autoMessage = auto ? " (just decreased due to getting an Auto Eternity Challenge completion)" : ""
     if (auto) {
       if (this.id === 4) {
-        reason = restriction => `Auto Eternity Challenge completion completed Eternity Challenge ${this.id} and made the next tier ` +
-        `require having less Infinities (${quantifyInt("Infinity", restriction)} or less) than you had`;
+        reason = restriction => `Auto Eternity Challenge completion completed ` +
+        `Eternity Challenge ${this.id} and made the next tier ` +
+        `require having less Infinities (${quantifyInt("Infinity", restriction)} ` +
+        `or less) than you had`;
       } else if (this.id === 12) {
-        reason = restriction => `Auto Eternity Challenge completion completed Eternity Challenge ${this.id} and made the next tier ` +
-        `require spending less time in it (${quantify("in-game second", restriction, 0, 1)} or less) than you had spent`;
+        reason = restriction => `Auto Eternity Challenge completion completed ` +
+        `Eternity Challenge ${this.id} and made the next tier ` +
+        `require spending less time in it (${quantify("in-game second", restriction, 0, 1)} ` +
+        `or less) than you had spent`;
       }
-    } else {
-      if (this.id === 4) {
-        reason = restriction => `You failed Eternity Challenge ${this.id} due to having more than ${quantifyInt("Infinity", restriction)}`;
-      } else if (this.id === 12) {
-        reason = restriction => `You failed Eternity Challenge ${this.id} due to spending more than ${quantify("in-game second", restriction, 0, 1)} in it`;
-      }
+    } else if (this.id === 4) {
+      reason = restriction => `You failed Eternity Challenge ${this.id} due to ` +
+      `having more than ${quantifyInt("Infinity", restriction)}`;
+    } else if (this.id === 12) {
+      reason = restriction => `You failed Eternity Challenge ${this.id} due to ` +
+      `spending more than ${quantify("in-game second", restriction, 0, 1)} in it`;
     }
     Modal.message.show(`${reason(this.config.restriction(this.completions))}; you have now exited ${auto ? "that challenge" : "it"}.`,
     { closeEvent: GAME_EVENT.REALITY_RESET_AFTER }, 1);

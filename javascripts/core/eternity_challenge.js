@@ -158,7 +158,7 @@ export class EternityChallengeState extends GameMechanicState {
     return Math.min(Math.floor(completions), this.maxCompletions);
   }
 
-  addCompletion(auto = False) {
+  addCompletion(auto = false) {
     this.completions++;
     if ((this.id === 4 || this.id === 12) && auto) {
       this.tryFail(true);

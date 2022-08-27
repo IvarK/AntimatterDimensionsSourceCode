@@ -1875,6 +1875,7 @@ GameDatabase.celestials.navigation = {
       clickAction: () => Tab.celestials.pelle.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
       symbol: "♅",
+      symbolOffset: "1.6",
       fill: "crimson",
       position: Positions.pelleAchievementRequirement,
       ring: {

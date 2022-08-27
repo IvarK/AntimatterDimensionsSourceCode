@@ -129,7 +129,7 @@ export default {
       />
     </template>
     <template
-      v-if="postBreak"
+      v-if="postBreak && mode === 0"
       #checkboxSlot
     >
       <label

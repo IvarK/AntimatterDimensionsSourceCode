@@ -107,7 +107,10 @@ export default {
         v-bind="modeProps(mode).input"
       />
     </template>
-    <template #checkboxSlot>
+    <template
+      v-if="mode === 0"
+      #checkboxSlot
+    >
       <label
         class="o-autobuyer-toggle-checkbox o-clickable"
       >

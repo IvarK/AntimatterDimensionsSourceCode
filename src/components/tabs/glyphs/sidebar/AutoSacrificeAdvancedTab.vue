@@ -37,7 +37,7 @@ export default {
       };
     },
     questionmarkTooltip() {
-      return "The score of a glyph is its rarity percentage, plus the specified amount for each effect it has.";
+      return "The score of a Glyph is its rarity percentage, plus the specified amount for each effect it has.";
     },
     // This is an absolute value limit (ie. it's allowed to go negative down to negative this value)
     weightInputLimit() {

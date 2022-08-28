@@ -79,7 +79,7 @@ export default {
       />
     </template>
     <template #checkboxSlot>
-      <div>Target glyph level:</div>
+      <div>Target Glyph level:</div>
       <AutobuyerInput
         :autobuyer="autobuyer"
         type="int"

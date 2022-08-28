@@ -197,7 +197,7 @@ export const Pelle = {
       // Undefined means that there is no glyph equipped, needs to be here since this function is used in
       // both Current Glyph Effects and Glyph Tooltip
       case undefined:
-        return "No glyph equipped!";
+        return "No Glyph equipped!";
       default:
         return "";
     }

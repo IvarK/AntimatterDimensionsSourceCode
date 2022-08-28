@@ -95,7 +95,7 @@ export default {
       {{ pelleGlyphText }}
     </div>
     <div class="c-current-glyph-effects__header">
-      Currently active glyph effects:
+      Currently active Glyph effects:
     </div>
     <GlyphSetName :glyph-set="glyphSet" />
     <br v-if="isSoftcapActive || hasEffarig || hasReality">

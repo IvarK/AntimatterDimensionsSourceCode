@@ -35,7 +35,7 @@ export default {
     <br>
     Hold shift to swap this behavior.
     <br>
-    Every completed row of purchased upgrades increases your glyph level by {{ formatInt(1) }}.
+    Every completed row of purchased upgrades increases your Glyph level by {{ formatInt(1) }}.
     <br><br>
     <div
       v-for="row in 5"

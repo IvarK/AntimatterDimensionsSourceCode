@@ -80,7 +80,7 @@ export default {
     >
       Purchase the Reality study to see
       <br>
-      this Reality's glyph choices
+      this Reality's Glyph choices
     </div>
   </div>
 </template>

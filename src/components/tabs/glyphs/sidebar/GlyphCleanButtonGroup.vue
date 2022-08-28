@@ -23,7 +23,7 @@ export default {
     },
     harshAutoCleanTooltip() {
       return `${this.removeString} Glyphs that are worse in every way than
-        ANY other glyph${this.hasPerkShop ? " (includes Music Glyphs)" : ""}`;
+        ANY other Glyph${this.hasPerkShop ? " (includes Music Glyphs)" : ""}`;
     },
     deleteRejectedTooltip() {
       const negativeWarning = AutoGlyphProcessor.hasNegativeEffectScore()

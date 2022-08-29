@@ -112,7 +112,7 @@ export function requestManualReality() {
     return;
   }
   if (GameCache.glyphInventorySpace.value === 0) {
-    Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.",
+    Modal.message.show("Inventory cannot hold new Glyphs. Delete/sacrifice (shift-click) some Glyphs.",
       { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
     return;
   }

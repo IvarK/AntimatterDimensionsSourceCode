@@ -103,7 +103,7 @@ export default {
       class="c-glyph-inventory-option"
       @click="deleteAllUnprotected"
     >
-      {{ removeString }} all unprotected glyphs
+      {{ removeString }} all unprotected Glyphs
     </button>
     <button
       v-if="hasFilter"

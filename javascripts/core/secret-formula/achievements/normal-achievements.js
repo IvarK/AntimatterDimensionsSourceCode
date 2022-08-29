@@ -1101,7 +1101,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 152,
-    name: "Y'all got any more of them glyphs?",
+    name: "Y'all got any more of them Glyphs?",
     get description() { return `Have ${formatInt(100)} Glyphs in your inventory.`; },
     checkRequirement: () => Glyphs.inventoryList.length >= 100,
     checkEvent: GAME_EVENT.GLYPHS_CHANGED

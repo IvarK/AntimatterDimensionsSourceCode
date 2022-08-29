@@ -60,7 +60,13 @@ export default {
           v-for="id in presets"
           :key="id"
         >
-          "{{ presetData[id].name }}" (slot {{ id + 1 }}): {{ presetData[id].studies }}
+          <span v-if="presetData[id].name">"{{ presetData[id].name }}" (slot {{ id + 1 }}):</span>
+          <span v-else>Preset slot {{ id + 1 }}:</span>
+          <br>
+          <div class="l-value-padding">
+            <span v-if="presetData[id].studies">{{ presetData[id].studies }}</span>
+            <i v-else>Empty Study Preset</i>
+          </div>
         </div>
       </span>
     </span>
@@ -79,7 +85,11 @@ export default {
           v-for="name in constants"
           :key="name"
         >
-          "{{ name }}": {{ constantData[name] }}
+          "{{ name }}":
+          <br>
+          <div class="l-value-padding">
+            {{ constantData[name] }}
+          </div>
         </div>
       </span>
     </span>
@@ -95,6 +105,10 @@ export default {
   border-radius: var(--var-border-radius, 0.5rem);
   overflow-wrap: break-word;
   padding: 1rem 1.5rem;
+}
+
+.l-value-padding {
+  padding-left: 1.5rem;
 }
 
 .l-button-margin {

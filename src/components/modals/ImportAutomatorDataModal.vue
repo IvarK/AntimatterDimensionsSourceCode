@@ -26,28 +26,38 @@ export default {
     maxConstantCount() {
       return AutomatorData.MAX_ALLOWED_CONSTANT_COUNT;
     },
-    willOverwritePreset() {
-      return this.importedPresets.map(p => p.id).some(id => this.currentPresets[id].name !== "");
+    // Number of studies with different contents which will be overwritten
+    overwrittenPresetCount() {
+      let mismatchedPresets = 0;
+      for (const toImport of this.importedPresets) {
+        const existingPreset = this.currentPresets[toImport.id];
+        const isEmpty = existingPreset.name === "" && existingPreset.studies === "";
+        if (!isEmpty && (existingPreset.name !== toImport.name || existingPreset.studies !== toImport.studies)) {
+          mismatchedPresets++;
+        }
+      }
+      return mismatchedPresets;
     },
     willOverwriteConstant() {
       const all = new Set();
       for (const constant of this.currentConstants) all.add(constant);
       for (const constant of this.importedConstants) {
-        if (all.has(constant)) return true;
+        if (all.has(constant.key) && player.reality.automator.constants[constant.key] !== constant.value) return true;
       }
       return false;
     },
-    cannotImportAllConstants() {
+    // Number of constants over the limit
+    extraConstants() {
       const all = new Set();
       for (const constant of this.currentConstants) all.add(constant);
-      for (const constant of this.importedConstants) all.add(constant);
-      return all.size > this.maxConstantCount;
+      for (const constant of this.importedConstants) all.add(constant.key);
+      return all.size - this.maxConstantCount;
     },
     presetButtonText() {
-      return this.ignorePresets ? "Ignore Presets" : "Import Presets";
+      return this.ignorePresets ? "Will Ignore Presets" : "Will Import Presets";
     },
     constantButtonText() {
-      return this.ignoreConstants ? "Ignore Constants" : "Import Constants";
+      return this.ignoreConstants ? "Will Ignore Constants" : "Will Import Constants";
     }
   },
   mounted() {
@@ -107,57 +117,67 @@ export default {
       Script name: {{ scriptName }}
       <br>
       Line count: {{ lineCount }}
-      <br>
-      <br>
-      Imported presets:
-      <div
-        v-for="(preset, id) in importedPresets"
-        :key="id"
-      >
-        "{{ preset.name }}" (slot {{ preset.id }})
-      </div>
-      <button
-        class="o-primary-btn"
-        @click="ignorePresets = !ignorePresets"
-      >
-        {{ presetButtonText }}
-      </button>
-      <div
-        v-if="!ignorePresets && willOverwritePreset"
-        class="l-has-errors"
-      >
-        Warning: Some of your existing presets will be overwritten!
-      </div>
-      <br>
-      <br>
-      Imported constants:
-      <div
-        v-for="(constant, id) in importedConstants"
-        :key="id + 10"
-      >
-        "{{ constant.key }}"
-      </div>
-      <button
-        class="o-primary-btn"
-        @click="ignoreConstants = !ignoreConstants"
-      >
-        {{ constantButtonText }}
-      </button>
-      <div
-        v-if="!ignoreConstants && (willOverwriteConstant || cannotImportAllConstants)"
-        class="l-has-errors"
-      >
-        Warning: <span v-if="willOverwriteConstant">Some of your existing constants will be overwritten!</span>
-        <span v-if="cannotImportAllConstants">
-          Some constants will not be imported due to the {{ maxConstantCount }} constant limit.
+      <div v-if="importedPresets.length !== 0">
+        <br>
+        Study Presets:
+        <span
+          v-for="(preset, id) in importedPresets"
+          :key="id"
+          class="c-import-data-name"
+        >
+          <span v-if="preset.name">"{{ preset.name }}" (slot {{ preset.id + 1 }})</span>
+          <span v-else>Preset slot #{{ preset.id + 1 }}</span>
         </span>
+        <div
+          v-if="!ignorePresets && overwrittenPresetCount > 0"
+          class="l-has-errors"
+        >
+          {{ formatInt(overwrittenPresetCount) }} of your existing presets are
+          different from those being imported and will be overwritten!
+        </div>
+        <br>
+        <button
+          class="o-primary-btn"
+          @click="ignorePresets = !ignorePresets"
+        >
+          {{ presetButtonText }}
+        </button>
+      </div>
+      <div v-if="importedConstants.length !== 0">
+        <br>
+        Constants:
+        <span
+          v-for="(constant, id) in importedConstants"
+          :key="id + 10"
+          class="c-import-data-name"
+        >
+          "{{ constant.key }}"
+        </span>
+        <div
+          v-if="!ignoreConstants && (willOverwriteConstant || extraConstants > 0)"
+          class="l-has-errors"
+        >
+          <span v-if="willOverwriteConstant">Some of your existing constants will be overwritten!</span>
+          <br v-if="willOverwriteConstant && extraConstants > 0">
+          <span v-if="extraConstants > 0">
+            {{ quantifyInt("constant", extraConstants) }} will not be imported due to the
+            {{ maxConstantCount }} constant limit.
+          </span>
+        </div>
+        <br>
+        <button
+          class="o-primary-btn"
+          @click="ignoreConstants = !ignoreConstants"
+        >
+          {{ constantButtonText }}
+        </button>
       </div>
       <br>
       <div
         v-if="hasErrors"
         class="l-has-errors"
       >
-        Warning: This script has errors which need to be fixed before it can be run!
+        This script has errors which need to be fixed before it can be run!
       </div>
     </div>
     <div v-else-if="input.length !== 0">
@@ -172,5 +192,9 @@ export default {
 <style scoped>
 .l-has-errors {
   color: red;
+}
+
+.c-import-data-name {
+  padding: 0 1rem;
 }
 </style>

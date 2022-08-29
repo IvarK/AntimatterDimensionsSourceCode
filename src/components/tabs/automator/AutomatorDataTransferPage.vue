@@ -8,21 +8,31 @@ export default {
   },
   data() {
     return {
+      canImport: true,
+      scripts: 0,
     };
   },
   computed: {
-    scripts: () => Object.values(player.reality.automator.scripts),
     maxScriptCount: () => AutomatorData.MAX_ALLOWED_SCRIPT_COUNT,
   },
   created() {
-    this.on$(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.$recompute("scripts"));
+    this.loadScripts();
+    this.on$(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => {
+      this.loadScripts();
+    });
   },
   methods: {
     update() {
-      this.canMakeNewScript = this.scripts.length < this.maxScriptCount;
+      this.canImport = this.scripts.length < this.maxScriptCount;
+    },
+    loadScripts() {
+      this.scripts = Object.values(player.reality.automator.scripts).map(script => ({
+        id: script.id,
+        name: script.name,
+      }));
     },
     importData() {
-      if (!this.canMakeNewScript) return;
+      if (!this.canImport) return;
       Modal.importScriptData.show();
     },
   }
@@ -33,7 +43,8 @@ export default {
   <div class="l-panel-padding">
     This page lets you import and export scripts with additional data attached; the encoded text will also include data
     for any Time Study presets or constants used within the script. This will allow you to more easily transfer working
-    scripts between different save files, but you may have to overwrite existing data in the process.
+    scripts between different save files, but you may have to overwrite existing data in the process due to limited
+    space for study presets and constants.
     <br>
     <button
       class="o-primary-btn c-import-button l-automator__button"

@@ -154,7 +154,7 @@ export default {
         <div class="information-header">
           <HeaderChallengeDisplay />
           <div v-if="isInEffarig">
-            Gamespeed and multipliers are Dilated {{ effarigMultNerfText }}
+            Game speed and multipliers are Dilated {{ effarigMultNerfText }}
             <br>
             Tickspeed is Dilated {{ effarigTickNerfText }}
           </div>

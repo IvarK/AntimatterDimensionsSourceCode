@@ -27,8 +27,8 @@ GameDatabase.celestials.descriptions = [
   {
     name: "Effarig",
     effects() {
-      return `All Dimension multipliers, gamespeed, and tickspeed are severely lowered, like Dilation.
-      Infinity Power reduces the production and gamespeed penalties and Time Shards reduce the tickspeed penalty.
+      return `All Dimension multipliers, game speed, and tickspeed are severely lowered, like Dilation.
+      Infinity Power reduces the production and game speed penalties and Time Shards reduce the tickspeed penalty.
       Glyph levels are temporarily capped to ${formatInt(Effarig.glyphLevelCap)}, rarity is unaffected.`;
     },
     description() {

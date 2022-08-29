@@ -19,8 +19,9 @@ export function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked() || (Pelle.isDoomed && !Pelle.canDilateInPelle)) return;
   const playAnimation = player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying;
   if (player.dilation.active) {
-    // TODO Dilation modal
-    if (playAnimation) {
+    if (player.options.confirmations.dilation) {
+      Modal.exitDilation.show();
+    } else if (playAnimation) {
       animateAndUndilate();
     } else {
       eternity(false, false, { switchingDilation: true });

@@ -8,18 +8,20 @@ export default {
   },
   data() {
     return {
-      tachyonGain: new Decimal(0)
+      tachyonGain: new Decimal(0),
+      isDoomed: false
     };
   },
   computed: {
     gainText() {
       if (this.tachyonGain.lte(0)) return `not give you anything`;
-      return `give you ${quantify("Tachyon Particle", this.gainTexttachyonGain, 2, 1)}`;
+      return `give you ${quantify("Tachyon Particle", this.tachyonGain, 2, 1)}`;
     }
   },
   methods: {
     update() {
       this.tachyonGain.copyFrom(getTachyonGain());
+      this.isDoomed = Pelle.isDoomed;
     },
     handleYesClick() {
       if (!player.dilation.active) return;
@@ -44,7 +46,14 @@ export default {
       You are about to exit Dilation
     </template>
     <div class="c-modal-message__text">
-      Exiting Dilation now will {{ gainText }}. Are you sure you want to proceed?
+      Exiting Dilation now will {{ gainText }}.
+      <span v-if="isDoomed">
+        The Dilation effect will still be applied due to the 5th Pelle Strike.
+      </span>
+      <span v-else>
+        Your Dimension multipliers will return to normal.
+      </span>
+      Are you sure you want to proceed?
     </div>
     <template #confirm-text>
       Exit

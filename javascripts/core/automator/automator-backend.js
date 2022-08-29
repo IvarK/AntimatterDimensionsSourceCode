@@ -451,7 +451,8 @@ export const AutomatorBackend = {
     const lines = script.content.split("\n");
     for (const rawLine of lines) {
       const availableConstants = Object.keys(player.reality.automator.constants);
-      for (const key of availableConstants) if (rawLine.includes(key)) foundConstants.add(key);
+      // Needs a space-padded regex match so that (for example) a constant "unl" doesn't match to an unlock command
+      for (const key of availableConstants) if (rawLine.match(`\\s${key}\\s?`)) foundConstants.add(key);
     }
     const constants = Array.from(foundConstants);
     constants.sort();
@@ -557,17 +558,20 @@ export const AutomatorBackend = {
     const parts = decoded.split("||");
     if (parts.length !== 4) return null;
 
-    // Parse preset data
+    // Parse preset data (needs the conditional because otherwise it'll use the empty string to assign 0/undef/undef)
     const presetData = parts[1];
     const presets = [];
-    for (const preset of presetData.split("*")) {
-      const props = preset.split(":");
-      presets.push({
-        id: Number(props[0]),
-        name: props[1],
-        studies: props[2],
-      });
+    if (presetData) {
+      for (const preset of presetData.split("*")) {
+        const props = preset.split(":");
+        presets.push({
+          id: Number(props[0]),
+          name: props[1],
+          studies: props[2],
+        });
+      }
     }
+    presets.sort((a, b) => a.id - b.id);
 
     // Parse constant data
     const constantData = parts[2];

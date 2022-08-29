@@ -21,6 +21,16 @@ export default {
       type: Boolean,
       required: true
     },
+    tooltipClass: {
+      type: String,
+      required: false,
+      default: ""
+    },
+    tooltipContent: {
+      type: String,
+      required: false,
+      default: ""
+    }
   },
   computed: {
     displayText() {
@@ -36,6 +46,12 @@ export default {
     @click="emitInput(!value)"
   >
     {{ displayText }}
+    <div
+      v-if="tooltipClass"
+      :class="tooltipClass"
+    >
+      {{ tooltipContent }}
+    </div>
   </button>
 </template>
 

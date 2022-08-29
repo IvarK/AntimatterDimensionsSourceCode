@@ -89,9 +89,10 @@ export default {
     <ToggleButton
       v-if="showAutoAutoClean"
       v-model="applyFilterToPurge"
-      v-tooltip="keepTooltip"
       class="c-glyph-inventory-option"
       label="Never Auto-purge Glyphs accepted by filter:"
+      tooltip-class="c-glyph-inventory-option__tooltip"
+      :tooltip-content="keepTooltip"
     />
   </div>
 </template>

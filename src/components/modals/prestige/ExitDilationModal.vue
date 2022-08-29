@@ -43,15 +43,20 @@ export default {
     @confirm="handleYesClick"
   >
     <template #header>
-      You are about to exit Dilation
-    </template>
-    <div class="c-modal-message__text">
-      Exiting Dilation now will {{ gainText }}.
       <span v-if="isDoomed">
-        The Dilation effect will still be applied due to the 5th Pelle Strike.
+        You cannot exit Dilation while Doomed
       </span>
       <span v-else>
-        Your Dimension multipliers will return to normal.
+        You are about to exit Dilation
+      </span>
+    </template>
+    <div class="c-modal-message__text">
+      <span v-if="isDoomed">
+        Dilation is permanent. You will {{ gainText }} and reset your current eternity. You will not get any
+        Eternity Points.
+      </span>
+      <span v-else>
+        Exiting Dilation now will {{ gainText }}.
       </span>
       Are you sure you want to proceed?
     </div>

@@ -26,7 +26,8 @@ export default {
       AUTO_ETERNITY_MODE.AMOUNT,
       AUTO_ETERNITY_MODE.TIME,
       AUTO_ETERNITY_MODE.X_HIGHEST,
-    ]
+    ],
+    amountMode: () => AUTO_ETERNITY_MODE.AMOUNT
   },
   watch: {
     increaseWithMult(newValue) {
@@ -108,7 +109,7 @@ export default {
       />
     </template>
     <template
-      v-if="mode === 0"
+      v-if="mode === amountMode"
       #checkboxSlot
     >
       <label

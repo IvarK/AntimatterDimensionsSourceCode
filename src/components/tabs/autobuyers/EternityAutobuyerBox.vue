@@ -26,7 +26,8 @@ export default {
       AUTO_ETERNITY_MODE.AMOUNT,
       AUTO_ETERNITY_MODE.TIME,
       AUTO_ETERNITY_MODE.X_HIGHEST,
-    ]
+    ],
+    amountMode: () => AUTO_ETERNITY_MODE.AMOUNT
   },
   watch: {
     increaseWithMult(newValue) {
@@ -107,7 +108,10 @@ export default {
         v-bind="modeProps(mode).input"
       />
     </template>
-    <template #checkboxSlot>
+    <template
+      v-if="mode === amountMode"
+      #checkboxSlot
+    >
       <label
         class="o-autobuyer-toggle-checkbox o-clickable"
       >

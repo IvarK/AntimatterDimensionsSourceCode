@@ -30,7 +30,8 @@ export default {
       AUTO_CRUNCH_MODE.AMOUNT,
       AUTO_CRUNCH_MODE.TIME,
       AUTO_CRUNCH_MODE.X_HIGHEST,
-    ]
+    ],
+    amountMode: () => AUTO_ETERNITY_MODE.AMOUNT
   },
   watch: {
     increaseWithMult(newValue) {
@@ -129,7 +130,7 @@ export default {
       />
     </template>
     <template
-      v-if="postBreak"
+      v-if="postBreak && mode === amountMode"
       #checkboxSlot
     >
       <label

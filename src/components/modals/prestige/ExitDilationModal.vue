@@ -26,7 +26,6 @@ export default {
     handleYesClick() {
       if (!player.dilation.active) return;
       const playAnimation = player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying;
-      // TODO Dilation modal
       if (playAnimation) {
         animateAndUndilate();
       } else {

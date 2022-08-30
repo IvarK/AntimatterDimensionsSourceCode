@@ -14,8 +14,8 @@ export default {
   },
   computed: {
     gainText() {
-      if (this.tachyonGain.lte(0)) return `not give you anything`;
-      return `give you ${quantify("Tachyon Particle", this.tachyonGain, 2, 1)}`;
+      if (this.tachyonGain.lte(0)) return `not gain anything`;
+      return `gain ${quantify("Tachyon Particle", this.tachyonGain, 2, 1)}`;
     }
   },
   methods: {
@@ -52,11 +52,11 @@ export default {
     </template>
     <div class="c-modal-message__text">
       <span v-if="isDoomed">
-        Dilation is permanent. You will {{ gainText }} and reset your current eternity. You will not get any
+        Dilation is permanent. You will {{ gainText }} and reset your current eternity. You will not gain any
         Eternity Points.
       </span>
       <span v-else>
-        Exiting Dilation now will {{ gainText }}.
+        If you exit Dilation now, you will {{ gainText }}.
       </span>
       Are you sure you want to proceed?
     </div>

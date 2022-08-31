@@ -30,7 +30,7 @@ export default {
     timeString() {
       // If diff is zero, that means we opened it up via the button and don't need the text for last opening
       if (!this.diff) return null;
-      return `It has been ${TimeSpan.fromMilliseconds(this.diff).toStringShort()} since you last loaded up the game.`;
+      return `It has been ${TimeSpan.fromSeconds(this.diff).toString()} since you last loaded up the game.`;
     },
     titleText() {
       return this.diff ? "Content Catch-up" : "Content Summary";
@@ -98,13 +98,13 @@ export default {
 
 <style scoped>
 .l-catchup-group-container {
-  text-align: left;
-  width: 100%;
-  margin: 1rem;
-  padding: 2rem;
   overflow-y: scroll;
+  width: 100%;
+  text-align: left;
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-radius, 0.4rem);
+  margin: 1rem;
+  padding: 2rem;
 }
 
 .l-confirm-padding {

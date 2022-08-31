@@ -88,7 +88,7 @@ export default {
       this.cheapestLog10TD = Math.min(...TimeDimensions.all.map(x => x.cost.log10()));
       this.multEPLog10Cost = EternityUpgrade.epMult.cost.log10();
       this.purchasableTS = NormalTimeStudyState.studies.countWhere(s => s && s.canBeBought && !s.isBought);
-      this.hasDilated = player.dilation.lastEP.gt(0);
+      this.hasDilated = player.dilation.tachyonParticles.gt(0);
       this.availableCharges = Ra.chargesLeft;
     },
     clicked() {

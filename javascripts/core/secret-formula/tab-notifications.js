@@ -108,7 +108,8 @@ GameDatabase.tabNotifications = {
       }
     ],
     condition: () => !PlayerProgress.realityUnlocked() && TimeStudy.reality.canBeBought,
-    events: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION]
+    events: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION,
+      GAME_EVENT.OFFLINE_CURRENCY_GAINED, GAME_EVENT.ACHIEVEMENT_UNLOCKED]
   },
   blackHoleUnlock: {
     id: 8,

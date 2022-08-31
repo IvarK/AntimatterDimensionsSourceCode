@@ -283,5 +283,4 @@ EventHub.logic.on(GAME_EVENT.SINGULARITY_RESET_AFTER, () => {
   if (newMilestones === 1) GameUI.notify.blackHole(`You reached a Singularity milestone!`);
   else GameUI.notify.blackHole(`You reached ${formatInt(newMilestones)} Singularity milestones!`);
   SingularityMilestones.lastNotified = Currency.singularities.value;
-  if (SingularityMilestones.all.every(x => x.completions > 0)) Achievement(177).unlock();
 });

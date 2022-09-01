@@ -5768,6 +5768,7 @@ br {
   background-color: #f2f2f2;
   border: 0.1rem solid black;
   border-radius: var(--var-border-radius, 0.3rem);
+  margin: 0.5rem;
 }
 
 .c-modal-options {

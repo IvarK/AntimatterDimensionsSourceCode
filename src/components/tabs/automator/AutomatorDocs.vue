@@ -102,7 +102,9 @@ export default {
       return AutomatorPanels;
     },
     importTooltip() {
-      return this.canMakeNewScript ? "Import automator script" : "You have too many scripts to import another!";
+      return this.canMakeNewScript
+        ? "Import single automator script or data"
+        : "You have too many scripts to import another!";
     },
     currentEditorScriptName() {
       return this.scripts.find(s => s.id === this.currentScriptID).name;
@@ -144,7 +146,7 @@ export default {
     },
     importScript() {
       if (!this.canMakeNewScript) return;
-      Modal.importScript.show();
+      Modal.importScriptData.show();
     },
     onGameLoad() {
       this.updateCurrentScriptID();
@@ -278,7 +280,7 @@ export default {
       </div>
       <div class="l-automator-button-row">
         <AutomatorButton
-          v-tooltip="'Export automator script'"
+          v-tooltip="'Export single automator script'"
           class="fa-file-export"
           @click="exportScript"
         />

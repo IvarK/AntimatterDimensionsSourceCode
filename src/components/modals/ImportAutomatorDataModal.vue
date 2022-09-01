@@ -10,6 +10,7 @@ export default {
     return {
       input: "",
       isValid: false,
+      hasExtraData: false,
       scriptName: "",
       lineCount: 0,
       scriptContent: "",
@@ -21,6 +22,22 @@ export default {
     };
   },
   computed: {
+    hasPresets() {
+      return (this.importedPresets?.length ?? 0) !== 0;
+    },
+    hasConstants() {
+      return (this.importedConstants?.length ?? 0) !== 0;
+    },
+    isImportingExtraData() {
+      // These two checks differ because we suppress the preset import warning when importing into an empty
+      // slot, but we use this prop for information on importing rather than overwriting
+      const hasNewConstants = this.willOverwriteConstant || this.constantCountAfterImport > this.currentConstants;
+      const isImportingPresets = this.importedPresets ? !this.ignorePresets : false;
+      const isImportingConstants = this.importedConstants
+        ? !this.ignoreConstants && hasNewConstants
+        : false;
+      return this.isValid && this.hasExtraData && (isImportingPresets || isImportingConstants);
+    },
     currentPresets: () => player.timestudy.presets,
     currentConstants: () => Object.keys(player.reality.automator.constants),
     maxConstantCount() {
@@ -39,6 +56,7 @@ export default {
       return mismatchedPresets;
     },
     willOverwriteConstant() {
+      if (!this.hasExtraData) return false;
       const all = new Set();
       for (const constant of this.currentConstants) all.add(constant);
       for (const constant of this.importedConstants) {
@@ -46,12 +64,15 @@ export default {
       }
       return false;
     },
-    // Number of constants over the limit
-    extraConstants() {
+    constantCountAfterImport() {
+      if (!this.hasExtraData) return this.currentConstants.length;
       const all = new Set();
       for (const constant of this.currentConstants) all.add(constant);
       for (const constant of this.importedConstants) all.add(constant.key);
-      return all.size - this.maxConstantCount;
+      return all.size;
+    },
+    extraConstants() {
+      return this.constantCountAfterImport - this.maxConstantCount;
     },
     presetButtonText() {
       return this.ignorePresets ? "Will Ignore Presets" : "Will Import Presets";
@@ -65,23 +86,28 @@ export default {
   },
   methods: {
     update() {
-      try {
-        const parsed = AutomatorBackend.parseFullScriptData(this.input);
-        if (!parsed) {
-          this.isValid = false;
-          return;
-        }
-        this.scriptName = parsed.name;
-        this.scriptContent = parsed.content;
-        this.importedPresets = parsed.presets;
-        this.importedConstants = parsed.constants;
-        this.lineCount = this.scriptContent.split("\n").length;
-        this.hasErrors = AutomatorGrammar.compile(this.scriptContent).errors.length !== 0;
-        this.isValid = true;
-      } catch (e) {
-        // Improperly encoded scripts will cause decodeText() to throw an exception
-        this.isValid = false;
+      // We need to sequentially parse full data and then single script data in order to handle both in the same modal.
+      // Parsing order doesn't matter due to the fact that export formatting means it's only ever one or the other.
+      let parsed = AutomatorBackend.parseFullScriptData(this.input);
+      if (parsed) this.hasExtraData = true;
+      else {
+        parsed = AutomatorBackend.parseScriptContents(this.input);
+        this.hasExtraData = false;
       }
+      if (!parsed) {
+        this.isValid = false;
+        return;
+      }
+
+      // Some of these may be undefined for single script importing (ie. no additional data attached) or for scripts
+      // with errors. These cases are checked elsewhere
+      this.scriptName = parsed.name;
+      this.scriptContent = parsed.content;
+      this.importedPresets = parsed.presets;
+      this.importedConstants = parsed.constants;
+      this.lineCount = this.scriptContent.split("\n").length;
+      this.hasErrors = AutomatorGrammar.compile(this.scriptContent).errors.length !== 0;
+      this.isValid = true;
     },
     importSave() {
       if (!this.isValid) return;
@@ -102,9 +128,10 @@ export default {
     @confirm="importSave"
   >
     <template #header>
-      Import Automator Script with additional Data
+      Import Automator Script Data
     </template>
     This will create a new Automator script at the end of your list.
+    <span v-if="isImportingExtraData">This will also import additional data related to the script.</span>
     <input
       ref="input"
       v-model="input"
@@ -117,7 +144,7 @@ export default {
       Script name: {{ scriptName }}
       <br>
       Line count: {{ lineCount }}
-      <div v-if="importedPresets.length !== 0">
+      <div v-if="hasPresets">
         <br>
         Study Presets:
         <span
@@ -143,7 +170,7 @@ export default {
           {{ presetButtonText }}
         </button>
       </div>
-      <div v-if="importedConstants.length !== 0">
+      <div v-if="hasConstants">
         <br>
         Constants:
         <span
@@ -178,6 +205,9 @@ export default {
         class="l-has-errors"
       >
         This script has errors which need to be fixed before it can be run!
+      </div>
+      <div v-if="hasErrors && isImportingExtraData">
+        <i>Some errors may be fixed with the additional data being imported.</i>
       </div>
     </div>
     <div v-else-if="input.length !== 0">

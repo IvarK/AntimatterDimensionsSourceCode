@@ -1443,6 +1443,7 @@ GameStorage.devMigrations = {
       delete player.celestials.pelle.maxAMThisArmageddon;
       delete player.options.sidebarMinimized;
       delete player.options.chart;
+      delete player.devMode;
     }
   ],
 

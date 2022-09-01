@@ -167,6 +167,9 @@ export default {
       const textShadow = this.isCursedGlyph
         ? `-0.04em 0.04em 0.08em ${this.cursedColor}`
         : `-0.04em 0.04em 0.08em ${rarityColor}`;
+      const defaultBG = player.options.forceDarkGlyphs || Theme.current().isDark()
+        ? "black"
+        : "white";
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
@@ -175,7 +178,7 @@ export default {
         "text-shadow": this.isBlobHeart ? undefined : textShadow,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
-        background: this.isCursedGlyph ? this.cursedColorInverted : undefined
+        background: this.isCursedGlyph ? this.cursedColorInverted : defaultBG
       };
     },
     mouseEventHandlers() {
@@ -265,6 +268,10 @@ export default {
     }
   },
   created() {
+    this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
+      this.$recompute("innerStyle");
+      this.$recompute("showGlyphEffectDots");
+    });
     this.on$("tooltip-touched", () => this.hideTooltip());
   },
   beforeDestroy() {

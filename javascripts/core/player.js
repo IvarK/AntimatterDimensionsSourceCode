@@ -789,6 +789,7 @@ window.player = {
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,
+    forceDarkGlyphs: true,
     showHintText: {
       achievements: true,
       achievementUnlockStates: true,

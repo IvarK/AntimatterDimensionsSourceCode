@@ -683,14 +683,11 @@ window.player = {
       upgrades: new Set(),
       remnants: 0,
       realityShards: DC.D0,
-      // For recording which ones you permanently have
-      armageddonDuration: 0,
       records: {
         totalAntimatter: DC.D0,
         totalInfinityPoints: DC.D0,
         totalEternityPoints: DC.D0,
       },
-      maxAMThisArmageddon: DC.D0,
       rebuyables: {
         antimatterDimensionMult: 0,
         timeSpeedMult: 0,
@@ -771,7 +768,6 @@ window.player = {
     commas: true,
     updateRate: 33,
     newUI: true,
-    sidebarMinimized: false,
     offlineProgress: true,
     automaticTabSwitching: true,
     respecIntoProtected: false,
@@ -798,13 +794,6 @@ window.player = {
       realityUpgrades: true,
       perks: true,
       alchemy: true,
-    },
-    chart: {
-      updateRate: 1000,
-      duration: 10,
-      warning: 0,
-      on: false,
-      dips: true
     },
     animations: {
       bigCrunch: true,

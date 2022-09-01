@@ -1437,6 +1437,12 @@ GameStorage.devMigrations = {
         newScripts[newID].id = newID;
       }
       player.reality.automator.scripts = newScripts;
+    },
+    player => {
+      delete player.celestials.pelle.armageddonDuration;
+      delete player.celestials.pelle.maxAMThisArmageddon;
+      delete player.options.sidebarMinimized;
+      delete player.options.chart;
     }
   ],
 

@@ -51,7 +51,6 @@ import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal
 import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal";
 import H2PModal from "@/components/modals/H2PModal";
 import ImportAutomatorDataModal from "@/components/modals/ImportAutomatorDataModal";
-import ImportAutomatorScriptModal from "@/components/modals/ImportAutomatorScriptModal";
 import ImportFileWarningModal from "@/components/modals/ImportFileWarningModal";
 import ImportSaveModal from "@/components/modals/ImportSaveModal";
 import InformationModal from "@/components/modals/InformationModal";
@@ -235,7 +234,6 @@ Modal.awayProgress = new Modal(AwayProgressModal);
 Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);
 Modal.importWarning = new Modal(ImportFileWarningModal);
-Modal.importScript = new Modal(ImportAutomatorScriptModal);
 Modal.importScriptData = new Modal(ImportAutomatorDataModal);
 Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
 Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);

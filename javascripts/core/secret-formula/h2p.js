@@ -103,10 +103,12 @@ complicated to be run at full accuracy in a reasonable amount of time. At the en
 summarize how various relevant resources have changed while you were gone.
 <br>
 <br>
-The game runs on a system where everything is updated once per tick - all dimensions and resources do one unit of
+The game runs on a system where everything is updated once per tick - all Dimensions and resources do one unit of
 production, all autobuyers trigger once, all multipliers and values are changed accordingly, and all the displayed
-numbers are updated. There are normally ${formatInt(20)} ticks per second when the game is running, although lag and
-internal javascript behavior may cause tick length to vary by a few milliseconds.
+numbers are updated. By default there are ${formatInt(20)} ticks per second when the game is running, although this can
+be modified by changing the "Update rate" within the game Options.
+Your current settings will run the game at ${format(1000 / player.options.updateRate, 2, 1)} ticks per second on
+average, although lag and internal javascript behavior may cause individual ticks to vary by a few percent.
 <br>
 <br>
 When offline simulation is active, these ticks have an adjusted length in order to fill the amount of time you were
@@ -117,6 +119,17 @@ autobuyers - in this situation autobuyers will effectively only trigger once eve
 may have a strong impact depending on the part of the game.
 <br>
 <br>
+${BlackHole(1).isUnlocked
+    ? `<b>Offline Black Hole behavior:</b> Once the Black Hole has been unlocked, the offline progress simulation will
+      attempt to run the game in a way where each tick contains roughly the same amount of <i>game</i> time. This may
+      give the appearance of the Black Hole(s) being active for a much larger fraction of time than normal while
+      simulating, when in fact the game is running active periods more slowly and "skipping past" the inactive periods
+      because they contribute much less production per real time. This results in behavior which is generally in your
+      favor when compared to ticks with constant real time.
+      <br>
+      <br>`
+    : ""
+}
 Offline tick count can be adjusted between ${formatInt(500)} and ${formatInt(DC.E6)} ticks. Smaller counts will result
 in faster but less accurate simulations, while larger counts will result in more accurate simulations which take longer
 to complete.
@@ -1060,7 +1073,7 @@ Duration - How long each speed burst lasts before going back to normal speed,
 increased by ${formatPercents(0.3)} per upgrade.
 <br>
 <br>
-Once you have a ${formatInt(1)} year of <i>game time</i> on your save, you unlock a Reality Upgrade that allows
+Once you have ${formatInt(1)} year of <i>game time</i> on your save, you unlock a Reality Upgrade that allows
 you to have a second Black Hole. 
 The timer on the second Black Hole only advances when the first Black Hole is active. So, for example, if the first
 Black Hole has a duration of ${formatInt(4)} minutes and the second has an interval of ${formatInt(8)} minutes, the
@@ -1074,11 +1087,21 @@ When a Black Hole is active at least ${formatPercents(0.9999, 2)} of the time, i
 This is tracked separately for the two Black Holes.
 <br>
 <br>
+While offline, Black Hole cycles will still advance normally and their active speed boosts will apply fully as if the
+game were still open. Offline time simulates segments of inactive and active Black Holes with different tick lengths
+in order to reduce the negative effects of small tick count during active periods; the entry for "Offline Progress"
+has been updated with more technical details.
+<br>
+<br>
 The Black Holes can be paused, completely halting their interval/duration cycle. However, when unpausing them, it will
-take ${BlackHoles.ACCELERATION_TIME} real-time seconds for them to reach maximum speed if they were paused while their
-speed boost was active. This acceleration time will still advance the cycle as if it were running at full speed; so
+take ${BlackHoles.ACCELERATION_TIME} real-time seconds for them to go from inactive to their maximum boosted speed.
+This acceleration time will still advance the cycle as if it were running at full speed; so
 while pausing gives some more control, it also ultimately results in some boosted time being lost.
-Pausing and unpausing affects both Black Holes; they can't be paused or unpaused independently.
+<br>
+<br>
+Pausing and unpausing affects both Black Holes; they can't be paused or unpaused independently. They can be paused
+automatically ${BlackHoles.ACCELERATION_TIME} real-time seconds before activation by toggling the relevant setting on
+the Black Hole tab.
 <br>
 <br>
 <b>Hotkey: B</b> will pause/unpause the Black Holes.

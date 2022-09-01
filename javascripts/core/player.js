@@ -878,8 +878,6 @@ window.player = {
       id: false,
     }
   },
-  // TODO: Remove everything with devMode in it, we (probably?) don't want this in release
-  devMode: false,
 };
 
 export const Player = {

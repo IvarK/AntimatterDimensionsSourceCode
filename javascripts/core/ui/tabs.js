@@ -27,7 +27,7 @@ class SubtabState {
   }
 
   get isUnlocked() {
-    return this.config.condition === undefined || this.config.condition() || player.devMode;
+    return this.config.condition === undefined || this.config.condition();
   }
 
   get isAvailable() {
@@ -112,7 +112,7 @@ class TabState {
   }
 
   get isUnlocked() {
-    return this.config.condition === undefined || this.config.condition() || player.devMode;
+    return this.config.condition === undefined || this.config.condition();
   }
 
   get isAvailable() {

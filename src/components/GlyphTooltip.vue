@@ -87,17 +87,16 @@ export default {
     rarityInfo() {
       return getRarity(this.strength);
     },
-    textShadowColor() {
-      return Theme.current().isDark() ? "black" : "white";
+    baseColor() {
+      if (this.type === "cursed") return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
+      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "black" : "white";
     },
-    cursedColor() {
-      return Theme.current().isDark() ? "black" : "white";
-    },
-    cursedColorInverted() {
-      return Theme.current().isDark() ? "white" : "black";
+    textColor() {
+      if (this.type === "cursed") return Theme.current().isDark() || player.options.forceDarkGlyphs ? "black" : "white";
+      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
     },
     mainBorderColor() {
-      if (this.type === "cursed") return this.cursedColor;
+      if (this.type === "cursed") return this.textColor;
       if (this.type === "companion") return GlyphTypes[this.type].color;
       return getColor(this.strength);
     },
@@ -105,11 +104,6 @@ export default {
       const color = this.mainBorderColor;
       return {
         color,
-        "text-shadow": this.type === "cursed"
-          ? undefined
-          : `-0.1rem 0.1rem 0.1rem ${this.textShadowColor}, 0.1rem 0.1rem 0.1rem ${this.textShadowColor},
-            -0.1rem -0.1rem 0.1rem ${this.textShadowColor}, 0.1rem -0.1rem 0.1rem ${this.textShadowColor},
-            0 0 0.3rem ${color}`,
         animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
       };
     },
@@ -147,7 +141,7 @@ export default {
       // eslint-disable-next-line no-nested-ternary
       const color = this.isLevelCapped
         ? "#ff4444"
-        : (this.isLevelBoosted ? "#44FF44" : "");
+        : (this.isLevelBoosted ? "#44FF44" : undefined);
       return `Level: <span style="color: ${color}">
               ${arrow}${formatInt(this.effectiveLevel)}${arrow}
               </span>`;
@@ -162,13 +156,14 @@ export default {
     glyphTooltipStyle() {
       // With computer mice, it's nice to just totally disable mouse events on the tooltip,
       // which reduces the chances for stupidity
+      const borderColor = this.type === "cursed" ? this.textColor : GlyphTypes[this.type].color;
       return {
         "pointer-events": this.onTouchDevice ? undefined : "none",
-        "border-color": GlyphTypes[this.type].color,
-        "box-shadow": `0 0 0.5rem ${GlyphTypes[this.type].color}, 0 0 0.5rem ${GlyphTypes[this.type].color} inset`,
+        "border-color": borderColor,
+        "box-shadow": `0 0 0.5rem ${borderColor}, 0 0 0.5rem ${borderColor} inset`,
         animation: this.type === "reality" ? "a-reality-glyph-tooltip-cycle 10s infinite" : undefined,
-        color: this.type === "cursed" ? this.cursedColor : undefined,
-        background: this.type === "cursed" ? this.cursedColorInverted : undefined
+        color: this.textColor,
+        background: this.baseColor
       };
     },
     glyphHeaderStyle() {
@@ -176,14 +171,14 @@ export default {
       const isReality = this.type === "reality";
 
       let color = Theme.current().isDark() ? this.rarityInfo.darkColor : this.rarityInfo.lightColor;
-      if (isCursed) color = this.cursedColor;
+      if (isCursed) color = this.textColor;
       if (this.type === "companion") color = GlyphTypes[this.type].color;
       return {
         "border-color": color,
         "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,
         animation: isReality ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined,
-        color: isCursed ? this.cursedColor : undefined,
-        background: isCursed ? this.cursedColorInverted : undefined
+        color: this.textColor,
+        background: this.baseColor
       };
     }
   },
@@ -237,8 +232,7 @@ export default {
       if (this.type === "companion" || this.type === "cursed") return "";
       const powerText = `${format(this.sacrificeReward, 2, 2)}`;
       const isCurrentAction = this.currentAction === "sacrifice";
-      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};
-              color: ${isCurrentAction ? this.getFontColor() : ""}">
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};">
               Sacrifice: ${powerText}
               </span>`;
     },

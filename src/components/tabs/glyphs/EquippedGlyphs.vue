@@ -59,6 +59,14 @@ export default {
       return {
         cursor: "pointer",
       };
+    },
+    // "Armageddon" causes the button to have text overflow, so we conditionally make the button taller; this doesn't
+    // cause container overflow due to another button being removed entirely when doomed
+    unequipClass() {
+      return {
+        "l-glyph-equip-button": this.isDoomed,
+        "l-glyph-equip-button-short": !this.isDoomed,
+      };
     }
   },
   created() {
@@ -177,7 +185,8 @@ export default {
     </div>
     <div class="l-equipped-glyphs__buttons">
       <button
-        class="l-glyph-equip-button-short c-reality-upgrade-btn"
+        class="c-reality-upgrade-btn"
+        :class="unequipClass"
         :style="glyphRespecStyle"
         :ach-tooltip="respecTooltip"
         @click="toggleRespec"

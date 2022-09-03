@@ -73,9 +73,9 @@ export default {
       return this.cost.exponent < 1e6;
     },
     timeEstimate() {
-      if (!this.showTTCost || this.ttGen.eq(0)) return null;
+      if (!this.showTTCost || this.ttGen.eq(0)) return "";
       const time = Decimal.sub(this.ttCost, this.currTT).dividedBy(this.ttGen);
-      return time.gt(0) ? `Enough TT in ${TimeSpan.fromSeconds(time.toNumber()).toStringShort()}` : null;
+      return time.gt(0) ? `Enough TT in ${TimeSpan.fromSeconds(time.toNumber()).toStringShort()}` : "";
     }
   },
   watch: {

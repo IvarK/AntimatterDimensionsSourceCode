@@ -18,6 +18,12 @@ export default {
   computed: {
     presetData: () => player.timestudy.presets,
     constantData: () => player.reality.automator.constants,
+    hasPresets() {
+      return (this.presets?.length ?? 0) !== 0;
+    },
+    hasConstants() {
+      return (this.constants?.length ?? 0) !== 0;
+    },
   },
   methods: {
     update() {
@@ -49,7 +55,7 @@ export default {
     />
     <b>Script name: {{ script.name }}</b>
     <br>
-    <span v-if="presets.length !== 0">
+    <span v-if="hasPresets">
       <span
         :class="iconClass(hidePresets)"
         @click="hidePresets = !hidePresets"
@@ -74,7 +80,7 @@ export default {
       Does not reference any study presets.
     </span>
     <br>
-    <span v-if="constants.length !== 0">
+    <span v-if="hasConstants">
       <span
         :class="iconClass(hideConstants)"
         @click="hideConstants = !hideConstants"

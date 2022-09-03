@@ -1,4 +1,6 @@
 <script>
+import { AutomatorBackend } from "../../../javascripts/core/globals";
+
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
@@ -111,10 +113,14 @@ export default {
     },
     importSave() {
       if (!this.isValid) return;
-      AutomatorBackend.importFullScriptData(this.input, {
-        presets: this.ignorePresets,
-        constants: this.ignoreConstants
-      });
+      if (this.hasExtraData) {
+        AutomatorBackend.importFullScriptData(this.input, {
+          presets: this.ignorePresets,
+          constants: this.ignoreConstants
+        });
+      } else {
+        AutomatorBackend.importScriptContents(this.input);
+      }
       this.emitClose();
     },
   },

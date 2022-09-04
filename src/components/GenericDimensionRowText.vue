@@ -39,7 +39,7 @@ export default {
     update() {
       // Needs to be reactive or else rows that don't have changing values (eg. the highest dimension and any higher
       // locked ones) won't change layout when the window size changes
-      this.isSmall = window.innerWidth < 1500;
+      this.isSmall = window.innerWidth < 1573;
     },
     adjustableTextClass() {
       return {

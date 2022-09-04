@@ -244,8 +244,7 @@ export default {
         refinementText += ` (Actual value due to cap: ${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]})`;
       }
       const isCurrentAction = this.currentAction === "refine";
-      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};
-              color: ${isCurrentAction ? this.getFontColor() : ""}">
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};">
               Refine: ${refinementText}
               </span>`;
     },

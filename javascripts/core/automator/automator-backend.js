@@ -817,6 +817,7 @@ export const AutomatorBackend = {
     this._scripts.splice(idx, 1);
     if (this._scripts.length === 0) {
       this._createDefaultScript();
+      this.clearEditor();
     }
     if (id === this.state.topLevelScript) {
       this.stop();
@@ -901,6 +902,14 @@ export const AutomatorBackend = {
       player.reality.automator.currentInfoPane = AutomatorPanels.BLOCKS;
     }
     AutomatorHighlighter.clearAllHighlightedLines();
+  },
+
+  clearEditor() {
+    if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
+      BlockAutomator.clearEditor();
+    } else {
+      AutomatorTextUI.clearEditor();
+    }
   },
 
   stack: {

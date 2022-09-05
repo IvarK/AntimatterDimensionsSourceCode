@@ -60,12 +60,12 @@ export default {
 export const BlockAutomator = {
   editor: null,
   gutter: null,
+  _idArray: [],
+
   initialize() {
     this.editor = document.getElementsByClassName("c-automator-block-editor")[0];
     this.gutter = document.getElementsByClassName("c-automator-block-editor--gutter")[0];
   },
-
-  _idArray: [],
 
   get lines() {
     return ui.view.tabs.reality.automator.lines;
@@ -162,6 +162,12 @@ export const BlockAutomator = {
 
   numberOfLinesInBlock(block) {
     return block.nested ? Math.max(block.nest.reduce((v, b) => v + this.numberOfLinesInBlock(b), 1), 2) : 1;
+  },
+
+  clearEditor() {
+    // I genuinely don't understand why this needs to be done asynchronously, but removing the setTimeout makes this
+    // method not do anything at all. Even setting the array in the console without the setTimeout works fine.
+    setTimeout(() => this.lines = [], 0);
   },
 
   previousScrollPosition: 0,

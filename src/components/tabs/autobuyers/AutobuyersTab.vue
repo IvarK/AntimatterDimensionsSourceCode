@@ -26,6 +26,7 @@ export default {
   },
   data() {
     return {
+      hasInfinity: false,
       hasContinuum: false,
       displayADAutobuyersIndividually: false,
     };
@@ -43,6 +44,7 @@ export default {
   },
   methods: {
     update() {
+      this.hasInfinity = PlayerProgress.infinityUnlocked();
       this.hasContinuum = Laitela.continuumActive;
       this.checkADAutoStatus();
     },
@@ -72,6 +74,9 @@ export default {
       Autobuyers intervals are real time and therefore unaffected
       <br>
       by anything which may alter how fast the game itself is running.
+    </div>
+    <div v-if="!hasInfinity">
+      Challenges for upgrading autobuyers are unlocked by reaching Infinity.
     </div>
     <b>Autobuyers with no displayed bulk have unlimited bulk by default.</b>
     <b>Autobuyers with "Instant" interval will trigger every game tick ({{ gameTickLength }}).</b>

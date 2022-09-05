@@ -13,7 +13,7 @@ class SubtabState {
   }
 
   get isPermanentlyHidden() {
-    return this.config.hideAt <= GameEnd.endState;
+    return this.config.hideAt < GameEnd.endState;
   }
 
   get hidable() {
@@ -98,7 +98,7 @@ class TabState {
   }
 
   get isPermanentlyHidden() {
-    return this.config.hideAt <= GameEnd.endState;
+    return this.config.hideAt < GameEnd.endState;
   }
 
   get hidable() {

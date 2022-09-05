@@ -93,9 +93,12 @@ export const BlockAutomator = {
     return this.lineNumber(this._idArray.indexOf(id) + 1);
   },
 
-  parseTextFromBlocks() {
+  // This gets called from many places which do block editor error checking for the purpose of a responsive UI, so
+  // we use checkID to distinguish between scripts to check. When not given, we assume it's the currently-displayed
+  // script; otherwise we need to be careful because we're in the process of changing scripts
+  parseTextFromBlocks(checkID) {
     const content = this.parseLines(BlockAutomator.lines).join("\n");
-    const automatorID = ui.view.tabs.reality.automator.editorScriptID;
+    const automatorID = checkID ?? ui.view.tabs.reality.automator.editorScriptID;
     AutomatorData.recalculateErrors();
     AutomatorBackend.saveScript(automatorID, content);
   },

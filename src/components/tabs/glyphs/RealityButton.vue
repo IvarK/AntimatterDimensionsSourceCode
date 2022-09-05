@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     formatMachinesGained() {
-      if (this.machinesGained.gt(0)) return `Machines gained: ${format(this.machinesGained, 2, 0)}`;
+      if (this.machinesGained.gt(0)) return `Machines gained: ${format(this.machinesGained, 2)}`;
       return "No Machines gained";
     },
     formatMachineStats() {

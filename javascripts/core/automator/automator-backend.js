@@ -459,25 +459,61 @@ export const AutomatorBackend = {
     return constants;
   },
 
+  // We can't just concatenate different parts of script data together or use some kind of delimiting character string
+  // due to the fact that comments can essentially contain character sequences with nearly arbitrary content and
+  // length. Instead, we take the approach of concatenating all data together with their lengths prepended at the start
+  // of each respective data string. For example:
+  //    ["blob", "11,21,31"] => "00004blob0000811,21,31"
+  // Note that the whole string can be unambiguously parsed from left-to-right regardless of the actual data contents.
+  // All numerical values are assumed to be exactly 5 characters long for consistency and since the script length limit
+  // is 5 digits long.
+  serializeAutomatorData(dataArray) {
+    const paddedNumber = num => `0000${num}`.slice(-5);
+    const segments = [];
+    for (const data of dataArray) {
+      segments.push(`${paddedNumber(data.length)}${data}`);
+    }
+    return segments.join("");
+  },
+
+  // Inverse of the operation performed by serializeAutomatorData(). Can throw an error for malformed inputs, but this
+  // will always be caught farther up the call chain and interpreted properly as an invalid dataString.
+  deserializeAutomatorData(dataString) {
+    const dataArray = [];
+    let remainingData = dataString;
+    while (remainingData.length > 0) {
+      const segmentLength = Number(remainingData.slice(0, 5));
+      remainingData = remainingData.substr(5);
+      if (remainingData.length < segmentLength) {
+        throw new Error("Inconsistent serialized automator data");
+      } else {
+        const segmentData = remainingData.slice(0, segmentLength);
+        remainingData = remainingData.substr(segmentLength);
+        dataArray.push(segmentData);
+      }
+    }
+    return dataArray;
+  },
+
   // This exports only the text contents of the currently-visible script
   exportCurrentScriptContents() {
     // Cut off leading and trailing whitespace
     const trimmed = AutomatorData.currentScriptText().replace(/^\s*(.*?)\s*$/u, "$1");
     if (trimmed.length === 0) return null;
-    // Append the script name into the beginning of the string and separate it from the script content with "||"
+    // Serialize the script name and content
     const name = AutomatorData.currentScriptName();
-    return GameSaveSerializer.encodeText(`${name}||${trimmed}`, "automator script");
+    return GameSaveSerializer.encodeText(this.serializeAutomatorData([name, trimmed]), "automator script");
   },
 
   // This parses script content from an encoded export string; does not actually import anything
   parseScriptContents(rawInput) {
-    let decoded;
+    let decoded, parts;
     try {
       decoded = GameSaveSerializer.decodeText(rawInput, "automator script");
+      parts = this.deserializeAutomatorData(decoded);
     } catch (e) {
       return null;
     }
-    const parts = decoded.split("||");
 
     // TODO Remove this 3-length conditional before release; this is only here to maintain compatability with scripts
     // exported from older test versions and will never be called on scripts exported post-release
@@ -524,7 +560,7 @@ export const AutomatorBackend = {
         if (presetID !== -1) foundPresets.add(presetID);
       }
       const availableConstants = Object.keys(player.reality.automator.constants);
-      for (const key of availableConstants) if (rawLine.includes(key)) foundConstants.add(key);
+      for (const key of availableConstants) if (rawLine.match(`\\s${key}(\\s|$)`)) foundConstants.add(key);
     }
 
     // Serialize presets
@@ -540,22 +576,21 @@ export const AutomatorBackend = {
       constants.push(`${name}:${player.reality.automator.constants[name]}`);
     }
 
-    // Append the script name, study presets, and constants to the script contents, separating all of them with "||"
-    return GameSaveSerializer.encodeText(
-      `${script.name}||${presets.join("*")}||${constants.join("*")}||${trimmed}`,
-      "automator data");
+    // Serialize all the variables for the full data export
+    const serialized = this.serializeAutomatorData([script.name, presets.join("*"), constants.join("*"), trimmed]);
+    return GameSaveSerializer.encodeText(serialized, "automator data");
   },
 
   // This parses scripts which also have attached information in the form of associated constants and study presets.
   // Note that it doesn't actually import or assign the data to the save file at this point.
   parseFullScriptData(rawInput) {
-    let decoded;
+    let decoded, parts;
     try {
       decoded = GameSaveSerializer.decodeText(rawInput, "automator data");
+      parts = this.deserializeAutomatorData(decoded);
     } catch (e) {
       return null;
     }
-    const parts = decoded.split("||");
     if (parts.length !== 4) return null;
 
     // Parse preset data (needs the conditional because otherwise it'll use the empty string to assign 0/undef/undef)

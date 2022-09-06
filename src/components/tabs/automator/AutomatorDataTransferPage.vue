@@ -40,6 +40,11 @@ export default {
     script data is imported.
     <br>
     <br>
+    Note: Any mentions of constant names or full study-buying commands within comments will also be counted as being
+    "used" within a script. This is intentional, as the comment is assumed to be indicative of what the script itself
+    is attempting to do with presets or constants.
+    <br>
+    <br>
     <div
       v-for="(script, id) in scripts"
       :key="id"

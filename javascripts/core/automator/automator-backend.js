@@ -452,7 +452,7 @@ export const AutomatorBackend = {
     for (const rawLine of lines) {
       const availableConstants = Object.keys(player.reality.automator.constants);
       // Needs a space-padded regex match so that (for example) a constant "unl" doesn't match to an unlock command
-      for (const key of availableConstants) if (rawLine.match(`\\s${key}\\s?`)) foundConstants.add(key);
+      for (const key of availableConstants) if (rawLine.match(`\\s${key}(\\s|$)`)) foundConstants.add(key);
     }
     const constants = Array.from(foundConstants);
     constants.sort();

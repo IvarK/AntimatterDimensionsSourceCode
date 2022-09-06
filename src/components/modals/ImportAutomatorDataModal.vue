@@ -165,8 +165,8 @@ export default {
           v-if="!ignorePresets && overwrittenPresetCount > 0"
           class="l-has-errors"
         >
-          {{ formatInt(overwrittenPresetCount) }} of your existing presets are
-          different from those being imported and will be overwritten!
+          {{ formatInt(overwrittenPresetCount) }} of your existing presets
+          will be overwritten by imported presets!
         </div>
         <br>
         <button

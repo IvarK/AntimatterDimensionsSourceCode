@@ -874,6 +874,8 @@ export function simulateTime(seconds, real, fast) {
     Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
 
+  EventHub.dispatch(GAME_EVENT.OFFLINE_CURRENCY_GAINED);
+
   let remainingRealSeconds = seconds;
   // During async code the number of ticks remaining can go down suddenly
   // from "Speed up" which means tick length needs to go up, and thus

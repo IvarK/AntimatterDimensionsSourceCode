@@ -150,6 +150,7 @@ GameStorage.migrations = {
       GameStorage.migrations.convertNews(player);
       GameStorage.migrations.etercreqConversion(player);
       GameStorage.migrations.moveTS33(player);
+      GameStorage.migrations.addBestPrestigeCurrency(player);
 
       kong.migratePurchases();
     }
@@ -914,6 +915,13 @@ GameStorage.migrations = {
       player.timestudy.studies.splice(player.timestudy.studies.indexOf(33), 1);
       player.timestudy.theorem = new Decimal(player.timestudy.theorem).plus(2);
     }
+  },
+
+  addBestPrestigeCurrency(player) {
+    player.records.thisReality.maxEP = player.eternityPoints;
+    player.records.bestReality.bestEP = player.eternityPoints;
+    player.records.thisEternity.maxIP = player.infinityPoints;
+    player.records.thisReality.maxIP = player.infinityPoints;
   },
 
   prePatch(saveData) {

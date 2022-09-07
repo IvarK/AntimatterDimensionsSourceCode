@@ -51,8 +51,8 @@ export default {
     onCancel() {
       Payments.cancelPurchase();
     },
-    respecAll() {
-      ShopPurchase.respecAll();
+    respec() {
+      ShopPurchase.respecRequest();
     }
   },
 };
@@ -72,7 +72,7 @@ export default {
       />
       <PrimaryButton
         class="o-primary-btn--subtab-option"
-        @click="respecAll()"
+        @click="respec()"
       >
         Respec Shop
       </PrimaryButton>

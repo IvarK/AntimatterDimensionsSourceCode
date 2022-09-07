@@ -83,6 +83,14 @@ ShopPurchase.respecAll = function() {
   }
 };
 
+ShopPurchase.respecRequest = function() {
+  if (player.options.confirmations.respecIAP) {
+    Modal.respecIAP.show();
+  } else {
+    ShopPurchase.respecAll();
+  }
+};
+
 kong.purchaseTimeSkip = function() {
   simulateTime(3600 * 6);
 };

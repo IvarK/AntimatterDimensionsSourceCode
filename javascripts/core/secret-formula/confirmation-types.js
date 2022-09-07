@@ -77,5 +77,9 @@ GameDatabase.confirmationTypes = [
     name: "Armageddon",
     option: "armageddon",
     isUnlocked: () => Pelle.isDoomed,
-  },
+  }, {
+    name: "Respec Shop Purchases",
+    option: "respecIAP",
+    isUnlocked: () => true
+  }
 ];

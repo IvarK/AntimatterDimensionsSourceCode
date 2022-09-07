@@ -36,13 +36,12 @@ export default {
       const isValidName = this.aliasString.match(/^[a-zA-Z_][a-zA-Z_0-9]*$/u);
       const alreadyExists = Object.keys(player.reality.automator.constants).includes(this.aliasString) &&
         this.aliasString !== this.oldAlias;
-      const hasCommandConflict = allowedConstantPatterns.some(p => {
-        // A bit of a workaround here - the patterns need to do check global match but cannot be modified
+      const hasCommandConflict = forbiddenConstantPatterns.some(p => {
         const matchObj = this.aliasString.match(p);
         return matchObj ? matchObj[0] === this.aliasString : false;
       });
 
-      if (!isValidName) return "Constant name must be alphanumeric and cannot start with a number";
+      if (!isValidName) return "Constant name must be alphanumeric without spaces and cannot start with a number";
       if (alreadyExists) return "You have already defined a constant with this name";
       if (hasCommandConflict) return "Constant name conflicts with a command key word";
 

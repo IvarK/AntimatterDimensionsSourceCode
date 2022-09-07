@@ -186,7 +186,9 @@ function applyRealityUpgradesAfterEternity() {
 }
 
 function askEternityConfirmation() {
-  if (player.options.confirmations.eternity) {
+  if (player.dilation.active && player.options.confirmations.dilation) {
+    Modal.exitDilation.show();
+  } else if (player.options.confirmations.eternity) {
     Modal.eternity.show();
   } else {
     animateAndEternity();

@@ -1,3 +1,5 @@
+import { AutomatorPanels } from "../../src/components/tabs/automator/AutomatorDocs";
+
 import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend";
 import { DC } from "./constants";
 import { deepmergeAll } from "@/utility/deepmerge";
@@ -508,7 +510,7 @@ window.player = {
       execTimer: 0,
       type: AUTOMATOR_TYPE.BLOCK,
       forceUnlock: false,
-      currentInfoPane: 4
+      currentInfoPane: AutomatorPanels.INTRO_PAGE,
     },
     achTimer: 0,
   },

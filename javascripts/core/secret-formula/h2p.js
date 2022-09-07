@@ -929,29 +929,8 @@ simply completing more Realities.
 <br>
 <br>
 The Automator uses a scripting language that allows you to automate nearly the entire game.
-The interface has two panes, a script pane on the left where you enter the commands to automate the game and a
-pane on the right which has multiple panels which do many different things. The panels on the right side include:
-<br>
-- The command list, with information on all the commands available to you (some may not be available until you have
-  unlocked certain things)
-<br>
-- The template creator, which allows you to generate premade script templates to accomplish certain tasks
-<br>
-- All errors in the current Automator script, as well as possible suggestions on how to fix them; the button for
-  this panel will light up if you have any errors in your current script
-<br>
-- All recently executed commands, what those commands did, and how recently they were executed
-<br>
-- A constant definition panel where you can define as shorthand for values within the Automator (eg. special numbers
-  or certain Time Study Trees)
-<br>
-- If you are in the block mode of the Automator, there will also be a panel for the command blocks used to write the
-  script
-<br>
-<br>
-You are able to create new scripts by clicking on the dropdown, and then clicking the "Create a new script" option.
-To rename a script, click the pencil next to the dropdown and edit the name to whatever you wish the script to be
-called.
+The interface has two panes, a script pane on the left where you enter the commands to automate the game and a pane
+on the right which has multiple panels which do many different things as explained on the Automator Introduction page.
 <br>
 <br>
 If you want a larger workspace, you can press the button in the top right corner of the documentation pane of the
@@ -959,16 +938,12 @@ Automator to expand it to fullscreen. You can also drag the boundary between the
 panes if you want more room to write your script or read documentation.
 <br>
 <br>
-By pressing the top-right button on the script pane, you can switch to block mode, which may be more approachable if
-you are unfamiliar with programming. To enter commands in block mode, select the command block pane on the right and
-drag the box for the relevant command into the script pane and drop it where you want the command to go. Commands can be
-freely rearranged by dragging the blocks around if needed.
-<br>
-<br>
-Clicking the top-right button in block mode will switch back to text mode, and switching between block and text mode
-will automatically translate your script as well. If you have a script in text mode which has errors, the Automator
-may not be able to figure out what blocks to convert the lines with errors into. This may result in part of your
-script being lost if you attempt to convert a text script with errors into a block script.
+By pressing the top-right button on the script pane, you can switch between the Automator's block and text editor
+modes; the block mode may be more approachable if you are unfamiliar with programming. To enter commands in block mode,
+select the command block pane on the right and drag the box for the relevant command into the script pane and drop it
+where you want the command to go. Commands can be freely rearranged by dragging the blocks around if needed. Switching
+between block and text mode will attempt to automatically translate your script as well, although you may lose part of
+your converted script if it contains errors.
 <br>
 <br>
 Just like your entire savefile, individual Automator scripts can be imported and exported from the game.

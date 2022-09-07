@@ -4,6 +4,7 @@ import AutomatorButton from "./AutomatorButton";
 import AutomatorDataTransferPage from "./AutomatorDataTransferPage";
 import AutomatorDefinePage from "./AutomatorDefinePage";
 import AutomatorDocsCommandList from "./AutomatorDocsCommandList";
+import AutomatorDocsIntroPage from "./AutomatorDocsIntroPage";
 import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 import AutomatorErrorPage from "./AutomatorErrorPage";
 import AutomatorEventLog from "./AutomatorEventLog";
@@ -11,6 +12,7 @@ import AutomatorScriptDropdownEntryList from "./AutomatorScriptDropdownEntryList
 import ExpandingControlBox from "@/components/ExpandingControlBox";
 
 export const AutomatorPanels = {
+  INTRO_PAGE: 0,
   COMMANDS: 1,
   ERRORS: 2,
   EVENTS: 3,
@@ -29,6 +31,7 @@ export default {
     AutomatorEventLog,
     AutomatorDataTransferPage,
     AutomatorBlocks,
+    AutomatorDocsIntroPage,
     AutomatorDocsTemplateList,
     AutomatorDefinePage,
     AutomatorScriptDropdownEntryList,
@@ -221,6 +224,12 @@ export default {
     <div class="c-automator__controls l-automator__controls">
       <div class="l-automator-button-row">
         <AutomatorButton
+          v-tooltip="'Automator Introduction'"
+          class="fa-circle-info"
+          :class="activePanelClass(panelEnum.INTRO_PAGE)"
+          @click="infoPaneID = panelEnum.INTRO_PAGE"
+        />
+        <AutomatorButton
           v-tooltip="'Scripting Information'"
           class="fa-list"
           :class="activePanelClass(panelEnum.COMMANDS)"
@@ -329,7 +338,8 @@ export default {
       </div>
     </div>
     <div class="c-automator-docs l-automator-pane__content">
-      <AutomatorDocsCommandList v-if="infoPaneID === panelEnum.COMMANDS" />
+      <AutomatorDocsIntroPage v-if="infoPaneID === panelEnum.INTRO_PAGE" />
+      <AutomatorDocsCommandList v-else-if="infoPaneID === panelEnum.COMMANDS" />
       <AutomatorErrorPage v-else-if="infoPaneID === panelEnum.ERRORS" />
       <AutomatorEventLog v-else-if="infoPaneID === panelEnum.EVENTS" />
       <AutomatorDataTransferPage v-else-if="infoPaneID === panelEnum.DATA_TRANSFER" />

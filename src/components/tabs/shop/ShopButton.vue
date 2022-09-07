@@ -52,17 +52,17 @@ export default {
 
 <style scoped>
 .c-shop-button-container {
+  display: flex;
+  flex-direction: column;
   width: 30rem;
+  height: 16rem;
+  justify-content: space-between;
   color: white;
   background: #3c3c3c;
   border: var(--var-border-width, 0.2rem) solid #1f7d1f;
   border-radius: var(--var-border-radius, 0.5rem);
   margin: 0.5rem;
   padding: 1rem;
-  height: 16rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 .o-shop-button-button {
@@ -78,8 +78,8 @@ export default {
 }
 
 .o-shop-button-button--disabled {
-  cursor: default;
   background: rgb(150, 150, 150);
+  cursor: default;
 }
 
 .o-shop-button-button__img {

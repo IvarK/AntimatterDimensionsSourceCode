@@ -299,6 +299,9 @@ GameDatabase.credits = {
       name: "Nani",
       roles: 12
     }, {
+      name: "netweak",
+      roles: 12
+    }, {
       name: "NotBrewst",
       name2: "Luc Leblanc",
       roles: 12
@@ -334,6 +337,9 @@ GameDatabase.credits = {
     }, {
       name: "Socks",
       name2: "Hannah Pocks",
+      roles: 12
+    }, {
+      name: "Sweets the Alien",
       roles: 12
     }, {
       name: "Taylor Reeves",

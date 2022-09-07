@@ -75,6 +75,14 @@ export const ShopPurchase = mapGameDataToObject(
   config => new ShopPurchaseState(config)
 );
 
+ShopPurchase.respecAll = function() {
+  for (const purchase of ShopPurchase.all) {
+    if (purchase.config.singleUse) continue;
+    player.IAP.spentSTD -= purchase.purchases * purchase.cost;
+    purchase.purchases = 0;
+  }
+};
+
 kong.purchaseTimeSkip = function(cost) {
   if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
   player.IAP.spentSTD += cost;

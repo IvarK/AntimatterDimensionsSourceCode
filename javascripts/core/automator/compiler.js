@@ -191,12 +191,13 @@ import { AutomatorLexer } from "./lexer";
     lookupVar(identifier, type) {
       const varName = identifier.image;
       const varInfo = {};
-      const value = player.reality.automator.constants[varName];
-      if (value === undefined) {
+      const constants = player.reality.automator.constants;
+      if (!Object.keys(constants).includes(varName)) {
         this.addError(identifier, `Variable ${varName} has not been defined`,
           `Use the definition panel to define ${varName} in order to reference it, or check for typos`);
         return undefined;
       }
+      const value = constants[varName];
 
       let tree;
       switch (type) {

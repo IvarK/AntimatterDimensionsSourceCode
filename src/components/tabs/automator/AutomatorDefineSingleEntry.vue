@@ -40,10 +40,13 @@ export default {
         const matchObj = this.aliasString.match(p);
         return matchObj ? matchObj[0] === this.aliasString : false;
       });
+      const shadowsPrototype = ["constructor", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable",
+        "toLocaleString", "toString", "toValueOf"].some(p => this.aliasString.match(p));
 
       if (!isValidName) return "Constant name must be alphanumeric without spaces and cannot start with a number";
       if (alreadyExists) return "You have already defined a constant with this name";
       if (hasCommandConflict) return "Constant name conflicts with a command key word";
+      if (shadowsPrototype) return "Constant name cannot shadow a built-in Javascript prototype prop";
 
       if (!this.valueString) return "Constant value cannot be empty";
 

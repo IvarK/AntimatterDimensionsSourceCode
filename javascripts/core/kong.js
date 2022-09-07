@@ -83,15 +83,11 @@ ShopPurchase.respecAll = function() {
   }
 };
 
-kong.purchaseTimeSkip = function(cost) {
-  if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
-  player.IAP.spentSTD += cost;
+kong.purchaseTimeSkip = function() {
   simulateTime(3600 * 6);
 };
 
-kong.purchaseLongerTimeSkip = function(cost) {
-  if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
-  player.IAP.spentSTD += cost;
+kong.purchaseLongerTimeSkip = function() {
   simulateTime(3600 * 24);
 };
 

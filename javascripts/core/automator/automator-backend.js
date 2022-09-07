@@ -479,13 +479,14 @@ export const AutomatorBackend = {
   // Inverse of the operation performed by serializeAutomatorData(). Can throw an error for malformed inputs, but this
   // will always be caught farther up the call chain and interpreted properly as an invalid dataString.
   deserializeAutomatorData(dataString) {
+    if (dataString === "") throw new Error("Attempted deserialization of empty string");
     const dataArray = [];
     let remainingData = dataString;
     while (remainingData.length > 0) {
       const segmentLength = Number(remainingData.slice(0, 5));
       remainingData = remainingData.substr(5);
-      if (remainingData.length < segmentLength) {
-        throw new Error("Inconsistent serialized automator data");
+      if (Number.isNaN(segmentLength) || remainingData.length < segmentLength) {
+        throw new Error("Inconsistent or malformed serialized automator data");
       } else {
         const segmentData = remainingData.slice(0, segmentLength);
         remainingData = remainingData.substr(segmentLength);
@@ -512,21 +513,21 @@ export const AutomatorBackend = {
       decoded = GameSaveSerializer.decodeText(rawInput, "automator script");
       parts = this.deserializeAutomatorData(decoded);
     } catch (e) {
+      // TODO Remove everything but "return null" in this catch block before release; this is only here to maintain
+      // compatability with scripts from older test versions and will never be called on scripts exported post-release
+      if (decoded) {
+        parts = decoded.split("||");
+        if (parts.length === 3 && parts[1].length === parseInt(parts[0], 10)) {
+          return {
+            name: parts[1],
+            content: parts[2],
+          };
+        }
+      }
+
       return null;
     }
 
-    // TODO Remove this 3-length conditional before release; this is only here to maintain compatability with scripts
-    // exported from older test versions and will never be called on scripts exported post-release
-    if (parts.length === 3 && parts[1].length !== parseInt(parts[0], 10)) {
-      return {
-        name: parts[1],
-        content: parts[2],
-      };
-    }
-
-    if (parts.length !== 2) {
-      return null;
-    }
     return {
       name: parts[0],
       content: parts[1],

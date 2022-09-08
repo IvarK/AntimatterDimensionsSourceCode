@@ -30,12 +30,14 @@ GameDatabase.shopPurchases = {
     cost: 60,
     description: "Increase your Replicanti gain by 50%. (additive)",
     multiplier: purchases => (purchases === 0 ? 1 : 1 + 0.5 * purchases),
+    formatEffect: x => formatX(x, 2, 1),
   },
   dilatedTimePurchases: {
     key: "dilatedTimePurchases",
     cost: 40,
     description: "Increase your Dilated Time gain by 50%. (additive)",
     multiplier: purchases => (purchases === 0 ? 1 : 1 + 0.5 * purchases),
+    formatEffect: x => formatX(x, 2, 1),
   },
   smallTimeSkip: {
     key: "smallTimeSkip",

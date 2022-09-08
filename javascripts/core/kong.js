@@ -43,18 +43,22 @@ class ShopPurchaseState extends RebuyableMechanicState {
     player.IAP[this.config.key] = value;
   }
 
-  get displayMult() {
+  get shouldDisplayMult() {
     return Boolean(this.config.multiplier);
   }
 
   get currentMult() {
-    if (!this.displayMult) return "";
+    if (!this.shouldDisplayMult) return "";
     return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases);
   }
 
   get nextMult() {
-    if (!this.displayMult) return "";
+    if (!this.shouldDisplayMult) return "";
     return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases + 1);
+  }
+
+  formatEffect(effect) {
+    return this.config.formatEffect?.(effect) || formatX(effect, 2, 0);
   }
 
   purchase() {

@@ -14,8 +14,8 @@ const SigilAttributes = {
   visible: () => PelleRifts.all.map(r => Math.clamp(r.realPercentage, 0, 1)).min() > 0,
   center: new Vector(400, 300),
   size: 400,
-  color: "crimson",
-  canvasLayer: CELESTIAL_NAV_DRAW_ORDER.SIGIL_BG,
+  color: "#00ffff",
+  canvasLayer: CELESTIAL_NAV_DRAW_ORDER.NODE_BG - 500,
 };
 
 function scaledPos(x, y) {
@@ -83,7 +83,7 @@ function sigilShape(type, att, fill, colorOverride) {
       path,
       fill: colorOverride ?? SigilAttributes.color,
       completeWidth: SigilAttributes.size / 20,
-      noBG: true
+      noBG: true,
     },
   };
 }
@@ -192,12 +192,12 @@ for (let arcIndex = 0; arcIndex < arcSegments; arcIndex++) {
     { center: SigilAttributes.center, radius: 0.75,
       initAngle: init, finalAngle: init + len },
     { init: 0.1, weight: 0.4 },
-    "#7055bb");
+    "crimson");
   Shapes[`arcOuter${arcIndex}`] = sigilShape("circle",
     { center: SigilAttributes.center, radius: 0.95,
       initAngle: init, finalAngle: init - len },
     { init: 0.5, weight: 0.4 },
-    "#7055bb");
+    "crimson");
 }
 
 GameDatabase.celestials.navSigils = {

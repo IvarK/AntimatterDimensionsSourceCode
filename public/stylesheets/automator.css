@@ -10,6 +10,7 @@
   --color-automator-error-background: #ac0617;
   --color-automator-error-outline: #440108;
   --color-automator-docs-font: black;
+  --color-blockmator-light-text: #dddddd;
   --color-blockmator-block-border: #cfcfcf;
   --color-blockmator-block-background: #f5f5f5;
   --color-blockmator-block-command: #401090;
@@ -27,6 +28,7 @@
   --color-automator-active-line-outline: #4400ff;
   --color-automator-event-background: #004b00;
   --color-automator-docs-font: white;
+  --color-blockmator-light-text: white;
   --color-blockmator-block-border: #353535;
   --color-blockmator-block-background: #000115;
   --color-blockmator-block-command: #a142ff;
@@ -342,6 +344,7 @@
 }
 
 .c-automator-input-optional {
+  color: var(--color-blockmator-light-text);
   background: var(--color-blockmator-block-optional);
 }
 

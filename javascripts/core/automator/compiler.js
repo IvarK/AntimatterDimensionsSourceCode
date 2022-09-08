@@ -214,9 +214,32 @@ import { AutomatorLexer } from "./lexer";
         case AUTOMATOR_VAR_TYPES.DURATION:
           varInfo.value = parseInt(1000 * value, 10);
           break;
+        default:
+          throw new Error("Unrecognized variable format in automator constant lookup");
       }
 
       return varInfo;
+    }
+
+    isValidVarFormat(identifier, type) {
+      const varName = identifier.image;
+      const constants = player.reality.automator.constants;
+      if (!Object.keys(constants).includes(varName)) return false;
+      const value = constants[varName];
+
+      switch (type) {
+        case AUTOMATOR_VAR_TYPES.NUMBER:
+          // We can't rely on native Decimal parsing here because it largely just discards input past invalid
+          // characters and constructs something based on the start of the input string. Notably, this makes
+          // things like new Decimal("11,21,31") return 11 instead of something indicating an error.
+          return value.match(/^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?$/u);
+        case AUTOMATOR_VAR_TYPES.STUDIES:
+          return new TimeStudyTree(value).purchasedStudies.length > 0;
+        case AUTOMATOR_VAR_TYPES.DURATION:
+          return !Number.isNaN(parseInt(1000 * value, 10));
+        default:
+          throw new Error("Unrecognized variable format in automator constant lookup");
+      }
     }
 
     duration(ctx) {
@@ -319,6 +342,10 @@ import { AutomatorLexer } from "./lexer";
       if (ctx.NumberLiteral) {
         ctx.$value = new Decimal(ctx.NumberLiteral[0].image);
       } else if (ctx.Identifier) {
+        if (!this.isValidVarFormat(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.NUMBER)) {
+          this.addError(ctx, `Constant ${ctx.Identifier[0].image} cannot be used for comparison`,
+            `Ensure that ${ctx.Identifier[0].image} contains a properly-formatted number and not a Time Study string`);
+        }
         const varLookup = this.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.NUMBER);
         if (varLookup) ctx.$value = ctx.Identifier[0].image;
       }

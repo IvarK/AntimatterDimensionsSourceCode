@@ -76,7 +76,6 @@ function riftFillStage(name) {
 export const CELESTIAL_NAV_DRAW_ORDER = {
   // Node background is a black fuzzy circle drawn behind nodes. It can help show their
   // outline in some cases, and can be used in cases where a connector passes under a node
-  SIGIL_BG: -1000,
   NODE_BG: 0,
   CONNECTORS: 1000,
   NODES: 2000,
@@ -1917,7 +1916,6 @@ GameDatabase.celestials.navigation = {
     visible: () => Pelle.hasGalaxyGenerator,
     complete: () => (Pelle.hasGalaxyGenerator ? 1 : 0),
     node: {
-      clickAction: () => Tab.celestials.pelle.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
       fill: "black",
       position: Positions.pelleAchievementRequirement,
@@ -1933,6 +1931,18 @@ GameDatabase.celestials.navigation = {
         angle: 290,
         diagonal: 40,
         horizontal: 16,
+      },
+    },
+  },
+  // Invisible element to suppress the mouseover detection on the galaxy icon causing the legend to flicker
+  "pelle-galaxy-generator-sigil-mask": {
+    visible: () => Pelle.hasGalaxyGenerator,
+    complete: () => (Pelle.hasGalaxyGenerator ? 1 : 0),
+    node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
+      position: Positions.pelleAchievementRequirement,
+      ring: {
+        rMajor: 20,
       },
     },
   },

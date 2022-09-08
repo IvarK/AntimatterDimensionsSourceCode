@@ -21,6 +21,11 @@ export default {
       required: false,
       default: false,
     },
+    opacity: {
+      type: Number,
+      required: false,
+      default: 1,
+    },
     fill: {
       type: String,
       required: false,
@@ -175,6 +180,7 @@ export default {
         :fill="fill"
         stroke="none"
         :d="completePath"
+        :style="{ 'opacity': opacity }"
       />
     </g>
   </g>

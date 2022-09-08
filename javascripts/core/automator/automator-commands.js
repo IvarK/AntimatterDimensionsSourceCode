@@ -367,6 +367,12 @@ export const AutomatorCommands = ((() => {
         ctx.startLine = ctx.Pause[0].startLine;
         let duration;
         if (ctx.Identifier) {
+          if (!V.isValidVarFormat(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.DURATION)) {
+            V.addError(ctx, `Constant ${ctx.Identifier[0].image} is not a valid time duration constant`,
+              `Ensure that ${ctx.Identifier[0].image} is a number of seconds less than
+              ${format(Number.MAX_VALUE / 1000)}`);
+            return false;
+          }
           const lookup = V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.DURATION);
           duration = lookup ? lookup.value : lookup;
         } else {
@@ -590,13 +596,18 @@ export const AutomatorCommands = ((() => {
       validate: (ctx, V) => {
         ctx.startLine = ctx.Studies[0].startLine;
         if (ctx.Identifier) {
+          if (!V.isValidVarFormat(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES)) {
+            V.addError(ctx, `Constant ${ctx.Identifier[0].image} is not a valid Time Study constant`,
+              `Ensure that ${ctx.Identifier[0].image} is a properly-formatted Time Study string`);
+            return false;
+          }
           const varInfo = V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES);
-          if (!varInfo) return;
           ctx.$studies = varInfo.value;
           ctx.$studies.image = ctx.Identifier[0].image;
         } else if (ctx.studyList) {
           ctx.$studies = V.visit(ctx.studyList);
         }
+        return true;
       },
       compile: ctx => {
         const studies = ctx.$studies;

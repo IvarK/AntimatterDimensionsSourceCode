@@ -5,7 +5,8 @@ import Loading from "vue-loading-overlay";
 
 import Payments from "../../../../javascripts/core/payments";
 
-import PrimaryToggleButton from "../../PrimaryToggleButton";
+import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 import ShopButton from "./ShopButton";
 
@@ -14,6 +15,7 @@ export default {
   components: {
     ShopButton,
     Loading,
+    PrimaryButton,
     PrimaryToggleButton
   },
   data() {
@@ -48,6 +50,9 @@ export default {
     },
     onCancel() {
       Payments.cancelPurchase();
+    },
+    respec() {
+      ShopPurchase.respecRequest();
     }
   },
 };
@@ -59,11 +64,19 @@ export default {
       Disclaimer: These are not required to progress in the game, they are just for supporting the developer.
       The game is balanced without the use of any microtransactions.
     </div>
-    <PrimaryToggleButton
-      v-model="IAPsDisabled"
-      class="o-primary-btn--subtab-option"
-      label="Disable in-app-purchases:"
-    />
+    <div class="c-subtab-option-container">
+      <PrimaryToggleButton
+        v-model="IAPsDisabled"
+        class="o-primary-btn--subtab-option"
+        label="Disable in-app-purchases:"
+      />
+      <PrimaryButton
+        class="o-primary-btn--subtab-option"
+        @click="respec()"
+      >
+        Respec Shop
+      </PrimaryButton>
+    </div>
     <div class="c-shop-header">
       <span>You have {{ STD }}</span>
       <img

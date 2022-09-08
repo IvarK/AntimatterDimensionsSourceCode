@@ -824,7 +824,8 @@ window.player = {
       replicantiGalaxy: true,
       antimatterGalaxy: true,
       dimensionBoost: true,
-      switchAutomatorMode: true
+      switchAutomatorMode: true,
+      respecIAP: true
     },
     awayProgress: {
       antimatter: true,

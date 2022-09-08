@@ -58,6 +58,7 @@ import LoadGameModal from "@/components/modals/LoadGameModal";
 import PelleEffectsModal from "@/components/modals/PelleEffectsModal";
 import RealityGlyphCreationModal from "@/components/modals/RealityGlyphCreationModal";
 import ReplaceGlyphModal from "@/components/modals/ReplaceGlyphModal";
+import RespecIAPModal from "@/components/modals/RespecIAPModal";
 import SacrificeModal from "@/components/modals/SacrificeModal";
 import SingularityMilestonesModal from "@/components/modals/SingularityMilestonesModal";
 import StdStoreModal from "@/components/modals/StdStoreModal";
@@ -244,6 +245,7 @@ Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
 Modal.pelleEffects = new Modal(PelleEffectsModal);
 Modal.sacrifice = new Modal(SacrificeModal, 1, GAME_EVENT.DIMBOOST_AFTER);
 Modal.breakInfinity = new Modal(BreakInfinityModal, 1, GAME_EVENT.ETERNITY_RESET_AFTER);
+Modal.respecIAP = new Modal(RespecIAPModal);
 
 function getSaveInfo(save) {
   const resources = {

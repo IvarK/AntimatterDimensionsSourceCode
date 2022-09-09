@@ -27,7 +27,6 @@ export default {
       return {
         "o-prestige-button": true,
         "o-infinity-button": true,
-        "l-game-header__new-dim-btn": true,
         "o-infinity-button--unavailable": !this.canUnlock
       };
     },

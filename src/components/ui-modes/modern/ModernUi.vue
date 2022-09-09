@@ -1,5 +1,4 @@
 <script>
-import HeaderAmountsLine from "../HeaderAmountsLine";
 import HeaderBigCrunchButton from "../HeaderBigCrunchButton";
 import HeaderBlackHole from "../HeaderBlackHole";
 import HeaderChallengeDisplay from "../HeaderChallengeDisplay";
@@ -15,7 +14,6 @@ export default {
     HeaderChallengeDisplay,
     HeaderEternityButton,
     HeaderBigCrunchButton,
-    HeaderAmountsLine,
     HeaderUnlockInfinityDimButton,
     NewsTicker,
     HeaderBlackHole,
@@ -144,7 +142,6 @@ export default {
           <HeaderUnlockInfinityDimButton />
           <HeaderBigCrunchButton />
         </div>
-        <HeaderAmountsLine />
         <div class="l-game-header__antimatter-container">
           <p>You have <span class="c-game-header__antimatter">{{ format(antimatter, 2, 1) }}</span> antimatter.</p>
           <div>You are getting {{ format(antimatterPerSec, 2, 0) }} antimatter per second.</div>

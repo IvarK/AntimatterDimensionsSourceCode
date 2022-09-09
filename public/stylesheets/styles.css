@@ -2767,11 +2767,9 @@ br {
    modern browsers only support one or the other for scrollbar styling */
 .l-select-notation__inner,
 .l-select-theme__inner {
-  display: flex;
   overflow-y: auto;
   flex-direction: column;
   max-height: 24.9rem;
-  align-items: stretch;
   scrollbar-color: var(--color-good-dark) var(--color-disabled);
   scrollbar-width: thin;
 }
@@ -2916,8 +2914,8 @@ br {
   flex-direction: column;
   width: 35rem;
   height: 12rem;
-  font-size: 1.4rem;
   justify-content: space-between;
+  font-size: 1.4rem;
   color: var(--color-text);
   border: var(--var-border-width, 0.2rem) solid var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);
@@ -5731,9 +5729,9 @@ br {
 }
 
 .c-modal-IAP__warning {
-  color: #ff6666;
   font-size: 1.6rem;
   font-weight: bold;
+  color: #ff6666;
 }
 
 /* #endregion c-modal-import */
@@ -5830,8 +5828,8 @@ br {
 
 .c-modal-store-btn-container {
   display: flex;
-  align-items: center;
   justify-content: flex-end;
+  align-items: center;
   margin-bottom: 1.5rem;
 }
 
@@ -6325,8 +6323,8 @@ kbd {
   width: 35rem;
   justify-content: center;
   align-items: center;
-  font-size: 1.4rem;
   font-family: Typewriter;
+  font-size: 1.4rem;
   line-height: 1.5;
   color: black;
   background: var(--color-disabled);
@@ -6594,10 +6592,10 @@ kbd {
   flex-direction: column;
   width: 520px;
   align-items: center;
-  margin-left: 3rem;
-  padding: 1rem;
   border: var(--var-border-width, 0.2rem) solid var(--color-effarig--base);
   border-radius: var(--var-border-radius, 0.5rem);
+  margin-left: 3rem;
+  padding: 1rem;
 }
 
 .c-effarig-run-description {

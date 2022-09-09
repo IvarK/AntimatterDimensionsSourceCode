@@ -197,7 +197,7 @@ export const AutomatorData = {
   },
   currentScriptText(index) {
     const toCheck = index || this.scriptIndex();
-    return player.reality.automator.scripts[toCheck].content;
+    return player.reality.automator.scripts[toCheck]?.content;
   },
   createNewScript(content, name) {
     const newScript = AutomatorScript.create(name, content);
@@ -452,7 +452,10 @@ export const AutomatorBackend = {
     for (const rawLine of lines) {
       const availableConstants = Object.keys(player.reality.automator.constants);
       // Needs a space-padded regex match so that (for example) a constant "unl" doesn't match to an unlock command
-      for (const key of availableConstants) if (rawLine.match(`\\s${key}(\\s|$)`)) foundConstants.add(key);
+      // Additionally we need a negative lookbehind in order to ignore matches with presets which have the same name
+      for (const key of availableConstants) {
+        if (rawLine.match(`(?<![Nn][Aa][Mm][Ee])\\s${key}(\\s|$)`)) foundConstants.add(key);
+      }
     }
     const constants = Array.from(foundConstants);
     constants.sort();
@@ -797,6 +800,7 @@ export const AutomatorBackend = {
   },
 
   saveScript(id, data) {
+    if (!this.findScript(id)) return;
     this.findScript(id).save(data);
     if (id === this.state.topLevelScript) this.stop();
   },

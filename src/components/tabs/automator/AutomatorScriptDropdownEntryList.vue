@@ -87,7 +87,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div :key="scripts.length">
     <div
       v-for="script in scripts"
       :key="script.id"

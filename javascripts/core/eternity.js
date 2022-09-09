@@ -35,7 +35,6 @@ function giveEternityRewards(auto) {
       AutomatorData.lastECCompletionCount = completionCount;
       if (Enslaved.isRunning && completionCount > 5) EnslavedProgress.ec1.giveProgress();
     }
-    // eslint-disable-next-line no-bitwise
     player.challenge.eternity.requirementBits &= ~(1 << challenge.id);
     respecTimeStudies(auto);
   }
@@ -80,9 +79,7 @@ export function eternity(force, auto, specialConditions = {}) {
     player.requirementChecks.reality.noEternities = false;
   }
 
-  if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) {
-    rewardTP();
-  }
+  if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) rewardTP();
 
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
@@ -93,7 +90,7 @@ export function eternity(force, auto, specialConditions = {}) {
   }
 
   player.challenge.eternity.current = 0;
-  if (!specialConditions.enteringEC) {
+  if (!specialConditions.enteringEC && !Pelle.isDoomed) {
     player.dilation.active = false;
   }
   resetInfinityRuns();
@@ -131,6 +128,7 @@ export function eternity(force, auto, specialConditions = {}) {
 }
 
 export function animateAndEternity() {
+  if (!Player.canEternity) return;
   const hasAnimation = !FullScreenAnimationHandler.isDisplaying &&
     ((player.dilation.active && player.options.animations.dilation) ||
     (!player.dilation.active && player.options.animations.eternity));
@@ -182,8 +180,7 @@ export function initializeResourcesAfterEternity() {
 }
 
 function applyRealityUpgradesAfterEternity() {
-  if (Pelle.isDoomed) return;
-  if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
+  if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.canBeApplied) {
     for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
   }
 }
@@ -202,8 +199,8 @@ export class EternityMilestoneState {
   }
 
   get isReached() {
-    if (Pelle.isDoomed && this.config.pelleObsolete) {
-      return this.config.pelleObsolete();
+    if (Pelle.isDoomed && this.config.givenByPelle) {
+      return this.config.givenByPelle();
     }
     return Currency.eternities.gte(this.config.eternities);
   }

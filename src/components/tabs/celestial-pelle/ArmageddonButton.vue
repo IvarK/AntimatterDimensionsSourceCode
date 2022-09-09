@@ -69,7 +69,7 @@ export default {
 
 .c-armageddon-button--unavailable {
   opacity: 0.5;
-  cursor: default;
+  cursor: default !important;
 }
 
 .c-remnant-gain {

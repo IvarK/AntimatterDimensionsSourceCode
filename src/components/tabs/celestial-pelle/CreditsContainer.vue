@@ -1,21 +1,34 @@
 <script>
+import CreditsDisplay from "@/components/CreditsDisplay";
+
 export default {
   name: "CreditsContainer",
+  components: {
+    CreditsDisplay
+  },
   data() {
     return {
       rolling: false,
       scroll: 0,
-      audio: null
+      audio: null,
+      isMuted: false,
     };
   },
   computed: {
-    people() { return GameDatabase.credits.people; },
-    roles() { return GameDatabase.credits.roles; },
     creditStyles() {
       return {
         bottom: `${this.scroll}rem`,
         display: this.rolling ? "block" : "none"
       };
+    },
+    muteStyle() {
+      return {
+        top: `calc(${this.scroll + 2}rem - 100vh)`,
+        display: this.rolling ? "block" : "none"
+      };
+    },
+    muteIconClass() {
+      return this.isMuted ? "fa-volume-xmark" : "fa-volume-high";
     },
     celestialDisplays() {
       return {
@@ -40,14 +53,9 @@ export default {
   methods: {
     update() {
       this.rolling = GameEnd.endState > 4.5;
-      this.scroll = (GameEnd.endState - 4.5) * 48;
-      if (this.audio) this.audio.volume = Math.clamp((GameEnd.endState - 4.5), 0, 0.3);
+      this.scroll = (Math.clampMax(GameEnd.endState, 14) - 4.5) * 53;
+      if (this.audio) this.audio.volume = this.isMuted ? 0 : Math.clamp((GameEnd.endState - 4.5), 0, 0.3);
     },
-    relevantPeople(role) {
-      return this.people
-        .filter(x => (typeof x.roles === "number" ? x.roles === role : x.roles.includes(role)))
-        .sort((a, b) => a.name.localeCompare(b.name));
-    }
   }
 };
 </script>
@@ -57,6 +65,12 @@ export default {
     class="c-credits-container"
     :style="creditStyles"
   >
+    <i
+      class="c-mute-button fa-solid"
+      :class="muteIconClass"
+      :style="muteStyle"
+      @click="isMuted = !isMuted"
+    />
     <div
       v-for="(celSymbol, celIndex) in celestialDisplays"
       :key="celIndex + '-end-credit-symbol-disp'"
@@ -64,39 +78,20 @@ export default {
       :class="`c-${celIndex}-credits`"
       v-html="celSymbol"
     />
-    <h1 class="c-credits-header">
-      Antimatter Dimensions
-    </h1>
-
-    <div
-      v-for="role in roles.count"
-      :key="role"
-    >
-      <h2 class="c-credits-section">
-        {{ pluralize(roles[role], relevantPeople(role).length) }}
-      </h2>
-      <div :class="{ 'l-credits--bulk': relevantPeople(role).length > 10}">
-        <div
-          v-for="person in relevantPeople(role)"
-          :key="person.name"
-          class="c-credit-entry"
-        >
-          {{ person.name }}
-          <span v-if="person.name2">
-            ({{ person.name2 }})
-          </span>
-        </div>
-      </div>
-    </div>
-
-    <br><br><br><br><br><br><br><br><br>
-    <h1 class="c-credits-header">
-      Thank you so much for playing!
-    </h1>
+    <CreditsDisplay />
   </div>
 </template>
 
 <style scoped>
+.c-mute-button {
+  position: fixed;
+  left: 2rem;
+  font-size: 2rem;
+  opacity: 0.5;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
 @keyframes a-teresa-credits {
   0% { transform: rotate(61deg); }
   10% { transform: rotate(322deg); }
@@ -147,6 +142,23 @@ perfectly the same. */
 
 @keyframes a-ra-credits {
   0% {
+    opacity: 0.3;
+    transform: translateX(-50%) scale(0.2);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: translateX(-50%) scale(0.9);
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: translateX(-50%) scale(0.2);
+  }
+}
+
+@keyframes a-ra-credits--dark {
+  0% {
     opacity: 0.1;
     transform: translateX(-50%) scale(0.2);
   }
@@ -184,33 +196,8 @@ perfectly the same. */
   position: absolute;
   left: 0;
   z-index: 9;
-  color: rgb(185, 185, 185);
   transform: translateY(100%);
   pointer-events: none;
-}
-
-.c-credits-header {
-  color: yellow;
-}
-
-.c-credits-section {
-  color: white;
-  text-shadow: 1px 1px 2px turquoise;
-  margin-top: 10rem;
-  margin-bottom: 2rem;
-}
-
-.l-credits--bulk {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: 76%;
-  position: relative;
-  left: 12%;
-}
-
-.c-credit-entry {
-  font-size: 1.3rem;
-  margin-top: 1rem;
 }
 
 .c-credits-cel-symbol {
@@ -258,6 +245,10 @@ perfectly the same. */
   left: 44%;
   color: var(--color-ra--base);
   animation: a-ra-credits 10s ease-in-out infinite;
+}
+
+.s-base--dark .c-ra-credits {
+  animation: a-ra-credits--dark 10s ease-in-out infinite;
 }
 
 .c-laitela-credits {

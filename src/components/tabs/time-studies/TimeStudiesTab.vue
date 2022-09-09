@@ -137,7 +137,7 @@ export default {
       </PrimaryButton>
       <PrimaryButton
         class="o-primary-btn--subtab-option"
-        onclick="Modal.studyString.show()"
+        onclick="Modal.studyString.show({ id: -1 })"
       >
         Import tree
       </PrimaryButton>

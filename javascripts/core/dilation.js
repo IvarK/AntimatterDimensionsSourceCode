@@ -32,20 +32,19 @@ export function startDilatedEternityRequest() {
   } else {
     startDilatedEternity();
   }
-  if (Pelle.isDoomed && !player.options.confirmations.dilation) {
-    PelleStrikes.dilation.trigger();
-  }
 }
 
 export function startDilatedEternity(auto) {
-  if (!PlayerProgress.dilationUnlocked()) return;
+  if (!PlayerProgress.dilationUnlocked()) return false;
   if (player.dilation.active) {
     eternity(false, auto, { switchingDilation: true });
-    return;
+    return false;
   }
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
+  if (Pelle.isDoomed) PelleStrikes.dilation.trigger();
+  return true;
 }
 
 const DIL_UPG_NAMES = [
@@ -109,12 +108,12 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
 }
 
 export function getDilationGainPerSecond() {
-  const mult = NG.multiplier;
   if (Pelle.isDoomed) {
-    const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.death.milestones[1].effectOrDefault(1));
+    const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.paradox.milestones[1].effectOrDefault(1));
     return new Decimal(tachyonEffect)
       .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
-      .times(Pelle.specialGlyphEffect.dilation).div(3e4).times(mult);
+      .times(ShopPurchase.dilatedTimePurchases.currentMult ** 0.5)
+      .times(Pelle.specialGlyphEffect.dilation).div(3e4);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
@@ -127,16 +126,17 @@ export function getDilationGainPerSecond() {
       Ra.unlocks.peakGamespeedDT
     );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
+  dtRate = dtRate.times(ShopPurchase.dilatedTimePurchases.currentMult);
   dtRate = dtRate.times(
     Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
   if (Enslaved.isRunning && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
-  dtRate = dtRate.times(mult);
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;
 }
 
 function tachyonGainMultiplier() {
   if (Pelle.isDisabled("tpMults")) return new Decimal(1);
+  const pow = Enslaved.isRunning ? Enslaved.tachyonNerf : 1;
   return DC.D1.timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
@@ -144,7 +144,7 @@ function tachyonGainMultiplier() {
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
-  );
+  ).pow(pow);
 }
 
 export function rewardTP() {
@@ -152,13 +152,22 @@ export function rewardTP() {
   player.dilation.lastEP = Currency.eternityPoints.value;
 }
 
+// This function exists to apply Teresa-25 in a consistent way; TP multipliers can be very volatile and
+// applying the reward only once upon unlock promotes min-maxing the upgrade by unlocking dilation with
+// TP multipliers as large as possible. Applying the reward to a base TP value and letting the multipliers
+// act dynamically on this fixed base value elsewhere solves that issue
+export function getBaseTP(antimatter) {
+  const am = (isInCelestialReality() || Pelle.isDoomed)
+    ? antimatter
+    : Ra.unlocks.unlockDilationStartingTP.effectOrDefault(antimatter);
+  let baseTP = Decimal.pow(Decimal.log10(am) / 400, 1.5);
+  if (Enslaved.isRunning) baseTP = baseTP.pow(Enslaved.tachyonNerf);
+  return baseTP;
+}
+
 // Returns the TP that would be gained this run
 export function getTP(antimatter) {
-  let tachyon = Decimal
-    .pow(Decimal.log10(antimatter) / 400, 1.5)
-    .times(tachyonGainMultiplier());
-  if (Enslaved.isRunning) tachyon = tachyon.pow(Enslaved.tachyonNerf);
-  return tachyon;
+  return getBaseTP(antimatter).times(tachyonGainMultiplier());
 }
 
 // Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
@@ -235,5 +244,5 @@ export const DilationUpgrades = {
     DilationUpgrade.galaxyThreshold,
     DilationUpgrade.tachyonGain,
   ],
-  fromId: id => DilationUpgrade.all.find(x => x.id === id)
+  fromId: id => DilationUpgrade.all.find(x => x.id === Number(id))
 };

@@ -12,7 +12,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 1,
     uiOrder: 1,
     unlockedAt: 2,
-    description: "provides a multiplier to Antimatter Dimensions",
+    description: "provides a power to Antimatter Dimensions",
     formatEffect: value => `Antimatter Dimension multipliers ${formatPow(value, 4, 4)}`
   },
   "infinity": {
@@ -24,7 +24,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 1,
     uiOrder: 2,
     unlockedAt: 3,
-    description: "provides a multiplier to Infinity Dimensions",
+    description: "provides a power to Infinity Dimensions",
     formatEffect: value => `Infinity Dimension multipliers ${formatPow(value, 4, 4)}`
   },
   "time": {
@@ -36,7 +36,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 1,
     uiOrder: 3,
     unlockedAt: 4,
-    description: "provides a multiplier to Time Dimensions",
+    description: "provides a power to Time Dimensions",
     formatEffect: value => `Time Dimension multipliers ${formatPow(value, 4, 4)}`
   },
   "replication": {
@@ -48,7 +48,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 1,
     uiOrder: 4,
     unlockedAt: 5,
-    description: `increases Replication Speed`,
+    description: `increases Replication speed`,
     formatEffect: value => `Replication speed is increased by ${formatX(value, 2, 2)}`
   },
   "dilation": {
@@ -74,7 +74,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 2,
     uiOrder: 3,
     unlockedAt: 8,
-    get description() { return `reduces the slowdown per ${format(Number.MAX_VALUE, 2)} Replicanti`; },
+    description: "reduces Replicanti slowdown when above the cap",
     formatEffect: value => `Replicanti interval increases slower ${formatX(1.2, 1, 1)} ➜
       ${formatX(value, 4, 4)} per ${format(Number.MAX_VALUE, 2)}`,
     reagents: [
@@ -97,7 +97,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 2,
     uiOrder: 2,
     unlockedAt: 9,
-    description: "increases Eternity generation",
+    description: "provides a power to Eternity generation",
     formatEffect: value => `Eternity generation ${formatPow(value, 4, 4)}`,
     reagents: [
       {
@@ -119,7 +119,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 2,
     uiOrder: 1,
     unlockedAt: 10,
-    description: "provides a multiplier to all dimensions",
+    description: "provides a large multiplier to all Dimensions",
     formatEffect: value => `All Dimensions ${formatX(value)}`,
     reagents: [
       {
@@ -141,7 +141,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 2,
     uiOrder: 5,
     unlockedAt: 11,
-    description: "increases multiplier effect over a threshold",
+    description: "provides an additional power for very large multipliers",
     formatEffect: value => `All Antimatter Dimension multipliers are ${formatPow(1.05, 2, 2)}
       if they are above ${format(value)} `,
     reagents: [
@@ -186,8 +186,8 @@ GameDatabase.celestials.alchemy.resources = {
     symbol: "Ϙ",
     isBaseResource: true,
     effect: amount => Math.pow(10, amount / 2500),
-    tier: 2,
-    uiOrder: 3.5,
+    tier: 1,
+    uiOrder: 1.5,
     unlockedAt: 7,
     description: "increases Relic Shard gain",
     formatEffect: value => `Relic Shard gain is multiplied ${formatX(value, 2, 2)}`
@@ -197,18 +197,17 @@ GameDatabase.celestials.alchemy.resources = {
     name: "Synergism",
     symbol: "π",
     isBaseResource: false,
-    effect: amount => Math.clampMax(0.3 + Math.sqrt(amount / 15000), 1),
+    effect: amount => {
+      const rawValue = 0.3 + 1.3 * Math.sqrt(amount / 25000);
+      return Achievement(175).isUnlocked ? rawValue : Math.min(rawValue, 1);
+    },
     tier: 3,
     uiOrder: 2,
     unlockedAt: 13,
-    description: "increases the effectiveness of Alchemy Reactions",
+    description: "increases the yield of Alchemy Reactions",
     formatEffect(value) {
-      const baseEffect = `Alchemy reaction efficiency ${formatPercents(0.3)} ➜ ${formatPercents(value, 2, 2)}`;
-      if (player.reality.glyphs.sac.reality === 0) {
-        return baseEffect;
-      }
-      const increasedYield = formatPercents(value * Effects.sum(GlyphSacrifice.reality), 2, 2);
-      return `${baseEffect} (${increasedYield} after Glyph Sacrifice)`;
+      return `Alchemy Reaction efficiency ${formatPercents(0.3)} ➜ ${formatPercents(value, 2, 2)}
+        ${(!Achievement(175).isUnlocked && value >= 1) ? " (Capped)" : ""}`;
     },
     reagents: [
       {
@@ -234,7 +233,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 3,
     uiOrder: 3,
     unlockedAt: 15,
-    description: "provides a multiplier to all dimensions based on real time since unlock",
+    description: "provides a power to all Dimensions that permanently grows over time",
     formatEffect: value => `All Dimensions ${formatPow(Ra.momentumValue, 4, 4)}, increasing by
       ${format(0.002 * Achievement(175).effectOrDefault(1), 3, 3)}
       per real-time hour after the resource is unlocked, up to a maximum of ${formatPow(value, 4, 4)}`,
@@ -258,11 +257,11 @@ GameDatabase.celestials.alchemy.resources = {
     name: "Decoherence",
     symbol: "ξ",
     isBaseResource: false,
-    effect: amount => 0.10 * Math.sqrt(amount / 10000),
+    effect: amount => 0.15 * Math.sqrt(amount / 25000),
     tier: 3,
     uiOrder: 4,
     unlockedAt: 14,
-    description: "causes refining to give all basic Alchemy Resources",
+    description: "gives all basic Alchemy Resources upon refinement",
     formatEffect: value => `Refined Glyphs also give ${formatPercents(value, 2)} of their value ` +
       "to all other base resources",
     reagents: [
@@ -287,7 +286,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 4,
     uiOrder: 2,
     unlockedAt: 18,
-    description: "multiplies Infinity Points by Replicanti",
+    description: "multiplies Infinity Points based on Replicanti",
     formatEffect: value => `Infinity Points multiplied by Replicanti${formatPow(value, 2, 3)}`,
     reagents: [
       {
@@ -309,7 +308,7 @@ GameDatabase.celestials.alchemy.resources = {
     tier: 4,
     uiOrder: 2,
     unlockedAt: 17,
-    description: "multiplies Antimatter Dimensions by Reality Machines",
+    description: "multiplies Antimatter Dimensions based on Reality Machines",
     formatEffect: value => `Multiply Antimatter Dimensions by Reality Machines${formatPow(value, 2, 2)}`,
     reagents: [
       {
@@ -327,7 +326,7 @@ GameDatabase.celestials.alchemy.resources = {
     name: "Uncountability",
     symbol: "Θ",
     isBaseResource: false,
-    effect: amount => Math.sqrt(amount),
+    effect: amount => 160 * Math.sqrt(amount / 25000),
     tier: 4,
     uiOrder: 3,
     unlockedAt: 19,
@@ -375,7 +374,7 @@ GameDatabase.celestials.alchemy.resources = {
     name: "Multiversal",
     symbol: "Σ",
     isBaseResource: false,
-    effect: amount => 5 * Math.pow(amount / 10000, 2),
+    effect: amount => 32 * Math.pow(amount / 25000, 2),
     tier: 4,
     uiOrder: 5,
     unlockedAt: 16,
@@ -398,12 +397,13 @@ GameDatabase.celestials.alchemy.resources = {
     name: "Unpredictability",
     symbol: "Λ",
     isBaseResource: false,
-    effect: amount => amount / (10000 + amount),
+    // Somewhat ugly number to make this show 70.00% at cap
+    effect: amount => amount / (10714.28 + amount),
     tier: 4,
     uiOrder: 4,
     unlockedAt: 21,
     description: "makes each Alchemy Reaction have a chance to happen twice",
-    formatEffect: value => `Any alchemy reaction has a ${formatPercents(value, 2, 2)}
+    formatEffect: value => `Any Alchemy Reaction has a ${formatPercents(value, 2, 2)}
       chance of triggering again`,
     reagents: [
       {
@@ -430,8 +430,8 @@ GameDatabase.celestials.alchemy.resources = {
     effect: amount => Math.floor(amount),
     tier: 5,
     unlockedAt: 25,
-    description: "allows creation of Reality Glyphs",
-    formatEffect: value => `Consume all Reality resource to create a level ${formatInt(value)} Reality Glyph`,
+    description: "can be consumed to create Reality Glyphs",
+    formatEffect: value => `Consume all Reality Resource to create a level ${formatInt(value)} Reality Glyph`,
     reagents: [
       {
         resource: ALCHEMY_RESOURCE.EXPONENTIAL,

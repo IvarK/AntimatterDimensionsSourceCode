@@ -5,6 +5,7 @@ import { deepmergeAll } from "@/utility/deepmerge";
 import { playFabLogin } from "./core/playfab";
 import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
+import Payments from "./core/payments";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -85,14 +86,10 @@ export function gainedInfinityPoints() {
     Achievement(103),
     TimeStudy(111)
   );
-  const mult = NG.multiplier;
-  const pow = NG.power;
   if (Pelle.isDisabled("IPMults")) {
     return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
-      .timesEffectsOf(PelleRifts.famine)
+      .timesEffectsOf(PelleRifts.vacuum)
       .times(Pelle.specialGlyphEffect.infinity)
-      .times(mult)
-      .pow(pow)
       .floor();
   }
   let ip = player.break
@@ -101,7 +98,6 @@ export function gainedInfinityPoints() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
     ip = ip.min(DC.E200);
   }
-  ip = ip.times(mult);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
@@ -114,15 +110,13 @@ export function gainedInfinityPoints() {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
 
-  ip = ip.pow(pow);
   return ip.floor();
 }
 
 function totalEPMult() {
-  const totalMult = new Decimal(NG.multiplier);
   return Pelle.isDisabled("EPMults")
-    ? totalMult.times(Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]))
-    : totalMult.times(getAdjustedGlyphEffect("cursedEP"))
+    ? Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.vacuum.milestones[2])
+    : getAdjustedGlyphEffect("cursedEP")
       .times(ShopPurchase.EPPurchases.currentMult)
       .timesEffectsOf(
         EternityUpgrade.epMult,
@@ -136,9 +130,8 @@ function totalEPMult() {
 }
 
 export function gainedEternityPoints() {
-  const pow = NG.power;
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
-    gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
+    gainedInfinityPoints()).log10() / (308 - PelleRifts.recursion.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -151,11 +144,11 @@ export function gainedEternityPoints() {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
 
-  return ep.pow(pow).floor();
+  return ep.floor();
 }
 
 export function requiredIPForEP(epAmount) {
-  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(Math.pow(epAmount, 1 / NG.power), totalEPMult()), 5) + 0.7))
+  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(epAmount, totalEPMult()), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
 }
 
@@ -538,7 +531,7 @@ export function gameLoop(passDiff, options = {}) {
   Currency.realities.add(uncountabilityGain);
   Currency.perkPoints.add(uncountabilityGain);
 
-  if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
+  if (Perk.autocompleteEC1.canBeApplied && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 
   EternityChallenge(12).tryFail();
   Achievements._power.invalidate();
@@ -589,13 +582,17 @@ export function gameLoop(passDiff, options = {}) {
   applyAutoUnlockPerks();
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
-  if (player.dilation.active && Ra.unlocks.autoTP.canBeApplied && !Pelle.isDoomed) rewardTP();
+  // There are some external checks which prevent excessive resource gain with Teresa-25; it may give TP outside of
+  // dilation, but the TP gain function is also coded to behave differently if it's active
+  const teresa1 = player.dilation.active && Ra.unlocks.autoTP.canBeApplied;
+  const teresa25 = !isInCelestialReality() && Ra.unlocks.unlockDilationStartingTP.canBeApplied;
+  if ((teresa1 || teresa25) && !Pelle.isDoomed) rewardTP();
 
   if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
     if (player.celestials.enslaved.hintUnlockProgress >= TimeSpan.fromHours(5).totalMilliseconds) {
       EnslavedProgress.hintsUnlocked.giveProgress();
-      Enslaved.quotes.show(Enslaved.quotes.HINT_UNLOCK);
+      Enslaved.quotes.hintUnlock.show();
     }
   }
 
@@ -674,13 +671,12 @@ function passivePrestigeGen() {
 
 // Applies all perks which automatically unlock things when passing certain thresholds, needs to be checked every tick
 function applyAutoUnlockPerks() {
-  if (Pelle.isDoomed) return;
-  if (!TimeDimension(8).isUnlocked && Perk.autounlockTD.isBought) {
+  if (!TimeDimension(8).isUnlocked && Perk.autounlockTD.canBeApplied) {
     for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
   }
-  if (Perk.autounlockDilation3.isBought) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
-  if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
-  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
+  if (Perk.autounlockDilation3.canBeApplied) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
+  if (Perk.autounlockReality.canBeApplied) TimeStudy.reality.purchase(true);
+  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.canBeApplied) {
     const secondRow = EternityUpgrade.all.filter(u => u.id > 3);
     for (const upgrade of secondRow) {
       if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);
@@ -711,9 +707,9 @@ function laitelaRealityTick(realDiff) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;
       completionText += laitelaBeatText(Laitela.maxAllowedDimension + 1);
-      for (const quote of Object.values(Laitela.quotes)) {
-        if (laitelaInfo.difficultyTier >= quote.destabilize) {
-          Laitela.quotes.show(quote);
+      for (const quote of Laitela.quotes.all) {
+        if (quote.requirement) {
+          quote.show();
         }
       }
     }
@@ -730,7 +726,7 @@ function laitelaRealityTick(realDiff) {
         ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()} to improve your multiplier.`;
     }
     if (Laitela.isFullyDestabilized) SpeedrunMilestones(24).tryComplete();
-    Modal.message.show(completionText);
+    Modal.message.show(completionText, {}, 2);
   }
 }
 
@@ -739,9 +735,10 @@ function laitelaBeatText(disabledDim) {
     case 1: return `<br><br>Lai'tela's Reality will now completely disable production from all Dimensions.
         The Reality can still be entered, but further destabilization is no longer possible.
         For completely destabilizing the Reality, you also get an additional ${formatX(8)} to Dark Energy gain.`;
-    case 2:
-    case 3: return `<br><br>Lai'tela's Reality will now disable production from all
-        ${disabledDim}${disabledDim === 2 ? "nd" : "rd"} Dimensions during
+    case 2: return `<br><br>Lai'tela's Reality will now disable production from all 2nd Dimensions during
+      future runs, but the reward will be ${formatInt(100)} times stronger than before. Completely destabilizing
+      the Reality for the final Dimension will give you an additional ${formatX(8)} to Dark Energy gain.`;
+    case 3: return `<br><br>Lai'tela's Reality will now disable production from all 3rd Dimensions during
         future runs, but the reward will be ${formatInt(100)} times stronger than before.`;
     case 8: return `<br><br>Lai'tela's Reality will now disable production from all 8th Dimensions during
         future runs, but the reward will be ${formatInt(100)} times stronger than before. This boost can be
@@ -965,12 +962,6 @@ export function simulateTime(seconds, real, fast) {
       };
     }
   }
-  const oldLoopFn = loopFn;
-  loopFn = i => {
-    Pelle.addAdditionalEnd = false;
-    oldLoopFn(i);
-    Pelle.addAdditionalEnd = true;
-  };
 
   // We don't show the offline modal here or bother with async if doing a fast simulation
   if (fast) {
@@ -1094,6 +1085,7 @@ export function init() {
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   kong.init();
+  Payments.init();
 }
 
 window.tweenTime = 0;

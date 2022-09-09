@@ -1,8 +1,12 @@
 <script>
 import { MatterScale } from "./matter-scale";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "StatisticsTab",
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isDoomed: false,
@@ -137,6 +141,9 @@ export default {
 <template>
   <div class="c-stats-tab">
     <div>
+      <PrimaryButton onclick="Modal.catchup.show(0)">
+        View Content Summary
+      </PrimaryButton>
       <div class="c-stats-tab-general">
         General
       </div>

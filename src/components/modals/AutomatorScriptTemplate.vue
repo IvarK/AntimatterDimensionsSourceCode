@@ -31,6 +31,7 @@ export default {
       invalidInputCount: 0,
       templateProps: null,
       currentPreset: "",
+      isBlock: false,
     };
   },
   computed: {
@@ -63,6 +64,9 @@ export default {
     }
   },
   methods: {
+    update() {
+      this.isBlock = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
+    },
     paramTypeObject(name) {
       return this.params.find(p => p.name === name);
     },
@@ -78,8 +82,8 @@ export default {
         ? undefined
         : "c-automator-template-textbox--invalid";
     },
-    loadPreset(name) {
-      this.templateInputs.treeStudies = `PRESET ${name}`;
+    loadPreset(name, id) {
+      this.templateInputs.treeStudies = name ? `NAME ${name}` : `ID ${id}`;
       this.updateTemplateProps();
     },
     loadCurrent() {
@@ -96,10 +100,18 @@ export default {
         if (!this.isValid(input)) this.invalidInputCount++;
       }
 
-      // We treat treeStudies as a special prop which will set treePreset iff it matches the format "PRESET [name]"
-      const presetMatch = this.templateProps.treeStudies.match(/^PRESET (.{1,4})$/u);
-      const presetStr = presetMatch ? presetMatch[1] : "";
-      this.currentPreset = this.presets.some((p, i) => p.name === presetStr || i === presetStr - 1) ? presetStr : "";
+      // We treat treeStudies as a special prop which will set treePreset if it matches the format "NAME [name]"
+      const nameMatch = this.templateProps.treeStudies.match(/^NAME (.{1,4})$/u);
+      const idMatch = this.templateProps.treeStudies.match(/^ID (\d)$/u);
+
+      if (nameMatch) {
+        const nameStr = nameMatch ? nameMatch[1] : "";
+        this.currentPreset = this.presets.find(x => x.name === nameStr).name;
+      } else if (idMatch) {
+        const idStr = idMatch ? idMatch[1] : "";
+        this.currentPreset = this.presets.some((x, y) => y === idStr - 1) ? idStr : "";
+      }
+
       this.templateProps.treePreset = this.currentPreset === "" ? null : this.currentPreset;
     },
     updateButton(input) {
@@ -109,8 +121,17 @@ export default {
       this.updateTemplateProps();
     },
     copyAndClose() {
-      copyToClipboard(this.templateScript.script);
-      GameUI.notify.info("Template copied to clipboard");
+      if (this.isBlock) {
+        const newTemplateBlock = {
+          name: `Template: ${this.name}`,
+          blocks: AutomatorGrammar.blockifyTextAutomator(this.templateScript.script).blocks
+        };
+        AutomatorData.blockTemplates.push(newTemplateBlock);
+        GameUI.notify.info("Custom template block created");
+      } else {
+        copyToClipboard(this.templateScript.script);
+        GameUI.notify.info("Template copied to clipboard");
+      }
       this.emitClose();
     }
   }
@@ -132,13 +153,13 @@ export default {
       <button
         v-for="(preset, presetNumber) in presets"
         :key="preset.name"
-        class="o-primary-btn"
-        @click="loadPreset(preset.name ? preset.name : presetNumber + 1)"
+        class="o-primary-btn o-load-preset-button-margin"
+        @click="loadPreset(preset.name, presetNumber + 1)"
       >
         {{ preset.name ? preset.name : presetNumber + 1 }}
       </button>
       <button
-        class="o-primary-btn"
+        class="o-primary-btn o-load-preset-button-margin"
         @click="loadCurrent"
       >
         <i>Current Tree</i>
@@ -191,7 +212,7 @@ export default {
       class="o-primary-btn"
       @click="copyAndClose"
     >
-      Copy this template to your clipboard and close this modal
+      {{ isBlock ? "Create custom template block" : "Copy this template to your clipboard" }} and close this modal
     </button>
     <button
       v-else
@@ -201,3 +222,9 @@ export default {
     </button>
   </ModalWrapper>
 </template>
+
+<style scoped>
+.o-load-preset-button-margin {
+  margin-right: 0.3rem;
+}
+</style>

@@ -19,6 +19,17 @@ function handleChallengeCompletion() {
   }
 }
 
+export function manualBigCrunchResetRequest() {
+  if (!Player.canCrunch) return;
+  // Before the player has broken infinity, the confirmation modal should never be shown
+  if ((player.break || PlayerProgress.eternityUnlocked()) &&
+    player.options.confirmations.bigCrunch) {
+    Modal.bigCrunch.show();
+  } else {
+    bigCrunchResetRequest();
+  }
+}
+
 export function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
   if (!disableAnimation && player.options.animations.bigCrunch && !FullScreenAnimationHandler.isDisplaying) {
@@ -32,7 +43,6 @@ export function bigCrunchResetRequest(disableAnimation = false) {
 export function bigCrunchReset() {
   if (!Player.canCrunch) return;
 
-  const firstInfinity = !PlayerProgress.infinityUnlocked();
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
 
   bigCrunchUpdateStatistics();
@@ -41,17 +51,13 @@ export function bigCrunchReset() {
   Currency.infinityPoints.add(infinityPoints);
   Currency.infinities.add(gainedInfinities().round());
 
-  bigCrunchTabChange(firstInfinity);
+  bigCrunchTabChange(!PlayerProgress.infinityUnlocked());
   bigCrunchResetValues();
   bigCrunchCheckUnlocks();
 
   if (Pelle.isDoomed) PelleStrikes.infinity.trigger();
 
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
-  if (firstInfinity && !Pelle.isDoomed) Modal.message.show(`Upon Infinity, all Dimensions, Dimension Boosts, and
-  Antimatter Galaxies are reset, but in return, you gain an Infinity Point (IP). This allows you to buy multiple
-  upgrades that you can find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the
-  Statistics tab.`);
 }
 
 function bigCrunchUpdateStatistics() {

@@ -19,7 +19,6 @@ window.EventHub = class EventHub {
     }
   }
 
-  // eslint-disable-next-line max-params
   dispatch(event, args) {
     const handlers = this._handlers[event];
     if (handlers === undefined) return;
@@ -28,7 +27,6 @@ window.EventHub = class EventHub {
     }
   }
 
-  // eslint-disable-next-line max-params
   static dispatch(event, ...args) {
     EventHub.logic.dispatch(event, args);
     GameUI.dispatch(event, args);
@@ -78,7 +76,6 @@ window.GAME_EVENT = {
   GLYPHS_EQUIPPED_CHANGED: "GLYPHS_EQUIPPED_CHANGED",
   GLYPHS_CHANGED: "GLYPHS_CHANGED",
   GLYPH_SACRIFICED: "GLYPH_SACRIFICED",
-  GLYPH_CHOICES_GENERATED: "GLYPH_CHOICES_GENERATED",
   GLYPH_SET_SAVE_CHANGE: "GLYPH_SET_SAVE_CHANGE",
 
   // Break Infinity
@@ -89,6 +86,8 @@ window.GAME_EVENT = {
   INFINITY_DIMENSION_UNLOCKED: "INFINITY_DIMENSION_UNLOCKED",
   INFINITY_CHALLENGE_COMPLETED: "INFINITY_CHALLENGE_COMPLETED",
   INFINITY_UPGRADE_BOUGHT: "INFINITY_UPGRADE_BOUGHT",
+  INFINITY_UPGRADE_CHARGED: "INFINITY_UPGRADE_CHARGED",
+  INFINITY_UPGRADES_DISCHARGED: "INFINITY_UPGRADES_DISCHARGED",
   ACHIEVEMENT_UNLOCKED: "ACHIEVEMENT_UNLOCKED",
   CHALLENGE_FAILED: "CHALLENGE_FAILED",
   REALITY_UPGRADE_BOUGHT: "REALITY_UPGRADE_BOUGHT",
@@ -107,6 +106,7 @@ window.GAME_EVENT = {
   ACHIEVEMENT_EVENT_OTHER: "ACHIEVEMENT_EVENT_OTHER",
 
   ENTER_PRESSED: "ENTER_PRESSED",
+  ARROW_KEY_PRESSED: "ARROW_KEY_PRESSED",
 
   // UI Events
   UPDATE: "UPDATE",

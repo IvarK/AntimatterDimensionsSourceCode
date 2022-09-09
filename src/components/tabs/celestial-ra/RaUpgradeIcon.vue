@@ -9,13 +9,15 @@ export default {
   },
   data() {
     return {
-      isUseless: false,
       isUnlocked: false,
       level: 0,
       description: "",
     };
   },
   computed: {
+    petID() {
+      return this.unlock.pet.id;
+    },
     petName() {
       return this.unlock.pet.name;
     },
@@ -26,17 +28,16 @@ export default {
       return {
         "c-ra-upgrade-icon": true,
         "c-ra-upgrade-icon--inactive": !this.isUnlocked,
-        "c-ra-upgrade-icon--teresa": this.petName === "Teresa",
-        "c-ra-upgrade-icon--effarig": this.petName === "Effarig",
-        "c-ra-upgrade-icon--enslaved": this.petName === "Enslaved",
-        "c-ra-upgrade-icon--v": this.petName === "V"
+        [`c-ra-upgrade-icon--${this.petID}`]: true
       };
+    },
+    isUseless() {
+      return this.unlock.disabledByPelle;
     }
   },
   methods: {
     update() {
       const unlock = this.unlock;
-      this.isUseless = unlock.disabledByPelle;
       this.isUnlocked = unlock.isUnlocked;
       this.level = unlock.level;
       this.description = unlock.reward;
@@ -54,25 +55,17 @@ export default {
       <div class="c-ra-pet-upgrade__tooltip__name">
         {{ petName }} Level {{ formatInt(level) }}
       </div>
-      <div class="c-ra-pet-upgrade__tooltip__description">
+      <div
+        class="c-ra-pet-upgrade__tooltip__description"
+        :class="{ 'o-pelle-disabled': isUseless }"
+      >
         {{ description }}
-        <div
-          v-if="isUseless"
-          class="c-ra-effect-disabled"
-        >
-          This has no effect while in Doomed
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.c-ra-effect-disabled {
-  font-style: italic;
-  color: var(--color-pelle--base);
-}
-
 .c-ra-upgrade-icon {
   font-weight: bold;
 }

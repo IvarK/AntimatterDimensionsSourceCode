@@ -6,6 +6,11 @@ export const state = {
       cloudConflict: [],
       progressBar: undefined,
     },
+    quotes: {
+      queue: [],
+      current: undefined,
+      history: undefined
+    },
     tabs: {
       reality: {
         openGlyphWeights: false,

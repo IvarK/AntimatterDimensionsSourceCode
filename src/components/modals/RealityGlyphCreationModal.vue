@@ -20,8 +20,8 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.realityGlyphLevel = AlchemyResource.reality.effectValue;
-      const realityEffectConfigs = Object.values(GameDatabase.reality.glyphEffects)
-        .filter(eff => eff.id.match("reality*"))
+      const realityEffectConfigs = GlyphEffects.all
+        .filter(eff => eff.glyphTypes.includes("reality"))
         .sort((a, b) => a.bitmaskIndex - b.bitmaskIndex);
       const minRealityEffectIndex = realityEffectConfigs.map(cfg => cfg.bitmaskIndex).min();
       this.possibleEffects = realityEffectConfigs
@@ -29,7 +29,8 @@ export default {
     },
     createRealityGlyph() {
       if (GameCache.glyphInventorySpace.value === 0) {
-        Modal.message.show("Inventory cannot hold new Glyphs. Purge some Glyphs.");
+        Modal.message.show("Inventory cannot hold new Glyphs. Purge some Glyphs.",
+          { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
         return;
       }
       Glyphs.addToInventory(GlyphGenerator.realityGlyph(this.realityGlyphLevel));
@@ -39,11 +40,9 @@ export default {
     },
     formatGlyphEffect(effect) {
       if (this.realityGlyphLevel < effect[0]) return `(Requires Glyph level ${formatInt(effect[0])})`;
-      const config = GameDatabase.reality.glyphEffects[effect[1]];
+      const config = GlyphEffects[effect[1]];
       const value = config.effect(this.realityGlyphLevel, rarityToStrength(100));
-      const effectTemplate = typeof config.singleDesc === "function"
-        ? config.singleDesc()
-        : config.singleDesc;
+      const effectTemplate = config.singleDesc;
       return effectTemplate.replace("{value}", config.formatEffect(value));
     }
   },
@@ -59,9 +58,9 @@ export default {
       <div>
         Create a level {{ formatInt(realityGlyphLevel) }} Reality Glyph.
         Rarity will always be {{ formatPercents(1) }} and
-        level scales on your current reality resource amount (which is all consumed). All other alchemy resources will
+        level scales on your current Reality Resource amount (which is all consumed). All other Alchemy Resources will
         be unaffected. Reality Glyphs have unique effects, some of which are only available with higher level Glyphs.
-        Reality Glyphs can also be sacrificed to increase the yield from alchemy reactions. Like Effarig Glyphs,
+        Reality Glyphs can also be sacrificed to increase all Memory Chunk gain. Like Effarig Glyphs,
         you cannot equip more than one at the same time.
       </div>
       <div class="o-available-effects-container">
@@ -79,7 +78,7 @@ export default {
         v-if="isDoomed"
         :enabled="false"
       >
-        You cannot create Reality Glyphs while in Doomed
+        You cannot create Reality Glyphs while Doomed
       </PrimaryButton>
       <PrimaryButton
         v-else-if="realityGlyphLevel !== 0"

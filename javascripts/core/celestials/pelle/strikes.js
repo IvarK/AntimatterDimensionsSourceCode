@@ -22,8 +22,8 @@ class PelleStrikeState extends BitUpgradeState {
     return typeof x === "function" ? x() : x;
   }
 
-  get reward() {
-    return this.config.rewardDescription;
+  reward() {
+    return this.config.rewardDescription();
   }
 
   get rift() {
@@ -37,10 +37,8 @@ class PelleStrikeState extends BitUpgradeState {
   onUnlock() {
     GameUI.notify.strike(`You encountered a Pelle Strike: ${this.requirement}`);
     player.celestials.pelle.collapsed.rifts = false;
-    Tab.celestials.pelle.show();
-    EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
 
-    // If it's death, reset the records
+    // If it's paradox, reset the records
     if (this.id === 5) {
       Pelle.cel.records.totalAntimatter = new Decimal("1e180000");
       Pelle.cel.records.totalInfinityPoints = new Decimal("1e60000");
@@ -52,7 +50,8 @@ class PelleStrikeState extends BitUpgradeState {
       // softlocked, or starting it too late and getting not-softlocked.
       Pelle.cel.records.totalEternityPoints = new Decimal("1e1050");
     }
-
+    Tab.celestials.pelle.show();
+    EventHub.dispatch(GAME_EVENT.PELLE_STRIKE_UNLOCKED);
   }
 }
 

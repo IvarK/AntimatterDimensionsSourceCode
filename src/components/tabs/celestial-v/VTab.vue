@@ -14,7 +14,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       mainUnlock: false,
       canUnlockCelestial: false,
       mainUnlockDB: [],
@@ -83,15 +82,17 @@ export default {
         "l-v-hexagon": true,
         "c-v-run-button": true,
         "c-v-run-button--running": this.isRunning,
+        "c-celestial-run-button--clickable": !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[3].description().replace(/^\w/u, c => c.toUpperCase());
+      return GameDatabase.celestials.descriptions[3].effects().replace(/^\w/u, c => c.toUpperCase());
     },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.mainUnlock = VUnlocks.vAchievementUnlock.isUnlocked;
       this.canUnlockCelestial = V.canUnlockCelestial;
       this.mainUnlockDB = GameDatabase.celestials.v.mainUnlock;
@@ -190,10 +191,11 @@ export default {
           <span v-else>Show</span>
           Hard V
         </PrimaryButton>
-        <br><br>
-        Cursed Glyphs can be created in the Effarig tab<span v-if="!isDoomed">, and the
-          Black Hole can now be used to slow down time</span>.
         <br>
+        Cursed Glyphs can be created in the Effarig tab.
+        <br>
+        <span v-if="!isDoomed">The Black Hole can now be used to slow down time if they are both permanent.</span>
+        <br><br>
         Each Hard V-Achievement counts as two V-Achievements and will award {{ formatInt(2) }} Space Theorems
         instead of {{ formatInt(1) }}.
         <br>
@@ -261,18 +263,17 @@ export default {
             :class="runButtonClassObject"
             @click="startRun()"
           >
-            <b class="o-v-start-text">
-              <span v-if="isDoomed">You can't start<br></span>
-              <span v-else-if="isRunning">You are in </span>
+            <b
+              class="o-v-start-text"
+              :class="{ 'o-pelle-disabled': isDoomed }"
+            >
+              <span v-if="isRunning">You are in </span>
               <span v-else>Start </span>
               V's Reality.
             </b>
             <br>
-            <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
+            <div :style="{ 'font-size': hasAlchemy ? '1.2rem' : '' }">
               {{ runDescription }}
-              <span v-if="hasAlchemy">
-                Exponential Glyph Alchemy effect is disabled.
-              </span>
             </div>
             <div class="c-v-run-button__line c-v-run-button__line--1" />
             <div class="c-v-run-button__line c-v-run-button__line--2" />
@@ -308,10 +309,7 @@ export default {
             :class="{'o-v-milestone--unlocked':
               has(milestone)}"
           >
-            <div v-if="isDoomed">
-              Disabled while in Doomed
-            </div>
-            <div v-else>
+            <div :class="{ 'o-pelle-disabled': isDoomed }">
               <p>{{ milestone.description }}</p>
               <p>Reward: {{ milestone.rewardText }}</p>
               <p v-if="milestone.formattedEffect">

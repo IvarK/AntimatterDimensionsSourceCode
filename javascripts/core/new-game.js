@@ -1,46 +1,14 @@
 import * as ADNotations from "@antimatter-dimensions/notations";
 
 export const NG = {
-  get current() {
-    return player.newGame.current;
-  },
-
-  get plusRecord() {
-    return player.newGame.plusRecord;
-  },
-
-  get minusRecord() {
-    return player.newGame.minusRecord;
-  },
-
-  get isNegative() {
-    return this.current < 0;
-  },
-
-  get multiplier() {
-    if (!this.isNegative) return 2 ** this.current;
-    return 0.8 ** Math.abs(this.current);
-  },
-
-  get power() {
-    if (!this.isNegative) return 1 + this.current * 0.02;
-    return 0.99 ** Math.abs(this.current);
-  },
-
-  startNewGame(i) {
+  startNewGame() {
     const backUpOptions = JSON.stringify(player.options);
     // This can't be JSONed as it contains sets
     const secretUnlocks = player.secretUnlocks;
-    const newGameBackup = JSON.stringify(player.newGame);
     const secretAchievements = JSON.stringify(player.secretAchievementBits);
-    const prevGameEnd = GameEnd.additionalEnd;
-    GameEnd.removeAdditionalEnd = true;
     Modal.hideAll();
+    Quote.clearAll();
     GameStorage.hardReset();
-    player.newGame = JSON.parse(newGameBackup);
-    player.newGame.current = i;
-    player.newGame.plusRecord = Math.max(player.newGame.plusRecord, i);
-    player.newGame.minusRecord = Math.min(player.newGame.minusRecord, i);
     player.options = JSON.parse(backUpOptions);
     player.secretUnlocks = secretUnlocks;
     player.secretAchievementBits = JSON.parse(secretAchievements);
@@ -49,8 +17,12 @@ export const NG = {
     Themes.find(player.options.theme).set();
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
     ADNotations.Settings.exponentCommas.show = player.options.commas;
-    GameStorage.save();
     player.lastUpdate = Date.now();
-    GameEnd.additionalEnd = Math.min(prevGameEnd, 14) + 1;
+    // The ending animation ends at 12.5, although the value continues to increase after that. We set it to a bit above
+    // 12.5 when we start the rollback animation to hide some of the unavoidable lag from all the reset functions
+    GameEnd.removeAdditionalEnd = true;
+    GameEnd.additionalEnd = 15;
+    // Without the delay, this causes the saving (and its notification) to occur during the credits rollback
+    setTimeout(() => GameStorage.save(), 10000);
   }
 };

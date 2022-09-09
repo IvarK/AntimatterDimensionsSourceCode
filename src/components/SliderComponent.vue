@@ -449,6 +449,11 @@ export default {
         position: "relative"
       }
     },
+    draggableStyle() {
+      return {
+        cursor: this.boolDisabled ? "default" : "pointer"
+      };
+    },
     dotStyles() {
       let ret = {
         width: this.dotWidthVal,
@@ -831,6 +836,7 @@ export default {
       }
     },
     increment(dir) {
+      if (this.boolDisabled) return;
       const newVal = this.getValue() + dir * this.interval;
       if (newVal > this.max || newVal < this.min) return;
       this.setValue(newVal);
@@ -1030,7 +1036,11 @@ export default {
          :class="['l-ad-slider__wrap', stateClass]"
          :style="[wrapStyles, boolDisabled ? disabledStyle : null]"
          @click="wrapClick">
-      <div ref="elem" aria-hidden="true" :class="['l-ad-slider__bg', 'c-ad-slider__bg', bgClass]" :style="[elemStyles, bgStyle]">
+      <div ref="elem" aria-hidden="true" :class="['l-ad-slider__bg', 'c-ad-slider__bg', bgClass]"
+        :style="[elemStyles, bgStyle, draggableStyle]"
+        @mousedown="moveStart($event, 0, true)"
+        @touchstart="moveStart($event, 0, true)"
+      >
         <template v-if="isRange">
           <div
             ref="dot0"
@@ -1043,8 +1053,8 @@ export default {
             }
           ]"
             :style="dotStyles"
-            @mousedown="moveStart($event, 0)"
-            @touchstart="moveStart($event, 0)"
+            @mousedown="moveStart"
+            @touchstart="moveStart"
           >
             <div
               :class="['l-ad-slider__dot-handle', 'c-ad-slider__dot-handle', dotClass]"
@@ -1137,10 +1147,8 @@ export default {
         <div
           ref="process"
           :class="['l-ad-slider__process', 'c-ad-slider__process', { 'ad-slider-process-draggable': isRange && processDraggable }, processClass]"
-          :style="processStyle"
+          :style="[elemStyles, bgStyle, draggableStyle]"
           @click="processClick"
-          @mousedown="moveStart($event, 0, true)"
-          @touchstart="moveStart($event, 0, true)"
         >
           <div
             ref="mergedTooltip"

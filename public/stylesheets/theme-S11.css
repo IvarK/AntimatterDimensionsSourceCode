@@ -51,6 +51,11 @@ body.t-s11 {
   box-shadow: 0 0 1.5rem 0 black;
 }
 
+.t-s11 .c-modal__confirmation-toggle__checkbox {
+  top: 0.05rem;
+  border-color: black;
+}
+
 .o-tachyon-particle {
   fill: orange !important;
   font-family: Typewriter;

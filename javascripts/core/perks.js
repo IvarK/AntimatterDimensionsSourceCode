@@ -37,6 +37,10 @@ class PerkState extends SetPurchasableMechanicState {
     return this.id === 0 || this.connectedPerks.some(p => p.isBought);
   }
 
+  get canBeApplied() {
+    return this.isBought && !(Pelle.isDoomed && Pelle.uselessPerks.includes(this.id));
+  }
+
   initializeConnections() {
     this.connectedPerks = GameDatabase.reality.perkConnections[this.id].map(id => Perks.find(id));
   }

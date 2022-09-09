@@ -88,7 +88,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     costMult: 1000,
     description: () => `Increase Galaxy strength`,
     effect: 0.03,
-    formatEffect: value => `+${formatPercents(value)}`
+    formatEffect: value => `+${formatPercents(value)}`,
   }),
   rebuyable({
     name: "Entropic Condensing",
@@ -97,7 +97,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     costMult: 2000,
     description: () => `Increase Singularity gain`,
     effect: 1,
-    formatEffect: value => `${formatX(1 + value, 2)}`,
+    formatEffect: value => `${formatX(1 + value, 2)}`
   }),
   {
     name: "Suspicion of Interference",
@@ -111,6 +111,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     description: "Time Dimension power based on total antimatter",
     effect: () => 1 + Math.log10(player.records.totalAntimatter.log10()) / 100,
     formatEffect: value => `${formatPow(value, 0, 4)}`,
+    isDisabledInDoomed: true
   },
   {
     name: "Consequences of Illusions",
@@ -125,6 +126,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     description: "Gain free Dimboosts based on Imaginary rebuyable count",
     effect: () => 2e4 * ImaginaryUpgrades.totalRebuyables,
     formatEffect: value => `${format(value, 1)}`,
+    isDisabledInDoomed: true
   },
   {
     name: "Transience of Information",
@@ -138,6 +140,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     description: "Increase Imaginary Machine Cap based on Imaginary Upgrades purchased",
     effect: () => 1 + ImaginaryUpgrades.totalRebuyables / 20 + ImaginaryUpgrades.totalSinglePurchase / 2,
     formatEffect: value => `${formatX(value, 2, 1)}`,
+    isDisabledInDoomed: true
   },
   {
     name: "Recollection of Intrusion",
@@ -148,7 +151,8 @@ GameDatabase.reality.imaginaryUpgrades = [
     checkRequirement: () => EternityChallenge(5).isRunning && Tickspeed.perSecond.exponent >= 7.5e10,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: () => `Raise all Dimension per-purchase multipliers to ${formatPow(1.5, 0, 1)}`,
-    effect: 1.5
+    effect: 1.5,
+    isDisabledInDoomed: true
   },
   {
     name: "Fabrication of Ideals",
@@ -159,7 +163,9 @@ GameDatabase.reality.imaginaryUpgrades = [
     hasFailed: () => player.requirementChecks.reality.maxID1.gt(0),
     checkRequirement: () => player.requirementChecks.reality.maxID1.eq(0) && player.antimatter.exponent >= 1.5e12,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    description: "Convert Antimatter Dimensions to Continuum and unlock Lai'tela, Celestial of Dimensions",
+    description: () => `${
+      Pelle.isDoomed ? "Unlock" : "Convert Antimatter Dimensions to Continuum and unlock"
+    } Lai'tela, Celestial of Dimensions`,
   },
   {
     name: "Massless Momentum",
@@ -206,7 +212,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     checkRequirement: () => player.requirementChecks.reality.maxStudies <= 8 &&
       Tickspeed.continuumValue >= 3.85e6,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    description: "Unlock Dark Matter Annihilation",
+    description: "Unlock Dark Matter Annihilation"
   },
   {
     name: "Vacuum Acceleration",
@@ -219,6 +225,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     description: () => `Unlock Autobuyers for repeatable Imaginary Upgrades and generate Imaginary Machines
       ${formatInt(10)} times faster`,
     effect: 10,
+    isDisabledInDoomed: true
   },
   {
     name: "Existential Elimination",
@@ -232,6 +239,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     description: "Annihilation multiplier gain is improved based on Imaginary Machines",
     effect: () => Math.clampMin(Math.pow(Math.log10(Currency.imaginaryMachines.value) - 10, 3), 1),
     formatEffect: value => `${formatX(value, 2, 1)}`,
+    isDisabledInDoomed: true
   },
   {
     name: "Total Termination",
@@ -247,6 +255,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: () => `Glyph Sacrifice totals for basic Glyphs are increased to ${format(1e100)}`,
     effect: 1e100,
+    isDisabledInDoomed: true
   },
   {
     name: "Planar Purification",
@@ -261,6 +270,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     description: "Increase free Dimboost count based on Tesseract count",
     effect: () => Math.floor(0.25 * Math.pow(Tesseracts.effectiveCount, 2)),
     formatEffect: value => `${formatX(value)}`,
+    isDisabledInDoomed: true
   },
   {
     name: "Absolute Annulment",
@@ -275,6 +285,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     description: "Increase free Dimboost strength based on Singularity count",
     effect: () => Decimal.pow(player.celestials.laitela.singularities, 300),
     formatEffect: value => `${formatX(value, 2, 1)}`,
+    isDisabledInDoomed: true
   },
   {
     name: "Omnipresent Obliteration",

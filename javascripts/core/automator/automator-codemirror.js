@@ -3,10 +3,10 @@ import { AutomatorLexer } from "./lexer";
 
 (function() {
   function walkSuggestion(suggestion, prefix, output) {
-    if (suggestion.$autocomplete &&
-      suggestion.$autocomplete.startsWith(prefix) && suggestion.$autocomplete !== prefix) {
-      output.add(suggestion.$autocomplete);
-    }
+    const hasAutocomplete = suggestion.$autocomplete &&
+      suggestion.$autocomplete.startsWith(prefix) && suggestion.$autocomplete !== prefix;
+    const isUnlocked = suggestion.$unlocked ? suggestion.$unlocked() : true;
+    if (hasAutocomplete && isUnlocked) output.add(suggestion.$autocomplete);
     for (const s of suggestion.categoryMatches) {
       walkSuggestion(AutomatorLexer.tokenIds[s], prefix, output);
     }
@@ -60,14 +60,9 @@ import { AutomatorLexer } from "./lexer";
       { regex: /blob\s\s/ui, token: "blob" },
       {
         // eslint-disable-next-line max-len
-        regex: /(auto|if|pause|studies|tt|time[ \t]+theorems?|until|wait|while|black[ \t]+hole|stored?[ \t]+game[ \t]+time|notify)\s/ui,
+        regex: /(auto|if|pause|studies|time[ \t]+theorems?|until|wait|while|black[ \t]+hole|stored?[ \t]+game[ \t]+time|notify)\s/ui,
         token: "keyword",
         next: "commandArgs"
-      },
-      {
-        regex: /define\s/ui,
-        token: "keyword",
-        next: "defineIdentifier"
       },
       {
         regex: /start\s|unlock\s/ui,
@@ -85,8 +80,8 @@ import { AutomatorLexer } from "./lexer";
       { sol: true, next: "start" },
       { regex: /load(\s+|$)/ui, token: "variable-2", next: "studiesLoad" },
       { regex: /respec/ui, token: "variable-2", next: "commandDone" },
+      { regex: /purchase/ui, token: "variable-2", next: "studiesList" },
       { regex: /nowait(\s+|$)/ui, token: "property" },
-      { regex: /(?=\S)/ui, next: "studiesList" },
     ],
     studiesList: [
       commentRule,
@@ -101,8 +96,14 @@ import { AutomatorLexer } from "./lexer";
     studiesLoad: [
       commentRule,
       { sol: true, next: "start" },
-      { regex: /preset(\s+|$)/ui, token: "variable-2", next: "studiesLoadPreset" },
+      { regex: /id(\s+|$)/ui, token: "variable-2", next: "studiesLoadId" },
+      { regex: /name(\s+|$)/ui, token: "variable-2", next: "studiesLoadPreset" },
       { regex: /\S+/ui, token: "error" },
+    ],
+    studiesLoadId: [
+      commentRule,
+      { sol: true, next: "start" },
+      { regex: /\d/ui, token: "qualifier", next: "commandDone" },
     ],
     studiesLoadPreset: [
       commentRule,
@@ -122,11 +123,6 @@ import { AutomatorLexer } from "./lexer";
       { regex: /\}/ui, dedent: true },
       { regex: /\S+/ui, token: "error" },
     ],
-    defineIdentifier: [
-      commentRule,
-      { sol: true, next: "start" },
-      { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandArgs" },
-    ],
     startUnlock: [
       commentRule,
       { sol: true, next: "start" },
@@ -144,7 +140,7 @@ import { AutomatorLexer } from "./lexer";
       { regex: /nowait(\s|$)/ui, token: "property" },
       { regex: /".*"/ui, token: "string", next: "commandDone" },
       { regex: /(on|off|dilation|load|respec)(\s|$)/ui, token: "variable-2" },
-      { regex: /(preset|eternity|reality|use)(\s|$)/ui, token: "variable-2" },
+      { regex: /(eternity|reality|use)(\s|$)/ui, token: "variable-2" },
       { regex: /(antimatter|infinity|time)(\s|$|(?=,))/ui, token: "variable-2" },
       { regex: /(active|passive|idle)(\s|$|(?=,))/ui, token: "variable-2" },
       { regex: /(light|dark)(\s|$|(?=,))/ui, token: "variable-2" },
@@ -160,6 +156,7 @@ import { AutomatorLexer } from "./lexer";
       { regex: / sec(onds ?) ?| min(utes ?) ?| hours ?/ui, token: "variable-2" },
       { regex: /([0-9]+:[0-5][0-9]:[0-5][0-9]|[0-5]?[0-9]:[0-5][0-9]|t[1-4])/ui, token: "number" },
       { regex: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/ui, token: "number" },
+      { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable" },
       { regex: /\{/ui, indent: true, next: "commandDone" },
       // This seems necessary to have a closing curly brace de-indent automatically in some cases
       { regex: /\}/ui, dedent: true },

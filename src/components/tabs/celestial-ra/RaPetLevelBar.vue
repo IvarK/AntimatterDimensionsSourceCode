@@ -55,10 +55,7 @@ export default {
       return {
         "c-ra-level-up-btn": true,
         "c-ra-pet-btn--available": available,
-        "c-ra-pet-btn--teresa": available && pet.name === "Teresa",
-        "c-ra-pet-btn--effarig": available && pet.name === "Effarig",
-        "c-ra-pet-btn--enslaved": available && pet.name === "Enslaved",
-        "c-ra-pet-btn--v": available && pet.name === "V"
+        [`c-ra-pet-btn--${pet.id}`]: available
       };
     },
     nextUnlock() {

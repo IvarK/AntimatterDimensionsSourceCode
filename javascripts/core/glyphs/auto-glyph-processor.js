@@ -23,8 +23,11 @@ export const AutoGlyphProcessor = {
     if (glyph.type === "cursed") return -Infinity;
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
-        // Picked glyphs are never kept in this mode
-        return -player.reality.glyphs.sac[glyph.type];
+        // Picked glyphs are never kept in this mode. Sacrifice cap needs to be checked since effarig caps
+        // at a lower value than the others and we don't want to uselessly pick that to sacrifice all the time
+        return player.reality.glyphs.sac[glyph.type] >= GlyphSacrifice[glyph.type].cap
+          ? -Infinity
+          : -player.reality.glyphs.sac[glyph.type];
       case AUTO_GLYPH_SCORE.EFFECT_COUNT:
         // Effect count, plus a very small rarity term to break ties in favor of rarer glyphs
         return strengthToRarity(glyph.strength) / 1000 + getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
@@ -61,7 +64,8 @@ export const AutoGlyphProcessor = {
       // to make them picked last, because we can't refine them.
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY: {
         const resource = AlchemyResource[glyph.type];
-        return resource.isUnlocked && !resource.capped
+        const refinementGain = GlyphSacrificeHandler.glyphRefinementGain(glyph);
+        return resource.isUnlocked && refinementGain > 0
           ? -resource.amount
           : Number.NEGATIVE_INFINITY;
       }
@@ -123,6 +127,12 @@ export const AutoGlyphProcessor = {
       default:
         throw new Error("Unknown auto Glyph Sacrifice mode");
     }
+  },
+  // Generally only used for UI in order to notify the player that they might end up retroactively getting rid of
+  // some glyphs they otherwise want to keep
+  hasNegativeEffectScore() {
+    return this.scoreMode === AUTO_GLYPH_SCORE.EFFECT_SCORE &&
+      Object.values(this.types).map(t => Object.values(t.effectScores)).flat().some(v => v < 0);
   }
 };
 
@@ -130,10 +140,27 @@ export function autoAdjustGlyphWeights() {
   const sources = getGlyphLevelSources();
   const f = x => Math.pow(Math.clampMin(1, Math.log(5 * x)), 3 / 2);
   const totalWeight = Object.values(sources).map(s => f(s.value)).sum();
-  player.celestials.effarig.glyphWeights.ep = 100 * f(sources.ep.value) / totalWeight;
-  player.celestials.effarig.glyphWeights.repl = 100 * f(sources.repl.value) / totalWeight;
-  player.celestials.effarig.glyphWeights.dt = 100 * f(sources.dt.value) / totalWeight;
-  player.celestials.effarig.glyphWeights.eternities = 100 * f(sources.eternities.value) / totalWeight;
+  const scaledWeight = key => 100 * f(sources[key].value) / totalWeight;
+
+  // Adjust all weights to be integer, while maintaining that they must sum to 100. We ensure it's within 1 on the
+  // weights by flooring and then taking guesses on which ones would give the largest boost when adding the lost
+  // amounts. This isn't necessarily the best integer weighting, but gives a result that's quite literally within
+  // 99.97% of the non-integer optimal settings and prevents the total from exceeding 100.
+  const weightKeys = ["ep", "repl", "dt", "eternities"];
+  const weights = [];
+  for (const key of weightKeys) {
+    weights.push({
+      key,
+      percent: scaledWeight(key)
+    });
+  }
+  const fracPart = x => x - Math.floor(x);
+  const priority = weights.sort((a, b) => fracPart(b.percent) - fracPart(a.percent)).map(w => w.key);
+  const missingPercent = 100 - weights.map(w => Math.floor(w.percent)).reduce((a, b) => a + b);
+  for (let i = 0; i < weightKeys.length; i++) {
+    const key = priority[i];
+    player.celestials.effarig.glyphWeights[key] = Math.floor(scaledWeight(key)) + (i < missingPercent ? 1 : 0);
+  }
 }
 
 function getGlyphLevelSources() {

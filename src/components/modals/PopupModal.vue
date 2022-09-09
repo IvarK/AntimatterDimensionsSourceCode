@@ -24,6 +24,7 @@ export default {
       this.forceDontShowModal = GameEnd.endState > 2.5;
     },
     hide() {
+      if (!this.modal.isOpen) return;
       if (this.modal.hide) this.modal.hide();
       else Modal.hide();
     }
@@ -32,20 +33,13 @@ export default {
 </script>
 
 <template>
-  <component
-    :is="modal.component"
-    v-if="modal.isBare && !forceDontShowModal"
-    v-bind="modal.props"
-    :modal-config="modal.props"
-  />
   <div
-    v-else-if="!forceDontShowModal"
+    v-if="!forceDontShowModal"
     class="c-modal l-modal"
   >
     <component
       :is="modal.component"
       v-bind="modal.props"
-      :modal-config="modal.props"
       @close="hide"
     />
   </div>

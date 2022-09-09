@@ -17,6 +17,9 @@ export default {
     return {
       automatorUnlocked: false,
       interval: 0,
+      currentChars: 0,
+      totalChars: 0,
+      withinLimit: false,
     };
   },
   computed: {
@@ -25,7 +28,7 @@ export default {
     },
     tabClass() {
       if (!this.fullScreen) return undefined;
-      return ["c-automator-tab--full-screen", "l-automator-tab--full-screen"];
+      return "c-automator-tab--full-screen";
     },
     fullScreenIconClass() {
       return this.fullScreen ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";
@@ -37,12 +40,21 @@ export default {
         ? `The Automator is running at max speed (${formatInt(1000)} commands per real-time second).`
         : `The Automator is running ${quantify("command", 1000 / this.interval, 2, 2)} per real-time second.
           ${speedupText}`;
-    }
+    },
+    maxScriptChars() {
+      return AutomatorData.MAX_ALLOWED_SCRIPT_CHARACTERS;
+    },
+    maxTotalChars() {
+      return AutomatorData.MAX_ALLOWED_TOTAL_CHARACTERS;
+    },
   },
   methods: {
     update() {
       this.automatorUnlocked = Player.automatorUnlocked;
       this.interval = AutomatorBackend.currentInterval;
+      this.currentChars = AutomatorData.singleScriptCharacters();
+      this.totalChars = AutomatorData.totalScriptCharacters();
+      this.withinLimit = AutomatorData.isWithinLimit();
     }
   }
 };
@@ -57,29 +69,43 @@ export default {
       <div class="c-automator-tab__interval-info">
         {{ intervalText }}
       </div>
-      At higher speeds, certain commands may take too long to execute while still maintaining this speed,
+      Script changes are not immediately saved to your computer under all conditions,
+      check the Automator How To Play entries for more details.
       <br>
-      in which case the next command will be immediately processed after the slower command is run.
+      There are two character limits to reduce lag. If either is exceeded,
+      <span :class="{ 'c-overlimit': !withinLimit }">
+        changes to your scripts will not be saved!
+      </span>
       <br>
-      The Automator autosaves with every change, but is not stored in the save file until the game is saved normally.
-      <SplitPane
-        :min-percent="40"
-        :default-percent="50"
-        split="vertical"
-        class="_-automator-split-pane-fix"
-      >
-        <template #paneL>
-          <AutomatorEditor />
-        </template>
-        <template #paneR>
-          <AutomatorDocs />
-        </template>
-      </SplitPane>
+      <span :class="{ 'c-overlimit': currentChars > maxScriptChars }">
+        This script: {{ formatInt(currentChars) }} / {{ formatInt(maxScriptChars) }}
+      </span>
+      |
+      <span :class="{ 'c-overlimit': totalChars > maxTotalChars }">
+        Across all scripts: {{ formatInt(totalChars) }} / {{ formatInt(maxTotalChars) }}
+      </span>
+      <div class="c-automator-split-pane">
+        <SplitPane
+          :min-percent="44"
+          :default-percent="50"
+          split="vertical"
+        >
+          <template #paneL>
+            <AutomatorEditor />
+          </template>
+          <template #paneR>
+            <AutomatorDocs />
+          </template>
+        </SplitPane>
+      </div>
     </div>
     <AutomatorPointsList v-else />
   </div>
 </template>
 
 <style scoped>
-
+.c-overlimit {
+  font-weight: bold;
+  color: var(--color-bad);
+}
 </style>

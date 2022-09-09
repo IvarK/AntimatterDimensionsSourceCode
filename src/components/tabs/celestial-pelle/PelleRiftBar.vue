@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import CustomizeableTooltip from "@/components/CustomizeableTooltip";
 
 export default {
@@ -23,32 +25,16 @@ export default {
       // Converts 1 rem to number of px
       remToPx: parseInt(getComputedStyle(document.documentElement).fontSize, 10),
       effects: [],
-      isDark: false
+      selectedMilestoneResourceText: "",
+      selectedMilestoneDescriptionText: "",
     };
   },
   computed: {
-    tooltipContentStyle() {
-      const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
-      const baseColor = this.isDark ? "#111111" : "var(--color-base)";
-      return {
-        width: "20rem",
-        border: "0.1rem solid var(--color-pelle--base)",
-        backgroundColor: hasMilestone ? "var(--color-pelle--base)" : baseColor,
-        color: hasMilestone ? "black" : "var(--color-text)",
-        fontSize: "1.1rem",
-        fontWeight: "bold",
-        zIndex: 4,
-        boxShadow: hasMilestone ? " 0 0 0.1rem 0.1rem black" : ""
-      };
-    },
     tooltipArrowStyle() {
       return {
         borderTop: "0.55rem solid var(--color-pelle--base)"
       };
     }
-  },
-  created() {
-    this.isDark = Themes.find(player.options.theme).isDark();
   },
   methods: {
     update() {
@@ -58,21 +44,27 @@ export default {
       this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
       this.percentage = rift.percentage;
       this.reducedTo = rift.reducedTo;
-      this.hasEffectiveFill = rift.config.key === "pestilence" && PelleRifts.chaos.milestones[0].canBeApplied;
+      this.hasEffectiveFill = rift.config.key === "decay" && PelleRifts.chaos.milestones[0].canBeApplied;
+
+      this.selectedMilestoneResourceText = this.milestoneResourceText(this.selectedHoverMilestone);
+      this.selectedMilestoneDescriptionText = this.milestoneDescriptionText(this.selectedHoverMilestone);
     },
     hasMilestone(ms) {
       return ms.canBeApplied;
     },
-    milestoneResourceText(rift, milestone) {
+    milestoneResourceText(milestone) {
+      const rift = this.rift;
       return `${formatPercents(milestone.requirement)}
-      (${this.formatRift(rift.config.percentageToFill(milestone.requirement))} ${rift.drainResource})`;
+      (${this.formatRift(rift.config.percentageToFill(milestone.requirement))} \
+      ${rift.id === 3 ? wordShift.wordCycle(PelleRifts.decay.name) : rift.drainResource})`;
     },
     milestoneDescriptionText(milestone) {
-      return milestone.description;
+      if (typeof milestone.description === "string") return milestone.description;
+      return milestone.description();
     },
-    // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
+    // One-off formatting function; needs to format large Decimals and a small number assumed to be an integer percent
     formatRift(value) {
-      return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
+      return typeof value === "number" ? `${formatInt(100 * value)}%` : format(value, 2);
     },
     toggle() {
       if (!this.isMaxed) this.rift.toggle();
@@ -104,7 +96,14 @@ export default {
       if (milestonesCloseTo.length) {
         this.selectedHoverMilestone = milestonesCloseTo.sort((a, b) => a.dist - b.dist)[0].m;
       }
-    }
+    },
+    tooltipContentClass() {
+      const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
+      return {
+        "c-pelle-milestone-tooltip": true,
+        "c-pelle-milestone-tooltip--unlocked": hasMilestone
+      };
+    },
   }
 };
 </script>
@@ -164,16 +163,16 @@ export default {
     </div>
     <CustomizeableTooltip
       class="o-pelle-rift-bar-milestone-hover-container"
-      :tooltip-content-style="tooltipContentStyle"
+      :tooltip-class="tooltipContentClass()"
       :tooltip-arrow-style="tooltipArrowStyle"
       :left="`calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`"
       content-class="o-pelle-rift-bar-milestone-hover-area"
     >
       <template #tooltipContent>
-        {{ milestoneResourceText(rift, selectedHoverMilestone) }}
+        {{ selectedMilestoneResourceText }}
         <br>
         <br>
-        {{ milestoneDescriptionText(selectedHoverMilestone) }}
+        {{ selectedMilestoneDescriptionText }}
       </template>
     </CustomizeableTooltip>
   </div>
@@ -224,26 +223,33 @@ export default {
   100% { opacity: 1; }
 }
 
-/* CONTAINER STYLES */
-
+/* #region CONTAINER STYLES */
 .c-pelle-rift-bar {
-  --color-bar-bg: #1e1e1e;
   display: flex;
   width: 32rem;
   height: 5rem;
   position: relative;
   justify-content: center;
   align-items: center;
-  background: var(--color-bar-bg);
+  background: linear-gradient(45deg, #ffffff, #e6e6e6);
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--secondary);
   border-radius: var(--var-border-radius, 0.5rem);
   margin-bottom: 1rem;
 }
 
+.s-base--metro .c-pelle-rift-bar {
+  width: 31.9rem;
+  height: 4.8rem;
+}
+
+.s-base--dark .c-pelle-rift-bar {
+  background: linear-gradient(45deg, #1e1e1e, #262626);
+}
+
 .c-pelle-rift-bar--filling,
 .c-pelle-rift-bar--idle {
-  cursor: pointer;
   transition: box-shadow 0.5s;
+  cursor: pointer;
 }
 
 .c-pelle-rift-bar--filling:hover,
@@ -270,14 +276,15 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 0;
-  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-bar-bg);
+  box-shadow: inset 0 0 0.3rem 0.1rem #222222;
 }
 
 .c-pelle-rift-bar--filling .o-pelle-rift-bar-overlay {
   box-shadow: inset 0 0 0.3rem 0.1rem var(--color-pelle--secondary);
 }
+/* #endregion CONTAINER STYLES */
 
-/* FILLING STYLES */
+/* #region FILLING STYLES */
 .o-pelle-rift-bar-fill {
   height: 100%;
   position: absolute;
@@ -297,8 +304,9 @@ export default {
   background: var(--color-pelle--base);
   filter: brightness(0.5);
 }
+/* #endregion FILLING STYLES */
 
-/* SPECIAL BAR OVERLAY STYLES */
+/* #region SPECIAL BAR OVERLAY STYLES */
 .o-pelle-rift-bar-permanent {
   width: 100%;
   height: 100%;
@@ -306,8 +314,9 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 0;
+  opacity: 0.5;
   background: var(--color-pelle--secondary);
-  filter: brightness(50%);
+  filter: grayscale(0.6);
 }
 
 .o-pelle-rift-bar-overfilled {
@@ -335,13 +344,14 @@ export default {
   background: var(--color-pelle--base);
   animation: a-pelle-bar-filling-sweep infinite 2s linear;
 }
+/* #endregion SPECIAL BAR OVERLAY STYLES */
 
-/* PERCENTAGE STYLES */
+/* #region PERCENTAGE STYLES */
 .o-pelle-rift-bar-percentage {
   z-index: 2;
   font-size: 1.5rem;
-  color: white;
-  text-shadow: 0.1rem 0.1rem 0.2rem var(--color-pelle--base);
+  color: var(--color-text);
+  filter: drop-shadow(0.1rem 0.1rem 0.1rem var(--color-pelle--base));
 
   /* This keeps the percentage from blocking the hover area */
   pointer-events: none;
@@ -351,8 +361,9 @@ export default {
 .c-pelle-rift-bar--idle .o-pelle-rift-bar-percentage {
   opacity: 0.6;
 }
+/* #endregion PERCENTAGE STYLES */
 
-/* MILESTONE STYLES */
+/* #region MILESTONE STYLES */
 .o-pelle-rift-bar-milestone-hover-container {
   height: 100%;
 }
@@ -374,11 +385,36 @@ export default {
   filter: brightness(0.25);
   animation: none;
 }
+/* #endregion MILESTONE STYLES */
 </style>
 
 <style>
 .o-pelle-rift-bar-milestone-hover-area {
   width: 2rem;
   height: 100%;
+}
+
+.c-pelle-milestone-tooltip {
+  width: 20rem;
+  z-index: 4;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--color-text);
+  background-color: var(--color-base);
+  border: 0.1rem solid var(--color-pelle--base);
+}
+
+.s-base--dark .c-pelle-milestone-tooltip {
+  background-color: #111111;
+}
+
+.c-pelle-milestone-tooltip--unlocked {
+  color: black;
+  background-color: var(--color-pelle--base);
+  box-shadow: 0 0 0 0.1rem black;
+}
+
+.s-base--dark .c-pelle-milestone-tooltip--unlocked {
+  background-color: var(--color-pelle--base);
 }
 </style>

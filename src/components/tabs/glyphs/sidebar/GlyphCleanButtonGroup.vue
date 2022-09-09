@@ -26,14 +26,17 @@ export default {
         ANY other glyph${this.hasPerkShop ? " (includes Music Glyphs)" : ""}`;
     },
     deleteRejectedTooltip() {
+      const negativeWarning = AutoGlyphProcessor.hasNegativeEffectScore()
+        ? " You also have some negative Effect Filter scores; this may remove some Glyphs you normally want to keep!"
+        : "";
       return this.removeCount === 0
-        ? `This will not remove any Glyphs, adjust your filter settings to remove some.`
-        : `This will remove ${quantifyInt("Glyph", this.removeCount)}!`;
+        ? `This will not remove any Glyphs, adjust your Filter settings to remove some.`
+        : `This will remove ${quantifyInt("Glyph", this.removeCount)}!${negativeWarning}`;
     }
   },
   methods: {
     update() {
-      this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
+      this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice && !Pelle.isDoomed;
       this.hasPerkShop = TeresaUnlocks.shop.canBeApplied;
       this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.inventory = Glyphs.inventory.map(GlyphGenerator.copy);

@@ -17,6 +17,14 @@ export default {
         return "Store more real time or complete the Reality faster to amplify";
       }
       return null;
+    },
+    buttonClass() {
+      return {
+        "c-button-wrapper": true,
+        "l-reality-amplify-button": true,
+        "l-reality-amplify-button--clickable": !this.isDoomed && this.canAmplify,
+        "o-enslaved-mechanic-button--storing-time": this.isActive,
+      };
     }
   },
   methods: {
@@ -37,31 +45,29 @@ export default {
 </script>
 
 <template>
-  <div v-if="isVisible">
-    <button
-      :class="['l-reality-amplify-button', {'o-enslaved-mechanic-button--storing-time': isActive}]"
-      class="c-button-wrapper"
-      :ach-tooltip="tooltip"
-      @click="toggleActive"
-    >
-      <div v-if="isDoomed">
-        You cannot amplify Doomed Realities.
-      </div>
-      <div v-else-if="canAmplify">
-        <span v-if="isActive">Will be amplified:</span>
-        <span v-else>Amplify this Reality:</span>
-        <br>
-        All rewards ×{{ formatInt(ratio) }}
-      </div>
-      <div v-else>
-        Not enough stored real time to amplify.
-      </div>
-    </button>
-  </div>
+  <button
+    v-if="isVisible"
+    :class="buttonClass"
+    :ach-tooltip="tooltip"
+    @click="toggleActive"
+  >
+    <div v-if="isDoomed">
+      You cannot amplify Doomed Realities.
+    </div>
+    <div v-else-if="canAmplify">
+      <span v-if="isActive">Will be amplified:</span>
+      <span v-else>Amplify this Reality:</span>
+      All rewards ×{{ formatInt(ratio) }}
+    </div>
+    <div v-else>
+      Not enough stored real time to amplify.
+    </div>
+  </button>
 </template>
 
 <style scoped>
 .c-button-wrapper {
-  width: 100%;
+  width: calc(100% - 1rem);
+  margin-bottom: 1rem;
 }
 </style>

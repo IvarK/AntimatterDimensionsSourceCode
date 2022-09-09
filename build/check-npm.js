@@ -1,4 +1,4 @@
-/* eslint-disable no-bitwise, no-console */
+/* eslint-disable no-console */
 
 const fs = require("fs");
 const path = require("path");

@@ -20,6 +20,20 @@ export default {
       v-for="id in 3"
       :key="id"
       :save-id="id - 1"
+      class="c-entry-border"
     />
   </ModalWrapperOptions>
 </template>
+
+<style scoped>
+.c-entry-border {
+  border-bottom: 0.1rem solid var(--color-text);
+  width: 28rem;
+  padding-bottom: 1rem;
+}
+
+.c-entry-border:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+</style>

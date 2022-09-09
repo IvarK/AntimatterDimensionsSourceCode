@@ -37,7 +37,9 @@ export default {
       projectedTimeEstimate: new Decimal(0),
       isCapped: false,
       hovering: false,
-      hasRemnants: false
+      hasRemnants: false,
+      galaxyCap: 0,
+      notAffordable: false
     };
   },
   computed: {
@@ -49,13 +51,14 @@ export default {
       const prefix = this.isCapped ? "Capped:" : "Currently:";
       const formattedEffect = x => this.config.formatEffect(this.config.effect(x));
       const value = formattedEffect(this.purchases);
-      const next = (!this.isCapped && this.hovering && this.canBuy)
+      const next = (!this.isCapped && this.hovering)
         ? formattedEffect(this.purchases + 1)
         : undefined;
       return { prefix, value, next };
     },
     timeEstimate() {
       if (!this.hasTimeEstimate || !this.hasRemnants) return null;
+      if (this.notAffordable) return "Never affordable due to Generated Galaxy cap";
       return this.currentTimeEstimate;
     },
     hasTimeEstimate() {
@@ -97,6 +100,10 @@ export default {
         .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain).toNumber())
         .toTimeEstimate();
       this.hasRemnants = Pelle.cel.remnants > 0;
+      this.galaxyCap = GalaxyGenerator.generationCap;
+      const genDB = GameDatabase.celestials.pelle.galaxyGeneratorUpgrades;
+      this.notAffordable = (this.config === genDB.additive || this.config === genDB.multiplicative) &&
+        (Decimal.gt(this.upgrade.cost, this.galaxyCap - GalaxyGenerator.generatedGalaxies + player.galaxies));
     },
     secondsUntilCost(rate) {
       const value = this.galaxyGenerator ? player.galaxies + GalaxyGenerator.galaxies : Currency.realityShards.value;
@@ -143,7 +150,12 @@ export default {
     <div v-if="effectText">
       {{ effectText.prefix }} {{ effectText.value }}
       <template v-if="effectText.next">
-        ➜ <span class="c-improved-effect">
+        ➜ <span
+          :class="{
+            'c-improved-effect': canBuy,
+            'c-improved-effect--unavailable': !canBuy,
+          }"
+        >
           {{ effectText.next }}
         </span>
       </template>
@@ -226,9 +238,13 @@ export default {
 }
 
 .c-improved-effect {
-  font-style: italic;
   font-weight: bold;
   color: #00bb00;
+}
+
+.c-improved-effect--unavailable {
+  font-weight: bold;
+  color: #990000;
 }
 
 .s-base--metro .c-pelle-upgrade--unavailable {

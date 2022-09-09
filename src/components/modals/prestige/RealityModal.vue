@@ -23,7 +23,7 @@ export default {
       simRealities: 0,
       realityMachines: new Decimal(),
       shardsGained: 0,
-      effarigUnlocked: false,
+      effarigUnlocked: false
     };
   },
   computed: {
@@ -65,17 +65,6 @@ export default {
   },
   created() {
     this.on$(GAME_EVENT.ENTER_PRESSED, () => this.confirmModal(false));
-    // This refreshes the glyphs shown after every reality, and also doesn't
-    // allow it to refresh if you're choosing glyphs (at that point,
-    // your choices are your choices). This is technically incorrect since
-    // while you're choosing glyphs the level might increase, and this code
-    // stops it from increasing in the glyphs shown here, but with
-    // the glyph choice popup open, you can't see the tooltips, so there's
-    // no way for the player to notice that.
-    this.on$(GAME_EVENT.GLYPH_CHOICES_GENERATED, () => {
-      this.canRefresh = false;
-    });
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
     this.getGlyphs();
     GlyphSelection.realityProps = getRealityProps(false, false);
   },
@@ -117,8 +106,12 @@ export default {
       this.selectedGlyph = index;
     },
     confirmModal(sacrifice) {
+      if (sacrifice) {
+        // Sac isn't passed through confirm so we have to close it manually
+        this.emitClose();
+      }
       processManualReality(sacrifice, this.selectedGlyph);
-    },
+    }
   },
 };
 </script>

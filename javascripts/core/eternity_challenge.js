@@ -194,7 +194,7 @@ export class EternityChallengeState extends GameMechanicState {
     }
     if (Enslaved.isRunning) {
       if (this.id === 6 && this.completions === 5) EnslavedProgress.ec6.giveProgress();
-      if (EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
+      if (!auto && EnslavedProgress.challengeCombo.hasProgress) Tab.challenges.normal.show();
     }
     startEternityChallenge();
     return true;
@@ -233,7 +233,8 @@ export class EternityChallengeState extends GameMechanicState {
       reason = restriction => `spending more than ${quantify("in-game second", restriction, 0, 1)} in it`;
     }
     Modal.message.show(`You failed Eternity Challenge ${this.id} due to
-      ${reason(this.config.restriction(this.completions))}; you have now exited it.`);
+      ${reason(this.config.restriction(this.completions))}; you have now exited it.`,
+    { closeEvent: GAME_EVENT.REALITY_RESET_AFTER }, 1);
     EventHub.dispatch(GAME_EVENT.CHALLENGE_FAILED);
   }
 
@@ -317,7 +318,7 @@ export const EternityChallenges = {
     },
 
     get interval() {
-      if (!Perk.autocompleteEC1.isBought || Pelle.isDisabled("autoec")) return Infinity;
+      if (!Perk.autocompleteEC1.canBeApplied) return Infinity;
       let minutes = Effects.min(
         Number.MAX_VALUE,
         Perk.autocompleteEC1,

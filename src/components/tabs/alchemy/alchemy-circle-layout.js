@@ -30,10 +30,10 @@ class AlchemyOrbitLayout {
 export class AlchemyCircleLayout {
   constructor() {
     this.orbits = [
-      new AlchemyOrbitLayout(1, 4, -Math.PI / 5),
+      new AlchemyOrbitLayout(1, 4, -Math.PI / 3),
       new AlchemyOrbitLayout(2, 3),
       new AlchemyOrbitLayout(3, 2, Math.PI / 3),
-      new AlchemyOrbitLayout(4, 1),
+      new AlchemyOrbitLayout(4, 1, -Math.PI / 6),
       new AlchemyOrbitLayout(5, 0)
     ];
     const nodes = [];

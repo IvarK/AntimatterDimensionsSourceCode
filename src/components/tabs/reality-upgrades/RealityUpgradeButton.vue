@@ -22,7 +22,6 @@ export default {
   },
   data() {
     return {
-      isUseless: false,
       isAvailableForPurchase: false,
       automatorPoints: false,
       canBeBought: false,
@@ -50,7 +49,10 @@ export default {
       return {
         description: this.config.requirement
       };
-    }
+    },
+    isUseless() {
+      return Pelle.disabledRUPGs.includes(this.upgrade.id) && Pelle.isDoomed;
+    },
   },
   watch: {
     isAutobuyerOn(newValue) {
@@ -68,7 +70,6 @@ export default {
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
-      this.isUseless = Pelle.disabledRUPGs.includes(upgrade.id) && Pelle.isDoomed;
     }
   }
 };
@@ -87,10 +88,7 @@ export default {
       >
         {{ config.name }}
       </HintText>
-      <span v-if="isUseless">
-        This upgrade has no effect while in Doomed
-      </span>
-      <span v-else>
+      <span :class="{ 'o-pelle-disabled': isUseless }">
         <DescriptionDisplay :config="config" />
         <template v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable">
           <br>

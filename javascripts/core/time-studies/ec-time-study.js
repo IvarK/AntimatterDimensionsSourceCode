@@ -33,7 +33,6 @@ export class ECTimeStudyState extends TimeStudyState {
       if (!auto) {
         Tab.challenges.eternity.show();
       }
-      // eslint-disable-next-line no-bitwise
       player.challenge.eternity.requirementBits |= 1 << this.id;
       Currency.timeTheorems.subtract(this.cost);
       TimeStudyTree.commitToGameState([TimeStudy.eternityChallenge(this.id)]);
@@ -118,7 +117,6 @@ export class ECTimeStudyState extends TimeStudyState {
 
   get wasRequirementPreviouslyMet() {
     if (this.id === 11 || this.id === 12) return false;
-    // eslint-disable-next-line no-bitwise
     return (player.challenge.eternity.requirementBits & (1 << this.id)) !== 0;
   }
 

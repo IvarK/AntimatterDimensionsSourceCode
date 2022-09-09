@@ -5,9 +5,7 @@ class AchievementState extends GameMechanicState {
     super(config);
     this._row = Math.floor(this.id / 10);
     this._column = this.id % 10;
-    // eslint-disable-next-line no-bitwise
     this._bitmask = 1 << (this.column - 1);
-    // eslint-disable-next-line no-bitwise
     this._inverseBitmask = ~this._bitmask;
     this.registerEvents(config.checkEvent, args => this.tryUnlock(args));
   }
@@ -33,7 +31,6 @@ class AchievementState extends GameMechanicState {
   }
 
   get isUnlocked() {
-    // eslint-disable-next-line no-bitwise
     return (player.achievementBits[this.row - 1] & this._bitmask) !== 0;
   }
 
@@ -52,21 +49,19 @@ class AchievementState extends GameMechanicState {
   }
 
   lock() {
-    // eslint-disable-next-line no-bitwise
     player.achievementBits[this.row - 1] &= this._inverseBitmask;
   }
 
   unlock(auto) {
     if (this.isUnlocked) return;
-    // eslint-disable-next-line no-bitwise
     player.achievementBits[this.row - 1] |= this._bitmask;
     if (this.id === 85 || this.id === 93) {
       Autobuyer.bigCrunch.bumpAmount(4);
     }
     if (this.id === 55 && !PlayerProgress.realityUnlocked()) {
       Modal.message.show(`Since you performed an Infinity in under a minute, the UI changed on the screen.
-      Instead of the Dimensions disappearing, they stay and the Big Crunch button appears on top of them.
-      This is purely visual, and is there to prevent flickering.`);
+        Instead of the Dimensions disappearing, they stay and the Big Crunch button appears on top of them.
+        This is purely visual, and is there to prevent flickering.`, {}, 3);
     }
     if (this.id === 148 || this.id === 166) {
       GameCache.staticGlyphWeights.invalidate();

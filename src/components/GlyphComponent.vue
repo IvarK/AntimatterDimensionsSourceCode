@@ -36,6 +36,11 @@ export default {
       required: false,
       default: 0
     },
+    isInventoryGlyph: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     isActiveGlyph: {
       type: Boolean,
       required: false,
@@ -109,25 +114,24 @@ export default {
     typeConfig() {
       return GlyphTypes[this.glyph.type];
     },
+    isBlobHeart() {
+      return this.$viewModel.theme === "S11" && this.glyph.type === "companion";
+    },
     symbol() {
       const symbol = this.glyph.symbol;
+      // \uE019 = :blobheart:
+      if (this.isBlobHeart) return "\uE019";
       if (symbol) {
         return symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol;
       }
       return this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
-    },
-    // RM multiplier and instability are the only mutually-exclusive pair, which occurs on effarig without a particular
-    // Ra upgrade. We hardcode that here - it's not worth the performance hit of diving into gameDB to do dynamically
-    hasMutuallyExclusiveEffect() {
-      const exclusionActive = this.glyph.type === "effarig" && !Ra.unlocks.glyphEffectCount.canBeApplied;
-      const hasExactlyOne = this.glyphEffects.includes(1) !== this.glyphEffects.includes(2);
-      return exclusionActive && hasExactlyOne;
     },
     zIndexStyle() {
       return { "z-index": this.isInModal ? 7 : 6 };
     },
     borderColor() {
       if (this.isRealityGlyph) return this.realityGlyphColor();
+      if (this.isCursedGlyph) return this.cursedColor;
       return this.glyph.color || this.typeConfig.color;
     },
     overStyle() {
@@ -150,19 +154,28 @@ export default {
         "-webkit-user-drag": this.draggable ? "" : "none"
       };
     },
+    cursedColor() {
+      return Theme.current().isDark() ? "black" : "white";
+    },
+    cursedColorInverted() {
+      return Theme.current().isDark() ? "white" : "black";
+    },
     innerStyle() {
       const rarityColor = this.isRealityGlyph
         ? this.realityGlyphColor()
-        : this.glyph.color || getRarity(this.glyph.strength).color;
+        : (this.glyph.color || getColor(this.glyph.strength));
+      const textShadow = this.isCursedGlyph
+        ? `-0.04em 0.04em 0.08em ${this.cursedColor}`
+        : `-0.04em 0.04em 0.08em ${rarityColor}`;
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
-        color: this.isCursedGlyph ? "black" : rarityColor,
-        "text-shadow": this.isCursedGlyph ? "-0.04em 0.04em 0.08em black" : `-0.04em 0.04em 0.08em ${rarityColor}`,
+        color: this.isCursedGlyph ? this.cursedColor : rarityColor,
+        "text-shadow": this.isBlobHeart ? undefined : textShadow,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
-        background: this.isCursedGlyph ? "white" : undefined
+        background: this.isCursedGlyph ? this.cursedColorInverted : undefined
       };
     },
     mouseEventHandlers() {
@@ -228,12 +241,9 @@ export default {
           throw new Error(`Unrecognized glyph type "${this.glyph.type}" in glyph effect icons`);
       }
       const effectIDs = [];
-      // eslint-disable-next-line no-bitwise
       let remainingEffects = this.glyph.effects >> minEffectID;
       for (let id = 0; remainingEffects > 0; id++) {
-        // eslint-disable-next-line no-bitwise
         if ((remainingEffects & 1) === 1) effectIDs.push(id);
-        // eslint-disable-next-line no-bitwise
         remainingEffects >>= 1;
       }
       return effectIDs;
@@ -255,7 +265,7 @@ export default {
     }
   },
   created() {
-    this.$on("tooltip-touched", () => this.hideTooltip());
+    this.on$("tooltip-touched", () => this.hideTooltip());
   },
   beforeDestroy() {
     if (this.isCurrentTooltip) this.hideTooltip();
@@ -265,6 +275,23 @@ export default {
     update() {
       this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value;
       this.colorTimer = (this.colorTimer + 4) % 1000;
+      this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+      this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+        ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
+        : 0;
+      this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
+        : 0;
+
+      // A few things need to be updated continuously, but only when the tooltip is visible
+      if (this.tooltipLoaded) {
+        const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
+        let adjustedLevel = this.isActiveGlyph
+          ? getAdjustedGlyphLevel(this.glyph)
+          : this.glyph.level + levelBoost;
+        if (Pelle.isDoomed && this.isInventoryGlyph) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
+        this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
+      }
     },
     // This produces a linearly interpolated color between the basic glyph colors, but with RGB channels copied and
     // hardcoded from the color data because that's probably preferable to a very hacky hex conversion method. The
@@ -298,13 +325,6 @@ export default {
       glyphInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
       glyphInfo.refineValue = GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph);
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
-      this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
-        ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
-        : 0;
-      this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
-        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
-        : 0;
       if (
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
         (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP && this.refineReward === 0)
@@ -314,11 +334,6 @@ export default {
         this.currentAction = "refine";
       }
       this.scoreMode = AutoGlyphProcessor.scoreMode;
-      const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
-      const adjustedLevel = this.isActiveGlyph
-        ? getAdjustedGlyphLevel(this.glyph)
-        : this.glyph.level + levelBoost;
-      this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
     },
     moveTooltipTo(x, y) {
       // If we are just creating the tooltip now, we can't move it yet.
@@ -432,37 +447,23 @@ export default {
       const dy = scale * (Math.cos(angle) + 0.15);
       return { dx, dy };
     },
+    glyphColor() {
+      if (this.isCursedGlyph) return this.cursedColor;
+      if (this.isRealityGlyph) return this.realityGlyphColor();
+      return `${this.glyph.color || getColor(this.glyph.strength)}`;
+    },
     // Note that the dot bigger for one of the mutually-exclusive effect pair (IDs of the only case are hardcoded)
     glyphEffectIcon(id) {
       if (this.glyph.type === "companion") return {};
       const pos = this.effectIconPos(id);
-      const size = this.hasMutuallyExclusiveEffect && [1, 2].includes(id) ? 0.5 : 0.3;
-
-      let color;
-      if (this.isCursedGlyph) color = "black";
-      else if (this.isRealityGlyph) color = this.realityGlyphColor();
-      else color = `${this.glyph.color || getRarity(this.glyph.strength).color}`;
 
       return {
         position: "absolute",
-        width: `${size}rem`,
-        height: `${size}rem`,
+        width: "0.3rem",
+        height: "0.3rem",
         "border-radius": "50%",
-        background: color,
-        transform: `translate(${pos.dx - 0.15 * size}rem, ${pos.dy - 0.15 * size}rem)`,
-        opacity: Theme.current().name === "S9" ? 0 : 0.8
-      };
-    },
-    // This adds an x on effarig effects which are mutually-exclusive with existing ones
-    exclusiveIcon() {
-      if (!this.hasMutuallyExclusiveEffect) return {};
-      const forbiddenEffect = this.glyphEffects.includes(1) ? 2 : 1;
-      const pos = this.effectIconPos(forbiddenEffect);
-      return {
-        position: "absolute",
-        "font-size": "1.2rem",
-        "text-align": "center",
-        transform: `translate(${pos.dx}rem, ${pos.dy - 0.15}rem)`,
+        background: this.glyphColor(),
+        transform: `translate(${pos.dx - 0.15 * 0.3}rem, ${pos.dy - 0.15 * 0.3}rem)`,
         opacity: Theme.current().name === "S9" ? 0 : 0.8
       };
     },
@@ -493,12 +494,6 @@ export default {
           :key="x"
           :style="glyphEffectIcon(x)"
         />
-        <div
-          v-if="hasMutuallyExclusiveEffect"
-          :style="exclusiveIcon()"
-        >
-          &#x00d7;
-        </div>
       </template>
     </div>
     <GlyphTooltip

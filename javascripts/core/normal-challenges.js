@@ -1,20 +1,6 @@
 import { DC } from "./constants";
 import { GameMechanicState } from "./game-mechanics/index";
 
-// This function does *not* reset anything. Only call it when you've already
-// done all the non-UI stuff. Right now the only UI thing to do is switch to
-// the AD tab.
-function startChallengeUI() {
-  if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
-}
-
-export function tryCompleteInfinityChallenges() {
-  if (EternityMilestone.autoIC.isReached) {
-    const toComplete = InfinityChallenges.all.filter(x => x.isUnlocked && !x.isCompleted);
-    for (const challenge of toComplete) challenge.complete();
-  }
-}
-
 export function updateNormalAndInfinityChallenges(diff) {
   if (NormalChallenge(11).isRunning || InfinityChallenge(6).isRunning) {
     if (AntimatterDimension(2).amount.neq(0)) {
@@ -25,10 +11,10 @@ export function updateNormalAndInfinityChallenges(diff) {
       Currency.matter.multiply(Decimal.pow(cappedBase, diff / 20));
     }
     if (Currency.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
-      Modal.hideAll();
-      Modal.message.show(`Your ${format(Currency.antimatter.value, 2, 2)} antimatter was annhiliated by ` +
-        `${format(Currency.matter.value, 2, 2)} matter.`);
-      softReset(0);
+      const values = [Currency.antimatter.value, Currency.matter.value];
+      softReset(0, true, true);
+      Modal.message.show(`Your ${format(values[0], 2, 2)} antimatter was annihilated
+        by ${format(values[1], 2, 2)} matter.`, { closeEvent: GAME_EVENT.BIG_CRUNCH_AFTER }, 1);
     }
   }
 
@@ -70,6 +56,10 @@ class NormalChallengeState extends GameMechanicState {
     return Currency.infinitiesTotal.gte(ip);
   }
 
+  get isDisabled() {
+    return this.config.isDisabledInDoomed && Pelle.isDoomed;
+  }
+
   get lockedAt() {
     return GameDatabase.challenges.normal[this.id].lockedAt;
   }
@@ -91,18 +81,16 @@ class NormalChallengeState extends GameMechanicState {
     bigCrunchResetValues();
     if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) {
       EnslavedProgress.challengeCombo.giveProgress();
-      Enslaved.quotes.show(Enslaved.quotes.EC6C10);
+      Enslaved.quotes.ec6C10.show();
     }
-    startChallengeUI();
+    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 
   get isCompleted() {
-    // eslint-disable-next-line no-bitwise
     return (player.challenge.normal.completedBits & (1 << this.id)) !== 0;
   }
 
   complete() {
-    // eslint-disable-next-line no-bitwise
     player.challenge.normal.completedBits |= 1 << this.id;
     // Since breaking infinity maxes even autobuyers that aren't unlocked,
     // it's possible to get r52 or r53 from completing a challenge
@@ -165,145 +153,5 @@ export const NormalChallenges = {
   },
   clearCompletions() {
     player.challenge.normal.completedBits = 0;
-  }
-};
-
-class InfinityChallengeRewardState extends GameMechanicState {
-  constructor(config, challenge) {
-    super(config);
-    this._challenge = challenge;
-  }
-
-  get isEffectActive() {
-    return this._challenge.isCompleted;
-  }
-}
-
-class InfinityChallengeState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    this._reward = new InfinityChallengeRewardState(config.reward, this);
-  }
-
-  get unlockAM() {
-    return this.config.unlockAM;
-  }
-
-  get isUnlocked() {
-    return player.records.thisEternity.maxAM.gte(this.unlockAM) || (Achievement(133).isUnlocked && !Pelle.isDoomed) ||
-      (PelleUpgrade.keepInfinityChallenges.canBeApplied && Pelle.cel.records.totalAntimatter.gte(this.unlockAM));
-  }
-
-  get isRunning() {
-    return player.challenge.infinity.current === this.id;
-  }
-
-  requestStart() {
-    if (!this.isUnlocked) return;
-    if (!player.options.confirmations.challenges) {
-      this.start();
-      return;
-    }
-    Modal.startInfinityChallenge.show(this.id);
-  }
-
-  start() {
-    if (!this.isUnlocked || this.isRunning) return;
-    player.challenge.normal.current = 0;
-    player.challenge.infinity.current = this.id;
-    bigCrunchResetValues();
-    startChallengeUI();
-    player.break = true;
-    if (EternityChallenge.isRunning) Achievement(115).unlock();
-  }
-
-  get isCompleted() {
-    // eslint-disable-next-line no-bitwise
-    return (player.challenge.infinity.completedBits & (1 << this.id)) !== 0;
-  }
-
-  complete() {
-    // eslint-disable-next-line no-bitwise
-    player.challenge.infinity.completedBits |= 1 << this.id;
-    EventHub.dispatch(GAME_EVENT.INFINITY_CHALLENGE_COMPLETED);
-  }
-
-  get isEffectActive() {
-    return this.isRunning;
-  }
-
-  /**
-   * @return {InfinityChallengeRewardState}
-   */
-  get reward() {
-    return this._reward;
-  }
-
-  get isQuickResettable() {
-    return this.config.isQuickResettable;
-  }
-
-  get goal() {
-    return this.config.goal;
-  }
-
-  updateChallengeTime() {
-    const bestTimes = player.challenge.infinity.bestTimes;
-    if (bestTimes[this.id - 1] <= player.records.thisInfinity.time) {
-      return;
-    }
-    // TODO: remove splice once player.challenge.infinity.bestTimes is not reactive
-    bestTimes.splice(this.id - 1, 1, player.records.thisInfinity.time);
-    GameCache.infinityChallengeTimeSum.invalidate();
-  }
-
-  exit() {
-    player.challenge.infinity.current = 0;
-    bigCrunchResetValues();
-    if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
-  }
-}
-
-/**
- * @param {number} id
- * @return {InfinityChallengeState}
- */
-export const InfinityChallenge = InfinityChallengeState.createAccessor(GameDatabase.challenges.infinity);
-
-/**
- * @returns {InfinityChallengeState}
- */
-Object.defineProperty(InfinityChallenge, "current", {
-  get: () => (player.challenge.infinity.current > 0
-    ? InfinityChallenge(player.challenge.infinity.current)
-    : undefined),
-});
-
-Object.defineProperty(InfinityChallenge, "isRunning", {
-  get: () => InfinityChallenge.current !== undefined,
-});
-
-export const InfinityChallenges = {
-  /**
-   * @type {InfinityChallengeState[]}
-   */
-  all: InfinityChallenge.index.compact(),
-  completeAll() {
-    for (const challenge of InfinityChallenges.all) challenge.complete();
-  },
-  clearCompletions() {
-    player.challenge.infinity.completedBits = 0;
-  },
-  get nextIC() {
-    return InfinityChallenges.all.find(x => !x.isUnlocked);
-  },
-  get nextICUnlockAM() {
-    return this.nextIC?.unlockAM;
-  },
-  /**
-   * @returns {InfinityChallengeState[]}
-   */
-  get completed() {
-    return InfinityChallenges.all.filter(ic => ic.isCompleted);
   }
 };

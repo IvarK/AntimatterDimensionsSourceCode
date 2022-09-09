@@ -5,106 +5,64 @@ export default {
     celestial: {
       type: String,
       required: true
-    },
-    visibleLines: {
-      type: Number,
-      default: 3,
-    },
-    lineHeight: {
-      type: String,
-      default: ""
-    },
-    fontSize: {
-      type: String,
-      default: ""
     }
   },
-  data: () => ({
-    seenIds: [],
-    lastVisibleIndex: 4,
-  }),
+  data() {
+    return {
+      isShown: false
+    };
+  },
   computed: {
-    quotes() {
-      const quoteLists = this.seenIds.map(id => Celestials[this.celestial].quotes.fromID(id).lines);
-      return [].concat(...quoteLists);
+    color() {
+      return this.celestial === "laitela" ? `var(--color-laitela--accent)` : `var(--color-${this.celestial}--base)`;
     },
-    firstVisibleIndex() {
-      return Math.max(0, this.lastVisibleIndex - this.visibleLines + 1);
-    },
-    visibleQuotes() {
-      return this.quotes.slice(this.firstVisibleIndex, this.lastVisibleIndex + 1).map(
-        x => (typeof x === "function" ? x() : x)
-      );
-    },
-    upButtonClass() {
-      return this.buttonClass(this.upButtonEnabled);
-    },
-    downButtonClass() {
-      return this.buttonClass(this.downButtonEnabled);
-    },
-    upButtonEnabled() {
-      return this.lastVisibleIndex >= this.visibleLines;
-    },
-    downButtonEnabled() {
-      return this.lastVisibleIndex < this.quotes.length - 1;
+    possessiveForm() {
+      return Celestials[this.celestial].possessiveName;
     }
-  },
-  mounted() {
-    this.lastVisibleIndex = this.quotes.length - 1;
   },
   methods: {
     update() {
-      this.seenIds = Array.from(player.celestials[this.celestial].quotes);
+      this.isShown = Celestials[this.celestial].quotes.all.some(x => x.isUnlocked);
     },
-    lineStyle(idx) {
-      const idxDiff = Math.abs(idx - (this.visibleQuotes.length - 1));
-      return {
-        opacity: 0.3 + 0.7 / (idxDiff + 1),
-        lineHeight: this.lineHeight,
-        fontSize: this.fontSize
-      };
+    show() {
+      Quote.showHistory(Celestials[this.celestial].quotes.all);
     },
-    buttonClass(enabled) {
-      return enabled
-        ? "c-celestial-quote-history__button--enabled"
-        : "c-celestial-quote-history__button--disabled";
-    },
-    upButtonClick() {
-      if (this.upButtonEnabled) this.lastVisibleIndex--;
-    },
-    downButtonClick() {
-      if (this.downButtonEnabled) this.lastVisibleIndex++;
-    },
-    removeQuoteSyntax(x) {
-      return Modal.celestialQuote.removeOverrideCel(x);
-    }
   }
 };
 </script>
 
 <template>
-  <div class="o-celestial-quote-history">
-    <div class="l-celestial-quote-history__lines">
-      <div
-        v-for="(quote, idx) in visibleQuotes"
-        :key="idx"
-        class="c-celestial-quote-history__line"
-        :style="lineStyle(idx)"
-      >
-        {{ removeQuoteSyntax(quote) }}
-      </div>
-    </div>
-    <div class="l-celestial-quote-history__buttons">
-      <div
-        class="c-celestial-quote-history__button fas fa-chevron-circle-up"
-        :class="upButtonClass"
-        @click="upButtonClick"
-      />
-      <div
-        class="c-celestial-quote-history__button fas fa-chevron-circle-down"
-        :class="downButtonClass"
-        @click="downButtonClick"
-      />
-    </div>
-  </div>
+  <button
+    v-if="isShown"
+    class="c-celestial-quote-history--button"
+    :style="{
+      '--scoped-cel-color': color
+    }"
+    @click="show"
+  >
+    {{ possessiveForm }} Quotes
+  </button>
 </template>
+
+<style scope>
+.c-celestial-quote-history--button {
+  align-self: center;
+  font-family: Typewriter;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--color-text);
+  background-color: var(--color-base);
+  border: var(--var-border-width, 0.2rem) solid var(--scoped-cel-color);
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin-bottom: 1.5rem;
+  padding: 0.5rem 1rem;
+  transition: 0.2s;
+  transition-property: color, background-color;
+  cursor: pointer;
+}
+
+.c-celestial-quote-history--button:hover {
+  color: var(--color-text-inverted);
+  background-color: var(--scoped-cel-color);
+}
+</style>

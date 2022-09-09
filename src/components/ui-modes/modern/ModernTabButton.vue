@@ -25,6 +25,7 @@ export default {
     classObject() {
       return {
         "o-tab-btn": true,
+        "o-tab-btn--modern-tabs": true,
         "o-tab-btn--subtabs": this.showSubtabs,
         "o-tab-btn--active": this.isCurrentTab && player.options.theme !== "S9"
       };
@@ -75,12 +76,12 @@ export default {
       v-if="showSubtabs"
       class="subtabs"
     >
-      <span
+      <template
         v-for="(subtab, index) in tab.subtabs"
-        :key="index"
       >
         <div
           v-if="subtabVisibilities[index]"
+          :key="index"
           class="o-tab-btn o-tab-btn--subtab"
           :class="
             [tab.config.UIClass,
@@ -98,7 +99,7 @@ export default {
             {{ subtab.name }}
           </div>
         </div>
-      </span>
+      </template>
     </div>
   </div>
 </template>
@@ -137,5 +138,17 @@ export default {
 
 .o-subtab-btn--active {
   border-bottom-width: 0.5rem;
+}
+
+.o-tab-btn--subtab:first-child {
+  border-top-left-radius: var(--var-border-radius, 0.5rem);
+  border-bottom-left-radius: var(--var-border-radius, 0.5rem);
+  transition: border-radius 0s;
+}
+
+.o-tab-btn--subtab:last-child {
+  border-top-right-radius: var(--var-border-radius, 0.5rem);
+  border-bottom-right-radius: var(--var-border-radius, 0.5rem);
+  transition: border-radius 0s;
 }
 </style>

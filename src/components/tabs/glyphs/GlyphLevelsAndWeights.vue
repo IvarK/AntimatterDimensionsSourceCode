@@ -17,6 +17,7 @@ export default {
       showAutoAdjustWeights: false,
       isAutoAdjustWeightsOn: false,
       factors: getGlyphLevelInputs(),
+      shardsGained: 0,
       weights: Object.assign({}, player.celestials.effarig.glyphWeights),
       rows: 3,
     };
@@ -44,7 +45,7 @@ export default {
         min: 0,
         max: 100,
         interval: 1,
-        show: true,
+        disabled: this.isAutoAdjustWeightsOn,
         "dot-width": "2.2rem",
         "dot-height": "1.6rem",
         width: "13.5rem",
@@ -53,8 +54,7 @@ export default {
         "plus-minus-buttons": true,
         "dot-class": "c-glyph-levels-and-weights__slider-handle",
         "bg-class": "c-glyph-levels-and-weights__slider-bg",
-        "process-class": "c-glyph-levels-and-weights__slider-process",
-        direction: "horizontal",
+        "process-class": "c-glyph-levels-and-weights__slider-process"
       };
     },
     totalWeights() {
@@ -72,6 +72,7 @@ export default {
       if (this.achievementVisible) rows.push("achievements");
       rows.push("level");
       rows.push("info");
+      rows.push("info2");
       return rows;
     },
     adjustVisible() {
@@ -81,7 +82,7 @@ export default {
       return RealityUpgrade(18).isBought;
     },
     shardVisible() {
-      return Ra.unlocks.relicShardGlyphLevelBoost.canBeApplied && Effarig.shardsGained !== 0;
+      return Ra.unlocks.relicShardGlyphLevelBoost.canBeApplied && this.shardsGained !== 0;
     },
     singularityVisible() {
       return SingularityMilestone.glyphLevelFromSingularities.canBeApplied;
@@ -132,6 +133,7 @@ export default {
         this.rows = 6;
       }
       this.factors = glyphFactors;
+      this.shardsGained = Effarig.shardsGained;
       let same = true;
       this.glyphWeightFields.forEach(e => {
         if (this.weights[e] !== player.celestials.effarig.glyphWeights[e]) same = false;
@@ -167,6 +169,12 @@ export default {
       return {
         "grid-row": r,
         "-ms-grid-row": r,
+      };
+    },
+    resetWeightsButtonClass() {
+      return {
+        "c-glyph-levels-and-weights__reset-btn": true,
+        "c-glyph-levels-and-weights__reset-btn-clickable": !this.isAutoAdjustWeightsOn
       };
     },
     resetWeights() {
@@ -475,7 +483,13 @@ function roundPreservingSum(data) {
       :style="rowStyle('info')"
       class="l-glyph-levels-and-weights__factor l-glyph-level-and-weights-note"
     >
-      Note: All resources here are log10 of their actual values
+      Note: All resources here are log10 of their actual values.
+    </div>
+    <div
+      :style="rowStyle('info2')"
+      class="l-glyph-levels-and-weights__factor l-glyph-level-and-weights-note"
+    >
+      Replicanti and DT use their highest values this Reality.
     </div>
     <template v-if="adjustVisible">
       <div
@@ -486,7 +500,7 @@ function roundPreservingSum(data) {
         Adjust weights
         <div class="l-glyph-levels-and-weights__reset-btn-outer">
           <div
-            class="c-glyph-levels-and-weights__reset-btn"
+            :class="resetWeightsButtonClass()"
             @click="resetWeights"
           >
             Reset

@@ -16,7 +16,6 @@ export class BitUpgradeState extends GameMechanicState {
   set bits(value) { throw new NotImplementedError(); }
 
   get isUnlocked() {
-    // eslint-disable-next-line no-bitwise
     return Boolean(this.bits & (1 << this.id));
   }
 
@@ -33,7 +32,6 @@ export class BitUpgradeState extends GameMechanicState {
 
   unlock() {
     if (!this.canBeUnlocked) return;
-    // eslint-disable-next-line no-bitwise
     this.bits |= (1 << this.id);
     this.onUnlock();
   }

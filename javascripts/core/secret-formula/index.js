@@ -4,6 +4,8 @@ import "./game-database";
 
 import "./tabs";
 import "./away-progress-types";
+import "./catchup-resources";
+import "./progress-checker";
 import "./confirmation-types";
 import "./tab-notifications";
 import "./news";
@@ -24,6 +26,8 @@ import "./reality/reality-upgrades";
 import "./reality/imaginary-upgrades";
 export * from "./reality/perks";
 import "./reality/automator";
+import "./reality/glyph-types";
+export * from "./reality/glyph-effects";
 import "./reality/glyph-sacrifices";
 import "./celestials/perk-shop";
 import "./celestials/teresa";
@@ -33,7 +37,6 @@ import "./celestials/strikes";
 import "./celestials/rifts";
 import "./celestials/galaxy-generator";
 import "./celestials/ra";
-import "./celestials/pelle-quotes";
 import "./celestials/enslaved";
 export * from "./celestials/v";
 import "./celestials/alchemy";
@@ -42,6 +45,10 @@ export * from "./celestials/singularity-milestones";
 import "./script-templates";
 import "./speedrun-milestones";
 
+import "./celestials/quotes/index";
+
 import "./h2p";
 
 import "./credits";
+
+import "./changelog";

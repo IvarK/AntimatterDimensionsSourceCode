@@ -44,6 +44,7 @@ export default {
         "Effects from Glyph Sacrifice, Alteration, and Alchemy are all disabled",
 
         // Celestial features
+        "You cannot enter any other Celestial Realities",
         "All rewards from Effarig are disabled",
         "All rewards from V are disabled",
         "Infinity Upgrades cannot be charged",

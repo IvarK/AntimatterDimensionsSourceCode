@@ -10,13 +10,15 @@ export default {
   data() {
     return {
       currentMult: 0,
-      nextMult: 0
+      nextMult: 0,
+      canAfford: false,
     };
   },
   methods: {
     update() {
       this.currentMult = this.purchase.currentMult;
       this.nextMult = this.purchase.nextMult;
+      this.canAfford = this.purchase.canBeBought;
     }
   },
 };
@@ -27,12 +29,16 @@ export default {
     <div class="o-shop-button-description">
       {{ purchase.description }}
       <br>
-      <span class="o-shop-button-multiplier">
+      <span
+        v-if="purchase.displayMult"
+        class="o-shop-button-multiplier"
+      >
         Currently {{ formatX(currentMult, 2, 0) }}, next: {{ formatX(nextMult, 2, 0) }}
       </span>
     </div>
     <button
       class="o-shop-button-button"
+      :class="{ 'o-shop-button-button--disabled': !canAfford }"
       @click="purchase.purchase()"
     >
       Cost: {{ purchase.cost }}
@@ -53,6 +59,10 @@ export default {
   border-radius: var(--var-border-radius, 0.5rem);
   margin: 0.5rem;
   padding: 1rem;
+  height: 16rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .o-shop-button-button {
@@ -62,10 +72,14 @@ export default {
   background: turquoise;
   border: none;
   border-radius: var(--var-border-radius, 0.5rem);
-  margin: auto;
-  margin-top: 1rem;
+  margin: 0 auto;
   padding: 0.5rem 2rem;
   cursor: pointer;
+}
+
+.o-shop-button-button--disabled {
+  cursor: default;
+  background: rgb(150, 150, 150);
 }
 
 .o-shop-button-button__img {

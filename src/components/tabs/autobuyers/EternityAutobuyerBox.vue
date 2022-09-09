@@ -1,12 +1,16 @@
 <script>
 import AutobuyerBox from "./AutobuyerBox";
+import AutobuyerDropdownEntry from "./AutobuyerDropdownEntry";
 import AutobuyerInput from "./AutobuyerInput";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
 
 export default {
   name: "EternityAutobuyerBox",
   components: {
     AutobuyerBox,
-    AutobuyerInput
+    AutobuyerInput,
+    ExpandingControlBox,
+    AutobuyerDropdownEntry
   },
   data() {
     return {
@@ -62,11 +66,9 @@ export default {
       }
       throw new Error("Unknown Auto Eternity mode");
     },
-    changeMode(event) {
-      const mode = parseInt(event.target.value, 10);
-      this.autobuyer.mode = mode;
-      this.mode = mode;
-    }
+    modeName(mode) {
+      return this.modeProps(mode).title;
+    },
   }
 };
 </script>
@@ -77,20 +79,25 @@ export default {
     name="Automatic Eternity"
   >
     <template #intervalSlot>
-      <select
+      <ExpandingControlBox
         v-if="hasAdditionalModes"
-        class="c-autobuyer-box__mode-select"
-        @change="changeMode"
+        :auto-close="true"
       >
-        <option
-          v-for="optionMode in modes"
-          :key="optionMode"
-          :value="optionMode"
-          :selected="mode === optionMode"
-        >
-          {{ modeProps(optionMode).title }}
-        </option>
-      </select>
+        <template #header>
+          <div class="o-primary-btn c-autobuyer-box__mode-select c-autobuyer-box__mode-select-header">
+            ▼ Current Setting: ▼
+            <br>
+            {{ modeName(mode) }}
+          </div>
+        </template>
+        <template #dropdown>
+          <AutobuyerDropdownEntry
+            :autobuyer="autobuyer"
+            :modes="modes"
+            :mode-name-fn="modeName"
+          />
+        </template>
+      </ExpandingControlBox>
       <span v-else>{{ modeProps(mode).title }}:</span>
     </template>
     <template #toggleSlot>
@@ -101,20 +108,22 @@ export default {
       />
     </template>
     <template #checkboxSlot>
-      <span>Dynamic amount:</span>
-      <div
-        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text"
-        @click="increaseWithMult = !increaseWithMult"
+      <label
+        class="o-autobuyer-toggle-checkbox o-clickable"
       >
         <input
+          v-model="increaseWithMult"
           type="checkbox"
-          :checked="increaseWithMult"
+          class="o-clickable"
         >
-      </div>
+        Dynamic amount
+      </label>
     </template>
   </AutobuyerBox>
 </template>
 
 <style scoped>
-
+.o-clickable {
+  cursor: pointer;
+}
 </style>

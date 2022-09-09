@@ -12,9 +12,9 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       relicShards: 0,
       shardRarityBoost: 0,
+      shardPower: 0,
       shardsGained: 0,
       currentShardsRate: 0,
       amplification: 0,
@@ -41,23 +41,37 @@ export default {
     ],
     symbol: () => GLYPH_SYMBOLS.effarig,
     runButtonOuterClass() {
-      return this.isRunning ? "c-effarig-run-button--running" : "c-effarig-run-button--not-running";
+      return {
+        "l-effarig-run-button": true,
+        "c-effarig-run-button": true,
+        "c-effarig-run-button--running": this.isRunning,
+        "c-effarig-run-button--not-running": !this.isRunning,
+        "c-celestial-run-button--clickable": !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed
+      };
     },
     runButtonInnerClass() {
       return this.isRunning ? "c-effarig-run-button__inner--running" : "c-effarig-run-button__inner--not-running";
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[1].description();
+      return `${GameDatabase.celestials.descriptions[1].effects()}\n
+      ${GameDatabase.celestials.descriptions[1].description()}`;
     },
     showShardsRate() {
       return this.currentShardsRate;
+    },
+    isDoomed: () => Pelle.isDoomed,
+  },
+  watch: {
+    isRunning() {
+      this.$recompute("runDescription");
     }
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.relicShards = Currency.relicShards.value;
       this.shardRarityBoost = Effarig.maxRarityBoost / 100;
+      this.shardPower = Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.effectOrDefault(1);
       this.shardsGained = Effarig.shardsGained;
       this.currentShardsRate = (this.shardsGained / Time.thisRealityRealTime.totalSeconds);
       this.amplification = simulatedRealityCount(false);
@@ -75,7 +89,8 @@ export default {
     },
     createCursedGlyph() {
       if (GameCache.glyphInventorySpace.value === 0) {
-        Modal.message.show("Inventory cannot hold new Glyphs. Sacrifice (shift-click) some Glyphs.");
+        Modal.message.show("Inventory cannot hold new Glyphs. Sacrifice (shift-click) some Glyphs.",
+          { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
         return;
       }
       const cursedCount = player.reality.glyphs.active
@@ -102,7 +117,10 @@ export default {
           You have {{ quantify("Relic Shard", relicShards, 2, 0) }}, which increases
           <br>
           the rarity of new Glyphs by {{ relicShardRarityAlwaysMax ? "" : "up to" }}
-          +{{ formatPercents(shardRarityBoost, 2) }}.
+          +{{ formatPercents(shardRarityBoost, 2) }}
+          <span v-if="shardPower > 1">
+            <br> and is raising Glyph Sacrifice gain to {{ formatPow(shardPower, 0, 2) }}
+          </span>
         </div>
         <div class="c-effarig-relic-description">
           You will gain {{ quantify("Relic Shard", shardsGained, 2) }} next Reality
@@ -145,19 +163,12 @@ export default {
         class="l-effarig-run"
       >
         <div class="c-effarig-run-description">
-          <div v-if="isRunning">
-            You are in Effarig's Reality - give up?
-          </div>
-          <br>
-          <span v-if="!isDoomed">
-            Enter Effarig's Reality, in which {{ runDescription }}
-          </span>
-          <span v-else>
-            You can't start Effarig's Reality, in which {{ runDescription }}
+          <span :class="{ 'o-pelle-disabled': isDoomed }">
+            Enter Effarig's Reality.
           </span>
         </div>
         <div
-          :class="['l-effarig-run-button', 'c-effarig-run-button', runButtonOuterClass]"
+          :class="runButtonOuterClass"
           @click="startRun"
         >
           <div
@@ -166,6 +177,9 @@ export default {
           >
             {{ symbol }}
           </div>
+        </div>
+        <div class="c-effarig-run-description">
+          {{ runDescription }}
         </div>
         <EffarigRunUnlockReward
           v-for="(unlock, i) in runUnlocks"

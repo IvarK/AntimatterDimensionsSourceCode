@@ -32,7 +32,7 @@ export class DimBoost {
         Achievement(117),
         Achievement(142),
         GlyphEffect.dimBoostPower,
-        PelleRifts.war.milestones[0]
+        PelleRifts.recursion.milestones[0]
       ).powEffectsOf(InfinityUpgrade.dimboostMult.chargedEffect);
     if (GlyphAlteration.isAdded("effarig")) boost = boost.pow(getSecondaryGlyphEffect("effarigforgotten"));
     return boost;
@@ -141,15 +141,15 @@ export class DimBoost {
     if (boosts >= DimBoost.maxDimensionsUnlockable - 1) dimensionRange = `to all Dimensions`;
 
     let boostEffects;
-    if (NormalChallenge(8).isRunning) boostEffects = newUnlock === "" ? "" : ` to ${newUnlock}`;
-    else if (newUnlock === "") boostEffects = ` to ${formattedMultText} ${dimensionRange}`;
-    else boostEffects = ` to ${newUnlock} and ${formattedMultText} ${dimensionRange}`;
+    if (NormalChallenge(8).isRunning) boostEffects = newUnlock;
+    else if (newUnlock === "") boostEffects = `${formattedMultText} ${dimensionRange}`;
+    else boostEffects = `${newUnlock} and ${formattedMultText} ${dimensionRange}`;
 
-    const areDimensionsReset = `Reset
-    ${((Perk.antimatterNoReset.isBought || Achievement(111).isUnlocked) &&
-      (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought)) ? "nothing" : "your Dimensions"}`;
-
-    return `${areDimensionsReset}${boostEffects}`;
+    if (boostEffects === "") return "Dimension Boosts are currently useless";
+    const areDimensionsKept = (Perk.antimatterNoReset.isBought || Achievement(111).canBeApplied) &&
+      (!Pelle.isDoomed || PelleUpgrade.dimBoostResetsNothing.isBought);
+    if (areDimensionsKept) return boostEffects[0].toUpperCase() + boostEffects.substring(1);
+    return `Reset your Dimensions to ${boostEffects}`;
   }
 
   static get purchasedBoosts() {
@@ -171,17 +171,18 @@ export function softReset(tempBulk, forcedNDReset = false, forcedAMReset = false
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
   player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
   resetChallengeStuff();
-  if (
-    forcedNDReset ||
-    !Perk.antimatterNoReset.isBought ||
-    (Pelle.isDoomed && !PelleUpgrade.dimBoostResetsNothing.canBeApplied)
-  ) {
+  const canKeepDimensions = Pelle.isDoomed
+    ? PelleUpgrade.dimBoostResetsNothing.canBeApplied
+    : Perk.antimatterNoReset.canBeApplied;
+  if (forcedNDReset || !canKeepDimensions) {
     AntimatterDimensions.reset();
     player.sacrificed = DC.D0;
     resetTickspeed();
   }
   skipResetsIfPossible();
-  const canKeepAntimatter = (Achievement(111).isUnlocked || Perk.antimatterNoReset.isBought) && !Pelle.isDoomed;
+  const canKeepAntimatter = Pelle.isDoomed
+    ? PelleUpgrade.dimBoostResetsNothing.canBeApplied
+    : (Achievement(111).isUnlocked || Perk.antimatterNoReset.canBeApplied);
   if (!forcedAMReset && canKeepAntimatter) {
     Currency.antimatter.bumpTo(Currency.antimatter.startingValue);
   } else {
@@ -198,6 +199,16 @@ export function skipResetsIfPossible() {
   } else if (InfinityUpgrade.skipReset3.isBought && player.dimensionBoosts < 3) player.dimensionBoosts = 3;
   else if (InfinityUpgrade.skipReset2.isBought && player.dimensionBoosts < 2) player.dimensionBoosts = 2;
   else if (InfinityUpgrade.skipReset1.isBought && player.dimensionBoosts < 1) player.dimensionBoosts = 1;
+}
+
+export function manualRequestDimensionBoost(bulk) {
+  if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
+  if (!DimBoost.canBeBought) return;
+  if (player.options.confirmations.dimensionBoost) {
+    Modal.dimensionBoost.show({ bulk });
+    return;
+  }
+  requestDimensionBoost(bulk);
 }
 
 export function requestDimensionBoost(bulk) {

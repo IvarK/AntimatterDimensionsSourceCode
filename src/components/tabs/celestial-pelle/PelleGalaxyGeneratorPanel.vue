@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import PelleUpgrade from "./PelleUpgrade";
 
 export default {
@@ -17,7 +19,8 @@ export default {
       capRift: null,
       sacrificeActive: false,
       isCollapsed: false,
-      barWidth: 0
+      barWidth: 0,
+      capRiftName: "",
     };
   },
   computed: {
@@ -33,6 +36,12 @@ export default {
       let text = format(Math.max(this.galaxies, 0), 2);
       if (this.galaxies < 0) text += ` [${format(this.galaxies, 2)}]`;
       return text;
+    },
+    sacrificeText() {
+      return this.capRift.galaxyGeneratorText.replace("$value", this.capRiftName);
+    },
+    emphasisedStart() {
+      return Math.pow(this.generatedGalaxies / this.cap, 0.45);
     }
   },
   methods: {
@@ -47,7 +56,8 @@ export default {
       this.cap = GalaxyGenerator.generationCap;
       this.capRift = GalaxyGenerator.capRift;
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
-      this.barWidth = (this.isCapped ? this.capRift.reducedTo : this.generatedGalaxies / this.cap);
+      this.barWidth = (this.isCapped ? this.capRift.reducedTo : this.emphasisedStart);
+      if (this.capRift) this.capRiftName = wordShift.wordCycle(this.capRift.name);
     },
     increaseCap() {
       if (GalaxyGenerator.isCapped) GalaxyGenerator.startSacrifice();
@@ -57,7 +67,7 @@ export default {
     },
     unlock() {
       player.celestials.pelle.galaxyGenerator.unlocked = true;
-      Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_UNLOCK);
+      Pelle.quotes.galaxyGeneratorUnlock.show();
     }
   },
 };
@@ -67,6 +77,7 @@ export default {
   <div class="l-pelle-panel-container">
     <div class="c-pelle-panel-title">
       <i
+        v-if="!isCapped"
         :class="collapseIcon"
         class="c-collapse-icon-clickable"
         @click="toggleCollapse"
@@ -88,7 +99,7 @@ export default {
           <button
             class="c-increase-cap"
             :class="{
-              'c-increase-cap-available': isCapped && capRift,
+              'c-increase-cap-available': isCapped && capRift && !sacrificeActive,
               'tutorial--glow': cap === Infinity
             }"
             @click="increaseCap"
@@ -101,18 +112,18 @@ export default {
               v-if="isCapped && capRift"
               class="c-increase-cap-text"
             >
-              To generate more Galaxies, you need to get rid of all that {{ capRift.name }}. <br><br>
+              {{ sacrificeText }}. <br><br>
               <span
                 v-if="!sacrificeActive"
                 class="c-big-text"
               >
-                Sacrifice your {{ capRift.name }}
+                Sacrifice your {{ capRiftName }}
               </span>
               <span
                 v-else
                 class="c-big-text"
               >
-                Getting rid of all that {{ capRift.name }}...
+                Getting rid of all that {{ capRiftName }}...
               </span>
             </div>
             <div
@@ -144,34 +155,14 @@ export default {
 </template>
 
 <style scoped>
-.c-pelle-panel-title {
-  position: relative;
-  font-size: 3rem;
-  font-weight: bold;
-  color: var(--color-pelle--base);
-}
-
 .c-collapse-icon-clickable {
   position: absolute;
   top: 50%;
   left: 1.5rem;
+  width: 3rem;
+  align-content: center;
   transform: translateY(-50%);
   cursor: pointer;
-}
-
-.l-pelle-panel-container {
-  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
-  border-radius: var(--var-border-radius, 0.2rem);
-  margin: 1rem;
-  padding: 1rem;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.l-pelle-content-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .c-generator-unlock-button {
@@ -216,15 +207,18 @@ export default {
   position: relative;
   font-family: Typewriter;
   font-size: 1.1rem;
-  color: white;
-  background-color: #004b55;
+  color: var(--color-text);
+  background-color: #c1eaf0;
   border: var(--var-border-width, 0.1rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
+  /* box-shadow is here to prevent a weird grey border forming around the background */
   box-shadow: inset 0 0 0.1rem 0.1rem var(--color-pelle--base);
   margin: 1rem;
   padding: 2rem;
+}
 
-  /* box-shadow is here to prevent a weird grey border forming around the background */
+.s-base--dark .c-increase-cap {
+  background-color: #004b55;
 }
 
 .c-increase-cap:hover {
@@ -247,17 +241,25 @@ export default {
   top: 0;
   left: 0;
   z-index: 0;
-  background: linear-gradient(black, var(--color-pelle--base));
+  background: linear-gradient(var(--color-text-inverted), var(--color-pelle--base));
   transition: width 0.1s;
 }
 
 .c-big-text {
-  font-size: 3rem;
+  font-size: 2.5rem;
+  text-shadow: 0.2rem 0.2rem 0.2rem #888888;
+}
+
+.s-base--dark .c-big-text {
   text-shadow: 0.2rem 0.2rem 0.2rem black;
 }
 
 .c-medium-text {
   font-size: 2rem;
+  text-shadow: 0.2rem 0.2rem 0.2rem #888888;
+}
+
+.s-base--dark .c-medium-text {
   text-shadow: 0.2rem 0.2rem 0.2rem black;
 }
 </style>

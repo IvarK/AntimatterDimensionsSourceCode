@@ -1,10 +1,19 @@
 <script>
+import { EternityChallenge } from "../../javascripts/core/eternity_challenge";
+
 export default {
   name: "GameSpeedDisplay",
+  props: {
+    isStandalone: {
+      type: Boolean,
+      required: true
+    }
+  },
   data() {
     return {
       baseSpeed: 0,
       pulsedSpeed: 0,
+      hasSeenAlteredSpeed: false,
       isStopped: false,
       isEC12: false,
       isPulsing: false,
@@ -23,14 +32,22 @@ export default {
     },
     pulseSpeedText() {
       return `${this.formatNumber(this.pulsedSpeed)}`;
+    },
+    standaloneText() {
+      if (!this.hasSeenAlteredSpeed) return null;
+      return this.baseSpeed === 1
+        ? "The game is running at normal speed."
+        : `The game is running at a different speed than normal: ${this.baseSpeedText}`;
     }
   },
   methods: {
     update() {
       this.baseSpeed = getGameSpeedupFactor();
       this.pulsedSpeed = getGameSpeedupForDisplay();
+      const ec12 = EternityChallenge(12);
+      this.hasSeenAlteredSpeed = PlayerProgress.realityUnlocked() || ec12.completions > 0 || ec12.isRunning;
       this.isStopped = Enslaved.isStoringRealTime;
-      this.isEC12 = EternityChallenge(12).isRunning;
+      this.isEC12 = ec12.isRunning;
       this.isPulsing = (this.baseSpeed !== this.pulsedSpeed) && Enslaved.canRelease(true);
     },
     formatNumber(num) {
@@ -48,7 +65,12 @@ export default {
 
 <template>
   <span>
-    | Game speed: {{ baseSpeedText }}
+    <span v-if="isStandalone">
+      {{ standaloneText }}
+    </span>
+    <span v-else-if="baseSpeed !== 1">
+      | Game speed: {{ baseSpeedText }}
+    </span>
     <span v-if="isPulsing">(<i class="fas fa-expand-arrows-alt u-fa-padding" /> {{ pulseSpeedText }})</span>
   </span>
 </template>

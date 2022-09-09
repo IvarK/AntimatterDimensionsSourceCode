@@ -65,10 +65,11 @@ export class ScriptTemplate {
     if (params.treePreset) {
       const presetObj = player.timestudy.presets.map((p, i) => ({ ...p, id: i + 1 }))
         .find(p => (p.name === params.treePreset || p.id === Number(params.treePreset)));
-      this.storedTreeStr = `studies${nowaitStr} load preset ${presetObj.name || presetObj.id}`;
+      const preset = presetObj.name ? `name ${presetObj.name}` : `id ${presetObj.id}`;
+      this.storedTreeStr = `studies${nowaitStr} load ${preset}`;
       this.storedTreeObj = new TimeStudyTree(presetObj.studies);
     } else {
-      this.storedTreeStr = `studies${nowaitStr} ${params.treeStudies}`;
+      this.storedTreeStr = `studies${nowaitStr} purchase ${params.treeStudies}`;
       this.storedTreeObj = new TimeStudyTree(params.treeStudies);
     }
     if (this.storedTreeObj.invalidStudies.length > 0) this.warnings.push("Tree contains invalid Study IDs");
@@ -234,7 +235,7 @@ export class ScriptTemplate {
     }
     this.lines.push(`auto infinity off`);
     this.lines.push(`auto eternity ${this.parseAutobuyerProp(params.autoEterMode, params.autoEterValue)}`);
-    this.lines.push(`while tt < ${this.format(TimeStudy.dilation.totalTimeTheoremRequirement)} {`);
+    this.lines.push(`while total tt < ${this.format(TimeStudy.dilation.totalTimeTheoremRequirement)} {`);
     this.lines.push(` ${this.storedTreeStr}`);
     this.lines.push(" studies respec");
     this.lines.push(" wait eternity");

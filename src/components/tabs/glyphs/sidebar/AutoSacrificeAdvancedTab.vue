@@ -37,7 +37,11 @@ export default {
       };
     },
     questionmarkTooltip() {
-      return "The score of a glyph is its rarity % plus the specified amount for each effect it has";
+      return "The score of a glyph is its rarity percentage, plus the specified amount for each effect it has.";
+    },
+    // This is an absolute value limit (ie. it's allowed to go negative down to negative this value)
+    weightInputLimit() {
+      return 999;
     }
   },
   created() {
@@ -50,16 +54,19 @@ export default {
         this.effectScores[e.id] = this.autoSacrificeSettings.effectScores[e.id];
       }
     },
+    limitedInput(input) {
+      return Math.clamp(input, -this.weightInputLimit, this.weightInputLimit);
+    },
     setScoreThreshold(event) {
       const inputValue = event.target.value;
       if (!isNaN(inputValue)) {
-        this.autoSacrificeSettings.scoreThreshold = Math.min(999, Math.max(inputValue, 0));
+        this.autoSacrificeSettings.scoreThreshold = this.limitedInput(inputValue);
       }
     },
     setEffectScore(id, event) {
       const inputValue = event.target.value;
       if (!isNaN(inputValue)) {
-        this.autoSacrificeSettings.effectScores[id] = Math.min(999, Math.max(inputValue, 0));
+        this.autoSacrificeSettings.effectScores[id] = this.limitedInput(inputValue);
       }
     },
   }
@@ -70,19 +77,19 @@ export default {
   <div class="l-auto-sac-type-tab">
     <div class="l-auto-sac-type-tab__row-wrapper">
       <div>
-        <b>Threshold score</b> (rarity % + effects)
         <div
           :ach-tooltip="questionmarkTooltip"
           class="o-questionmark"
         >
           ?
         </div>
+        <b> Threshold score</b> (rarity % + effect scores)
       </div>
       <input
         ref="scoreThreshold"
         type="number"
-        min="0"
-        max="999"
+        :min="-weightInputLimit"
+        :max="weightInputLimit"
         class="c-auto-sac-type-tab__input"
         :value="scoreThreshold"
         :style="minScoreInputStyle"
@@ -98,12 +105,12 @@ export default {
         class="c-auto-sac-type-tab__effect-desc l-auto-sac-type-tab__effect-desc"
         :style="descStyle"
       >
-        {{ typeof effect.genericDesc === "function" ? effect.genericDesc() : effect.genericDesc }}
+        {{ effect.genericDesc }}
       </div>
       <input
         type="number"
-        min="0"
-        max="999"
+        :min="-weightInputLimit"
+        :max="weightInputLimit"
         class="c-auto-sac-type-tab__input"
         :value="effectScores[effect.id]"
         @blur="setEffectScore(effect.id, $event)"

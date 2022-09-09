@@ -25,7 +25,6 @@ export default {
   },
   data() {
     return {
-      isUseless: false,
       isBought: false,
       isCapped: false,
       isAffordable: false,
@@ -33,34 +32,42 @@ export default {
       isAutobuyerOn: false,
       boughtAmount: 0,
       currentDT: new Decimal(0),
+      currentDTGain: new Decimal(0),
     };
   },
   computed: {
     classObject() {
+      if (this.isUseless) {
+        return {
+          "o-dilation-upgrade": true,
+          "o-dilation-upgrade--useless": true,
+          "o-pelle-disabled-pointer": true
+        };
+      }
       return {
         "o-dilation-upgrade": true,
         "o-dilation-upgrade--rebuyable": this.isRebuyable,
-        "o-dilation-upgrade--useless-available": this.isUseless && !this.isBought && this.isAffordable,
-        "o-dilation-upgrade--useless-unavailable": this.isUseless && !this.isBought && !this.isAffordable,
-        "o-dilation-upgrade--useless-bought": this.isUseless && this.isBought,
-        "o-dilation-upgrade--available": !this.isUseless && !this.isBought && !this.isCapped && this.isAffordable,
-        "o-dilation-upgrade--unavailable": !this.isUseless && !this.isBought && !this.isCapped && !this.isAffordable,
-        "o-dilation-upgrade--bought": !this.isUseless && this.isBought,
+        "o-dilation-upgrade--available": !this.isBought && !this.isCapped && this.isAffordable,
+        "o-dilation-upgrade--unavailable": !this.isBought && !this.isCapped && !this.isAffordable,
+        "o-dilation-upgrade--bought": this.isBought,
         "o-dilation-upgrade--capped": this.isCapped,
       };
     },
     timeEstimate() {
-      if (this.isAffordable || this.isCapped || this.upgrade.isBought || getDilationGainPerSecond().eq(0)) return null;
-      if (PelleRifts.death.isActive) {
+      if (this.isAffordable || this.isCapped || this.upgrade.isBought || this.currentDTGain.eq(0)) return null;
+      if (PelleRifts.paradox.isActive) {
         const drain = Pelle.riftDrainPercent;
-        const rawDTGain = getDilationGainPerSecond().times(getGameSpeedupForDisplay());
+        const rawDTGain = this.currentDTGain.times(getGameSpeedupForDisplay());
         const goalNetRate = rawDTGain.minus(Decimal.multiply(this.upgrade.cost, drain));
         const currNetRate = rawDTGain.minus(this.currentDT.multiply(drain));
         if (goalNetRate.lt(0)) return "Never affordable due to Rift drain";
         return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln() / drain).toTimeEstimate();
       }
       return TimeSpan.fromSeconds(Decimal.sub(this.upgrade.cost, this.currentDT)
-        .div(getDilationGainPerSecond().times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
+        .div(this.currentDTGain.times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
+    },
+    isUseless() {
+      return Pelle.isDoomed && this.upgrade.id === 7;
     }
   },
   watch: {
@@ -72,6 +79,7 @@ export default {
     update() {
       const upgrade = this.upgrade;
       this.currentDT.copyFrom(Currency.dilatedTime.value);
+      this.currentDTGain.copyFrom(getDilationGainPerSecond());
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;
@@ -86,7 +94,6 @@ export default {
       if (!this.isBought) {
         this.isAffordable = upgrade.isAffordable;
       }
-      this.isUseless = (upgrade.id === 7) && Pelle.isDoomed;
     }
   }
 };
@@ -99,16 +106,14 @@ export default {
       :class="classObject"
       @click="upgrade.purchase()"
     >
-      <span v-if="isUseless">
-        This upgrade has no effect while in Doomed
-      </span>
-      <span v-else>
+      <span :class="{ 'o-pelle-disabled': isUseless }">
         <DescriptionDisplay
           :config="upgrade.config"
           :length="70"
           name="o-dilation-upgrade__description"
         />
         <EffectDisplay
+          :key="boughtAmount"
           br
           :config="upgrade.config"
         />

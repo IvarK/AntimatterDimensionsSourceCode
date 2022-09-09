@@ -13,21 +13,10 @@ export default {
       isDoomed: false,
       canPeek: false,
       isVisible: false,
-      canRefresh: false,
       canSacrifice: false,
     };
   },
   created() {
-    // This refreshes the glyphs shown after every reality, and also doesn't
-    // allow it to refresh if you're choosing glyphs (at that point,
-    // your choices are your choices). This is technically incorrect since
-    // while you're choosing glyphs the level might increase, and this code
-    // stops it from increasing in the glyphs shown here, but with
-    // the glyph choice popup open, you can't see the tooltips, so there's
-    // no way for the player to notice that.
-    this.on$(GAME_EVENT.GLYPH_CHOICES_GENERATED, () => {
-      this.canRefresh = false;
-    });
     this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.refreshGlyphs);
     this.refreshGlyphs();
   },
@@ -39,7 +28,7 @@ export default {
       // and due to pre-selected first glyph might well be incorrect anyway.
       this.isVisible = PlayerProgress.realityUnlocked() && TimeStudy.reality.isBought;
       this.canPeek = PlayerProgress.realityUnlocked();
-      if (this.canRefresh && gainedGlyphLevel().actualLevel !== this.level) {
+      if (gainedGlyphLevel().actualLevel !== this.level) {
         this.refreshGlyphs();
       }
     },
@@ -82,6 +71,7 @@ export default {
         :ignore-modified-level="true"
         :show-sacrifice="canSacrifice"
         :flip-tooltip="true"
+        :sort="false"
       />
       (Click to bring up details)
     </div>

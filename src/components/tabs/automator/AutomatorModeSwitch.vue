@@ -32,7 +32,7 @@ export default {
       return {
         "tutorial--glow": ui.view.tutorialState === TUTORIAL_STATE.AUTOMATOR && ui.view.tutorialActive
       };
-    }
+    },
   },
   created() {
     this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
@@ -54,32 +54,34 @@ export default {
         this.currentScriptID = Object.keys(storedScripts)[0];
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
-      if (AutomatorData.currentErrors().length !== 0 && player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
-        Modal.message.show(`Switched to text editor mode; this script has errors
-          which cannot be converted to block mode.`);
-        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
+      if (BlockAutomator.hasUnparsableCommands(this.currentScript) &&
+        player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
+        Modal.message.show(`Some script commands were unrecognizable - defaulting to text editor.`);
+        AutomatorBackend.changeModes(this.currentScriptID);
       }
       this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
     },
     toggleAutomatorMode() {
-      if (AutomatorBackend.state.mode === AUTOMATOR_MODE.PAUSE || !player.options.confirmations.switchAutomatorMode) {
-        const scriptID = this.currentScriptID;
-        Tutorial.moveOn(TUTORIAL_STATE.AUTOMATOR);
-        if (this.automatorType === AUTOMATOR_TYPE.BLOCK) {
-          // This saves the script after converting it.
-          BlockAutomator.parseTextFromBlocks();
-          player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-        } else if (BlockAutomator.fromText(this.currentScriptContent)) {
-          AutomatorBackend.saveScript(scriptID, AutomatorTextUI.editor.getDoc().getValue());
-          player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
-        } else {
-          Modal.message.show("Automator script has errors, cannot convert to blocks.");
-        }
-        this.$recompute("currentScriptContent");
-      } else {
+      const currScript = player.reality.automator.scripts[this.currentScriptID].content;
+      const hasTextErrors = this.automatorType === AUTOMATOR_TYPE.TEXT &&
+        (BlockAutomator.hasUnparsableCommands(currScript) || AutomatorData.currentErrors().length !== 0);
+
+      // While we normally have the player option override the modal, script deletion due to failed parsing can have a
+      // big enough adverse impact on the gameplay experience that we force the modal here regardless of the setting
+      if (hasTextErrors || (player.options.confirmations.switchAutomatorMode && AutomatorBackend.isRunning)) {
+        const blockified = AutomatorGrammar.blockifyTextAutomator(currScript);
+
+        // We explicitly pass in 0 for lostBlocks if converting from block to text since nothing is ever lost in that
+        // conversion direction
+        const lostBlocks = this.automatorType === AUTOMATOR_TYPE.TEXT
+          ? blockified.validatedBlocks - blockified.visitedBlocks
+          : 0;
         Modal.switchAutomatorEditorMode.show({
-          callBack: () => this.$recompute("currentScriptContent")
+          callBack: () => this.$recompute("currentScriptContent"),
+          lostBlocks,
         });
+      } else {
+        AutomatorBackend.changeModes(this.currentScriptID);
       }
     }
   }
@@ -87,23 +89,21 @@ export default {
 </script>
 
 <template>
-  <div class="c-automator__controls l-automator__controls">
-    <button
-      v-tooltip="{
-        content: automatorModeTooltip,
-        hideOnTargetClick: false
-      }"
-      :class="{
-        'c-slider-toggle-button': true,
-        'c-slider-toggle-button--right': isTextAutomator,
-        ...tutorialClass
-      }"
-      @click="toggleAutomatorMode"
-    >
-      <i class="fas fa-cubes" />
-      <i class="fas fa-code" />
-    </button>
-  </div>
+  <button
+    v-tooltip="{
+      content: automatorModeTooltip,
+      hideOnTargetClick: false
+    }"
+    :class="{
+      'c-slider-toggle-button': true,
+      'c-slider-toggle-button--right': isTextAutomator,
+      ...tutorialClass
+    }"
+    @click="toggleAutomatorMode"
+  >
+    <i class="fas fa-cubes" />
+    <i class="fas fa-code" />
+  </button>
 </template>
 
 <style scoped>
@@ -112,11 +112,11 @@ export default {
   overflow: hidden;
   position: relative;
   align-items: center;
-  color: black;
+  color: var(--color-automator-docs-font);
   background-color: #626262;
-  border: 0.2rem solid #767676;
-  border-radius: 0.2rem;
-  margin: 0.2rem 0.4rem;
+  border: var(--var-border-width, 0.2rem) solid #767676;
+  border-radius: var(--var-border-radius, 0.3rem);
+  margin: 0.2rem 0.4rem 0.2rem auto;
   padding: 0.3rem 0;
   cursor: pointer;
 }
@@ -135,14 +135,14 @@ export default {
   top: 0;
   left: 0;
   z-index: 0;
-  background-color: white;
-  border-radius: 0.2rem;
+  background-color: var(--color-automator-controls-inactive);
+  border-radius: var(--var-border-radius, 0.3rem);
   transition: 0.3s ease all;
 }
 
 .c-slider-toggle-button--right::before {
   left: 3rem;
-  background-color: white;
+  background-color: var(--color-automator-controls-inactive);
 }
 
 .tutorial--glow::after {

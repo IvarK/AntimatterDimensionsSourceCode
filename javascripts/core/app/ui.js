@@ -115,13 +115,13 @@ export const GameUI = {
   touchDevice: ("ontouchstart" in window ||
     window.navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0 ||
     (window.DocumentTouch && document instanceof DocumentTouch)),
-  dispatch(event) {
+  dispatch(event, args) {
     const index = this.events.indexOf(event);
     if (index !== -1) {
       this.events.splice(index, 1);
     }
     if (event !== GAME_EVENT.UPDATE) {
-      this.events.push(event);
+      this.events.push([event, args]);
     }
     if (this.flushPromise) return;
     this.flushPromise = Promise.resolve()
@@ -134,7 +134,7 @@ export const GameUI = {
       PerformanceStats.start("Vue Update");
     }
     for (const event of this.events) {
-      EventHub.ui.dispatch(event);
+      EventHub.ui.dispatch(event[0], event[1]);
     }
     EventHub.ui.dispatch(GAME_EVENT.UPDATE);
     ReactivityComplainer.complain();

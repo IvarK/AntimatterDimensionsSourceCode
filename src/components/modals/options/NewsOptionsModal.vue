@@ -2,13 +2,15 @@
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 import PrimaryButton from "@/components/PrimaryButton";
+import SliderComponent from "@/components/SliderComponent";
 
 export default {
   name: "NewsOptionsModal",
   components: {
     ModalOptionsToggleButton,
-    PrimaryButton,
     ModalWrapperOptions,
+    PrimaryButton,
+    SliderComponent
   },
   data() {
     return {
@@ -22,7 +24,34 @@ export default {
   computed: {
     newsOnOffLabel() {
       return `News: ${this.enabled ? "On" : "Off"}`;
-    }
+    },
+    sliderPropsRepeatBuffer() {
+      return {
+        min: 0,
+        max: 80,
+        interval: 1,
+        width: "98%",
+        tooltip: false
+      };
+    },
+    sliderPropsAIChance() {
+      return {
+        min: 0,
+        max: 1,
+        interval: 0.01,
+        width: "98%",
+        tooltip: false
+      };
+    },
+    sliderPropsSpeed() {
+      return {
+        min: 0.5,
+        max: 2,
+        interval: 0.01,
+        width: "98%",
+        tooltip: false
+      };
+    },
   },
   watch: {
     type(newValue) {
@@ -49,8 +78,20 @@ export default {
       this.AIChance = options.AIChance;
       this.speed = options.speed;
       this.includeAnimated = options.includeAnimated;
+    },
+    adjustSliderValueRepeatBuffer(value) {
+      this.repeatBuffer = value;
+      player.options.repeatBuffer = this.repeatBuffer;
+    },
+    adjustSliderValueAIChance(value) {
+      this.AIChance = value;
+      player.options.AIChance = this.AIChance;
+    },
+    adjustSliderValueSpeed(value) {
+      this.speed = value;
+      player.options.speed = this.speed;
     }
-  },
+  }
 };
 </script>
 
@@ -67,36 +108,30 @@ export default {
     </PrimaryButton>
     <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
       <b>{{ formatInt(parseInt(repeatBuffer)) }} message repeat buffer</b>
-      <input
-        v-model="repeatBuffer"
+      <SliderComponent
         class="o-primary-btn--slider__slider"
-        type="range"
-        min="0"
-        step="1"
-        max="80"
-      >
+        v-bind="sliderPropsRepeatBuffer"
+        :value="repeatBuffer"
+        @input="adjustSliderValueRepeatBuffer($event)"
+      />
     </div>
     <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
       <b>{{ formatPercents(parseFloat(AIChance)) }} AI messages</b>
-      <input
-        v-model="AIChance"
+      <SliderComponent
         class="o-primary-btn--slider__slider"
-        type="range"
-        min="0"
-        step="0.01"
-        max="1"
-      >
+        v-bind="sliderPropsAIChance"
+        :value="AIChance"
+        @input="adjustSliderValueAIChance($event)"
+      />
     </div>
     <div class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider">
       <b>{{ formatPercents(parseFloat(speed)) }} scroll speed</b>
-      <input
-        v-model="speed"
+      <SliderComponent
         class="o-primary-btn--slider__slider"
-        type="range"
-        min="0.5"
-        step="0.01"
-        max="2"
-      >
+        v-bind="sliderPropsSpeed"
+        :value="speed"
+        @input="adjustSliderValueSpeed($event)"
+      />
     </div>
     <ModalOptionsToggleButton
       v-model="includeAnimated"

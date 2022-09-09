@@ -99,8 +99,8 @@ export default {
       }
     },
     scrollToLine(line) {
-      AutomatorTextUI.scrollToLine(line);
-      AutomatorTextUI.updateHighlightedLine(line, "Event");
+      AutomatorScroller.scrollToLine(line);
+      AutomatorHighlighter.updateHighlightedLine(line, LineEnum.Event);
     }
   }
 };
@@ -117,7 +117,13 @@ const AUTOMATOR_EVENT_TIMESTAMP_MODE = {
 <template>
   <div class="c-automator-docs-page">
     <div>
-      <i>Note: These are not saved and disappear on refresh</i>
+      This panel keeps a running event log of all the commands which the automator has recently executed, with a little
+      extra info on some of the commands. It may be useful to help you find problems if you find your automator is
+      getting stuck in certain spots.
+      <br>
+      <br>
+      While your settings are kept within your savefile, the actual events are not and will disappear on refresh.
+      <br>
       <br>
       <b>Entry Sorting:</b>
       <button

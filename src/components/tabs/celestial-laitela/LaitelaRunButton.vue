@@ -1,32 +1,41 @@
 <script>
+import GlyphSetPreview from "@/components/GlyphSetPreview";
+
 export default {
   name: "LaitelaRunButton",
+  components: {
+    GlyphSetPreview
+  },
   data() {
     return {
-      isDoomed: false,
       realityTime: 0,
       maxDimTier: 0,
       isRunning: false,
       realityReward: 1,
       singularitiesUnlocked: false,
+      bestSet: [],
     };
   },
   computed: {
     completionTime() {
       return TimeSpan.fromSeconds(this.realityTime).toStringShort();
     },
+    runEffects() {
+      return GameDatabase.celestials.descriptions[5].effects().split("\n");
+    },
     runDescription() {
-      return GameDatabase.celestials.descriptions[5].description().split("\n");
-    }
+      return GameDatabase.celestials.descriptions[5].description();
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.realityTime = player.celestials.laitela.fastestCompletion;
       this.maxDimTier = Laitela.maxAllowedDimension;
       this.realityReward = Laitela.realityReward;
       this.isRunning = Laitela.isRunning;
       this.singularitiesUnlocked = Currency.singularities.gt(0);
+      this.bestSet = Glyphs.copyForRecords(player.records.bestReality.laitelaSet);
     },
     startRun() {
       if (this.isDoomed) return;
@@ -42,6 +51,8 @@ export default {
       return {
         "o-laitela-run-button__icon": true,
         "o-laitela-run-button__icon--running": this.isRunning,
+        "c-celestial-run-button--clickable": !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed
       };
     },
   }
@@ -50,8 +61,9 @@ export default {
 
 <template>
   <button :class="classObject()">
-    <span v-if="isDoomed"><b>You can't start Lai'tela's Reality</b></span>
-    <span v-else><b>Start Lai'tela's Reality</b></span>
+    <span :class="{ 'o-pelle-disabled': isDoomed }">
+      <b>Start Lai'tela's Reality</b>
+    </span>
     <div
       :class="runButtonClassObject()"
       @click="startRun"
@@ -67,6 +79,14 @@ export default {
         <span v-if="maxDimTier <= 7">
           Highest active dimension: {{ formatInt(maxDimTier) }}
         </span>
+        <br><br>
+        Glyph Set:
+        <GlyphSetPreview
+          text="Fastest Destabilization Glyph Set"
+          :text-hidden="true"
+          :force-name-color="false"
+          :glyphs="bestSet"
+        />
       </span>
       <span v-else>
         <br>
@@ -79,10 +99,12 @@ export default {
       <br><br>
     </div>
     <div
-      v-for="(line, lineId) in runDescription"
+      v-for="(line, lineId) in runEffects"
       :key="lineId + '-laitela-run-desc'"
     >
       {{ line }} <br>
     </div>
+    <br>
+    <div>{{ runDescription }}</div>
   </button>
 </template>

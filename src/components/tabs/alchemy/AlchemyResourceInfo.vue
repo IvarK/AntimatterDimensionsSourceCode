@@ -14,7 +14,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       amount: 0,
       cap: 0,
       capped: false,
@@ -43,7 +42,7 @@ export default {
       const reagents = this.reaction.reagents
         .map(r => `${format(r.cost)}${r.resource.symbol}`)
         .join(" + ");
-      return `${reagents} ➜ ${format(this.reaction.reactionProduction, 2, 2)}${this.resource.symbol}`;
+      return `${reagents} ➜ ${format(this.reactionProduction, 2, 2)}${this.resource.symbol}`;
     },
     realityReactionText() {
       const reagents = this.reaction.reagents
@@ -70,11 +69,11 @@ export default {
       const resourceText = `${sign}${format(Math.abs(this.flow), 2, 2)}/sec`;
       const color = this.flow > 0 ? "9CCC65" : "CC6666";
       return `<span style="color:#${color}">${resourceText}</span>`;
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       const resource = this.resource;
       this.amount = resource.amount;
       this.cap = resource.cap;
@@ -83,8 +82,8 @@ export default {
       this.isUnlocked = resource.isUnlocked;
       this.unlockRequirement = resource.lockText;
       if (!this.isBaseResource) {
-        this.isReactionActive = this.reaction.isActive;
-        this.reactionProduction = this.reaction.production;
+        this.isReactionActive = !this.isDoomed && this.reaction.isActive;
+        this.reactionProduction = this.reaction.reactionProduction;
       }
     }
   }
@@ -99,14 +98,16 @@ export default {
     <span class="c-alchemy-resource-info__title">
       {{ resource.symbol }} {{ resource.name }} {{ resource.symbol }}
     </span>
-    <span>
+    <span v-if="isDoomed">
+      Destroyed by Pelle
+    </span>
+    <span v-else>
       {{ capped ? "Capped" : "Current" }}: {{ resourceAmount }}/{{ resourceCap }}
       (Recent change: <span v-html="formattedFlow" />)
     </span>
     <span v-if="isBaseResource">Base Resource</span>
     <span v-else>Reaction: {{ isReactionActive ? "Active" : "Inactive" }} ({{ reactionText }})</span>
-    <span v-if="isDoomed">Alchemy effects are disabled while in Doomed</span>
-    <span v-else>
+    <span :class="{ 'o-pelle-disabled': isDoomed }">
       <EffectDisplay
         label="Effect"
         :config="effectConfig"

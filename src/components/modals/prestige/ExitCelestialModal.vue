@@ -8,11 +8,8 @@ export default {
   },
   data() {
     return {
-      isRestarting: false,
+      isRestarting: false
     };
-  },
-  created() {
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
     update() {
@@ -20,7 +17,8 @@ export default {
     },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>
@@ -31,7 +29,7 @@ export default {
     @confirm="handleYesClick"
   >
     <template #header>
-      You are about to exit a Celestial Reality
+      You are about to {{ isRestarting ? "restart" : "exit" }} a Celestial Reality
     </template>
 
     <div class="c-modal-message__text">

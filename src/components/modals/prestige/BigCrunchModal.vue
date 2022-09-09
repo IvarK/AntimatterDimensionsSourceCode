@@ -1,6 +1,7 @@
 <script>
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
+// Note: This modal only shows up on the first infinity and post-break infinities; it won't appear pre-break otherwise
 export default {
   name: "BigCrunchModal",
   components: {
@@ -9,20 +10,25 @@ export default {
   data() {
     return {
       gainedInfinities: new Decimal(),
-      gainedInfinityPoints: new Decimal(),
+      gainedInfinityPoints: new Decimal()
     };
   },
   computed: {
-    message() {
-      return `Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter Galaxies are reset. You will gain
-      ${quantify("Infinity Point", this.gainedInfinityPoints, 2, 2)}
-      and ${quantify("Infinity", this.gainedInfinities)}.`;
+    isFirstInfinity() {
+      return !PlayerProgress.infinityUnlocked();
     },
-  },
-  created() {
-    this.$on(GAME_EVENT.INFINITY_RESET_AFTER, this.emitClose);
-    this.$on(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.$on(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
+    message() {
+      const info = this.isFirstInfinity ? this.firstIntinityInfo : this.ipGainInfo;
+      return `Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter Galaxies are reset. ${info}`;
+    },
+    firstIntinityInfo() {
+      return `In return, you gain an Infinity Point (IP). This allows you to buy multiple upgrades that you can
+        find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the Statistics tab.`;
+    },
+    ipGainInfo() {
+      return `You will gain ${quantify("Infinity Point", this.gainedInfinityPoints, 2, 2)}
+        and ${quantify("Infinity", this.gainedInfinities)}.`;
+    }
   },
   methods: {
     update() {
@@ -31,14 +37,20 @@ export default {
     },
     handleYesClick() {
       bigCrunchResetRequest();
-    },
+      EventHub.ui.offAll(this);
+      if (this.isFirstInfinity) {
+        setTimeout(() => Modal.message.show(`This animation will occur after every manually-triggered Infinity. If
+          you would like to disable it, there is a setting to do so in the Options tab. This can be done for any
+          visual animation effect in the game after seeing it for the first time.`, {}, 3), 2000);
+      }
+    }
   },
 };
 </script>
 
 <template>
   <ModalWrapperChoice
-    option="bigCrunch"
+    :option="isFirstInfinity ? undefined : 'bigCrunch'"
     @confirm="handleYesClick"
   >
     <template #header>

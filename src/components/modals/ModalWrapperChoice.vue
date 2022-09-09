@@ -35,6 +35,16 @@ export default {
       type: String,
       required: false,
       default: undefined
+    },
+    confirmFn: {
+      type: Function,
+      required: false,
+      default: undefined
+    },
+    cancelFn: {
+      type: Function,
+      required: false,
+      default: undefined
     }
   },
   created() {
@@ -42,12 +52,18 @@ export default {
   },
   methods: {
     doConfirm() {
-      this.$emit("confirm");
-      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+      if (this.confirmFn) this.confirmFn();
+      else {
+        this.$emit("confirm");
+        EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+      }
     },
     doCancel() {
-      this.$emit("cancel");
-      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+      if (this.cancelFn) this.cancelFn();
+      else {
+        this.$emit("cancel");
+        EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+      }
     },
     closeModal() {
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
@@ -60,7 +76,10 @@ export default {
   <div class="c-modal-message l-modal-content--centered">
     <span class="c-modal__header">
       <ModalCloseButton @click="closeModal" />
-      <span class="c-modal__title">
+      <span
+        v-if="$slots.header"
+        class="c-modal__title"
+      >
         <slot name="header" />
       </span>
     </span>

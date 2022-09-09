@@ -47,7 +47,10 @@ export default {
       class="c-game-ui"
     >
       <component :is="uiLayout">
-        <component :is="page" />
+        <component
+          :is="page"
+          class="c-game-tab"
+        />
       </component>
       <link
         v-if="view.theme !== 'Normal'"

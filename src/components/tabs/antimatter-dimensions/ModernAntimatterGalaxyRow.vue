@@ -80,12 +80,7 @@ export default {
     },
     buyGalaxy(bulk) {
       if (!this.canBeBought) return;
-      if (player.options.confirmations.antimatterGalaxy) {
-        const buyBulk = this.canBulkBuy && bulk;
-        Modal.antimatterGalaxy.show({ bulk: buyBulk });
-        return;
-      }
-      requestGalaxyReset(bulk);
+      manualRequestGalaxyReset(this.canBulkBuy && bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
     },
   }

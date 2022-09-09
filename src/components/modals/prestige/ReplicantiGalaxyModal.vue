@@ -28,10 +28,6 @@ export default {
         It will ${reductionString}.`;
     }
   },
-  created() {
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-  },
   methods: {
     update() {
       this.replicanti.copyFrom(player.replicanti.amount);

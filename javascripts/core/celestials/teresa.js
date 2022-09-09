@@ -1,13 +1,14 @@
 import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics/index";
 import { GameDatabase } from "../secret-formula/game-database";
 
-import { CelestialQuotes } from "./quotes";
+import { Quotes } from "./quotes";
 
 export const Teresa = {
   timePoured: 0,
   lastUnlock: "shop",
   pouredAmountCap: 1e24,
   displayName: "Teresa",
+  possessiveName: "Teresa's",
   get isUnlocked() {
     return Achievement(147).isUnlocked;
   },
@@ -56,31 +57,7 @@ export const Teresa = {
   get runCompleted() {
     return player.celestials.teresa.bestRunAM.gt(0);
   },
-  quotes: new CelestialQuotes("teresa", {
-    INITIAL: {
-      id: 1,
-      lines: [
-        "We have been observing you.",
-        "You have shown promise with your bending of Reality.",
-        "We are the Celestials, and we want you to join us.",
-        "My name is Teresa, the Celestial Of Reality.",
-        "Prove your worth.",
-      ]
-    },
-    UNLOCK_REALITY: CelestialQuotes.singleLine(
-      2, "I will let you inside my Reality, mortal. Do not get crushed by it."
-    ),
-    COMPLETE_REALITY: CelestialQuotes.singleLine(
-      3, "Why are you still here... you were supposed to fail."
-    ),
-    EFFARIG: {
-      id: 4,
-      lines: [
-        "You are still no match for us.",
-        "I hope the others succeed where I have failed."
-      ]
-    }
-  }),
+  quotes: Quotes.teresa,
   symbol: "Ϟ"
 };
 
@@ -119,7 +96,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
       Autobuyer.reality.bumpAmount(2);
     }
     // Give a single music glyph
-    if (this.id === 4) {
+    if (this.id === 4 && !Pelle.isDoomed) {
       if (GameCache.glyphInventorySpace.value === 0) {
         // Refund the perk point if they didn't actually get a glyph
         Currency.perkPoints.add(1);
@@ -130,7 +107,7 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
       }
     }
     // Fill the inventory with music glyphs
-    if (this.id === 5) {
+    if (this.id === 5 && !Pelle.isDoomed) {
       const toCreate = GameCache.glyphInventorySpace.value;
       for (let count = 0; count < toCreate; count++) Glyphs.addToInventory(GlyphGenerator.musicGlyph());
       GameUI.notify.success(`Created ${quantifyInt("Music Glyph", toCreate)}`);
@@ -159,11 +136,7 @@ class TeresaUnlockState extends BitUpgradeState {
   }
 
   get description() {
-    if (this.pelleDisabled) {
-      return "This has no effect while in Doomed";
-    }
-    return typeof this.config.description === "function" ? this.config.description()
-      : this.config.description;
+    return typeof this.config.description === "function" ? this.config.description() : this.config.description;
   }
 
   onUnlock() {
@@ -182,7 +155,7 @@ export const PerkShopUpgrade = mapGameDataToObject(
 );
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.teresa.isOpen) Teresa.quotes.show(Teresa.quotes.INITIAL);
+  if (Tab.celestials.teresa.isOpen) Teresa.quotes.initial.show();
 });
 
 EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => Teresa.checkForUnlocks());

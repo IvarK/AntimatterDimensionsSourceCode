@@ -18,6 +18,8 @@ export default {
       remnants: 0,
       realityShards: new Decimal(0),
       shardRate: new Decimal(0),
+      upgrades: [],
+      boughtUpgrades: []
     };
   },
   computed: {
@@ -27,8 +29,6 @@ export default {
         : "fas fa-compress-arrows-alt";
     },
     rebuyables: () => PelleUpgrade.rebuyables,
-    upgrades() { return PelleUpgrade.singles.filter(u => !u.isBought); },
-    boughtUpgrades() { return PelleUpgrade.singles.filter(u => u.isBought); },
     visibleUpgrades() { return this.upgrades.slice(0, 5); },
     fadedUpgrades() { return this.upgrades.slice(5, 10); },
     allUpgrades() {
@@ -48,6 +48,8 @@ export default {
       this.remnants = Pelle.cel.remnants;
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
+      this.upgrades = PelleUpgrade.singles.filter(u => !u.isBought);
+      this.boughtUpgrades = PelleUpgrade.singles.filter(u => u.isBought);
     },
     toggleBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;
@@ -134,34 +136,14 @@ export default {
 </template>
 
 <style scoped>
-.c-pelle-panel-title {
-  position: relative;
-  font-size: 3rem;
-  font-weight: bold;
-  color: var(--color-pelle--base);
-}
-
 .c-collapse-icon-clickable {
   position: absolute;
   top: 50%;
   left: 1.5rem;
+  width: 3rem;
+  align-content: center;
   transform: translateY(-50%);
   cursor: pointer;
-}
-
-.l-pelle-panel-container {
-  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
-  border-radius: var(--var-border-radius, 0.5rem);
-  margin: 1rem;
-  padding: 1rem;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.l-pelle-content-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .o-pelle-button {

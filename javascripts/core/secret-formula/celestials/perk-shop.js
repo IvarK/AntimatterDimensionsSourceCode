@@ -24,7 +24,7 @@ GameDatabase.celestials.perkShop = {
     id: 0,
     initialCost: 1,
     increment: 2,
-    description: () => `Increase Glyph levels by ${formatPercents(0.05)}`,
+    description: () => `Increase pre-instability Glyph levels by ${formatPercents(0.05)}`,
     effect: bought => Math.pow(1.05, bought),
     formatEffect: value => formatX(value, 2, 2),
     formatCost: value => format(value, 2),

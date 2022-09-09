@@ -1,4 +1,6 @@
 <script>
+import { Laitela } from "../../../javascripts/core/globals";
+
 import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
@@ -12,7 +14,7 @@ export default {
   },
   data() {
     return {
-      hasBlackHoles: false,
+      canModifyBlackHoles: false,
       displaySingle: false,
       singleState: "",
       pauseText: "",
@@ -28,6 +30,12 @@ export default {
     id() {
       return this.blackHole.id;
     },
+    dischargeText() {
+      return `Discharge: ${timeDisplayShort(this.storedTime)}`;
+    },
+    hasLongText() {
+      return this.dischargeText.length > 15;
+    },
   },
   watch: {
     isAutoReleasing(newValue) {
@@ -36,7 +44,9 @@ export default {
   },
   methods: {
     update() {
-      this.hasBlackHoles = BlackHoles.areUnlocked;
+      // Technically not entirely accurate (you can still invert within Laitela), but it's cleaner to just hide it all
+      // because Laitela disables everything else and it technically still displays as pulsing even if it isn't
+      this.canModifyBlackHoles = BlackHoles.areUnlocked && !Laitela.isRunning;
       this.displaySingle = BlackHoles.arePermanent;
       if (this.displaySingle) this.singleState = BlackHole(1).displayState;
       this.pauseText = this.pauseButtonText();
@@ -57,15 +67,12 @@ export default {
     timeDisplayShort(ms) {
       return timeDisplayShort(ms);
     },
-    toggleAutoRelease() {
-      player.celestials.enslaved.isAutoReleasing = !player.celestials.enslaved.isAutoReleasing;
-    },
   }
 };
 </script>
 
 <template>
-  <span v-if="hasBlackHoles">
+  <span v-if="canModifyBlackHoles">
     <PrimaryButton
       class="o-primary-btn--buy-max c-primary-btn--black-hole-header"
       onclick="BlackHoles.togglePause()"
@@ -99,10 +106,11 @@ export default {
     </span>
     <span v-if="canCharge">
       <PrimaryButton
-        class="o-enslaved-release-header-button c-primary-btn--black-hole-header"
+        class="o-discharge-btn c-primary-btn--black-hole-header"
+        :class="{ 'o-small-discharge-text': hasLongText }"
         onclick="Enslaved.useStoredTime(false)"
       >
-        Discharge: {{ timeDisplayShort(storedTime) }}
+        {{ dischargeText }}
       </PrimaryButton>
     </span>
     <span v-if="canAutoRelease">
@@ -123,5 +131,15 @@ export default {
 
 .c-black-hole-status-text {
   margin: 0 0.8rem;
+}
+
+.o-discharge-btn {
+  width: 20rem;
+  font-size: 1rem;
+}
+
+.o-small-discharge-text {
+  font-size: 1rem;
+  line-height: 1rem;
 }
 </style>

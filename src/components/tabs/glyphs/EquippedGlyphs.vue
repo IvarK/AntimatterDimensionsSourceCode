@@ -34,7 +34,6 @@ export default {
         : `Your currently-equipped Glyphs will stay equipped on ${reset}.`;
     },
     undoTooltip() {
-      if (Pelle.isDoomed) return "Undo is not available while in Doomed";
       if (!this.undoSlotsAvailable) return "You do not have available inventory space to unequip Glyphs to";
       return this.undoAvailable
         ? ("Unequip the last equipped Glyph and rewind Reality to when you equipped it." +
@@ -47,6 +46,19 @@ export default {
     },
     isDoomed() {
       return Pelle.isDoomed;
+    },
+    glyphRespecStyle() {
+      if (this.respec) {
+        return {
+          color: "var(--color-reality-light)",
+          "background-color": "var(--color-reality)",
+          "border-color": "#094e0b",
+          cursor: "pointer",
+        };
+      }
+      return {
+        cursor: "pointer",
+      };
     }
   },
   created() {
@@ -61,8 +73,7 @@ export default {
         ? Glyphs.totalSlots - GameCache.glyphInventorySpace.value - Glyphs.inventoryList.length > 0
         : GameCache.glyphInventorySpace.value > 0;
       this.undoVisible = TeresaUnlocks.undo.canBeApplied;
-      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable &&
-        player.reality.glyphs.undo.length > 0 && !this.isDoomed;
+      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable && player.reality.glyphs.undo.length > 0;
     },
     glyphPositionStyle(idx) {
       const angle = 2 * Math.PI * idx / this.slotCount;
@@ -120,11 +131,9 @@ export default {
         closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
       });
     },
-    clickGlyph(glyph, idx) {
+    clickGlyph(glyph, idx, increaseSound = false) {
       if (glyph.symbol === "key266b") {
-        // Random then round. If its 0, thats false, so increase by 1; otherwise its 1, which is true, so increase by 6
-        const increase = Math.round(Math.random()) ? 6 : 1;
-        const sound = idx + increase;
+        const sound = idx + (increaseSound ? 6 : 1);
         new Audio(`audio/note${sound}.mp3`).play();
       }
     }
@@ -153,6 +162,8 @@ export default {
           :is-active-glyph="true"
           class="c-equipped-glyph"
           @clicked="clickGlyph(glyph, idx)"
+          @shiftClicked="clickGlyph(glyph, idx, true)"
+          @ctrlShiftClicked="clickGlyph(glyph, idx, true)"
         />
         <div
           v-else
@@ -164,7 +175,7 @@ export default {
     <div class="l-equipped-glyphs__buttons">
       <button
         class="l-glyph-equip-button c-reality-upgrade-btn"
-        :class="{'c-reality-upgrade-btn--bought': respec}"
+        :style="glyphRespecStyle"
         :ach-tooltip="respecTooltip"
         @click="toggleRespec"
       >
@@ -177,8 +188,7 @@ export default {
         :ach-tooltip="undoTooltip"
         @click="undo"
       >
-        <span v-if="!isDoomed">Rewind to <b>undo</b> the last equipped Glyph</span>
-        <span v-if="isDoomed">You can't <b>undo</b> Armageddon</span>
+        <span>Rewind to <b>undo</b> the last equipped Glyph</span>
       </button>
       <button
         class="l-glyph-equip-button c-reality-upgrade-btn"

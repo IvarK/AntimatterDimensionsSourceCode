@@ -8,6 +8,8 @@ export default {
   },
   data() {
     return {
+      purchasedTickspeed: 0,
+      freeTickspeed: 0,
       isVisible: false,
       mult: new Decimal(0),
       cost: new Decimal(0),
@@ -35,25 +37,21 @@ export default {
     tickspeedDisplay() {
       return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
     },
-    isGameSpeedNormal() {
-      return this.gameSpeedMult === 1;
-    },
-    isGameSpeedSlow() {
-      return this.gameSpeedMult < 1;
-    },
-    formattedFastSpeed() {
-      const gameSpeedMult = this.gameSpeedMult;
-      return gameSpeedMult < 10000 ? format(gameSpeedMult, 3, 3) : format(gameSpeedMult, 2, 0);
-    },
     showCostTitle() {
       return this.cost.exponent < 1000000;
     },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
+    },
+    upgradeCount() {
+      if (this.freeTickspeed === 0) return `Purchased ${quantifyInt("time", this.purchasedTickspeed)}`;
+      return `${formatInt(this.purchasedTickspeed)} Purchased + ${formatInt(this.freeTickspeed)} Free`;
     }
   },
   methods: {
     update() {
+      this.purchasedTickspeed = player.totalTickBought;
+      this.freeTickspeed = FreeTickspeed.amount;
       const isEC9Running = EternityChallenge(9).isRunning;
       this.isVisible = Tickspeed.isUnlocked || isEC9Running;
       if (!this.isVisible) return;
@@ -65,6 +63,14 @@ export default {
       this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
+    },
+    buttonClass() {
+      return {
+        "o-primary-btn": true,
+        "tickspeed-btn": true,
+        "o-primary-btn--disabled": !this.isAffordable && !this.isContinuumActive,
+        "o-non-clickable": this.isContinuumActive
+      };
     }
   }
 };
@@ -75,13 +81,13 @@ export default {
     <div class="tickspeed-labels">
       <span>
         {{ tickspeedDisplay }} <span>{{ multiplierDisplay }}</span>
-        <GameSpeedDisplay v-if="!isGameSpeedNormal" />
+        <GameSpeedDisplay :is-standalone="false" />
       </span>
     </div>
     <div class="tickspeed-buttons">
       <button
-        class="o-primary-btn tickspeed-btn"
-        :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
+        v-tooltip="upgradeCount"
+        :class="buttonClass()"
         onclick="buyTickSpeed()"
       >
         <span v-if="isContinuumActive">
@@ -110,5 +116,9 @@ export default {
 
 .tickspeed-max-btn {
   margin-left: 0.5rem;
+}
+
+.o-non-clickable {
+  cursor: auto;
 }
 </style>

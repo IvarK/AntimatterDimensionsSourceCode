@@ -7,6 +7,8 @@ import HeaderEternityButton from "../HeaderEternityButton";
 import HeaderUnlockInfinityDimButton from "../HeaderUnlockInfinityDimButton";
 import NewsTicker from "../NewsTicker";
 
+import GameSpeedDisplay from "@/components/GameSpeedDisplay";
+
 export default {
   name: "ModernUi",
   components: {
@@ -16,7 +18,8 @@ export default {
     HeaderAmountsLine,
     HeaderUnlockInfinityDimButton,
     NewsTicker,
-    HeaderBlackHole
+    HeaderBlackHole,
+    GameSpeedDisplay
   },
   data() {
     return {
@@ -100,6 +103,10 @@ export default {
         this.challengePower = powerArray.join(", ");
       }
     },
+    handleClick() {
+      if (PlayerProgress.infinityUnlocked()) bigCrunchResetRequest();
+      else Modal.bigCrunch.show();
+    }
   },
 };
 </script>
@@ -123,7 +130,7 @@ export default {
         <h3>The world has collapsed due to excess antimatter.</h3>
         <button
           class="btn-big-crunch"
-          onclick="bigCrunchResetRequest()"
+          @click="handleClick"
         >
           Big Crunch
         </button>
@@ -141,6 +148,8 @@ export default {
         <div class="l-game-header__antimatter-container">
           <p>You have <span class="c-game-header__antimatter">{{ format(antimatter, 2, 1) }}</span> antimatter.</p>
           <div>You are getting {{ format(antimatterPerSec, 2, 0) }} antimatter per second.</div>
+          <br>
+          <GameSpeedDisplay :is-standalone="true" />
         </div>
         <div class="information-header">
           <HeaderChallengeDisplay />

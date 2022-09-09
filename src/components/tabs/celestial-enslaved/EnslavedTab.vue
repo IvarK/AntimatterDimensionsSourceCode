@@ -13,7 +13,6 @@ export default {
     BlackHoleChargingSliders
   },
   data: () => ({
-    isDoomed: false,
     isStoringBlackHole: false,
     isStoringReal: false,
     autoStoreReal: false,
@@ -32,6 +31,10 @@ export default {
     quote: "",
     currentSpeedUp: 0,
     hintsUnlocked: false,
+    canChangeStoreTime: false,
+    canChangeStoreRealTime: false,
+    canDischarge: false,
+    canAutoRelease: false,
   }),
   computed: {
     storedRealEfficiencyDesc() {
@@ -47,18 +50,19 @@ export default {
       return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
     },
     realityTitle() {
-      if (this.isDoomed) return "You can't start Enslaved Ones' Reality while in Doomed";
-      if (this.isRunning) return "You're inside Enslaved Ones' Reality";
-      return "Start Enslaved One's Reality";
+      if (this.isRunning) return "You are inside The Enslaved Ones' Reality";
+      return "Start The Enslaved Ones' Reality";
     },
     runButtonClassObject() {
       return {
         "c-enslaved-run-button__icon": true,
         "c-enslaved-run-button__icon--running": this.isRunning,
+        "c-celestial-run-button--clickable": !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[2].description().split("\n");
+      return GameDatabase.celestials.descriptions[2].effects().split("\n");
     },
     realTimeButtonText() {
       if (!this.offlineEnabled) return "Offline Progress is disabled";
@@ -66,7 +70,42 @@ export default {
       return "Offline time used for production";
     },
     // Use this here since Enslaved has a fairly non-standard character, and SFCs don't support using \uf0c1
-    enslavedSymbol: () => Enslaved.symbol
+    enslavedSymbol: () => Enslaved.symbol,
+    isDoomed: () => Pelle.isDoomed,
+    storeGameTimeClass() {
+      return {
+        "o-enslaved-mechanic-button": true,
+        "o-enslaved-mechanic-button--storing-time": this.isStoringBlackHole,
+        "l-fixed-setting": !this.canChangeStoreTime,
+        "o-pelle-disabled": this.isDoomed,
+      };
+    },
+    storeRealTimeClass() {
+      return {
+        "o-enslaved-mechanic-button": true,
+        "o-enslaved-mechanic-button--clickable": !this.isDoomed,
+        "o-enslaved-mechanic-button--storing-time": this.isStoringReal,
+        "l-fixed-setting": !this.canChangeStoreRealTime,
+        "o-pelle-disabled": this.isDoomed
+      };
+    },
+    dischargeClass() {
+      return {
+        "o-enslaved-mechanic-button": true,
+        "o-enslaved-mechanic-button--clickable": !this.isDoomed,
+        "l-fixed-setting": !this.canDischarge,
+        "o-pelle-disabled": this.isDoomed
+      };
+    },
+    doomedDisabledClass() {
+      return { "o-pelle-disabled": this.isDoomed };
+    },
+    mechanicButtonClass() {
+      return {
+        "o-enslaved-mechanic-button": true,
+        "o-enslaved-mechanic-button--clickable": !this.isDoomed
+      };
+    }
   },
   watch: {
     autoRelease(newValue) {
@@ -75,7 +114,6 @@ export default {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.isStoringBlackHole = Enslaved.isStoringGameTime;
       this.storedBlackHole = player.celestials.enslaved.stored;
       this.isStoringReal = Enslaved.isStoringRealTime;
@@ -94,6 +132,10 @@ export default {
       this.autoReleaseSpeed = Enslaved.isAutoReleasing ? Enslaved.autoReleaseSpeed : 0;
       this.currentSpeedUp = Enslaved.currentBlackHoleStoreAmountPerMs;
       this.hintsUnlocked = EnslavedProgress.hintsUnlocked.hasProgress;
+      this.canChangeStoreTime = Enslaved.canModifyGameTimeStorage;
+      this.canChangeStoreRealTime = Enslaved.canModifyRealTimeStorage;
+      this.canDischarge = Enslaved.canRelease(false);
+      this.canAutoRelease = Enslaved.canRelease(true);
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -153,11 +195,13 @@ export default {
 
 <template>
   <div class="l-enslaved-celestial-tab">
+    <CelestialQuoteHistory celestial="enslaved" />
     <div
       v-if="canAdjustStoredTime"
       class="c-subtab-option-container"
     >
       <PrimaryToggleButton
+        v-if="canAutoRelease"
         v-model="autoRelease"
         class="o-primary-btn--subtab-option"
         label="Pulse Black Hole:"
@@ -167,7 +211,10 @@ export default {
       <div class="l-enslaved-run-container">
         <div v-if="hasUnlock(unlocksInfo.RUN)">
           <div class="c-enslaved-run-button">
-            <div class="c-enslaved-run-button__title">
+            <div
+              class="c-enslaved-run-button__title"
+              :class="doomedDisabledClass"
+            >
               {{ realityTitle }}
             </div>
             <div v-if="completed">
@@ -190,6 +237,7 @@ export default {
             <div
               v-for="line in runDescription"
               :key="line"
+              class="c-enslaved-run-description-line"
             >
               {{ line }}
             </div>
@@ -199,7 +247,6 @@ export default {
         </div>
       </div>
       <div class="l-enslaved-upgrades-column">
-        <CelestialQuoteHistory celestial="enslaved" />
         <PrimaryButton
           v-if="hintsUnlocked"
           class="o-primary-btn"
@@ -213,11 +260,13 @@ export default {
             and the lost speed is converted into stored game time. Discharging the Black Hole allows you to skip
             forward in time. Stored game time is also used to unlock certain upgrades.
             <button
-              :class="['o-enslaved-mechanic-button',
-                       {'o-enslaved-mechanic-button--storing-time': isStoringBlackHole }]"
+              :class="storeGameTimeClass"
               @click="toggleStoreBlackHole"
             >
-              <div class="o-enslaved-stored-time">
+              <div
+                class="o-enslaved-stored-time"
+                :class="doomedDisabledClass"
+              >
                 {{ timeDisplayShort(storedBlackHole) }}
               </div>
               <div>
@@ -225,11 +274,10 @@ export default {
               </div>
             </button>
             <button
-              class="o-enslaved-mechanic-button"
+              :class="dischargeClass"
               @click="useStored"
             >
-              <span v-if="isDoomed">You can't discharge Black Hole while in Doomed</span>
-              <span v-else>Discharge Black Hole</span>
+              <span>Discharge Black Hole</span>
               <p v-if="isRunning">
                 {{ timeDisplayShort(nerfedBlackHoleTime) }} in this Reality
               </p>
@@ -240,7 +288,7 @@ export default {
             You can use stored real time to "amplify" a Reality, simulating repeated runs of it.
             Amplified Realities give all the rewards that normal Realities do.
             <button
-              :class="['o-enslaved-mechanic-button', {'o-enslaved-mechanic-button--storing-time': isStoringReal}]"
+              :class="storeRealTimeClass"
               @click="toggleStoreReal"
             >
               <div class="o-enslaved-stored-time">
@@ -251,8 +299,9 @@ export default {
               </div>
             </button>
             <button
-              :class="['o-enslaved-mechanic-button',
-                       {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled}]"
+              :class="[mechanicButtonClass,
+                       {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled},
+                       doomedDisabledClass]"
               @click="toggleAutoStoreReal"
             >
               {{ realTimeButtonText }}
@@ -288,3 +337,15 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-enslaved-run-description-line {
+  margin-bottom: 1rem;
+}
+
+.l-fixed-setting {
+  cursor: pointer;
+  pointer-events: none;
+  filter: brightness(70%);
+}
+</style>

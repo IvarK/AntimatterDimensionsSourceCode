@@ -14,24 +14,34 @@ export default {
   },
   data() {
     return {
-      name: player.timestudy.presets[this.saveslot - 1].name,
+      name: "",
+      displayName: "",
     };
   },
   computed: {
     preset() {
       return player.timestudy.presets[this.saveslot - 1];
     },
-    displayName() {
-      return this.name === "" ? this.saveslot : this.name;
-    }
   },
   methods: {
+    update() {
+      this.name = player.timestudy.presets[this.saveslot - 1].name;
+      this.displayName = this.name === "" ? this.saveslot : this.name;
+    },
     nicknameBlur(event) {
-      this.preset.name = event.target.value.slice(0, 4);
+      const newName = event.target.value.slice(0, 4).trim();
+      if (!this.isASCII(newName)) return;
+      this.preset.name = newName;
       this.name = this.preset.name;
     },
     hideContextMenu() {
       this.$viewModel.currentContextMenu = null;
+    },
+    // This is largely done because of UI reasons - there is no Unicode specification for character width, which means
+    // that arbitrary Unicode inputs can allow for massive text overflow
+    isASCII(input) {
+      // eslint-disable-next-line no-control-regex
+      return !/[^\u0000-\u00ff]/u.test(input);
     },
     save() {
       this.hideContextMenu();
@@ -47,13 +57,18 @@ export default {
         const combinedTree = new TimeStudyTree();
         combinedTree.attemptBuyArray(TimeStudyTree.currentStudies, false);
         combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.preset.studies), true);
-        TimeStudyTree.commitToGameState(combinedTree.purchasedStudies);
+        TimeStudyTree.commitToGameState(combinedTree.purchasedStudies, false);
 
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
         GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
       } else {
         Modal.message.show("This Time Study list currently contains no Time Studies.");
       }
+    },
+    deletePreset() {
+      this.hideContextMenu();
+      if (this.preset.studies) Modal.studyString.show({ id: this.saveslot - 1, deleting: true });
+      else Modal.message.show("This Time Study list currently contains no Time Studies.");
     },
     handleExport() {
       this.hideContextMenu();
@@ -81,7 +96,7 @@ export default {
     </template>
     <template #menu>
       <div class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu">
-        <span ach-tooltip="Set a custom name (up to 4 characters)">
+        <span ach-tooltip="Set a custom name (up to 4 ASCII characters)">
           <input
             type="text"
             size="4"
@@ -115,6 +130,12 @@ export default {
           @click="load"
         >
           Load
+        </div>
+        <div
+          class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item"
+          @click="deletePreset"
+        >
+          Delete
         </div>
       </div>
     </template>

@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       effects: [],
+      isColored: false,
       hasEffarig: false,
       hasReality: false,
       logTotalSacrifice: 0,
@@ -72,6 +73,7 @@ export default {
   },
   methods: {
     update() {
+      this.isColored = player.options.glyphTextColors;
       this.hasEffarig = Glyphs.active.some(g => g && g.type === "effarig");
       this.hasReality = Glyphs.active.some(g => g && g.type === "reality");
 
@@ -113,6 +115,7 @@ export default {
       v-for="effect in effects"
       :key="effect.id + logTotalSacrifice"
       :effect="effect"
+      :is-colored="isColored"
     />
     <div
       v-if="showChaosText"

@@ -120,7 +120,7 @@ GameDatabase.achievements.secret = [
   {
     id: 33,
     name: "A sound financial decision",
-    description: "Click on the donate link."
+    description: "Click on the button to purchase STD coins."
   },
   {
     id: 34,
@@ -163,7 +163,7 @@ GameDatabase.achievements.secret = [
     id: 43,
     name: "A cacophonous chorus",
     description: "Have all equipped Glyphs be Music Glyphs.",
-    checkRequirement: () => Glyphs.active.every(x => x?.symbol === "key266b"),
+    checkRequirement: () => Glyphs.active.length && Glyphs.active.every(x => x?.symbol === "key266b"),
     checkEvent: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED
   },
   {

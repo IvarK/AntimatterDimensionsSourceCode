@@ -108,7 +108,7 @@ dev.spin4d = function() {
 };
 
 dev.cancerize = function() {
-  Theme.tryUnlock("Cancer");
+  Theme.tryUnlock("Design");
   Notation.emoji.setAsCurrent();
 };
 
@@ -350,11 +350,11 @@ dev.printResourceTotals = function() {
 };
 
 dev.unlockCelestialQuotes = function(celestial) {
-  const quotes = Celestials[celestial].quotes;
-  for (const q of quotes.quotesById) {
-    if (q === undefined) continue;
-    quotes.show(q);
-  }
+  Quotes[celestial].all.forEach(x => x.show());
+};
+
+dev.presentCelestialQuotes = function(celestial) {
+  Quotes[celestial].all.forEach(x => x.present());
 };
 
 // This doesn't check everything but hopefully it gets some of the more obvious ones.
@@ -417,19 +417,16 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[8] |= 16;
       }
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[12] |= 8;
       }
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.achievementBits[12] |= 128;
       }
     ],
@@ -459,7 +456,6 @@ dev.testReplicantiCode = function(singleId, useDebugger = false) {
     ],
     [
       function() {
-        // eslint-disable-next-line no-bitwise
         player.reality.upgReqs = (1 << 6);
         player.reality.upgradeBits = 64;
       }
@@ -602,4 +598,17 @@ dev.devMode = function() {
 // May want to make this command in particular publicly known if automator gating is a common complaint post-release
 dev.unlockAutomator = function() {
   player.reality.automator.forceUnlock = true;
+};
+
+// This bypasses any conflict checking and forces the current save to overwrite the cloud save. This largely exists
+// because normal cloud saving checks for a conflict and then always shows a modal if a conflict is found, only actually
+// saving if the player says to in the modal. The check can fail if the cloud save is somehow malformed and missing
+// props. This can lead to the check always failing, the modal never showing up, and cloud saving never occurring. That
+// should in principle only show up in dev, as migrations aren't run on cloud saves, but this allows fixing in case.
+dev.forceCloudSave = async function() {
+  const save = await Cloud.load();
+  const root = GameSaveSerializer.deserialize(save);
+  const saveId = GameStorage.currentSlot;
+  root.saves[saveId] = GameStorage.saves[saveId];
+  Cloud.save(saveId);
 };

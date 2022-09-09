@@ -18,6 +18,8 @@ export default {
     return {
       showRequirement: false,
       maxTT: new Decimal(),
+      currTT: new Decimal(),
+      ttGen: new Decimal(),
     };
   },
   computed: {
@@ -38,24 +40,34 @@ export default {
         return `Requirement: ${format("1e4000")} Eternity Points${achRows}`;
       }
       return "";
+    },
+    theoremTimeEstimate() {
+      if (!this.study.cost || this.ttGen.eq(0)) return null;
+      const time = Decimal.sub(this.study.cost, this.currTT).dividedBy(this.ttGen);
+      return time.gt(0) ? `Enough TT in ${TimeSpan.fromSeconds(time.toNumber()).toStringShort()}` : null;
     }
   },
   methods: {
     update() {
       if (this.id === 1) {
         this.maxTT.copyFrom(Currency.timeTheorems.max);
-        this.showRequirement = !this.study.isBought && (!Perk.bypassECDilation.isBought || Pelle.isDoomed);
+        this.showRequirement = !this.study.isBought && !Perk.bypassECDilation.canBeApplied;
       }
       if (this.id === 6) {
         this.showRequirement = !Pelle.isDoomed;
       }
+      this.currTT.copyFrom(Currency.timeTheorems.value);
+      this.ttGen.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
     }
   }
 };
 </script>
 
 <template>
-  <TimeStudyButton :setup="setup">
+  <TimeStudyButton
+    :setup="setup"
+    :ach-tooltip="theoremTimeEstimate"
+  >
     <DescriptionDisplay :config="study.config" />
     <template v-if="showRequirement">
       <br>

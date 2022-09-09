@@ -19,7 +19,6 @@ export default {
     }
   },
   data: () => ({
-    isUseless: false,
     showCost: true,
     showSTCost: false
   }),
@@ -27,21 +26,18 @@ export default {
     study() {
       return this.setup.study;
     },
-    doomedDescription() {
-      return this.study.id === 33
-        ? "This Time Study became useless due to a Pelle upgrade"
-        : "This Time Study has no effect while in Doomed";
-    },
     hintText() {
       const id = this.study.id;
       if (!this.setup.path) return id;
       const pathEntry = NormalTimeStudies.pathList.find(p => p.path === this.setup.path);
       return `${id} ${pathEntry.name}`;
+    },
+    isUseless() {
+      return Pelle.uselessTimeStudies.includes(this.study.id) && Pelle.isDoomed;
     }
   },
   methods: {
     update() {
-      this.isUseless = Pelle.uselessTimeStudies.includes(this.study.id) && Pelle.isDoomed;
       this.showCost = this.study.id !== 192 || !Enslaved.isRunning;
       // We don't show ST cost if purchased because the first 1-2 of each "set" won't actually cost ST. There's no
       // particularly sensible way to accurately display the actual ST spent other than tracing through buy order
@@ -66,10 +62,7 @@ export default {
     >
       {{ hintText }}
     </HintText>
-    <span v-if="isUseless">
-      {{ doomedDescription }}
-    </span>
-    <span v-else>
+    <span :class="{ 'o-pelle-disabled': isUseless }">
       <DescriptionDisplay
         :config="study.config"
       />

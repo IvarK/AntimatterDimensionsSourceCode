@@ -56,7 +56,6 @@ export const GlyphSelection = {
   },
 
   generate(count, level = gainedGlyphLevel()) {
-    EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
     this.glyphs = this.glyphList(count, level, { isChoosingGlyph: true });
   },
 
@@ -113,7 +112,8 @@ export function requestManualReality() {
     return;
   }
   if (GameCache.glyphInventorySpace.value === 0) {
-    Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
+    Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.",
+      { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
     return;
   }
   processManualReality(false);
@@ -134,13 +134,16 @@ export function processManualReality(sacrifice, glyphID) {
     // modal showed up and the player decided not to pick anything
     if (glyphID === undefined) {
       if (EffarigUnlock.glyphFilter.isUnlocked) {
-        // If the player has the glyph filter, we apply the filter to the choices instead of picking randomly
-        let newGlyph = AutoGlyphProcessor.pick(GlyphSelection.glyphs);
-        if (!AutoGlyphProcessor.wouldKeep(newGlyph) || GameCache.glyphInventorySpace.value === 0) {
+        // Note that this code path is eventually followed regardless of the glyph selection popping up - if it did, we
+        // pass through the option selected there; if it didn't, then we apply the filter. If we don't handle it this
+        // way, manual realities without the modal will never sacrifice and may give bad glyphs you don't care about
+        const newGlyph = AutoGlyphProcessor.pick(GlyphSelection.glyphs);
+        const shouldSacrifice = player.options.confirmations.glyphSelection
+          ? sacrifice
+          : !AutoGlyphProcessor.wouldKeep(newGlyph);
+        if (shouldSacrifice || GameCache.glyphInventorySpace.value === 0) {
           AutoGlyphProcessor.getRidOfGlyph(newGlyph);
-          newGlyph = null;
-        }
-        if (newGlyph && GameCache.glyphInventorySpace.value > 0) {
+        } else {
           Glyphs.addToInventory(newGlyph);
         }
       } else {
@@ -286,11 +289,12 @@ function giveRealityRewards(realityProps) {
     const current = Teresa.runRewardMultiplier;
     const newMultiplier = Teresa.rewardMultiplier(player.antimatter);
     const isHigher = newMultiplier > current;
-    Modal.message.show(`You have completed Teresa's Reality! ${isHigher
+    const modalText = `You have completed Teresa's Reality! ${isHigher
       ? `Since you gained more Antimatter, you increased your
       Glyph Sacrifice multiplier from ${format(current, 2, 2)} to ${format(newMultiplier, 2, 2)}`
       : `You did not gain more Antimatter during this run, so the Glyph Sacrifice multiplier
-      from Teresa did not increase`}.`);
+      from Teresa did not increase`}.`;
+    Modal.message.show(modalText, {}, 2);
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
       player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
@@ -302,17 +306,17 @@ function giveRealityRewards(realityProps) {
       player.celestials.teresa.lastRepeatedMachines = player.celestials.teresa.lastRepeatedMachines
         .clampMin(machineRecord);
     }
-    Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
+    Teresa.quotes.completeReality.show();
   }
 
   if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) {
     EffarigUnlock.reality.unlock();
-    Effarig.quotes.show(Effarig.quotes.COMPLETE_REALITY);
+    Effarig.quotes.completeReality.show();
   }
 
   if (Enslaved.isRunning) Enslaved.completeRun();
 
-  if (V.isRunning) V.quotes.show(V.quotes.REALITY_COMPLETE);
+  if (V.isRunning) V.quotes.realityComplete.show();
 }
 
 // Due to simulated realities taking a long time in late game, this function might not immediately
@@ -392,6 +396,9 @@ export function beginProcessReality(realityProps) {
       addToStats(glyphSample.totalStats, sacGain);
     } else {
       processAutoGlyph(realityProps.gainedGlyphLevel, rng);
+      // We'd normally run processSortingAfterReality() here, but also sorting after every glyph is extremely intensive
+      // at this scale and largely useless if autoClean is getting run every time too
+      if (VUnlocks.autoAutoClean.canBeApplied && player.reality.autoAutoClean) Glyphs.autoClean();
     }
   };
   const glyphsToSample = 10000;
@@ -527,7 +534,9 @@ export function finishProcessReality(realityProps) {
   if (!realityProps.glyphUndo) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
-    if (player.celestials.ra.disCharge) disChargeAll();
+    if (player.celestials.ra.disCharge) {
+      disChargeAll();
+    }
   }
   if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
   if (player.options.automatorEvents.clearOnReality) AutomatorData.clearEventLog();
@@ -687,7 +696,7 @@ export function applyRUPG10() {
   }
   if (Pelle.isDisabled("rupg10")) return;
 
-  player.auto.antimatterDims = player.auto.antimatterDims.map(current => ({
+  player.auto.antimatterDims.all = player.auto.antimatterDims.all.map(current => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
     cost: 1e14,
@@ -729,6 +738,9 @@ export function clearCelestialRuns() {
   if (Enslaved.isRunning) {
     player.celestials.enslaved.run = false;
     if (Tabs.current.isHidden || Tabs.current._currentSubtab.isHidden) Tab.celestials.enslaved.show();
+    // We specifically revalidate here and nowhere else because Enslaved changes the unlock state of the BLACK HOLE
+    // command, which changes the validity of existing scripts when entering/exiting
+    AutomatorData.recalculateErrors();
   }
   player.celestials.v.run = false;
   player.celestials.ra.run = false;

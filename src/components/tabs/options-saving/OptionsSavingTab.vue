@@ -3,14 +3,16 @@ import AutosaveIntervalSlider from "./AutosaveIntervalSlider";
 import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import OptionsButton from "@/components/OptionsButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import SaveFileName from "./SaveFileName";
 
 export default {
   name: "OptionsSavingTab",
   components: {
-    PrimaryToggleButton,
+    AutosaveIntervalSlider,
     OpenModalHotkeysButton,
     OptionsButton,
-    AutosaveIntervalSlider
+    PrimaryToggleButton,
+    SaveFileName
   },
   data() {
     return {
@@ -40,9 +42,24 @@ export default {
       this.userName = Cloud.user.displayName;
     },
     importAsFile(event) {
+      // This happens if the file dialog is canceled instead of a file being selected
+      if (event.target.files.length === 0) return;
+
       const reader = new FileReader();
       reader.onload = function() {
-        GameStorage.import(reader.result);
+        const contents = reader.result;
+        const toImport = GameSaveSerializer.deserialize(contents);
+        const showWarning = (toImport?.IAP?.totalSTD ?? 0) < player.IAP.totalSTD;
+        if (showWarning) {
+          Modal.addImportConflict(toImport, GameStorage.saves[GameStorage.currentSlot]);
+          Modal.importWarning.show({
+            rawInput: contents,
+            saveToImport: toImport,
+            warningMessage: "The Imported Save has less STDs than your Current Save.",
+          });
+        } else {
+          GameStorage.import(contents);
+        }
       };
       reader.readAsText(event.target.files[0]);
     }
@@ -107,11 +124,10 @@ export default {
           label="Display time since save:"
         />
       </div>
-      <div
-        v-if="canSpeedrun"
-        class="l-options-grid__row"
-      >
+      <div class="l-options-grid__row">
+        <SaveFileName />
         <OptionsButton
+          v-if="canSpeedrun"
           class="o-primary-btn--option_font-x-large"
           onclick="Modal.enterSpeedrun.show()"
         >

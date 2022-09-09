@@ -56,8 +56,9 @@ export default {
       };
     },
     questionmarkTooltip() {
-      return "All Glyph choices are given a score based on the chosen option, and the Glyph with the highest score " +
-        "is picked. If this Glyph is below a mode-specific threshold, it will be Sacrificed instead.";
+      return `All Glyph choices are given a score and compared to a threshold based on the chosen mode. 
+        The Glyph with the highest score is picked, but will still be Sacrificed if below the threshold.
+        (click for more detail)`;
     },
     unlockedModes() {
       return Object.values(this.modes).filter(idx => this.isUnlocked(idx));
@@ -168,7 +169,11 @@ export default {
         .filter(s => s > this.rarityThresholds[type])
         .min();
       this.setRarityThreshold(type, newRarity);
-    }
+    },
+    showFilterHowTo() {
+      ui.view.h2pForcedTab = GameDatabase.h2p.tabs.filter(tab => tab.name === "Advanced Glyph Mechanics")[0];
+      Modal.h2p.show();
+    },
   }
 };
 </script>
@@ -179,7 +184,8 @@ export default {
       <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
         <div
           v-tooltip="questionmarkTooltip"
-          class="o-questionmark"
+          class="o-questionmark o-clickable"
+          @click="showFilterHowTo"
         >
           ?
         </div>
@@ -245,6 +251,7 @@ export default {
           <GlyphComponent
             :glyph="{type: type.id, strength: strengthThreshold(type.id) }"
             v-bind="glyphIconProps"
+            class="o-clickable"
           />
         </span>
         <SliderComponent
@@ -277,6 +284,7 @@ export default {
           <GlyphComponent
             :glyph="{type: advancedType, strength: strengthThreshold(advancedType) }"
             v-bind="glyphIconProps"
+            class="o-clickable"
           />
         </span>
         <SliderComponent
@@ -346,5 +354,7 @@ export default {
 </template>
 
 <style scoped>
-
+.o-clickable {
+  cursor: pointer;
+}
 </style>

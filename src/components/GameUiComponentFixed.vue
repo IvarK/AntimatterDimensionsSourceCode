@@ -1,6 +1,8 @@
 <script>
+import CelestialQuoteHistoryDisplay from "@/components/modals/celestial-quotes/CelestialQuoteHistoryDisplay";
+import CelestialQuoteModal from "@/components/modals/celestial-quotes/CelestialQuoteModal";
 import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
-import FadeToBlack from "@/components/tabs/celestial-pelle/FadeToBlack";
+import FadeAway from "@/components/tabs/celestial-pelle/FadeAway";
 import HowToPlay from "@/components/HowToPlay";
 import InfoButton from "@/components/InfoButton";
 import ModalProgressBar from "@/components/modals/ModalProgressBar";
@@ -23,10 +25,12 @@ export default {
     SpeedrunStatus,
     PopupModal,
     ModalProgressBar,
-    FadeToBlack,
+    CelestialQuoteModal,
+    CelestialQuoteHistoryDisplay,
+    FadeAway,
     CreditsContainer,
-    NewGame,
     SpectateGame,
+    NewGame
   },
   data() {
     return {
@@ -45,7 +49,7 @@ export default {
   },
   methods: {
     update() {
-      this.rollingCredits = GameEnd.endState >= 2.5;
+      this.rollingCredits = GameEnd.endState >= 2.5 && !player.celestials.pelle.creditsClosed;
     }
   }
 };
@@ -74,13 +78,23 @@ export default {
     />
     <SaveTimer :style="hideIfMatoFullscreen" />
     <SpeedrunStatus :style="hideIfMatoFullscreen" />
+    <ModalProgressBar v-if="view.modal.progressBar" />
+    <CelestialQuoteModal
+      v-else-if="view.quotes.current"
+      :quote="view.quotes.current"
+    />
+    <CelestialQuoteHistoryDisplay
+      v-else-if="view.quotes.history"
+      :quotes="view.quotes.history"
+    />
     <PopupModal
-      v-if="view.modal.current"
+      v-else-if="view.modal.current"
       :modal="view.modal.current"
     />
     <ModalProgressBar v-if="view.modal.progressBar" />
-    <FadeToBlack v-if="rollingCredits" />
+    <FadeAway v-if="rollingCredits" />
     <CreditsContainer v-if="rollingCredits" />
+    <SpectateGame />
     <NewGame v-if="rollingCredits" />
     <SpectateGame />
   </div>

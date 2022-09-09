@@ -17,8 +17,8 @@ export const GameEnd = {
 
   gameLoop(diff) {
     if (this.removeAdditionalEnd) {
-      this.additionalEnd -= 0.12;
-      if (this.additionalEnd < 0) {
+      this.additionalEnd -= Math.min(diff / 200, 0.5);
+      if (this.additionalEnd < 4) {
         this.additionalEnd = 0;
         this.removeAdditionalEnd = false;
       }

@@ -15,6 +15,7 @@ export default {
       autoCollapse: false,
       showAutoAutoClean: false,
       autoAutoClean: false,
+      applyFilterToPurge: false,
     };
   },
   computed: {
@@ -25,6 +26,9 @@ export default {
     },
     questionMarkTooltip() {
       return `The automatic settings below will apply after every Reality`;
+    },
+    keepTooltip() {
+      return "If set to ON, Glyphs which your filter accepts will never be auto-purged even if they are worse";
     }
   },
   watch: {
@@ -36,7 +40,10 @@ export default {
     },
     autoAutoClean(newValue) {
       player.reality.autoAutoClean = newValue;
-    }
+    },
+    applyFilterToPurge(newValue) {
+      player.reality.applyFilterToPurge = newValue;
+    },
   },
   methods: {
     update() {
@@ -45,6 +52,7 @@ export default {
       this.autoCollapse = player.reality.autoCollapse;
       this.showAutoAutoClean = VUnlocks.autoAutoClean.canBeApplied;
       this.autoAutoClean = player.reality.autoAutoClean;
+      this.applyFilterToPurge = player.reality.applyFilterToPurge;
     },
   }
 };
@@ -76,7 +84,14 @@ export default {
       v-if="showAutoAutoClean"
       v-model="autoAutoClean"
       class="c-glyph-inventory-option"
-      label="Auto Purge on Realities:"
+      label="Auto-purge on Realities:"
+    />
+    <ToggleButton
+      v-if="showAutoAutoClean"
+      v-model="applyFilterToPurge"
+      v-tooltip="keepTooltip"
+      class="c-glyph-inventory-option"
+      label="Never Auto-purge Glyphs accepted by filter:"
     />
   </div>
 </template>

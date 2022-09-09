@@ -6,19 +6,26 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
   }
 
   get data() {
-    return player.auto.realityUpgrades[this.id - 1];
+    return player.auto.realityUpgrades.all[this.id - 1];
   }
 
   get isUnlocked() {
     return Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied;
   }
 
+  get hasUnlimitedBulk() {
+    return true;
+  }
+
   tick() {
-    RealityUpgrade(this.id).purchase();
+    const upg = RealityUpgrade(this.id);
+    while (Currency.realityMachines.gte(upg.cost)) upg.purchase();
   }
 
   static get entryCount() { return 5; }
   static get autobuyerGroupName() { return "Reality Upgrade"; }
+  static get isActive() { return player.auto.realityUpgrades.isActive; }
+  static set isActive(value) { player.auto.realityUpgrades.isActive = value; }
 }
 
 Autobuyer.realityUpgrade = RealityUpgradeAutobuyerState.createAccessor();

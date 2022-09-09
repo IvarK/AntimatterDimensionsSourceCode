@@ -31,8 +31,8 @@ export default {
 
 .l-game-header__eternity {
   position: absolute;
-  left: calc(25% - 21rem);
-  width: 21rem;
+  left: calc(25% - 22rem);
+  width: 22rem;
 }
 
 .l-game-header__center {
@@ -43,7 +43,7 @@ export default {
 
 .l-game-header__infinity {
   position: absolute;
-  right: calc(25% - 21rem);
-  width: 21rem;
+  right: calc(25% - 22rem);
+  width: 22rem;
 }
 </style>

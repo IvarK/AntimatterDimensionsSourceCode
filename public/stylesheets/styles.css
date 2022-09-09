@@ -2158,22 +2158,7 @@ br {
 
 /* #region Header */
 
-.l-game-header__amounts-line {
-  position: relative;
-  font-size: 1.2rem;
-}
-
 /* #region IP Amount */
-
-.l-game-header__infinity-points {
-  position: absolute;
-  left: 75%;
-}
-
-.c-game-header__infinity-points {
-  width: 22rem;
-  font-size: 1.2rem;
-}
 
 .c-game-header__tesseract-available {
   font-family: Typewriter, serif;
@@ -2228,11 +2213,6 @@ br {
 .l-game-header__eternity-points {
   position: absolute;
   right: 75%;
-}
-
-.c-game-header__eternity-points {
-  width: 22rem;
-  font-size: 1.2rem;
 }
 
 .c-game-header__ep-amount {
@@ -2305,21 +2285,6 @@ br {
 
 .l-game-header__buttons-line {
   position: relative;
-}
-
-.l-game-header__big-crunch-btn {
-  position: absolute;
-  left: 75%;
-}
-
-.l-game-header__eternity-btn {
-  position: absolute;
-  right: 75%;
-}
-
-.l-game-header__new-dim-btn {
-  position: absolute;
-  right: 75%;
 }
 
 .c-game-header__tickspeed-row {

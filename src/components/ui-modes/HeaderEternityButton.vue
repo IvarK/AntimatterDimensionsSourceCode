@@ -194,7 +194,7 @@ const EP_BUTTON_DISPLAY_TYPE = {
   <button
     v-if="isVisible"
     :class="buttonClassObject"
-    class="o-prestige-button l-game-header__eternity-btn"
+    class="o-prestige-button"
     onclick="eternityResetRequest()"
     @mouseover="hover = true"
     @mouseleave="hover = false"

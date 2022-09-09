@@ -105,7 +105,7 @@ export default {
   <button
     v-if="isVisible && !tesseractAffordable"
     :class="buttonClassObject"
-    class="o-prestige-button o-infinity-button l-game-header__big-crunch-btn"
+    class="o-prestige-button o-infinity-button"
     @click="crunch"
     @mouseover="hover = true"
     @mouseleave="hover = false"
@@ -144,7 +144,7 @@ export default {
 
   <button
     v-else-if="tesseractAffordable"
-    class="o-prestige-button l-game-header__big-crunch-btn c-game-header__tesseract-available"
+    class="o-prestige-button c-game-header__tesseract-available"
     :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
     @click="switchToInfinity"
   >

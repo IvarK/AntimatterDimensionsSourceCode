@@ -389,8 +389,7 @@ export const AutomatorLexer = (() => {
   const forbiddenConstantPatterns = lexer.lexerDefinition
     .filter(p => !ignoredPatterns.includes(p.name))
     .map(p => p.PATTERN.source)
-    .map(p => ((p.includes("(") || p.includes(")")) ? p : p.split("[ \\t]+")))
-    .flat();
+    .flatMap(p => ((p.includes("(") || p.includes(")")) ? p : p.split("[ \\t]+")));
 
   return {
     lexer,

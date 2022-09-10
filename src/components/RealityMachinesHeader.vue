@@ -4,17 +4,13 @@ export default {
   data() {
     return {
       realityMachines: new Decimal(),
-      unlockedIM: false,
       machineStr: "",
-      capStr: "",
     };
   },
   methods: {
     update() {
       this.realityMachines.copyFrom(Currency.realityMachines.value);
-      this.unlockedIM = MachineHandler.isIMUnlocked;
       this.machineStr = formatMachines(this.realityMachines, Currency.imaginaryMachines.value);
-      this.capStr = formatMachines(MachineHandler.hardcapRM, MachineHandler.currentIMCap);
     }
   }
 };
@@ -27,9 +23,6 @@ export default {
       {{ machineStr }}
     </span>
     {{ pluralize("Reality Machine", realityMachines) }}.
-    <span v-if="unlockedIM">
-      (Cap: {{ capStr }})
-    </span>
   </div>
 </template>
 

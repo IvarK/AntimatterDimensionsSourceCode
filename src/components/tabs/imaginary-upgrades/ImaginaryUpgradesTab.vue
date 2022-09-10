@@ -11,6 +11,7 @@ export default {
       baseRMCap: new Decimal(),
       capRM: new Decimal(),
       scaleTime: 0,
+      capStr: "",
     };
   },
   computed: {
@@ -22,6 +23,7 @@ export default {
       this.baseRMCap.copyFrom(MachineHandler.baseRMCap);
       this.capRM.copyFrom(MachineHandler.hardcapRM);
       this.scaleTime = MachineHandler.scaleTimeForIM;
+      this.capStr = formatMachines(MachineHandler.hardcapRM, MachineHandler.currentIMCap);
     },
     id(row, column) {
       return (row - 1) * 5 + column - 1;
@@ -32,6 +34,10 @@ export default {
 
 <template>
   <div class="l-reality-upgrade-grid">
+    <div class="c-cap-text">
+      Your Machine cap is <span class="c-reality-tab__reality-machines">{{ capStr }}</span>.
+    </div>
+    <br>
     You have reached the limits of reality and cannot hold more than {{ format(capRM) }} Reality Machines.
     <br>
     Machines gained in excess of {{ format(baseRMCap) }} will raise the maximum amount of Imaginary Machines
@@ -65,5 +71,7 @@ export default {
 </template>
 
 <style scoped>
-
+.c-cap-text {
+  font-size: 1.5rem;
+}
 </style>

@@ -7,7 +7,6 @@ import GlyphLevelsAndWeights from "./GlyphLevelsAndWeights";
 import GlyphPeek from "./GlyphPeek";
 import GlyphTabSidebar from "./sidebar/GlyphTabSidebar";
 import RealityAmplifyButton from "./RealityAmplifyButton";
-import RealityButton from "./RealityButton";
 import RealityReminder from "./RealityReminder";
 import ResetRealityButton from "./ResetRealityButton";
 import SacrificedGlyphs from "./SacrificedGlyphs";
@@ -25,7 +24,6 @@ export default {
     EquippedGlyphs,
     GlyphLevelsAndWeights,
     ResetRealityButton,
-    RealityButton,
     RealityReminder
   },
   data() {
@@ -35,6 +33,7 @@ export default {
       instabilityThreshold: 0,
       hyperInstabilityThreshold: 0,
       isInCelestialReality: false,
+      canAmplify: false,
       glyphTextColors: true,
       autoRestartCelestialRuns: false,
       sacrificeUnlocked: false,
@@ -61,6 +60,7 @@ export default {
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
       this.isInCelestialReality = isInCelestialReality();
+      this.canAmplify = Enslaved.isUnlocked && !this.isInCelestialReality;
       this.autoRestartCelestialRuns = player.options.retryCelestial;
       this.glyphTextColors = player.options.glyphTextColors;
       this.enslavedHint = "";
@@ -97,6 +97,11 @@ export default {
         "c-current-glyph-effects-with-top-border": !this.sacrificeUnlocked
       };
     },
+    buttonGroupClass() {
+      return {
+        "l-half-width": this.canAmplify
+      };
+    }
   }
 };
 </script>
@@ -107,11 +112,15 @@ export default {
       <div class="l-reality-button-column">
         <GlyphPeek />
 
-        <div class="l-reality-button-group">
-          <div class="l-reality-button-group-half">
-            <ResetRealityButton v-if="resetRealityDisplayed" />
-          </div>
-          <RealityButton />
+        <div
+          v-if="resetRealityDisplayed"
+          class="l-reality-button-group"
+        >
+          <RealityAmplifyButton
+            v-if="!isInCelestialReality"
+            :class="buttonGroupClass()"
+          />
+          <ResetRealityButton :class="buttonGroupClass()" />
         </div>
 
         <div
@@ -133,7 +142,6 @@ export default {
             Repeat this Celestial's Reality
           </label>
         </div>
-        <RealityAmplifyButton v-else />
 
         <br>
 
@@ -224,5 +232,9 @@ export default {
   flex-direction: row;
   align-items: center;
   user-select: none;
+}
+
+.l-half-width {
+  width: 50%;
 }
 </style>

@@ -7,7 +7,6 @@ import ClassicSubtabBar from "./ClassicSubtabBar";
 import ClassicTabBar from "./ClassicTabBar";
 import EternityPointsHeader from "@/components/EternityPointsHeader";
 import InfinityPointsHeader from "@/components/InfinityPointsHeader";
-import RealityMachinesHeader from "@/components/RealityMachinesHeader";
 
 export default {
   name: "ClassicUi",
@@ -18,8 +17,7 @@ export default {
     ClassicTabBar,
     NewsTicker,
     InfinityPointsHeader,
-    EternityPointsHeader,
-    RealityMachinesHeader
+    EternityPointsHeader
   },
   data() {
     return {

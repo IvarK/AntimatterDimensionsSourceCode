@@ -133,6 +133,7 @@ function galaxyReset() {
 
 export function manualRequestGalaxyReset(bulk) {
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return;
+  if (GameEnd.creditsClosed) return;
   if (player.options.confirmations.antimatterGalaxy) {
     Modal.antimatterGalaxy.show({ bulk });
     return;

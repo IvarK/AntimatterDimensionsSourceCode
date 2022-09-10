@@ -14,7 +14,8 @@ export default {
       this.showSpectate = GameEnd.endState > 13.75;
     },
     swap() {
-      player.celestials.pelle.creditsClosed = !player.celestials.pelle.creditsClosed;
+      GameEnd.creditsClosed = !GameEnd.creditsClosed;
+      if (!GameEnd.creditsEverClosed) GameEnd.creditsEverClosed = true;
     }
   }
 };
@@ -38,10 +39,10 @@ export default {
   position: fixed;
   top: 1rem;
   right: 4.5rem;
+  z-index: 10;
   font-size: 2rem;
   opacity: 0.8;
   pointer-events: auto;
   cursor: pointer;
-  z-index: 10;
 }
 </style>

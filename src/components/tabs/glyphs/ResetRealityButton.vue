@@ -26,6 +26,7 @@ export default {
     },
     resetReality() {
       const confirms = player.options.confirmations;
+      if (GameEnd.creditsClosed) return;
       if (this.isInCelestialReality) {
         if (confirms.resetCelestial) Modal.exitCelestialReality.show();
         else beginProcessReality(getRealityProps(true));

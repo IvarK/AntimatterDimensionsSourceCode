@@ -15,6 +15,9 @@ export const GameEnd = {
 
   removeAdditionalEnd: false,
 
+  creditsClosed: false,
+  creditsEverClosed: false,
+
   gameLoop(diff) {
     if (this.removeAdditionalEnd) {
       this.additionalEnd -= Math.min(diff / 200, 0.5);

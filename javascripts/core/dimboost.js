@@ -204,6 +204,7 @@ export function skipResetsIfPossible() {
 export function manualRequestDimensionBoost(bulk) {
   if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
+  if (GameEnd.creditsClosed) return;
   if (player.options.confirmations.dimensionBoost) {
     Modal.dimensionBoost.show({ bulk });
     return;

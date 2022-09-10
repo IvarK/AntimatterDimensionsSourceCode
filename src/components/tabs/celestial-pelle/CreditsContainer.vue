@@ -44,6 +44,7 @@ export default {
   },
   watch: {
     rolling(newVal, oldVal) {
+      if (GameEnd.creditsEverClosed) return;
       if (!oldVal && newVal && this.audio === null) {
         this.audio = new Audio(`audio/credits.mp3`);
         this.audio.play();
@@ -83,15 +84,6 @@ export default {
 </template>
 
 <style scoped>
-.c-mute-button {
-  position: fixed;
-  left: 2rem;
-  font-size: 2rem;
-  opacity: 0.5;
-  pointer-events: auto;
-  cursor: pointer;
-}
-
 @keyframes a-teresa-credits {
   0% { transform: rotate(61deg); }
   10% { transform: rotate(322deg); }
@@ -188,6 +180,13 @@ perfectly the same. */
   50% { transform: translateX(-50%) rotate3d(0, 1, 0, 180deg) scaleY(1); }
   75% { transform: translateX(-50%) rotate3d(0, 1, 0, 270deg) scaleY(1.3); }
   100% { transform: translateX(-50%) rotate3d(0, 1, 0, 360deg) scaleY(1); }
+}.c-mute-button {
+  position: fixed;
+  left: 2rem;
+  font-size: 2rem;
+  opacity: 0.5;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .c-credits-container {

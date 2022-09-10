@@ -36,6 +36,7 @@ export function startDilatedEternityRequest() {
 
 export function startDilatedEternity(auto) {
   if (!PlayerProgress.dilationUnlocked()) return false;
+  if (GameEnd.creditsClosed) return false;
   if (player.dilation.active) {
     eternity(false, auto, { switchingDilation: true });
     return false;

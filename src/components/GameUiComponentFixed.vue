@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     update() {
-      this.rollingCredits = GameEnd.endState >= 2.5 && !player.celestials.pelle.creditsClosed;
+      this.rollingCredits = GameEnd.endState >= 2.5 && !GameEnd.creditsClosed;
     }
   }
 };

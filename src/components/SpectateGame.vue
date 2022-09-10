@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     update() {
-      this.showSpectate = GameEnd.endState > 13.75;
+      this.showSpectate = GameEnd.endState > 15;
     },
     swap() {
       GameEnd.creditsClosed = !GameEnd.creditsClosed;

@@ -27,25 +27,25 @@ export default {
     },
     formatMachineStats() {
       if (!PlayerProgress.realityUnlocked() && this.nextMachineEP.gt("1e8000")) {
-        return `RM this Reality is capped!`;
+        return `(RM this Reality is capped!)`;
       }
       if (this.machinesGained.gt(0) && this.machinesGained.lt(100)) {
-        return `Next at ${format(this.nextMachineEP, 2)} EP`;
+        return `(Next at ${format(this.nextMachineEP, 2)} EP)`;
       }
       if (this.machinesGained.eq(0) && this.newIMCap === 0) {
-        return `Projected: ${format(this.projectedRM, 2)} RM`;
+        return `(Projected: ${format(this.projectedRM, 2)} RM)`;
       }
       if (this.newIMCap !== 0) {
-        return `iM Cap: ${formatMachines(0, this.newIMCap)}`;
+        return `(iM Cap: ${formatMachines(0, this.newIMCap)})`;
       }
       if (this.machinesGained.lt(Number.MAX_VALUE)) {
-        return `${format(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min`;
+        return `(${format(this.machinesGained.divide(this.realityTime), 2, 2)} RM/min)`;
       }
       return "";
     },
     formatGlyphLevel() {
       if (this.glyphLevel >= 10000) return `Glyph level: ${formatInt(this.glyphLevel)}`;
-      return `Glyph level: ${formatInt(this.glyphLevel)}  (${this.nextGlyphPercent})`;
+      return `Glyph level: ${formatInt(this.glyphLevel)} (${this.nextGlyphPercent} to next)`;
     },
     showShardsRate() {
       return this.currentShardsRate;
@@ -137,7 +137,7 @@ export default {
 </script>
 
 <template>
-  <div class="l-reality-button l-reality-button-group-half">
+  <div class="l-reality-button">
     <button
       class="c-reality-button infotooltip"
       :class="classObject"
@@ -151,8 +151,7 @@ export default {
           <div class="c-reality-button__header">
             Make a new Reality
           </div>
-          <div>{{ formatMachinesGained }}</div>
-          <div>{{ formatMachineStats }}</div>
+          <div>{{ formatMachinesGained }} {{ formatMachineStats }}</div>
           <div>{{ formatGlyphLevel }}</div>
         </template>
         <template v-else-if="hasRealityStudy">

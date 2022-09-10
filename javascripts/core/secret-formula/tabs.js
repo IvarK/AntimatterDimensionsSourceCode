@@ -322,7 +322,6 @@ GameDatabase.tabs = [
     key: "reality",
     name: "Reality",
     hideAt: 2.3,
-    before: "RealityMachinesHeader",
     UIClass: "o-tab-btn--reality",
     condition: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
     id: 8,

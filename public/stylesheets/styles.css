@@ -735,9 +735,8 @@ button:focus {
 }
 
 .l-reality-button {
-  display: block;
-  width: 50%;
-  height: 100%;
+  width: 30rem;
+  height: 6rem;
 }
 
 .l-reality-button__contents {
@@ -747,7 +746,7 @@ button:focus {
 }
 
 .c-reality-button__header {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   line-height: 1.6;
 }
 
@@ -821,10 +820,10 @@ button:focus {
 .l-reset-reality-button {
   display: block;
   width: 100%;
+  height: 100%;
 }
 
 .c-reset-reality-button {
-  height: 100%;
   font-family: Typewriter;
   font-size: 1.2rem;
   font-weight: bold;
@@ -870,6 +869,7 @@ button:focus {
   border-radius: var(--var-border-radius, 0.5rem);
   box-shadow: 0 0 2rem inset rgba(244, 164, 96, 50%);
   transition-duration: 0.2s;
+  margin-right: 0.5rem;
 }
 
 .l-reality-amplify-button--clickable {
@@ -8675,16 +8675,7 @@ kbd {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 9rem;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.l-reality-button-group-half {
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  justify-content: space-between;
+  height: 6rem;
   padding: 0.5rem;
 }
 
@@ -8891,8 +8882,7 @@ kbd {
 /* #region reality-tab */
 
 .c-reality-tab__header {
-  font-size: 1.5rem;
-  margin: 1.5rem 0;
+  font-size: 1.2rem;
 }
 
 .c-reality-tab__reality-machines {

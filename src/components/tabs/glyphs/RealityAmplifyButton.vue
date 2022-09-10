@@ -20,7 +20,6 @@ export default {
     },
     buttonClass() {
       return {
-        "c-button-wrapper": true,
         "l-reality-amplify-button": true,
         "l-reality-amplify-button--clickable": !this.isDoomed && this.canAmplify,
         "o-enslaved-mechanic-button--storing-time": this.isActive,
@@ -57,6 +56,7 @@ export default {
     <div v-else-if="canAmplify">
       <span v-if="isActive">Will be amplified:</span>
       <span v-else>Amplify this Reality:</span>
+      <br>
       All rewards ×{{ formatInt(ratio) }}
     </div>
     <div v-else>
@@ -66,8 +66,5 @@ export default {
 </template>
 
 <style scoped>
-.c-button-wrapper {
-  width: calc(100% - 1rem);
-  margin-bottom: 1rem;
-}
+
 </style>

@@ -1,10 +1,10 @@
 <script>
-import HeaderBigCrunchButton from "./HeaderBigCrunchButton";
+import BigCrunchButton from "./BigCrunchButton";
 
 export default {
   name: "HeaderInfinityContainer",
   components: {
-    HeaderBigCrunchButton,
+    BigCrunchButton,
   },
   data() {
     return {
@@ -43,7 +43,7 @@ export default {
         v-html="tesseractText"
       />
     </div>
-    <HeaderBigCrunchButton />
+    <BigCrunchButton />
   </div>
 </template>
 

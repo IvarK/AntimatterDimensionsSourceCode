@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "HeaderEternityButton",
+  name: "EternityButton",
   data() {
     return {
       isVisible: false,

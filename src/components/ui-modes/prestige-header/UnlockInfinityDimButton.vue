@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "HeaderUnlockInfinityDimButton",
+  name: "UnlockInfinityDimButton",
   data() {
     return {
       isVisible: false,

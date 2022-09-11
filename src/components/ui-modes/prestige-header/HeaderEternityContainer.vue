@@ -1,12 +1,12 @@
 <script>
-import HeaderEternityButton from "./HeaderEternityButton";
-import HeaderUnlockInfinityDimButton from "./HeaderUnlockInfinityDimButton";
+import EternityButton from "./EternityButton";
+import UnlockInfinityDimButton from "./UnlockInfinityDimButton";
 
 export default {
   name: "HeaderEternityContainer",
   components: {
-    HeaderEternityButton,
-    HeaderUnlockInfinityDimButton,
+    EternityButton,
+    UnlockInfinityDimButton,
   },
   data() {
     return {
@@ -41,8 +41,8 @@ export default {
       {{ pluralize("Eternity Point", eternityPoints) }}.
       <span v-if="showNextEP">(Next EP at {{ format(nextEP, 1) }} IP)</span>
     </div>
-    <HeaderUnlockInfinityDimButton />
-    <HeaderEternityButton />
+    <UnlockInfinityDimButton />
+    <EternityButton />
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <script>
-import HeaderCenterContainer from "./HeaderCenterContainer";
-import HeaderEternityContainer from "./HeaderEternityContainer";
-import HeaderInfinityContainer from "./HeaderInfinityContainer";
+import HeaderCenterContainer from "./prestige-header/HeaderCenterContainer";
+import HeaderEternityContainer from "./prestige-header/HeaderEternityContainer";
+import HeaderInfinityContainer from "./prestige-header/HeaderInfinityContainer";
 
 export default {
   name: "HeaderPrestigeGroup",

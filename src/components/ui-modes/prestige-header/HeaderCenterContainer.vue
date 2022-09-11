@@ -1,9 +1,10 @@
 <script>
-import ArmageddonButton from "../tabs/celestial-pelle/ArmageddonButton";
-import RealityMachinesHeader from "../RealityMachinesHeader";
+import ArmageddonButton from "../../tabs/celestial-pelle/ArmageddonButton";
+import RealityMachinesHeader from "../../RealityMachinesHeader";
 
-import HeaderTickspeedRowClassic from "./HeaderTickspeedRowClassic";
-import HeaderTickspeedRowModern from "./HeaderTickspeedRowModern";
+import HeaderTickspeedRowClassic from "../HeaderTickspeedRowClassic";
+import HeaderTickspeedRowModern from "../HeaderTickspeedRowModern";
+
 import RealityButton from "./RealityButton";
 
 // This component contains antimatter and antimatter rate at the start of the game, as well as some additional

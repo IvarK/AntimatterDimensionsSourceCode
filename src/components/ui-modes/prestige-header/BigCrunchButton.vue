@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "HeaderBigCrunchButton",
+  name: "BigCrunchButton",
   data() {
     return {
       isVisible: false,

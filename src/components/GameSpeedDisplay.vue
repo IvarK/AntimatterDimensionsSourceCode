@@ -1,6 +1,4 @@
 <script>
-import { EternityChallenge } from "../../javascripts/core/eternity_challenge";
-
 export default {
   name: "GameSpeedDisplay",
   props: {
@@ -37,7 +35,7 @@ export default {
       if (!this.hasSeenAlteredSpeed) return null;
       return this.baseSpeed === 1
         ? "The game is running at normal speed."
-        : `The game is running at a different speed than normal: ${this.baseSpeedText}`;
+        : `Game speed is altered: ${this.baseSpeedText}`;
     }
   },
   methods: {
@@ -64,7 +62,7 @@ export default {
 </script>
 
 <template>
-  <span>
+  <span :class="{ 'o-standalone' : isStandalone }">
     <span v-if="isStandalone">
       {{ standaloneText }}
     </span>
@@ -74,3 +72,10 @@ export default {
     <span v-if="isPulsing">(<i class="fas fa-expand-arrows-alt u-fa-padding" /> {{ pulseSpeedText }})</span>
   </span>
 </template>
+
+<style scoped>
+.o-standalone {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+</style>

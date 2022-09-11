@@ -1,6 +1,4 @@
 <script>
-import { Laitela } from "../../../javascripts/core/globals";
-
 import HeaderBlackHoleStatusText from "./HeaderBlackHoleStatusText";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";

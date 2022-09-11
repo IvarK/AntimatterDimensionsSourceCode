@@ -1,11 +1,6 @@
 <script>
-import GameSpeedDisplay from "@/components/GameSpeedDisplay";
-
 export default {
   name: "TickspeedRow",
-  components: {
-    GameSpeedDisplay
-  },
   data() {
     return {
       purchasedTickspeed: 0,
@@ -81,7 +76,6 @@ export default {
     <div class="tickspeed-labels">
       <span>
         {{ tickspeedDisplay }} <span>{{ multiplierDisplay }}</span>
-        <GameSpeedDisplay :is-standalone="false" />
       </span>
     </div>
     <div class="tickspeed-buttons">

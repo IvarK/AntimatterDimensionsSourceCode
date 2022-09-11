@@ -25,10 +25,7 @@ export default {
 
 <template>
   <span>
-    <GameSpeedDisplay
-      v-if="showSpeed"
-      :is-standalone="true"
-    />
+    <GameSpeedDisplay v-if="showSpeed" />
     <br>
     <HeaderBlackHole />
   </span>

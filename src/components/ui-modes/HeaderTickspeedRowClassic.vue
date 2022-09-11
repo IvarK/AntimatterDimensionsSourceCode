@@ -1,12 +1,17 @@
 <script>
-import GameSpeedDisplay from "@/components/GameSpeedDisplay";
 import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
-  name: "HeaderTickspeedRow",
+  name: "HeaderTickspeedRowClassic",
   components: {
     PrimaryButton,
-    GameSpeedDisplay
+  },
+  props: {
+    inHeader: {
+      type: Boolean,
+      required: false,
+      default: true,
+    }
   },
   data() {
     return {
@@ -26,20 +31,18 @@ export default {
     classObject() {
       return {
         "c-game-header__tickspeed-row": true,
-        "c-game-header__tickspeed-row--hidden": !this.isVisible
+        "c-game-header__tickspeed-row--hidden": !this.isVisible,
+        "l-inline-padding": !this.inHeader
       };
     },
     multiplierDisplay() {
       if (InfinityChallenge(3).isRunning) return `Multiply all Antimatter Dimensions by
         ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
       const tickmult = this.mult;
-      return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
+      return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade`;
     },
     tickspeedDisplay() {
       return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
-    },
-    showCostTitle() {
-      return this.cost.exponent < 1000000;
     },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
@@ -66,6 +69,7 @@ export default {
     },
     buttonClass() {
       return {
+        "l-long-button": !this.inHeader,
         "o-primary-btn--tickspeed": true,
         "o-continuum": this.isContinuumActive
       };
@@ -76,7 +80,9 @@ export default {
 
 <template>
   <div :class="classObject">
-    <div>{{ multiplierDisplay }}</div>
+    <div v-if="inHeader">
+      {{ multiplierDisplay }}
+    </div>
     <div>
       <PrimaryButton
         v-tooltip="upgradeCount"
@@ -84,9 +90,9 @@ export default {
         :class="buttonClass()"
         onclick="buyTickSpeed()"
       >
+        <span v-if="!inHeader">Tickspeed </span>
         <span v-if="isContinuumActive">Continuum: {{ continuumString }}</span>
-        <span v-else-if="showCostTitle">Cost: {{ format(cost) }}</span>
-        <span v-else>{{ format(cost) }}<br></span>
+        <span v-else>Cost: {{ format(cost) }}</span>
       </PrimaryButton>
       <PrimaryButton
         v-if="!isContinuumActive"
@@ -98,16 +104,22 @@ export default {
       </PrimaryButton>
     </div>
     <div>
-      {{ tickspeedDisplay }}
-      <GameSpeedDisplay :is-standalone="false" />
+      {{ tickspeedDisplay }} <span v-if="!inHeader">({{ multiplierDisplay }})</span>
     </div>
   </div>
 </template>
 
 <style scoped>
 .o-continuum {
-  width: 25rem;
   transition: width 0s;
   cursor: auto;
+}
+
+.l-inline-padding {
+  padding-top: 1rem;
+}
+
+.l-long-button {
+  width: 30rem;
 }
 </style>

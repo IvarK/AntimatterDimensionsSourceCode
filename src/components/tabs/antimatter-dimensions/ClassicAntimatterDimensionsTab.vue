@@ -1,4 +1,6 @@
 <script>
+import HeaderTickspeedRowClassic from "../../ui-modes/HeaderTickspeedRowClassic";
+
 import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import AntimatterDimensionRow from "./ClassicAntimatterDimensionRow";
 import AntimatterDimensionsTabHeader from "./ClassicAntimatterDimensionsTabHeader";
@@ -14,7 +16,8 @@ export default {
     AntimatterDimensionsTabHeader,
     AntimatterGalaxyRow,
     DimensionBoostRow,
-    AntimatterDimensionProgressBar
+    AntimatterDimensionProgressBar,
+    HeaderTickspeedRowClassic,
   },
   data() {
     return {
@@ -23,7 +26,7 @@ export default {
       isSacrificeUnlocked: false,
       buy10Mult: new Decimal(0),
       currentSacrifice: new Decimal(0),
-      multiplierText: "",
+      hasRealityButton: false,
     };
   },
   methods: {
@@ -33,10 +36,7 @@ export default {
       this.isSacrificeUnlocked = Sacrifice.isVisible;
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
-      const sacText = this.isSacrificeUnlocked
-        ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
-        : "";
-      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}${sacText}`;
+      this.hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
     },
     quickReset() {
       softReset(-1, true, true);
@@ -49,6 +49,10 @@ export default {
   <div class="l-old-ui-antimatter-dim-tab">
     <span>{{ multiplierText }}</span>
     <AntimatterDimensionsTabHeader />
+    <HeaderTickspeedRowClassic
+      v-if="hasRealityButton"
+      :in-header="false"
+    />
     <div class="l-dimensions-container">
       <AntimatterDimensionRow
         v-for="tier in 8"

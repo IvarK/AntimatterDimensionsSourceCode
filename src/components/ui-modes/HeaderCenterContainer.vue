@@ -56,11 +56,8 @@ export default {
     <div v-else>
       You are getting {{ format(antimatterPerSec, 2) }} antimatter per second.
       <br>
-      <GameSpeedDisplay
-        v-if="isModern"
-        :is-standalone="true"
-      />
-      <HeaderTickspeedRow v-else />
+      <HeaderTickspeedRowModern v-if="isModern" />
+      <HeaderTickspeedRowClassic v-else />
     </div>
   </div>
 </template>

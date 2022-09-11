@@ -12,6 +12,7 @@ export default {
   methods: {
     update() {
       this.showSpectate = GameEnd.endState > 15;
+      this.endState = GameEnd.endState;
     },
     swap() {
       GameEnd.creditsClosed = !GameEnd.creditsClosed;
@@ -24,6 +25,7 @@ export default {
 <template>
   <div
     v-if="showSpectate"
+    :key="endState"
   >
     <PrimaryButton
       class="c-swap-button o-primary-btn--modal-close c-modal__close-btn"

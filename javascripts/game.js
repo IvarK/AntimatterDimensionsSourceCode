@@ -395,6 +395,10 @@ export function getGameSpeedupForDisplay() {
 // TODO: Clean this up, remove the disable line
 // eslint-disable-next-line complexity
 export function gameLoop(passDiff, options = {}) {
+  if (GameEnd.creditsEverClosed) {
+    GameUI.update();
+    return;
+  }
   let diff = passDiff;
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");

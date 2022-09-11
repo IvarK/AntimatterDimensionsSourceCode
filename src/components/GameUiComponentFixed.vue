@@ -94,7 +94,6 @@ export default {
     <ModalProgressBar v-if="view.modal.progressBar" />
     <FadeAway v-if="rollingCredits" />
     <CreditsContainer v-if="rollingCredits" />
-    <SpectateGame />
     <NewGame v-if="rollingCredits" />
     <SpectateGame />
   </div>

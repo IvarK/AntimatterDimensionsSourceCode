@@ -39,6 +39,7 @@ class InfinityChallengeState extends GameMechanicState {
 
   requestStart() {
     if (!this.isUnlocked) return;
+    if (GameEnd.creditsClosed) return;
     if (!player.options.confirmations.challenges) {
       this.start();
       return;

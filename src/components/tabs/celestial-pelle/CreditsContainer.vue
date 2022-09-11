@@ -180,7 +180,9 @@ perfectly the same. */
   50% { transform: translateX(-50%) rotate3d(0, 1, 0, 180deg) scaleY(1); }
   75% { transform: translateX(-50%) rotate3d(0, 1, 0, 270deg) scaleY(1.3); }
   100% { transform: translateX(-50%) rotate3d(0, 1, 0, 360deg) scaleY(1); }
-}.c-mute-button {
+}
+
+.c-mute-button {
   position: fixed;
   left: 2rem;
   font-size: 2rem;

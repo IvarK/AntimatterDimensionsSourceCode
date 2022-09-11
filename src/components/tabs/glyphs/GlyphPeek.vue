@@ -10,7 +10,6 @@ export default {
     return {
       glyphs: [],
       level: 0,
-      isDoomed: false,
       canPeek: false,
       isVisible: false,
       canSacrifice: false,
@@ -22,12 +21,11 @@ export default {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.canSacrifice = GlyphSacrificeHandler.canSacrifice;
       // Hide this before first reality since then it'll confuse the player,
       // and due to pre-selected first glyph might well be incorrect anyway.
-      this.isVisible = PlayerProgress.realityUnlocked() && TimeStudy.reality.isBought;
-      this.canPeek = PlayerProgress.realityUnlocked();
+      this.isVisible = !Pelle.isDoomed && PlayerProgress.realityUnlocked();
+      this.canPeek = TimeStudy.reality.isBought;
       if (gainedGlyphLevel().actualLevel !== this.level) {
         this.refreshGlyphs();
       }
@@ -53,14 +51,12 @@ export default {
 </script>
 
 <template>
-  <div class="c-glyph-peek">
-    <div v-if="isDoomed">
-      You will not gain any Glyphs
-      <br>
-      from Doomed Realities
-    </div>
+  <div
+    v-if="isVisible"
+    class="c-glyph-peek"
+  >
     <div
-      v-else-if="isVisible"
+      v-if="canPeek"
       class="l-glyph-set-preview"
       @click="showModal"
     >
@@ -75,9 +71,7 @@ export default {
       />
       (Click to bring up details)
     </div>
-    <div
-      v-else-if="canPeek"
-    >
+    <div v-else>
       Purchase the Reality study to see
       <br>
       this Reality's Glyph choices

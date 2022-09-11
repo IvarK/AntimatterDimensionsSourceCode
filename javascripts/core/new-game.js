@@ -6,7 +6,7 @@ export const NG = {
     // This can't be JSONed as it contains sets
     const secretUnlocks = player.secretUnlocks;
     const secretAchievements = JSON.stringify(player.secretAchievementBits);
-    const automatorScripts = JSON.stringify(AutomatorBackend._scripts);
+    const automatorScripts = JSON.stringify(player.reality.automator.scripts);
     Modal.hideAll();
     Quote.clearAll();
     GameStorage.hardReset();

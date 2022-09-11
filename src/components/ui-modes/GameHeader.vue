@@ -1,7 +1,7 @@
 <script>
-import HeaderBlackHole from "./HeaderBlackHole";
 import HeaderChallengeDisplay from "./HeaderChallengeDisplay";
 import HeaderChallengeEffects from "./HeaderChallengeEffects";
+import HeaderGameSpeed from "./HeaderGameSpeed";
 import HeaderPrestigeGroup from "./HeaderPrestigeGroup";
 
 export default {
@@ -9,7 +9,7 @@ export default {
   components: {
     HeaderChallengeDisplay,
     HeaderChallengeEffects,
-    HeaderBlackHole,
+    HeaderGameSpeed,
     HeaderPrestigeGroup,
   },
 };
@@ -20,7 +20,7 @@ export default {
     <HeaderChallengeDisplay />
     <HeaderChallengeEffects />
     <HeaderPrestigeGroup />
-    <HeaderBlackHole />
+    <HeaderGameSpeed />
   </div>
 </template>
 

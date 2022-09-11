@@ -735,8 +735,12 @@ button:focus {
 }
 
 .l-reality-button {
-  width: 30rem;
+  width: 35rem;
   height: 6rem;
+}
+
+.s-base--metro .l-reality-button {
+  box-shadow: 0.1rem 0.1rem 0.1rem 0 #9e9e9e;
 }
 
 .l-reality-button__contents {
@@ -8882,6 +8886,7 @@ kbd {
 /* #region reality-tab */
 
 .c-reality-tab__header {
+  margin-top: -0.5rem;
   font-size: 1.2rem;
 }
 

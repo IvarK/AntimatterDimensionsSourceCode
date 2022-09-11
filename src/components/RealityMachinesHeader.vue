@@ -19,9 +19,9 @@ export default {
 <template>
   <div class="c-reality-tab__header">
     You have
-    <span class="c-reality-tab__reality-machines">
+    <b class="c-reality-tab__reality-machines">
       {{ machineStr }}
-    </span>
+    </b>
     {{ pluralize("Reality Machine", realityMachines) }}.
   </div>
 </template>

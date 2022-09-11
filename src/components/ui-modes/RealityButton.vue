@@ -3,7 +3,6 @@ export default {
   name: "RealityButton",
   data() {
     return {
-      isDoomed: false,
       canReality: false,
       showSpecialEffect: false,
       hasRealityStudy: false,
@@ -70,9 +69,8 @@ export default {
       return `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), decimalPoints)}`;
     },
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.hasRealityStudy = TimeStudy.reality.isBought;
-      this.canReality = isRealityAvailable() && !this.isDoomed;
+      this.canReality = isRealityAvailable();
       this.showSpecialEffect = this.hasSpecialReward();
       if (!this.canReality) {
         this.shardsGained = 0;
@@ -144,10 +142,7 @@ export default {
       @click="handleClick"
     >
       <div class="l-reality-button__contents">
-        <template v-if="isDoomed">
-          <div>You cannot escape a Doomed Reality</div>
-        </template>
-        <template v-else-if="canReality">
+        <template v-if="canReality">
           <div class="c-reality-button__header">
             Make a new Reality
           </div>

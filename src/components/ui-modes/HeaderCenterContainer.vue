@@ -1,8 +1,9 @@
 <script>
+import ArmageddonButton from "../tabs/celestial-pelle/ArmageddonButton";
 import RealityMachinesHeader from "../RealityMachinesHeader";
 
-import GameSpeedDisplay from "@/components/GameSpeedDisplay";
-import HeaderTickspeedRow from "./HeaderTickspeedRow";
+import HeaderTickspeedRowClassic from "./HeaderTickspeedRowClassic";
+import HeaderTickspeedRowModern from "./HeaderTickspeedRowModern";
 import RealityButton from "./RealityButton";
 
 // This component contains antimatter and antimatter rate at the start of the game, as well as some additional
@@ -11,25 +12,25 @@ import RealityButton from "./RealityButton";
 export default {
   name: "HeaderCenterContainer",
   components: {
-    GameSpeedDisplay,
-    HeaderTickspeedRow,
+    HeaderTickspeedRowClassic,
+    HeaderTickspeedRowModern,
     RealityMachinesHeader,
     RealityButton,
+    ArmageddonButton,
   },
   data() {
     return {
       isModern: false,
       hasRealityButton: false,
+      isDoomed: false,
       antimatter: new Decimal(0),
       antimatterPerSec: new Decimal(0),
-      realityMachines: new Decimal(0),
-      unlockedIM: false,
-      machineStr: "",
     };
   },
   methods: {
     update() {
       this.isModern = player.options.newUI;
+      this.isDoomed = Pelle.isDoomed;
       this.antimatter.copyFrom(Currency.antimatter);
       this.hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
       if (!this.hasRealityButton) this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
@@ -46,7 +47,11 @@ export default {
       class="c-reality-container"
     >
       <RealityMachinesHeader />
-      <RealityButton />
+      <ArmageddonButton
+        v-if="isDoomed"
+        :is-header="true"
+      />
+      <RealityButton v-else />
     </div>
     <div v-else>
       You are getting {{ format(antimatterPerSec, 2) }} antimatter per second.

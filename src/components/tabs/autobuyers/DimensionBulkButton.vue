@@ -29,7 +29,8 @@ export default {
     classObject() {
       return {
         "o-autobuyer-btn": true,
-        "o-non-clickable": !this.isAffordable || this.hasMaxedBulk
+        "o-autobuyer-btn--unavailable": !this.isAffordable && !this.hasMaxedBulk,
+        "o-non-clickable": this.hasMaxedBulk
       };
     }
   },
@@ -65,7 +66,7 @@ export default {
   </button>
   <button
     v-else-if="hasMaxedInterval && !bulkUnlimited"
-    class="o-autobuyer-btn l-autobuyer-box__button o-non-clickable"
+    class="o-autobuyer-btn l-autobuyer-box__button o-autobuyer-btn--unavailable"
   >
     Complete the challenge to upgrade bulk
   </button>

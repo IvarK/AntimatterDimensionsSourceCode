@@ -4236,6 +4236,16 @@ br {
   border-color: var(--color-infinity);
 }
 
+.o-autobuyer-btn--unavailable {
+  background: var(--color-disabled);
+  cursor: auto;
+}
+
+.o-autobuyer-btn--unavailable:hover {
+  color: black;
+  background-color: var(--color-disabled);
+}
+
 .t-dark .o-autobuyer-btn,
 .t-s6 .o-autobuyer-btn,
 .t-s10 .o-autobuyer-btn {
@@ -5758,6 +5768,7 @@ br {
   background-color: #f2f2f2;
   border: 0.1rem solid black;
   border-radius: var(--var-border-radius, 0.3rem);
+  margin: 0.5rem;
 }
 
 .c-modal-options {

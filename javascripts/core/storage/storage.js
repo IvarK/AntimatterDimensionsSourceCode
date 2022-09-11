@@ -68,6 +68,7 @@ export const GameStorage = {
     }
     Modal.hideAll();
     Quote.clearAll();
+    AutomatorBackend.clearEditor();
     this.loadPlayerObject(player, overrideLastUpdate);
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);

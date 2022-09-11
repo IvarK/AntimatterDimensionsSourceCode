@@ -3,6 +3,7 @@ export default {
   name: "AutomatorScriptDropdownEntryList",
   data() {
     return {
+      isBlock: false,
       currentScriptID: 0,
       runningScriptID: 0,
       isRunning: false,
@@ -35,6 +36,7 @@ export default {
   },
   methods: {
     update() {
+      this.isBlock = player.reality.automator.type === AUTOMATOR_TYPE.BLOCK;
       this.runningScriptID = AutomatorBackend.state.topLevelScript;
       this.isRunning = AutomatorBackend.isRunning;
       this.isPaused = AutomatorBackend.isOn && !AutomatorBackend.isRunning;
@@ -59,11 +61,7 @@ export default {
         this.currentScriptID = Number(Object.keys(storedScripts)[0]);
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
-      if (this.isBlock && !AutomatorGrammar.blockifyTextAutomator(this.currentScript)) {
-        player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-        Modal.message.show("Automator script has errors, cannot view in blocks.");
-      }
-      this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
+      if (this.isBlock) this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
       this.$parent.openRequest = false;
     },
     dropdownLabel(script) {
@@ -89,7 +87,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div :key="scripts.length">
     <div
       v-for="script in scripts"
       :key="script.id"

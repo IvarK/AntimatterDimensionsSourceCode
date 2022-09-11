@@ -48,13 +48,17 @@ export default {
 <template>
   <div class="l-laitela-annihilation-container">
     <button
+      v-if="darkMatter.lt(matterRequirement)"
+      class="l-laitela-annihilation-button"
+    >
+      Annihilation requires {{ format(matterRequirement, 2) }} Dark Matter
+    </button>
+    <button
+      v-else
       class="l-laitela-annihilation-button c-laitela-annihilation-button"
       @click="annihilate"
     >
-      <span v-if="darkMatter.lt(matterRequirement)">
-        Annihilation requires {{ format(matterRequirement, 2) }} Dark Matter
-      </span>
-      <b v-else>Annihilate your Dark Matter Dimensions</b>
+      <b>Annihilate your Dark Matter Dimensions</b>
     </button>
     <br>
     <br>

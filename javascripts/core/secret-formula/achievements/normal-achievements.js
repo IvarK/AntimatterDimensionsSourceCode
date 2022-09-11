@@ -1101,7 +1101,7 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 152,
-    name: "Y'all got any more of them glyphs?",
+    name: "Y'all got any more of them Glyphs?",
     get description() { return `Have ${formatInt(100)} Glyphs in your inventory.`; },
     checkRequirement: () => Glyphs.inventoryList.length >= 100,
     checkEvent: GAME_EVENT.GLYPHS_CHANGED
@@ -1285,6 +1285,8 @@ GameDatabase.achievements.normal = [
     id: 177,
     name: "This mile took a celestial",
     description: "Complete all Singularity Milestones at least once.",
+    checkRequirement: () => SingularityMilestones.all.every(x => x.completions > 0),
+    checkEvent: GAME_EVENT.SINGULARITY_RESET_AFTER,
   },
   {
     id: 178,

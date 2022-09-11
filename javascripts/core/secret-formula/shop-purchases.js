@@ -28,14 +28,16 @@ GameDatabase.shopPurchases = {
   replicantiPurchases: {
     key: "replicantiPurchases",
     cost: 60,
-    description: "Double your Replicanti gain. (additive)",
-    multiplier: purchases => (purchases === 0 ? 1 : 2 * purchases),
+    description: "Increase your Replicanti gain by 50%. (additive)",
+    multiplier: purchases => (purchases === 0 ? 1 : 1 + 0.5 * purchases),
+    formatEffect: x => formatX(x, 2, 1),
   },
   dilatedTimePurchases: {
     key: "dilatedTimePurchases",
     cost: 40,
-    description: "Double your Dilated Time gain. (additive)",
-    multiplier: purchases => (purchases === 0 ? 1 : 2 * purchases),
+    description: "Increase your Dilated Time gain by 50%. (additive)",
+    multiplier: purchases => (purchases === 0 ? 1 : 1 + 0.5 * purchases),
+    formatEffect: x => formatX(x, 2, 1),
   },
   smallTimeSkip: {
     key: "smallTimeSkip",
@@ -43,7 +45,7 @@ GameDatabase.shopPurchases = {
     description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
     singleUse: true,
     onPurchase: () => {
-      kong.purchaseTimeSkip(10);
+      kong.purchaseTimeSkip();
     }
   },
   bigTimeSkip: {
@@ -52,7 +54,7 @@ GameDatabase.shopPurchases = {
     description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
     singleUse: true,
     onPurchase: () => {
-      kong.purchaseLongerTimeSkip(20);
+      kong.purchaseLongerTimeSkip();
     }
   },
 };

@@ -143,7 +143,7 @@ export const AutomatorLexer = (() => {
     $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : DC.D0)
   });
   createInCategory(AutomatorCurrency, "PendingGlyphLevel", /pending[ \t]+glyph[ \t]+level/i, {
-    $autocomplete: "pending glyph level",
+    $autocomplete: "pending Glyph level",
     $getter: () => new Decimal(isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0),
   });
 
@@ -382,18 +382,25 @@ export const AutomatorLexer = (() => {
     return x;
   };
 
+  // In order to disallow individual words within command key words/phrases, we need to ignore certain patterns (mostly
+  // ones with special regex characters), split the rest of them up across all spaces and tabs, and then flatten the
+  // final resulting array. Note that this technically duplicates words present in multiple phrases (eg. "pending")
+  const ignoredPatterns = ["Identifier", "LCurly", "RCurly"];
+  const forbiddenConstantPatterns = lexer.lexerDefinition
+    .filter(p => !ignoredPatterns.includes(p.name))
+    .map(p => p.PATTERN.source)
+    .flatMap(p => ((p.includes("(") || p.includes(")")) ? p : p.split("[ \\t]+")));
+
   return {
     lexer,
     tokens: automatorTokens,
     tokenIds,
     tokenMap,
     standardizeAutomatorValues,
-    allowedConstantPatterns: lexer.lexerDefinition
-      .filter(p => p.name !== "NumberLiteral" && p.name !== "Identifier")
-      .map(p => p.PATTERN),
+    forbiddenConstantPatterns,
   };
 })();
 
 export const standardizeAutomatorValues = AutomatorLexer.standardizeAutomatorValues;
 
-export const allowedConstantPatterns = AutomatorLexer.allowedConstantPatterns;
+export const forbiddenConstantPatterns = AutomatorLexer.forbiddenConstantPatterns;

@@ -69,20 +69,19 @@ export default {
       <div class="c-automator-tab__interval-info">
         {{ intervalText }}
       </div>
-      Script changes are not immediately saved to your computer under all conditions,
-      check the Automator How To Play entries for more details.
-      <br>
-      There are two character limits to reduce lag. If either is exceeded,
-      <span :class="{ 'c-overlimit': !withinLimit }">
-        changes to your scripts will not be saved!
-      </span>
-      <br>
       <span :class="{ 'c-overlimit': currentChars > maxScriptChars }">
         This script: {{ formatInt(currentChars) }} / {{ formatInt(maxScriptChars) }}
       </span>
       |
       <span :class="{ 'c-overlimit': totalChars > maxTotalChars }">
         Across all scripts: {{ formatInt(totalChars) }} / {{ formatInt(maxTotalChars) }}
+      </span>
+      <br>
+      <span
+        v-if="!withinLimit"
+        class="c-overlimit"
+      >
+        (Your changes will not be saved due to being over a character limit!)
       </span>
       <div class="c-automator-split-pane">
         <SplitPane

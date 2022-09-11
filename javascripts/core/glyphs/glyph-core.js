@@ -724,7 +724,7 @@ export function getRarity(x) {
 }
 
 export function getColor(strength) {
-  return getRarity(strength)[Theme.current().isDark() ? "darkColor" : "lightColor"];
+  return getRarity(strength)[(player.options.forceDarkGlyphs || Theme.current().isDark()) ? "darkColor" : "lightColor"];
 }
 
 export function getAdjustedGlyphLevel(glyph, realityGlyphBoost = Glyphs.levelBoost, ignoreCelestialEffects = false) {

@@ -23,13 +23,16 @@ export default {
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     classObject() {
       return {
         "o-teresa-shop-button": true,
         "o-teresa-shop-button--available": this.isAvailableForPurchase && !this.isCapped,
-        "o-teresa-shop-button--capped": this.isCapped
+        "o-teresa-shop-button--capped": this.isCapped,
+        "o-teresa-shop-button--pelle-disabled": this.isDoomed &&
+          (this.upgrade === PerkShopUpgrade.musicGlyph || this.upgrade === PerkShopUpgrade.fillMusicGlyph)
       };
-    }
+    },
   },
   methods: {
     update() {
@@ -61,3 +64,10 @@ export default {
     </button>
   </div>
 </template>
+
+<style scoped>
+.o-teresa-shop-button--pelle-disabled {
+  text-decoration: line-through;
+  cursor: auto;
+}
+</style>

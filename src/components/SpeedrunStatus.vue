@@ -13,6 +13,7 @@ export default {
       offlineFraction: 0,
       mostRecent: {},
       isCollapsed: false,
+      timeSince: 0,
     };
   },
   computed: {
@@ -42,7 +43,10 @@ export default {
   methods: {
     update() {
       const speedrun = player.speedrun;
+      const db = GameDatabase.speedrunMilestones;
       this.isActive = speedrun.isActive;
+      // Short-circuit if speedrun isn't active; updating some later stuff can cause vue errors outside of speedruns
+      if (!this.isActive) return;
       this.isSegmented = speedrun.isSegmented;
       this.hasStarted = speedrun.hasStarted;
       this.startDate = speedrun.startDate;
@@ -52,9 +56,10 @@ export default {
       this.timePlayedStr = Time.realTimePlayed.toStringShort();
       this.offlineProgress = player.options.offlineProgress;
       this.offlineFraction = speedrun.offlineTimeUsed / Math.clampMin(player.records.realTimePlayed, 1);
-      this.mostRecent = speedrun.milestones.length === 0
-        ? 0
-        : speedrun.milestones[speedrun.milestones.length - 1];
+      this.mostRecent = speedrun.milestones[speedrun.milestones.length - 1] ?? 0;
+      const lastMilestoneKey = db.find(m => m.id === this.mostRecent)?.key;
+      this.timeSince = Time.realTimePlayed.minus(TimeSpan.fromMilliseconds(speedrun.records[lastMilestoneKey] ?? 0))
+        .toStringShort();
     },
     milestoneName(id) {
       const db = GameDatabase.speedrunMilestones;
@@ -97,7 +102,7 @@ export default {
       <br>
       Offline Progress: <span v-html="offlineText" />
       <br>
-      Most Recent Milestone: {{ milestoneName(mostRecent) }}
+      Most Recent Milestone: {{ milestoneName(mostRecent) }} <span v-if="mostRecent">({{ timeSince }} ago)</span>
       <br>
     </div>
     <div

@@ -436,7 +436,7 @@ export function gameLoop(passDiff, options = {}) {
     return;
   }
 
-  // Ra-Enslaved auto-release stored time (once every 5 ticks)
+  // Ra-Nameless auto-release stored time (once every 5 ticks)
   if (Enslaved.isAutoReleasing) {
     Enslaved.autoReleaseTick++;
   }
@@ -837,12 +837,6 @@ function afterSimulation(seconds, playerBefore) {
   GameUI.notify.showBlackHoles = true;
 }
 
-const OFFLINE_BH_PAUSE_STATE = {
-  ACTIVE: 0,
-  INACTIVE: 1,
-  PAUSED: 2,
-};
-
 export function simulateTime(seconds, real, fast) {
   // The game is simulated at a base 50ms update rate, with a max of
   // player.options.offlineTicks ticks. additional ticks are converted
@@ -884,6 +878,8 @@ export function simulateTime(seconds, real, fast) {
     Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
 
+  EventHub.dispatch(GAME_EVENT.OFFLINE_CURRENCY_GAINED);
+
   let remainingRealSeconds = seconds;
   // During async code the number of ticks remaining can go down suddenly
   // from "Speed up" which means tick length needs to go up, and thus
@@ -902,69 +898,16 @@ export function simulateTime(seconds, real, fast) {
   };
 
   // Simulation code which accounts for BH cycles (segments where a BH is active doesn't use diff since it splits
-  // up intervals based on real time instead in an effort to keep ticks all roughly equal in game time). With black
-  // hole auto-pausing, the simulation now becomes a three-step process:
-  // 1. Simulate until the BH dectivates (this only occurs if it's active when the simulation starts)
-  // 2. At this point, the BH we're tracking is inactive and timeToNextStateChange will return the proper value until
-  //    we should pause it, so we run until we either hit that or run out of time (this often takes very few ticks)
-  // 3. The BH is now paused and the simpler code works to finish the rest of the ticks
-  let offlineBHState = OFFLINE_BH_PAUSE_STATE.ACTIVE;
-  const trackedBH = player.blackHoleAutoPauseMode;
+  // up intervals based on real time instead in an effort to keep ticks all roughly equal in game time).
+  // Black hole auto-pausing is entirely handled by the black hole phase advancement code (for actually pausing)
+  // and calculateOfflineTick (for time calculation).
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
-    if (trackedBH === 0) {
-      // Auto-pause is off, don't bother doing anything fancy
-      loopFn = i => {
-        const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
-          i, 0.0001);
-        remainingRealSeconds -= realTickTime;
-        gameLoop(1000 * realTickTime, { blackHoleSpeedup });
-      };
-    } else {
-      if (!BlackHole(trackedBH).isActive) offlineBHState++;
-      loopFn = i => {
-        let realTickTime, blackHoleSpeedup, limit, diff;
-        switch (offlineBHState) {
-          case OFFLINE_BH_PAUSE_STATE.ACTIVE:
-            // If we have to reduce tick length to not overshoot the transition, we also advance the simulation state
-            // We skip past the BH going inactive by 1 ms in order to ensure that the next simulation step actually has
-            // an inactive BH in order for the logic to work out
-            [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
-              i, 0.0001);
-            limit = BlackHole(trackedBH).timeToNextStateChange + 0.001;
-            if (realTickTime > limit) {
-              remainingRealSeconds -= limit;
-              gameLoop(1000 * limit, { blackHoleSpeedup });
-              offlineBHState++;
-            } else {
-              remainingRealSeconds -= realTickTime;
-              gameLoop(1000 * realTickTime, { blackHoleSpeedup });
-            }
-            break;
-          case OFFLINE_BH_PAUSE_STATE.INACTIVE:
-            // Same as above, but this time the extra 1 ms serves the purpose of putting the game past the auto-pause
-            // threshold. Otherwise, it'll immediately auto-pause once more when online
-            [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
-              i, 0.0001);
-            limit = BlackHole(trackedBH).timeToNextStateChange - BlackHoles.ACCELERATION_TIME + 0.001;
-            if (realTickTime > limit) {
-              remainingRealSeconds -= limit;
-              gameLoop(1000 * limit, { blackHoleSpeedup });
-              offlineBHState++;
-            } else {
-              remainingRealSeconds -= realTickTime;
-              gameLoop(1000 * realTickTime, { blackHoleSpeedup });
-            }
-            break;
-          case OFFLINE_BH_PAUSE_STATE.PAUSED:
-            // At this point the BH is paused and we just use the same code as no BH at all. This isn't necessarily
-            // executed in all situations; for example short offline periods may not reach this code
-            diff = remainingRealSeconds / i;
-            gameLoop(1000 * diff);
-            remainingRealSeconds -= diff;
-            break;
-        }
-      };
-    }
+    loopFn = i => {
+      const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
+        i, 0.0001);
+      remainingRealSeconds -= realTickTime;
+      gameLoop(1000 * realTickTime, { blackHoleSpeedup });
+    };
   }
 
   // We don't show the offline modal here or bother with async if doing a fast simulation

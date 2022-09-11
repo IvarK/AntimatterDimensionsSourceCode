@@ -6,7 +6,7 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get name() {
-    return TimeDimension(this.tier).displayName;
+    return TimeDimension(this.tier).shortDisplayName;
   }
 
   get fullName() {

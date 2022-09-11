@@ -53,12 +53,12 @@ export default {
     },
     handleClick() {
       if (this.isEnslaved && !this.isVisible) {
-        // If you're in Enslaved and haven't gotten the secret study
+        // If you're in Nameless and haven't gotten the secret study
         player.secretUnlocks.viewSecretTS = true;
         EnslavedProgress.secretStudy.giveProgress();
         Currency.timeTheorems.add(this.enslavedTT);
       } else if (!this.isEnslaved && this.isVisible) {
-        // If you aren't in Enslaved, double clicking will hide the study
+        // If you aren't in Nameless, double clicking will hide the study
         const clickTime = Date.now();
         if (clickTime - ui.lastClickTime < 750) {
           ui.lastClickTime = 0;
@@ -67,7 +67,7 @@ export default {
           ui.lastClickTime = clickTime;
         }
       } else {
-        // If you aren't in Enslaved and it isn't visible, show it and give the achievement
+        // If you aren't in Nameless and it isn't visible, show it and give the achievement
         ui.lastClickTime = 0;
         if (!player.secretUnlocks.viewSecretTS) {
           player.secretUnlocks.viewSecretTS = true;

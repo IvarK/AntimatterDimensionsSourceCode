@@ -1,8 +1,10 @@
 <script>
 import AutomatorBlocks from "./AutomatorBlocks";
 import AutomatorButton from "./AutomatorButton";
+import AutomatorDataTransferPage from "./AutomatorDataTransferPage";
 import AutomatorDefinePage from "./AutomatorDefinePage";
 import AutomatorDocsCommandList from "./AutomatorDocsCommandList";
+import AutomatorDocsIntroPage from "./AutomatorDocsIntroPage";
 import AutomatorDocsTemplateList from "./AutomatorDocsTemplateList";
 import AutomatorErrorPage from "./AutomatorErrorPage";
 import AutomatorEventLog from "./AutomatorEventLog";
@@ -10,12 +12,14 @@ import AutomatorScriptDropdownEntryList from "./AutomatorScriptDropdownEntryList
 import ExpandingControlBox from "@/components/ExpandingControlBox";
 
 export const AutomatorPanels = {
+  INTRO_PAGE: 0,
   COMMANDS: 1,
   ERRORS: 2,
   EVENTS: 3,
-  CONSTANTS: 4,
-  TEMPLATES: 5,
-  BLOCKS: 6
+  DATA_TRANSFER: 4,
+  CONSTANTS: 5,
+  TEMPLATES: 6,
+  BLOCKS: 7
 };
 
 export default {
@@ -25,7 +29,9 @@ export default {
     AutomatorDocsCommandList,
     AutomatorErrorPage,
     AutomatorEventLog,
+    AutomatorDataTransferPage,
     AutomatorBlocks,
+    AutomatorDocsIntroPage,
     AutomatorDocsTemplateList,
     AutomatorDefinePage,
     AutomatorScriptDropdownEntryList,
@@ -99,7 +105,9 @@ export default {
       return AutomatorPanels;
     },
     importTooltip() {
-      return this.canMakeNewScript ? "Import automator script" : "You have too many scripts to import another!";
+      return this.canMakeNewScript
+        ? "Import single automator script or data"
+        : "You have too many scripts to import another!";
     },
     currentEditorScriptName() {
       return this.scripts.find(s => s.id === this.currentScriptID).name;
@@ -131,21 +139,17 @@ export default {
       this.currentScriptID = player.reality.automator.state.editorScript;
     },
     exportScript() {
-      // Cut off leading and trailing whitespace
-      const trimmed = AutomatorData.currentScriptText().replace(/^\s*(.*?)\s*$/u, "$1");
-      if (trimmed.length === 0) {
-        GameUI.notify.error("Could not export blank Automator script!");
-      } else {
-        // Append the script name into the beginning of the string as "name_length||name||"
-        const name = AutomatorData.currentScriptName();
-        copyToClipboard(GameSaveSerializer.encodeText(
-          `${name.length}||${name}||${trimmed}`, "automator script"));
+      const toExport = AutomatorBackend.exportCurrentScriptContents();
+      if (toExport) {
+        copyToClipboard(toExport);
         GameUI.notify.info("Exported current Automator script to your clipboard");
+      } else {
+        GameUI.notify.error("Could not export blank Automator script!");
       }
     },
     importScript() {
       if (!this.canMakeNewScript) return;
-      Modal.importScript.show();
+      Modal.importScriptData.show();
     },
     onGameLoad() {
       this.updateCurrentScriptID();
@@ -220,6 +224,12 @@ export default {
     <div class="c-automator__controls l-automator__controls">
       <div class="l-automator-button-row">
         <AutomatorButton
+          v-tooltip="'Automator Introduction'"
+          class="fa-circle-info"
+          :class="activePanelClass(panelEnum.INTRO_PAGE)"
+          @click="infoPaneID = panelEnum.INTRO_PAGE"
+        />
+        <AutomatorButton
           v-tooltip="'Scripting Information'"
           class="fa-list"
           :class="activePanelClass(panelEnum.COMMANDS)"
@@ -231,6 +241,12 @@ export default {
           class="fa-exclamation-triangle"
           :class="activePanelClass(panelEnum.ERRORS)"
           @click="infoPaneID = panelEnum.ERRORS"
+        />
+        <AutomatorButton
+          v-tooltip="'Extended Data Transfer'"
+          class="fa-window-restore"
+          :class="activePanelClass(panelEnum.DATA_TRANSFER)"
+          @click="infoPaneID = panelEnum.DATA_TRANSFER"
         />
         <AutomatorButton
           v-tooltip="'View recently executed commands'"
@@ -273,7 +289,7 @@ export default {
       </div>
       <div class="l-automator-button-row">
         <AutomatorButton
-          v-tooltip="'Export automator script'"
+          v-tooltip="'Export single automator script'"
           class="fa-file-export"
           @click="exportScript"
         />
@@ -322,9 +338,11 @@ export default {
       </div>
     </div>
     <div class="c-automator-docs l-automator-pane__content">
-      <AutomatorDocsCommandList v-if="infoPaneID === panelEnum.COMMANDS" />
+      <AutomatorDocsIntroPage v-if="infoPaneID === panelEnum.INTRO_PAGE" />
+      <AutomatorDocsCommandList v-else-if="infoPaneID === panelEnum.COMMANDS" />
       <AutomatorErrorPage v-else-if="infoPaneID === panelEnum.ERRORS" />
       <AutomatorEventLog v-else-if="infoPaneID === panelEnum.EVENTS" />
+      <AutomatorDataTransferPage v-else-if="infoPaneID === panelEnum.DATA_TRANSFER" />
       <AutomatorDefinePage v-else-if="infoPaneID === panelEnum.CONSTANTS" />
       <AutomatorDocsTemplateList v-else-if="infoPaneID === panelEnum.TEMPLATES" />
       <AutomatorBlocks v-else-if="infoPaneID === panelEnum.BLOCKS" />

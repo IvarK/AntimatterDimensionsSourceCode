@@ -94,7 +94,7 @@ export default {
 <template>
   <ModalWrapper>
     <template #header>
-      Cracks in The Enslaved Ones' Reality
+      Cracks in The Nameless Ones' Reality
     </template>
     <div class="c-enslaved-hint-modal">
       <div>
@@ -139,6 +139,7 @@ export default {
         <br><br>
         <PrimaryButton
           :enabled="realityHintsLeft > 0 && canGetHint"
+          class="l-enslaved-hint-button"
           @click="giveRealityHint(realityHintsLeft)"
         >
           Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
@@ -146,6 +147,7 @@ export default {
         <br>
         <PrimaryButton
           :enabled="glyphHintsLeft > 0 && canGetHint"
+          class="l-enslaved-hint-button"
           @click="giveGlyphHint(glyphHintsLeft)"
         >
           Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
@@ -161,5 +163,9 @@ export default {
 <style scoped>
 .c-icon-wrapper {
   margin-right: 1rem;
+}
+
+.l-enslaved-hint-button {
+  margin: 0.4rem 0;
 }
 </style>

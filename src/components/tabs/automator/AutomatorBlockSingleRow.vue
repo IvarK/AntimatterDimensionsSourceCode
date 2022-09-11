@@ -95,6 +95,12 @@ export default {
         "c-automator-block-row-event": this.isEventLine,
         "c-automator-block-row-error": this.isErrorLine
       };
+    },
+    // The target value is either a String or some kind of a number - we need to force it to be a String for the
+    // component type-checking (Numbers are implicitly cast, but Decimals are not)
+    nextSelection() {
+      const val = this.b.targets ? this.b[this.b.targets[0]].toString() : "";
+      return val;
     }
   }
 };
@@ -130,7 +136,7 @@ export default {
         :block="b"
         :block-target="b.targets[0]"
         :patterns="b.allowedPatterns"
-        :initial-selection="b.targets ? b[b.targets[0]] : ''"
+        :initial-selection="nextSelection()"
         :update-function="updateBlock"
         :recursive="true"
       />

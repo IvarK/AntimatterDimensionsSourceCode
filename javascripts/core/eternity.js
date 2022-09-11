@@ -25,11 +25,11 @@ function giveEternityRewards(auto) {
 
   if (EternityChallenge.isRunning) {
     const challenge = EternityChallenge.current;
-    challenge.addCompletion();
+    challenge.addCompletion(false);
     if (Perk.studyECBulk.isBought) {
       let completionCount = 0;
       while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
-        challenge.addCompletion();
+        challenge.addCompletion(false);
         completionCount++;
       }
       AutomatorData.lastECCompletionCount = completionCount;
@@ -187,7 +187,9 @@ function applyRealityUpgradesAfterEternity() {
 }
 
 function askEternityConfirmation() {
-  if (player.options.confirmations.eternity) {
+  if (player.dilation.active && player.options.confirmations.dilation) {
+    Modal.exitDilation.show();
+  } else if (player.options.confirmations.eternity) {
     Modal.eternity.show();
   } else {
     animateAndEternity();

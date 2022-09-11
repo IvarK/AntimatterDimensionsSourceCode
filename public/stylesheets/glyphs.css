@@ -2,7 +2,6 @@
   --color-background: white;
   --color-glyph-sac-text-input: #f0f0f0;
   --color-glyph-sac-text-input--focused: #d6d6d6;
-  --color-glyph-sac-text-tooltip: #505050;
   --color-glyph-equipping: #444444;
   --color-background-dark-green-gray: #dbe6db;
   --color-text-light-blue-gray: #3b3b46;
@@ -16,7 +15,6 @@
   --color-background: black;
   --color-glyph-sac-text-input: #333333;
   --color-glyph-sac-text-input--focused: #555555;
-  --color-glyph-sac-text-tooltip: #b4b4b4;
   --color-glyph-equipping: #adadad;
   --color-background-dark-green-gray: #113311;
   --color-text-light-blue-gray: #d4d4ff;
@@ -558,10 +556,8 @@
   text-align: center;
   font-size: 1.2rem;
   font-weight: normal;
-  color: var(--color-text);
   text-shadow: none;
-  background-color: var(--color-background);
-  border: var(--var-border-width, 0.2rem) solid var(--color-background);
+  border: var(--var-border-width, 0.2rem) solid;
   border-radius: var(--var-border-radius, 0.6rem);
   padding: 0 0.6rem;
   padding-bottom: 0.6rem;
@@ -581,7 +577,6 @@
   flex-direction: column;
   width: calc(100% + 2.4rem);
   font-weight: bold;
-  background-color: var(--color-background);
   border: var(--var-border-width, 0.2rem) solid;
   border-radius: var(--var-border-radius, 0.8rem);
   margin: -0.6rem;
@@ -589,14 +584,13 @@
 }
 
 .l-glyph-tooltip__effects {
-  margin-top: 0.8rem;
+  margin-top: 1rem;
   margin-bottom: -0.8rem;
 }
 
 .c-glyph-tooltip__sacrifice {
   font-size: 1rem;
   font-weight: normal;
-  color: var(--color-glyph-sac-text-tooltip);
 }
 
 .c-glyph-tooltip__sacrifice--touchable {
@@ -635,6 +629,7 @@
   height: 18rem;
   position: relative;
   background-color: rgba(0, 0, 0, 0%);
+  margin-bottom: 1rem;
 }
 
 .l-equipped-glyphs__dropzone {
@@ -680,12 +675,6 @@
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-}
-
-.l-glyph-equip-button {
-  width: 100%;
-  height: 4rem;
-  margin: 0.5rem;
 }
 
 .l-glyph-set-save__header {
@@ -868,7 +857,7 @@
 .c-current-glyph-effects {
   overflow: auto;
   width: 45rem;
-  height: 30rem;
+  height: 31rem;
   position: relative;
   color: var(--color-reality-dark);
   background: var(--color-background);
@@ -1266,7 +1255,7 @@
 .l-glyph-color-position__low {
   width: 0%;
   position: absolute;
-  top: 2.9rem;
+  top: 3.9rem;
   right: 22.5rem;
 }
 

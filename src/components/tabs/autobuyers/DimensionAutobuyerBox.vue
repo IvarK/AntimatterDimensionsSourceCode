@@ -26,7 +26,7 @@ export default {
       return Autobuyer.antimatterDimension(this.tier);
     },
     name() {
-      return `${AntimatterDimension(this.tier).displayName} Dimension Autobuyer`;
+      return `${AntimatterDimension(this.tier).shortDisplayName} Dimension Autobuyer`;
     },
     modeDisplay() {
       switch (this.mode) {

@@ -45,6 +45,7 @@ export default {
       this.IAPsDisabled = player.IAP.disabled;
     },
     showStore() {
+      if (GameEnd.creditsClosed) return;
       SecretAchievement(33).unlock();
       Modal.shop.show();
     },
@@ -52,6 +53,7 @@ export default {
       Payments.cancelPurchase();
     },
     respec() {
+      if (GameEnd.creditsClosed) return;
       ShopPurchase.respecRequest();
     }
   },

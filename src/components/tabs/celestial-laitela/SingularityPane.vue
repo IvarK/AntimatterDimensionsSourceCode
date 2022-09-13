@@ -23,6 +23,7 @@ export default {
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     singularityFormText() {
       const formText = this.singularitiesGained === 1 ? "all Dark Energy into a Singularity"
         : `all Dark Energy into ${quantify("Singularity", this.singularitiesGained, 2)}`;
@@ -103,6 +104,13 @@ export default {
       if (rate < 1 / 60) return `${format(3600 * rate, 2, 3)} per hour`;
       if (rate < 1) return `${format(60 * rate, 2, 3)} per minute`;
       return `${format(rate, 2, 3)} per second`;
+    },
+    condenseClassObject() {
+      return {
+        "c-laitela-singularity": true,
+        "c-laitela-singularity--active": this.canPerformSingularity && !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed,
+      };
     }
   }
 };
@@ -112,11 +120,10 @@ export default {
   <div class="c-laitela-singularity-container">
     <div>
       <h2>
-        You have {{ quantify("Singularity", singularities, 2, 0) }}
+        You have {{ quantify("Singularity", singularities, 2) }}
       </h2>
       <button
-        class="c-laitela-singularity"
-        :class="{ 'c-laitela-singularity--active' : canPerformSingularity }"
+        :class="condenseClassObject()"
         @click="doSingularity"
       >
         <h2>

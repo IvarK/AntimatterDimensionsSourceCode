@@ -1,19 +1,24 @@
-window.format = function format(value, places = 0, placesUnder1000 = 0) {
+function isEND() {
+  const threshold = GameEnd.endState > 4.2 ? 1 : (GameEnd.endState - 2.5) / 2;
   // Using the Pelle.isDoomed getter here causes this to not update properly after a game restart
-  if (player.celestials.pelle.doomed) {
-    if ((GameEnd.endState - 2.5) / 2 > Math.random()) return "END";
-  }
+  return player.celestials.pelle.doomed && Math.random() < threshold;
+}
+
+window.format = function format(value, places = 0, placesUnder1000 = 0) {
+  if (isEND()) return "END";
   return Notations.current.format(value, places, placesUnder1000, 3);
 };
 
 window.formatInt = function formatInt(value) {
+  if (isEND()) return "END";
   if (Notations.current.isPainful) {
-    return format(value, 2, 0);
+    return format(value, 2);
   }
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 };
 
 window.formatFloat = function formatFloat(value, digits) {
+  if (isEND()) return "END";
   if (Notations.current.isPainful) {
     return format(value, Math.max(2, digits), digits);
   }
@@ -21,6 +26,7 @@ window.formatFloat = function formatFloat(value, digits) {
 };
 
 window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000) {
+  if (isEND()) return "END";
   const notation = Notations.current;
   // This is basically just a copy of the format method from notations library,
   // with the pre-break case removed.
@@ -69,6 +75,7 @@ window.formatRarity = function formatRarity(value) {
 
 // We assume 2/0, 2/2 decimal places to keep parameter count sensible; this is used very rarely
 window.formatMachines = function formatMachines(realPart, imagPart) {
+  if (isEND()) return "END";
   const parts = [];
   if (Decimal.neq(realPart, 0)) parts.push(format(realPart, 2));
   if (Decimal.neq(imagPart, 0)) parts.push(`${format(imagPart, 2, 2)}i`);

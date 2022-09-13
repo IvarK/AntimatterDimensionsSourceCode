@@ -29,17 +29,12 @@ export default {
       isQuickResetAvailable: false,
       hasContinuum: false,
       isContinuumActive: false,
+      multiplierText: "",
     };
   },
   computed: {
     sacrificeTooltip() {
       return `Boosts 8th Antimatter Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
-    },
-    multiplierText() {
-      const sacText = this.isSacrificeUnlocked
-        ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
-        : "";
-      return `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}${sacText}`;
     },
   },
   methods: {
@@ -86,6 +81,10 @@ export default {
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
+      const sacText = this.isSacrificeUnlocked
+        ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
+        : "";
+      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}${sacText}`;
     }
   }
 };

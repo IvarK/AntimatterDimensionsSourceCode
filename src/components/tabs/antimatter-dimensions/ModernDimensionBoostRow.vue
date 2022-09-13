@@ -12,13 +12,16 @@ export default {
       imaginaryBoosts: 0,
       lockText: null,
       unlockedByBoost: null,
+      requirementText: null,
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     dimName() {
       return AntimatterDimension(this.requirement.tier).shortDisplayName;
     },
     boostCountText() {
+      if (this.requirementText) return this.requirementText;
       const parts = [this.purchasedBoosts];
       if (this.imaginaryBoosts !== 0) {
         parts.push(this.imaginaryBoosts);
@@ -43,6 +46,7 @@ export default {
       this.imaginaryBoosts = DimBoost.imaginaryBoosts;
       this.lockText = DimBoost.lockText;
       this.unlockedByBoost = DimBoost.unlockedByBoost;
+      if (this.isDoomed) this.requirementText = formatInt(this.purchasedBoosts);
     },
     dimensionBoost(bulk) {
       if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;

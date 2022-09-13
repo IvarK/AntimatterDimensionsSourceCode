@@ -67,7 +67,7 @@ GameDatabase.progressStages = [
     suggestedResource: "Eternity Challenge Completions and Eternity Points",
     // Half from ECs, half from EP (up to e1300)
     subProgressValue: save => 0.008 * Object.values(save.eternityChalls).reduce((sum, c) => sum + c, 0) +
-      ep.log10() / 2500,
+      new Decimal(save.eternityPoints).log10() / 2500,
   },
   {
     id: PROGRESS_STAGE.EARLY_DILATION,

@@ -17,9 +17,14 @@ export default {
       distantStart: 0,
       lockText: null,
       canBulkBuy: false,
+      scalingText: {
+        distant: null,
+        remote: null,
+      }
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     dimName() {
       return AntimatterDimension(this.requirement.tier).shortDisplayName;
     },
@@ -32,9 +37,9 @@ export default {
       const parts = [Math.max(this.galaxies.normal, 0)];
       if (this.galaxies.replicanti > 0) parts.push(this.galaxies.replicanti);
       if (this.galaxies.dilation > 0) parts.push(this.galaxies.dilation);
-      const sum = parts.map(formatInt).join(" + ");
+      const sum = parts.map(this.formatGalaxies).join(" + ");
       if (parts.length >= 2) {
-        return `${sum} = ${formatInt(parts.sum())}`;
+        return `${sum} = ${this.formatGalaxies(parts.sum())}`;
       }
       return sum;
     },
@@ -55,8 +60,8 @@ export default {
           return `Each Galaxy is more expensive past ${quantifyInt("Galaxy", this.distantStart)}`;
         case GALAXY_TYPE.REMOTE:
           return "Increased Galaxy cost scaling: " +
-            `Quadratic past ${formatInt(this.distantStart)} (distant), ` +
-            `exponential past ${formatInt(Galaxy.remoteStart)} (remote)`;
+            `Quadratic past ${this.scalingText.distant ?? formatInt(this.distantStart)} (distant),
+              exponential past ${this.scalingText.remote ?? formatInt(Galaxy.remoteStart)} (remote)`;
       }
       return undefined;
     },
@@ -77,11 +82,20 @@ export default {
       this.distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
       this.lockText = Galaxy.lockText;
       this.canBulkBuy = EternityMilestone.autobuyMaxGalaxies.isReached;
+      if (this.isDoomed) {
+        this.scalingText = {
+          distant: this.formatGalaxies(this.distantStart),
+          remote: this.formatGalaxies(Galaxy.remoteStart),
+        };
+      }
     },
     buyGalaxy(bulk) {
       if (!this.canBeBought) return;
       manualRequestGalaxyReset(this.canBulkBuy && bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
+    },
+    formatGalaxies(num) {
+      return num > 1e8 ? format(num, 2) : formatInt(num);
     },
   }
 };

@@ -32,13 +32,16 @@ export default {
       continuumValue: 0,
       isShown: false,
       isCostsAD: false,
+      formattedAmount: null,
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     name() {
       return `${AntimatterDimension(this.tier).shortDisplayName} Antimatter Dimension`;
     },
     amountText() {
+      if (this.formattedAmount) return this.formattedAmount;
       const amount = this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
       return `${amount} (${formatInt(this.boughtBefore10)})`;
     },
@@ -74,6 +77,7 @@ export default {
   methods: {
     update() {
       const tier = this.tier;
+      if (tier === 8 && this.isDoomed) this.formattedAmount = formatInt(this.amount);
       if (tier > DimBoost.maxDimensionsUnlockable) return;
       const dimension = AntimatterDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;

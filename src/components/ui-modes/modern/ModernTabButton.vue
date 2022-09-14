@@ -67,9 +67,10 @@ export default {
       class="l-tab-btn-inner"
       @click="tab.show(true)"
     >
-      {{ tabName }} <i
+      {{ tabName }}
+      <div
         v-if="hasNotification"
-        class="fas fa-exclamation"
+        class="fas fa-circle-exclamation l-tab-notification"
       />
     </div>
     <div
@@ -89,12 +90,11 @@ export default {
           "
           @click="subtab.show(true)"
         >
-          <span v-html="subtab.symbol">
-            <i
-              v-if="subtab.hasNotification"
-              class="fas fa-exclamation"
-            />
-          </span>
+          <span v-html="subtab.symbol" />
+          <div
+            v-if="subtab.hasNotification"
+            class="fas fa-circle-exclamation l-tab-notification"
+          />
           <div class="o-subtab__tooltip">
             {{ subtab.name }}
           </div>

@@ -197,6 +197,7 @@ body.t-s9 {
 }
 
 .l-tab-btn-inner {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;

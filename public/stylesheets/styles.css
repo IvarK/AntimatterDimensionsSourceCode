@@ -6022,6 +6022,21 @@ kbd {
   transition: transform 0.25s ease-in;
 }
 
+.l-tab-notification {
+  position: absolute;
+  top: -0.2rem;
+  right: -0.2rem;
+  z-index: 5;
+  animation: a-tab-notification 2s infinite;
+  font-size: 1.5rem;
+}
+
+@keyframes a-tab-notification {
+  0% { color: yellow; }
+  50% { color: gray; }
+  100% { color: yellow; }
+}
+
 /* #endregion o-notification */
 
 /* #region component */

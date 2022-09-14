@@ -51,15 +51,17 @@ export default {
     class="o-tab-btn"
     @click="tab.show(true)"
   >
-    {{ tabName }} <i
+    {{ tabName }}
+    <div
       v-if="hasNotification"
-      class="fas fa-exclamation"
+      class="fas fa-circle-exclamation l-tab-notification"
     />
   </button>
 </template>
 
 <style scoped>
 .o-tab-btn {
+  position: relative;
   height: 3.1rem;
   vertical-align: middle;
   margin: 0.2rem;

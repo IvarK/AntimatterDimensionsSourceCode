@@ -54,15 +54,16 @@ export default {
     @click="subtab.show(true)"
   >
     {{ tabName }}
-    <i
+    <div
       v-if="hasNotification"
-      class="fas fa-exclamation"
+      class="fas fa-circle-exclamation l-tab-notification"
     />
   </button>
 </template>
 
 <style scoped>
 .o-tab-btn {
+  position: relative;
   height: 2.5rem;
   vertical-align: middle;
   padding-top: 0.2rem;

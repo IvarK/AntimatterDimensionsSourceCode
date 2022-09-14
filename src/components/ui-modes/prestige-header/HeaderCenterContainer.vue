@@ -1,6 +1,6 @@
 <script>
 import ArmageddonButton from "../../tabs/celestial-pelle/ArmageddonButton";
-import RealityMachinesHeader from "../../RealityMachinesHeader";
+import RealityCurrencyHeader from "../../RealityCurrencyHeader";
 
 import HeaderTickspeedRowClassic from "../HeaderTickspeedRowClassic";
 import HeaderTickspeedRowModern from "../HeaderTickspeedRowModern";
@@ -15,7 +15,7 @@ export default {
   components: {
     HeaderTickspeedRowClassic,
     HeaderTickspeedRowModern,
-    RealityMachinesHeader,
+    RealityCurrencyHeader,
     RealityButton,
     ArmageddonButton,
   },
@@ -41,13 +41,13 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="c-prestige-button-container">
     <span>You have <span class="c-game-header__antimatter">{{ format(antimatter, 2, 1) }}</span> antimatter.</span>
     <div
       v-if="hasRealityButton"
       class="c-reality-container"
     >
-      <RealityMachinesHeader />
+      <RealityCurrencyHeader />
       <ArmageddonButton
         v-if="isDoomed"
         :is-header="true"
@@ -67,6 +67,7 @@ export default {
 .c-reality-container {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
 }
 </style>

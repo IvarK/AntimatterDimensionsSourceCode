@@ -12,6 +12,7 @@ export default {
       imaginaryBoosts: 0,
       lockText: null,
       unlockedByBoost: null,
+      creditsClosed: false
     };
   },
   computed: {
@@ -43,6 +44,7 @@ export default {
       this.imaginaryBoosts = DimBoost.imaginaryBoosts;
       this.lockText = DimBoost.lockText;
       this.unlockedByBoost = DimBoost.unlockedByBoost;
+      this.creditsClosed = GameEnd.creditsEverClosed;
     },
     dimensionBoost(bulk) {
       if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;
@@ -59,7 +61,7 @@ export default {
     <span>Requires: {{ formatInt(requirement.amount) }} {{ dimName }} Antimatter D</span>
     <button
       class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
-      :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass }"
+      :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass, 'o-pelle-disabled-pointer': creditsClosed }"
       @click.exact="dimensionBoost(true)"
       @click.shift.exact="dimensionBoost(false)"
     >

@@ -27,6 +27,7 @@ export default {
       enslavedCompleted: false,
       boughtTesseracts: 0,
       extraTesseracts: 0,
+      creditsClosed: false,
     };
   },
   computed: {
@@ -66,6 +67,7 @@ export default {
       this.enslavedCompleted = Enslaved.isCompleted;
       this.boughtTesseracts = Tesseracts.bought;
       this.extraTesseracts = Tesseracts.extra;
+      this.creditsClosed = GameEnd.creditsEverClosed;
     },
     maxAll() {
       InfinityDimensions.buyMax();
@@ -124,7 +126,10 @@ export default {
     >
       <button
         class="c-infinity-dim-tab__tesseract-button"
-        :class="{ 'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract }"
+        :class="{
+          'c-infinity-dim-tab__tesseract-button--disabled': !canBuyTesseract,
+          'o-pelle-disabled-pointer': creditsClosed
+        }"
         @click="buyTesseract"
       >
         <p>

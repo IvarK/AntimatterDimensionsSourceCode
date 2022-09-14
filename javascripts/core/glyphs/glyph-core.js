@@ -243,7 +243,7 @@ export const Glyphs = {
       )
     ) return;
 
-    if (GameEnd.creditsClosed) return;
+    if (GameEnd.creditsEverClosed) return;
 
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {

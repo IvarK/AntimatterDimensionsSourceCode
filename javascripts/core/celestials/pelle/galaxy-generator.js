@@ -118,16 +118,6 @@ export class GalaxyGeneratorUpgrade extends RebuyableMechanicState {
   get effectValue() {
     return this.config.effect(this.boughtAmount);
   }
-
-  purchase() {
-    if (GameEnd.creditsEverClosed) return false;
-    if (!this.canBeBought) return false;
-    this.currency.subtract(this.cost);
-    this.boughtAmount++;
-    this.onPurchased();
-    GameUI.update();
-    return true;
-  }
 }
 
 export const GalaxyGeneratorUpgrades = mapGameDataToObject(

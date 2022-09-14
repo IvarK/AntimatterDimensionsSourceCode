@@ -22,6 +22,7 @@ export default {
       distantStart: 0,
       lockText: null,
       canBulkBuy: false,
+      creditsClosed: false,
     };
   },
   computed: {
@@ -82,6 +83,7 @@ export default {
       this.distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
       this.lockText = Galaxy.lockText;
       this.canBulkBuy = EternityMilestone.autobuyMaxGalaxies.isReached;
+      this.creditsClosed = GameEnd.creditsEverClosed;
     },
     buyGalaxy(bulk) {
       if (!this.canBeBought) return;
@@ -106,7 +108,7 @@ export default {
     <PrimaryButton
       :enabled="canBeBought"
       class="o-primary-btn--galaxy l-dim-row__prestige-button"
-      :class="tutorialClass"
+      :class="{ ...tutorialClass, 'o-pelle-disabled-pointer': creditsClosed }"
       @click.exact="buyGalaxy(true)"
       @click.shift.exact="buyGalaxy(false)"
     >

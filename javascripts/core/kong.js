@@ -63,7 +63,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
 
   purchase() {
     if (!this.canBeBought) return false;
-    if (GameEnd.creditsClosed) return false;
+    if (GameEnd.creditsEverClosed) return false;
     if (this.config.singleUse && ui.$viewModel.modal.progressBar) return false;
     player.IAP.spentSTD += this.cost;
     if (this.config.singleUse) {

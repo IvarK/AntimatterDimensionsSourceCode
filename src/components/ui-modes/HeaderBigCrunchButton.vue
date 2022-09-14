@@ -14,12 +14,14 @@ export default {
       inAntimatterChallenge: false,
       hover: false,
       headerTextColored: true,
+      creditsClosed: false,
     };
   },
   computed: {
     buttonClassObject() {
       return {
-        "o-infinity-button--unavailable": !this.canCrunch
+        "o-infinity-button--unavailable": !this.canCrunch,
+        "o-pelle-disabled-pointer": this.creditsClosed
       };
     },
     // Show IP/min below this threshold, color the IP number above it
@@ -78,6 +80,7 @@ export default {
       this.infinityGoal.copyFrom(Player.infinityGoal);
       this.inAntimatterChallenge = Player.isInAntimatterChallenge;
       this.headerTextColored = player.options.headerTextColored;
+      this.creditsClosed = GameEnd.creditsEverClosed;
 
       const gainedIP = gainedInfinityPoints();
       this.currentIP.copyFrom(Currency.infinityPoints);
@@ -142,6 +145,7 @@ export default {
   <button
     v-else-if="tesseractAffordable"
     class="o-prestige-button l-game-header__big-crunch-btn c-game-header__tesseract-available"
+    :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
     @click="switchToInfinity"
   >
     <b>

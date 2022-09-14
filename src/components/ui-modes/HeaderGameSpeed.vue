@@ -17,7 +17,10 @@ export default {
   methods: {
     update() {
       const ec12 = EternityChallenge(12);
-      this.showSpeed = PlayerProgress.realityUnlocked() || ec12.completions > 0 || ec12.isRunning;
+      const hasSeenAlteredSpeed = PlayerProgress.realityUnlocked() || ec12.completions > 0 || ec12.isRunning;
+      const hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
+      // This is additionally shown in a different place on Modern, so we hide it to prevent showing it twice
+      this.showSpeed = hasRealityButton || (hasSeenAlteredSpeed && !player.options.newUI);
     },
   }
 };

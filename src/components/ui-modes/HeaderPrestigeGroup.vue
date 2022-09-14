@@ -25,7 +25,7 @@ export default {
 .c-prestige-info-blocks {
   display: flex;
   flex-direction: row;
-  height: 12rem;
+  height: 14rem;
   width: 100%;
 }
 

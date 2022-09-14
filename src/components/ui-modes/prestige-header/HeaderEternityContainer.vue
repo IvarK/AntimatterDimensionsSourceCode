@@ -31,7 +31,10 @@ export default {
 </script>
 
 <template>
-  <div v-if="showContainer">
+  <div
+    v-if="showContainer"
+    class="c-prestige-button-container"
+  >
     <div
       v-if="showEP"
       class="c-eternity-points"

@@ -39,8 +39,9 @@ export default {
       return formatFloat(this.continuumValue, 2);
     },
     upgradeCount() {
-      if (this.freeTickspeed === 0) return `Purchased ${quantifyInt("time", this.purchasedTickspeed)}`;
-      return `${formatInt(this.purchasedTickspeed)} Purchased + ${formatInt(this.freeTickspeed)} Free`;
+      const purchased = this.purchasedTickspeed;
+      if (purchased === 0 || this.isContinuumActive) return `${formatInt(this.freeTickspeed)} Free Upgrades`;
+      return `${formatInt(purchased)} Purchased + ${formatInt(his.freeTickspeed)} Free`;
     }
   },
   methods: {

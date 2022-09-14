@@ -1,10 +1,15 @@
 <script>
 export default {
-  name: "SecretTimeStudyConnection",
+  name: "HiddenTimeStudyConnection",
   props: {
     setup: {
       type: Object,
       required: true
+    },
+    isEnslaved: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
   data() {
@@ -24,7 +29,7 @@ export default {
   },
   methods: {
     update() {
-      this.isVisible = player.secretUnlocks.viewSecretTS;
+      this.isVisible = this.isEnslaved ? player.celestials.enslaved.hasSecretStudy : player.secretUnlocks.viewSecretTS;
     },
     percents(value) {
       return `${value * 100}%`;

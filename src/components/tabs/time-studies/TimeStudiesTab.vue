@@ -3,10 +3,11 @@ import { STUDY_TREE_LAYOUT_TYPE, TimeStudyTreeLayout } from "./time-study-tree-l
 
 import DilationTimeStudy from "./DilationTimeStudy";
 import ECTimeStudy from "./ECTimeStudy";
+import EnslavedTimeStudy from "./EnslavedTimeStudy";
+import HiddenTimeStudyConnection from "./HiddenTimeStudyConnection";
 import NormalTimeStudy from "./NormalTimeStudy";
 import PrimaryButton from "@/components/PrimaryButton";
 import SecretTimeStudy from "./SecretTimeStudy";
-import SecretTimeStudyConnection from "./SecretTimeStudyConnection";
 import TimeStudyConnection from "./TimeStudyConnection";
 import TriadTimeStudy from "./TriadTimeStudy";
 
@@ -16,11 +17,12 @@ export default {
     PrimaryButton,
     NormalTimeStudy,
     ECTimeStudy,
+    EnslavedTimeStudy,
     DilationTimeStudy,
     TriadTimeStudy,
     SecretTimeStudy,
     TimeStudyConnection,
-    SecretTimeStudyConnection
+    HiddenTimeStudyConnection
   },
   data() {
     return {
@@ -32,6 +34,7 @@ export default {
     };
   },
   computed: {
+    isEnslaved: () => Enslaved.isRunning,
     layout() {
       return TimeStudyTreeLayout.create(this.layoutType);
     },
@@ -153,6 +156,10 @@ export default {
         :setup="setup"
       />
       <SecretTimeStudy :setup="layout.secretStudy" />
+      <EnslavedTimeStudy
+        v-if="isEnslaved"
+        :setup="layout.enslavedStudy"
+      />
       <svg
         :style="treeStyleObject"
         class="l-time-study-connection"
@@ -162,7 +169,12 @@ export default {
           :key="'connection' + index"
           :setup="setup"
         />
-        <SecretTimeStudyConnection :setup="layout.secretStudyConnection" />
+        <HiddenTimeStudyConnection :setup="layout.secretStudyConnection" />
+        <HiddenTimeStudyConnection
+          v-if="isEnslaved"
+          :setup="layout.enslavedStudyConnection"
+          :is-enslaved="isEnslaved"
+        />
       </svg>
     </div>
   </div>

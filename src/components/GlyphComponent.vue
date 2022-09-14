@@ -1,4 +1,6 @@
 <script>
+import { GlyphInfoType } from "../../src/components/modals/options/GlyphDisplayOptionsModal";
+
 import GlyphTooltip from "@/components/GlyphTooltip";
 
 export default {
@@ -259,6 +261,36 @@ export default {
     },
     showGlyphEffectDots() {
       return player.options.showHintText.glyphEffectDots;
+    },
+    displayedInfo() {
+      const blacklist = ["companion", "cursed"];
+      if (!this.isInventoryGlyph || blacklist.includes(this.glyph.type)) return null;
+
+      const options = player.options.showHintText;
+      if (options.glyphInfoType === GlyphInfoType.NONE ||
+        (!options.showGlyphInfoByDefault && !this.$viewModel.shiftDown)) {
+        return null;
+      }
+
+      let val;
+      switch (options.glyphInfoType) {
+        case GlyphInfoType.LEVEL:
+          val = this.displayLevel === 0 ? this.glyph.level : this.displayLevel;
+          return formatInt(val);
+        case GlyphInfoType.RARITY:
+          val = Pelle.isDoomed ? Pelle.glyphStrength : this.glyph.strength;
+          return formatRarity(strengthToRarity(val));
+        case GlyphInfoType.SAC_VALUE:
+          return format(this.sacrificeReward, 2, 2);
+        case GlyphInfoType.FILTER_SCORE:
+          return format(AutoGlyphProcessor.filterValue(this.glyph), 1, 1);
+        case GlyphInfoType.CURRENT_REFINE:
+          return `${format(this.refineReward, 2, 2)} ${this.symbol}`;
+        case GlyphInfoType.MAX_REFINE:
+          return `${format(this.uncappedRefineReward, 2, 2)} ${this.symbol}`;
+        default:
+          throw new Error("Unrecognized Glyph info type in info text");
+      }
     }
   },
   watch: {
@@ -273,6 +305,7 @@ export default {
       this.$recompute("cursedColor");
       this.$recompute("cursedColorInverted");
       this.$recompute("showGlyphEffectDots");
+      this.$recompute("displayedInfo");
     });
     this.on$("tooltip-touched", () => this.hideTooltip());
   },
@@ -527,6 +560,12 @@ export default {
       class="l-new-glyph"
     >
       New!
+    </div>
+    <div
+      v-if="displayedInfo"
+      class="l-glyph-info"
+    >
+      {{ displayedInfo }}
     </div>
     <div
       ref="over"

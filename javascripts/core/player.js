@@ -578,6 +578,7 @@ window.player = {
       run: false,
       completed: false,
       tesseracts: 0,
+      hasSecretStudy: false,
       feltEternity: false,
       progressBits: 0,
       hintBits: 0,

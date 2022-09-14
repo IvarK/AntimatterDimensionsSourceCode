@@ -154,8 +154,7 @@ export const TimeTheorems = {
     if (ecStudy !== undefined) {
       totalCost += ecStudy.cost;
     }
-    // Secret time study
-    if (Enslaved.isRunning && player.secretUnlocks.viewSecretTS) totalCost -= 100;
+    if (Enslaved.isRunning && player.celestials.enslaved.hasSecretStudy) totalCost -= 100;
     return totalCost;
   }
 };

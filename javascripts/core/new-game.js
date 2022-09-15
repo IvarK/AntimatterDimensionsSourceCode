@@ -6,14 +6,16 @@ export const NG = {
     // This can't be JSONed as it contains sets
     const secretUnlocks = player.secretUnlocks;
     const secretAchievements = JSON.stringify(player.secretAchievementBits);
-    const automator = JSON.stringify(player.reality.automator);
+    const automatorConstants = JSON.stringify(player.reality.automator.constants);
+    const automatorScripts = JSON.stringify(player.reality.automator.scripts);
     Modal.hideAll();
     Quote.clearAll();
     GameStorage.hardReset();
     player.options = JSON.parse(backUpOptions);
     player.secretUnlocks = secretUnlocks;
     player.secretAchievementBits = JSON.parse(secretAchievements);
-    player.reality.automator = JSON.parse(automator);
+    player.reality.automator.constants = JSON.parse(automatorConstants);
+    player.reality.automator.scripts = JSON.parse(automatorScripts);
     ui.view.newUI = player.options.newUI;
     ui.view.news = player.options.news.enabled;
     Themes.find(player.options.theme).set();

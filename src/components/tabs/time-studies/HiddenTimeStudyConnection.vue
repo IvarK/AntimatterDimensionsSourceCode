@@ -29,7 +29,9 @@ export default {
   },
   methods: {
     update() {
-      this.isVisible = this.isEnslaved ? player.celestials.enslaved.hasSecretStudy : player.secretUnlocks.viewSecretTS;
+      this.isVisible = this.isEnslaved
+        ? (Enslaved.isRunning && player.celestials.enslaved.hasSecretStudy)
+        : player.secretUnlocks.viewSecretTS;
     },
     percents(value) {
       return `${value * 100}%`;

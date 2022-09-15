@@ -31,10 +31,11 @@ export default {
       vLevel: 0,
       renderedStudyCount: 0,
       renderedConnectionCount: 0,
+      isEnslaved: false,
+      delayTimer: 0,
     };
   },
   computed: {
-    isEnslaved: () => Enslaved.isRunning,
     layout() {
       return TimeStudyTreeLayout.create(this.layoutType);
     },
@@ -89,6 +90,15 @@ export default {
     };
     incrementRenderedCount();
 
+    // CSS controlling the fade in/out for the Enslaved study is an animation happening over the course of 1 second.
+    // Removing it normally via key-switching ends up getting rid of it immediately without animating, which we do if it
+    // wasn't purchased - otherwise it animates to the unbought state and then remove it after the animation finishes.
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => {
+      this.delayTimer = player.celestials.enslaved.hasSecretStudy
+        ? Date.now()
+        : 0;
+    });
+
     // Scroll to top because time studies tab is rendered progressively
     // and we don't want the player to see empty space while it's loading.
     document.body.scrollTop = 0;
@@ -101,6 +111,7 @@ export default {
       this.respec = player.respec;
       this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
       this.vLevel = Ra.pets.v.level;
+      this.isEnslaved = Enslaved.isRunning || Date.now() - this.delayTimer < 1000;
     },
     studyComponent(study) {
       switch (study.type) {

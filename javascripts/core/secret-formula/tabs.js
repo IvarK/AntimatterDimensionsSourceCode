@@ -111,12 +111,22 @@ GameDatabase.tabs = [
         hidable: true,
       },
       {
+        key: "multipliers",
+        name: "Multiplier Breakdown",
+        // TODO change this icon
+        symbol: "<i class='fas fa-list-ol'></i>",
+        component: "MultiplierBreakdownTab",
+        condition: () => PlayerProgress.infinityUnlocked(),
+        id: 3,
+        hidable: true,
+      },
+      {
         key: "glyph sets",
         name: "Glyph Set Records",
         symbol: "<i class='fas fa-ellipsis-h'></i>",
         component: "GlyphSetRecordsTab",
         condition: () => PlayerProgress.realityUnlocked(),
-        id: 3,
+        id: 4,
         hidable: true,
       },
       {
@@ -125,7 +135,7 @@ GameDatabase.tabs = [
         symbol: "<i class='fas fa-flag-checkered'></i>",
         component: "SpeedrunMilestonesTab",
         condition: () => player.speedrun.isActive,
-        id: 4,
+        id: 5,
         hidable: true,
       },
     ]

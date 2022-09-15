@@ -47,6 +47,8 @@ import "./shop-purchases";
 export * from "./celestials/singularity-milestones";
 import "./script-templates";
 import "./speedrun-milestones";
+import "./multiplier-tab/values";
+import "./multiplier-tab/tree";
 
 import "./celestials/quotes/index";
 

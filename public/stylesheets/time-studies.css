@@ -469,15 +469,18 @@
   cursor: pointer;
 }
 
-.o-time-study--secret-enslaved {
+.o-time-study--enslaved {
   opacity: 0.02;
-  background: #f1aa7f;
-  transition: opacity 2s 0.5s;
+  background: var(--color-enslaved--base);
+  transition: all 1s;
   animation: a-time-study 0.5s infinite;
   cursor: pointer;
 }
 
-.o-time-study--secret-enslaved-unlocked {
+.o-time-study--enslaved-unlocked {
+  opacity: 1;
+  background: var(--color-eternity);
+  animation: a-time-study 2s infinite;
   cursor: default;
 }
 

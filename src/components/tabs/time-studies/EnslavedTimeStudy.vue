@@ -27,21 +27,20 @@ export default {
         "o-time-study--bought": true,
         "o-time-study-normal": true,
         "o-time-study-normal--bought": true,
-        "o-time-study--secret-enslaved": !this.isVisible,
-        "o-time-study--secret-enslaved-unlocked": this.isVisible,
+        "o-time-study--enslaved": true,
+        "o-time-study--enslaved-unlocked": this.isVisible,
       };
     }
   },
   methods: {
     update() {
-      this.isVisible = player.celestials.enslaved.hasSecretStudy;
+      this.isVisible = Enslaved.isRunning && player.celestials.enslaved.hasSecretStudy;
     },
     handleClick() {
-      if (!this.isVisible) {
-        player.celestials.enslaved.hasSecretStudy = true;
-        EnslavedProgress.secretStudy.giveProgress();
-        Currency.timeTheorems.add(this.enslavedTT);
-      }
+      if (!this.isVisible) return;
+      player.celestials.enslaved.hasSecretStudy = true;
+      EnslavedProgress.secretStudy.giveProgress();
+      Currency.timeTheorems.add(this.enslavedTT);
     },
   }
 };
@@ -56,6 +55,7 @@ export default {
   >
     <span>
       ... you ... have great potential ...
+      <br>
       <br>
       Cost: {{ format(-enslavedTT) }} Time Theorems
     </span>

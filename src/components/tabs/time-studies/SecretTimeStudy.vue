@@ -71,6 +71,7 @@ export default {
     <span>
       Unlock a Secret Achievement
       <br>
+      <br>
       (Double click to hide)
     </span>
   </button>

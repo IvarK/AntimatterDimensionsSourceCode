@@ -11,7 +11,8 @@ export default {
       eternityGoal: new Decimal(),
       tachyonGain: new Decimal(),
       remnantRequirement: 0,
-      showRequirement: false
+      showRequirement: false,
+      creditsClosed: false
     };
   },
   computed: {
@@ -36,6 +37,11 @@ export default {
       } else {
         this.requiredForGain.copyFrom(getTachyonReq());
       }
+      this.creditsClosed = GameEnd.creditsEverClosed;
+    },
+    dilate() {
+      if (this.creditsClosed) return;
+      startDilatedEternityRequest();
     }
   }
 };

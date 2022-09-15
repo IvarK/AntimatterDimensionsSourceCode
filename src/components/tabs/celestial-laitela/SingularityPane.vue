@@ -109,6 +109,7 @@ export default {
       return {
         "c-laitela-singularity": true,
         "c-laitela-singularity--active": this.canPerformSingularity && !this.isDoomed,
+        "o-pelle-disabled": this.isDoomed,
         "o-pelle-disabled-pointer": this.isDoomed,
       };
     }

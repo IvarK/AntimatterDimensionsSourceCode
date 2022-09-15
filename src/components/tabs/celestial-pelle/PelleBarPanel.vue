@@ -35,7 +35,7 @@ export default {
     // render with proper layering
     styleObject(index) {
       return {
-        "z-index": 6 - index,
+        "z-index": 4 - index,
       };
     },
   }
@@ -65,7 +65,7 @@ export default {
       <div class="c-pelle-bar-container">
         <div
           v-for="(strike, index) in strikes"
-          :key="index"
+          :key="strike.config.id"
           class="c-pelle-single-bar"
           :style="styleObject(index)"
         >

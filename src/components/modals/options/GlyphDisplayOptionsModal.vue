@@ -1,24 +1,18 @@
 <script>
-import ButtonCycle from "@/components/ButtonCycle";
+import SelectGlyphInfoDropdown, { GlyphInfo } from "./SelectGlyphInfoDropdown";
+
+import ExpandingControlBox from "@/components/ExpandingControlBox";
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 
-export const GlyphInfoType = {
-  NONE: 0,
-  LEVEL: 1,
-  RARITY: 2,
-  SAC_VALUE: 3,
-  FILTER_SCORE: 4,
-  CURRENT_REFINE: 5,
-  MAX_REFINE: 6,
-};
 
 export default {
   name: "GlyphDisplayOptionsModal",
   components: {
-    ButtonCycle,
+    ExpandingControlBox,
     ModalOptionsToggleButton,
     ModalWrapperOptions,
+    SelectGlyphInfoDropdown,
   },
   data() {
     return {
@@ -30,16 +24,9 @@ export default {
     };
   },
   computed: {
-    availableInfo() {
-      const options = ["None", "Level", "Rarity"];
-      if (GlyphSacrificeHandler.canSacrifice) options.push("Sacrifice Value");
-      if (EffarigUnlock.glyphFilter.isUnlocked) options.push("Glyph Filter Score");
-      if (Ra.unlocks.unlockGlyphAlchemy.canBeApplied) {
-        options.push("Current Refinement Value");
-        options.push("Maximum Refinement Value");
-      }
-      return options;
-    }
+    infoLabel() {
+      return GlyphInfo.labels[this.glyphInfoType];
+    },
   },
   watch: {
     newGlyphs(newValue) {
@@ -52,10 +39,6 @@ export default {
     },
     forceDarkGlyphs(newValue) {
       player.options.forceDarkGlyphs = newValue;
-      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
-    },
-    glyphInfoType(newValue) {
-      player.options.showHintText.glyphInfoType = newValue;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
     showGlyphInfoByDefault(newValue) {
@@ -100,12 +83,20 @@ export default {
         v-model="forceDarkGlyphs"
         text="Force dark Glyph background:"
       />
-      <ButtonCycle
-        v-model="glyphInfoType"
-        text="Additional Glyph Info:"
-        class="o-primary-btn o-primary-btn--option-wide"
-        :labels="availableInfo"
-      />
+      <ExpandingControlBox
+        class="o-primary-btn c-dropdown-btn"
+      >
+        <template #header>
+          <div class="c-dropdown-header">
+            ▼ Additional Glyph Info: ▼
+            <br>
+            {{ infoLabel }}
+          </div>
+        </template>
+        <template #dropdown>
+          <SelectGlyphInfoDropdown />
+        </template>
+      </ExpandingControlBox>
       <ModalOptionsToggleButton
         v-model="showGlyphInfoByDefault"
         :style="noEffectStyle()"
@@ -114,3 +105,17 @@ export default {
     </div>
   </ModalWrapperOptions>
 </template>
+
+<style scoped>
+.c-dropdown-btn {
+  width: 24rem;
+  margin: 0.5rem;
+  padding: 0;
+}
+
+.c-dropdown-header {
+  padding: 0.75rem;
+  height: 5.5rem;
+  user-select: none;
+}
+</style>

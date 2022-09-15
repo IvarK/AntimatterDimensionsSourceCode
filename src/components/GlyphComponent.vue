@@ -1,5 +1,5 @@
 <script>
-import { GlyphInfoType } from "../../src/components/modals/options/GlyphDisplayOptionsModal";
+import { GlyphInfo } from "../../src/components/modals/options/SelectGlyphInfoDropdown";
 
 import GlyphTooltip from "@/components/GlyphTooltip";
 
@@ -267,26 +267,25 @@ export default {
       if (!this.isInventoryGlyph || blacklist.includes(this.glyph.type)) return null;
 
       const options = player.options.showHintText;
-      if (options.glyphInfoType === GlyphInfoType.NONE ||
+      if (options.glyphInfoType === GlyphInfo.types.NONE ||
         (!options.showGlyphInfoByDefault && !this.$viewModel.shiftDown)) {
         return null;
       }
 
-      let val;
+      const typeEnum = GlyphInfo.types;
       switch (options.glyphInfoType) {
-        case GlyphInfoType.LEVEL:
-          val = this.displayLevel === 0 ? this.glyph.level : this.displayLevel;
-          return formatInt(val);
-        case GlyphInfoType.RARITY:
-          val = Pelle.isDoomed ? Pelle.glyphStrength : this.glyph.strength;
-          return formatRarity(strengthToRarity(val));
-        case GlyphInfoType.SAC_VALUE:
+        case typeEnum.LEVEL:
+          this.updateDisplayLevel();
+          return formatInt(this.displayLevel === 0 ? this.glyph.level : this.displayLevel);
+        case typeEnum.RARITY:
+          return formatRarity(strengthToRarity(Pelle.isDoomed ? Pelle.glyphStrength : this.glyph.strength));
+        case typeEnum.SAC_VALUE:
           return format(this.sacrificeReward, 2, 2);
-        case GlyphInfoType.FILTER_SCORE:
+        case typeEnum.FILTER_SCORE:
           return format(AutoGlyphProcessor.filterValue(this.glyph), 1, 1);
-        case GlyphInfoType.CURRENT_REFINE:
+        case typeEnum.CURRENT_REFINE:
           return `${format(this.refineReward, 2, 2)} ${this.symbol}`;
-        case GlyphInfoType.MAX_REFINE:
+        case typeEnum.MAX_REFINE:
           return `${format(this.uncappedRefineReward, 2, 2)} ${this.symbol}`;
         default:
           throw new Error("Unrecognized Glyph info type in info text");
@@ -324,16 +323,19 @@ export default {
       this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
         ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
         : 0;
-
-      // A few things need to be updated continuously, but only when the tooltip is visible
-      if (this.tooltipLoaded) {
-        const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
-        let adjustedLevel = this.isActiveGlyph
-          ? getAdjustedGlyphLevel(this.glyph)
-          : this.glyph.level + levelBoost;
-        if (Pelle.isDoomed && this.isInventoryGlyph) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
-        this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
+      if (this.tooltipLoaded) this.updateDisplayLevel();
+    },
+    updateDisplayLevel() {
+      if (this.ignoreModifiedLevel) {
+        this.displayLevel = 0;
+        return;
       }
+      const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
+      let adjustedLevel = this.isActiveGlyph
+        ? getAdjustedGlyphLevel(this.glyph)
+        : this.glyph.level + levelBoost;
+      if (Pelle.isDoomed && this.isInventoryGlyph) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
+      this.displayLevel = adjustedLevel;
     },
     // This produces a linearly interpolated color between the basic glyph colors, but with RGB channels copied and
     // hardcoded from the color data because that's probably preferable to a very hacky hex conversion method. The

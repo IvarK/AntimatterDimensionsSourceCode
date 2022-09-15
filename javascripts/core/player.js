@@ -1,5 +1,5 @@
 import { AutomatorPanels } from "../../src/components/tabs/automator/AutomatorDocs";
-import { GlyphInfoType } from "../../src/components/modals/options/GlyphDisplayOptionsModal";
+import { GlyphInfo } from "../../src/components/modals/options/SelectGlyphInfoDropdown";
 
 import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend";
 import { DC } from "./constants";
@@ -798,7 +798,7 @@ window.player = {
       realityUpgrades: true,
       perks: true,
       alchemy: true,
-      glyphInfoType: GlyphInfoType.NONE,
+      glyphInfoType: GlyphInfo.types.NONE,
       showGlyphInfoByDefault: false,
     },
     animations: {

@@ -440,6 +440,19 @@ class AntimatterDimensionState extends DimensionState {
   }
 
   /**
+   * @returns {boolean}
+   */
+  get isProducing() {
+    const tier = this.tier;
+    if ((EternityChallenge(3).isRunning && tier > 3) ||
+      (NormalChallenge(12).isRunning && tier > 6) ||
+      (Laitela.isRunning && tier > Laitela.maxAllowedDimension)) {
+      return false;
+    }
+    return AntimatterDimension(tier).amount.gt(0);
+  }
+
+  /**
    * @returns {Decimal}
    */
   get currencyAmount() {

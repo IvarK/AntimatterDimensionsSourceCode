@@ -2,20 +2,13 @@ import { DC } from "../../../core/constants";
 import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../app/player-progress";
 
-export const MULTIPLIER_TAB_TYPE = {
-  SUM: 0,
-  MULTIPLIER: 1,
-  POWER: 2
-};
-
 GameDatabase.multiplierTabValues = {
-  // Pre-Infinity Effects for dimensions
+  // Pre-Infinity Effects for ADs
   totalAD: {
     name: dim => (dim
       ? `Total AD ${dim} Mult.`
       : "All AD Mult."),
-    type: MULTIPLIER_TAB_TYPE.MULTIPLIER,
-    value: dim => (dim
+    multValue: dim => (dim
       ? AntimatterDimension(dim).multiplier
       : AntimatterDimensions.all
         .filter(ad => ad.isProducing)
@@ -27,8 +20,7 @@ GameDatabase.multiplierTabValues = {
     name: dim => (dim
       ? `AD ${dim} Mult. from Purchases`
       : "Total AD Mult. from Purchases"),
-    type: MULTIPLIER_TAB_TYPE.MULTIPLIER,
-    value: dim => {
+    multValue: dim => {
       const getBuy10 = ad => (Laitela.continuumActive
         ? AntimatterDimension(ad).continuumValue
         : Math.floor(AntimatterDimension(ad).bought / 10)
@@ -45,8 +37,7 @@ GameDatabase.multiplierTabValues = {
     name: dim => (dim
       ? `AD ${dim} Mult. from Dimboosts`
       : "Total AD Mult. from Dimboosts"),
-    type: MULTIPLIER_TAB_TYPE.MULTIPLIER,
-    value: dim => (dim
+    multValue: dim => (dim
       ? DimBoost.multiplierToNDTier(dim)
       : AntimatterDimensions.all
         .filter(ad => ad.isProducing)
@@ -56,16 +47,14 @@ GameDatabase.multiplierTabValues = {
   },
   sacrifice: {
     name: () => `AD 8 Mult. from Sacrifice`,
-    type: MULTIPLIER_TAB_TYPE.MULTIPLIER,
-    value: () => Sacrifice.totalBoost,
+    multValue: () => Sacrifice.totalBoost,
     isActive: () => Sacrifice.totalBoost.gt(1),
   },
   achievementAD: {
     name: dim => (dim
       ? `AD ${dim} Mult. from Achievements`
       : "Total AD Mult. from Achievements"),
-    type: MULTIPLIER_TAB_TYPE.MULTIPLIER,
-    value: dim => {
+    multValue: dim => {
       const allMult = new Decimal(Achievements.power).timesEffectsOf(
         Achievement(48),
         Achievement(56),
@@ -105,16 +94,16 @@ GameDatabase.multiplierTabValues = {
       for (let tier = 1; tier <= maxActiveDim; tier++) totalMult = totalMult.times(dimMults[tier]).times(allMult);
       return totalMult;
     },
+    powValue: () => Achievement(183).effectOrDefault(1),
     isActive: () => true,
   },
 
-  // Post-Infinity, pre-ID
+  // Post-Infinity, applying to ADs
   infinityUpgradeAD: {
     name: dim => (dim
       ? `AD ${dim} Mult. from Infinity Upgrades`
       : "Total AD Mult. from Infinity Upgrades"),
-    type: MULTIPLIER_TAB_TYPE.MULTIPLIER,
-    value: dim => {
+    multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         InfinityUpgrade.totalTimeMult,
         InfinityUpgrade.thisInfinityTimeMult,
@@ -144,8 +133,7 @@ GameDatabase.multiplierTabValues = {
     name: dim => (dim
       ? `AD ${dim} Mult. from Break Infinity Upgrades`
       : "Total AD Mult. from Break Infinity Upgrades"),
-    type: MULTIPLIER_TAB_TYPE.MULTIPLIER,
-    value: dim => {
+    multValue: dim => {
       const mult = DC.D1.timesEffectsOf(
         BreakInfinityUpgrade.totalAMMult,
         BreakInfinityUpgrade.currentAMMult,
@@ -157,5 +145,84 @@ GameDatabase.multiplierTabValues = {
       return Decimal.pow(mult, dim ? 1 : maxActiveDim);
     },
     isActive: () => player.break,
-  }
+  },
+  infinityChallengeAD: {
+    name: dim => (dim
+      ? `AD ${dim} Mult. from Infinity Challenges`
+      : "Total AD Mult. from Infinity Challenges"),
+    multValue: dim => {
+      const allMult = DC.D1.timesEffectsOf(
+        InfinityChallenge(3),
+        InfinityChallenge(3).reward,
+      );
+
+      const dimMults = Array.repeat(DC.D1, 9);
+      for (let tier = 1; tier <= 8; tier++) {
+        dimMults[tier] = dimMults[tier].timesEffectsOf(
+          tier > 1 && tier < 8 ? InfinityChallenge(8).reward : null
+        );
+      }
+
+      if (dim) return allMult.times(dimMults[dim]);
+      const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+      let totalMult = DC.D1;
+      for (let tier = 1; tier <= maxActiveDim; tier++) totalMult = totalMult.times(dimMults[tier]).times(allMult);
+      return totalMult;
+    },
+    powValue: () => (InfinityChallenge(4).isCompleted ? InfinityChallenge(4).reward.effectValue : 1),
+    isActive: () => player.break,
+  },
+
+  // Eternity-level effects to ADs
+  timeStudyAD: {
+    name: dim => (dim
+      ? `AD ${dim} Mult. from Time Studies`
+      : "Total AD Mult. from Time Studies"),
+    multValue: dim => {
+      const allMult = DC.D1.timesEffectsOf(
+        TimeStudy(91),
+        TimeStudy(101),
+        TimeStudy(161),
+        TimeStudy(193),
+      );
+
+      const dimMults = Array.repeat(DC.D1, 9);
+      for (let tier = 1; tier <= 8; tier++) {
+        if (tier === 1) {
+          dimMults[tier] = dimMults[tier].timesEffectsOf(
+            TimeStudy(234)
+          );
+        }
+
+        // We don't want to double-count the base effect that TS31 boosts
+        const infinitiedMult = DC.D1.timesEffectsOf(
+          AntimatterDimension(tier).infinityUpgrade,
+          BreakInfinityUpgrade.infinitiedMult
+        );
+        dimMults[tier] = dimMults[tier].times(infinitiedMult.pow(TimeStudy(31).effectOrDefault(1) - 1));
+
+        dimMults[tier] = dimMults[tier].timesEffectsOf(
+          tier < 8 ? TimeStudy(71) : null,
+          tier === 8 ? TimeStudy(214) : null,
+        );
+      }
+
+      if (dim) return allMult.times(dimMults[dim]);
+      const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+      let totalMult = DC.D1;
+      for (let tier = 1; tier <= maxActiveDim; tier++) totalMult = totalMult.times(dimMults[tier]).times(allMult);
+      return totalMult;
+    },
+    isActive: () => PlayerProgress.eternityUnlocked(),
+  },
+  eternityChallengeAD: {
+    name: dim => (dim
+      ? `AD ${dim} Mult. from Eternity Challenges`
+      : "Total AD Mult. from Eternity Challenges"),
+    multValue: dim => {
+      const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+      return Decimal.pow(EternityChallenge(10).effectValue, dim ? 1 : maxActiveDim);
+    },
+    isActive: () => EternityChallenge(10).isRunning,
+  },
 };

@@ -12,7 +12,8 @@ export default {
   data() {
     return {
       selected: 0,
-      totalValue: new Decimal(0),
+      baseMultList: new Decimal(0),
+      powList: 0,
       percentList: [],
       showGroup: [],
       mouseoverIndex: -1,
@@ -29,12 +30,18 @@ export default {
   methods: {
     update() {
       this.currentGroupKeys = this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
-      this.totalValue = this.currentGroupKeys
-        .map(key => this.getProp(key, "value"))
-        .reduce((x, y) => x.times(y), DC.D1)
-        .clampMin(1.1);
-      this.percentList = this.currentGroupKeys
-        .map(key => Decimal.log10(this.getProp(key, "value")) / this.totalValue.log10());
+      this.baseMultList = this.currentGroupKeys.map(key => this.getProp(key, "multValue")?.clampMin(1) ?? 1);
+      this.powList = this.currentGroupKeys.map(key => this.getProp(key, "powValue") ?? 1);
+
+      const totalBaseMult = this.baseMultList.reduce((x, y) => x.times(y), DC.D1);
+      const totalPow = this.powList.reduce((x, y) => x * y, 1);
+
+      this.percentList = [];
+      for (let index = 0; index < this.baseMultList.length; index++) {
+        const multFrac = Decimal.log10(this.baseMultList[index]) / totalBaseMult.log10();
+        const powFrac = totalPow === 1 ? 0 : Math.log(this.powList[index]) / Math.log(totalPow);
+        this.percentList.push(multFrac / totalPow + powFrac * (1 - 1 / totalPow));
+      }
     },
     changeGroup() {
       this.selected = (this.selected + 1) % this.groups.length;
@@ -42,12 +49,10 @@ export default {
     },
     getProp(key, attr) {
       const args = key.split("_");
+      if (!this.valueDB[args[0]][attr]) return null;
       return args.length === 1
         ? this.valueDB[key][attr]()
         : this.valueDB[args[0]][attr](Number(args[1]));
-    },
-    getPercent(key) {
-      return Decimal.log10(this.getProp(key, "value")) / this.totalValue.log10();
     },
     styleObject(perc) {
       return {
@@ -99,8 +104,8 @@ export default {
         <div v-if="getProp(key, 'isActive')">
           <span :class="hideIcon(index)" />
           {{ getProp(key, "name") }}:
-          {{ formatX(getProp(key, "value"), 2, 2) }}
-          ({{ formatPercents(getPercent(key), 1) }})
+          {{ formatX(getProp(key, "multValue"), 2, 2) }}
+          ({{ formatPercents(percentList[index], 1) }})
         </div>
         <MultiplierBreakdownEntry
           v-if="showGroup[index] && treeDB[key]"

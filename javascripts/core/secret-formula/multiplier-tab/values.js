@@ -1,5 +1,6 @@
 import { DC } from "../../../core/constants";
 import { GameDatabase } from "../game-database";
+import { PlayerProgress } from "../../app/player-progress";
 
 export const MULTIPLIER_TAB_TYPE = {
   SUM: 0,
@@ -105,5 +106,56 @@ GameDatabase.multiplierTabValues = {
       return totalMult;
     },
     isActive: () => true,
+  },
+
+  // Post-Infinity, pre-ID
+  infinityUpgradeAD: {
+    name: dim => (dim
+      ? `AD ${dim} Mult. from Infinity Upgrades`
+      : "Total AD Mult. from Infinity Upgrades"),
+    type: MULTIPLIER_TAB_TYPE.MULTIPLIER,
+    value: dim => {
+      const allMult = DC.D1.timesEffectsOf(
+        InfinityUpgrade.totalTimeMult,
+        InfinityUpgrade.thisInfinityTimeMult,
+      );
+
+      const dimMults = Array.repeat(DC.D1, 9);
+      for (let tier = 1; tier <= 8; tier++) {
+        if (tier === 1) {
+          dimMults[tier] = dimMults[tier].timesEffectsOf(
+            InfinityUpgrade.unspentIPMult,
+          );
+        }
+        dimMults[tier] = dimMults[tier].timesEffectsOf(
+          AntimatterDimension(tier).infinityUpgrade,
+        );
+      }
+
+      if (dim) return allMult.times(dimMults[dim]);
+      const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+      let totalMult = DC.D1;
+      for (let tier = 1; tier <= maxActiveDim; tier++) totalMult = totalMult.times(dimMults[tier]).times(allMult);
+      return totalMult;
+    },
+    isActive: () => PlayerProgress.infinityUnlocked(),
+  },
+  breakInfinityUpgradeAD: {
+    name: dim => (dim
+      ? `AD ${dim} Mult. from Break Infinity Upgrades`
+      : "Total AD Mult. from Break Infinity Upgrades"),
+    type: MULTIPLIER_TAB_TYPE.MULTIPLIER,
+    value: dim => {
+      const mult = DC.D1.timesEffectsOf(
+        BreakInfinityUpgrade.totalAMMult,
+        BreakInfinityUpgrade.currentAMMult,
+        BreakInfinityUpgrade.achievementMult,
+        BreakInfinityUpgrade.slowestChallengeMult,
+        BreakInfinityUpgrade.infinitiedMult
+      );
+      const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+      return Decimal.pow(mult, dim ? 1 : maxActiveDim);
+    },
+    isActive: () => player.break,
   }
 };

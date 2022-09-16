@@ -57,6 +57,17 @@ class ShopPurchaseState extends RebuyableMechanicState {
     return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases + 1);
   }
 
+  // We want to still display the correct value in the button, so we need separate getters for it
+  get currentMultForDisplay() {
+    if (!this.shouldDisplayMult) return "";
+    return this.config.multiplier(this.purchases);
+  }
+
+  get nextMultForDisplay() {
+    if (!this.shouldDisplayMult) return "";
+    return this.config.multiplier(this.purchases + 1);
+  }
+
   formatEffect(effect) {
     return this.config.formatEffect?.(effect) || formatX(effect, 2, 0);
   }

@@ -6,7 +6,7 @@ export default {
       type: Object,
       required: true
     },
-    disabled: {
+    iapDisabled: {
       type: Boolean,
       required: false,
       default: false
@@ -21,8 +21,8 @@ export default {
   },
   methods: {
     update() {
-      this.currentMult = this.purchase.currentMult;
-      this.nextMult = this.purchase.nextMult;
+      this.currentMult = this.purchase.currentMultForDisplay;
+      this.nextMult = this.purchase.nextMultForDisplay;
       this.canAfford = this.purchase.canBeBought;
     }
   },
@@ -37,7 +37,7 @@ export default {
       <span
         v-if="purchase.shouldDisplayMult"
         class="o-shop-button-multiplier"
-        :class="{ 'o-shop-button-multiplier--disabled': disabled }"
+        :class="{ 'o-shop-button-multiplier--disabled': iapDisabled }"
       >
         Currently {{ purchase.formatEffect(currentMult) }}, next: {{ purchase.formatEffect(nextMult) }}
       </span>

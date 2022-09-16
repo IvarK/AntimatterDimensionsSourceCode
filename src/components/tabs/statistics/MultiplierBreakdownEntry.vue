@@ -25,7 +25,7 @@ export default {
       return this.treeDB[this.entry];
     },
     currentGroupKeys() {
-      return this.groups[this.selected];
+      return this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
     },
   },
   methods: {

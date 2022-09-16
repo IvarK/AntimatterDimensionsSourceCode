@@ -32,7 +32,7 @@ GameDatabase.celestials.quotes.enslaved = {
     lines: [
       "... you need... to look harder...",
       "We think... we can help...",
-      { text: "You have unlocked help from The Enslaved Ones.", showCelestialName: false }
+      { text: "You have unlocked help from The Nameless Ones.", showCelestialName: false }
     ]
   },
   ec6C10: {

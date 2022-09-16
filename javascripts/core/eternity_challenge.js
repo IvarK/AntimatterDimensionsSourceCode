@@ -158,8 +158,11 @@ export class EternityChallengeState extends GameMechanicState {
     return Math.min(Math.floor(completions), this.maxCompletions);
   }
 
-  addCompletion() {
+  addCompletion(auto = false) {
     this.completions++;
+    if ((this.id === 4 || this.id === 12) && auto) {
+      this.tryFail(true);
+    }
     if (this.id === 6) {
       GameCache.dimensionMultDecrease.invalidate();
     }
@@ -224,23 +227,37 @@ export class EternityChallengeState extends GameMechanicState {
     eternity(true);
   }
 
-  fail() {
+  fail(auto = false) {
     this.exit();
     let reason;
-    if (this.id === 4) {
-      reason = restriction => `having more than ${quantifyInt("Infinity", restriction)}`;
+    if (auto) {
+      if (this.id === 4) {
+        reason = restriction => `Auto Eternity Challenge completion completed ` +
+        `Eternity Challenge ${this.id} and made the next tier ` +
+        `require having less Infinities (${quantifyInt("Infinity", restriction)} ` +
+        `or less) than you had`;
+      } else if (this.id === 12) {
+        reason = restriction => `Auto Eternity Challenge completion completed ` +
+        `Eternity Challenge ${this.id} and made the next tier ` +
+        `require spending less time in it (${quantify("in-game second", restriction, 0, 1)} ` +
+        `or less) than you had spent`;
+      }
+    } else if (this.id === 4) {
+      reason = restriction => `You failed Eternity Challenge ${this.id} due to ` +
+      `having more than ${quantifyInt("Infinity", restriction)}`;
     } else if (this.id === 12) {
-      reason = restriction => `spending more than ${quantify("in-game second", restriction, 0, 1)} in it`;
+      reason = restriction => `You failed Eternity Challenge ${this.id} due to ` +
+      `spending more than ${quantify("in-game second", restriction, 0, 1)} in it`;
     }
-    Modal.message.show(`You failed Eternity Challenge ${this.id} due to
-      ${reason(this.config.restriction(this.completions))}; you have now exited it.`,
+    Modal.message.show(`${reason(this.config.restriction(this.completions))}, ` +
+    `which has caused you to exit it.`,
     { closeEvent: GAME_EVENT.REALITY_RESET_AFTER }, 1);
     EventHub.dispatch(GAME_EVENT.CHALLENGE_FAILED);
   }
 
-  tryFail() {
+  tryFail(auto = false) {
     if (this.isRunning && !this.isWithinRestriction) {
-      this.fail();
+      this.fail(auto);
       return true;
     }
     return false;
@@ -297,7 +314,7 @@ export const EternityChallenges = {
         let next = this.nextChallenge;
         while (next !== undefined) {
           while (!next.isFullyCompleted) {
-            next.addCompletion();
+            next.addCompletion(true);
           }
           next = this.nextChallenge;
         }
@@ -307,7 +324,7 @@ export const EternityChallenges = {
       let next = this.nextChallenge;
       while (player.reality.lastAutoEC - interval > 0 && next !== undefined) {
         player.reality.lastAutoEC -= interval;
-        next.addCompletion();
+        next.addCompletion(true);
         next = this.nextChallenge;
       }
       player.reality.lastAutoEC %= interval;

@@ -45,7 +45,7 @@ export default {
         :is-in-modal="true"
         :glyphs="glyphSet"
       />
-      This will not affect your actual glyphs, only the saved preset.
+      This will not affect your actual Glyphs, only the saved preset.
     </div>
     <template #confirm-text>
       Delete

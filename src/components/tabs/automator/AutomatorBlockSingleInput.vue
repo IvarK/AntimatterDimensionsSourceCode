@@ -57,6 +57,9 @@ export default {
       unknownNext: false,
       nextNodeCount: false,
       lineNumber: 0,
+      // This is tracked here because switching scripts causes events to be fired in a weird order, often seemingly
+      // starting the creation of the new component before the UI's visible script ID is properly updated
+      scriptID: 0,
     };
   },
   computed: {
@@ -88,6 +91,7 @@ export default {
     }
   },
   created() {
+    this.scriptID = player.reality.automator.state.editorScript;
     this.b = this.block;
     this.lineNumber = BlockAutomator.lineNumber(BlockAutomator._idArray.indexOf(this.block.id) + 1);
     BlockAutomator.updateIdArray();
@@ -137,9 +141,10 @@ export default {
   //   "unlock dilation" makes the 8 unnecessary) - in that case we also need to blank out the block prop
   // * Blocks are dragged and reordered, causing a parent component to key-swap and force a rerender on this
   //   component - in that case we need to remove the errors corresponding to the old line number
-  // * The player changes to the text editor or switches tabs, wiping the entire block editor - we do nothing here
+  // * The player changes to the text editor or switches tabs/scripts, wiping the entire script - we do nothing here
   destroyed() {
-    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT || Tabs.current._currentSubtab.key !== "automator") {
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT || Tabs.current._currentSubtab.key !== "automator" ||
+      this.scriptID !== player.reality.automator.state.editorScript) {
       return;
     }
 
@@ -239,7 +244,7 @@ export default {
     // This gets called whenever blocks are changed, but we also need to halt execution if the currently visible script
     // is also the one being run
     recalculateErrorCount() {
-      BlockAutomator.parseTextFromBlocks();
+      BlockAutomator.parseTextFromBlocks(this.scriptID);
       this.validateInput();
       if (AutomatorBackend.currentEditingScript.id === AutomatorBackend.currentRunningScript.id) {
         AutomatorBackend.stop();

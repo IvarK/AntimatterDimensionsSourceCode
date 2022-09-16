@@ -56,7 +56,7 @@ export default {
       </button>
       <button
         v-else
-        class="o-autobuyer-btn o-non-clickable"
+        class="o-autobuyer-btn o-autobuyer-btn--unavailable"
       >
         Complete the challenge to change mode
       </button>
@@ -65,7 +65,5 @@ export default {
 </template>
 
 <style scoped>
-.o-non-clickable {
-  cursor: auto;
-}
+
 </style>

@@ -417,7 +417,7 @@ GameDatabase.tabs = [
       },
       {
         key: "enslaved",
-        name: "The Enslaved Ones",
+        name: "The Nameless Ones",
         symbol: "<div class='o-tab-btn--cel3'>\uf0c1</div>",
         component: "EnslavedTab",
         condition: () => EffarigUnlock.eternity.isUnlocked,
@@ -466,7 +466,7 @@ GameDatabase.tabs = [
     key: "shop",
     name: "Shop",
     newUIClass: "shop",
-    hideAt: 2.4,
+    hideAt: 0,
     condition: () => true || player.IAP.totalSTD > 0,
     id: 10,
     hidable: true,

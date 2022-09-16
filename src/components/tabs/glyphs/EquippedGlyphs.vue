@@ -59,6 +59,14 @@ export default {
       return {
         cursor: "pointer",
       };
+    },
+    // "Armageddon" causes the button to have text overflow, so we conditionally make the button taller; this doesn't
+    // cause container overflow due to another button being removed entirely when doomed
+    unequipClass() {
+      return {
+        "l-glyph-equip-button": this.isDoomed,
+        "l-glyph-equip-button-short": !this.isDoomed,
+      };
     }
   },
   created() {
@@ -122,7 +130,7 @@ export default {
         drop: $event => this.drop($event, idx),
       };
     },
-    showModal() {
+    showEquippedModal() {
       // If there aren't any glyphs equipped, the array is full of nulls which get filtered out by x => x
       if (this.glyphs.filter(x => x).length === 0) return;
       Modal.glyphShowcasePanel.show({
@@ -130,6 +138,9 @@ export default {
         glyphSet: this.glyphs,
         closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
       });
+    },
+    showOptionModal() {
+      Modal.glyphDisplayOptions.show();
     },
     clickGlyph(glyph, idx, increaseSound = false) {
       if (glyph.symbol === "key266b") {
@@ -150,7 +161,7 @@ export default {
         class="l-glyph-set-preview"
         :style="glyphPositionStyle(idx)"
         v-on="dragEvents(idx)"
-        @click="showModal"
+        @click="showEquippedModal"
       >
         <!-- the drop zone is a bit larger than the glyph itself. -->
         <div class="l-equipped-glyphs__dropzone" />
@@ -174,7 +185,8 @@ export default {
     </div>
     <div class="l-equipped-glyphs__buttons">
       <button
-        class="l-glyph-equip-button c-reality-upgrade-btn"
+        class="c-reality-upgrade-btn"
+        :class="unequipClass"
         :style="glyphRespecStyle"
         :ach-tooltip="respecTooltip"
         @click="toggleRespec"
@@ -199,6 +211,12 @@ export default {
         <span v-if="respecIntoProtected">Protected slots</span>
         <span v-else>Main inventory</span>
       </button>
+      <button
+        class="l-glyph-equip-button-short c-reality-upgrade-btn"
+        @click="showOptionModal"
+      >
+        Open Glyph Visual Options
+      </button>
     </div>
   </div>
 </template>
@@ -206,5 +224,17 @@ export default {
 <style scoped>
 .c-equipped-glyph {
   -webkit-user-drag: none;
+}
+
+.l-glyph-equip-button {
+  width: 100%;
+  height: 3.5rem;
+  margin: 0.25rem 0.5rem;
+}
+
+.l-glyph-equip-button-short {
+  width: 100%;
+  height: 2.5rem;
+  margin: 0.25rem 0.5rem;
 }
 </style>

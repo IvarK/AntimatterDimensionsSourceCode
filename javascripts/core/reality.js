@@ -112,7 +112,7 @@ export function requestManualReality() {
     return;
   }
   if (GameCache.glyphInventorySpace.value === 0) {
-    Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.",
+    Modal.message.show("Inventory cannot hold new Glyphs. Delete/sacrifice (shift-click) some Glyphs.",
       { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
     return;
   }
@@ -731,14 +731,14 @@ export function clearCelestialRuns() {
   };
   player.celestials.teresa.run = false;
   player.celestials.effarig.run = false;
-  // Enslaved forces all tabs to be visible, but exiting via the header might leave the player on a tab which is
-  // otherwise normally hidden - in that case we force them to the Enslaved tab. We could scan for the lowest-index tab
-  // and subtab, but all other things being equal the Enslaved tab makes the most sense. The run flag is toggled
-  // *before* the check because otherwise isHidden will always evaluate to false due to still being in Enslaved.
+  // Nameless forces all tabs to be visible, but exiting via the header might leave the player on a tab which is
+  // otherwise normally hidden - in that case we force them to the Nameless tab. We could scan for the lowest-index tab
+  // and subtab, but all other things being equal the Nameless tab makes the most sense. The run flag is toggled
+  // *before* the check because otherwise isHidden will always evaluate to false due to still being in Nameless.
   if (Enslaved.isRunning) {
     player.celestials.enslaved.run = false;
     if (Tabs.current.isHidden || Tabs.current._currentSubtab.isHidden) Tab.celestials.enslaved.show();
-    // We specifically revalidate here and nowhere else because Enslaved changes the unlock state of the BLACK HOLE
+    // We specifically revalidate here and nowhere else because Nameless changes the unlock state of the BLACK HOLE
     // command, which changes the validity of existing scripts when entering/exiting
     AutomatorData.recalculateErrors();
   }

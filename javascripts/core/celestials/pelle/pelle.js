@@ -100,14 +100,12 @@ export const Pelle = {
     disChargeAll();
     player.celestials.enslaved.isStoringReal = false;
     player.celestials.enslaved.autoStoreReal = false;
-    this.cel.armageddonDuration = 0;
     if (PelleStrikes.dilation.hasStrike) player.dilation.active = true;
     EventHub.dispatch(GAME_EVENT.ARMAGEDDON_AFTER, gainStuff);
   },
 
   gameLoop(diff) {
     if (this.isDoomed) {
-      this.cel.armageddonDuration += diff;
       Currency.realityShards.add(this.realityShardGainPerSecond.times(diff).div(1000));
       PelleRifts.all.forEach(r => r.fill(diff));
     }
@@ -119,10 +117,6 @@ export const Pelle = {
 
   get isDoomed() {
     return this.cel.doomed;
-  },
-
-  get currentArmageddonDuration() {
-    return this.cel.armageddonDuration;
   },
 
   get disabledAchievements() {
@@ -197,7 +191,7 @@ export const Pelle = {
       // Undefined means that there is no glyph equipped, needs to be here since this function is used in
       // both Current Glyph Effects and Glyph Tooltip
       case undefined:
-        return "No glyph equipped!";
+        return "No Glyph equipped!";
       default:
         return "";
     }

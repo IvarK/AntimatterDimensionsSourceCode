@@ -46,6 +46,7 @@ export default {
   created() {
     AutomatorTextUI.initialize();
     this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
+    this.on$(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad());
   },
   mounted() {
     this.$refs.container.appendChild(this.UI.container);
@@ -94,8 +95,11 @@ export default {
 };
 
 export const AutomatorTextUI = {
+  documents: {},
   wrapper: null,
   editor: null,
+  container: null,
+  textArea: null,
   mode: {
     mode: "automato",
     lint: "automato",
@@ -109,14 +113,20 @@ export const AutomatorTextUI = {
     autoCloseBrackets: true,
     lineWrapping: true
   },
-  documents: {},
   initialize() {
     if (this.container) return;
+    this.setUpContainer();
+    this.setUpEditor();
+    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
+  },
+  setUpContainer() {
     this.container = document.createElement("div");
     this.container.className = "l-automator-editor__codemirror-container";
-    const textArea = document.createElement("textarea");
-    this.container.appendChild(textArea);
-    this.editor = CodeMirror.fromTextArea(textArea, this.mode);
+    this.textArea = document.createElement("textarea");
+    this.container.appendChild(this.textArea);
+  },
+  setUpEditor() {
+    this.editor = CodeMirror.fromTextArea(this.textArea, this.mode);
     this.editor.on("keydown", (editor, event) => {
       if (editor.state.completionActive) return;
       const key = event.key;
@@ -135,7 +145,11 @@ export const AutomatorTextUI = {
       // Clear all line highlighting as soon as any text is changed because that might have shifted lines around
       AutomatorHighlighter.clearAllHighlightedLines();
     });
-    EventHub.ui.on(GAME_EVENT.GAME_LOAD, () => this.documents = {});
+  },
+  clearEditor() {
+    this.editor.setValue("");
+    this.editor.clearHistory();
+    this.editor.clearGutter("gutterId");
   },
   // Used to return back to the same line the editor was on from before switching tabs
   savedVertPos: 0,

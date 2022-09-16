@@ -5,9 +5,9 @@ GameDatabase.celestials.enslaved = {
   progress: {
     hintsUnlocked: {
       id: 0,
-      hint: "The Enslaved Ones want to help, but the help takes a while.",
+      hint: "The Nameless Ones want to help, but the help takes a while.",
       condition: () => `Spent more than ${formatInt(5)} real-time hours inside the Reality without completing it;
-        time outside the Reality counts for ${formatPercents(0.04)} as much. The timer starts once Enslaved's
+        time outside the Reality counts for ${formatPercents(0.04)} as much. The timer starts once Nameless's
         Reality is unlocked, but accumulates continuously.`,
     },
     ec1: {

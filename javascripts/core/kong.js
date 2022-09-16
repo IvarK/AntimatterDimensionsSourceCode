@@ -43,22 +43,27 @@ class ShopPurchaseState extends RebuyableMechanicState {
     player.IAP[this.config.key] = value;
   }
 
-  get displayMult() {
+  get shouldDisplayMult() {
     return Boolean(this.config.multiplier);
   }
 
   get currentMult() {
-    if (!this.displayMult) return "";
+    if (!this.shouldDisplayMult) return "";
     return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases);
   }
 
   get nextMult() {
-    if (!this.displayMult) return "";
+    if (!this.shouldDisplayMult) return "";
     return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases + 1);
+  }
+
+  formatEffect(effect) {
+    return this.config.formatEffect?.(effect) || formatX(effect, 2, 0);
   }
 
   purchase() {
     if (!this.canBeBought) return false;
+    if (this.config.singleUse && ui.$viewModel.modal.progressBar) return false;
     player.IAP.spentSTD += this.cost;
     if (this.config.singleUse) {
       this.config.onPurchase();
@@ -75,15 +80,27 @@ export const ShopPurchase = mapGameDataToObject(
   config => new ShopPurchaseState(config)
 );
 
-kong.purchaseTimeSkip = function(cost) {
-  if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
-  player.IAP.spentSTD += cost;
+ShopPurchase.respecAll = function() {
+  for (const purchase of ShopPurchase.all) {
+    if (purchase.config.singleUse) continue;
+    player.IAP.spentSTD -= purchase.purchases * purchase.cost;
+    purchase.purchases = 0;
+  }
+};
+
+ShopPurchase.respecRequest = function() {
+  if (player.options.confirmations.respecIAP) {
+    Modal.respecIAP.show();
+  } else {
+    ShopPurchase.respecAll();
+  }
+};
+
+kong.purchaseTimeSkip = function() {
   simulateTime(3600 * 6);
 };
 
-kong.purchaseLongerTimeSkip = function(cost) {
-  if (player.IAP.totalSTD - player.IAP.spentSTD < cost) return;
-  player.IAP.spentSTD += cost;
+kong.purchaseLongerTimeSkip = function() {
   simulateTime(3600 * 24);
 };
 

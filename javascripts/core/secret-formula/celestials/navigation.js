@@ -411,7 +411,7 @@ GameDatabase.celestials.navigation = {
       },
       alwaysShowLegend: false,
       legend: {
-        text: "Enslaved",
+        text: "Nameless",
         angle: -90,
         diagonal: 20,
         horizontal: 16,
@@ -531,13 +531,13 @@ GameDatabase.celestials.navigation = {
       alwaysShowLegend: true,
       legend: {
         text: complete => {
-          if (complete >= 1) return "The Enslaved Ones' Reality";
+          if (complete >= 1) return "The Nameless Ones' Reality";
           const ep = Enslaved.isRunning ? Currency.eternityPoints.value : 0;
           const goal = DC.E4000;
           return [
-            "The Enslaved Ones' Reality",
+            "The Nameless Ones' Reality",
             `Reach ${format(ep, 2)} / ${format(goal, 2)}`,
-            "Eternity Points inside The Enslaved Ones' Reality."
+            "Eternity Points inside The Nameless Ones' Reality."
           ];
         },
         angle: 45,
@@ -1125,9 +1125,9 @@ GameDatabase.celestials.navigation = {
           const unlocked = Ra.pets.effarig.level;
           const level = Ra.pets.enslaved.level;
           if (complete < 1) return `Ra's Effarig Memory level ${unlocked} / ${formatInt(8)}`;
-          if (level === 25) return `Ra's Enslaved Memories have all been returned`;
+          if (level === 25) return `Ra's Nameless Memories have all been returned`;
           return [
-            "Ra's Enslaved Memory level",
+            "Ra's Nameless Memory level",
             `${formatInt(level)} / ${formatInt(25)}`
           ];
         },
@@ -1175,7 +1175,7 @@ GameDatabase.celestials.navigation = {
         text: complete => {
           const unlocked = Ra.pets.enslaved.level;
           const level = Ra.pets.v.level;
-          if (complete < 1) return `Ra's Enslaved Memory level ${unlocked} / ${formatInt(8)}`;
+          if (complete < 1) return `Ra's Nameless Memory level ${unlocked} / ${formatInt(8)}`;
           if (level === 25) return `Ra's V Memories have all been returned`;
           return [
             "Ra's V Memory level",

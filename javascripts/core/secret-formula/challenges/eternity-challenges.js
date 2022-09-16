@@ -186,7 +186,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 12,
     description: () => (PlayerProgress.realityUnlocked()
-      ? `the game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled. The goal must be reached
+      ? `the game runs ×${formatInt(1000)} slower; all other game speed effects are disabled. The goal must be reached
         within a certain amount of time or you will fail the Challenge. ${specialInfinityGlyphDisabledEffectText()}`
       : `the game runs ×${formatInt(1000)} slower. The goal must be reached
         within a certain amount of time or you will fail the Challenge.`),

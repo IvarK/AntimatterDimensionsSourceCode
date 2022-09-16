@@ -39,6 +39,9 @@ export default {
       v-else
       class="c-automator-docs-page"
     >
+      Click on an underlined command to see more details on syntax, usage, and functionality.
+      <br>
+      <br>
       <span>Command List:</span>
       <br>
       <div

@@ -194,6 +194,7 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
     <p>
       Drag and drop these blocks to the area on the left! The blocks have names matching the commands in the reference
       page, but may change appearance after being placed to describe what they do in a more natural-sounding manner.
+      If a block changes in this way, the alternate text will be shown as a tooltip when going to drag it over.
     </p>
     <br>
     <p>
@@ -216,6 +217,7 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
       <div
         v-for="block in blocks"
         :key="block.id"
+        v-tooltip="block.alias"
         class="o-automator-command o-automator-block-list draggable-blocks"
       >
         {{ block.cmd }}

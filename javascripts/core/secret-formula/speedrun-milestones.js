@@ -164,8 +164,8 @@ GameDatabase.speedrunMilestones = [
   {
     id: 21,
     key: "completeEnslavedReality",
-    name: "The Enslaved Ones' Reality",
-    description: "Complete The Enslaved Ones' Reality",
+    name: "The Nameless Ones' Reality",
+    description: "Complete The Nameless Ones' Reality",
     checkRequirement: () => Enslaved.isRunning,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },

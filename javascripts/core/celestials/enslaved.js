@@ -18,14 +18,14 @@ export const ENSLAVED_UNLOCKS = {
       const hasRarityRequirement = strengthToRarity(player.records.bestReality.glyphStrength) >= 100;
       return hasLevelRequirement && hasRarityRequirement;
     },
-    description: () => `Unlock The Enslaved Ones' Reality (requires
+    description: () => `Unlock The Nameless Ones' Reality (requires
       a level ${formatInt(5000)} Glyph and a ${formatRarity(100)} rarity Glyph)`,
   }
 };
 
 export const Enslaved = {
-  displayName: "The Enslaved Ones",
-  possessiveName: "The Enslaved Ones'",
+  displayName: "The Nameless Ones",
+  possessiveName: "The Nameless Ones'",
   boostReality: false,
   BROKEN_CHALLENGES: [2, 3, 4, 5, 7, 8, 10, 11, 12],
   nextTickDiff: 50,
@@ -147,7 +147,7 @@ export const Enslaved = {
     this.feltEternity = false;
 
     // Re-validation needs to be done here because this code gets called after the automator attempts to start.
-    // This is a special case for Enslaved because it's one of the only two cases where a command becomes locked
+    // This is a special case for Nameless because it's one of the only two cases where a command becomes locked
     // again (the other being Pelle entry, which just force-stops the automator entirely).
     AutomatorData.recalculateErrors();
     if (AutomatorBackend.state.mode === AUTOMATOR_MODE.RUN && AutomatorData.currentErrors().length) {
@@ -242,7 +242,7 @@ class EnslavedProgressState extends BitUpgradeState {
     // Bump the last hint time appropriately if the player found the hint
     if (this.hasHint && !this.hasProgress) {
       player.celestials.enslaved.zeroHintTime -= Math.log(2) / Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds;
-      GameUI.notify.success("You found a crack in The Enslaved Ones' Reality!", 10000);
+      GameUI.notify.success("You found a crack in The Nameless Ones' Reality!", 10000);
     }
     player.celestials.enslaved.progressBits |= (1 << this.id);
   }

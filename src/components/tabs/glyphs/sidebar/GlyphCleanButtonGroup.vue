@@ -23,7 +23,7 @@ export default {
     },
     harshAutoCleanTooltip() {
       return `${this.removeString} Glyphs that are worse in every way than
-        ANY other glyph${this.hasPerkShop ? " (includes Music Glyphs)" : ""}`;
+        ANY other Glyph${this.hasPerkShop ? " (includes Music Glyphs)" : ""}`;
     },
     deleteRejectedTooltip() {
       const negativeWarning = AutoGlyphProcessor.hasNegativeEffectScore()
@@ -103,7 +103,7 @@ export default {
       class="c-glyph-inventory-option"
       @click="deleteAllUnprotected"
     >
-      {{ removeString }} all unprotected glyphs
+      {{ removeString }} all unprotected Glyphs
     </button>
     <button
       v-if="hasFilter"

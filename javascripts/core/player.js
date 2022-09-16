@@ -1,3 +1,5 @@
+import { AutomatorPanels } from "../../src/components/tabs/automator/AutomatorDocs";
+
 import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend";
 import { DC } from "./constants";
 import { deepmergeAll } from "@/utility/deepmerge";
@@ -508,7 +510,7 @@ window.player = {
       execTimer: 0,
       type: AUTOMATOR_TYPE.BLOCK,
       forceUnlock: false,
-      currentInfoPane: 4
+      currentInfoPane: AutomatorPanels.INTRO_PAGE,
     },
     achTimer: 0,
   },
@@ -683,14 +685,11 @@ window.player = {
       upgrades: new Set(),
       remnants: 0,
       realityShards: DC.D0,
-      // For recording which ones you permanently have
-      armageddonDuration: 0,
       records: {
         totalAntimatter: DC.D0,
         totalInfinityPoints: DC.D0,
         totalEternityPoints: DC.D0,
       },
-      maxAMThisArmageddon: DC.D0,
       rebuyables: {
         antimatterDimensionMult: 0,
         timeSpeedMult: 0,
@@ -771,7 +770,6 @@ window.player = {
     commas: true,
     updateRate: 33,
     newUI: true,
-    sidebarMinimized: false,
     offlineProgress: true,
     automaticTabSwitching: true,
     respecIntoProtected: false,
@@ -789,6 +787,7 @@ window.player = {
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,
+    forceDarkGlyphs: true,
     showHintText: {
       achievements: true,
       achievementUnlockStates: true,
@@ -798,13 +797,6 @@ window.player = {
       realityUpgrades: true,
       perks: true,
       alchemy: true,
-    },
-    chart: {
-      updateRate: 1000,
-      duration: 10,
-      warning: 0,
-      on: false,
-      dips: true
     },
     animations: {
       bigCrunch: true,
@@ -834,7 +826,8 @@ window.player = {
       replicantiGalaxy: true,
       antimatterGalaxy: true,
       dimensionBoost: true,
-      switchAutomatorMode: true
+      switchAutomatorMode: true,
+      respecIAP: true
     },
     awayProgress: {
       antimatter: true,
@@ -889,8 +882,6 @@ window.player = {
       id: false,
     }
   },
-  // TODO: Remove everything with devMode in it, we (probably?) don't want this in release
-  devMode: false,
 };
 
 export const Player = {

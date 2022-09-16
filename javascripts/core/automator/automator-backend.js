@@ -197,7 +197,7 @@ export const AutomatorData = {
   },
   currentScriptText(index) {
     const toCheck = index || this.scriptIndex();
-    return player.reality.automator.scripts[toCheck].content;
+    return player.reality.automator.scripts[toCheck]?.content;
   },
   createNewScript(content, name) {
     const newScript = AutomatorScript.create(name, content);
@@ -373,9 +373,9 @@ export const AutomatorBackend = {
   },
 
   findRawScriptObject(id) {
-    const auto = player.reality.automator;
-    const index = Object.values(auto.scripts).findIndex(s => s.id === id);
-    return auto.scripts[parseInt(Object.keys(auto.scripts)[index], 10)];
+    const scripts = player.reality.automator.scripts;
+    const index = Object.values(scripts).findIndex(s => s.id === id);
+    return scripts[parseInt(Object.keys(scripts)[index], 10)];
   },
 
   get currentRunningScript() {
@@ -418,6 +418,244 @@ export const AutomatorBackend = {
 
   get currentScriptLength() {
     return this.currentRawText.split("\n").length;
+  },
+
+  // Finds which study presets are referenced within the specified script
+  getUsedPresets(scriptID) {
+    const script = this.findRawScriptObject(scriptID);
+    if (!script) return null;
+
+    const foundPresets = new Set();
+    const lines = script.content.split("\n");
+    for (const rawLine of lines) {
+      const matchPresetID = rawLine.match(/studies( nowait)? load id ([1-6])/ui);
+      if (matchPresetID) foundPresets.add(Number(matchPresetID[2]) - 1);
+      const matchPresetName = rawLine.match(/studies( nowait)? load name (\S+)/ui);
+      if (matchPresetName) {
+        // A script might pass the regex match, but actually be referencing a preset which doesn't exist by name
+        const presetID = player.timestudy.presets.findIndex(p => p.name === matchPresetName[2]);
+        if (presetID !== -1) foundPresets.add(presetID);
+      }
+    }
+    const presets = Array.from(foundPresets);
+    presets.sort();
+    return presets;
+  },
+
+  // Finds which constants are referenced within the specified script
+  getUsedConstants(scriptID) {
+    const script = this.findRawScriptObject(scriptID);
+    if (!script) return null;
+
+    const foundConstants = new Set();
+    const lines = script.content.split("\n");
+    for (const rawLine of lines) {
+      const availableConstants = Object.keys(player.reality.automator.constants);
+      // Needs a space-padded regex match so that (for example) a constant "unl" doesn't match to an unlock command
+      // Additionally we need a negative lookbehind in order to ignore matches with presets which have the same name
+      for (const key of availableConstants) {
+        if (rawLine.match(`(?<![Nn][Aa][Mm][Ee])\\s${key}(\\s|$)`)) foundConstants.add(key);
+      }
+    }
+    const constants = Array.from(foundConstants);
+    constants.sort();
+    return constants;
+  },
+
+  // We can't just concatenate different parts of script data together or use some kind of delimiting character string
+  // due to the fact that comments can essentially contain character sequences with nearly arbitrary content and
+  // length. Instead, we take the approach of concatenating all data together with their lengths prepended at the start
+  // of each respective data string. For example:
+  //    ["blob", "11,21,31"] => "00004blob0000811,21,31"
+  // Note that the whole string can be unambiguously parsed from left-to-right regardless of the actual data contents.
+  // All numerical values are assumed to be exactly 5 characters long for consistency and since the script length limit
+  // is 5 digits long.
+  serializeAutomatorData(dataArray) {
+    const paddedNumber = num => `0000${num}`.slice(-5);
+    const segments = [];
+    for (const data of dataArray) {
+      segments.push(`${paddedNumber(data.length)}${data}`);
+    }
+    return segments.join("");
+  },
+
+  // Inverse of the operation performed by serializeAutomatorData(). Can throw an error for malformed inputs, but this
+  // will always be caught farther up the call chain and interpreted properly as an invalid dataString.
+  deserializeAutomatorData(dataString) {
+    if (dataString === "") throw new Error("Attempted deserialization of empty string");
+    const dataArray = [];
+    let remainingData = dataString;
+    while (remainingData.length > 0) {
+      const segmentLength = Number(remainingData.slice(0, 5));
+      remainingData = remainingData.substr(5);
+      if (Number.isNaN(segmentLength) || remainingData.length < segmentLength) {
+        throw new Error("Inconsistent or malformed serialized automator data");
+      } else {
+        const segmentData = remainingData.slice(0, segmentLength);
+        remainingData = remainingData.substr(segmentLength);
+        dataArray.push(segmentData);
+      }
+    }
+    return dataArray;
+  },
+
+  // This exports only the text contents of the currently-visible script
+  exportCurrentScriptContents() {
+    // Cut off leading and trailing whitespace
+    const trimmed = AutomatorData.currentScriptText().replace(/^\s*(.*?)\s*$/u, "$1");
+    if (trimmed.length === 0) return null;
+    // Serialize the script name and content
+    const name = AutomatorData.currentScriptName();
+    return GameSaveSerializer.encodeText(this.serializeAutomatorData([name, trimmed]), "automator script");
+  },
+
+  // This parses script content from an encoded export string; does not actually import anything
+  parseScriptContents(rawInput) {
+    let decoded, parts;
+    try {
+      decoded = GameSaveSerializer.decodeText(rawInput, "automator script");
+      parts = this.deserializeAutomatorData(decoded);
+    } catch (e) {
+      // TODO Remove everything but "return null" in this catch block before release; this is only here to maintain
+      // compatability with scripts from older test versions and will never be called on scripts exported post-release
+      if (decoded) {
+        parts = decoded.split("||");
+        if (parts.length === 3 && parts[1].length === parseInt(parts[0], 10)) {
+          return {
+            name: parts[1],
+            content: parts[2],
+          };
+        }
+      }
+
+      return null;
+    }
+
+    return {
+      name: parts[0],
+      content: parts[1],
+    };
+  },
+
+  // Creates a new script from the supplied import string
+  importScriptContents(rawInput) {
+    const parsed = this.parseScriptContents(rawInput);
+    AutomatorData.createNewScript(parsed.content, parsed.name);
+    this.initializeFromSave();
+  },
+
+  // This exports the selected script along with any constants and study presets it uses or references
+  exportFullScriptData(scriptID) {
+    const script = this.findRawScriptObject(scriptID);
+    const trimmed = script.content.replace(/^\s*(.*?)\s*$/u, "$1");
+    if (trimmed.length === 0) return null;
+
+    const foundPresets = new Set();
+    const foundConstants = new Set();
+    const lines = trimmed.split("\n");
+    // We find just the keys first, the rest of the associated data is serialized later
+    for (const rawLine of lines) {
+      const matchPresetID = rawLine.match(/studies( nowait)? load id ([1-6])/ui);
+      if (matchPresetID) foundPresets.add(Number(matchPresetID[2]) - 1);
+      const matchPresetName = rawLine.match(/studies( nowait)? load name (\S+)/ui);
+      if (matchPresetName) {
+        // A script might pass the regex match, but actually be referencing a preset which doesn't exist by name
+        const presetID = player.timestudy.presets.findIndex(p => p.name === matchPresetName[2]);
+        if (presetID !== -1) foundPresets.add(presetID);
+      }
+      const availableConstants = Object.keys(player.reality.automator.constants);
+      for (const key of availableConstants) if (rawLine.match(`\\s${key}(\\s|$)`)) foundConstants.add(key);
+    }
+
+    // Serialize presets
+    const presets = [];
+    for (const id of Array.from(foundPresets)) {
+      const preset = player.timestudy.presets[id];
+      presets.push(`${id}:${preset?.name ?? ""}:${preset?.studies ?? ""}`);
+    }
+
+    // Serialize constants
+    const constants = [];
+    for (const name of Array.from(foundConstants)) {
+      constants.push(`${name}:${player.reality.automator.constants[name]}`);
+    }
+
+    // Serialize all the variables for the full data export
+    const serialized = this.serializeAutomatorData([script.name, presets.join("*"), constants.join("*"), trimmed]);
+    return GameSaveSerializer.encodeText(serialized, "automator data");
+  },
+
+  // This parses scripts which also have attached information in the form of associated constants and study presets.
+  // Note that it doesn't actually import or assign the data to the save file at this point.
+  parseFullScriptData(rawInput) {
+    let decoded, parts;
+    try {
+      decoded = GameSaveSerializer.decodeText(rawInput, "automator data");
+      parts = this.deserializeAutomatorData(decoded);
+    } catch (e) {
+      return null;
+    }
+    if (parts.length !== 4) return null;
+
+    // Parse preset data (needs the conditional because otherwise it'll use the empty string to assign 0/undef/undef)
+    const presetData = parts[1];
+    const presets = [];
+    if (presetData) {
+      for (const preset of presetData.split("*")) {
+        const props = preset.split(":");
+        presets.push({
+          id: Number(props[0]),
+          name: props[1],
+          studies: props[2],
+        });
+      }
+    }
+    presets.sort((a, b) => a.id - b.id);
+
+    // Parse constant data
+    const constantData = parts[2];
+    const constants = [];
+    for (const constant of constantData.split("*")) {
+      if (constant === "") continue;
+      const props = constant.split(":");
+      constants.push({
+        key: props[0],
+        value: props[1],
+      });
+    }
+
+    return {
+      name: parts[0],
+      presets,
+      constants,
+      content: parts[3],
+    };
+  },
+
+  // This imports a given script, with options supplied for ignoring included presets and constants
+  // within the import data.
+  importFullScriptData(rawInput, ignore) {
+    const parsed = this.parseFullScriptData(rawInput);
+    AutomatorData.createNewScript(parsed.content, parsed.name);
+
+    if (!ignore.presets) {
+      for (const preset of parsed.presets) {
+        player.timestudy.presets[preset.id] = { name: preset.name, studies: preset.studies };
+      }
+    }
+
+    if (!ignore.constants) {
+      for (const constant of parsed.constants) {
+        const alreadyExists = player.reality.automator.constants[constant.key];
+        const canMakeNew = Object.keys(player.reality.automator.constants).length <
+          AutomatorData.MAX_ALLOWED_CONSTANT_COUNT;
+        if (alreadyExists || canMakeNew) {
+          player.reality.automator.constants[constant.key] = constant.value;
+        }
+      }
+    }
+
+    this.initializeFromSave();
   },
 
   update(diff) {
@@ -562,6 +800,7 @@ export const AutomatorBackend = {
   },
 
   saveScript(id, data) {
+    if (!this.findScript(id)) return;
     this.findScript(id).save(data);
     if (id === this.state.topLevelScript) this.stop();
   },
@@ -582,11 +821,13 @@ export const AutomatorBackend = {
     this._scripts.splice(idx, 1);
     if (this._scripts.length === 0) {
       this._createDefaultScript();
+      this.clearEditor();
     }
     if (id === this.state.topLevelScript) {
       this.stop();
       this.state.topLevelScript = this._scripts[0].id;
     }
+    EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
 
   toggleRepeat() {
@@ -665,6 +906,14 @@ export const AutomatorBackend = {
       player.reality.automator.currentInfoPane = AutomatorPanels.BLOCKS;
     }
     AutomatorHighlighter.clearAllHighlightedLines();
+  },
+
+  clearEditor() {
+    if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
+      BlockAutomator.clearEditor();
+    } else {
+      AutomatorTextUI.clearEditor();
+    }
   },
 
   stack: {

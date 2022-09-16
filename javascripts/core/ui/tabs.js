@@ -13,7 +13,7 @@ class SubtabState {
   }
 
   get isPermanentlyHidden() {
-    return this.config.hideAt <= GameEnd.endState;
+    return this.config.hideAt < GameEnd.endState;
   }
 
   get hidable() {
@@ -27,7 +27,7 @@ class SubtabState {
   }
 
   get isUnlocked() {
-    return this.config.condition === undefined || this.config.condition() || player.devMode;
+    return this.config.condition === undefined || this.config.condition();
   }
 
   get isAvailable() {
@@ -98,7 +98,7 @@ class TabState {
   }
 
   get isPermanentlyHidden() {
-    return this.config.hideAt <= GameEnd.endState;
+    return this.config.hideAt < GameEnd.endState;
   }
 
   get hidable() {
@@ -112,7 +112,7 @@ class TabState {
   }
 
   get isUnlocked() {
-    return this.config.condition === undefined || this.config.condition() || player.devMode;
+    return this.config.condition === undefined || this.config.condition();
   }
 
   get isAvailable() {

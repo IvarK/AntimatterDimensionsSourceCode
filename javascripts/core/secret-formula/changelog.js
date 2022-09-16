@@ -179,7 +179,7 @@ or infinity power.</li>
 while they were locked.</li>
 <li>Dirt is now more abundant.</li>
 <li>Fixed a bug where the 1st dimension wasn't producing the 0th dimension.</li>
-<li>Fixed a bug where The Nameless King was too hard.</li>
+<li>Fixed a bug where The Nameless Ones were too easy.</li>
 <li>Fixed a bug where in a specific case, 2 eternity challenges would appear as running at the same time.</li>
 <li>Increased TukkunFCG YC rewards by 15%.</li>
 <li>Added more space. SPAAAAAAACE</li>

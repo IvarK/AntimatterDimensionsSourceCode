@@ -61,12 +61,11 @@ export default {
     @confirm="handleYesClick"
   >
     <template #header>
-      {{ exitingEC ? "Complete Eternity Challenge" :"You are about to Eternity" }}
+      {{ exitingEC ? "Complete Eternity Challenge" : "You are about to Eternity" }}
     </template>
     <div v-if="!exitingEC">
       <div class="c-modal-message__text">
         {{ message }}
-        <!-- TODO: DILATION EXIT MODAL HI GAMER -->
         <br>
       </div>
       <br>

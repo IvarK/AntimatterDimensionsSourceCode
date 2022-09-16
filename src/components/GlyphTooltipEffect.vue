@@ -67,7 +67,7 @@ export default {
       };
     },
     textShadowColor() {
-      return Theme.current().isDark() ? "white" : "black";
+      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
     },
   },
   methods: {
@@ -75,7 +75,12 @@ export default {
       return string
         .replace("\n", "<br>")
         .replace("]", "</span>")
-        .replace("[", `<span style="color: ${this.additionColor}; text-shadow: ${this.textShadowColor} 0 0 0.6rem;">`);
+        .replace(
+          "[", `<span style="${Theme.current().isDark() || player.options.forceDarkGlyphs
+            ? "text-shadow: white 0 0 0.6rem;"
+            : ""}
+            font-weight: bold;">`
+        );
     }
   }
 };

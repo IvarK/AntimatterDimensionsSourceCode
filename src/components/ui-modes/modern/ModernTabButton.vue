@@ -45,7 +45,7 @@ export default {
         this.tabName = Pelle.transitionText(
           this.tab.name,
           Pelle.endTabNames[this.tabPosition],
-          Math.max(Math.min(GameEnd.endState - (this.tab.id) % 4 / 10, 1), 0)
+          Math.clamp(GameEnd.endState - (this.tab.id % 4) / 10, 0, 1)
         );
       } else {
         this.tabName = this.tab.name;

@@ -108,7 +108,7 @@ GameDatabase.progressStages = [
   },
   {
     id: PROGRESS_STAGE.ENSLAVED,
-    name: "The Enslaved Ones (3rd Celestial)",
+    name: "The Nameless Ones (3rd Celestial)",
     hasReached: save => save.celestials.enslaved.quoteBits > 0,
     suggestedResource: "Reality Machines and Glyph Level",
     subProgressValue: save => Math.sqrt((new Decimal(save.reality.realityMachines).log10() - 30) / 30),

@@ -123,7 +123,7 @@ export default {
       </div>
       <div v-else>
         Glyph types will have one of their effects improved<br>
-        when their glyph type's total sacrifice value is above:
+        when their Glyph type's total sacrifice value is above:
         <br><br>
         {{ format(addThreshold) }} - an additional secondary effect<br>
         {{ format(empowerThreshold) }} - formula drastically improved<br>

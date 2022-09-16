@@ -54,7 +54,7 @@ GameDatabase.celestials.effarig.unlocks = {
     get description() {
       return ` Eternities generates Infinities
         Infinity Points are no longer limited in any way in Effarig's Reality
-        You have unlocked The Enslaved Ones`;
+        You have unlocked The Nameless Ones`;
     },
   },
   reality: {

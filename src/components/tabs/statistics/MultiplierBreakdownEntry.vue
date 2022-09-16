@@ -16,6 +16,7 @@ export default {
       percentList: [],
       showGroup: [],
       mouseoverIndex: -1,
+      currentGroupKeys: [],
     };
   },
   computed: {
@@ -24,12 +25,10 @@ export default {
     groups() {
       return this.treeDB[this.entry];
     },
-    currentGroupKeys() {
-      return this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
-    },
   },
   methods: {
     update() {
+      this.currentGroupKeys = this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
       this.totalValue = this.currentGroupKeys
         .map(key => this.getProp(key, "value"))
         .reduce((x, y) => x.times(y), DC.D1)

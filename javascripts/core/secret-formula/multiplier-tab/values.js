@@ -6,8 +6,8 @@ GameDatabase.multiplierTabValues = {
   // Pre-Infinity Effects for ADs
   totalAD: {
     name: dim => (dim
-      ? `Total AD ${dim} Mult.`
-      : "All AD Mult."),
+      ? `Total AD ${dim} Multiplier`
+      : "All AD Multipliers"),
     multValue: dim => (dim
       ? AntimatterDimension(dim).multiplier
       : AntimatterDimensions.all
@@ -18,8 +18,8 @@ GameDatabase.multiplierTabValues = {
   },
   buy10AD: {
     name: dim => (dim
-      ? `AD ${dim} Mult. from Purchases`
-      : "Total AD Mult. from Purchases"),
+      ? `AD ${dim} from Purchases`
+      : "Total from Purchases"),
     multValue: dim => {
       const getBuy10 = ad => (Laitela.continuumActive
         ? AntimatterDimension(ad).continuumValue
@@ -35,8 +35,8 @@ GameDatabase.multiplierTabValues = {
   },
   dimboostAD: {
     name: dim => (dim
-      ? `AD ${dim} Mult. from Dimboosts`
-      : "Total AD Mult. from Dimboosts"),
+      ? `AD ${dim} from Dimboosts`
+      : "Total AD from Dimboosts"),
     multValue: dim => (dim
       ? DimBoost.multiplierToNDTier(dim)
       : AntimatterDimensions.all
@@ -46,14 +46,14 @@ GameDatabase.multiplierTabValues = {
     isActive: () => true,
   },
   sacrifice: {
-    name: () => `AD 8 Mult. from Sacrifice`,
+    name: () => `AD 8 from Sacrifice`,
     multValue: () => Sacrifice.totalBoost,
     isActive: () => Sacrifice.totalBoost.gt(1),
   },
   achievementAD: {
     name: dim => (dim
-      ? `AD ${dim} Mult. from Achievements`
-      : "Total AD Mult. from Achievements"),
+      ? `AD ${dim} from Achievements`
+      : "Total AD from Achievements"),
     multValue: dim => {
       const allMult = new Decimal(Achievements.power).timesEffectsOf(
         Achievement(48),
@@ -101,8 +101,8 @@ GameDatabase.multiplierTabValues = {
   // Post-Infinity, applying to ADs
   infinityUpgradeAD: {
     name: dim => (dim
-      ? `AD ${dim} Mult. from Infinity Upgrades`
-      : "Total AD Mult. from Infinity Upgrades"),
+      ? `AD ${dim} from Infinity Upgrades`
+      : "Total AD from Infinity Upgrades"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         InfinityUpgrade.totalTimeMult,
@@ -131,8 +131,8 @@ GameDatabase.multiplierTabValues = {
   },
   breakInfinityUpgradeAD: {
     name: dim => (dim
-      ? `AD ${dim} Mult. from Break Infinity Upgrades`
-      : "Total AD Mult. from Break Infinity Upgrades"),
+      ? `AD ${dim} from Break Infinity Upgrades`
+      : "Total AD from Break Infinity Upgrades"),
     multValue: dim => {
       const mult = DC.D1.timesEffectsOf(
         BreakInfinityUpgrade.totalAMMult,
@@ -148,8 +148,8 @@ GameDatabase.multiplierTabValues = {
   },
   infinityChallengeAD: {
     name: dim => (dim
-      ? `AD ${dim} Mult. from Infinity Challenges`
-      : "Total AD Mult. from Infinity Challenges"),
+      ? `AD ${dim} from Infinity Challenges`
+      : "Total AD from Infinity Challenges"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         InfinityChallenge(3),
@@ -176,8 +176,8 @@ GameDatabase.multiplierTabValues = {
   // Eternity-level effects to ADs
   timeStudyAD: {
     name: dim => (dim
-      ? `AD ${dim} Mult. from Time Studies`
-      : "Total AD Mult. from Time Studies"),
+      ? `AD ${dim} from Time Studies`
+      : "Total AD from Time Studies"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         TimeStudy(91),
@@ -217,8 +217,8 @@ GameDatabase.multiplierTabValues = {
   },
   eternityChallengeAD: {
     name: dim => (dim
-      ? `AD ${dim} Mult. from Eternity Challenges`
-      : "Total AD Mult. from Eternity Challenges"),
+      ? `AD ${dim} from Eternity Challenges`
+      : "Total AD from Eternity Challenges"),
     multValue: dim => {
       const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
       return Decimal.pow(EternityChallenge(10).effectValue, dim ? 1 : maxActiveDim);

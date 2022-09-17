@@ -33,7 +33,7 @@ export default {
     :style="style"
   >
     <h2>
-      Reset the entire game, but keep Secret Themes, Secret Achievements, and Options
+      Reset the entire game, but keep Automator Scripts, Secret Themes, Secret Achievements, and Options
     </h2>
     <div class="c-new-game-button-container">
       <button

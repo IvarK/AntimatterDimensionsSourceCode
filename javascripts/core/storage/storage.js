@@ -82,6 +82,7 @@ export const GameStorage = {
   },
 
   importAsFile() {
+    if (GameEnd.creditsEverClosed) return;
     const reader = new FileReader();
     const text = reader.readAsText(file);
     this.import(text);

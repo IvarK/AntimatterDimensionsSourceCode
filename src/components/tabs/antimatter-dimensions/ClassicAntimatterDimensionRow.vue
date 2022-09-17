@@ -123,12 +123,17 @@ export default {
     isLongText(str) {
       return str.length > 20;
     },
-    singlesClass() {
+    textClass() {
       return {
         "l-dim-row-small-text": this.isLongText(this.singleText) || !this.showCostTitle(this.singleCost),
+      };
+    },
+    tutorialClass() {
+      return {
+        "l-glow-container": true,
         "tutorial--glow": this.isAffordable && this.hasTutorial
       };
-    }
+    },
   }
 };
 </script>
@@ -152,10 +157,12 @@ export default {
         :ach-tooltip="boughtTooltip"
         :enabled="isAffordable && !isCapped && isUnlocked"
         class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad"
-        :class="singlesClass()"
+        :class="textClass()"
         @click="buySingle"
       >
-        {{ singleText }}
+        <div :class="tutorialClass()">
+          {{ singleText }}
+        </div>
         <div
           v-if="hasTutorial"
           class="fas fa-circle-exclamation l-tab-notification"
@@ -177,3 +184,17 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.l-glow-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  border-radius: var(--var-border-radius, inherit);
+}
+</style>

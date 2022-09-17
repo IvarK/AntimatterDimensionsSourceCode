@@ -1,4 +1,5 @@
 import { AutomatorPanels } from "../../src/components/tabs/automator/AutomatorDocs";
+import { GlyphInfo } from "../../src/components/modals/options/SelectGlyphInfoDropdown";
 
 import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend";
 import { DC } from "./constants";
@@ -577,6 +578,7 @@ window.player = {
       run: false,
       completed: false,
       tesseracts: 0,
+      hasSecretStudy: false,
       feltEternity: false,
       progressBits: 0,
       hintBits: 0,
@@ -797,6 +799,8 @@ window.player = {
       realityUpgrades: true,
       perks: true,
       alchemy: true,
+      glyphInfoType: GlyphInfo.types.NONE,
+      showGlyphInfoByDefault: false,
     },
     animations: {
       bigCrunch: true,

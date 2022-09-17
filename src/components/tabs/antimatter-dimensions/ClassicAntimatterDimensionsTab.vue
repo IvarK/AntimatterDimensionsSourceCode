@@ -27,15 +27,8 @@ export default {
       isSacrificeUnlocked: false,
       buy10Mult: new Decimal(0),
       currentSacrifice: new Decimal(0),
+      multiplierText: "",
     };
-  },
-  computed: {
-    multiplierText() {
-      const sacText = this.isSacrificeUnlocked
-        ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
-        : "";
-      return `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}${sacText}`;
-    },
   },
   methods: {
     update() {
@@ -64,6 +57,10 @@ export default {
       this.isSacrificeUnlocked = Sacrifice.isVisible;
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
+      const sacText = this.isSacrificeUnlocked
+        ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
+        : "";
+      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}${sacText}`;
     },
     quickReset() {
       softReset(-1, true, true);

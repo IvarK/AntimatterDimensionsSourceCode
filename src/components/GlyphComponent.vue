@@ -1,4 +1,6 @@
 <script>
+import { GlyphInfo } from "../../src/components/modals/options/SelectGlyphInfoDropdown";
+
 import GlyphTooltip from "@/components/GlyphTooltip";
 
 export default {
@@ -259,6 +261,35 @@ export default {
     },
     showGlyphEffectDots() {
       return player.options.showHintText.glyphEffectDots;
+    },
+    displayedInfo() {
+      const blacklist = ["companion", "cursed"];
+      if (!this.isInventoryGlyph || blacklist.includes(this.glyph.type)) return null;
+
+      const options = player.options.showHintText;
+      if (options.glyphInfoType === GlyphInfo.types.NONE ||
+        (!options.showGlyphInfoByDefault && !this.$viewModel.shiftDown)) {
+        return null;
+      }
+
+      const typeEnum = GlyphInfo.types;
+      switch (options.glyphInfoType) {
+        case typeEnum.LEVEL:
+          this.updateDisplayLevel();
+          return formatInt(this.displayLevel === 0 ? this.glyph.level : this.displayLevel);
+        case typeEnum.RARITY:
+          return formatRarity(strengthToRarity(Pelle.isDoomed ? Pelle.glyphStrength : this.glyph.strength));
+        case typeEnum.SAC_VALUE:
+          return format(this.sacrificeReward, 2, 2);
+        case typeEnum.FILTER_SCORE:
+          return format(AutoGlyphProcessor.filterValue(this.glyph), 1, 1);
+        case typeEnum.CURRENT_REFINE:
+          return `${format(this.refineReward, 2, 2)} ${this.symbol}`;
+        case typeEnum.MAX_REFINE:
+          return `${format(this.uncappedRefineReward, 2, 2)} ${this.symbol}`;
+        default:
+          throw new Error("Unrecognized Glyph info type in info text");
+      }
     }
   },
   watch: {
@@ -273,6 +304,7 @@ export default {
       this.$recompute("cursedColor");
       this.$recompute("cursedColorInverted");
       this.$recompute("showGlyphEffectDots");
+      this.$recompute("displayedInfo");
     });
     this.on$("tooltip-touched", () => this.hideTooltip());
   },
@@ -291,16 +323,19 @@ export default {
       this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
         ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
         : 0;
-
-      // A few things need to be updated continuously, but only when the tooltip is visible
-      if (this.tooltipLoaded) {
-        const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
-        let adjustedLevel = this.isActiveGlyph
-          ? getAdjustedGlyphLevel(this.glyph)
-          : this.glyph.level + levelBoost;
-        if (Pelle.isDoomed && this.isInventoryGlyph) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
-        this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
+      if (this.tooltipLoaded) this.updateDisplayLevel();
+    },
+    updateDisplayLevel() {
+      if (this.ignoreModifiedLevel) {
+        this.displayLevel = 0;
+        return;
       }
+      const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
+      let adjustedLevel = this.isActiveGlyph
+        ? getAdjustedGlyphLevel(this.glyph)
+        : this.glyph.level + levelBoost;
+      if (Pelle.isDoomed && this.isInventoryGlyph) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
+      this.displayLevel = adjustedLevel;
     },
     // This produces a linearly interpolated color between the basic glyph colors, but with RGB channels copied and
     // hardcoded from the color data because that's probably preferable to a very hacky hex conversion method. The
@@ -527,6 +562,12 @@ export default {
       class="l-new-glyph"
     >
       New!
+    </div>
+    <div
+      v-if="displayedInfo"
+      class="l-glyph-info"
+    >
+      {{ displayedInfo }}
     </div>
     <div
       ref="over"

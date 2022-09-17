@@ -17,10 +17,12 @@ export default {
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     dimName() {
       return AntimatterDimension(this.requirement.tier).shortDisplayName;
     },
     boostCountText() {
+      if (this.requirementText) return this.requirementText;
       const parts = [this.purchasedBoosts];
       if (this.imaginaryBoosts !== 0) {
         parts.push(this.imaginaryBoosts);

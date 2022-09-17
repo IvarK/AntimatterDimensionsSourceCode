@@ -25,12 +25,13 @@ export default {
 
 <template>
   <div>
-    <button
-      v-if="selectedCommand !== -1"
-      v-tooltip="'Back to Command List'"
-      class="c-automator-docs--button fas fa-arrow-left"
-      @click="selectedCommand = -1"
-    />
+    <div v-if="selectedCommand !== -1">
+      <button
+        class="c-automator-docs--button l-return-button fas fa-arrow-left"
+        @click="selectedCommand = -1"
+      />
+      Return to the Command List
+    </div>
     <AutomatorDocsManPage
       v-if="selectedCommand !== -1"
       :command="commands[selectedCommand]"
@@ -76,5 +77,12 @@ export default {
   display: flex;
   flex-direction: column;
   padding-left: 1rem;
+}
+
+.l-return-button {
+  width: 4rem;
+  height: 2.6rem;
+  font-size: 1.8rem;
+  margin-left: 2rem;
 }
 </style>

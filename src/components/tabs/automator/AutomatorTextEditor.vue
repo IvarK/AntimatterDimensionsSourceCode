@@ -147,6 +147,13 @@ export const AutomatorTextUI = {
     });
   },
   clearEditor() {
+    // In some importing cases (mostly when importing a save without the automator unlocked), the editor doesn't exist
+    // and attempting to modify it will cause console errors; in this case we initialize it to a blank editor (even
+    // though its inaccessible) in order to prevent errors on-load and when first checking that subtab
+    if (!this.editor) {
+      this.setUpContainer();
+      this.setUpEditor();
+    }
     this.editor.setValue("");
     this.editor.clearHistory();
     this.editor.clearGutter("gutterId");

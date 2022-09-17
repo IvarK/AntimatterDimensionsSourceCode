@@ -48,6 +48,18 @@
   padding: 0.2rem;
 }
 
+.l-glyph-info {
+  position: absolute;
+  font-size: 0.9rem;
+  bottom: -0.5rem;
+  right: -0.5rem;
+  z-index: 5;
+  color: white;
+  background-color: gray;
+  border-radius: var(--var-border-radius, 0.2rem);
+  padding: 0.2rem;
+}
+
 .c-glyph-component--dragging {
   opacity: 0.5;
 }

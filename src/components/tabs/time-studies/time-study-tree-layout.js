@@ -150,6 +150,13 @@ export class TimeStudyTreeLayout {
     this.secretStudy = new TimeStudySetup({
       study: secretStudy,
       row: 0,
+      column: 0
+    });
+
+    const enslavedStudy = {};
+    this.enslavedStudy = new TimeStudySetup({
+      study: enslavedStudy,
+      row: 0,
       column: 2
     });
 
@@ -161,6 +168,9 @@ export class TimeStudyTreeLayout {
     this.secretStudyConnection = new TimeStudyConnectionSetup(
       new TimeStudyConnection(TS(11), secretStudy)
     );
+    this.enslavedStudyConnection = new TimeStudyConnectionSetup(
+      new TimeStudyConnection(TS(11), enslavedStudy)
+    );
 
     this.width = this.rows.map(row => row.width).max();
     const heightNoSpacing = this.rows.map(r => r.layout.itemHeight).sum();
@@ -170,11 +180,13 @@ export class TimeStudyTreeLayout {
       study.setPosition(this);
     }
     this.secretStudy.setPosition(this);
+    this.enslavedStudy.setPosition(this);
 
     for (const connection of this.connections) {
       connection.setPosition(this.studies, this.width, this.height);
     }
     this.secretStudyConnection.setPosition(this.studies.concat(this.secretStudy), this.width, this.height);
+    this.enslavedStudyConnection.setPosition(this.studies.concat(this.enslavedStudy), this.width, this.height);
   }
 
   itemPosition(row) {

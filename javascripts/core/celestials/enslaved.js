@@ -143,7 +143,7 @@ export const Enslaved = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.enslaved.run = true;
-    player.secretUnlocks.viewSecretTS = false;
+    player.celestials.enslaved.hasSecretStudy = false;
     this.feltEternity = false;
 
     // Re-validation needs to be done here because this code gets called after the automator attempts to start.

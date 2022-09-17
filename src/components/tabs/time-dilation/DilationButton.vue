@@ -51,7 +51,7 @@ export default {
   <button
     class="o-dilation-btn"
     :class="isUnlocked ? 'o-dilation-btn--unlocked' : 'o-dilation-btn--locked'"
-    onclick="startDilatedEternityRequest()"
+    @click="dilate()"
   >
     <span v-if="!isUnlocked">Purchase the Dilation Study to unlock.</span>
     <span v-else-if="!isRunning">

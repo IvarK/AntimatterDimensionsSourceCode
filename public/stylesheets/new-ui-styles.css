@@ -497,7 +497,7 @@ body.t-s9 {
 
 .l-tickspeed-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding: 1rem 5rem 0 9rem;
 }
 

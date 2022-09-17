@@ -12,7 +12,8 @@ export default {
       imaginaryBoosts: 0,
       lockText: null,
       unlockedByBoost: null,
-      creditsClosed: false
+      creditsClosed: false,
+      requirementText: null
     };
   },
   computed: {
@@ -45,6 +46,7 @@ export default {
       this.lockText = DimBoost.lockText;
       this.unlockedByBoost = DimBoost.unlockedByBoost;
       this.creditsClosed = GameEnd.creditsEverClosed;
+      if (this.isDoomed) this.requirementText = formatInt(this.purchasedBoosts);
     },
     dimensionBoost(bulk) {
       if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;

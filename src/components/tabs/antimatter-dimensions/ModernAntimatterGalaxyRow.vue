@@ -18,6 +18,10 @@ export default {
       lockText: null,
       canBulkBuy: false,
       creditsClosed: false,
+      scalingText: {
+        distant: null,
+        remote: null,
+      }
     };
   },
   computed: {
@@ -79,6 +83,12 @@ export default {
       this.lockText = Galaxy.lockText;
       this.canBulkBuy = EternityMilestone.autobuyMaxGalaxies.isReached;
       this.creditsClosed = GameEnd.creditsEverClosed;
+      if (this.isDoomed) {
+        this.scalingText = {
+          distant: this.formatGalaxies(this.distantStart),
+          remote: this.formatGalaxies(Galaxy.remoteStart),
+        };
+      }
     },
     buyGalaxy(bulk) {
       if (!this.canBeBought) return;

@@ -12,7 +12,7 @@ function append8(key) {
 // Used as shorthand for all the effects which boost ADs
 function getADProps(tier) {
   const props = ["buy10AD", "dimboostAD", "achievementAD", "infinityUpgradeAD", "breakInfinityUpgradeAD",
-    "infinityChallengeAD", "timeStudyAD", "eternityChallengeAD"];
+    "infinityChallengeAD", "infinityPowerAD", "timeStudyAD", "eternityChallengeAD", "glyphAD", "alchemyAD", "otherAD"];
   if (!tier) return props;
   const newProps = [];
   for (const effect of props) newProps.push(`${effect}_${tier}`);
@@ -44,11 +44,23 @@ GameDatabase.multiplierTabTree = {
   infinityChallengeAD: [
     append8("infinityChallengeAD")
   ],
+  infinityPowerAD: [
+    append8("infinityPowerAD")
+  ],
   timeStudyAD: [
     append8("timeStudyAD")
   ],
   eternityChallengeAD: [
     append8("eternityChallengeAD")
+  ],
+  glyphAD: [
+    append8("glyphAD")
+  ],
+  alchemyAD: [
+    append8("alchemyAD")
+  ],
+  otherAD: [
+    append8("otherAD")
   ],
   totalAD_1: [
     getADProps(1)

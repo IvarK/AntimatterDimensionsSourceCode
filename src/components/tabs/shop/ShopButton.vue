@@ -5,6 +5,11 @@ export default {
     purchase: {
       type: Object,
       required: true
+    },
+    iapDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
@@ -16,8 +21,8 @@ export default {
   },
   methods: {
     update() {
-      this.currentMult = this.purchase.currentMult;
-      this.nextMult = this.purchase.nextMult;
+      this.currentMult = this.purchase.currentMultForDisplay;
+      this.nextMult = this.purchase.nextMultForDisplay;
       this.canAfford = this.purchase.canBeBought;
     }
   },
@@ -32,6 +37,7 @@ export default {
       <span
         v-if="purchase.shouldDisplayMult"
         class="o-shop-button-multiplier"
+        :class="{ 'o-shop-button-multiplier--disabled': iapDisabled }"
       >
         Currently {{ purchase.formatEffect(currentMult) }}, next: {{ purchase.formatEffect(nextMult) }}
       </span>
@@ -92,5 +98,10 @@ export default {
   font-size: 1.5rem;
   font-weight: bold;
   margin: 0.5rem 0;
+}
+
+.o-shop-button-multiplier--disabled {
+  color: red;
+  text-decoration: line-through;
 }
 </style>

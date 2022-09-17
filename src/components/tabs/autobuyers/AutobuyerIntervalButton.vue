@@ -11,7 +11,7 @@ export default {
     return {
       cost: 0,
       isMaxed: false,
-      isUnlocked: false,
+      isUpgradeable: false,
       isAffordable: false
     };
   },
@@ -28,7 +28,7 @@ export default {
     update() {
       this.cost = this.autobuyer.cost;
       this.isMaxed = this.autobuyer.hasMaxedInterval;
-      this.isUnlocked = this.autobuyer.isUnlocked;
+      this.isUpgradeable = this.autobuyer.canBeUpgraded;
       this.isAffordable = Currency.infinityPoints.gte(this.cost);
     },
     upgradeInterval() {
@@ -40,13 +40,13 @@ export default {
 
 <template>
   <button
-    v-if="!isMaxed && isUnlocked"
+    v-if="!isMaxed && isUpgradeable"
     :class="classObject"
     @click="upgradeInterval"
   >
     {{ formatPercents(0.4) }} smaller interval
     <br>
-    Cost: {{ format(cost, 2, 0) }} IP
+    Cost: {{ format(cost, 2) }} IP
   </button>
   <button
     v-else-if="!isMaxed"

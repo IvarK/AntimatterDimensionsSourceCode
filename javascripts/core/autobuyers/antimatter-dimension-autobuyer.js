@@ -25,7 +25,7 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
 
   get isUnlocked() {
     if (Pelle.isDisabled(`antimatterDimAutobuyer${this.tier}`)) return false;
-    return this.data.isBought || NormalChallenge(this.tier).isCompleted;
+    return this.data.isBought || this.canBeUpgraded;
   }
 
   get isBought() {
@@ -38,6 +38,10 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
 
   get canBeBought() {
     return !Pelle.isDisabled(`antimatterDimAutobuyer${this.tier}`);
+  }
+
+  get canBeUpgraded() {
+    return NormalChallenge(this.tier).isCompleted;
   }
 
   get disabledByContinuum() {

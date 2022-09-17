@@ -29,6 +29,7 @@ export default {
       hasInfinity: false,
       hasContinuum: false,
       displayADAutobuyersIndividually: false,
+      hasInstant: false,
     };
   },
   computed: {
@@ -57,6 +58,7 @@ export default {
           .every(x => x.hasUnlimitedBulk && x.hasMaxedInterval);
         return;
       }
+      this.hasInstant = ad.hasInstant;
       const allMaxedInterval = ad.allMaxedInterval;
       const allUnlocked = ad.allUnlocked;
       const allUnlimitedBulk = ad.allUnlimitedBulk;
@@ -79,7 +81,10 @@ export default {
       Challenges for upgrading autobuyers are unlocked by reaching Infinity.
     </div>
     <b>Autobuyers with no displayed bulk have unlimited bulk by default.</b>
-    <b>Autobuyers with "Instant" interval will trigger every game tick ({{ gameTickLength }}).</b>
+    <b>
+      Antimatter Dimension Autobuyers can have their bulk upgraded once interval is below {{ formatInt(100) }} ms.
+    </b>
+    <b v-if="hasInstant">Autobuyers with "Instant" interval will trigger every game tick ({{ gameTickLength }}).</b>
     <RealityAutobuyerBox class="c-reality-pos" />
     <EternityAutobuyerBox class="c-eternity-pos" />
     <BigCrunchAutobuyerBox class="c-infinity-pos" />

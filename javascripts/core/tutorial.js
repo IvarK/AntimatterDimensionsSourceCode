@@ -34,11 +34,8 @@ const tutorialStates = [
 
 export const Tutorial = {
 
-  // Class to be given to glowing components
-  glowingClass(atState, conditional = true) {
-    return {
-      "tutorial--glow": ui.view.tutorialState === atState && conditional && ui.view.tutorialActive
-    };
+  isActive(atState) {
+    return ui.view.tutorialState === atState && ui.view.tutorialActive;
   },
 
   // Turns off the visual effect

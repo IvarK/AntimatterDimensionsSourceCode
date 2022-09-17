@@ -26,7 +26,8 @@ export default {
       scalingText: {
         distant: null,
         remote: null,
-      }
+      },
+      hasTutorial: false,
     };
   },
   computed: {
@@ -72,7 +73,9 @@ export default {
       return undefined;
     },
     tutorialClass() {
-      return Tutorial.glowingClass(TUTORIAL_STATE.GALAXY, this.canBeBought);
+      return {
+        "tutorial--glow": this.canBeBought && this.hasTutorial
+      };
     }
   },
   methods: {
@@ -95,6 +98,7 @@ export default {
           remote: this.formatGalaxies(Galaxy.remoteStart),
         };
       }
+      this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.GALAXY);
     },
     buyGalaxy(bulk) {
       if (!this.canBeBought) return;
@@ -127,6 +131,10 @@ export default {
       @click.shift.exact="buyGalaxy(false)"
     >
       {{ buttonText }}
+      <div
+        v-if="hasTutorial"
+        class="fas fa-circle-exclamation l-tab-notification"
+      />
     </PrimaryButton>
   </div>
 </template>

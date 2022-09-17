@@ -33,6 +33,7 @@ export default {
       isShown: false,
       isCostsAD: false,
       formattedAmount: null,
+      hasTutorial: false,
     };
   },
   computed: {
@@ -99,6 +100,8 @@ export default {
       this.isShown =
         (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
       this.isCostsAD = NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
+      this.hasTutorial = (tier === 1 && Tutorial.isActive(TUTORIAL_STATE.DIM1)) ||
+        (tier === 2 && Tutorial.isActive(TUTORIAL_STATE.DIM2));
     },
     buySingle() {
       if (this.isContinuumActive) return;
@@ -121,20 +124,10 @@ export default {
       return str.length > 20;
     },
     singlesClass() {
-      const small = {
-        "l-dim-row-small-text": this.isLongText(this.singleText) || !this.showCostTitle(this.singleCost)
+      return {
+        "l-dim-row-small-text": this.isLongText(this.singleText) || !this.showCostTitle(this.singleCost),
+        "tutorial--glow": this.isAffordable && this.hasTutorial
       };
-      let tutorial;
-      switch (this.tier) {
-        case 1:
-          tutorial = Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
-          break;
-        case 2:
-          tutorial = Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
-          break;
-      }
-
-      return { ...small, ...tutorial };
     }
   }
 };
@@ -163,6 +156,10 @@ export default {
         @click="buySingle"
       >
         {{ singleText }}
+        <div
+          v-if="hasTutorial"
+          class="fas fa-circle-exclamation l-tab-notification"
+        />
       </PrimaryButton>
       <PrimaryButton
         :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"

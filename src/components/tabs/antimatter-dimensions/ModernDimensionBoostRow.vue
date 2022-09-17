@@ -13,7 +13,8 @@ export default {
       lockText: null,
       unlockedByBoost: null,
       creditsClosed: false,
-      requirementText: null
+      requirementText: null,
+      hasTutorial: false,
     };
   },
   computed: {
@@ -34,7 +35,9 @@ export default {
       return sum;
     },
     tutorialClass() {
-      return Tutorial.glowingClass(TUTORIAL_STATE.DIMBOOST, this.isBuyable);
+      return {
+        "tutorial--glow": this.isBuyable && this.hasTutorial
+      };
     }
   },
   methods: {
@@ -49,6 +52,7 @@ export default {
       this.unlockedByBoost = DimBoost.unlockedByBoost;
       this.creditsClosed = GameEnd.creditsEverClosed;
       if (this.isDoomed) this.requirementText = formatInt(this.purchasedBoosts);
+      this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.DIMBOOST);
     },
     dimensionBoost(bulk) {
       if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;
@@ -70,6 +74,10 @@ export default {
       @click.shift.exact="dimensionBoost(false)"
     >
       {{ unlockedByBoost }}
+      <div
+        v-if="hasTutorial"
+        class="fas fa-circle-exclamation l-tab-notification"
+      />
     </button>
   </div>
 </template>

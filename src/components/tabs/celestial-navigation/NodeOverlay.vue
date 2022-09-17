@@ -31,11 +31,22 @@ export default {
       required: false,
       default: false
     },
+    forceLegend: {
+      type: Function,
+      required: false,
+      default: undefined
+    },
     clickAction: {
       type: Function,
       required: false,
       default: undefined
     }
+  },
+  data() {
+    return {
+      legendLines: [],
+      hoverOverride: false,
+    };
   },
   computed: {
     LEGEND_FONT_SIZE: () => 16,
@@ -67,24 +78,29 @@ export default {
       const angle = (this.legend.angle + 360) % 360;
       return angle > 90 && angle < 270 ? "end" : "start";
     },
-    legendLines() {
-      const data = typeof (this.legend.text) === "function"
-        ? this.legend.text(this.complete) : this.legend.text;
-      return typeof (data) === "string" ? [data] : data;
-    },
     nodeClass() {
       return {
-        "o-celestial-nav__force-hover": this.alwaysShowLegend,
+        "o-celestial-nav__force-hover": this.hoverOverride,
         "o-celestial-nav__clickable": this.clickAction !== undefined
       };
     },
   },
   methods: {
+    update() {
+      this.legendLines = this.getLines();
+      this.hoverOverride = this.alwaysShowLegend || (this.forceLegend && this.forceLegend());
+    },
     legendLineY(idx) {
       const spacing = Math.round(this.LEGEND_FONT_SIZE * 1.25 / 2);
       const num = this.legendLines.length;
       return (2 * idx - (num - 1)) * spacing;
-    }
+    },
+    getLines() {
+      if (!this.legend) return null;
+      const data = typeof (this.legend.text) === "function"
+        ? this.legend.text(this.complete) : this.legend.text;
+      return typeof (data) === "string" ? [data] : data;
+    },
   }
 };
 </script>

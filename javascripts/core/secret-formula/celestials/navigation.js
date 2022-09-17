@@ -1,5 +1,6 @@
 import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
+import wordShift from "../../wordShift";
 
 export function emphasizeEnd(fraction) {
   return Math.pow(fraction, 10);
@@ -20,6 +21,58 @@ export function vUnlockLegendLabel(complete, index) {
   ];
 }
 
+// Angle is defined/rescaled so that 0 is the first rift, 4 is the last one, and all 5 are equally spaced around
+// a circle. Starts at top-left and goes clockwise, reference point is that 3 is directly down. It's allowed to be
+// non-integer since it's also used for off-center curve control points
+export function pelleStarPosition(angle, scale) {
+  const pelleCenter = new Vector(750, 550);
+  const theta = (0.7 - 0.4 * angle) * Math.PI;
+  return new Vector(scale * Math.cos(theta), -scale * Math.sin(theta)).plus(pelleCenter);
+}
+
+// Makes curved spokes connecting the center of Pelle to all the outer nodes corresponding to rifts
+function pelleStarConnector(index, fillColor, isOverfill) {
+  return (function() {
+    // This should be half of the second argument used in pelleStarPosition when used to define rift node positions
+    const pelleSize = 75;
+    const pathStart = (0.4 * index + 0.5) * Math.PI;
+
+    // Technically 2 should be about 1.929 and 4/3 should be about 1.328; exact values for both of these leave a small
+    // gap between the path and the node, so we round up a bit to make those go away
+    const pathEnd = pathStart + 2;
+    const path = LogarithmicSpiral.fromPolarEndpoints(pelleStarPosition(index + 0.5, pelleSize),
+      pathStart, pelleSize, pathEnd, 4 / 3 * pelleSize);
+    // The +0.01 prevents curve decomposition errors from happening
+    const pathPadStart = path.angleFromRadius(pelleSize + 0.01) - pathStart;
+    const pathPadEnd = pathEnd - path.angleFromRadius(4 / 3 * pelleSize);
+    return {
+      pathStart,
+      pathEnd,
+      path,
+      pathPadStart,
+      pathPadEnd,
+      fill: fillColor,
+      drawOrder: isOverfill ? CELESTIAL_NAV_DRAW_ORDER.NODE_OVERLAYS : undefined,
+      noBG: isOverfill,
+    };
+  }());
+}
+
+const FILL_STATE = {
+  LOCKED: 0,
+  FILL: 1,
+  DRAIN: 2,
+  OVERFILL: 3
+};
+
+function riftFillStage(name) {
+  const rift = PelleRifts[name.toLowerCase()];
+  if (!rift.canBeApplied) return FILL_STATE.LOCKED;
+  if (!Pelle.hasGalaxyGenerator || rift.reducedTo === 1) return FILL_STATE.FILL;
+  if (rift.reducedTo < 1) return FILL_STATE.DRAIN;
+  return FILL_STATE.OVERFILL;
+}
+
 export const CELESTIAL_NAV_DRAW_ORDER = {
   // Node background is a black fuzzy circle drawn behind nodes. It can help show their
   // outline in some cases, and can be used in cases where a connector passes under a node
@@ -27,6 +80,7 @@ export const CELESTIAL_NAV_DRAW_ORDER = {
   CONNECTORS: 1000,
   NODES: 2000,
   NODE_OVERLAYS: 3000,
+  CANVAS_OVERLAY: 4000,
 };
 
 const Positions = Object.freeze({
@@ -62,7 +116,96 @@ const Positions = Object.freeze({
   laitelaSecondLeft: new Vector(100, 600),
   laitelaSecondRight: new Vector(200, 600),
   laitelaThirdCenter: new Vector(150, 650),
+
+  pelleUnlock: new Vector(450, 580),
+  pelleAchievementRequirement: pelleStarPosition(0, 0),
+  pelleVacuum: pelleStarPosition(0, 150),
+  pelleDecay: pelleStarPosition(1, 150),
+  pelleChaos: pelleStarPosition(2, 150),
+  pelleRecursion: pelleStarPosition(3, 150),
+  pelleParadox: pelleStarPosition(4, 150),
+
+  pelleGalaxyGen: pelleStarPosition(0, 0),
 });
+
+// Reduces boilerplate for rift line objects, but needs quite a few parameters to do so since there are three separate
+// elements that render for filling - the initial fill, the drain, and then the overfill
+// eslint-disable-next-line max-params
+function pelleRiftFill(name, index, textAngle, fillType) {
+  let visibleCheck, progressFn, legendFn, percentFn, incompleteClass, nodeFill, connectorFill;
+  switch (fillType) {
+    case FILL_STATE.FILL:
+      // The curve starts inside of the node, so we give the completion variable a bit of a headstart so that we can
+      // immediately see some filling even when it's pretty much still empty
+      visibleCheck = () => riftFillStage(name) === FILL_STATE.FILL;
+      progressFn = () => Math.clamp(0.1 + PelleRifts[name.toLowerCase()].realPercentage / 0.9, 1e-6, 1);
+      legendFn = () => false;
+      percentFn = x => (x - 0.1) / 0.9;
+      incompleteClass = "c-celestial-nav__test-incomplete";
+      nodeFill = "crimson";
+      connectorFill = "crimson";
+      break;
+    case FILL_STATE.DRAIN:
+      // The logarithmic curve code sometimes throws errors if you attempt to draw with complete === 0, so we cheat and
+      // make it a really tiny number that should format to 0 in most notations. We also do a pow in order to make it
+      // visually smoother, because the generator spiral blocks the bottom bit and makes it look static near the end of
+      // the drain
+      visibleCheck = () => riftFillStage(name) >= FILL_STATE.DRAIN;
+      progressFn = () => Math.clamp(Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo), 1e-6, 1);
+      legendFn = () => riftFillStage(name) === FILL_STATE.DRAIN && PelleRifts[name.toLowerCase()].reducedTo < 1;
+      percentFn = x => x;
+      incompleteClass = "c-celestial-nav__drained-rift";
+      nodeFill = "crimson";
+      connectorFill = "#550919";
+      break;
+    case FILL_STATE.OVERFILL:
+      visibleCheck = () => riftFillStage(name) === FILL_STATE.OVERFILL;
+      progressFn = () => Math.clamp(PelleRifts[name.toLowerCase()].percentage - 1, 1e-6, 1);
+      percentFn = x => x + 1;
+      legendFn = () => true;
+      incompleteClass = undefined;
+      nodeFill = "#ff7700";
+      connectorFill = "#ff9900";
+      break;
+  }
+
+  return {
+    visible: () => Pelle.isDoomed && visibleCheck(),
+    complete: () => progressFn(),
+    node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
+      incompleteClass,
+      position: Positions[`pelle${name}`],
+      fill: nodeFill,
+      ring: {
+        rMajor: 8,
+      },
+      forceLegend: () => legendFn(),
+      legend: {
+        text: complete => [
+          `${formatPercents(percentFn(complete), 1)} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`
+        ],
+        angle: textAngle,
+        diagonal: 30,
+        horizontal: 16,
+      },
+    },
+    connector: pelleStarConnector(index, connectorFill, fillType === FILL_STATE.OVERFILL),
+  };
+}
+
+// Slightly reduces boilerplate; there are a total of 15 rift elements which are largely duplicated code
+const fillStates = ["fill", "drain", "overfill"];
+const riftNames = ["Vacuum", "Decay", "Chaos", "Recursion", "Paradox"];
+const angles = [225, 315, 45, 135, 135];
+const riftFillElements = {};
+for (const fill of fillStates) {
+  for (let index = 0; index < riftNames.length; index++) {
+    const name = riftNames[index];
+    riftFillElements[`pelle-${name}-${fill}`] = pelleRiftFill(name, index, angles[index],
+      FILL_STATE[fill.toUpperCase()]);
+  }
+}
 
 GameDatabase.celestials.navigation = {
   "teresa-base": {
@@ -584,7 +727,7 @@ GameDatabase.celestials.navigation = {
             "8th Antimatter Dimensions in your current Infinity"
           ];
         },
-        angle: 35,
+        angle: 135,
         diagonal: 60,
         horizontal: 16,
       },
@@ -862,8 +1005,8 @@ GameDatabase.celestials.navigation = {
             `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
-        angle: 45,
-        diagonal: 16,
+        angle: 315,
+        diagonal: 25,
         horizontal: 16,
       },
     },
@@ -898,8 +1041,8 @@ GameDatabase.celestials.navigation = {
             `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
-        angle: 45,
-        diagonal: 16,
+        angle: 135,
+        diagonal: 25,
         horizontal: 16,
       },
     },
@@ -934,8 +1077,8 @@ GameDatabase.celestials.navigation = {
             `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
-        angle: 45,
-        diagonal: 16,
+        angle: 60,
+        diagonal: 25,
         horizontal: 16,
       },
     },
@@ -970,8 +1113,8 @@ GameDatabase.celestials.navigation = {
             `Reach ${formatInt(completions)} / ${formatInt(6)} completions in ${name}.`
           ];
         },
-        angle: 100,
-        diagonal: 16,
+        angle: 260,
+        diagonal: 30,
         horizontal: 16,
       },
     },
@@ -1290,9 +1433,9 @@ GameDatabase.celestials.navigation = {
       if (DarkMatterDimension(1).unlockUpgrade.canBeBought || Laitela.isUnlocked) return 1;
       if (MachineHandler.isIMUnlocked) {
         if (player.requirementChecks.reality.maxID1.neq(0)) return 0.5;
-        return Math.clampMax(0.999, player.antimatter.exponent / 1.5e12);
+        return 0.5 + 0.5 * Math.clampMax(0.999, player.antimatter.exponent / 1.5e12);
       }
-      return Math.clampMax(0.25, Currency.realityMachines.value.pLog10() / MachineHandler.baseRMCap.exponent);
+      return Math.clampMax(0.5, Currency.realityMachines.value.pLog10() / MachineHandler.baseRMCap.exponent);
     },
     drawOrder: -1,
     node: {
@@ -1464,7 +1607,7 @@ GameDatabase.celestials.navigation = {
       fill: "white",
       position: Positions.laitelaSecondCenter,
       ring: {
-        rMajor: 8,
+        rMajor: 15,
       },
       legend: {
         text: complete => {
@@ -1565,7 +1708,7 @@ GameDatabase.celestials.navigation = {
             `${format(Math.clampMax(allGalaxies, 80000))} / ${format(80000)}`
           ];
         },
-        angle: 135,
+        angle: 225,
         diagonal: 30,
         horizontal: 16,
       },
@@ -1620,8 +1763,8 @@ GameDatabase.celestials.navigation = {
     visible: () => DarkMatterDimension(4).isUnlocked && ImaginaryUpgrade(19).isBought,
     complete: () => Laitela.difficultyTier / 8,
     node: {
+      clickAction: () => Tab.celestials.laitela.show(true),
       incompleteClass: "c-celestial-nav__test-incomplete",
-      symbol: "ᛝ",
       symbolScale: 1.6,
       symbolOffset: "0.6",
       fill: "white",
@@ -1629,7 +1772,6 @@ GameDatabase.celestials.navigation = {
       ring: {
         rMajor: 15,
       },
-      alwaysShowLegend: true,
       legend: {
         text: complete => {
           if (complete < 1) return [
@@ -1643,7 +1785,7 @@ GameDatabase.celestials.navigation = {
             "Lai'tela's Reality",
           ];
         },
-        angle: 0,
+        angle: 180,
         diagonal: 15,
         horizontal: 8,
       },
@@ -1666,4 +1808,193 @@ GameDatabase.celestials.navigation = {
       }
     ]
   },
+  "pelle-unlock": {
+    visible: () => Laitela.difficultyTier > 4,
+    complete: () => {
+      if (Pelle.isUnlocked) return 1;
+      const imCost = Math.clampMax(emphasizeEnd(Math.log10(Currency.imaginaryMachines.value) / Math.log10(1.6e15)), 1);
+      let laitelaProgress = Laitela.isRunning ? Currency.eternityPoints.value.log10() / 4000 : 0;
+      if (Laitela.difficultyTier !== 8) laitelaProgress = 0;
+      else if (ImaginaryUpgrade(25).isAvailableForPurchase) laitelaProgress = 1;
+      return (imCost + laitelaProgress) / 2;
+    },
+    node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      fill: "crimson",
+      position: Positions.pelleUnlock,
+      ring: {
+        rMajor: 8,
+      },
+      legend: {
+        text: complete => {
+          if (complete === 1) {
+            return [
+              "Unlock Pelle",
+              "The Celestial of Antimatter"
+            ];
+          }
+          let laitelaString = `${format(Currency.eternityPoints.value)} / ${format("1e4000")} EP`;
+          if (!Laitela.isRunning || Laitela.difficultyTier !== 8) {
+            laitelaString = "Lai'tela's Reality is still intact";
+          } else if (ImaginaryUpgrade(25).isAvailableForPurchase) {
+            laitelaString = "Lai'tela's Reality has been destroyed";
+          }
+          return [
+            "Unlock Pelle",
+            "The Celestial of Antimatter",
+            `${format(Currency.imaginaryMachines.value, 2)} / ${format(1.6e15, 2)} iM`,
+            laitelaString
+          ];
+        },
+        angle: 105,
+        diagonal: 90,
+        horizontal: 10,
+      },
+    },
+    connector: {
+      pathStart: 0,
+      pathEnd: 1,
+      path: new LinearPath(Positions.laitelaThirdCenter, Positions.pelleUnlock),
+      fill: "url(#gradLaitelaPelle)",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    },
+  },
+  "pelle-doomed-requirement": {
+    visible: () => Pelle.isUnlocked,
+    complete: () => {
+      if (Pelle.isDoomed) return 1;
+      const achievements = Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked)) /
+        Achievements.prePelleRows.length;
+      const alchemy = AlchemyResources.all.countWhere(r => r.capped) / AlchemyResources.all.length;
+      return (emphasizeEnd(achievements) + emphasizeEnd(alchemy)) / 2;
+    },
+    node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      symbol: "♅",
+      symbolOffset: "1.6",
+      fill: "crimson",
+      position: Positions.pelleAchievementRequirement,
+      ring: {
+        rMajor: 20,
+      },
+      forceLegend: () => Pelle.isUnlocked && !Pelle.hasGalaxyGenerator,
+      legend: {
+        text: complete => {
+          if (complete >= 1) return Pelle.isDoomed ? "Doomed Reality" : "Doom your Reality";
+          const achievements = [Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked)),
+            Achievements.prePelleRows.length];
+          const alchemy = [AlchemyResources.all.countWhere(r => r.capped), AlchemyResources.all.length];
+          return [
+            `Complete ${formatInt(achievements[0])} / ${formatInt(achievements[1])} rows of achievements`,
+            `Fill ${formatInt(alchemy[0])} / ${formatInt(alchemy[1])} alchemy resources`,
+          ];
+        },
+        angle: 290,
+        diagonal: 40,
+        horizontal: 16,
+      },
+    },
+    connector: {
+      pathStart: 0,
+      pathEnd: 1,
+      path: new LinearPath(Positions.pelleUnlock, Positions.pelleAchievementRequirement),
+      fill: "crimson",
+      completeWidth: 6,
+      incompleteWidth: 4,
+    },
+  },
+
+  // All the fill elements are generated outside of here as a loop, and then unpacked here with the spread operator
+  ...riftFillElements,
+
+  // Needs a separate node in order to color the background of the galaxy generator not-gray. Note that this node gets
+  // placed on top of the "main" Doomed node once it's visible
+  "pelle-galaxy-generator-start-node": {
+    visible: () => Pelle.hasGalaxyGenerator,
+    complete: () => (Pelle.hasGalaxyGenerator ? 1 : 0),
+    node: {
+      incompleteClass: "c-celestial-nav__test-incomplete",
+      fill: "black",
+      position: Positions.pelleAchievementRequirement,
+      ring: {
+        rMajor: 20,
+      },
+      alwaysShowLegend: true,
+      legend: {
+        text: () => [
+          "Galaxy Generator:",
+          `${format(GalaxyGenerator.generatedGalaxies, 2)} / ${format(GalaxyGenerator.generationCap, 2)} Galaxies`
+        ],
+        angle: 290,
+        diagonal: 40,
+        horizontal: 16,
+      },
+    },
+  },
+  // Invisible element to suppress the mouseover detection on the galaxy icon causing the legend to flicker
+  "pelle-galaxy-generator-sigil-mask": {
+    visible: () => Pelle.hasGalaxyGenerator,
+    complete: () => (Pelle.hasGalaxyGenerator ? 1 : 0),
+    node: {
+      clickAction: () => Tab.celestials.pelle.show(true),
+      position: Positions.pelleAchievementRequirement,
+      ring: {
+        rMajor: 20,
+      },
+    },
+  },
+  "pelle-galaxy-generator-path": {
+    visible: () => Pelle.hasGalaxyGenerator,
+    complete: () => {
+      const riftCaps = PelleRifts.all.map(r => r.config.galaxyGeneratorThreshold);
+      const brokenRifts = riftCaps.countWhere(n => GalaxyGenerator.generatedGalaxies >= n);
+      if (brokenRifts === 5) return 1;
+      const prevRift = riftCaps.filter(n => GalaxyGenerator.generatedGalaxies >= n).max();
+      const nextRift = riftCaps.filter(n => GalaxyGenerator.generatedGalaxies < n).min();
+      const currRiftProp = Math.sqrt((GalaxyGenerator.generatedGalaxies - prevRift) / (nextRift - prevRift));
+      return (brokenRifts + currRiftProp) / 5;
+    },
+    connector: (function() {
+      const pathStart = 0.5 * Math.PI;
+      const pathEnd = pathStart + 10 * Math.PI;
+      const path = LogarithmicSpiral.fromPolarEndpoints(pelleStarPosition(0, 0),
+        pathStart, 18, pathEnd, 150);
+      return {
+        pathStart,
+        pathEnd,
+        path,
+        pathPadStart: 0,
+        pathPadEnd: 0,
+        fill: "#00bbbb",
+      };
+    }()),
+  },
+
+  // The path BG is invisible, but we want to make sure it extends far enough that it expands out "forever"
+  "pelle-galaxy-generator-infinite": {
+    visible: () => Pelle.hasGalaxyGenerator && !Number.isFinite(GalaxyGenerator.generationCap),
+    complete: () => Math.clamp((GalaxyGenerator.generatedGalaxies - 1e10) / 2e11, 1e-6, 1),
+    connector: (function() {
+      const pathStart = 0.5 * Math.PI;
+      const pathEnd = pathStart + 10 * Math.PI;
+      const path = LogarithmicSpiral.fromPolarEndpoints(pelleStarPosition(0, 0),
+        pathStart, 150, pathEnd, 1250);
+      return {
+        pathStart,
+        pathEnd,
+        path,
+        pathPadStart: 0,
+        pathPadEnd: 0,
+        drawOrder: CELESTIAL_NAV_DRAW_ORDER.CANVAS_OVERLAY,
+        fill: "#00bbbb",
+        noBG: true,
+      };
+    }()),
+  },
 };
+
+// This will get populated as needed in files within the navigation-sigils folder
+GameDatabase.celestials.navSigils = {};

@@ -16,6 +16,16 @@ export default {
       required: false,
       default: 6,
     },
+    noBG: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    opacity: {
+      type: Number,
+      required: false,
+      default: 1,
+    },
     fill: {
       type: String,
       required: false,
@@ -150,7 +160,10 @@ export default {
 
 <template>
   <g>
-    <g :transform="incompleteTransform">
+    <g
+      v-if="!noBG"
+      :transform="incompleteTransform"
+    >
       <path
         :d="incompleteFadePath"
         fill="url(#incompleteFade)"
@@ -167,6 +180,7 @@ export default {
         :fill="fill"
         stroke="none"
         :d="completePath"
+        :style="{ 'opacity': opacity }"
       />
     </g>
   </g>

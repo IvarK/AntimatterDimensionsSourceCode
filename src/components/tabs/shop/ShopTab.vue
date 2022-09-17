@@ -121,7 +121,8 @@ export default {
 }
 
 .c-shop-disclaimer {
-  width: 100rem;
+  width: 80%;
+  max-width: 100rem;
   font-size: 1.8rem;
   font-weight: bold;
   color: black;

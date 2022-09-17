@@ -180,6 +180,16 @@ class InfinityDimensionState extends DimensionState {
     return mult;
   }
 
+  get isProducing() {
+    const tier = this.tier;
+    if (EternityChallenge(2).isRunning ||
+      EternityChallenge(10).isRunning ||
+      (Laitela.isRunning && tier > Laitela.maxAllowedDimension)) {
+      return false;
+    }
+    return InfinityDimension(tier).amount.gt(0);
+  }
+
   get baseCost() {
     return this._baseCost;
   }

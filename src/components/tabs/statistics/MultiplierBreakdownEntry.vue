@@ -31,7 +31,7 @@ export default {
   methods: {
     update() {
       this.currentGroupKeys = this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
-      this.baseMultList = this.currentGroupKeys.map(key => this.getProp(key, "multValue")?.clampMin(1) ?? 1);
+      this.baseMultList = this.currentGroupKeys.map(key => this.getProp(key, "multValue")?.clampMin(1) ?? DC.D1);
       this.powList = this.currentGroupKeys.map(key => this.getProp(key, "powValue") ?? 1);
       this.calculatePercents();
     },
@@ -80,7 +80,7 @@ export default {
     },
     entryString(index) {
       // We want to handle very small numbers carefully to distinguish between "disabled/inactive" and
-      // "too small to be relevant" as well as pad with spaces so all colons line up vertically
+      // "too small to be relevant"
       let percString;
       if (this.percentList[index] === 0) percString = formatPercents(0);
       else if (this.percentList[index] < 0.001) percString = `<${formatPercents(0.001, 1)}`;
@@ -121,7 +121,7 @@ export default {
         class="o-primary-btn"
         @click="changeGroup"
       >
-        Change Breakdown Group for: {{ getProp(entry, "name") }}
+        Change Multiplier Grouping
       </div>
       <div v-if="isEmpty">
         No Active Multipliers

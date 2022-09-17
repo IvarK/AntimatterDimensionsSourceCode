@@ -114,6 +114,7 @@ GameDatabase.multiplierTabValues = {
         if (tier === 1) {
           dimMults[tier] = dimMults[tier].timesEffectsOf(
             InfinityUpgrade.unspentIPMult,
+            InfinityUpgrade.unspentIPMult.chargedEffect,
           );
         }
         dimMults[tier] = dimMults[tier].timesEffectsOf(
@@ -126,6 +127,22 @@ GameDatabase.multiplierTabValues = {
       let totalMult = DC.D1;
       for (let tier = 1; tier <= maxActiveDim; tier++) totalMult = totalMult.times(dimMults[tier]).times(allMult);
       return totalMult;
+    },
+    powValue: dim => {
+      const allPow = InfinityUpgrade.totalTimeMult.chargedEffect.effectOrDefault(1) *
+        InfinityUpgrade.thisInfinityTimeMult.chargedEffect.effectOrDefault(1);
+
+      const dimPow = Array.repeat(1, 9);
+      for (let tier = 1; tier <= 8; tier++) {
+        dimPow[tier] = AntimatterDimension(tier).infinityUpgrade.chargedEffect.effectOrDefault(1);
+      }
+
+      if (dim) return allPow * dimPow[dim];
+      const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+      // This isn't entirely accurate because you can't return a power for all ADs if only some of them actually have
+      // it, so we cheat somewhat by returning the geometric mean of all actively producing dimensions (this should
+      // be close to the same value if all the base multipliers are similar in magnitude)
+      return allPow * Math.exp(dimPow.slice(1).map(n => Math.log(n)).sum() / maxActiveDim);
     },
     isActive: () => PlayerProgress.infinityUnlocked(),
   },
@@ -145,6 +162,17 @@ GameDatabase.multiplierTabValues = {
       return Decimal.pow(mult, dim ? 1 : maxActiveDim);
     },
     isActive: () => player.break,
+  },
+  infinityPowerAD: {
+    name: dim => (dim
+      ? `AD ${dim} from Infinity Power`
+      : "Total AD from Infinity Power"),
+    multValue: dim => {
+      const mult = Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1);
+      const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+      return Decimal.pow(mult, dim ? 1 : maxActiveDim);
+    },
+    isActive: () => !EternityChallenge(9).isRunning,
   },
   infinityChallengeAD: {
     name: dim => (dim
@@ -224,5 +252,44 @@ GameDatabase.multiplierTabValues = {
       return Decimal.pow(EternityChallenge(10).effectValue, dim ? 1 : maxActiveDim);
     },
     isActive: () => EternityChallenge(10).isRunning,
+  },
+
+  // Reality and Celestial level effects to ADs
+  glyphAD: {
+    name: dim => (dim
+      ? `AD ${dim} from Glyph Effects`
+      : "Total AD from Glyph Effects"),
+    multValue: dim => {
+      const mult = getAdjustedGlyphEffect("powermult");
+      const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+      return Decimal.pow(mult, dim ? 1 : maxActiveDim);
+    },
+    powValue: () => getAdjustedGlyphEffect("powerpow") * getAdjustedGlyphEffect("effarigdimensions"),
+    isActive: () => PlayerProgress.realityUnlocked(),
+  },
+  alchemyAD: {
+    name: dim => (dim
+      ? `AD ${dim} from Glyph Alchemy`
+      : "Total AD from Glyph Alchemy"),
+    multValue: dim => {
+      const mult = AlchemyResource.dimensionality.effectOrDefault(1)
+        .times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));
+      const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+      return Decimal.pow(mult, dim ? 1 : maxActiveDim);
+    },
+    powValue: () => AlchemyResource.power.effectOrDefault(1) * Ra.momentumValue,
+    isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
+  },
+  otherAD: {
+    name: dim => (dim
+      ? `AD ${dim} from Other sources`
+      : "Total AD from Other sources"),
+    multValue: dim => {
+      const mult = ShopPurchase.dimPurchases.currentMult * ShopPurchase.allDimPurchases.currentMult;
+      const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+      return Decimal.pow(mult, dim ? 1 : maxActiveDim);
+    },
+    powValue: () => VUnlocks.adPow.effectOrDefault(1) * PelleRifts.paradox.effectOrDefault(1),
+    isActive: () => player.IAP.totalSTD > 0 || PlayerProgress.realityUnlocked(),
   },
 };

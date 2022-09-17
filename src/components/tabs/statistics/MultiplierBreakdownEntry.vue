@@ -60,9 +60,12 @@ export default {
         ? dbAttr()
         : dbAttr(args.slice(1).map(a => Number(a)));
     },
-    styleObject(perc) {
+    styleObject(index) {
       return {
-        height: `${100 * perc}%`,
+        position: "absolute",
+        top: `${100 * this.percentList.slice(0, index).sum()}%`,
+        height: `${100 * this.percentList[index]}%`,
+        width: "100%",
         border: this.isEmpty ? "" : "0.1rem solid",
       };
     },
@@ -105,7 +108,7 @@ export default {
       <div
         v-for="(perc, index) in percentList"
         :key="100 + index"
-        :style="styleObject(perc)"
+        :style="styleObject(index)"
         :class="{ 'c-bar-highlight' : mouseoverIndex === index }"
         @mouseover="mouseoverIndex = index"
         @mouseleave="mouseoverIndex = -1"
@@ -159,6 +162,7 @@ export default {
 }
 
 .c-stacked-bars {
+  position: relative;
   width: 5rem;
   background-color: var(--color-disabled);
   margin-right: 3rem;

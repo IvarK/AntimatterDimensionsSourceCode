@@ -16,6 +16,8 @@ function getADProps(tier) {
   if (!tier) return props;
   const newProps = [];
   for (const effect of props) newProps.push(`${effect}_${tier}`);
+  // Sacrifice is only directly referenced by name in AD 8; all other effects based on sacrifice either directly
+  // change sacrifice value or apply within their own category (eg. time studies)
   if (tier === 8) newProps.splice(3, 0, "sacrifice");
   return newProps;
 }
@@ -30,126 +32,24 @@ function getIDProps(tier) {
   return newProps;
 }
 
-// These are all associated with values in GameDatabase.multiplierTabValues
+// Everything is multiplierTabTree is associated with values in GameDatabase.multiplierTabValues. The only explicitly
+// initialized props here are the "root" props which are viewable on the tab with full breakdowns. After the initial
+// specification, all children props are dynamically added based on the arrays in the helper functions above
 GameDatabase.multiplierTabTree = {
   totalAD: [
     append8("totalAD"),
     getADProps()
   ],
-  buy10AD: [
-    append8("buy10AD")
-  ],
-  dimboostAD: [
-    append8("dimboostAD")
-  ],
-  achievementAD: [
-    append8("achievementAD")
-  ],
-  infinityUpgradeAD: [
-    append8("infinityUpgradeAD")
-  ],
-  breakInfinityUpgradeAD: [
-    append8("breakInfinityUpgradeAD")
-  ],
-  infinityChallengeAD: [
-    append8("infinityChallengeAD")
-  ],
-  infinityPowerAD: [
-    append8("infinityPowerAD")
-  ],
-  timeStudyAD: [
-    append8("timeStudyAD")
-  ],
-  eternityChallengeAD: [
-    append8("eternityChallengeAD")
-  ],
-  glyphAD: [
-    append8("glyphAD")
-  ],
-  alchemyAD: [
-    append8("alchemyAD")
-  ],
-  otherAD: [
-    append8("otherAD")
-  ],
-  totalAD_1: [
-    getADProps(1)
-  ],
-  totalAD_2: [
-    getADProps(2)
-  ],
-  totalAD_3: [
-    getADProps(3)
-  ],
-  totalAD_4: [
-    getADProps(4)
-  ],
-  totalAD_5: [
-    getADProps(5)
-  ],
-  totalAD_6: [
-    getADProps(6)
-  ],
-  totalAD_7: [
-    getADProps(7)
-  ],
-  totalAD_8: [
-    getADProps(8)
-  ],
-
   totalID: [
     append8("totalID"),
     getIDProps()
   ],
-  buy10ID: [
-    append8("buy10ID")
-  ],
-  replicantiID: [
-    append8("replicantiID")
-  ],
-  achievementID: [
-    append8("achievementID")
-  ],
-  timeStudyID: [
-    append8("timeStudyID")
-  ],
-  infinityChallengeID: [
-    append8("infinityChallengeID")
-  ],
-  eternityChallengeID: [
-    append8("eternityChallengeID")
-  ],
-  glyphID: [
-    append8("glyphID")
-  ],
-  alchemyID: [
-    append8("alchemyID")
-  ],
-  otherID: [
-    append8("otherID")
-  ],
-  totalID_1: [
-    getIDProps(1)
-  ],
-  totalID_2: [
-    getIDProps(2)
-  ],
-  totalID_3: [
-    getIDProps(3)
-  ],
-  totalID_4: [
-    getIDProps(4)
-  ],
-  totalID_5: [
-    getIDProps(5)
-  ],
-  totalID_6: [
-    getIDProps(6)
-  ],
-  totalID_7: [
-    getIDProps(7)
-  ],
-  totalID_8: [
-    getIDProps(8)
-  ],
 };
+
+for (const prop of getADProps()) GameDatabase.multiplierTabTree[prop] = [append8(prop)];
+for (const prop of getIDProps()) GameDatabase.multiplierTabTree[prop] = [append8(prop)];
+
+for (let dim = 1; dim <= 8; dim++) {
+  GameDatabase.multiplierTabTree[`totalAD_${dim}`] = [getADProps(dim)];
+  GameDatabase.multiplierTabTree[`totalID_${dim}`] = [getIDProps(dim)];
+}

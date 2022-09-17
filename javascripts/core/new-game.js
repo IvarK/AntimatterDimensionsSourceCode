@@ -6,6 +6,9 @@ export const NG = {
     // This can't be JSONed as it contains sets
     const secretUnlocks = player.secretUnlocks;
     const secretAchievements = JSON.stringify(player.secretAchievementBits);
+    // We don't backup the whole player.reality.automator object because it contains "state",
+    // which could lead to some edge cases where it starts when it shouldn't (ie before it's unlocked)
+    // It's easier to do something like this to avoid it entirely.
     const automatorConstants = JSON.stringify(player.reality.automator.constants);
     const automatorScripts = JSON.stringify(player.reality.automator.scripts);
     Modal.hideAll();

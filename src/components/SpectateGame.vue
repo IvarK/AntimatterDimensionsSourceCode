@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     update() {
-      this.showSpectate = GameEnd.endState > 15;
+      this.showSpectate = GameEnd.endState > GameEnd.showNewGame;
       this.endState = GameEnd.endState;
     },
     swap() {

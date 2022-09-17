@@ -31,6 +31,7 @@ export default {
       isShown: false,
       isCostsAD: false,
       amountDisplay: "",
+      hasTutorial: false,
     };
   },
   computed: {
@@ -97,6 +98,8 @@ export default {
         (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
       this.isCostsAD = NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
       this.amountDisplay = this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
+      this.hasTutorial = (tier === 1 && Tutorial.isActive(TUTORIAL_STATE.DIM1)) ||
+        (tier === 2 && Tutorial.isActive(TUTORIAL_STATE.DIM2));
     },
     buy() {
       if (this.isContinuumActive) return;
@@ -122,15 +125,9 @@ export default {
       };
     },
     tutorialClass() {
-      if (this.tier === 1) {
-        return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
-      }
-
-      if (this.tier === 2) {
-        return Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
-      }
-
-      return {};
+      return {
+        "tutorial--glow": this.isAffordable && this.hasTutorial
+      };
     }
   }
 };
@@ -165,6 +162,10 @@ export default {
           <div :class="{ 'l-dim-row-small-text': hasLongText }">
             {{ buttonValue }}
           </div>
+          <div
+            v-if="hasTutorial"
+            class="fas fa-circle-exclamation l-tab-notification"
+          />
         </div>
         <div
           v-if="!isContinuumActive && isUnlocked && !isCapped"

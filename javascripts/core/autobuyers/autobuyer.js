@@ -167,6 +167,9 @@ export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
     Object.defineProperty(accessor, "allMaxedInterval", {
       get: () => accessor.zeroIndexed.every(x => x.hasMaxedInterval)
     });
+    Object.defineProperty(accessor, "hasInstant", {
+      get: () => accessor.zeroIndexed.some(x => x.interval < player.options.updateRate)
+    });
     return accessor;
   }
 }

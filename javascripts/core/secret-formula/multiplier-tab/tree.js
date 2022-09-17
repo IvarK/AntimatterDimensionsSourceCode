@@ -20,6 +20,16 @@ function getADProps(tier) {
   return newProps;
 }
 
+// Used as shorthand for all the effects which boost IDs
+function getIDProps(tier) {
+  const props = ["buy10ID", "replicantiID", "achievementID", "timeStudyID", "infinityChallengeID",
+    "eternityChallengeID", "glyphID", "alchemyID", "otherID"];
+  if (!tier) return props;
+  const newProps = [];
+  for (const effect of props) newProps.push(`${effect}_${tier}`);
+  return newProps;
+}
+
 // These are all associated with values in GameDatabase.multiplierTabValues
 GameDatabase.multiplierTabTree = {
   totalAD: [
@@ -85,5 +95,61 @@ GameDatabase.multiplierTabTree = {
   ],
   totalAD_8: [
     getADProps(8)
+  ],
+
+  totalID: [
+    append8("totalID"),
+    getIDProps()
+  ],
+  buy10ID: [
+    append8("buy10ID")
+  ],
+  replicantiID: [
+    append8("replicantiID")
+  ],
+  achievementID: [
+    append8("achievementID")
+  ],
+  timeStudyID: [
+    append8("timeStudyID")
+  ],
+  infinityChallengeID: [
+    append8("infinityChallengeID")
+  ],
+  eternityChallengeID: [
+    append8("eternityChallengeID")
+  ],
+  glyphID: [
+    append8("glyphID")
+  ],
+  alchemyID: [
+    append8("alchemyID")
+  ],
+  otherID: [
+    append8("otherID")
+  ],
+  totalID_1: [
+    getIDProps(1)
+  ],
+  totalID_2: [
+    getIDProps(2)
+  ],
+  totalID_3: [
+    getIDProps(3)
+  ],
+  totalID_4: [
+    getIDProps(4)
+  ],
+  totalID_5: [
+    getIDProps(5)
+  ],
+  totalID_6: [
+    getIDProps(6)
+  ],
+  totalID_7: [
+    getIDProps(7)
+  ],
+  totalID_8: [
+    getIDProps(8)
   ],
 };

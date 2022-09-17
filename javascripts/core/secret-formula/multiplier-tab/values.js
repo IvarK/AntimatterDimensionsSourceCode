@@ -36,7 +36,7 @@ GameDatabase.multiplierTabValues = {
   dimboostAD: {
     name: dim => (dim
       ? `AD ${dim} from Dimboosts`
-      : "Total AD from Dimboosts"),
+      : "Total from Dimboosts"),
     multValue: dim => (dim
       ? DimBoost.multiplierToNDTier(dim)
       : AntimatterDimensions.all
@@ -53,7 +53,7 @@ GameDatabase.multiplierTabValues = {
   achievementAD: {
     name: dim => (dim
       ? `AD ${dim} from Achievements`
-      : "Total AD from Achievements"),
+      : "Total from Achievements"),
     multValue: dim => {
       const allMult = new Decimal(Achievements.power).timesEffectsOf(
         Achievement(48),
@@ -102,7 +102,7 @@ GameDatabase.multiplierTabValues = {
   infinityUpgradeAD: {
     name: dim => (dim
       ? `AD ${dim} from Infinity Upgrades`
-      : "Total AD from Infinity Upgrades"),
+      : "Total from Infinity Upgrades"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         InfinityUpgrade.totalTimeMult,
@@ -149,7 +149,7 @@ GameDatabase.multiplierTabValues = {
   breakInfinityUpgradeAD: {
     name: dim => (dim
       ? `AD ${dim} from Break Infinity Upgrades`
-      : "Total AD from Break Infinity Upgrades"),
+      : "Total from Break Infinity Upgrades"),
     multValue: dim => {
       const mult = DC.D1.timesEffectsOf(
         BreakInfinityUpgrade.totalAMMult,
@@ -166,7 +166,7 @@ GameDatabase.multiplierTabValues = {
   infinityPowerAD: {
     name: dim => (dim
       ? `AD ${dim} from Infinity Power`
-      : "Total AD from Infinity Power"),
+      : "Total from Infinity Power"),
     multValue: dim => {
       const mult = Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1);
       const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
@@ -177,7 +177,7 @@ GameDatabase.multiplierTabValues = {
   infinityChallengeAD: {
     name: dim => (dim
       ? `AD ${dim} from Infinity Challenges`
-      : "Total AD from Infinity Challenges"),
+      : "Total from Infinity Challenges"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         InfinityChallenge(3),
@@ -205,7 +205,7 @@ GameDatabase.multiplierTabValues = {
   timeStudyAD: {
     name: dim => (dim
       ? `AD ${dim} from Time Studies`
-      : "Total AD from Time Studies"),
+      : "Total from Time Studies"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         TimeStudy(91),
@@ -246,7 +246,7 @@ GameDatabase.multiplierTabValues = {
   eternityChallengeAD: {
     name: dim => (dim
       ? `AD ${dim} from Eternity Challenges`
-      : "Total AD from Eternity Challenges"),
+      : "Total from Eternity Challenges"),
     multValue: dim => {
       const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
       return Decimal.pow(EternityChallenge(10).effectValue, dim ? 1 : maxActiveDim);
@@ -258,7 +258,7 @@ GameDatabase.multiplierTabValues = {
   glyphAD: {
     name: dim => (dim
       ? `AD ${dim} from Glyph Effects`
-      : "Total AD from Glyph Effects"),
+      : "Total from Glyph Effects"),
     multValue: dim => {
       const mult = getAdjustedGlyphEffect("powermult");
       const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
@@ -270,7 +270,7 @@ GameDatabase.multiplierTabValues = {
   alchemyAD: {
     name: dim => (dim
       ? `AD ${dim} from Glyph Alchemy`
-      : "Total AD from Glyph Alchemy"),
+      : "Total from Glyph Alchemy"),
     multValue: dim => {
       const mult = AlchemyResource.dimensionality.effectOrDefault(1)
         .times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));
@@ -283,7 +283,7 @@ GameDatabase.multiplierTabValues = {
   otherAD: {
     name: dim => (dim
       ? `AD ${dim} from Other sources`
-      : "Total AD from Other sources"),
+      : "Total from Other sources"),
     multValue: dim => {
       const mult = ShopPurchase.dimPurchases.currentMult * ShopPurchase.allDimPurchases.currentMult;
       const maxActiveDim = AntimatterDimensions.all.filter(ad => ad.isProducing).length;
@@ -291,5 +291,145 @@ GameDatabase.multiplierTabValues = {
     },
     powValue: () => VUnlocks.adPow.effectOrDefault(1) * PelleRifts.paradox.effectOrDefault(1),
     isActive: () => player.IAP.totalSTD > 0 || PlayerProgress.realityUnlocked(),
+  },
+
+
+  totalID: {
+    name: dim => (dim
+      ? `Total ID ${dim} Multiplier`
+      : "All ID Multipliers"),
+    multValue: dim => (dim
+      ? InfinityDimension(dim).multiplier
+      : InfinityDimensions.all
+        .filter(id => id.isProducing)
+        .map(id => id.multiplier)
+        .reduce((x, y) => x.times(y), DC.D1)),
+    isActive: dim => InfinityDimension(dim ?? 1).isProducing,
+  },
+  buy10ID: {
+    name: dim => (dim
+      ? `ID ${dim} from Purchases`
+      : "Total from Purchases"),
+    multValue: dim => {
+      const getMult = id => Decimal.pow(InfinityDimension(id).powerMultiplier,
+        Math.floor(InfinityDimension(id).baseAmount / 10));
+      if (dim) return getMult(dim);
+      return InfinityDimensions.all
+        .filter(id => id.isProducing)
+        .map(id => getMult(id.tier))
+        .reduce((x, y) => x.times(y), DC.D1);
+    },
+    isActive: () => !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning,
+  },
+  replicantiID: {
+    name: dim => (dim
+      ? `ID ${dim} from Replicanti`
+      : "Total from Replicanti"),
+    multValue: dim => {
+      const maxActiveDim = InfinityDimensions.all.filter(id => id.isProducing).length;
+      return Decimal.pow(replicantiMult(), dim ? 1 : maxActiveDim);
+    },
+    isActive: () => Replicanti.areUnlocked,
+  },
+  achievementID: {
+    name: dim => (dim
+      ? `ID ${dim} from Achievements`
+      : "Total from Achievements"),
+    multValue: dim => {
+      const baseMult = new Decimal(Achievement(75).effectOrDefault(1));
+      if (dim) return dim === 1 ? baseMult.times(Achievement(94).effectOrDefault(1)) : baseMult;
+      const maxActiveDim = InfinityDimensions.all.filter(id => id.isProducing).length;
+      return Decimal.pow(baseMult, maxActiveDim).times(maxActiveDim > 0 ? Achievement(94).effectOrDefault(1) : DC.D1);
+    },
+    isActive: () => Achievement(75).canBeApplied,
+  },
+  timeStudyID: {
+    name: dim => (dim
+      ? `ID ${dim} from Time Studies and Eternity Upgrades`
+      : "Total from Time Studies and Eternity Upgrades"),
+    multValue: dim => {
+      const allMult = DC.D1.timesEffectsOf(
+        TimeStudy(82),
+        TimeStudy(92),
+        TimeStudy(162),
+        EternityUpgrade.idMultEP,
+        EternityUpgrade.idMultEternities,
+        EternityUpgrade.idMultICRecords,
+      );
+      if (dim) return dim === 4 ? allMult.times(TimeStudy(72).effectOrDefault(1)) : allMult;
+      const maxActiveDim = InfinityDimensions.all.filter(id => id.isProducing).length;
+      return Decimal.pow(allMult, maxActiveDim).times(maxActiveDim >= 4 ? TimeStudy(72).effectOrDefault(1) : DC.D1);
+    },
+    isActive: () => Achievement(75).canBeApplied,
+  },
+  infinityChallengeID: {
+    name: dim => (dim
+      ? `ID ${dim} from Infinity Challenges`
+      : "Total from Infinity Challenges"),
+    multValue: dim => {
+      const allMult = DC.D1.timesEffectsOf(
+        InfinityChallenge(1).reward,
+        InfinityChallenge(6).reward,
+      );
+      const maxActiveDim = InfinityDimensions.all.filter(id => id.isProducing).length;
+      return Decimal.pow(allMult, dim ? 1 : maxActiveDim);
+    },
+    isActive: () => InfinityChallenge(1).isCompleted,
+  },
+  eternityChallengeID: {
+    name: dim => (dim
+      ? `ID ${dim} from Eternity Challenges`
+      : "Total from Eternity Challenges"),
+    multValue: dim => {
+      const allMult = DC.D1.timesEffectsOf(
+        EternityChallenge(4).reward,
+        EternityChallenge(9).reward,
+      );
+      if (dim) return dim === 1 ? allMult.times(EternityChallenge(2).reward.effectOrDefault(1)) : allMult;
+      const maxActiveDim = InfinityDimensions.all.filter(id => id.isProducing).length;
+      return Decimal.pow(allMult, maxActiveDim)
+        .times(maxActiveDim >= 1 ? EternityChallenge(2).reward.effectOrDefault(1) : DC.D1);
+    },
+    isActive: () => InfinityChallenge(1).isCompleted,
+  },
+  glyphID: {
+    name: dim => (dim
+      ? `ID ${dim} from Glyph Effects`
+      : "Total from Glyph Effects"),
+    powValue: () => getAdjustedGlyphEffect("infinitypow") * getAdjustedGlyphEffect("effarigdimensions"),
+    isActive: () => PlayerProgress.realityUnlocked(),
+  },
+  alchemyID: {
+    name: dim => {
+      const imStr = MachineHandler.isIMUnlocked ? " and Imaginary Upgrades" : "";
+      return dim
+        ? `ID ${dim} from Glyph Alchemy${imStr}`
+        : `Total from Glyph Alchemy${imStr}`;
+    },
+    multValue: dim => {
+      const mult = DC.D1.timesEffectsOf(
+        AlchemyResource.dimensionality,
+        ImaginaryUpgrade(8),
+      );
+      const maxActiveDim = InfinityDimensions.all.filter(id => id.isProducing).length;
+      return Decimal.pow(mult, dim ? 1 : maxActiveDim);
+    },
+    powValue: () => AlchemyResource.infinity.effectOrDefault(1) * Ra.momentumValue,
+    isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
+  },
+  otherID: {
+    name: dim => (dim
+      ? `ID ${dim} from Other sources`
+      : "Total from Other sources"),
+    multValue: dim => {
+      const mult = new Decimal(ShopPurchase.allDimPurchases.currentMult).timesEffectsOf(
+        PelleRifts.recursion.milestones[1]
+      );
+      const maxActiveDim = InfinityDimensions.all.filter(id => id.isProducing).length;
+      return Decimal.pow(mult, dim ? 1 : maxActiveDim)
+        .times(maxActiveDim >= 1 ? PelleRifts.decay.milestones[0].effectOrDefault(1) : DC.D1);
+    },
+    powValue: () => PelleRifts.paradox.effectOrDefault(1),
+    isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
   },
 };

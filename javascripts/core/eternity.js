@@ -70,6 +70,11 @@ export function eternity(force, auto, specialConditions = {}) {
     // eslint-disable-next-line no-param-reassign
     force = true;
   }
+  // We define this variable so we can use it in checking whether to give
+  // the secret achievement for respec without studies.
+  // Annoyingly, we need to check for studies right here; giveEternityRewards removes studies if we're in an EC,
+  // so doing the check later doesn't give us the initial state of having studies or not.
+  const noStudies = player.timestudy.studies.length === 0;
   if (force) {
     player.challenge.eternity.current = 0;
   } else {
@@ -100,6 +105,9 @@ export function eternity(force, auto, specialConditions = {}) {
   AntimatterDimensions.reset();
 
   if (!specialConditions.enteringEC && player.respec) {
+    if (noStudies) {
+      SecretAchievement(34).unlock();
+    }
     respecTimeStudies(auto);
     player.respec = false;
   }

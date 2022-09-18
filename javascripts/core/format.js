@@ -1,5 +1,7 @@
 function isEND() {
-  const threshold = GameEnd.endState > 4.2 ? 1 : (GameEnd.endState - 2.5) / 2;
+  const threshold = GameEnd.endState > END_STATE_MARKERS.END_NUMBERS
+    ? 1
+    : (GameEnd.endState - END_STATE_MARKERS.FADE_AWAY) / 2;
   // Using the Pelle.isDoomed getter here causes this to not update properly after a game restart
   return player.celestials.pelle.doomed && Math.random() < threshold;
 }

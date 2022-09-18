@@ -143,8 +143,8 @@ export const GameStorage = {
   },
 
   save(silent = false, manual = false) {
-    if (GameEnd.endState >= 4 && !GameEnd.removeAdditionalEnd) return;
-    if (GameEnd.endState >= 2.5) {
+    if (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED && !GameEnd.removeAdditionalEnd) return;
+    if (GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED) {
       // Fade-out starts at 2.5
       GameUI.notify.error("There is nothing left to save");
       return;

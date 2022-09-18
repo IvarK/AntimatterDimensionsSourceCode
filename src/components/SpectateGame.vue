@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     update() {
-      this.showSpectate = GameEnd.endState > GameEnd.showNewGame;
+      this.showSpectate = GameEnd.endState > END_STATE_MARKERS.SPECTATE_GAME;
       this.endState = GameEnd.endState;
     },
     swap() {

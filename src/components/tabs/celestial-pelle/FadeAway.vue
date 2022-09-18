@@ -8,7 +8,7 @@ export default {
   },
   methods: {
     update() {
-      this.opacity = (GameEnd.endState - 2.5) / 2;
+      this.opacity = (GameEnd.endState - END_STATE_MARKERS.FADE_AWAY) / 2;
     }
   }
 };

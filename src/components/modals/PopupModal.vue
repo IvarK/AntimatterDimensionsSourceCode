@@ -20,8 +20,8 @@ export default {
   },
   methods: {
     update() {
-      // 2.5 is the cutoff point where the screen starts fading
-      this.forceDontShowModal = GameEnd.endState > 2.5;
+      // 2.5 is the cutoff point where the screen starts fading (interactivity disabled)
+      this.forceDontShowModal = GameEnd.endState > END_STATE_MARKERS.INTERACTIVITY_DISABLED;
     },
     hide() {
       if (!this.modal.isOpen) return;

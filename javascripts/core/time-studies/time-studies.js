@@ -140,9 +140,6 @@ export function respecTimeStudies(auto) {
   for (const study of TimeStudy.boughtNormalTS()) {
     study.refund();
   }
-  if (player.timestudy.studies.length === 0) {
-    SecretAchievement(34).unlock();
-  }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
   player.celestials.v.STSpent = 0;

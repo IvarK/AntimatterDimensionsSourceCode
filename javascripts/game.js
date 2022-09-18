@@ -395,14 +395,21 @@ export function getGameSpeedupForDisplay() {
 // TODO: Clean this up, remove the disable line
 // eslint-disable-next-line complexity
 export function gameLoop(passDiff, options = {}) {
-  let diff = passDiff;
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
+
   EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
+
+  let diff = passDiff;
   const thisUpdate = Date.now();
   const realDiff = diff === undefined
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
     : diff;
+
+  if (GameEnd.creditsEverClosed) {
+    GameUI.update();
+    return;
+  }
 
   // We want to allow for a speedrunner to be able to adjust their visual settings before actually starting the run,
   // which means that we need to effectively halt the game loop until the official start

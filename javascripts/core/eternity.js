@@ -62,6 +62,7 @@ export function eternityAnimation() {
 
 export function eternityResetRequest() {
   if (!Player.canEternity) return;
+  if (GameEnd.creditsEverClosed) return;
   askEternityConfirmation();
 }
 

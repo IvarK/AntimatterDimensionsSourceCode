@@ -2,6 +2,8 @@ import * as ADNotations from "@antimatter-dimensions/notations";
 
 export const NG = {
   startNewGame() {
+    GameEnd.creditsClosed = false;
+    GameEnd.creditsEverClosed = false;
     const backUpOptions = JSON.stringify(player.options);
     // This can't be JSONed as it contains sets
     const secretUnlocks = player.secretUnlocks;

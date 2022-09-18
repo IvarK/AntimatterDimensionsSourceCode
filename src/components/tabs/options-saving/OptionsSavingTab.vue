@@ -21,6 +21,7 @@ export default {
       loggedIn: false,
       userName: "",
       canSpeedrun: false,
+      creditsClosed: false
     };
   },
   watch: {
@@ -38,6 +39,7 @@ export default {
       this.showTimeSinceSave = options.showTimeSinceSave;
       this.loggedIn = Cloud.loggedIn;
       this.canSpeedrun = player.speedrun.isUnlocked;
+      this.creditsClosed = GameEnd.creditsEverClosed;
       if (!this.loggedIn) return;
       this.userName = Cloud.user.displayName;
     },
@@ -62,7 +64,7 @@ export default {
         }
       };
       reader.readAsText(event.target.files[0]);
-    }
+    },
   }
 };
 </script>
@@ -73,18 +75,21 @@ export default {
       <div class="l-options-grid__row">
         <OptionsButton
           class="o-primary-btn--option_font-x-large"
-          onclick="GameStorage.export()"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          @click="GameStorage.export()"
         >
           Export save
         </OptionsButton>
         <OptionsButton
           class="o-primary-btn--option_font-x-large"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
           onclick="Modal.import.show()"
         >
           Import save
         </OptionsButton>
         <OptionsButton
           class="o-primary-btn--option_font-x-large"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
           onclick="Modal.hardReset.show()"
         >
           RESET THE GAME
@@ -93,12 +98,14 @@ export default {
       <div class="l-options-grid__row">
         <OptionsButton
           class="o-primary-btn--option_font-x-large"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
           onclick="GameStorage.save(false, true)"
         >
           Save game
         </OptionsButton>
         <OptionsButton
           class="o-primary-btn--option_font-x-large"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
           onclick="Modal.loadGame.show()"
         >
           Choose save
@@ -106,10 +113,16 @@ export default {
         <AutosaveIntervalSlider />
       </div>
       <div class="l-options-grid__row">
-        <OptionsButton onclick="GameStorage.exportAsFile()">
+        <OptionsButton
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          onclick="GameStorage.exportAsFile()"
+        >
           Export save as file
         </OptionsButton>
-        <OptionsButton class="c-file-import-button">
+        <OptionsButton
+          class="c-file-import-button"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+        >
           <input
             class="c-file-import"
             type="file"
@@ -121,6 +134,7 @@ export default {
         <PrimaryToggleButton
           v-model="showTimeSinceSave"
           class="o-primary-btn--option l-options-grid__button"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
           label="Display time since save:"
         />
       </div>
@@ -129,6 +143,7 @@ export default {
         <OptionsButton
           v-if="canSpeedrun"
           class="o-primary-btn--option_font-x-large"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
           onclick="Modal.enterSpeedrun.show()"
         >
           Start Speedrun
@@ -147,17 +162,20 @@ export default {
       >
         <OptionsButton
           onclick="GameOptions.cloudSave()"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         >
           Cloud save
         </OptionsButton>
         <OptionsButton
           onclick="GameOptions.cloudLoad()"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         >
           Cloud load
         </OptionsButton>
         <PrimaryToggleButton
           v-model="cloudEnabled"
           class="o-primary-btn--option l-options-grid__button"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
           label="Automatic cloud saving/loading:"
         />
       </div>
@@ -171,6 +189,7 @@ export default {
         <OptionsButton
           v-else
           v-tooltip="'This will connect your Google Account to your Antimatter Dimensions savefiles'"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
           onclick="GameOptions.login()"
         >
           Login with Google to enable Cloud Saving

@@ -17,7 +17,8 @@ export default {
       imaginaryBoosts: 0,
       lockText: null,
       unlockedByBoost: null,
-      requirementText: null,
+      creditsClosed: false,
+      requirementText: null
     };
   },
   computed: {
@@ -51,6 +52,7 @@ export default {
       this.imaginaryBoosts = DimBoost.imaginaryBoosts;
       this.lockText = DimBoost.lockText;
       this.unlockedByBoost = DimBoost.unlockedByBoost;
+      this.creditsClosed = GameEnd.creditsClosed;
       if (this.isDoomed) this.requirementText = formatInt(this.purchasedBoosts);
     },
     dimensionBoost(bulk) {
@@ -71,7 +73,7 @@ export default {
     <PrimaryButton
       :enabled="isBuyable"
       class="o-primary-btn--dimboost l-dim-row__prestige-button"
-      :class="tutorialClass"
+      :class="{ ...tutorialClass, 'o-pelle-disabled-pointer': creditsClosed }"
       @click.exact="dimensionBoost(true)"
       @click.shift.exact="dimensionBoost(false)"
     >

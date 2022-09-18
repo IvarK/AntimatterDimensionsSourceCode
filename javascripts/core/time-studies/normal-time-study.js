@@ -77,6 +77,7 @@ export class NormalTimeStudyState extends TimeStudyState {
 
   purchase() {
     if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
+    if (GameEnd.creditsEverClosed) return false;
     if (this.costsST()) player.celestials.v.STSpent += this.STCost;
     player.timestudy.studies.push(this.id);
     player.requirementChecks.reality.maxStudies = Math.clampMin(player.requirementChecks.reality.maxStudies,

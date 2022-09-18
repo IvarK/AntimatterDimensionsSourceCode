@@ -13,7 +13,17 @@ export const GameEnd = {
     this._additionalEnd = (player.isGameEnd || this.removeAdditionalEnd) ? x : 0;
   },
 
+  // This constant is hardcoded here in order for it to be used across NewGame and SpectateGame files.
+  // Instead of putting "13" in both of those files, we just define it here in order for their appearance
+  // to be consistent
+  get showNewGame() {
+    return 13;
+  },
+
   removeAdditionalEnd: false,
+
+  creditsClosed: false,
+  creditsEverClosed: false,
 
   gameLoop(diff) {
     if (this.removeAdditionalEnd) {

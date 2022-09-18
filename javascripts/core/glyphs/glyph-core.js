@@ -243,6 +243,8 @@ export const Glyphs = {
       )
     ) return;
 
+    if (GameEnd.creditsEverClosed) return;
+
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
       throw new Error("Inconsistent inventory indexing");

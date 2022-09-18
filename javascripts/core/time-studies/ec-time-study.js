@@ -12,6 +12,7 @@ export class ECTimeStudyState extends TimeStudyState {
   }
 
   purchase(auto) {
+    if (GameEnd.creditsEverClosed) return false;
     const clickTime = Date.now();
 
     if (this.isBought && player.challenge.eternity.current === 0 && !auto) {

@@ -37,6 +37,7 @@ export function startDilatedEternityRequest() {
 
 export function startDilatedEternity(auto) {
   if (!PlayerProgress.dilationUnlocked()) return false;
+  if (GameEnd.creditsEverClosed) return false;
   if (player.dilation.active) {
     eternity(false, auto, { switchingDilation: true });
     return false;
@@ -55,6 +56,7 @@ const DIL_UPG_NAMES = [
 ];
 
 export function buyDilationUpgrade(id, bulk = 1) {
+  if (GameEnd.creditsEverClosed) return false;
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
   if (id > 3 && id < 11) {

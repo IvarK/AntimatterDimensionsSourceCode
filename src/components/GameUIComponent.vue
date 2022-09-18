@@ -12,7 +12,7 @@ export default {
     ClassicUi,
     ModernUi,
     GameUiComponentFixed,
-    BackgroundAnimations
+    BackgroundAnimations,
   },
   computed: {
     view() {

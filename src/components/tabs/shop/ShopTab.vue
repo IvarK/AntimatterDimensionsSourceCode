@@ -23,6 +23,7 @@ export default {
       STD: 0,
       isLoading: false,
       IAPsDisabled: false,
+      creditsClosed: false,
     };
   },
   computed: {
@@ -43,8 +44,10 @@ export default {
       this.STD = player.IAP.totalSTD - player.IAP.spentSTD;
       this.isLoading = Boolean(player.IAP.checkoutSession.id);
       this.IAPsDisabled = player.IAP.disabled;
+      this.creditsClosed = GameEnd.creditsEverClosed;
     },
     showStore() {
+      if (this.creditsClosed) return;
       SecretAchievement(33).unlock();
       Modal.shop.show();
     },
@@ -52,6 +55,7 @@ export default {
       Payments.cancelPurchase();
     },
     respec() {
+      if (this.creditsClosed) return;
       ShopPurchase.respecRequest();
     }
   },
@@ -68,10 +72,12 @@ export default {
       <PrimaryToggleButton
         v-model="IAPsDisabled"
         class="o-primary-btn--subtab-option"
+        :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         label="Disable in-app-purchases:"
       />
       <PrimaryButton
         class="o-primary-btn--subtab-option"
+        :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         @click="respec()"
       >
         Respec Shop

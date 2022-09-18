@@ -21,6 +21,7 @@ export default {
       eternityGoal: new Decimal(0),
       hover: false,
       headerTextColored: true,
+      creditsClosed: false,
     };
   },
   computed: {
@@ -28,7 +29,8 @@ export default {
       return {
         "o-eternity-button": !this.isDilation,
         "o-eternity-button--dilation": this.isDilation,
-        "o-eternity-button--unavailable": !this.isDilation && !this.canEternity
+        "o-eternity-button--unavailable": !this.isDilation && !this.canEternity,
+        "o-pelle-disabled-pointer": this.creditsClosed,
       };
     },
     // Show EP/min below this threshold, color the EP number above it
@@ -161,6 +163,7 @@ export default {
         );
       }
       this.peakEPRate.copyFrom(player.records.thisEternity.bestEPmin);
+      this.creditsClosed = GameEnd.creditsEverClosed;
     },
     updateChallengeWithRUPG() {
       const ec = EternityChallenge.current;

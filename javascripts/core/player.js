@@ -877,6 +877,7 @@ window.player = {
     spentSTD: 0,
     IPPurchases: 0,
     EPPurchases: 0,
+    RMPurchases: 0,
     dimPurchases: 0,
     allDimPurchases: 0,
     replicantiPurchases: 0,

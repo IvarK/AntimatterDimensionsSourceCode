@@ -29,16 +29,15 @@ export default {
   <div class="c-pelle-strike-container">
     <ExpandingControlBox container-class="c-pelle-strike">
       <template #header>
-        <div class="c-pelle-strike-text-padding c-pelle-strike-requirement-header">
+        <div class="c-pelle-strike-header">
           ▼ {{ strike.requirement }} ▼
         </div>
       </template>
       <template #dropdown>
-        <div class="c-pelle-strike-text-padding c-pelle-strike-description">
-          Penalty: {{ strike.penalty }}
-          <br><br>
-          Reward: {{ strikeReward }}
+        <div class="c-pelle-strike-dropdown">
+          <span>Penalty: {{ strike.penalty }}</span>
           <br>
+          <span>Reward: {{ strikeReward }}</span>
         </div>
       </template>
     </ExpandingControlBox>
@@ -58,21 +57,22 @@ export default {
 }
 
 .c-pelle-strike-container {
-  width: 26rem;
+  width: 28rem;
   height: 5rem;
   z-index: 3;
   padding: 0.5rem 0.5rem 2rem;
 }
 
-.c-pelle-strike-description {
-  font-size: 1.1rem;
-}
-
-.c-pelle-strike-text-padding {
+.c-pelle-strike-header {
   padding: 0.7rem;
+  cursor: pointer;
 }
 
-.c-pelle-strike-requirement-header {
-  cursor: pointer;
+.c-pelle-strike-dropdown {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 1.05rem;
+  padding: 0.7rem;
 }
 </style>

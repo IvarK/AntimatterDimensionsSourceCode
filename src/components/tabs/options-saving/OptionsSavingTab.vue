@@ -43,6 +43,9 @@ export default {
       if (!this.loggedIn) return;
       this.userName = Cloud.user.displayName;
     },
+    exportSave() {
+      GameStorage.export();
+    },
     importAsFile(event) {
       // This happens if the file dialog is canceled instead of a file being selected
       if (event.target.files.length === 0) return;
@@ -76,7 +79,7 @@ export default {
         <OptionsButton
           class="o-primary-btn--option_font-x-large"
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
-          @click="GameStorage.export()"
+          @click="exportSave()"
         >
           Export save
         </OptionsButton>

@@ -5,6 +5,7 @@ import pako from "pako/dist/pako.esm.mjs";
 import { get, getDatabase, ref, set } from "firebase/database";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";
+import { sha512_256 } from "js-sha512";
 
 import { decodeBase64Binary } from "./base64-binary";
 import { ProgressChecker } from "./progress-checker";
@@ -28,6 +29,7 @@ export const Cloud = {
   user: null,
   hasSeenSavingConflict: false,
   shouldOverwriteCloudSave: true,
+  lastCloudHash: null,
 
   get loggedIn() {
     return this.user !== null;
@@ -49,12 +51,13 @@ export const Cloud = {
     }
   },
 
-  compareSaves(cloud, local) {
+  compareSaves(cloud, local, hash) {
     return {
       farther: ProgressChecker.compareSaveProgress(cloud, local),
       older: ProgressChecker.compareSaveTimes(cloud, local),
       diffSTD: (cloud?.IAP?.totalSTD ?? 0) - (local?.IAP?.totalSTD ?? 0),
       differentName: cloud?.options.saveFileName !== local?.options.saveFileName,
+      hashMismatch: hash && this.lastCloudHash !== hash,
     };
   },
 
@@ -68,7 +71,7 @@ export const Cloud = {
       const saveId = GameStorage.currentSlot;
       const cloudSave = root.saves[saveId];
       const localSave = GameStorage.saves[saveId];
-      const saveComparison = this.compareSaves(cloudSave, localSave);
+      const saveComparison = this.compareSaves(cloudSave, localSave, sha512_256(save));
 
       // eslint-disable-next-line no-loop-func
       const overwriteAndSendCloudSave = () => {
@@ -80,7 +83,7 @@ export const Cloud = {
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
       const hasConflict = hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
-        saveComparison.diffSTD > 0 || saveComparison.differentName);
+        saveComparison.diffSTD > 0 || saveComparison.differentName || saveComparison.hashMismatch);
       if (hasConflict && !this.hasSeenSavingConflict) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
         Modal.cloudSaveConflict.show();
@@ -98,7 +101,9 @@ export const Cloud = {
       saves: GameStorage.saves,
     };
 
-    set(ref(this.db, `users/${this.user.id}/web`), GameSaveSerializer.serialize(root));
+    const toSave = GameSaveSerializer.serialize(root);
+    this.lastCloudHash = sha512_256(toSave);
+    set(ref(this.db, `users/${this.user.id}/web`), toSave);
     GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
   },
 

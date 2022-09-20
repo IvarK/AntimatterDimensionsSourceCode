@@ -67,9 +67,12 @@ export default {
       }
       return undefined;
     },
-    tutorialClass() {
+    classObject() {
       return {
-        "tutorial--glow": this.canBeBought && this.hasTutorial
+        "o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset": true,
+        "tutorial--glow": this.canBeBought && this.hasTutorial,
+        "o-primary-btn--disabled": !this.canBeBought,
+        "o-pelle-disabled-pointer": this.creditsClosed
       };
     }
   },
@@ -113,8 +116,7 @@ export default {
     <span>Requires: {{ formatInt(requirement.amount) }} {{ dimName }} Antimatter D</span>
     <span v-if="hasIncreasedScaling">{{ costScalingText }}</span>
     <button
-      class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
-      :class="{ 'o-primary-btn--disabled': !canBeBought, ...tutorialClass, 'o-pelle-disabled-pointer': creditsClosed }"
+      :class="classObject"
       @click.exact="buyGalaxy(true)"
       @click.shift.exact="buyGalaxy(false)"
     >

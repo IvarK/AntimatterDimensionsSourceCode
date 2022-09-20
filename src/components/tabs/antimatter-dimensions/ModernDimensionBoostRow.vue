@@ -34,9 +34,12 @@ export default {
       }
       return sum;
     },
-    tutorialClass() {
+    classObject() {
       return {
-        "tutorial--glow": this.isBuyable && this.hasTutorial
+        "o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset": true,
+        "tutorial--glow": this.isBuyable && this.hasTutorial,
+        "o-primary-btn--disabled": !this.isBuyable,
+        "o-pelle-disabled-pointer": this.creditsClosed
       };
     }
   },
@@ -68,8 +71,7 @@ export default {
     <h4>Dimension Boost ({{ boostCountText }})</h4>
     <span>Requires: {{ formatInt(requirement.amount) }} {{ dimName }} Antimatter D</span>
     <button
-      class="o-primary-btn o-primary-btn--new o-primary-btn--dimension-reset"
-      :class="{ 'o-primary-btn--disabled': !isBuyable, ...tutorialClass, 'o-pelle-disabled-pointer': creditsClosed }"
+      :class="classObject"
       @click.exact="dimensionBoost(true)"
       @click.shift.exact="dimensionBoost(false)"
     >

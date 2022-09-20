@@ -72,9 +72,11 @@ export default {
       }
       return undefined;
     },
-    tutorialClass() {
+    classObject() {
       return {
-        "tutorial--glow": this.canBeBought && this.hasTutorial
+        "o-primary-btn--galaxy l-dim-row__prestige-button": true,
+        "tutorial--glow": this.canBeBought && this.hasTutorial,
+        "o-pelle-disabled-pointer": this.creditsClosed,
       };
     }
   },
@@ -125,8 +127,7 @@ export default {
     </div>
     <PrimaryButton
       :enabled="canBeBought"
-      class="o-primary-btn--galaxy l-dim-row__prestige-button"
-      :class="{ ...tutorialClass, 'o-pelle-disabled-pointer': creditsClosed }"
+      :class="classObject"
       @click.exact="buyGalaxy(true)"
       @click.shift.exact="buyGalaxy(false)"
     >

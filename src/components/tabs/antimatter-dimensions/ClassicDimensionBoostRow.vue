@@ -39,9 +39,11 @@ export default {
       }
       return sum;
     },
-    tutorialClass() {
+    classObject() {
       return {
-        "tutorial--glow": this.isBuyable && this.hasTutorial
+        "o-primary-btn--dimboost l-dim-row__prestige-button": true,
+        "tutorial--glow": this.isBuyable && this.hasTutorial,
+        "o-pelle-disabled-pointer": this.creditsClosed
       };
     }
   },
@@ -76,8 +78,7 @@ export default {
     </div>
     <PrimaryButton
       :enabled="isBuyable"
-      class="o-primary-btn--dimboost l-dim-row__prestige-button"
-      :class="{ ...tutorialClass, 'o-pelle-disabled-pointer': creditsClosed }"
+      :class="classObject"
       @click.exact="dimensionBoost(true)"
       @click.shift.exact="dimensionBoost(false)"
     >

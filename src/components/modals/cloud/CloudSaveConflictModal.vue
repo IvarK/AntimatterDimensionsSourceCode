@@ -29,6 +29,9 @@ export default {
     hasLessSTDs() {
       return this.conflict.cloud.totalSTD > this.conflict.local.totalSTD;
     },
+    wrongHash() {
+      return this.conflict.saveComparison.hashMismatch;
+    },
     clicksLeft() {
       return 5 - this.overwriteCounter;
     }
@@ -65,7 +68,10 @@ export default {
       Save Game to Cloud
     </template>
     <b>
-      <span v-if="hasDifferentName">
+      <span v-if="wrongHash">
+        Your Cloud Save has been changed by someone else since you last saved to the Cloud this session.
+      </span>
+      <span v-else-if="hasDifferentName">
         Your Local and Cloud Saves have different names.
       </span>
       <span v-else-if="older">

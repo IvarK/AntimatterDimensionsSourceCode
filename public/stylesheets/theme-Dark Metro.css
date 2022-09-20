@@ -24,7 +24,3 @@ body.t-dark-metro {
 .t-dark-metro .c-tt-buy-button--locked:hover {
   background: #e53935;
 }
-
-.t-dark-metro #realityanimbg {
-  filter: invert(1);
-}

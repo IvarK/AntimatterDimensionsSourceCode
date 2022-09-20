@@ -38,7 +38,3 @@ input.t-dark {
 .t-dark .c-rm-amount__desc {
   color: #757575;
 }
-
-.t-dark #realityanimbg {
-  filter: invert(1);
-}

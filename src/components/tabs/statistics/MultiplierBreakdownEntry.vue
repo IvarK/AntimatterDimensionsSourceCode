@@ -4,7 +4,7 @@ import { DC } from "../../../../javascripts/core/constants";
 export default {
   name: "MultiplierBreakdownEntry",
   props: {
-    entry: {
+    resource: {
       type: String,
       required: true,
     }
@@ -25,7 +25,7 @@ export default {
     valueDB: () => GameDatabase.multiplierTabValues,
     treeDB: () => GameDatabase.multiplierTabTree,
     groups() {
-      return this.treeDB[this.entry];
+      return this.treeDB[this.resource];
     },
   },
   methods: {
@@ -54,11 +54,11 @@ export default {
     },
     getProp(key, attr) {
       const args = key.split("_");
-      const dbAttr = this.valueDB[args[0]][attr];
+      const dbAttr = this.valueDB[args[0]][args[1]][attr];
       if (!dbAttr) return null;
-      return args.length === 1
+      return args.length < 3
         ? dbAttr()
-        : dbAttr(args.slice(1).map(a => Number(a)));
+        : dbAttr(...args.slice(2).map(a => Number(a)));
     },
     styleObject(index) {
       return {
@@ -143,7 +143,7 @@ export default {
         </div>
         <MultiplierBreakdownEntry
           v-if="showGroup[index] && treeDB[key]"
-          :entry="key"
+          :resource="key"
         />
       </div>
     </div>

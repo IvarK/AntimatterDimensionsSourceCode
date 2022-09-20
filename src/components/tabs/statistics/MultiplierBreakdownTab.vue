@@ -12,10 +12,13 @@ export default {
     };
   },
   computed: {
-    options: () => ["totalAD", "totalID"],
-    currentName() {
-      return GameDatabase.multiplierTabValues[this.options[this.currentOption]].name();
-    }
+    options: () => ["AD", "ID"],
+    resourceName() {
+      return GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.name();
+    },
+    resourceKey() {
+      return `${this.options[this.currentOption]}_total`;
+    },
   },
   methods: {
     changeResource() {
@@ -31,10 +34,10 @@ export default {
       class="o-primary-btn"
       @click="changeResource"
     >
-      Currently viewing breakdown for {{ currentName }}
+      Currently viewing breakdown for {{ resourceName }}
     </div>
     <br>
-    <MultiplierBreakdownEntry :entry="options[currentOption]" />
+    <MultiplierBreakdownEntry :resource="resourceKey" />
   </div>
 </template>
 

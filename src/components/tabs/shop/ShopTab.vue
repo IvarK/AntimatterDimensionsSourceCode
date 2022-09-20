@@ -170,7 +170,7 @@ export default {
 .l-shop-buttons-container {
   display: flex;
   flex-wrap: wrap;
-  width: 62rem;
+  width: 93rem;
   margin: auto;
 }
 

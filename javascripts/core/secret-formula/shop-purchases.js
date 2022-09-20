@@ -10,19 +10,26 @@ GameDatabase.shopPurchases = {
   IPPurchases: {
     key: "IPPurchases",
     cost: 40,
-    description: "Double your Infinity Point gain from all sources. (additive) ",
+    description: "Double your Infinity Point gain from all sources. (additive)",
     multiplier: purchases => (purchases === 0 ? 1 : 2 * purchases),
   },
   EPPurchases: {
     key: "EPPurchases",
     cost: 50,
-    description: "Triple your Eternity Point gain from all sources. (additive) ",
+    description: "Triple your Eternity Point gain from all sources. (additive)",
     multiplier: purchases => (purchases === 0 ? 1 : 3 * purchases),
+  },
+  RMPurchases: {
+    key: "RMPurchases",
+    cost: 60,
+    description: "Increase your Reality Machine gain by 100%. (additive)",
+    multiplier: purchases => purchases + 1,
+    formatEffect: x => formatX(x, 2),
   },
   allDimPurchases: {
     key: "allDimPurchases",
     cost: 60,
-    description: "Double ALL Dimension multipliers (Antimatter, Infinity, Time) (multiplicative until 32x). Forever. ",
+    description: "Double ALL Dimension multipliers (Antimatter, Infinity, Time) (multiplicative until 32x). Forever.",
     multiplier: purchases => (purchases > 4 ? 32 + (purchases - 5) * 2 : Math.pow(2, purchases)),
   },
   replicantiPurchases: {

@@ -29,15 +29,6 @@ export default {
     toggleCollapse() {
       player.celestials.pelle.collapsed.rifts = !this.isCollapsed;
     },
-    // The rift objects don't normally overlap except for the ExpandingControlBox elements; these expand downward
-    // and would possibly render underneath rifts farther down the page. Assigning a z-index at this point in the
-    // hierarchy enforces the correct stacking context structure to make sure that the ExpandingControlBox elements
-    // render with proper layering
-    styleObject(index) {
-      return {
-        "z-index": 4 - index,
-      };
-    },
   }
 };
 </script>
@@ -64,10 +55,9 @@ export default {
       Rift effects apply even when not activated, and are based on the total amount drained.
       <div class="c-pelle-bar-container">
         <div
-          v-for="(strike, index) in strikes"
+          v-for="strike in strikes"
           :key="strike.config.id"
           class="c-pelle-single-bar"
-          :style="styleObject(index)"
         >
           <PelleRift :strike="strike" />
         </div>

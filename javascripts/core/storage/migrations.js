@@ -699,7 +699,11 @@ GameStorage.migrations = {
 
   convertAchievementsToBits(player) {
     // Also switches achievement positions
-    const swaps = { "4,3": "6,4", "6,4": "7,7", "7,7": "4,3", "10,1": "11,7", "11,7": "10,1" };
+    // So far there've been three swaps
+    // (1) a three-way swap of zero deaths, 1 million is a lot, and antitables
+    // (2) a two-way swap of costco sells dimboosts now and 8 nobody got time for that
+    // (3) a two-way swap of long lasting relationship and eternities are the new infinity
+    const swaps = { "4,3": "6,4", "6,4": "7,7", "7,7": "4,3", "10,1": "11,7", "11,7": "10,1", "11,3": "12,4", "12,4": "11,3" };
     const convertAchievementArray = (newAchievements, oldAchievements, isSecret) => {
       for (const oldId of oldAchievements) {
         let row = Math.floor(oldId / 10);

@@ -782,18 +782,12 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 113,
-    name: "Long lasting relationship",
-    get description() {
-      return `Have your Infinity Power per second exceed your Infinity Power
-      for ${formatInt(60)} consecutive seconds during a single Infinity.`;
-    },
-    checkRequirement: () => AchievementTimers.marathon2
-      .check(
-        !EternityChallenge(7).isRunning &&
-        InfinityDimension(1).productionPerSecond.gt(Currency.infinityPower.value),
-        60
-      ),
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+    name: "Eternities are the new infinity",
+    get description() { return `Eternity in under ${formatInt(250)}ms.`; },
+    checkRequirement: () => Time.thisEternity.totalMilliseconds <= 250,
+    checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
+    get reward() { return `Gain ${formatX(2)} more Eternities.`; },
+    effect: 2,
   },
   {
     id: 114,
@@ -863,12 +857,18 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 124,
-    name: "Eternities are the new infinity",
-    get description() { return `Eternity in under ${formatInt(250)}ms.`; },
-    checkRequirement: () => Time.thisEternity.totalMilliseconds <= 250,
-    checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
-    get reward() { return `Gain ${formatX(2)} more Eternities.`; },
-    effect: 2,
+    name: "Long lasting relationship",
+    get description() {
+      return `Have your Infinity Power per second exceed your Infinity Power
+      for ${formatInt(60)} consecutive seconds during a single Infinity.`;
+    },
+    checkRequirement: () => AchievementTimers.marathon2
+      .check(
+        !EternityChallenge(7).isRunning &&
+        InfinityDimension(1).productionPerSecond.gt(Currency.infinityPower.value),
+        60
+      ),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 125,

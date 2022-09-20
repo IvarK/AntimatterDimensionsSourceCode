@@ -8,7 +8,7 @@ function giveEternityRewards(auto) {
 
   const newEternities = Pelle.isDisabled("eternityMults")
     ? new Decimal(1)
-    : new Decimal(getAdjustedGlyphEffect("timeetermult")).timesEffectsOf(RealityUpgrade(3), Achievement(124));
+    : new Decimal(getAdjustedGlyphEffect("timeetermult")).timesEffectsOf(RealityUpgrade(3), Achievement(113));
 
   if (Currency.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();

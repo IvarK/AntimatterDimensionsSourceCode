@@ -64,7 +64,6 @@ export default {
     },
   },
   created() {
-    this.on$(GAME_EVENT.ENTER_PRESSED, () => this.confirmModal(false));
     this.getGlyphs();
     GlyphSelection.realityProps = getRealityProps(false, false);
   },

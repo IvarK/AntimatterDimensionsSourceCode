@@ -1362,7 +1362,7 @@ GameDatabase.achievements.normal = [
     id: 188,
     name: "The End",
     description: "Beat the game.",
-    checkRequirement: () => GameEnd.endState > 1 && !GameEnd.removeAdditionalEnd,
+    checkRequirement: () => GameEnd.endState > END_STATE_MARKERS.GAME_END && !GameEnd.removeAdditionalEnd,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
 ];

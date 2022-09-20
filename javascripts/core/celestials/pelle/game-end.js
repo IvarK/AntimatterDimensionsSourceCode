@@ -1,3 +1,17 @@
+export const END_STATE_MARKERS = {
+  // Tab zalgoification starts as soon as endState > 0
+  GAME_END: 1,
+  TAB_START_HIDE: 1.5,
+  INTERACTIVITY_DISABLED: 2.5,
+  FADE_AWAY: 2.5,
+  SAVE_DISABLED: 4,
+  END_NUMBERS: 4.2,
+  CREDITS_START: 4.5,
+  SHOW_NEW_GAME: 13,
+  SPECTATE_GAME: 13.5,
+  CREDITS_END: 14.5,
+};
+
 export const GameEnd = {
   get endState() {
     if (this.removeAdditionalEnd) return this.additionalEnd;
@@ -13,13 +27,6 @@ export const GameEnd = {
     this._additionalEnd = (player.isGameEnd || this.removeAdditionalEnd) ? x : 0;
   },
 
-  // This constant is hardcoded here in order for it to be used across NewGame and SpectateGame files.
-  // Instead of putting "13" in both of those files, we just define it here in order for their appearance
-  // to be consistent
-  get showNewGame() {
-    return 13;
-  },
-
   removeAdditionalEnd: false,
 
   creditsClosed: false,
@@ -33,7 +40,7 @@ export const GameEnd = {
         this.removeAdditionalEnd = false;
       }
     }
-    if (this.endState >= 1 && ui.$viewModel.modal.progressBar === undefined) {
+    if (this.endState >= END_STATE_MARKERS.GAME_END && ui.$viewModel.modal.progressBar === undefined) {
       player.isGameEnd = true;
       this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
     }

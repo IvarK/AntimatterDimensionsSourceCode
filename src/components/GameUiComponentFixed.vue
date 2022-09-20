@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      rollingCredits: false
+      ending: false
     };
   },
   computed: {
@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     update() {
-      this.rollingCredits = GameEnd.endState >= 2.5 && !GameEnd.creditsClosed;
+      this.ending = GameEnd.endState >= END_STATE_MARKERS.FADE_AWAY && !GameEnd.creditsClosed;
     }
   }
 };
@@ -92,9 +92,9 @@ export default {
       :modal="view.modal.current"
     />
     <ModalProgressBar v-if="view.modal.progressBar" />
-    <FadeAway v-if="rollingCredits" />
-    <CreditsContainer v-if="rollingCredits" />
-    <NewGame v-if="rollingCredits" />
+    <FadeAway v-if="ending" />
+    <CreditsContainer v-if="ending" />
+    <NewGame v-if="ending" />
     <SpectateGame />
   </div>
 </template>

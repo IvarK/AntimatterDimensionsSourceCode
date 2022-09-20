@@ -94,6 +94,8 @@ export default {
     },
     purchase() {
       this.autobuyer.purchase();
+      TabNotification.newAutobuyer.clearTrigger();
+      GameCache.cheapestAntimatterAutobuyer.invalidate();
     }
   }
 };

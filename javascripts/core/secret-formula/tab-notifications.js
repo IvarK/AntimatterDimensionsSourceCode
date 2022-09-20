@@ -163,4 +163,15 @@ GameDatabase.tabNotifications = {
     condition: () => player.celestials.ra.pets.effarig.level >= 2,
     events: [GAME_EVENT.GAME_TICK_AFTER]
   },
+  newAutobuyer: {
+    id: 12,
+    tabsToHighLight: [
+      {
+        parent: "automation",
+        tab: "autobuyers"
+      },
+    ],
+    // Always externally triggered
+    condition: () => true,
+  },
 };

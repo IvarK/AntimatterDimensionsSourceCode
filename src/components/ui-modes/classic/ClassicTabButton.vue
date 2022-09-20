@@ -54,7 +54,7 @@ export default {
     {{ tabName }}
     <div
       v-if="hasNotification"
-      class="fas fa-circle-exclamation l-tab-notification"
+      class="fas fa-circle-exclamation l-notification-icon"
     />
   </button>
 </template>

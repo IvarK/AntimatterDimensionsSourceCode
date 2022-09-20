@@ -164,7 +164,7 @@ export default {
           </div>
           <div
             v-if="hasTutorial"
-            class="fas fa-circle-exclamation l-tab-notification"
+            class="fas fa-circle-exclamation l-notification-icon"
           />
         </div>
         <div

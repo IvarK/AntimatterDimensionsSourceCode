@@ -70,7 +70,7 @@ export default {
       {{ tabName }}
       <div
         v-if="hasNotification"
-        class="fas fa-circle-exclamation l-tab-notification"
+        class="fas fa-circle-exclamation l-notification-icon"
       />
     </div>
     <div
@@ -93,7 +93,7 @@ export default {
           <span v-html="subtab.symbol" />
           <div
             v-if="subtab.hasNotification"
-            class="fas fa-circle-exclamation l-tab-notification"
+            class="fas fa-circle-exclamation l-notification-icon"
           />
           <div class="o-subtab__tooltip">
             {{ subtab.name }}

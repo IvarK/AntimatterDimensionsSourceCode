@@ -522,8 +522,8 @@ GameDatabase.achievements.normal = [
   {
     id: 78,
     name: "Blink of an eye",
-    get description() { return `Get to Infinity in under ${formatInt(200)} milliseconds.`; },
-    checkRequirement: () => Time.thisInfinityRealTime.totalMilliseconds <= 200,
+    get description() { return `Infinity in under ${formatInt(250)}ms.`; },
+    checkRequirement: () => Time.thisInfinityRealTime.totalMilliseconds <= 250,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() {
       return `Start with ${format(5e25)} antimatter.`;
@@ -864,9 +864,11 @@ GameDatabase.achievements.normal = [
   {
     id: 124,
     name: "Eternities are the new infinity",
-    get description() { return `Eternity in under ${formatInt(200)}ms.`; },
-    checkRequirement: () => Time.thisEternity.totalMilliseconds <= 200,
-    checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
+    get description() { return `Eternity in under ${formatInt(250)}ms.`; },
+    checkRequirement: () => Time.thisEternity.totalMilliseconds <= 250,
+    checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
+    get reward() { return `Gain ${formatX(2)} more Eternities.`; },
+    effect: 2,
   },
   {
     id: 125,

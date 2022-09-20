@@ -187,6 +187,8 @@ export function runRealityAnimation() {
   document.getElementById("ui").style.animation = "a-realize 10s 1";
   document.getElementById("realityanimbg").style.animation = "a-realizebg 10s 1";
   document.getElementById("realityanimbg").style.display = "block";
+  if (Theme.current().isDark()) document.getElementById("realityanimbg").style.filter = "invert(1)";
+  else document.getElementById("realityanimbg").style.filter = "";
   setTimeout(() => {
     document.getElementById("realityanimbg").play();
     document.getElementById("realityanimbg").currentTime = 0;

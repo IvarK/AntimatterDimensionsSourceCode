@@ -1446,8 +1446,8 @@ GameStorage.devMigrations = {
       delete player.devMode;
     },
     player => {
-      let swap1 = player.achievementBits[10] & 4;
-      let swap2 = player.achievementBits[11] & 8;
+      const swap1 = player.achievementBits[10] & 4;
+      const swap2 = player.achievementBits[11] & 8;
       if (swap1) {
         player.achievementBits[11] |= 8;
       } else {

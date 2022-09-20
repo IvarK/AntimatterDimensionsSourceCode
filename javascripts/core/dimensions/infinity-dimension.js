@@ -187,7 +187,7 @@ class InfinityDimensionState extends DimensionState {
       (Laitela.isRunning && tier > Laitela.maxAllowedDimension)) {
       return false;
     }
-    return InfinityDimension(tier).amount.gt(0);
+    return this.amount.gt(0);
   }
 
   get baseCost() {

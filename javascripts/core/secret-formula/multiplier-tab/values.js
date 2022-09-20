@@ -10,7 +10,7 @@ function activeDimCount(type) {
     case "infinity":
       return InfinityDimensions.all.filter(id => id.isProducing).length;
     case "time":
-      return 0;
+      return TimeDimensions.all.filter(td => td.isProducing).length;
     default:
       throw new Error("Unrecognized Dimension type in Multiplier tab GameDB entry");
   }
@@ -352,7 +352,7 @@ GameDatabase.multiplierTabValues = {
         return Decimal.pow(allMult, maxActiveDim)
           .times(maxActiveDim >= 1 ? EternityChallenge(2).reward.effectOrDefault(1) : DC.D1);
       },
-      isActive: () => InfinityChallenge(1).isCompleted,
+      isActive: () => EternityChallenge(2).isCompleted,
     },
     glyph: {
       name: dim => (dim ? `ID ${dim} from Glyph Effects` : "Total from Glyph Effects"),
@@ -383,6 +383,130 @@ GameDatabase.multiplierTabValues = {
         const maxActiveDim = activeDimCount("infinity");
         return Decimal.pow(mult, dim ? 1 : maxActiveDim)
           .times(maxActiveDim >= 1 ? PelleRifts.decay.milestones[0].effectOrDefault(1) : DC.D1);
+      },
+      powValue: () => PelleRifts.paradox.effectOrDefault(1),
+      isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
+    },
+  },
+
+  TD: {
+    total: {
+      name: dim => (dim ? `Total TD ${dim} Multiplier` : "All TD Multipliers"),
+      multValue: dim => (dim
+        ? TimeDimension(dim).multiplier
+        : TimeDimensions.all
+          .filter(td => td.isProducing)
+          .map(td => td.multiplier)
+          .reduce((x, y) => x.times(y), DC.D1)),
+      isActive: dim => TimeDimension(dim ?? 1).isProducing,
+    },
+    purchase: {
+      name: dim => (dim ? `TD ${dim} from Purchases` : "Total from Purchases"),
+      multValue: dim => {
+        const getMult = td => {
+          const d = TimeDimension(td);
+          const bought = td === 8 ? Math.clampMax(d.bought, 1e8) : d.bought;
+          return Decimal.pow(d.powerMultiplier, bought);
+        };
+        if (dim) return getMult(dim);
+        return TimeDimensions.all
+          .filter(td => td.isProducing)
+          .map(td => getMult(td.tier))
+          .reduce((x, y) => x.times(y), DC.D1);
+      },
+      isActive: () => !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning,
+    },
+    achievement: {
+      name: dim => (dim ? `TD ${dim} from Achievements` : "Total from Achievements"),
+      multValue: dim => {
+        const baseMult = DC.D1.timesEffectsOf(
+          Achievement(105),
+          Achievement(128),
+          EternityUpgrade.tdMultAchs,
+        );
+        return Decimal.pow(baseMult, dim ? 1 : activeDimCount("time"));
+      },
+      isActive: () => Achievement(75).canBeApplied,
+    },
+    timeStudy: {
+      name: dim => (dim
+        ? `TD ${dim} from Time Studies and Eternity Upgrades`
+        : "Total from Time Studies and Eternity Upgrades"),
+      multValue: dim => {
+        const allMult = DC.D1.timesEffectsOf(
+          TimeStudy(93),
+          TimeStudy(103),
+          TimeStudy(151),
+          TimeStudy(221),
+          TimeStudy(301),
+          EternityUpgrade.tdMultTheorems,
+          EternityUpgrade.tdMultRealTime,
+        );
+
+        const dimMults = Array.repeat(DC.D1, 9);
+        for (let tier = 1; tier <= 8; tier++) {
+          dimMults[tier] = dimMults[tier].timesEffectsOf(
+            tier === 1 ? TimeStudy(11) : null,
+            tier === 3 ? TimeStudy(73) : null,
+            tier === 4 ? TimeStudy(227) : null
+          );
+        }
+
+        if (dim) return allMult.times(dimMults[dim]);
+        let totalMult = DC.D1;
+        for (let tier = 1; tier <= activeDimCount("time"); tier++) {
+          totalMult = totalMult.times(dimMults[tier]).times(allMult);
+        }
+        return totalMult;
+      },
+      isActive: () => Achievement(75).canBeApplied,
+    },
+    eternityChallenge: {
+      name: dim => (dim ? `TD ${dim} from Eternity Challenges` : "Total from Eternity Challenges"),
+      multValue: dim => {
+        let allMult = DC.D1.timesEffectsOf(
+          EternityChallenge(1).reward,
+          EternityChallenge(10).reward,
+        );
+        if (EternityChallenge(9).isRunning) {
+          allMult = allMult.times(
+            Decimal.pow(Math.clampMin(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate / 7)
+              .log2(), 1), 4).clampMin(1));
+        }
+        return Decimal.pow(allMult, dim ? 1 : activeDimCount("time"));
+      },
+      isActive: () => EternityChallenge(1).isCompleted,
+    },
+    glyph: {
+      name: dim => (dim ? `TD ${dim} from Glyph Effects` : "Total from Glyph Effects"),
+      powValue: () => getAdjustedGlyphEffect("timepow") * getAdjustedGlyphEffect("effarigdimensions"),
+      isActive: () => PlayerProgress.realityUnlocked(),
+    },
+    alchemy: {
+      name: dim => {
+        const imStr = MachineHandler.isIMUnlocked ? " and Imaginary Upgrades" : "";
+        return dim ? `TD ${dim} from Glyph Alchemy${imStr}` : `Total from Glyph Alchemy${imStr}`;
+      },
+      multValue: dim => {
+        const mult = DC.D1.timesEffectsOf(
+          AlchemyResource.dimensionality,
+          ImaginaryUpgrade(11),
+        );
+        return Decimal.pow(mult, dim ? 1 : activeDimCount("time"));
+      },
+      powValue: () => AlchemyResource.time.effectOrDefault(1) * Ra.momentumValue,
+      isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
+    },
+    other: {
+      name: dim => (dim ? `TD ${dim} from Other sources` : "Total from Other sources"),
+      multValue: dim => {
+        const mult = new Decimal(ShopPurchase.allDimPurchases.currentMult).timesEffectsOf(
+          Replicanti.areUnlocked && Replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,
+          Pelle.isDoomed ? null : RealityUpgrade(22),
+          PelleRifts.chaos
+        );
+        const maxActiveDim = activeDimCount("time");
+        return Decimal.pow(mult, dim ? 1 : maxActiveDim);
       },
       powValue: () => PelleRifts.paradox.effectOrDefault(1),
       isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,

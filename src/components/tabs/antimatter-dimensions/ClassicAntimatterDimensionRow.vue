@@ -105,17 +105,14 @@ export default {
     },
     buySingle() {
       if (this.isContinuumActive) return;
-      buyOneDimension(this.tier);
-      if (this.tier === 2) {
-        Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
-      }
+      if (!buyOneDimension(this.tier)) return;
+      if (this.tier === 1) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM1);
+      if (this.tier === 2) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
     },
     buyUntil10() {
       if (this.isContinuumActive) return;
-      buyManyDimension(this.tier);
-      if (this.tier === 2) {
-        Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
-      }
+      if (!buyManyDimension(this.tier)) return;
+      if (this.tier === 2) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
     },
     showCostTitle(value) {
       return value.exponent < 1000000;

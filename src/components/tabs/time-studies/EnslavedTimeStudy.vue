@@ -37,7 +37,7 @@ export default {
       this.isVisible = Enslaved.isRunning && player.celestials.enslaved.hasSecretStudy;
     },
     handleClick() {
-      if (!this.isVisible) return;
+      if (!Enslaved.isRunning || player.celestials.enslaved.hasSecretStudy) return;
       player.celestials.enslaved.hasSecretStudy = true;
       EnslavedProgress.secretStudy.giveProgress();
       Currency.timeTheorems.add(this.enslavedTT);

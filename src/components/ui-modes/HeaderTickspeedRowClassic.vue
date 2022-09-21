@@ -24,7 +24,8 @@ export default {
       tickspeed: new Decimal(0),
       galaxyCount: 0,
       isContinuumActive: false,
-      continuumValue: 0
+      continuumValue: 0,
+      hasTutorial: false,
     };
   },
   computed: {
@@ -67,14 +68,21 @@ export default {
       this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
+      this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.TICKSPEED);
     },
     buttonClass() {
       return {
         "l-long-button": !this.inHeader,
         "o-primary-btn--tickspeed": true,
-        "o-continuum": this.isContinuumActive
+        "l-glow-container": true,
+        "o-continuum": this.isContinuumActive,
+        "tutorial--glow": this.isAffordable && this.hasTutorial
       };
-    }
+    },
+    buyUpgrade() {
+      if (!buyTickSpeed()) return;
+      Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
+    },
   },
 };
 </script>
@@ -89,11 +97,15 @@ export default {
         v-tooltip="upgradeCount"
         :enabled="isAffordable || isContinuumActive"
         :class="buttonClass()"
-        onclick="buyTickSpeed()"
+        @click="buyUpgrade"
       >
         <span v-if="!inHeader">Tickspeed </span>
         <span v-if="isContinuumActive">Continuum: {{ continuumString }}</span>
         <span v-else>Cost: {{ format(cost) }}</span>
+        <div
+          v-if="hasTutorial"
+          class="fas fa-circle-exclamation l-notification-icon"
+        />
       </PrimaryButton>
       <PrimaryButton
         v-if="!isContinuumActive"

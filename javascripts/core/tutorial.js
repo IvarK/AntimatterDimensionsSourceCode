@@ -1,9 +1,10 @@
 export const TUTORIAL_STATE = {
   DIM1: 0,
   DIM2: 1,
-  DIMBOOST: 2,
-  GALAXY: 3,
-  AUTOMATOR: 4
+  TICKSPEED: 2,
+  DIMBOOST: 3,
+  GALAXY: 4,
+  AUTOMATOR: 5
 };
 
 // Tutorial has two ways of moving on, either by Tutorial.moveOn() or by having it's condition be true
@@ -17,6 +18,10 @@ const tutorialStates = [
     // Highlight the 2nd dim button
     id: TUTORIAL_STATE.DIM2,
     condition: () => Currency.antimatter.gte(100)
+  },
+  {
+    id: TUTORIAL_STATE.TICKSPEED,
+    condition: () => AntimatterDimension(2).bought > 0
   },
   {
     id: TUTORIAL_STATE.DIMBOOST,

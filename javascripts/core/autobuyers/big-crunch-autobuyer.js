@@ -12,7 +12,11 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
   get isUnlocked() {
     return Pelle.isDoomed
       ? PelleStrikes.infinity.hasStrike
-      : NormalChallenge(12).isCompleted;
+      : this.canBeUpgraded;
+  }
+
+  get canBeUpgraded() {
+    return NormalChallenge(12).isCompleted;
   }
 
   get baseInterval() {

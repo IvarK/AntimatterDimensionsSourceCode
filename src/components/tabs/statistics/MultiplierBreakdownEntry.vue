@@ -66,7 +66,8 @@ export default {
         top: `${100 * this.percentList.slice(0, index).sum()}%`,
         height: `${100 * this.percentList[index]}%`,
         width: "100%",
-        border: this.isEmpty ? "" : "0.1rem solid",
+        border: this.isEmpty ? "" : "0.1rem solid var(--color-text)",
+        "background-color": this.getProp(this.currentGroupKeys[index], "color")
       };
     },
     classObject(index) {
@@ -76,6 +77,7 @@ export default {
       };
     },
     hideIcon(index) {
+      if (!this.treeDB[this.currentGroupKeys[index]]) return "c-no-icon";
       return this.showGroup[index] ? "far fa-minus-square" : "far fa-plus-square";
     },
     entryString(index) {
@@ -112,16 +114,22 @@ export default {
         :class="{ 'c-bar-highlight' : mouseoverIndex === index }"
         @mouseover="mouseoverIndex = index"
         @mouseleave="mouseoverIndex = -1"
+        @click="showGroup[index] = !showGroup[index]"
       />
     </div>
     <div />
     <div class="c-info-list">
-      <div
-        v-if="groups.length > 1"
-        class="o-primary-btn"
-        @click="changeGroup"
-      >
-        Change Multiplier Grouping
+      <div class="c-total-mult">
+        <b>
+          Total Multiplier for {{ getProp(resource, "name") }}: {{ formatX(getProp(resource, "multValue")) }}
+        </b>
+        <span
+          v-if="groups.length > 1"
+          class="o-primary-btn"
+          @click="changeGroup"
+        >
+          Change Grouping
+        </span>
       </div>
       <div v-if="isEmpty">
         No Active Multipliers
@@ -159,6 +167,8 @@ export default {
   max-width: 80rem;
   border: 0.2rem solid;
   padding: 0.5rem;
+  font-weight: normal;
+  background-color: var(--color-base);
 }
 
 .c-stacked-bars {
@@ -176,7 +186,7 @@ export default {
   0% { box-shadow: inset 0 0 0.3rem 0; }
   50% {
     box-shadow: inset 0 0 0.6rem 0;
-    background-color: var(--color-accent);
+    filter: brightness(130%);
   }
   100% { box-shadow: inset 0 0 0.3rem 0; }
 }
@@ -187,8 +197,18 @@ export default {
   padding: 0.2rem;
 }
 
+.c-total-mult {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .c-single-entry {
   text-align: left;
+  color: var(--color-text);
   padding: 0.2rem 0.5rem;
   margin: 0.2rem;
   border: 0.1rem dashed;
@@ -206,5 +226,9 @@ export default {
   0% {}
   50% { background-color: var(--color-accent); }
   100% {}
+}
+
+.c-no-icon {
+  padding: 0.9rem;
 }
 </style>

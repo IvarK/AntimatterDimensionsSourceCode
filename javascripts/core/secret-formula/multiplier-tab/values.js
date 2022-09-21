@@ -27,6 +27,7 @@ GameDatabase.multiplierTabValues = {
           .map(ad => ad.multiplier)
           .reduce((x, y) => x.times(y), DC.D1)),
       isActive: dim => AntimatterDimension(dim ?? 1).isProducing,
+      color: () => "var(--color-antimatter)",
     },
     purchase: {
       name: dim => (dim ? `AD ${dim} from Purchases` : "Total from Purchases"),
@@ -42,6 +43,7 @@ GameDatabase.multiplierTabValues = {
           .reduce((x, y) => x.times(y), DC.D1);
       },
       isActive: () => !EternityChallenge(11).isRunning,
+      color: () => "var(--color-antimatter)",
     },
     dimboost: {
       name: dim => (dim ? `AD ${dim} from Dimboosts` : "Total from Dimboosts"),
@@ -52,11 +54,13 @@ GameDatabase.multiplierTabValues = {
           .map(ad => DimBoost.multiplierToNDTier(ad.tier))
           .reduce((x, y) => x.times(y), DC.D1)),
       isActive: () => true,
+      color: () => GameDatabase.reality.glyphTypes.power.color,
     },
     sacrifice: {
       name: dim => (dim ? "AD 8 from Sacrifice" : "Sacrifice Multiplier"),
       multValue: dim => ((!dim || dim === 8) ? Sacrifice.totalBoost : DC.D1),
       isActive: dim => (!dim || dim === 8) && Sacrifice.totalBoost.gt(1),
+      color: () => "var(--color-antimatter)",
     },
     achievement: {
       name: dim => (dim ? `AD ${dim} from Achievements` : "Total from Achievements"),
@@ -103,6 +107,7 @@ GameDatabase.multiplierTabValues = {
       },
       powValue: () => Achievement(183).effectOrDefault(1),
       isActive: () => true,
+      color: () => "var(--color-v--base)",
     },
     infinityUpgrade: {
       name: dim => (dim ? `AD ${dim} from Infinity Upgrades` : "Total from Infinity Upgrades"),
@@ -148,6 +153,7 @@ GameDatabase.multiplierTabValues = {
         return allPow * Math.exp(dimPow.slice(1).map(n => Math.log(n)).sum() / activeDimCount("antimatter"));
       },
       isActive: () => PlayerProgress.infinityUnlocked(),
+      color: () => "var(--color-infinity)",
     },
     breakInfinityUpgrade: {
       name: dim => (dim ? `AD ${dim} from Break Infinity Upgrades` : "Total from Break Infinity Upgrades"),
@@ -162,6 +168,7 @@ GameDatabase.multiplierTabValues = {
         return Decimal.pow(mult, dim ? 1 : activeDimCount("antimatter"));
       },
       isActive: () => player.break,
+      color: () => "var(--color-infinity)",
     },
     infinityPower: {
       name: dim => (dim ? `AD ${dim} from Infinity Power` : "Total from Infinity Power"),
@@ -170,6 +177,7 @@ GameDatabase.multiplierTabValues = {
         return Decimal.pow(mult, dim ? 1 : activeDimCount("antimatter"));
       },
       isActive: () => Currency.infinityPower.value.gt(1) && !EternityChallenge(9).isRunning,
+      color: () => "var(--color-infinity)",
     },
     infinityChallenge: {
       name: dim => (dim ? `AD ${dim} from Infinity Challenges` : "Total from Infinity Challenges"),
@@ -195,6 +203,7 @@ GameDatabase.multiplierTabValues = {
       },
       powValue: () => (InfinityChallenge(4).isCompleted ? InfinityChallenge(4).reward.effectValue : 1),
       isActive: () => player.break,
+      color: () => "var(--color-infinity)",
     },
     timeStudy: {
       name: dim => (dim ? `AD ${dim} from Time Studies` : "Total from Time Studies"),
@@ -235,11 +244,13 @@ GameDatabase.multiplierTabValues = {
         return totalMult;
       },
       isActive: () => PlayerProgress.eternityUnlocked(),
+      color: () => "var(--color-eternity)",
     },
     eternityChallenge: {
       name: dim => (dim ? `AD ${dim} from Eternity Challenges` : "Total from Eternity Challenges"),
       multValue: dim => Decimal.pow(EternityChallenge(10).effectValue, dim ? 1 : activeDimCount("antimatter")),
       isActive: () => EternityChallenge(10).isRunning,
+      color: () => "var(--color-eternity)",
     },
     glyph: {
       name: dim => (dim ? `AD ${dim} from Glyph Effects` : "Total from Glyph Effects"),
@@ -249,6 +260,7 @@ GameDatabase.multiplierTabValues = {
       },
       powValue: () => getAdjustedGlyphEffect("powerpow") * getAdjustedGlyphEffect("effarigdimensions"),
       isActive: () => PlayerProgress.realityUnlocked(),
+      color: () => "var(--color-reality)",
     },
     alchemy: {
       name: dim => (dim ? `AD ${dim} from Glyph Alchemy` : "Total from Glyph Alchemy"),
@@ -259,6 +271,7 @@ GameDatabase.multiplierTabValues = {
       },
       powValue: () => AlchemyResource.power.effectOrDefault(1) * Ra.momentumValue,
       isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
+      color: () => "var(--color-ra-pet--effarig)",
     },
     other: {
       name: dim => (dim ? `AD ${dim} from Other sources` : "Total from Other sources"),
@@ -281,6 +294,7 @@ GameDatabase.multiplierTabValues = {
           .map(id => id.multiplier)
           .reduce((x, y) => x.times(y), DC.D1)),
       isActive: dim => InfinityDimension(dim ?? 1).isProducing,
+      color: () => "var(--color-infinity)",
     },
     purchase: {
       name: dim => (dim ? `ID ${dim} from Purchases` : "Total from Purchases"),
@@ -294,11 +308,13 @@ GameDatabase.multiplierTabValues = {
           .reduce((x, y) => x.times(y), DC.D1);
       },
       isActive: () => !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning,
+      color: () => "var(--color-infinity)",
     },
     replicanti: {
       name: dim => (dim ? `ID ${dim} from Replicanti` : "Total from Replicanti"),
       multValue: dim => Decimal.pow(replicantiMult(), dim ? 1 : activeDimCount("infinity")),
       isActive: () => Replicanti.areUnlocked,
+      color: () => GameDatabase.reality.glyphTypes.replication.color,
     },
     achievement: {
       name: dim => (dim ? `ID ${dim} from Achievements` : "Total from Achievements"),
@@ -309,6 +325,7 @@ GameDatabase.multiplierTabValues = {
         return Decimal.pow(baseMult, maxActiveDim).times(maxActiveDim > 0 ? Achievement(94).effectOrDefault(1) : DC.D1);
       },
       isActive: () => Achievement(75).canBeApplied,
+      color: () => "var(--color-v--base)",
     },
     timeStudy: {
       name: dim => (dim
@@ -328,6 +345,7 @@ GameDatabase.multiplierTabValues = {
         return Decimal.pow(allMult, maxActiveDim).times(maxActiveDim >= 4 ? TimeStudy(72).effectOrDefault(1) : DC.D1);
       },
       isActive: () => Achievement(75).canBeApplied,
+      color: () => "var(--color-eternity)",
     },
     infinityChallenge: {
       name: dim => (dim ? `ID ${dim} from Infinity Challenges` : "Total from Infinity Challenges"),
@@ -339,6 +357,7 @@ GameDatabase.multiplierTabValues = {
         return Decimal.pow(allMult, dim ? 1 : activeDimCount("infinity"));
       },
       isActive: () => InfinityChallenge(1).isCompleted,
+      color: () => "var(--color-infinity)",
     },
     eternityChallenge: {
       name: dim => (dim ? `ID ${dim} from Eternity Challenges` : "Total from Eternity Challenges"),
@@ -353,11 +372,13 @@ GameDatabase.multiplierTabValues = {
           .times(maxActiveDim >= 1 ? EternityChallenge(2).reward.effectOrDefault(1) : DC.D1);
       },
       isActive: () => EternityChallenge(2).isCompleted,
+      color: () => "var(--color-eternity)",
     },
     glyph: {
       name: dim => (dim ? `ID ${dim} from Glyph Effects` : "Total from Glyph Effects"),
       powValue: () => getAdjustedGlyphEffect("infinitypow") * getAdjustedGlyphEffect("effarigdimensions"),
       isActive: () => PlayerProgress.realityUnlocked(),
+      color: () => "var(--color-reality)",
     },
     alchemy: {
       name: dim => {
@@ -373,6 +394,7 @@ GameDatabase.multiplierTabValues = {
       },
       powValue: () => AlchemyResource.infinity.effectOrDefault(1) * Ra.momentumValue,
       isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
+      color: () => "var(--color-ra-pet--effarig)",
     },
     other: {
       name: dim => (dim ? `ID ${dim} from Other sources` : "Total from Other sources"),
@@ -399,6 +421,7 @@ GameDatabase.multiplierTabValues = {
           .map(td => td.multiplier)
           .reduce((x, y) => x.times(y), DC.D1)),
       isActive: dim => TimeDimension(dim ?? 1).isProducing,
+      color: () => "var(--color-eternity)",
     },
     purchase: {
       name: dim => (dim ? `TD ${dim} from Purchases` : "Total from Purchases"),
@@ -415,6 +438,7 @@ GameDatabase.multiplierTabValues = {
           .reduce((x, y) => x.times(y), DC.D1);
       },
       isActive: () => !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning,
+      color: () => "var(--color-eternity)",
     },
     achievement: {
       name: dim => (dim ? `TD ${dim} from Achievements` : "Total from Achievements"),
@@ -427,6 +451,7 @@ GameDatabase.multiplierTabValues = {
         return Decimal.pow(baseMult, dim ? 1 : activeDimCount("time"));
       },
       isActive: () => Achievement(75).canBeApplied,
+      color: () => "var(--color-v--base)",
     },
     timeStudy: {
       name: dim => (dim
@@ -460,6 +485,7 @@ GameDatabase.multiplierTabValues = {
         return totalMult;
       },
       isActive: () => Achievement(75).canBeApplied,
+      color: () => "var(--color-eternity)",
     },
     eternityChallenge: {
       name: dim => (dim ? `TD ${dim} from Eternity Challenges` : "Total from Eternity Challenges"),
@@ -476,11 +502,13 @@ GameDatabase.multiplierTabValues = {
         return Decimal.pow(allMult, dim ? 1 : activeDimCount("time"));
       },
       isActive: () => EternityChallenge(1).isCompleted,
+      color: () => "var(--color-eternity)",
     },
     glyph: {
       name: dim => (dim ? `TD ${dim} from Glyph Effects` : "Total from Glyph Effects"),
       powValue: () => getAdjustedGlyphEffect("timepow") * getAdjustedGlyphEffect("effarigdimensions"),
       isActive: () => PlayerProgress.realityUnlocked(),
+      color: () => "var(--color-reality)",
     },
     alchemy: {
       name: dim => {
@@ -496,6 +524,7 @@ GameDatabase.multiplierTabValues = {
       },
       powValue: () => AlchemyResource.time.effectOrDefault(1) * Ra.momentumValue,
       isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
+      color: () => "var(--color-v--base)",
     },
     other: {
       name: dim => (dim ? `TD ${dim} from Other sources` : "Total from Other sources"),

@@ -13,6 +13,10 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
 
   get isUnlocked() {
     if (Pelle.isDisabled("tickspeedAutobuyer")) return false;
+    return this.canBeUpgraded;
+  }
+
+  get canBeUpgraded() {
     return NormalChallenge(9).isCompleted;
   }
 

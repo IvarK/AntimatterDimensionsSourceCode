@@ -541,4 +541,131 @@ GameDatabase.multiplierTabValues = {
       isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
     },
   },
+
+  IP: {
+    total: {
+      name: () => "Total IP Gained",
+      isBase: () => true,
+      multValue: () => gainedInfinityPoints(),
+      isActive: () => player.break,
+    },
+    base: {
+      name: () => "Base Infinity Points",
+      isBase: () => true,
+      multValue: () => {
+        const div = Effects.min(
+          308,
+          Achievement(103),
+          TimeStudy(111)
+        );
+        return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75);
+      },
+      isActive: () => player.break,
+      color: () => "var(--color-infinity)",
+    },
+    infinityUpgrade: {
+      name: () => "Repeatable Infinity Upgrade",
+      multValue: () => InfinityUpgrade.ipMult.effectOrDefault(1),
+      isActive: () => player.break && !Pelle.isDoomed,
+      color: () => "var(--color-infinity)",
+    },
+    achievement: {
+      name: () => "Achievements",
+      multValue: () => DC.D1.timesEffectsOf(
+        Achievement(85),
+        Achievement(93),
+        Achievement(116),
+        Achievement(125),
+        Achievement(141).effects.ipGain,
+      ),
+      isActive: () => player.break && !Pelle.isDoomed,
+      color: () => "var(--color-v--base)",
+    },
+    timeStudy: {
+      name: () => "Time Studies",
+      multValue: () => DC.D1.timesEffectsOf(
+        TimeStudy(41),
+        TimeStudy(51),
+        TimeStudy(141),
+        TimeStudy(142),
+        TimeStudy(143),
+      ),
+      isActive: () => player.break && !Pelle.isDoomed,
+      color: () => "var(--color-eternity)",
+    },
+    dilationUpgrade: {
+      name: () => "Dilation Upgrades",
+      multValue: () => DilationUpgrade.ipMultDT.effectOrDefault(1),
+      isActive: () => player.break && !Pelle.isDoomed && DilationUpgrade.ipMultDT.canBeApplied,
+      color: () => "var(--color-dilation)",
+    },
+    glyph: {
+      name: () => (Ra.unlocks.unlockGlyphAlchemy.canBeApplied
+        ? "Equipped Glyphs and Glyph Alchemy"
+        : "Equipped Glyphs"),
+      multValue: () => Replicanti.amount.powEffectOf(AlchemyResource.exponential)
+        .times(getAdjustedGlyphEffect("infinityIP")),
+      powValue: () => (GlyphAlteration.isAdded("infinity") ? getSecondaryGlyphEffect("infinityIP") : 1),
+      isActive: () => PlayerProgress.realityUnlocked() && !Pelle.isDoomed,
+      color: () => "var(--color-reality)",
+    },
+    other: {
+      name: () => "IP Multipliers from Other sources",
+      multValue: () => DC.D1.times(ShopPurchase.IPPurchases.currentMult)
+        .timesEffectsOf(PelleRifts.vacuum)
+        .times(Pelle.specialGlyphEffect.infinity),
+      isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
+    },
+  },
+
+  EP: {
+    total: {
+      name: () => "Total EP Gained",
+      isBase: () => true,
+      multValue: () => gainedEternityPoints(),
+      isActive: () => PlayerProgress.eternityUnlocked(),
+    },
+    base: {
+      name: () => "Base Eternity Points",
+      isBase: () => true,
+      multValue: () => DC.D5.pow(player.records.thisEternity.maxIP.plus(
+        gainedInfinityPoints()).log10() / (308 - PelleRifts.recursion.effectValue.toNumber()) - 0.7),
+      isActive: () => PlayerProgress.eternityUnlocked(),
+      color: () => "var(--color-eternity)",
+    },
+    eternityUpgrade: {
+      name: () => "Repeatable Eternity Upgrade",
+      multValue: () => EternityUpgrade.epMult.effectOrDefault(1),
+      isActive: () => PlayerProgress.eternityUnlocked() && !Pelle.isDoomed,
+      color: () => "var(--color-eternity)",
+    },
+    timeStudy: {
+      name: () => "Time Studies",
+      multValue: () => DC.D1.timesEffectsOf(
+        TimeStudy(61),
+        TimeStudy(122),
+        TimeStudy(121),
+        TimeStudy(123),
+      ),
+      isActive: () => PlayerProgress.eternityUnlocked() && !Pelle.isDoomed,
+      color: () => "var(--color-eternity)",
+    },
+    glyph: {
+      name: () => "Equipped Glyphs and Reality Upgrades",
+      multValue: () => DC.D1.timesEffectsOf(
+        RealityUpgrade(12),
+        GlyphEffect.epMult
+      ),
+      powValue: () => (GlyphAlteration.isAdded("time") ? getSecondaryGlyphEffect("timeEP") : 1),
+      isActive: () => PlayerProgress.realityUnlocked(),
+      color: () => "var(--color-reality)",
+    },
+    other: {
+      name: () => "IP Multipliers from Other sources",
+      multValue: () => DC.D1.times(ShopPurchase.EPPurchases.currentMult)
+        .timesEffectsOf(PelleRifts.vacuum.milestones[2])
+        .times(Pelle.specialGlyphEffect.time),
+      isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
+    },
+  }
 };

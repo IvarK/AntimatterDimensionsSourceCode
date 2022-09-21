@@ -7,6 +7,8 @@ const propList = {
   ID: ["purchase", "achievement", "replicanti", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph",
     "alchemy", "other"],
   TD: ["purchase", "achievement", "timeStudy", "eternityChallenge", "glyph", "alchemy", "other"],
+  IP: ["base", "infinityUpgrade", "achievement", "timeStudy", "dilationUpgrade", "glyph", "other"],
+  EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "other"],
 };
 
 // Used for individual dimension breakdowns of effects (eg. full achievement mult into its values on individual ADs)
@@ -42,6 +44,12 @@ GameDatabase.multiplierTabTree = {
     append8("TD_total"),
     getProps("TD")
   ],
+  IP_total: [
+    getProps("IP")
+  ],
+  EP_total: [
+    getProps("EP")
+  ]
 };
 
 // Dynamically generate all values from existing values, but broken down by dimension

@@ -91,7 +91,10 @@ export default {
 
       // Display both multiplier and powers, but make sure to give an empty string if there's neither
       const values = [];
-      if (this.baseMultList[index].neq(1)) values.push(formatX(this.baseMultList[index], 2, 2));
+      const formatFn = this.getProp(this.currentGroupKeys[index], "isBase")
+        ? x => format(x, 2, 2)
+        : x => formatX(x, 2, 2);
+      if (this.baseMultList[index].neq(1)) values.push(formatFn(this.baseMultList[index]));
       if (this.powList[index] !== 1) values.push(formatPow(this.powList[index], 2, 3));
       const valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
 
@@ -120,7 +123,10 @@ export default {
     <div />
     <div class="c-info-list">
       <div class="c-total-mult">
-        <b>
+        <b v-if="getProp(resource, 'isBase')">
+          {{ getProp(resource, "name") }}: {{ format(getProp(resource, "multValue")) }}
+        </b>
+        <b v-else>
           Total Multiplier for {{ getProp(resource, "name") }}: {{ formatX(getProp(resource, "multValue")) }}
         </b>
         <span
@@ -204,6 +210,7 @@ export default {
   align-items: center;
   padding-left: 0.5rem;
   margin-bottom: 1rem;
+  color: var(--color-text);
 }
 
 .c-single-entry {

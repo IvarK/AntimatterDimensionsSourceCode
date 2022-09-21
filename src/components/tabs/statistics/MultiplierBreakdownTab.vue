@@ -12,7 +12,7 @@ export default {
     };
   },
   computed: {
-    options: () => ["AD", "ID", "TD"],
+    options: () => ["AD", "ID", "TD", "IP", "EP"],
     resourceName() {
       return GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.name();
     },

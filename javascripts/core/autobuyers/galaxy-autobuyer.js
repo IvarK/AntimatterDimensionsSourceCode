@@ -11,6 +11,10 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends UpgradeableAutobuyerSt
 
   get isUnlocked() {
     if (Pelle.isDisabled("galaxyAutobuyer")) return false;
+    return this.canBeUpgraded;
+  }
+
+  get canBeUpgraded() {
     return NormalChallenge(11).isCompleted;
   }
 

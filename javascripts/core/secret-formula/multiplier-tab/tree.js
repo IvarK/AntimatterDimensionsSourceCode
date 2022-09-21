@@ -2,9 +2,9 @@
 import { GameDatabase } from "../game-database";
 
 const propList = {
-  AD: ["purchase", "dimboost", "achievement", "sacrifice", "infinityUpgrade", "breakInfinityUpgrade",
-    "infinityChallenge", "infinityPower", "timeStudy", "eternityChallenge", "glyph", "alchemy", "other"],
-  ID: ["purchase", "replicanti", "achievement", "timeStudy", "infinityChallenge", "eternityChallenge", "glyph",
+  AD: ["purchase", "achievement", "dimboost", "sacrifice", "infinityUpgrade", "breakInfinityUpgrade",
+    "infinityPower", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph", "alchemy", "other"],
+  ID: ["purchase", "achievement", "replicanti", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph",
     "alchemy", "other"],
   TD: ["purchase", "achievement", "timeStudy", "eternityChallenge", "glyph", "alchemy", "other"],
 };
@@ -49,4 +49,12 @@ const resourcesWithDimensions = ["AD", "ID", "TD"];
 for (const res of resourcesWithDimensions) {
   for (const prop of getProps(res)) GameDatabase.multiplierTabTree[prop] = [append8(prop)];
   for (let dim = 1; dim <= 8; dim++) GameDatabase.multiplierTabTree[`${res}_total_${dim}`] = [getProps(res, dim)];
+}
+
+// A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
+// entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
+const removedProps = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_infinityPower", "ID_replicanti",
+  "ID_infinityChallenge", "TD_achievement"];
+for (const prop of removedProps) {
+  GameDatabase.multiplierTabTree[prop] = undefined;
 }

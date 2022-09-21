@@ -113,8 +113,7 @@ GameDatabase.tabs = [
       {
         key: "multipliers",
         name: "Multiplier Breakdown",
-        // TODO change this icon
-        symbol: "<i class='fas fa-list-ol'></i>",
+        symbol: "<i class='fas fa-calculator'></i>",
         component: "MultiplierBreakdownTab",
         condition: () => PlayerProgress.infinityUnlocked(),
         id: 3,

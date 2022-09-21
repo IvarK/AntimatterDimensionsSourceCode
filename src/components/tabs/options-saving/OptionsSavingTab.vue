@@ -76,7 +76,7 @@ export default {
         <OptionsButton
           class="o-primary-btn--option_font-x-large"
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
-          @click="GameStorage.export()"
+          onclick="GameStorage.export()"
         >
           Export save
         </OptionsButton>

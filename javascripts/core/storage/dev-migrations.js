@@ -1444,7 +1444,21 @@ GameStorage.devMigrations = {
       delete player.options.sidebarMinimized;
       delete player.options.chart;
       delete player.devMode;
-    }
+    },
+    player => {
+      const swap1 = player.achievementBits[10] & 4;
+      const swap2 = player.achievementBits[11] & 8;
+      if (swap1) {
+        player.achievementBits[11] |= 8;
+      } else {
+        player.achievementBits[11] &= ~8;
+      }
+      if (swap2) {
+        player.achievementBits[10] |= 4;
+      } else {
+        player.achievementBits[10] &= ~4;
+      }
+    },
   ],
 
   patch(player) {

@@ -522,8 +522,8 @@ GameDatabase.achievements.normal = [
   {
     id: 78,
     name: "Blink of an eye",
-    get description() { return `Get to Infinity in under ${formatInt(200)} milliseconds.`; },
-    checkRequirement: () => Time.thisInfinityRealTime.totalMilliseconds <= 200,
+    get description() { return `Infinity in under ${formatInt(250)}ms.`; },
+    checkRequirement: () => Time.thisInfinityRealTime.totalMilliseconds <= 250,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() {
       return `Start with ${format(5e25)} antimatter.`;
@@ -782,18 +782,12 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 113,
-    name: "Long lasting relationship",
-    get description() {
-      return `Have your Infinity Power per second exceed your Infinity Power
-      for ${formatInt(60)} consecutive seconds during a single Infinity.`;
-    },
-    checkRequirement: () => AchievementTimers.marathon2
-      .check(
-        !EternityChallenge(7).isRunning &&
-        InfinityDimension(1).productionPerSecond.gt(Currency.infinityPower.value),
-        60
-      ),
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+    name: "Eternities are the new infinity",
+    get description() { return `Eternity in under ${formatInt(250)}ms.`; },
+    checkRequirement: () => Time.thisEternity.totalMilliseconds <= 250,
+    checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
+    get reward() { return `Gain ${formatX(2)} more Eternities.`; },
+    effect: 2,
   },
   {
     id: 114,
@@ -863,10 +857,18 @@ GameDatabase.achievements.normal = [
   },
   {
     id: 124,
-    name: "Eternities are the new infinity",
-    get description() { return `Eternity in under ${formatInt(200)}ms.`; },
-    checkRequirement: () => Time.thisEternity.totalMilliseconds <= 200,
-    checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE
+    name: "Long lasting relationship",
+    get description() {
+      return `Have your Infinity Power per second exceed your Infinity Power
+      for ${formatInt(60)} consecutive seconds during a single Infinity.`;
+    },
+    checkRequirement: () => AchievementTimers.marathon2
+      .check(
+        !EternityChallenge(7).isRunning &&
+        InfinityDimension(1).productionPerSecond.gt(Currency.infinityPower.value),
+        60
+      ),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
     id: 125,

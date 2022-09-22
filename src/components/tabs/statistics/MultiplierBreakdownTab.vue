@@ -12,7 +12,7 @@ export default {
     };
   },
   computed: {
-    options: () => ["AD", "ID", "TD", "IP", "EP", "tickspeed"],
+    options: () => ["AM", "AD", "ID", "TD", "IP", "EP", "tickspeed"],
     resourceName() {
       return GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.name();
     },
@@ -22,7 +22,10 @@ export default {
   },
   methods: {
     changeResource() {
-      this.currentOption = (this.currentOption + 1) % this.options.length;
+      do {
+        this.currentOption = (this.currentOption + 1) % this.options.length;
+        this.$recompute("resourceKey");
+      } while (!GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.isActive());
     },
   }
 };

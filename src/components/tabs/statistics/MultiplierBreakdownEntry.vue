@@ -59,7 +59,8 @@ export default {
       if (!dbAttr) return null;
       return args.length < 3
         ? dbAttr()
-        : dbAttr(...args.slice(2).map(a => Number(a)));
+        // Arguments can potentially be Numbers or Strings, so we cast the ones which are Numbers
+        : dbAttr(...args.slice(2).map(a => (a.match("^\\d+$") ? Number(a) : a)));
     },
 
     styleObject(index) {

@@ -2,82 +2,7 @@ import { DC } from "../../../core/constants";
 import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../app/player-progress";
 
-// Helper method for counting enabled dimensions
-function activeDimCount(type) {
-  switch (type) {
-    case "antimatter":
-      return AntimatterDimensions.all.filter(ad => ad.isProducing).length;
-    case "infinity":
-      return InfinityDimensions.all.filter(id => id.isProducing).length;
-    case "time":
-      return TimeDimensions.all.filter(td => td.isProducing).length;
-    default:
-      throw new Error("Unrecognized Dimension type in Multiplier tab GameDB entry");
-  }
-}
-
-// Helper method for galaxy strength multipliers affecting all galaxy types (this is used a large number of times)
-function globalGalaxyMult() {
-  return Effects.product(
-    InfinityUpgrade.galaxyBoost,
-    InfinityUpgrade.galaxyBoost.chargedEffect,
-    BreakInfinityUpgrade.galaxyBoost,
-    TimeStudy(212),
-    TimeStudy(232),
-    Achievement(86),
-    Achievement(178),
-    InfinityChallenge(5).reward,
-    PelleUpgrade.galaxyPower,
-    PelleRifts.decay.milestones[1]
-  );
-}
-
-// Helper method for galaxies and tickspeed, broken up as contributions of tickspeed*log(perGalaxy) and galaxyCount to
-// their product, which is proportional to log(tickspeed)
-function decomposeTickspeed() {
-  let effectiveCount = effectiveBaseGalaxies();
-  const effects = globalGalaxyMult();
-
-  let galFrac, tickFrac;
-  if (effectiveCount < 3) {
-    let baseMult = 1.1245;
-    if (player.galaxies === 1) baseMult = 1.11888888;
-    if (player.galaxies === 2) baseMult = 1.11267177;
-    if (NormalChallenge(5).isRunning) {
-      baseMult = 1.08;
-      if (player.galaxies === 1) baseMult = 1.07632;
-      if (player.galaxies === 2) baseMult = 1.072;
-    }
-    // This is needed for numerical consistency with the other conditional case
-    baseMult /= 0.965 ** 2;
-    const logBase = Math.log10(baseMult);
-
-    const perGalaxy = 0.02 * effects;
-    effectiveCount *= Pelle.specialGlyphEffect.power;
-
-    tickFrac = Tickspeed.totalUpgrades * logBase;
-    galFrac = -Math.log10(Math.max(0.01, 1 / baseMult - (effectiveCount * perGalaxy))) / logBase;
-  } else {
-    effectiveCount -= 2;
-    effectiveCount *= effects;
-    effectiveCount *= getAdjustedGlyphEffect("realitygalaxies") * (1 + ImaginaryUpgrade(9).effectOrDefault(0));
-    effectiveCount *= Pelle.specialGlyphEffect.power;
-
-    // These all need to be framed as INCREASING x/sec tick rate (ie. all multipliers > 1, all logs > 0)
-    const baseMult = 0.965 ** 2 / (NormalChallenge(5).isRunning ? 0.83 : 0.8);
-    const logBase = Math.log10(baseMult);
-    const logPerGalaxy = -DC.D0_965.log10();
-
-    tickFrac = Tickspeed.totalUpgrades * logBase;
-    galFrac = (1 + effectiveCount / logBase * logPerGalaxy);
-  }
-
-  const sum = tickFrac + galFrac;
-  return {
-    tickspeed: tickFrac / sum,
-    galaxies: galFrac / sum,
-  };
-}
+import { MultiplierTabHelper } from "./helper-functions";
 
 /**
  * Scope structure for props is MAIN_RESOURCE.RESOURCE_COMPONENT and all fields must be functions which may or
@@ -96,6 +21,21 @@ function decomposeTickspeed() {
  * }
  */
 GameDatabase.multiplierTabValues = {
+  AM: {
+    total: {
+      name: () => "Antimatter Production",
+      multValue: () => {
+        const totalMult = AntimatterDimensions.all
+          .filter(ad => ad.isProducing)
+          .map(ad => ad.multiplier)
+          .reduce((x, y) => x.times(y), DC.D1);
+        const totalTickspeed = Tickspeed.perSecond.pow(MultiplierTabHelper.activeDimCount("AD"));
+        return totalMult.times(totalTickspeed);
+      },
+      isActive: () => AntimatterDimension(1).isProducing,
+    }
+  },
+
   AD: {
     total: {
       name: dim => (dim ? `Total AD ${dim} Multiplier` : "All AD Multipliers"),
@@ -179,7 +119,7 @@ GameDatabase.multiplierTabValues = {
 
         if (dim) return allMult.times(dimMults[dim]);
         let totalMult = DC.D1;
-        for (let tier = 1; tier <= activeDimCount("antimatter"); tier++) {
+        for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount("AD"); tier++) {
           totalMult = totalMult.times(dimMults[tier]).times(allMult);
         }
         return totalMult;
@@ -211,7 +151,7 @@ GameDatabase.multiplierTabValues = {
 
         if (dim) return allMult.times(dimMults[dim]);
         let totalMult = DC.D1;
-        for (let tier = 1; tier <= activeDimCount("antimatter"); tier++) {
+        for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount("AD"); tier++) {
           totalMult = totalMult.times(dimMults[tier]).times(allMult);
         }
         return totalMult;
@@ -229,7 +169,8 @@ GameDatabase.multiplierTabValues = {
         // This isn't entirely accurate because you can't return a power for all ADs if only some of them actually have
         // it, so we cheat somewhat by returning the geometric mean of all actively producing dimensions (this should
         // be close to the same value if all the base multipliers are similar in magnitude)
-        return allPow * Math.exp(dimPow.slice(1).map(n => Math.log(n)).sum() / activeDimCount("antimatter"));
+        return allPow * Math.exp(dimPow.slice(1)
+          .map(n => Math.log(n)).sum() / MultiplierTabHelper.activeDimCount("AD"));
       },
       isActive: () => PlayerProgress.infinityUnlocked(),
       color: () => "var(--color-infinity)",
@@ -244,7 +185,7 @@ GameDatabase.multiplierTabValues = {
           BreakInfinityUpgrade.slowestChallengeMult,
           BreakInfinityUpgrade.infinitiedMult
         );
-        return Decimal.pow(mult, dim ? 1 : activeDimCount("antimatter"));
+        return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
       },
       isActive: () => player.break,
       color: () => "var(--color-infinity)",
@@ -253,7 +194,7 @@ GameDatabase.multiplierTabValues = {
       name: dim => (dim ? `AD ${dim} from Infinity Power` : "Total from Infinity Power"),
       multValue: dim => {
         const mult = Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1);
-        return Decimal.pow(mult, dim ? 1 : activeDimCount("antimatter"));
+        return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
       },
       isActive: () => Currency.infinityPower.value.gt(1) && !EternityChallenge(9).isRunning,
       color: () => "var(--color-infinity)",
@@ -275,7 +216,7 @@ GameDatabase.multiplierTabValues = {
 
         if (dim) return allMult.times(dimMults[dim]);
         let totalMult = DC.D1;
-        for (let tier = 1; tier <= activeDimCount("antimatter"); tier++) {
+        for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount("AD"); tier++) {
           totalMult = totalMult.times(dimMults[tier]).times(allMult);
         }
         return totalMult;
@@ -317,7 +258,7 @@ GameDatabase.multiplierTabValues = {
 
         if (dim) return allMult.times(dimMults[dim]);
         let totalMult = DC.D1;
-        for (let tier = 1; tier <= activeDimCount("antimatter"); tier++) {
+        for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount("AD"); tier++) {
           totalMult = totalMult.times(dimMults[tier]).times(allMult);
         }
         return totalMult;
@@ -327,7 +268,8 @@ GameDatabase.multiplierTabValues = {
     },
     eternityChallenge: {
       name: dim => (dim ? `AD ${dim} from Eternity Challenges` : "Total from Eternity Challenges"),
-      multValue: dim => Decimal.pow(EternityChallenge(10).effectValue, dim ? 1 : activeDimCount("antimatter")),
+      multValue: dim => Decimal.pow(EternityChallenge(10).effectValue,
+        dim ? 1 : MultiplierTabHelper.activeDimCount("AD")),
       isActive: () => EternityChallenge(10).isRunning,
       color: () => "var(--color-eternity)",
     },
@@ -335,7 +277,7 @@ GameDatabase.multiplierTabValues = {
       name: dim => (dim ? `AD ${dim} from Glyph Effects` : "Total from Glyph Effects"),
       multValue: dim => {
         const mult = getAdjustedGlyphEffect("powermult");
-        return Decimal.pow(mult, dim ? 1 : activeDimCount("antimatter"));
+        return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
       },
       powValue: () => getAdjustedGlyphEffect("powerpow") * getAdjustedGlyphEffect("effarigdimensions"),
       isActive: () => PlayerProgress.realityUnlocked(),
@@ -346,7 +288,7 @@ GameDatabase.multiplierTabValues = {
       multValue: dim => {
         const mult = AlchemyResource.dimensionality.effectOrDefault(1)
           .times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));
-        return Decimal.pow(mult, dim ? 1 : activeDimCount("antimatter"));
+        return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
       },
       powValue: () => AlchemyResource.power.effectOrDefault(1) * Ra.momentumValue,
       isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
@@ -356,7 +298,7 @@ GameDatabase.multiplierTabValues = {
       name: dim => (dim ? `AD ${dim} from Other sources` : "Total from Other sources"),
       multValue: dim => {
         const mult = ShopPurchase.dimPurchases.currentMult * ShopPurchase.allDimPurchases.currentMult;
-        return Decimal.pow(mult, dim ? 1 : activeDimCount("antimatter"));
+        return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
       },
       powValue: () => VUnlocks.adPow.effectOrDefault(1) * PelleRifts.paradox.effectOrDefault(1),
       isActive: () => player.IAP.totalSTD > 0 || PlayerProgress.realityUnlocked(),
@@ -391,7 +333,7 @@ GameDatabase.multiplierTabValues = {
     },
     replicanti: {
       name: dim => (dim ? `ID ${dim} from Replicanti` : "Total from Replicanti"),
-      multValue: dim => Decimal.pow(replicantiMult(), dim ? 1 : activeDimCount("infinity")),
+      multValue: dim => Decimal.pow(replicantiMult(), dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
       isActive: () => Replicanti.areUnlocked,
       color: () => GameDatabase.reality.glyphTypes.replication.color,
     },
@@ -400,7 +342,7 @@ GameDatabase.multiplierTabValues = {
       multValue: dim => {
         const baseMult = new Decimal(Achievement(75).effectOrDefault(1));
         if (dim) return dim === 1 ? baseMult.times(Achievement(94).effectOrDefault(1)) : baseMult;
-        const maxActiveDim = activeDimCount("infinity");
+        const maxActiveDim = MultiplierTabHelper.activeDimCount("ID");
         return Decimal.pow(baseMult, maxActiveDim).times(maxActiveDim > 0 ? Achievement(94).effectOrDefault(1) : DC.D1);
       },
       isActive: () => Achievement(75).canBeApplied,
@@ -420,7 +362,7 @@ GameDatabase.multiplierTabValues = {
           EternityUpgrade.idMultICRecords,
         );
         if (dim) return dim === 4 ? allMult.times(TimeStudy(72).effectOrDefault(1)) : allMult;
-        const maxActiveDim = activeDimCount("infinity");
+        const maxActiveDim = MultiplierTabHelper.activeDimCount("ID");
         return Decimal.pow(allMult, maxActiveDim).times(maxActiveDim >= 4 ? TimeStudy(72).effectOrDefault(1) : DC.D1);
       },
       isActive: () => Achievement(75).canBeApplied,
@@ -433,7 +375,7 @@ GameDatabase.multiplierTabValues = {
           InfinityChallenge(1).reward,
           InfinityChallenge(6).reward,
         );
-        return Decimal.pow(allMult, dim ? 1 : activeDimCount("infinity"));
+        return Decimal.pow(allMult, dim ? 1 : MultiplierTabHelper.activeDimCount("ID"));
       },
       isActive: () => InfinityChallenge(1).isCompleted,
       color: () => "var(--color-infinity)",
@@ -446,7 +388,7 @@ GameDatabase.multiplierTabValues = {
           EternityChallenge(9).reward,
         );
         if (dim) return dim === 1 ? allMult.times(EternityChallenge(2).reward.effectOrDefault(1)) : allMult;
-        const maxActiveDim = activeDimCount("infinity");
+        const maxActiveDim = MultiplierTabHelper.activeDimCount("ID");
         return Decimal.pow(allMult, maxActiveDim)
           .times(maxActiveDim >= 1 ? EternityChallenge(2).reward.effectOrDefault(1) : DC.D1);
       },
@@ -469,7 +411,7 @@ GameDatabase.multiplierTabValues = {
           AlchemyResource.dimensionality,
           ImaginaryUpgrade(8),
         );
-        return Decimal.pow(mult, dim ? 1 : activeDimCount("infinity"));
+        return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("ID"));
       },
       powValue: () => AlchemyResource.infinity.effectOrDefault(1) * Ra.momentumValue,
       isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
@@ -481,7 +423,7 @@ GameDatabase.multiplierTabValues = {
         const mult = new Decimal(ShopPurchase.allDimPurchases.currentMult).timesEffectsOf(
           PelleRifts.recursion.milestones[1]
         );
-        const maxActiveDim = activeDimCount("infinity");
+        const maxActiveDim = MultiplierTabHelper.activeDimCount("ID");
         return Decimal.pow(mult, dim ? 1 : maxActiveDim)
           .times(maxActiveDim >= 1 ? PelleRifts.decay.milestones[0].effectOrDefault(1) : DC.D1);
       },
@@ -527,7 +469,7 @@ GameDatabase.multiplierTabValues = {
           Achievement(128),
           EternityUpgrade.tdMultAchs,
         );
-        return Decimal.pow(baseMult, dim ? 1 : activeDimCount("time"));
+        return Decimal.pow(baseMult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
       },
       isActive: () => Achievement(75).canBeApplied,
       color: () => "var(--color-v--base)",
@@ -558,7 +500,7 @@ GameDatabase.multiplierTabValues = {
 
         if (dim) return allMult.times(dimMults[dim]);
         let totalMult = DC.D1;
-        for (let tier = 1; tier <= activeDimCount("time"); tier++) {
+        for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount("TD"); tier++) {
           totalMult = totalMult.times(dimMults[tier]).times(allMult);
         }
         return totalMult;
@@ -578,7 +520,7 @@ GameDatabase.multiplierTabValues = {
             Decimal.pow(Math.clampMin(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate / 7)
               .log2(), 1), 4).clampMin(1));
         }
-        return Decimal.pow(allMult, dim ? 1 : activeDimCount("time"));
+        return Decimal.pow(allMult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
       },
       isActive: () => EternityChallenge(1).isCompleted,
       color: () => "var(--color-eternity)",
@@ -599,7 +541,7 @@ GameDatabase.multiplierTabValues = {
           AlchemyResource.dimensionality,
           ImaginaryUpgrade(11),
         );
-        return Decimal.pow(mult, dim ? 1 : activeDimCount("time"));
+        return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
       },
       powValue: () => AlchemyResource.time.effectOrDefault(1) * Ra.momentumValue,
       isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
@@ -613,7 +555,7 @@ GameDatabase.multiplierTabValues = {
           Pelle.isDoomed ? null : RealityUpgrade(22),
           PelleRifts.chaos
         );
-        const maxActiveDim = activeDimCount("time");
+        const maxActiveDim = MultiplierTabHelper.activeDimCount("TD");
         return Decimal.pow(mult, dim ? 1 : maxActiveDim);
       },
       powValue: () => PelleRifts.paradox.effectOrDefault(1),
@@ -754,14 +696,20 @@ GameDatabase.multiplierTabValues = {
   tickspeed: {
     total: {
       name: () => "Total Tickspeed",
-      isBase: () => true,
-      multValue: () => Tickspeed.perSecond,
+      displayOverride: () => {
+        const tickRate = Tickspeed.perSecond;
+        const activeDims = MultiplierTabHelper.activeDimCount("AD");
+        return `${format(tickRate, 2, 2)}/sec on ${formatInt(activeDims)} ${pluralize("Dimension", activeDims)}
+          ➜ ${formatX(tickRate.pow(activeDims), 2, 2)}`;
+      },
+      multValue: () => Tickspeed.perSecond.pow(MultiplierTabHelper.activeDimCount("AD")),
       isActive: () => true,
+      color: () => "var(--color-eternity)",
     },
     upgrades: {
       name: () => "Tickspeed Upgrades",
       displayOverride: () => `${formatInt(Tickspeed.totalUpgrades)} Total`,
-      multValue: () => new Decimal.pow10(1e10 * decomposeTickspeed().tickspeed),
+      multValue: () => new Decimal.pow10(1e10 * MultiplierTabHelper.decomposeTickspeed().tickspeed),
       isActive: () => true,
       color: () => GameDatabase.reality.glyphTypes.power.color,
     },
@@ -773,7 +721,7 @@ GameDatabase.multiplierTabValues = {
         const tg = player.dilation.totalTachyonGalaxies;
         return `${formatInt(ag + rg + tg)} Total`;
       },
-      multValue: () => new Decimal.pow10(1e10 * decomposeTickspeed().galaxies),
+      multValue: () => new Decimal.pow10(1e10 * MultiplierTabHelper.decomposeTickspeed().galaxies),
       isActive: () => true,
       color: () => "var(--color-eternity)",
     },
@@ -805,7 +753,7 @@ GameDatabase.multiplierTabValues = {
       name: () => "Antimatter Galaxies",
       displayOverride: () => {
         const num = player.galaxies + GalaxyGenerator.galaxies;
-        const mult = globalGalaxyMult();
+        const mult = MultiplierTabHelper.globalGalaxyMult();
         return `${formatInt(num)}, ${formatX(mult, 2, 2)} strength`;
       },
       multValue: () => Decimal.pow10(player.galaxies + GalaxyGenerator.galaxies),
@@ -821,7 +769,7 @@ GameDatabase.multiplierTabValues = {
         rg += Replicanti.galaxies.extra;
         rg += Math.min(Replicanti.galaxies.bought, ReplicantiUpgrade.galaxies.value) *
           Effects.sum(EternityChallenge(8).reward);
-        const mult = rg / Math.clampMin(num, 1) * globalGalaxyMult();
+        const mult = rg / Math.clampMin(num, 1) * MultiplierTabHelper.globalGalaxyMult();
         return `${formatInt(num)}, ${formatX(mult, 2, 2)} strength`;
       },
       multValue: () => {
@@ -839,7 +787,7 @@ GameDatabase.multiplierTabValues = {
       name: () => "Tachyon Galaxies",
       displayOverride: () => {
         const num = player.dilation.totalTachyonGalaxies;
-        const mult = globalGalaxyMult() *
+        const mult = MultiplierTabHelper.globalGalaxyMult() *
           (1 + Math.max(0, Replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue);
         return `${formatInt(num)}, ${formatX(mult, 2, 2)} strength`;
       },
@@ -850,6 +798,51 @@ GameDatabase.multiplierTabValues = {
       },
       isActive: () => player.dilation.totalTachyonGalaxies > 0,
       color: () => "var(--color-dilation)",
+    },
+  },
+
+  general: {
+    achievement: {
+      name: (ach, dim) => (dim.length === 2
+        ? `Achievement ${ach} on all ${dim}`
+        : `Achievement ${ach}`),
+      multValue: (ach, dim) => {
+        if (dim.length === 2) {
+          let totalEffect = DC.D1;
+          for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
+            let singleEffect;
+            if (ach === 43) singleEffect = Achievement(43).canBeApplied ? (1 + tier / 100) : 1;
+            else singleEffect = (MultiplierTabHelper.achievementDimCheck(ach, `${dim}${tier}`) &&
+              Achievement(ach).canBeApplied) ? Achievement(ach).effectOrDefault(1) : 1;
+            totalEffect = totalEffect.times(singleEffect);
+          }
+          return totalEffect;
+        }
+        if (ach === 43) return Achievement(43).canBeApplied ? (1 + Number(dim.charAt(2)) / 100) : 1;
+        return (MultiplierTabHelper.achievementDimCheck(ach, dim) && Achievement(ach).canBeApplied)
+          ? Achievement(ach).effectOrDefault(1) : 1;
+      },
+      isActive: ach => Achievement(ach).canBeApplied,
+      color: () => "var(--color-v--base)",
+    },
+    timeStudy: {
+      name: ts => `Time Study ${ts}`,
+      multValue: (ts, dim) => {
+        if (dim.length === 2) {
+          let totalEffect = DC.D1;
+          for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
+            totalEffect = totalEffect.times((MultiplierTabHelper.timeStudyDimCheck(ts, `${dim}${tier}`) &&
+              TimeStudy(ts).isBought) ? TimeStudy(ts).effectOrDefault(1) : 1);
+          }
+          return totalEffect;
+        }
+        // The new Decimal() wrapper is necessary because, for some inexplicable reason, replicanti becomes
+        // reactive through TS101 if that isn't there
+        return (MultiplierTabHelper.timeStudyDimCheck(ts, dim) && TimeStudy(ts).isBought)
+          ? new Decimal(TimeStudy(ts).effectOrDefault(1)) : 1;
+      },
+      isActive: ts => TimeStudy(ts).isBought,
+      color: () => "var(--color-eternity)",
     }
   }
 };

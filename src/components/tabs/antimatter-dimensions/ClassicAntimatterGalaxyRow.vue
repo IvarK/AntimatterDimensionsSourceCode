@@ -20,6 +20,7 @@ export default {
       },
       canBeBought: false,
       distantStart: 0,
+      remoteStart: 0,
       lockText: null,
       canBulkBuy: false,
       creditsClosed: false,
@@ -65,10 +66,15 @@ export default {
       switch (this.type) {
         case GALAXY_TYPE.DISTANT:
           return `Each Galaxy is more expensive past ${quantifyInt("Galaxy", this.distantStart)}`;
-        case GALAXY_TYPE.REMOTE:
-          return "Increased Galaxy cost scaling: " +
-            `Quadratic past ${this.scalingText.distant ?? formatInt(this.distantStart)} (distant),
-              exponential past ${this.scalingText.remote ?? formatInt(Galaxy.remoteStart)} (remote)`;
+        case GALAXY_TYPE.REMOTE: {
+          const scalings = [
+            { type: "distant", function: "quadratic", amount: this.distantStart },
+            { type: "remote", function: "exponential", amount: this.remoteStart }
+          ];
+          return `Increased Galaxy cost scaling: ${scalings.sort((a, b) => a.amount - b.amount)
+            .map(scaling => `${scaling.function} scaling ${this.formatGalaxies(scaling.amount)} (${scaling.type})`)
+            .join(", ").capitalize()}`;
+        }
       }
       return undefined;
     },
@@ -91,15 +97,10 @@ export default {
       this.requirement.tier = requirement.tier;
       this.canBeBought = requirement.isSatisfied && Galaxy.canBeBought;
       this.distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
+      this.remoteStart = Galaxy.remoteStart;
       this.lockText = Galaxy.lockText;
       this.canBulkBuy = EternityMilestone.autobuyMaxGalaxies.isReached;
       this.creditsClosed = GameEnd.creditsEverClosed;
-      if (this.isDoomed) {
-        this.scalingText = {
-          distant: this.formatGalaxies(this.distantStart),
-          remote: this.formatGalaxies(Galaxy.remoteStart),
-        };
-      }
       this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.GALAXY);
     },
     buyGalaxy(bulk) {

@@ -31,7 +31,8 @@ export default {
   methods: {
     update() {
       this.currentGroupKeys = this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
-      this.baseMultList = this.currentGroupKeys.map(key => this.getProp(key, "multValue")?.clampMin(1) ?? DC.D1);
+      this.baseMultList = this.currentGroupKeys
+        .map(key => Decimal.max(this.getProp(key, "multValue") ?? 1, 1));
       this.powList = this.currentGroupKeys.map(key => this.getProp(key, "powValue") ?? 1);
       this.calculatePercents();
     },
@@ -40,7 +41,7 @@ export default {
       this.showGroup = Array.repeat(false, this.currentGroupKeys.length);
     },
     calculatePercents() {
-      const totalBaseMult = this.baseMultList.reduce((x, y) => x.times(y), DC.D1);
+      const totalBaseMult = this.baseMultList.reduce((x, y) => Decimal.multiply(x, y), DC.D1);
       const totalPow = this.powList.reduce((x, y) => x * y, 1);
       this.isEmpty = totalBaseMult.eq(1);
       this.percentList = [];
@@ -60,6 +61,7 @@ export default {
         ? dbAttr()
         : dbAttr(...args.slice(2).map(a => Number(a)));
     },
+
     styleObject(index) {
       return {
         position: "absolute",
@@ -76,8 +78,13 @@ export default {
         "c-single-entry-highlight": this.mouseoverIndex === index,
       };
     },
+
+    hasChildComp(key) {
+      const dbEntry = this.treeDB[key];
+      return dbEntry && dbEntry[0].filter(k => this.getProp(k, "isActive")).length > 1;
+    },
     hideIcon(index) {
-      if (!this.treeDB[this.currentGroupKeys[index]]) return "c-no-icon";
+      if (!this.hasChildComp(this.currentGroupKeys[index])) return "c-no-icon";
       return this.showGroup[index] ? "far fa-minus-square" : "far fa-plus-square";
     },
     entryString(index) {
@@ -90,15 +97,30 @@ export default {
       else percString = formatPercents(this.percentList[index], 1);
 
       // Display both multiplier and powers, but make sure to give an empty string if there's neither
-      const values = [];
-      const formatFn = this.getProp(this.currentGroupKeys[index], "isBase")
-        ? x => format(x, 2, 2)
-        : x => formatX(x, 2, 2);
-      if (this.baseMultList[index].neq(1)) values.push(formatFn(this.baseMultList[index]));
-      if (this.powList[index] !== 1) values.push(formatPow(this.powList[index], 2, 3));
-      const valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
+      const overrideStr = this.getProp(this.currentGroupKeys[index], "displayOverride");
+      let valueStr;
+      if (overrideStr) valueStr = `(${overrideStr})`;
+      else {
+        const values = [];
+        const formatFn = this.getProp(this.currentGroupKeys[index], "isBase")
+          ? x => format(x, 2, 2)
+          : x => formatX(x, 2, 2);
+        if (Decimal.neq(this.baseMultList[index], 1)) values.push(formatFn(this.baseMultList[index]));
+        if (this.powList[index] !== 1) values.push(formatPow(this.powList[index], 2, 3));
+        valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
+      }
 
       return `${percString}: ${this.getProp(this.currentGroupKeys[index], "name")} ${valueStr}`;
+    },
+    totalString() {
+      const name = this.getProp(this.resource, "name");
+      const overrideStr = this.getProp(this.resource, "displayOverride");
+      if (overrideStr) return `${name}: ${overrideStr}`;
+
+      const val = this.getProp(this.resource, "multValue");
+      const baseProp = this.getProp(this.resource, "isBase");
+      if (baseProp) return `Total value for ${name}: ${format(val, 2, 2)}`;
+      return `Total multiplier for ${name}: ${formatX(val, 2, 2)}`;
     }
   },
 };
@@ -123,11 +145,8 @@ export default {
     <div />
     <div class="c-info-list">
       <div class="c-total-mult">
-        <b v-if="getProp(resource, 'isBase')">
-          {{ getProp(resource, "name") }}: {{ format(getProp(resource, "multValue")) }}
-        </b>
-        <b v-else>
-          Total Multiplier for {{ getProp(resource, "name") }}: {{ formatX(getProp(resource, "multValue")) }}
+        <b>
+          {{ totalString() }}
         </b>
         <span
           v-if="groups.length > 1"
@@ -156,7 +175,7 @@ export default {
           {{ entryString(index) }}
         </div>
         <MultiplierBreakdownEntry
-          v-if="showGroup[index] && treeDB[key]"
+          v-if="showGroup[index] && hasChildComp(key)"
           :resource="key"
         />
       </div>

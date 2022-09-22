@@ -49,7 +49,16 @@ GameDatabase.multiplierTabTree = {
   ],
   EP_total: [
     getProps("EP")
-  ]
+  ],
+  tickspeed_total: [
+    ["tickspeed_upgrades", "tickspeed_galaxies"]
+  ],
+  tickspeed_upgrades: [
+    ["tickspeedUpgrades_purchased", "tickspeedUpgrades_free"]
+  ],
+  tickspeed_galaxies: [
+    ["galaxies_antimatter", "galaxies_replicanti", "galaxies_tachyon"]
+  ],
 };
 
 // Dynamically generate all values from existing values, but broken down by dimension

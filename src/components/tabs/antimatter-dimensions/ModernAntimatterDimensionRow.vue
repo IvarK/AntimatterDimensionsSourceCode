@@ -59,7 +59,7 @@ export default {
     buttonPrefix() {
       if (this.isCapped) return "Shattered by Nameless";
       if (this.isContinuumActive) return "Continuum: ";
-      return `Buy ${this.howManyCanBuy}, `;
+      return `Buy ${this.howManyCanBuy}`;
     },
     buttonValue() {
       if (this.isCapped) return "";

@@ -331,6 +331,44 @@ GameDatabase.multiplierTabValues = {
       isActive: () => !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning,
       color: () => "var(--color-infinity)",
     },
+
+    basePurchase: {
+      name: dim => (dim ? `Multiplier from capped purchases` : "Total Multiplier from capped purchases"),
+      multValue: dim => {
+        const getMult = id => {
+          const purchases = id === 8
+            ? Math.floor(InfinityDimension(id).baseAmount / 10)
+            : Math.min(InfinityDimensions.HARDCAP_PURCHASES, Math.floor(InfinityDimension(id).baseAmount / 10));
+          return Decimal.pow(InfinityDimension(id).powerMultiplier, purchases);
+        };
+        if (dim) return getMult(dim);
+        return InfinityDimensions.all
+          .filter(id => id.isProducing)
+          .map(id => getMult(id.tier))
+          .reduce((x, y) => x.times(y), DC.D1);
+      },
+      isActive: dim => dim !== 8 && Tesseracts.bought > 0,
+      color: () => "var(--color-infinity)",
+    },
+    tesseractPurchase: {
+      name: dim => (dim ? "Extra multiplier from Tesseracts" : "Total extra multiplier from Tesseracts"),
+      multValue: dim => {
+        const getMult = id => {
+          if (id === 8) return DC.D1;
+          const purchases = Math.floor(InfinityDimension(id).baseAmount / 10);
+          return Decimal.pow(InfinityDimension(id).powerMultiplier,
+            Math.clampMin(purchases - InfinityDimensions.HARDCAP_PURCHASES, 0));
+        };
+        if (dim) return getMult(dim);
+        return InfinityDimensions.all
+          .filter(id => id.isProducing)
+          .map(id => getMult(id.tier))
+          .reduce((x, y) => x.times(y), DC.D1);
+      },
+      isActive: dim => dim !== 8 && Tesseracts.bought > 0,
+      color: () => "var(--color-enslaved--base)",
+    },
+
     replicanti: {
       name: dim => (dim ? `ID ${dim} from Replicanti` : "Total from Replicanti"),
       multValue: dim => Decimal.pow(replicantiMult(), dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
@@ -430,6 +468,12 @@ GameDatabase.multiplierTabValues = {
       powValue: () => PelleRifts.paradox.effectOrDefault(1),
       isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
     },
+    powerConversion: {
+      name: () => "Infinity Power Conversion",
+      powValue: () => InfinityDimensions.powerConversionRate,
+      isActive: () => Currency.infinityPower.value.gt(1) && !EternityChallenge(9).isRunning,
+      color: () => "var(--color-infinity)",
+    }
   },
 
   TD: {
@@ -584,6 +628,24 @@ GameDatabase.multiplierTabValues = {
       isActive: () => player.break,
       color: () => "var(--color-infinity)",
     },
+    antimatter: {
+      name: () => "Infinity Points from Antimatter",
+      displayOverride: () => `${format(player.records.thisInfinity.maxAM, 2, 2)} AM`,
+      // This just needs to be larger than 1 to make sure it's visible, the math is handled in powValue for divisor
+      multValue: () => 10,
+      isActive: () => player.break,
+      color: () => "var(--color-infinity)",
+    },
+    divisor: {
+      name: () => "Formula Improvement",
+      displayOverride: () => {
+        const div = Effects.min(308, Achievement(103), TimeStudy(111));
+        return `log(AM)/${formatInt(308)} ➜ log(AM)/${format(div, 2, 1)}`;
+      },
+      powValue: () => 308 / Effects.min(308, Achievement(103), TimeStudy(111)),
+      isActive: () => player.break,
+      color: () => "var(--color-infinity)",
+    },
     infinityUpgrade: {
       name: () => "Repeatable Infinity Upgrade",
       multValue: () => InfinityUpgrade.ipMult.effectOrDefault(1),
@@ -653,6 +715,24 @@ GameDatabase.multiplierTabValues = {
         gainedInfinityPoints()).log10() / (308 - PelleRifts.recursion.effectValue.toNumber()) - 0.7),
       isActive: () => PlayerProgress.eternityUnlocked(),
       color: () => "var(--color-eternity)",
+    },
+    IP: {
+      name: () => "Eternity Points from Infinity Points",
+      displayOverride: () => `${format(player.records.thisEternity.maxIP.plus(gainedInfinityPoints()), 2, 2)} IP`,
+      // This just needs to be larger than 1 to make sure it's visible, the math is handled in powValue for divisor
+      multValue: () => 10,
+      isActive: () => PlayerProgress.eternityUnlocked(),
+      color: () => "var(--color-eternity)",
+    },
+    divisor: {
+      name: () => "Formula Improvement",
+      displayOverride: () => {
+        const div = 308 - PelleRifts.recursion.effectValue.toNumber();
+        return `log(IP)/${formatInt(308)} ➜ log(IP)/${format(div, 2, 2)}`;
+      },
+      powValue: () => 308 / (308 - PelleRifts.recursion.effectValue.toNumber()),
+      isActive: () => PelleRifts.recursion.isActive,
+      color: () => "var(--color-pelle--base)",
     },
     eternityUpgrade: {
       name: () => "Repeatable Eternity Upgrade",
@@ -803,11 +883,11 @@ GameDatabase.multiplierTabValues = {
 
   general: {
     achievement: {
-      name: (ach, dim) => (dim.length === 2
+      name: (ach, dim) => (dim?.length === 2
         ? `Achievement ${ach} on all ${dim}`
         : `Achievement ${ach}`),
       multValue: (ach, dim) => {
-        if (dim.length === 2) {
+        if (dim?.length === 2) {
           let totalEffect = DC.D1;
           for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
             let singleEffect;
@@ -818,6 +898,10 @@ GameDatabase.multiplierTabValues = {
           }
           return totalEffect;
         }
+
+        // There is also a buy10 effect, but we don't track that in the multiplier tab
+        if (ach === 141) return Achievement(141).canBeApplied ? Achievement(141).effects.ipGain : 1;
+
         if (ach === 43) return Achievement(43).canBeApplied ? (1 + Number(dim.charAt(2)) / 100) : 1;
         return (MultiplierTabHelper.achievementDimCheck(ach, dim) && Achievement(ach).canBeApplied)
           ? Achievement(ach).effectOrDefault(1) : 1;
@@ -826,9 +910,11 @@ GameDatabase.multiplierTabValues = {
       color: () => "var(--color-v--base)",
     },
     timeStudy: {
-      name: ts => `Time Study ${ts}`,
+      name: (ts, dim) => (dim?.length === 2
+        ? `Time Study ${ts} on all ${dim}`
+        : `Time Study ${ts}`),
       multValue: (ts, dim) => {
-        if (dim.length === 2) {
+        if (dim?.length === 2) {
           let totalEffect = DC.D1;
           for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
             totalEffect = totalEffect.times((MultiplierTabHelper.timeStudyDimCheck(ts, `${dim}${tier}`) &&

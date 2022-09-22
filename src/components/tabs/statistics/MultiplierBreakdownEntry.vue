@@ -120,8 +120,8 @@ export default {
 
       const val = this.getProp(this.resource, "multValue");
       const baseProp = this.getProp(this.resource, "isBase");
-      if (baseProp) return `Total value for ${name}: ${format(val, 2, 2)}`;
-      return `Total multiplier for ${name}: ${formatX(val, 2, 2)}`;
+      if (baseProp) return `${name}: ${format(val, 2, 2)}`;
+      return `${name}: ${formatX(val, 2, 2)}`;
     }
   },
 };

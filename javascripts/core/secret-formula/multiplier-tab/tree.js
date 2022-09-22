@@ -52,8 +52,14 @@ GameDatabase.multiplierTabTree = {
   IP_total: [
     getProps("IP")
   ],
+  IP_base: [
+    ["IP_antimatter", "IP_divisor"]
+  ],
   EP_total: [
     getProps("EP")
+  ],
+  EP_base: [
+    ["EP_IP", "EP_divisor"]
   ],
   tickspeed_total: [
     ["tickspeed_upgrades", "tickspeed_galaxies"]
@@ -66,8 +72,27 @@ GameDatabase.multiplierTabTree = {
   ],
 };
 
-// Dynamically generate all values from existing values, but broken down by dimension
+// Additional data specification for dynamically-generated props
 const dimTypes = ["AD", "ID", "TD"];
+const singleRes = ["IP", "EP"];
+const targetedEffects = {
+  achievement: {
+    AD: [23, 28, 31, 34, 43, 56, 64, 65, 68, 71, 72, 73, 74, 76, 84, 91, 92],
+    ID: [75, 94],
+    TD: [105, 128],
+    IP: [85, 93, 116, 125, 141],
+    EP: [],
+  },
+  timeStudy: {
+    AD: [71, 91, 101, 161, 193, 214, 234],
+    ID: [72, 82, 92, 162],
+    TD: [11, 73, 93, 103, 151, 221, 227],
+    IP: [41, 51, 141, 142, 143],
+    EP: [61, 121, 122, 123],
+  }
+};
+
+// Dynamically generate all values from existing values, but broken down by dimension
 for (const res of dimTypes) {
   for (const prop of getProps(res)) GameDatabase.multiplierTabTree[prop] = [append8(prop)];
   for (let dim = 1; dim <= 8; dim++) GameDatabase.multiplierTabTree[`${res}_total_${dim}`] = [getProps(res, dim)];
@@ -75,25 +100,26 @@ for (const res of dimTypes) {
 
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
 // entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
-const removedProps = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_infinityPower", "ID_replicanti",
-  "ID_infinityChallenge", "TD_achievement"];
+const removedProps = ["AD_sacrifice", "AD_breakInfinityUpgrade", "ID_replicanti", "ID_infinityChallenge",
+  "TD_achievement"];
 for (const prop of removedProps) {
   GameDatabase.multiplierTabTree[prop] = undefined;
 }
 
-// Dynamically fill effects which only affect certain dimensions, based on a given specification
-const targetedEffects = {
-  achievement: {
-    AD: [23, 28, 31, 34, 43, 56, 64, 65, 68, 71, 72, 73, 74, 76, 84, 91, 92],
-    ID: [75, 94],
-    TD: [105, 128]
-  },
-  timeStudy: {
-    AD: [71, 91, 101, 161, 193, 214, 234],
-    ID: [72, 82, 92, 162],
-    TD: [11, 73, 93, 103, 151, 221, 227]
-  }
-};
+// We need to handle infinity power multiplier a bit differently; previous steps of dynamic generation fill it with
+// 8 identical AD multipliers, but we want to replace it with ID mults and the conversion rate
+GameDatabase.multiplierTabTree.AD_infinityPower = [["ID_total", "ID_powerConversion"]];
+for (let dim = 1; dim <= 8; dim++) {
+  GameDatabase.multiplierTabTree[`AD_infinityPower_${dim}`] = [["ID_total", "ID_powerConversion"]];
+}
+
+// Tesseracts are added one layer deep, but we don't want to override the existing ID_purchase entry
+GameDatabase.multiplierTabTree.ID_purchase.push(["ID_basePurchase", "ID_tesseractPurchase"]);
+for (let dim = 1; dim <= 7; dim++) {
+  GameDatabase.multiplierTabTree[`ID_purchase_${dim}`] = [[`ID_basePurchase_${dim}`, `ID_tesseractPurchase_${dim}`]];
+}
+
+// Dynamically fill effects which only affect certain dimensions
 for (const res of dimTypes) {
   // Achievements
   GameDatabase.multiplierTabTree[`${res}_achievement`] = [[]];
@@ -123,5 +149,18 @@ for (const res of dimTypes) {
       }
     }
     GameDatabase.multiplierTabTree[`${res}_timeStudy`][0].push(`general_timeStudy_${ts}_${res}`);
+  }
+}
+
+// Dynamically fill effects which affect single resources as well
+for (const res of singleRes) {
+  GameDatabase.multiplierTabTree[`${res}_achievement`] = [[]];
+  for (const ach of targetedEffects.achievement[res]) {
+    GameDatabase.multiplierTabTree[`${res}_achievement`][0].push(`general_achievement_${ach}`);
+  }
+
+  GameDatabase.multiplierTabTree[`${res}_timeStudy`] = [[]];
+  for (const ts of targetedEffects.timeStudy[res]) {
+    GameDatabase.multiplierTabTree[`${res}_timeStudy`][0].push(`general_timeStudy_${ts}`);
   }
 }

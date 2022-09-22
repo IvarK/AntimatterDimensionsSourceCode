@@ -12,7 +12,7 @@ export default {
     };
   },
   computed: {
-    options: () => ["AD", "ID", "TD", "IP", "EP"],
+    options: () => ["AD", "ID", "TD", "IP", "EP", "tickspeed"],
     resourceName() {
       return GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.name();
     },
@@ -40,7 +40,10 @@ export default {
       </span>
     </div>
     <br>
-    <MultiplierBreakdownEntry :resource="resourceKey" />
+    <MultiplierBreakdownEntry
+      :key="currentOption"
+      :resource="resourceKey"
+    />
     <div class="c-multiplier-tab-text-line">
       Note: Entries are only expandable if they contain multiple sources which can be different values.
       For example, any effects which affect all Dimensions of any type equally will not expand into a

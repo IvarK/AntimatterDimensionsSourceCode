@@ -16,6 +16,85 @@ function activeDimCount(type) {
   }
 }
 
+// Helper method for galaxy strength multipliers affecting all galaxy types (this is used a large number of times)
+function globalGalaxyMult() {
+  return Effects.product(
+    InfinityUpgrade.galaxyBoost,
+    InfinityUpgrade.galaxyBoost.chargedEffect,
+    BreakInfinityUpgrade.galaxyBoost,
+    TimeStudy(212),
+    TimeStudy(232),
+    Achievement(86),
+    Achievement(178),
+    InfinityChallenge(5).reward,
+    PelleUpgrade.galaxyPower,
+    PelleRifts.decay.milestones[1]
+  );
+}
+
+// Helper method for galaxies and tickspeed, broken up as contributions of tickspeed*log(perGalaxy) and galaxyCount to
+// their product, which is proportional to log(tickspeed)
+function decomposeTickspeed() {
+  let effectiveCount = effectiveBaseGalaxies();
+  const effects = globalGalaxyMult();
+
+  let galFrac, tickFrac;
+  if (effectiveCount < 3) {
+    let baseMult = 1.1245;
+    if (player.galaxies === 1) baseMult = 1.11888888;
+    if (player.galaxies === 2) baseMult = 1.11267177;
+    if (NormalChallenge(5).isRunning) {
+      baseMult = 1.08;
+      if (player.galaxies === 1) baseMult = 1.07632;
+      if (player.galaxies === 2) baseMult = 1.072;
+    }
+    // This is needed for numerical consistency with the other conditional case
+    baseMult /= 0.965 ** 2;
+    const logBase = Math.log10(baseMult);
+
+    const perGalaxy = 0.02 * effects;
+    effectiveCount *= Pelle.specialGlyphEffect.power;
+
+    tickFrac = Tickspeed.totalUpgrades * logBase;
+    galFrac = -Math.log10(Math.max(0.01, 1 / baseMult - (effectiveCount * perGalaxy))) / logBase;
+  } else {
+    effectiveCount -= 2;
+    effectiveCount *= effects;
+    effectiveCount *= getAdjustedGlyphEffect("realitygalaxies") * (1 + ImaginaryUpgrade(9).effectOrDefault(0));
+    effectiveCount *= Pelle.specialGlyphEffect.power;
+
+    // These all need to be framed as INCREASING x/sec tick rate (ie. all multipliers > 1, all logs > 0)
+    const baseMult = 0.965 ** 2 / (NormalChallenge(5).isRunning ? 0.83 : 0.8);
+    const logBase = Math.log10(baseMult);
+    const logPerGalaxy = -DC.D0_965.log10();
+
+    tickFrac = Tickspeed.totalUpgrades * logBase;
+    galFrac = (1 + effectiveCount / logBase * logPerGalaxy);
+  }
+
+  const sum = tickFrac + galFrac;
+  return {
+    tickspeed: tickFrac / sum,
+    galaxies: galFrac / sum,
+  };
+}
+
+/**
+ * Scope structure for props is MAIN_RESOURCE.RESOURCE_COMPONENT and all fields must be functions which may or
+ * may not accept an input argument.
+ * {
+ *  @property {function: @return String} name             Name to associate with this multiplier/effect
+ *  @property {function: @return String} isBase           Suppresses the leading × in multipliers if true. Primarily
+ *    exists in order to avoid copy-pasting extensive entries in multValue
+ *  @property {function: @return Decimal} displayOverride If present, displays this string instead of multipliers. This
+ *    has higher priority than isBase
+ *  @property {function: @return Decimal|Number} multValue  Value for multipliers given by this effect. Note that some
+ *    entries may have a pow10 applied to them in order to "undo" logarithmic scaling in the UI
+ *  @property {function: @return Number} powValue         Numerical value for powers given by this effect
+ *  @property {function: @return Boolean} isActive        Conditional determining if this component should be visible
+ *  @property {function: @return String} color            CSS entry or string specifying this component's color
+ * }
+ */
 GameDatabase.multiplierTabValues = {
   AD: {
     total: {
@@ -667,5 +746,110 @@ GameDatabase.multiplierTabValues = {
         .times(Pelle.specialGlyphEffect.time),
       isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
     },
+  },
+
+  // Both multValue entries are multiplied by 1e10 as a bit of a cheat; decomposeTickspeed returns a fraction, but the
+  // Vue component suppresses numbers less than one. Multiplying by 1e10 is a workaround because in practice the split
+  // between the components should never be that skewed
+  tickspeed: {
+    total: {
+      name: () => "Total Tickspeed",
+      isBase: () => true,
+      multValue: () => Tickspeed.perSecond,
+      isActive: () => true,
+    },
+    upgrades: {
+      name: () => "Tickspeed Upgrades",
+      displayOverride: () => `${formatInt(Tickspeed.totalUpgrades)} Total`,
+      multValue: () => new Decimal.pow10(1e10 * decomposeTickspeed().tickspeed),
+      isActive: () => true,
+      color: () => GameDatabase.reality.glyphTypes.power.color,
+    },
+    galaxies: {
+      name: () => "Galaxies",
+      displayOverride: () => {
+        const ag = player.galaxies + GalaxyGenerator.galaxies;
+        const rg = Replicanti.galaxies.total;
+        const tg = player.dilation.totalTachyonGalaxies;
+        return `${formatInt(ag + rg + tg)} Total`;
+      },
+      multValue: () => new Decimal.pow10(1e10 * decomposeTickspeed().galaxies),
+      isActive: () => true,
+      color: () => "var(--color-eternity)",
+    },
+  },
+
+  tickspeedUpgrades: {
+    purchased: {
+      name: () => "Purchased Tickspeed Upgrades",
+      displayOverride: () => (Laitela.continuumActive
+        ? formay(Tickspeed.continuumValue, 2, 2)
+        : formatInt(player.totalTickBought)),
+      multValue: () => Decimal.pow10(Laitela.continuumActive ? Tickspeed.continuumValue : player.totalTickBought),
+      isActive: () => true,
+      color: () => GameDatabase.reality.glyphTypes.power.color,
+    },
+    free: {
+      name: () => "Tickspeed Upgrades from TD",
+      displayOverride: () => formatInt(player.totalTickGained),
+      multValue: () => Decimal.pow10(player.totalTickGained),
+      isActive: () => Currency.timeShards.gt(0),
+      color: () => "var(--color-eternity)",
+    }
+  },
+
+  // Note: none of the galaxy types use the global multiplier that applies to all of them within multValue, which
+  // very slightly reduces performance impact and is okay because it's applied consistently
+  galaxies: {
+    antimatter: {
+      name: () => "Antimatter Galaxies",
+      displayOverride: () => {
+        const num = player.galaxies + GalaxyGenerator.galaxies;
+        const mult = globalGalaxyMult();
+        return `${formatInt(num)}, ${formatX(mult, 2, 2)} strength`;
+      },
+      multValue: () => Decimal.pow10(player.galaxies + GalaxyGenerator.galaxies),
+      isActive: () => true,
+      color: () => GameDatabase.reality.glyphTypes.power.color,
+    },
+    replicanti: {
+      name: () => "Replicanti Galaxies",
+      displayOverride: () => {
+        const num = Replicanti.galaxies.total;
+        let rg = Replicanti.galaxies.bought;
+        rg *= (1 + Effects.sum(TimeStudy(132), TimeStudy(133)));
+        rg += Replicanti.galaxies.extra;
+        rg += Math.min(Replicanti.galaxies.bought, ReplicantiUpgrade.galaxies.value) *
+          Effects.sum(EternityChallenge(8).reward);
+        const mult = rg / Math.clampMin(num, 1) * globalGalaxyMult();
+        return `${formatInt(num)}, ${formatX(mult, 2, 2)} strength`;
+      },
+      multValue: () => {
+        let rg = Replicanti.galaxies.bought;
+        rg *= (1 + Effects.sum(TimeStudy(132), TimeStudy(133)));
+        rg += Replicanti.galaxies.extra;
+        rg += Math.min(Replicanti.galaxies.bought, ReplicantiUpgrade.galaxies.value) *
+          Effects.sum(EternityChallenge(8).reward);
+        return Decimal.pow10(rg);
+      },
+      isActive: () => Replicanti.areUnlocked,
+      color: () => GameDatabase.reality.glyphTypes.replication.color,
+    },
+    tachyon: {
+      name: () => "Tachyon Galaxies",
+      displayOverride: () => {
+        const num = player.dilation.totalTachyonGalaxies;
+        const mult = globalGalaxyMult() *
+          (1 + Math.max(0, Replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue);
+        return `${formatInt(num)}, ${formatX(mult, 2, 2)} strength`;
+      },
+      multValue: () => {
+        const num = player.dilation.totalTachyonGalaxies;
+        const mult = 1 + Math.max(0, Replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
+        return Decimal.pow10(num * mult);
+      },
+      isActive: () => player.dilation.totalTachyonGalaxies > 0,
+      color: () => "var(--color-dilation)",
+    }
   }
 };

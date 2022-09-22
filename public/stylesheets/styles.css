@@ -877,8 +877,8 @@ button:focus {
   border: var(--var-border-width, 0.2rem) solid sandybrown;
   border-radius: var(--var-border-radius, 0.5rem);
   box-shadow: 0 0 2rem inset rgba(244, 164, 96, 50%);
-  transition-duration: 0.2s;
   margin-right: 0.5rem;
+  transition-duration: 0.2s;
 }
 
 .l-reality-amplify-button--clickable {
@@ -1557,13 +1557,6 @@ br {
   background-color: var(--color-accent);
 }
 
-.o-primary-btn--tickspeed {
-  width: 17rem;
-  font-size: 1.2rem;
-  margin-right: 0.4rem;
-  transition: width 0s;
-}
-
 .o-primary-btn--buy-max {
   width: 12rem;
   font-size: 1.2rem;
@@ -1951,9 +1944,9 @@ br {
 .c-prestige-button-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
   height: 14rem;
+  justify-content: space-around;
+  align-items: center;
   padding: 1rem;
 }
 
@@ -6032,8 +6025,8 @@ kbd {
   top: -0.1rem;
   right: -0.1rem;
   z-index: 5;
-  color: var(--color-notification);
   font-size: 1.5rem;
+  color: var(--color-notification);
   text-shadow: -0.2rem 0.2rem 0.5rem black;
   animation: a-notification-glow 2s infinite;
 }

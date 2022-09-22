@@ -184,14 +184,14 @@ export default {
 
 <style scoped>
 .l-glow-container {
-  position: absolute;
   display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100%;
+  position: absolute;
   top: 0;
   left: 0;
+  justify-content: center;
+  align-items: center;
   border-radius: var(--var-border-radius, inherit);
 }
 </style>

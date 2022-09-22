@@ -66,7 +66,6 @@ export default {
       return {
         "o-primary-btn": true,
         "tickspeed-btn": true,
-        "l-glow-container": true,
         "o-primary-btn--disabled": !this.isAffordable && !this.isContinuumActive,
         "o-non-clickable": this.isContinuumActive,
         "tutorial--glow": this.isAffordable && this.hasTutorial
@@ -118,6 +117,7 @@ export default {
 
 <style scoped>
 .o-primary-btn {
+  position: relative;
   vertical-align: middle;
 }
 

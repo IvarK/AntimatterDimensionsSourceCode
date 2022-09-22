@@ -74,7 +74,6 @@ export default {
       return {
         "l-long-button": !this.inHeader,
         "o-primary-btn--tickspeed": true,
-        "l-glow-container": true,
         "o-continuum": this.isContinuumActive,
         "tutorial--glow": this.isAffordable && this.hasTutorial
       };
@@ -123,6 +122,14 @@ export default {
 </template>
 
 <style scoped>
+.o-primary-btn--tickspeed {
+  width: 17rem;
+  position: relative;
+  font-size: 1.2rem;
+  margin-right: 0.4rem;
+  transition: width 0s;
+}
+
 .o-continuum {
   transition: width 0s;
   cursor: auto;

@@ -108,9 +108,6 @@ export default {
       } else {
         buyAsManyAsYouCanBuy(this.tier);
       }
-
-      if (this.tier === 1) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM1);
-      if (this.tier === 2) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
     },
     showCostTitle(value) {
       return value.exponent < 1000000;

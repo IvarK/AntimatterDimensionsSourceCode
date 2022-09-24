@@ -2,7 +2,7 @@
 import GameSpeedDisplay from "@/components/GameSpeedDisplay";
 
 export default {
-  name: "HeaderTickspeedRowModern",
+  name: "HeaderTickspeedInfo",
   components: {
     GameSpeedDisplay
   },

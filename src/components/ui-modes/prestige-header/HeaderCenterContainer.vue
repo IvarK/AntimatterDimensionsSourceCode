@@ -2,8 +2,7 @@
 import ArmageddonButton from "../../tabs/celestial-pelle/ArmageddonButton";
 import RealityCurrencyHeader from "../../RealityCurrencyHeader";
 
-import HeaderTickspeedRowClassic from "../HeaderTickspeedRowClassic";
-import HeaderTickspeedRowModern from "../HeaderTickspeedRowModern";
+import HeaderTickspeedInfo from "../HeaderTickspeedInfo";
 
 import RealityButton from "./RealityButton";
 
@@ -13,8 +12,7 @@ import RealityButton from "./RealityButton";
 export default {
   name: "HeaderCenterContainer",
   components: {
-    HeaderTickspeedRowClassic,
-    HeaderTickspeedRowModern,
+    HeaderTickspeedInfo,
     RealityCurrencyHeader,
     RealityButton,
     ArmageddonButton,
@@ -57,8 +55,7 @@ export default {
     <div v-else>
       You are getting {{ format(antimatterPerSec, 2) }} antimatter per second.
       <br>
-      <HeaderTickspeedRowModern v-if="isModern" />
-      <HeaderTickspeedRowClassic v-else />
+      <HeaderTickspeedInfo />
     </div>
   </div>
 </template>

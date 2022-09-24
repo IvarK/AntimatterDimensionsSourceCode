@@ -27,7 +27,8 @@ export default {
       isCharged: false,
       isDisabled: false,
       showingCharged: false,
-      hasTS31: false
+      hasTS31: false,
+      ts31Effect: new Decimal(0)
     };
   },
   computed: {
@@ -86,6 +87,7 @@ export default {
       this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled(upgrade.config.effect());
       this.isUseless = Pelle.uselessInfinityUpgrades.includes(upgrade.id) && Pelle.isDoomed;
       this.hasTS31 = TimeStudy(31).canBeApplied;
+      if (!this.isDisabled && this.isImprovedByTS31) this.ts31Effect = upgrade.config.effect().pow(4);
       if (upgrade.id !== "challengeMult") return;
       this.showWorstChallenge = upgrade.effectValue !== upgrade.cap &&
         player.challenge.normal.bestTimes.sum() < Number.MAX_VALUE;
@@ -119,7 +121,7 @@ export default {
       />
       <template v-if="!isDisabled && isImprovedByTS31">
         <br>
-        After TS31: {{ formatX(config.effect().pow(4), 2, 2) }}
+        After TS31: {{ formatX(ts31Effect, 2, 2) }}
       </template>
     </span>
     <CostDisplay

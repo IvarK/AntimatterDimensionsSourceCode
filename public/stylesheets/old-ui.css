@@ -31,6 +31,9 @@
 
 .l-old-ui__big-crunch-btn--overlay {
   position: absolute;
+  left: 50%;
+  margin-top: 5rem;
+  transform: translateX(-50%);
 }
 
 .l-old-ui__page {

@@ -19,6 +19,7 @@ export default {
   },
   data() {
     return {
+      shouldDisplay: true,
       isModern: false,
       hasRealityButton: false,
       isDoomed: false,
@@ -28,6 +29,9 @@ export default {
   },
   methods: {
     update() {
+      this.shouldDisplay = player.break || !Player.canCrunch;
+      if (!this.shouldDisplay) return;
+
       this.isModern = player.options.newUI;
       this.isDoomed = Pelle.isDoomed;
       this.antimatter.copyFrom(Currency.antimatter);
@@ -39,7 +43,10 @@ export default {
 </script>
 
 <template>
-  <div class="c-prestige-button-container">
+  <div
+    v-if="shouldDisplay"
+    class="c-prestige-button-container"
+  >
     <span>You have <span class="c-game-header__antimatter">{{ format(antimatter, 2, 1) }}</span> antimatter.</span>
     <div
       v-if="hasRealityButton"

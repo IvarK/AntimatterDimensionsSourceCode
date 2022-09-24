@@ -1,4 +1,5 @@
 <script>
+import BigCrunchButton from "../BigCrunchButton";
 import HeaderBlackHole from "../HeaderBlackHole";
 import HeaderChallengeDisplay from "../HeaderChallengeDisplay";
 import HeaderChallengeEffects from "../HeaderChallengeEffects";
@@ -9,6 +10,7 @@ import NewsTicker from "../NewsTicker";
 export default {
   name: "ModernUi",
   components: {
+    BigCrunchButton,
     HeaderChallengeDisplay,
     HeaderChallengeEffects,
     NewsTicker,
@@ -17,8 +19,7 @@ export default {
   },
   data() {
     return {
-      bigCrunch: false,
-      smallCrunch: false,
+      bigCrunch: false
     };
   },
   computed: {
@@ -32,9 +33,7 @@ export default {
   methods: {
     update() {
       const crunchButtonVisible = !player.break && Player.canCrunch;
-      const reachedInfinityInMinute = Time.bestInfinityRealTime.totalMinutes <= 1;
-      this.bigCrunch = crunchButtonVisible && !reachedInfinityInMinute;
-      this.smallCrunch = crunchButtonVisible && reachedInfinityInMinute;
+      this.bigCrunch = crunchButtonVisible && Time.bestInfinityRealTime.totalMinutes > 1;
     },
     handleClick() {
       if (PlayerProgress.infinityUnlocked()) manualBigCrunchResetRequest();
@@ -56,20 +55,9 @@ export default {
       :style="topMargin"
     >
       <NewsTicker v-if="news" />
+      <BigCrunchButton />
       <div
-        v-if="bigCrunch"
-        class="l-new-ui-big-crunch__container"
-      >
-        <h3>The world has collapsed due to excess antimatter.</h3>
-        <button
-          class="btn-big-crunch"
-          @click="handleClick"
-        >
-          Big Crunch
-        </button>
-      </div>
-      <div
-        v-else
+        v-if="!bigCrunch"
         class="tab-container"
       >
         <HeaderPrestigeGroup />
@@ -78,13 +66,6 @@ export default {
           <HeaderChallengeEffects />
           <HeaderBlackHole />
         </div>
-        <button
-          v-if="smallCrunch && !bigCrunch"
-          class="btn-big-crunch btn-big-crunch--small"
-          onclick="manualBigCrunchResetRequest()"
-        >
-          Big Crunch
-        </button>
         <slot />
       </div>
     </div>

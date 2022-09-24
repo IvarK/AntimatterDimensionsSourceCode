@@ -43,6 +43,7 @@ export default {
       if (accepted) {
         this.conflict.onAccept?.();
       }
+      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
     cancel() {
       this.overwriteCounter++;

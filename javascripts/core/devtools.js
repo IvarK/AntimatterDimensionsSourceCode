@@ -605,6 +605,7 @@ dev.forceCloudSave = async function() {
   const save = await Cloud.load();
   const root = GameSaveSerializer.deserialize(save);
   const saveId = GameStorage.currentSlot;
+  if (!root.saves) root.saves = [];
   root.saves[saveId] = GameStorage.saves[saveId];
   Cloud.save(saveId);
 };

@@ -62,7 +62,6 @@ export const Cloud = {
   },
 
   async saveCheck() {
-    GameIntervals.checkCloudSave.restart();
     const save = await this.load();
     if (save === null) {
       this.save();
@@ -70,8 +69,9 @@ export const Cloud = {
       const root = GameSaveSerializer.deserialize(save);
       const saveId = GameStorage.currentSlot;
       const cloudSave = root.saves[saveId];
+      const thisCloudHash = sha512_256(GameSaveSerializer.serialize(cloudSave));
       const localSave = GameStorage.saves[saveId];
-      const saveComparison = this.compareSaves(cloudSave, localSave, sha512_256(save));
+      const saveComparison = this.compareSaves(cloudSave, localSave, thisCloudHash);
 
       // eslint-disable-next-line no-loop-func
       const overwriteAndSendCloudSave = () => {
@@ -98,15 +98,16 @@ export const Cloud = {
   save(slot) {
     if (!this.user) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
+    GameStorage.save();
     const root = {
       current: GameStorage.currentSlot,
       saves: GameStorage.saves,
     };
 
-    const toSave = GameSaveSerializer.serialize(root);
-    this.lastCloudHash = sha512_256(toSave);
+    this.lastCloudHash = sha512_256(GameSaveSerializer.serialize(root.saves[slot]));
     GameStorage.lastCloudSave = Date.now();
-    set(ref(this.db, `users/${this.user.id}/web`), toSave);
+    GameIntervals.checkCloudSave.restart();
+    set(ref(this.db, `users/${this.user.id}/web`), GameSaveSerializer.serialize(root));
     GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
   },
 

@@ -162,16 +162,17 @@ export default {
     </h2>
     <div class="l-options-grid">
       <div
-        v-if="loggedIn"
         class="l-options-grid__row"
       >
         <OptionsButton
+          v-if="loggedIn"
           onclick="GameOptions.cloudSave()"
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         >
           Cloud save
         </OptionsButton>
         <OptionsButton
+          v-if="loggedIn"
           onclick="GameOptions.cloudLoad()"
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         >
@@ -192,7 +193,10 @@ export default {
           Login with Google to enable Cloud Saving
         </OptionsButton>
       </div>
-      <div class="l-options-grid__row">
+      <div
+        v-if="loggedIn"
+        class="l-options-grid__row"
+      >
         <PrimaryToggleButton
           v-model="cloudEnabled"
           class="o-primary-btn--option l-options-grid__button"
@@ -200,9 +204,9 @@ export default {
           label="Automatic cloud saving/loading:"
         />
         <AutosaveIntervalSlider
-          :min="60"
+          :min="10"
           :max="600"
-          :interval="20"
+          :interval="10"
           :is-cloud="true"
         />
       </div>

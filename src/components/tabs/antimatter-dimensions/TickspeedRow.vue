@@ -129,7 +129,10 @@ export default {
 }
 
 .tickspeed-btn {
+  position: relative;
   width: 30rem;
+  height: 3rem;
+  padding: 0.5rem;
 }
 
 .tickspeed-labels {
@@ -151,6 +154,9 @@ export default {
 
 .tickspeed-max-btn {
   margin-left: 0.5rem;
+  width: 10rem;
+  height: 3rem;
+  padding: 0.5rem;
 }
 
 .o-non-clickable {

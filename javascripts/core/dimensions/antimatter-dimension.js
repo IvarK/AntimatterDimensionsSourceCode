@@ -449,7 +449,7 @@ class AntimatterDimensionState extends DimensionState {
       (Laitela.isRunning && tier > Laitela.maxAllowedDimension)) {
       return false;
     }
-    return this.amount.gt(0);
+    return this.totalAmount.gt(0);
   }
 
   /**

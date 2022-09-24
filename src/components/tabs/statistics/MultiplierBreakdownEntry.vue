@@ -7,6 +7,11 @@ export default {
     resource: {
       type: String,
       required: true,
+    },
+    isRoot: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
   data() {
@@ -27,6 +32,12 @@ export default {
     groups() {
       return this.treeDB[this.resource];
     },
+    containerClass() {
+      return {
+        "c-multiplier-entry-container": true,
+        "c-multiplier-entry-root-container": this.isRoot,
+      };
+    }
   },
   methods: {
     update() {
@@ -73,11 +84,14 @@ export default {
         "background-color": this.getProp(this.currentGroupKeys[index], "color")
       };
     },
-    classObject(index) {
+    singleEntryClass(index) {
       return {
         "c-single-entry": true,
         "c-single-entry-highlight": this.mouseoverIndex === index,
       };
+    },
+    barSymbol(index) {
+      return this.getProp(this.currentGroupKeys[index], "barOverlay") ?? null;
     },
 
     hasChildComp(key) {
@@ -128,7 +142,7 @@ export default {
 </script>
 
 <template>
-  <div class="c-multiplier-entry-container">
+  <div :class="containerClass">
     <div
       v-if="!isEmpty"
       class="c-stacked-bars"
@@ -141,7 +155,12 @@ export default {
         @mouseover="mouseoverIndex = index"
         @mouseleave="mouseoverIndex = -1"
         @click="showGroup[index] = !showGroup[index]"
-      />
+      >
+        <span
+          class="c-bar-overlay"
+          v-html="barSymbol(index)"
+        />
+      </div>
     </div>
     <div />
     <div class="c-info-list">
@@ -164,7 +183,7 @@ export default {
         v-for="(key, index) in currentGroupKeys"
         v-else
         :key="key"
-        :class="classObject(index)"
+        :class="singleEntryClass(index)"
         @mouseover="mouseoverIndex = index"
         @mouseleave="mouseoverIndex = -1"
       >
@@ -197,11 +216,32 @@ export default {
   background-color: var(--color-base);
 }
 
+.c-multiplier-entry-root-container {
+  min-height: 45rem;
+}
+
 .c-stacked-bars {
   position: relative;
   width: 5rem;
   background-color: var(--color-disabled);
-  margin-right: 3rem;
+  margin-right: 1.5rem;
+}
+
+.c-bar-overlay {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  top: -5%;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: var(--color-text);
+  pointer-events: none;
+  user-select: none;
+  overflow: hidden;
+  opacity: 0.8;
+  z-index: 1;
 }
 
 .c-bar-highlight {
@@ -219,7 +259,7 @@ export default {
 
 .c-info-list {
   height: 100%;
-  width: 85%;
+  width: 90%;
   padding: 0.2rem;
 }
 

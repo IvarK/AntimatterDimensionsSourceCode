@@ -30,7 +30,7 @@ GameDatabase.celestials.quotes.laitela = {
       "You will never find a way to overpower me.",
     ]
   },
-  // Note: This happens about an hour or two before singualarities
+  // Note: This happens about an hour or two before singularities
   secondDestabilize: {
     id: 2,
     requirement: () => player.celestials.laitela.difficultyTier >= 2,
@@ -58,36 +58,39 @@ GameDatabase.celestials.quotes.laitela = {
       "It... it does not matter. The end will remain the same.",
     ]
   },
-  singularity1: {
-    id: 4,
-    requirement: () => Currency.singularities.gte(1e4),
+  // Note: Shown when unlocking DMD3; requirement is auto-condensing 20 singularities and it happens around ~200 total
+  thirdDMD: {
+    id: 5,
     lines: [
-      "An absolute control of Antimatter...",
-      "Your mastery of it... molding it into your own Power...",
+      "Your absolute control of Antimatter...",
+      "Your mastery of it, molding it into your own Power...",
       "It could not have been an accident.",
-      "How did you... manage to obtain it?",
-      "Were you the first? I seem to have forgotten again...",
+      "How did you manage to obtain it?",
+      "Fascinating... I was never aware of this.",
+      "... was I?",
     ]
   },
   // Note: This happens around e10-e11 singularities
   annihilation: {
-    id: 5,
+    id: 4,
     lines: [
-      "The more you struggle, the more tightly bound you become.",
-      "And so, back to square one again.",
+      "Back to square one, again.",
+      "Your chains shall bind you tighter, as your end slowly nears.",
       "While we transcend time and existence itself.",
       "Even if we may cease, we just come back. Never the exact same as before.",
       "And so... we repeat forever.",
-      "What about you?",
+      "And you?",
       "...",
-      "It... eludes me...",
+      "The answer... eludes me...",
     ]
   },
-  singularity2: {
+  // Note: This happens near e18 singularities
+  halfDimensions: {
     id: 6,
-    requirement: () => Currency.singularities.gte(1e14),
+    requirement: () => player.celestials.laitela.difficultyTier >= 4,
     lines: [
-      "If there were others who tried to control dimensions...",
+      "I do not understand...",
+      "Were there others... controlling Dimensions in this way?",
       "Did they... vanish? How have we not found them?",
       "Are they... us? Are we the endpoint?",
       "Or is their fate... something we cannot understand?",
@@ -96,10 +99,9 @@ GameDatabase.celestials.quotes.laitela = {
       "What... ARE you?",
     ]
   },
-  // Note: This about when the player starts on the last row of iM upgrades
-  singularity3: {
+  // Note: Shown when the first row 5 iM upgrade is purchased (~e26 singularities)
+  finalRowIM: {
     id: 7,
-    requirement: () => Currency.singularities.gte(1e26),
     lines: [
       "It is all impossible, beyond my comprehension...",
       "Unless... Is this all just part of the cycle?",
@@ -112,7 +114,7 @@ GameDatabase.celestials.quotes.laitela = {
     ]
   },
   // Note: This is around when all infinite milestones hit increased scaling
-  singularity4: {
+  increasedMilestoneScaling: {
     id: 8,
     requirement: () => Currency.singularities.gte(1e40),
     lines: [

@@ -39,6 +39,7 @@ import PurgeGlyphModal from "@/components/modals/glyph-management/PurgeGlyphModa
 import RefineGlyphModal from "@/components/modals/glyph-management/RefineGlyphModal";
 import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeGlyphModal";
 
+import AutobuyerEditModal from "@/components/modals/AutobuyerEditModal";
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
@@ -239,6 +240,7 @@ Modal.importScriptData = new Modal(ImportAutomatorDataModal);
 Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
 Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);
 Modal.switchAutomatorEditorMode = new Modal(SwitchAutomatorEditorModal);
+Modal.autobuyerEditModal = new Modal(AutobuyerEditModal);
 Modal.shop = new Modal(StdStoreModal);
 Modal.studyString = new Modal(StudyStringModal);
 Modal.singularityMilestones = new Modal(SingularityMilestonesModal);

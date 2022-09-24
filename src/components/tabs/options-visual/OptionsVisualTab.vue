@@ -25,7 +25,6 @@ export default {
       theme: "",
       notation: "",
       commas: false,
-      autosaveInterval: 3000,
       headerTextColored: true,
     };
   },

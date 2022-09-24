@@ -55,11 +55,12 @@ export const GameIntervals = (function() {
     },
     gameLoop: interval(() => gameLoop(), () => player.options.updateRate),
     save: interval(() => GameStorage.save(), () =>
-      (player.options.autosaveInterval - Math.clampMin(0, Date.now() - GameStorage.lastSaveTime))
+      player.options.autosaveInterval - Math.clampMin(0, Date.now() - GameStorage.lastSaveTime)
     ),
     checkCloudSave: interval(() => {
       if (player.options.cloudEnabled && Cloud.loggedIn) Cloud.saveCheck();
-    }, 300000),
+    }, () => player.options.cloudSaveInterval - Math.clampMin(0, Date.now() - GameStorage.lastCloudSave)
+    ),
     randomSecretAchievement: interval(() => {
       if (Math.random() < 0.00001) SecretAchievement(18).unlock();
     }, 1000),

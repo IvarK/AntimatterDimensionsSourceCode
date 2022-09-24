@@ -47,6 +47,10 @@ export class GameOptions {
   static refreshAutosaveInterval() {
     GameIntervals.save.restart();
   }
+
+  static refreshCloudSaveInterval() {
+    GameIntervals.checkCloudSave.restart();
+  }
 }
 
 const secretImports = [

@@ -105,6 +105,7 @@ export const Cloud = {
 
     const toSave = GameSaveSerializer.serialize(root);
     this.lastCloudHash = sha512_256(toSave);
+    GameStorage.lastCloudSave = Date.now();
     set(ref(this.db, `users/${this.user.id}/web`), toSave);
     GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
   },

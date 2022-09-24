@@ -11,6 +11,7 @@ export const GameStorage = {
   },
   saved: 0,
   lastSaveTime: Date.now(),
+  lastCloudSave: Date.now(),
 
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";

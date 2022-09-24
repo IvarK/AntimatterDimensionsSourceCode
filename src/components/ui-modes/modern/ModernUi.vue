@@ -1,7 +1,7 @@
 <script>
+import HeaderBlackHole from "../HeaderBlackHole";
 import HeaderChallengeDisplay from "../HeaderChallengeDisplay";
 import HeaderChallengeEffects from "../HeaderChallengeEffects";
-import HeaderGameSpeed from "../HeaderGameSpeed";
 import HeaderPrestigeGroup from "../HeaderPrestigeGroup";
 import NewsTicker from "../NewsTicker";
 
@@ -12,7 +12,7 @@ export default {
     HeaderChallengeDisplay,
     HeaderChallengeEffects,
     NewsTicker,
-    HeaderGameSpeed,
+    HeaderBlackHole,
     HeaderPrestigeGroup
   },
   data() {
@@ -76,7 +76,7 @@ export default {
         <div class="information-header">
           <HeaderChallengeDisplay />
           <HeaderChallengeEffects />
-          <HeaderGameSpeed />
+          <HeaderBlackHole />
         </div>
         <button
           v-if="smallCrunch && !bigCrunch"

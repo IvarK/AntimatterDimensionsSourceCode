@@ -497,14 +497,6 @@ body.t-s9 {
   margin-top: 0.3rem;
 }
 
-.tickspeed-btn {
-  height: 3rem;
-  min-width: 15rem;
-  max-width: 20rem;
-  font-size: 1.1rem;
-  padding: 0.5rem;
-}
-
 .tickspeed-max-btn {
   width: 10rem;
   height: 3rem;

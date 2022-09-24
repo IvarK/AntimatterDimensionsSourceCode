@@ -75,6 +75,10 @@ export default {
       if (!buyTickSpeed()) return;
       Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
     },
+    buyMaxUpgrade() {
+      if (!buyMaxTickSpeed()) return;
+      Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
+    },
   }
 };
 </script>
@@ -102,7 +106,7 @@ export default {
         v-if="!isContinuumActive"
         class="o-primary-btn tickspeed-max-btn"
         :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
-        onclick="buyMaxTickSpeed()"
+        @click="buyMaxUpgrade"
       >
         Buy Max
       </button>
@@ -122,6 +126,10 @@ export default {
 .o-primary-btn {
   position: relative;
   vertical-align: middle;
+}
+
+.tickspeed-btn {
+  width: 30rem;
 }
 
 .tickspeed-labels {

@@ -15,6 +15,7 @@ export default {
       isContinuumActive: false,
       continuumValue: 0,
       hasTutorial: false,
+      hasRealityButton: false,
     };
   },
   computed: {
@@ -33,21 +34,19 @@ export default {
     tickspeedDisplay() {
       return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
     },
-    showCostTitle() {
-      return this.cost.exponent < 1000000;
-    },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
     },
     upgradeCount() {
       const purchased = this.purchasedTickspeed;
-      if (!this.freeTickspeed) return `${formatInt(purchased)} Purchased`;
+      if (!this.freeTickspeed) return `${formatInt(purchased)} Purchased Upgrades`;
       if (purchased === 0 || this.isContinuumActive) return `${formatInt(this.freeTickspeed)} Free Upgrades`;
       return `${formatInt(purchased)} Purchased + ${formatInt(this.freeTickspeed)} Free`;
     }
   },
   methods: {
     update() {
+      this.hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
       this.purchasedTickspeed = player.totalTickBought;
       this.freeTickspeed = FreeTickspeed.amount;
       const isEC9Running = EternityChallenge(9).isRunning;
@@ -82,11 +81,6 @@ export default {
 
 <template>
   <div :class="classObject">
-    <div class="tickspeed-labels">
-      <span>
-        {{ tickspeedDisplay }} <span>{{ multiplierDisplay }}</span>
-      </span>
-    </div>
     <div class="tickspeed-buttons">
       <button
         v-tooltip="upgradeCount"
@@ -94,10 +88,10 @@ export default {
         @click="buyUpgrade"
       >
         <span v-if="isContinuumActive">
-          {{ continuumString }} (cont.)
+          Tickspeed Continuum: {{ continuumString }}
         </span>
         <span v-else>
-          Cost: {{ format(cost) }}
+          Tickspeed Cost: {{ format(cost) }}
         </span>
         <div
           v-if="hasTutorial"
@@ -113,6 +107,14 @@ export default {
         Buy Max
       </button>
     </div>
+    <div
+      v-if="hasRealityButton"
+      class="tickspeed-labels"
+    >
+      {{ tickspeedDisplay }}
+      <br>
+      {{ multiplierDisplay }}
+    </div>
   </div>
 </template>
 
@@ -120,6 +122,23 @@ export default {
 .o-primary-btn {
   position: relative;
   vertical-align: middle;
+}
+
+.tickspeed-labels {
+  color: var(--color-text);
+  padding: 0.5rem 1rem;
+}
+
+.l-tickspeed-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.l-tickspeed-container--hidden {
+  visibility: hidden;
 }
 
 .tickspeed-max-btn {

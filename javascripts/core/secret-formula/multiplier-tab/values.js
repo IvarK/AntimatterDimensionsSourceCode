@@ -355,13 +355,14 @@ GameDatabase.multiplierTabValues = {
     },
 
     basePurchase: {
-      name: dim => (dim ? `Multiplier from capped purchases` : "Total Multiplier from capped purchases"),
+      name: dim => (dim ? `Multiplier from base purchases` : "Total Multiplier from base purchases"),
       multValue: dim => {
         const getMult = id => {
           const purchases = id === 8
             ? Math.floor(InfinityDimension(id).baseAmount / 10)
             : Math.min(InfinityDimensions.HARDCAP_PURCHASES, Math.floor(InfinityDimension(id).baseAmount / 10));
-          return Decimal.pow(InfinityDimension(id).powerMultiplier, purchases);
+          const baseMult = InfinityDimension(id)._powerMultiplier;
+          return Decimal.pow(baseMult, purchases);
         };
         if (dim) return getMult(dim);
         return InfinityDimensions.all
@@ -369,7 +370,8 @@ GameDatabase.multiplierTabValues = {
           .map(id => getMult(id.tier))
           .reduce((x, y) => x.times(y), DC.D1);
       },
-      isActive: dim => dim !== 8 && Tesseracts.bought > 0,
+      isActive: dim => ImaginaryUpgrade(14).canBeApplied ||
+        (dim === 8 ? GlyphSacrifice.infinity.effectValue > 1 : Tesseracts.bought > 0),
       color: () => "var(--color-infinity)",
       barOverlay: () => `<i class="fas fa-arrows-up-to-line" />`,
     },
@@ -388,9 +390,25 @@ GameDatabase.multiplierTabValues = {
           .map(id => getMult(id.tier))
           .reduce((x, y) => x.times(y), DC.D1);
       },
-      isActive: dim => dim !== 8 && Tesseracts.bought > 0,
+      isActive: () => Tesseracts.bought > 0,
       color: () => "var(--color-enslaved--base)",
       barOverlay: () => `<i class="fas fa-up-right-and-down-left-from-center" />`,
+    },
+    infinityGlyphSacrifice: {
+      name: () => "Extra multiplier from Infinity Glyph sacrifice",
+      multValue: () => (InfinityDimension(8).isProducing
+        ? Decimal.pow(GlyphSacrifice.infinity.effectValue, Math.floor(InfinityDimension(8).baseAmount / 10))
+        : DC.D1),
+      isActive: () => GlyphSacrifice.infinity.effectValue > 1,
+      color: () => "var(--color-infinity)",
+      barOverlay: () => `∞<i class="fas fa-turn-down" />`,
+    },
+    powPurchase: {
+      name: () => "Power effect from Imaginary Upgrades",
+      powValue: () => ImaginaryUpgrade(14).effectOrDefault(1),
+      isActive: () => ImaginaryUpgrade(14).canBeApplied,
+      color: () => "var(--color-ra--base)",
+      barOverlay: () => `<i class="far fa-lightbulb" />`,
     },
 
     replicanti: {
@@ -458,7 +476,7 @@ GameDatabase.multiplierTabValues = {
         return Decimal.pow(allMult, maxActiveDim)
           .times(maxActiveDim >= 1 ? EternityChallenge(2).reward.effectOrDefault(1) : DC.D1);
       },
-      isActive: () => EternityChallenge(2).isCompleted,
+      isActive: () => EternityChallenge(2).completions > 0,
       color: () => "var(--color-eternity)",
       barOverlay: () => `Δ<i class="fas fa-arrow-down-wide-short" />`,
     },
@@ -541,6 +559,41 @@ GameDatabase.multiplierTabValues = {
       color: () => "var(--color-eternity)",
       barOverlay: dim => `<i class="fas fa-arrow-up-right-dots" />${dim ?? ""}`,
     },
+
+    basePurchase: {
+      name: () => "Base Multiplier from purchases",
+      multValue: dim => {
+        const getMult = td => Decimal.pow(4,
+          td === 8 ? Math.clampMax(TimeDimension(td).bought, 1e8) : TimeDimension(td).bought);
+        if (dim) return getMult(dim);
+        return TimeDimensions.all
+          .filter(td => td.isProducing)
+          .map(td => getMult(td.tier))
+          .reduce((x, y) => x.times(y), DC.D1);
+      },
+      isActive: dim => (dim
+        ? ImaginaryUpgrade(14).canBeApplied || (dim === 8 && GlyphSacrifice.time.effectValue > 1)
+        : TimeDimension(1).isProducing),
+      color: () => "var(--color-eternity)",
+      barOverlay: () => `<i class="fas fa-arrow-up-right-dots" />`,
+    },
+    timeGlyphSacrifice: {
+      name: () => "Extra multiplier from Time Glyph sacrifice",
+      multValue: () => (TimeDimension(8).isProducing
+        ? Decimal.pow(GlyphSacrifice.time.effectValue, Math.clampMax(TimeDimension(8).bought, 1e8))
+        : DC.D1),
+      isActive: () => GlyphSacrifice.time.effectValue > 1,
+      color: () => "var(--color-eternity)",
+      barOverlay: () => `Δ<i class="fas fa-turn-down" />`,
+    },
+    powPurchase: {
+      name: () => "Power effect from Imaginary Upgrades",
+      powValue: () => ImaginaryUpgrade(14).effectOrDefault(1),
+      isActive: () => ImaginaryUpgrade(14).canBeApplied,
+      color: () => "var(--color-ra--base)",
+      barOverlay: () => `<i class="far fa-lightbulb" />`,
+    },
+
     achievement: {
       name: dim => (dim ? `TD ${dim} from Achievements` : "Total from Achievements"),
       multValue: dim => {
@@ -604,7 +657,7 @@ GameDatabase.multiplierTabValues = {
         }
         return Decimal.pow(allMult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
       },
-      isActive: () => EternityChallenge(1).isCompleted,
+      isActive: () => EternityChallenge(1).completions > 0,
       color: () => "var(--color-eternity)",
       barOverlay: () => `Δ<i class="fas fa-arrow-down-wide-short" />`,
     },
@@ -1000,6 +1053,44 @@ GameDatabase.multiplierTabValues = {
       isActive: ts => TimeStudy(ts).isBought,
       color: () => "var(--color-eternity)",
       barOverlay: ts => `<i class="fas fa-book" />${ts}`,
-    }
+    },
+    infinityChallenge: {
+      name: ic => `Effect from Infinity Challenge ${ic}`,
+      multValue: (ic, dim) => {
+        if (ic === 4) return 1;
+        if (dim?.length === 2) {
+          let totalEffect = DC.D1;
+          for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
+            totalEffect = totalEffect.times((MultiplierTabHelper.ICDimCheck(ic, `${dim}${tier}`) &&
+              InfinityChallenge(ic).isCompleted) ? InfinityChallenge(ic).reward.effectOrDefault(1) : 1);
+          }
+          return totalEffect;
+        }
+        if (ic === 8) return (dim > 1 && dim < 8) ? InfinityChallenge(ic).reward.effectValue : DC.D1;
+        return InfinityChallenge(ic).reward.effectValue;
+      },
+      powValue: ic => (ic === 4 ? InfinityChallenge(4).reward.effectValue : 1),
+      isActive: ic => InfinityChallenge(ic).isCompleted,
+      color: () => "var(--color-infinity)",
+      barOverlay: ic => `∞<i class="fas fa-arrow-down-wide-short" />${ic}`,
+    },
+    eternityChallenge: {
+      name: ec => `Effect from Eternity Challenge ${ec}`,
+      multValue: (ec, dim) => {
+        if (dim?.length === 2) {
+          let totalEffect = DC.D1;
+          for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
+            totalEffect = totalEffect.times((MultiplierTabHelper.ECDimCheck(ec, `${dim}${tier}`) &&
+              EternityChallenge(ec).completions > 0) ? EternityChallenge(ec).reward.effectOrDefault(1) : 1);
+          }
+          return totalEffect;
+        }
+        if (ec === 2) return dim === 1 ? EternityChallenge(ec).reward.effectValue : DC.D1;
+        return EternityChallenge(ec).reward.effectValue;
+      },
+      isActive: ec => EternityChallenge(ec).completions > 0,
+      color: () => "var(--color-eternity)",
+      barOverlay: ec => `Δ<i class="fas fa-arrow-down-wide-short" />${ec}`,
+    },
   }
 };

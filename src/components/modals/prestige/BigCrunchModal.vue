@@ -1,7 +1,6 @@
 <script>
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
-// Note: This modal only shows up on the first infinity and post-break infinities; it won't appear pre-break otherwise
 export default {
   name: "BigCrunchModal",
   components: {
@@ -18,10 +17,10 @@ export default {
       return !PlayerProgress.infinityUnlocked();
     },
     message() {
-      const info = this.isFirstInfinity ? this.firstIntinityInfo : this.ipGainInfo;
+      const info = this.isFirstInfinity ? this.firstInfinityInfo : this.ipGainInfo;
       return `Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter Galaxies are reset. ${info}`;
     },
-    firstIntinityInfo() {
+    firstInfinityInfo() {
       return `In return, you gain an Infinity Point (IP). This allows you to buy multiple upgrades that you can
         find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the Statistics tab.`;
     },

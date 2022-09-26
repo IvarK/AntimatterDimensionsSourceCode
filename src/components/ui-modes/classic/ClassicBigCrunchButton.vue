@@ -3,7 +3,7 @@ export default {
   name: "ClassicBigCrunchButton",
   methods: {
     handleClick() {
-      if (PlayerProgress.infinityUnlocked()) bigCrunchResetRequest();
+      if (PlayerProgress.infinityUnlocked()) manualBigCrunchResetRequest();
       else Modal.bigCrunch.show();
     }
   }

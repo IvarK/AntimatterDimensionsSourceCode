@@ -118,7 +118,7 @@ html {
   --color-text-inverted: black;
   --color-base: #455a64;
   --color-disabled: #37474f;
-  --color-accent: #1565c0;
+  --color-accent: #1256a3;
   --color-notification: yellow;
 
   --color-infinity: #ff9800;
@@ -1780,7 +1780,6 @@ br {
 }
 
 .t-dark .o-primary-btn--disabled {
-  color: black;
   background-color: #37474f;
 }
 
@@ -4211,13 +4210,13 @@ br {
 }
 
 .o-autobuyer-btn--unavailable {
-  background: var(--color-disabled);
+  color: black;
+  background-color: var(--color-disabled);
   cursor: auto;
 }
 
 .o-autobuyer-btn--unavailable:hover {
-  color: black;
-  background-color: var(--color-disabled);
+  background-color: var(--color-bad);
 }
 
 .t-dark .o-autobuyer-btn,

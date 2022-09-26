@@ -115,7 +115,6 @@ export default {
           {{ moreShiftKeyInfo }}
         </span>
         <br>
-        <br>
         <div class="l-modal-hotkeys-row">
           <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Autobuyer Controls</span>
           <kbd>alt</kbd>
@@ -128,7 +127,6 @@ export default {
           and Tickspeed Autobuyers instead.
         </span>
         <br>
-        <br>
         <div class="l-modal-hotkeys-row">
           <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Tab Movement</span>
           <div>
@@ -139,6 +137,14 @@ export default {
           Using the Arrow Keys will cycle you through the game's pages.
           The Up and Down arrows cycle you through tabs,
           and the Left and Right arrows cycle you through that tab's subtabs.
+        </span>
+        <br>
+        <div class="l-modal-hotkeys-row">
+          <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Numpad Support</span>
+        </div>
+        <span class="c-modal-hotkeys__shift-description">
+          Due to technical reasons, pressing a number key on the Numpad will always be treated as pressing the
+          "Buy 1 Dimension" hotkey.
         </span>
       </div>
     </span>

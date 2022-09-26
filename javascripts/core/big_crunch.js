@@ -11,6 +11,11 @@ function handleChallengeCompletion() {
     NormalChallenge(1).complete();
   }
   if (!challenge) return;
+
+  // Clear the IC notification after the first completion (only) so that it can show it again for the next one
+  const inIC = InfinityChallenge.isRunning;
+  if (inIC && !InfinityChallenge.current.isCompleted) TabNotification.ICUnlock.clearTrigger();
+
   challenge.complete();
   challenge.updateChallengeTime();
   if (!player.options.retryChallenge) {

@@ -12,6 +12,8 @@ const propList = {
   TD: ["purchase", "achievement", "timeStudy", "eternityChallenge", "glyph", "alchemy", "other"],
   IP: ["base", "infinityUpgrade", "achievement", "timeStudy", "dilationUpgrade", "glyph", "other"],
   EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "other"],
+  TP: ["base", "achievement", "dilation", "realityUpgrade", "dilationGlyphSacrifice"],
+  DT: ["tachyon", "achievement", "dilation", "realityUpgrade", "glyph", "ra", "other"],
 };
 
 // Used for individual dimension breakdowns of effects (eg. full achievement mult into its values on individual ADs)
@@ -62,6 +64,12 @@ GameDatabase.multiplierTabTree = {
   EP_base: [
     ["EP_IP", "EP_divisor"]
   ],
+  TP_total: [
+    getProps("TP")
+  ],
+  DT_total: [
+    getProps("DT")
+  ],
   tickspeed_total: [
     ["tickspeed_upgrades", "tickspeed_galaxies"]
   ],
@@ -73,9 +81,12 @@ GameDatabase.multiplierTabTree = {
   ],
 };
 
+// TP has redundant entries, so we link them together by replacing a reference
+GameDatabase.multiplierTabTree.DT_total[0][0] = "TP_total";
+
 // Additional data specification for dynamically-generated props
 const dimTypes = ["AD", "ID", "TD"];
-const singleRes = ["IP", "EP"];
+const singleRes = ["IP", "EP", "DT"];
 const targetedEffects = {
   achievement: {
     checkFn: MultiplierTabHelper.achievementDimCheck,
@@ -83,7 +94,7 @@ const targetedEffects = {
     ID: [75, 94],
     TD: [105, 128],
     IP: [85, 93, 116, 125, 141],
-    EP: [],
+    DT: [132, 137]
   },
   timeStudy: {
     checkFn: MultiplierTabHelper.timeStudyDimCheck,
@@ -97,11 +108,9 @@ const targetedEffects = {
     checkFn: MultiplierTabHelper.ICDimCheck,
     AD: [3, 4, 8],
     ID: [1, 6],
-    TD: [],
   },
   eternityChallenge: {
     checkFn: MultiplierTabHelper.ECDimCheck,
-    AD: [],
     ID: [2, 4, 9],
     TD: [1, 10],
   },
@@ -115,8 +124,8 @@ for (const res of dimTypes) {
 
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
 // entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
-const removedProps = ["AD_sacrifice", "AD_breakInfinityUpgrade", "ID_replicanti", "ID_infinityChallenge",
-  "TD_achievement", "TD_alchemy"];
+const removedProps = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_alchemy", "ID_replicanti", "ID_infinityChallenge",
+  "ID_alchemy", "TD_achievement", "TD_alchemy"];
 for (const prop of removedProps) {
   GameDatabase.multiplierTabTree[prop] = undefined;
 }
@@ -144,6 +153,7 @@ GameDatabase.multiplierTabTree.TD_purchase_8 = [["TD_basePurchase_8", "TD_timeGl
 // Dynamically fill effects which only affect certain dimensions, as noted in targetedEffects
 for (const res of dimTypes) {
   for (const eff of Object.keys(targetedEffects)) {
+    if (!targetedEffects[eff][res]) continue;
     GameDatabase.multiplierTabTree[`${res}_${eff}`] = [[]];
     for (const id of targetedEffects[eff][res]) {
       for (let dim = 1; dim <= 8; dim++) {
@@ -161,13 +171,11 @@ for (const res of dimTypes) {
 
 // Dynamically fill effects which affect single resources as well
 for (const res of singleRes) {
-  GameDatabase.multiplierTabTree[`${res}_achievement`] = [[]];
-  for (const ach of targetedEffects.achievement[res]) {
-    GameDatabase.multiplierTabTree[`${res}_achievement`][0].push(`general_achievement_${ach}`);
-  }
-
-  GameDatabase.multiplierTabTree[`${res}_timeStudy`] = [[]];
-  for (const ts of targetedEffects.timeStudy[res]) {
-    GameDatabase.multiplierTabTree[`${res}_timeStudy`][0].push(`general_timeStudy_${ts}`);
+  for (const eff of Object.keys(targetedEffects)) {
+    if (!targetedEffects[eff][res]) continue;
+    GameDatabase.multiplierTabTree[`${res}_${eff}`] = [[]];
+    for (const ach of targetedEffects[eff][res]) {
+      GameDatabase.multiplierTabTree[`${res}_${eff}`][0].push(`general_${eff}_${ach}`);
+    }
   }
 }

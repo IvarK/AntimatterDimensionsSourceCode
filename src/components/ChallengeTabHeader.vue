@@ -57,10 +57,7 @@ export default {
 
 <template>
   <div class="l-challenges-tab__header">
-    <div
-      v-if="isShowAllVisible || isAutoECVisible || isInChallenge"
-      class="c-subtab-option-container"
-    >
+    <div class="c-subtab-option-container">
       <PrimaryToggleButton
         v-model="retryChallenge"
         class="o-primary-btn--subtab-option"

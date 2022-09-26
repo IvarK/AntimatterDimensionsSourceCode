@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 /* eslint-disable camelcase */
 import { GameDatabase } from "../game-database";
 
@@ -77,6 +78,7 @@ const dimTypes = ["AD", "ID", "TD"];
 const singleRes = ["IP", "EP"];
 const targetedEffects = {
   achievement: {
+    checkFn: MultiplierTabHelper.achievementDimCheck,
     AD: [23, 28, 31, 34, 43, 56, 64, 65, 68, 71, 72, 73, 74, 76, 84, 91, 92],
     ID: [75, 94],
     TD: [105, 128],
@@ -84,12 +86,25 @@ const targetedEffects = {
     EP: [],
   },
   timeStudy: {
+    checkFn: MultiplierTabHelper.timeStudyDimCheck,
     AD: [71, 91, 101, 161, 193, 214, 234],
     ID: [72, 82, 92, 162],
     TD: [11, 73, 93, 103, 151, 221, 227],
     IP: [41, 51, 141, 142, 143],
     EP: [61, 121, 122, 123],
-  }
+  },
+  infinityChallenge: {
+    checkFn: MultiplierTabHelper.ICDimCheck,
+    AD: [3, 4, 8],
+    ID: [1, 6],
+    TD: [],
+  },
+  eternityChallenge: {
+    checkFn: MultiplierTabHelper.ECDimCheck,
+    AD: [],
+    ID: [2, 4, 9],
+    TD: [1, 10],
+  },
 };
 
 // Dynamically generate all values from existing values, but broken down by dimension
@@ -101,7 +116,7 @@ for (const res of dimTypes) {
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
 // entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
 const removedProps = ["AD_sacrifice", "AD_breakInfinityUpgrade", "ID_replicanti", "ID_infinityChallenge",
-  "TD_achievement"];
+  "TD_achievement", "TD_alchemy"];
 for (const prop of removedProps) {
   GameDatabase.multiplierTabTree[prop] = undefined;
 }
@@ -114,41 +129,33 @@ for (let dim = 1; dim <= 8; dim++) {
 }
 
 // Tesseracts are added one layer deep, but we don't want to override the existing ID_purchase entry
-GameDatabase.multiplierTabTree.ID_purchase.push(["ID_basePurchase", "ID_tesseractPurchase"]);
+GameDatabase.multiplierTabTree.ID_purchase.push(["ID_basePurchase", "ID_tesseractPurchase", "ID_infinityGlyphSacrifice",
+  "ID_powPurchase"]);
 for (let dim = 1; dim <= 7; dim++) {
-  GameDatabase.multiplierTabTree[`ID_purchase_${dim}`] = [[`ID_basePurchase_${dim}`, `ID_tesseractPurchase_${dim}`]];
+  GameDatabase.multiplierTabTree[`ID_purchase_${dim}`] = [[`ID_basePurchase_${dim}`, `ID_tesseractPurchase_${dim}`,
+    "ID_powPurchase"]];
 }
+GameDatabase.multiplierTabTree.ID_purchase_8 = [[`ID_basePurchase_8`, `ID_infinityGlyphSacrifice`, "ID_powPurchase"]];
 
-// Dynamically fill effects which only affect certain dimensions
+// These are also added one layer deep
+GameDatabase.multiplierTabTree.TD_purchase.push(["TD_basePurchase", "TD_timeGlyphSacrifice", "TD_powPurchase"]);
+GameDatabase.multiplierTabTree.TD_purchase_8 = [["TD_basePurchase_8", "TD_timeGlyphSacrifice", "TD_powPurchase"]];
+
+// Dynamically fill effects which only affect certain dimensions, as noted in targetedEffects
 for (const res of dimTypes) {
-  // Achievements
-  GameDatabase.multiplierTabTree[`${res}_achievement`] = [[]];
-  for (const ach of targetedEffects.achievement[res]) {
-    for (let dim = 1; dim <= 8; dim++) {
-      const propStr = `${res}_achievement_${dim}`;
-      const dimStr = `${res}${dim}`;
-      if (MultiplierTabHelper.achievementDimCheck(ach, dimStr)) {
-        // eslint-disable-next-line max-depth
-        if (!GameDatabase.multiplierTabTree[propStr]) GameDatabase.multiplierTabTree[propStr] = [[]];
-        GameDatabase.multiplierTabTree[propStr][0].push(`general_achievement_${ach}_${dimStr}`);
+  for (const eff of Object.keys(targetedEffects)) {
+    GameDatabase.multiplierTabTree[`${res}_${eff}`] = [[]];
+    for (const id of targetedEffects[eff][res]) {
+      for (let dim = 1; dim <= 8; dim++) {
+        const propStr = `${res}_${eff}_${dim}`;
+        const dimStr = `${res}${dim}`;
+        if (targetedEffects[eff].checkFn(id, dimStr)) {
+          if (!GameDatabase.multiplierTabTree[propStr]) GameDatabase.multiplierTabTree[propStr] = [[]];
+          GameDatabase.multiplierTabTree[propStr][0].push(`general_${eff}_${id}_${dimStr}`);
+        }
       }
+      GameDatabase.multiplierTabTree[`${res}_${eff}`][0].push(`general_${eff}_${id}_${res}`);
     }
-    GameDatabase.multiplierTabTree[`${res}_achievement`][0].push(`general_achievement_${ach}_${res}`);
-  }
-
-  // Time Studies
-  GameDatabase.multiplierTabTree[`${res}_timeStudy`] = [[]];
-  for (const ts of targetedEffects.timeStudy[res]) {
-    for (let dim = 1; dim <= 8; dim++) {
-      const propStr = `${res}_timeStudy_${dim}`;
-      const dimStr = `${res}${dim}`;
-      if (MultiplierTabHelper.timeStudyDimCheck(ts, dimStr)) {
-        // eslint-disable-next-line max-depth
-        if (!GameDatabase.multiplierTabTree[propStr]) GameDatabase.multiplierTabTree[propStr] = [[]];
-        GameDatabase.multiplierTabTree[propStr][0].push(`general_timeStudy_${ts}_${dimStr}`);
-      }
-    }
-    GameDatabase.multiplierTabTree[`${res}_timeStudy`][0].push(`general_timeStudy_${ts}_${res}`);
   }
 }
 

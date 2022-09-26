@@ -100,8 +100,7 @@ export const MultiplierTabHelper = {
     }
   },
 
-  // Helper method to check for whether a time study affects a particular dimension or not. Format of dimStr is
-  // expected to be a three-character string "XXN", eg. "AD3" or "TD2"
+  // Helper method to check for whether a time study affects a particular dimension or not, see achievementDimCheck()
   timeStudyDimCheck(ts, dimStr) {
     switch (ts) {
       case 11:
@@ -120,6 +119,38 @@ export const MultiplierTabHelper = {
         return dimStr === "AD1";
       default:
         return true;
+    }
+  },
+
+  // Helper method to check for whether an IC reward affects a particular dimension or not, see achievementDimCheck()
+  ICDimCheck(ic, dimStr) {
+    switch (ic) {
+      case 1:
+      case 6:
+        return dimStr.substr(0, 2) === "ID";
+      case 3:
+      case 4:
+        return dimStr.substr(0, 2) === "AD";
+      case 8:
+        return dimStr.substr(0, 2) === "AD" && Number(dimStr.charAt(2)) > 1 && Number(dimStr.charAt(2)) < 8;
+      default:
+        return false;
+    }
+  },
+
+  // Helper method to check for whether an EC reward affects a particular dimension or not, see achievementDimCheck()
+  ECDimCheck(ec, dimStr) {
+    switch (ec) {
+      case 1:
+      case 10:
+        return dimStr.substr(0, 2) === "TD";
+      case 2:
+        return dimStr === "ID1";
+      case 4:
+      case 9:
+        return dimStr.substr(0, 2) === "ID";
+      default:
+        return false;
     }
   },
 };

@@ -37,7 +37,7 @@ export default {
       this.smallCrunch = crunchButtonVisible && reachedInfinityInMinute;
     },
     handleClick() {
-      if (PlayerProgress.infinityUnlocked()) bigCrunchResetRequest();
+      if (PlayerProgress.infinityUnlocked()) manualBigCrunchResetRequest();
       else Modal.bigCrunch.show();
     }
   },
@@ -81,7 +81,7 @@ export default {
         <button
           v-if="smallCrunch && !bigCrunch"
           class="btn-big-crunch btn-big-crunch--small"
-          onclick="bigCrunchResetRequest()"
+          onclick="manualBigCrunchResetRequest()"
         >
           Big Crunch
         </button>

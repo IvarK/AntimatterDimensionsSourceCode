@@ -2290,7 +2290,7 @@ GameDatabase.news = [
   {
     id: "a355",
     text:
-      `<div style='background: url("../images/unsmith.png"); width: 2.3rem; height: 2.5rem; margin-top: -0.1rem'></div>`
+      `<div style='background: url("./images/unsmith.png"); width: 2.3rem; height: 2.5rem; margin-top: -0.1rem'></div>`
   },
   {
     id: "a356",

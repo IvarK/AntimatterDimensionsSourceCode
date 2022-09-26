@@ -24,22 +24,6 @@ export default {
         ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)} to all ADs`;
       return `ADs produce ${formatX(this.mult.reciprocal(), 2, 3)} faster per Tickspeed upgrade`;
     },
-    upgradeCount() {
-      const upgrades = [];
-      if (this.purchasedTickspeed) upgrades.push(`${formatInt(this.purchasedTickspeed)} Purchased`);
-      if (this.freeTickspeed) upgrades.push(`${formatInt(this.freeTickspeed)} Free`);
-
-      switch (upgrades.length) {
-        case 0:
-          return "You have no Tickspeed Upgrades";
-        case 1:
-          return `You have ${upgrades[0]} Tickspeed Upgrades`;
-        case 2:
-          return `Upgrades: ${upgrades.join(" + ")}`;
-        default:
-          return "";
-      }
-    }
   },
   methods: {
     update() {
@@ -57,8 +41,6 @@ export default {
   <div>
     <br>
     {{ perUpgrade }}
-    <br>
-    {{ upgradeCount }}
     <br>
     {{ tickspeedDisplay }}
     <br>

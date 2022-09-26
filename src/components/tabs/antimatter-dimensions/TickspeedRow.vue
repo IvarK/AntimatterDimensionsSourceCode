@@ -115,9 +115,7 @@ export default {
       v-if="hasRealityButton"
       class="tickspeed-labels"
     >
-      {{ tickspeedDisplay }}
-      <br>
-      {{ multiplierDisplay }}
+      {{ tickspeedDisplay }} | {{ multiplierDisplay }}
     </div>
   </div>
 </template>
@@ -131,13 +129,13 @@ export default {
 .tickspeed-btn {
   position: relative;
   width: 30rem;
-  height: 3rem;
-  padding: 0.5rem;
+  height: 2.5rem;
+  padding: 0.25rem;
 }
 
 .tickspeed-labels {
   color: var(--color-text);
-  padding: 0.5rem 1rem;
+  padding: 0.25rem;
 }
 
 .l-tickspeed-container {
@@ -145,7 +143,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding-top: 0.5rem;
 }
 
 .l-tickspeed-container--hidden {
@@ -155,8 +153,8 @@ export default {
 .tickspeed-max-btn {
   margin-left: 0.5rem;
   width: 10rem;
-  height: 3rem;
-  padding: 0.5rem;
+  height: 2.5rem;
+  padding: 0.25rem;
 }
 
 .o-non-clickable {

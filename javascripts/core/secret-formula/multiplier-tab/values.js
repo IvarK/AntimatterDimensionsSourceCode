@@ -482,6 +482,7 @@ GameDatabase.multiplierTabValues = {
     },
     glyph: {
       name: dim => (dim ? `ID ${dim} from Glyph Effects` : "Total from Glyph Effects"),
+      multValue: () => 1,
       powValue: () => getAdjustedGlyphEffect("infinitypow") * getAdjustedGlyphEffect("effarigdimensions"),
       isActive: () => PlayerProgress.realityUnlocked(),
       color: () => "var(--color-reality)",
@@ -663,6 +664,7 @@ GameDatabase.multiplierTabValues = {
     },
     glyph: {
       name: dim => (dim ? `TD ${dim} from Glyph Effects` : "Total from Glyph Effects"),
+      multValue: () => 1,
       powValue: () => getAdjustedGlyphEffect("timepow") * getAdjustedGlyphEffect("effarigdimensions"),
       isActive: () => PlayerProgress.realityUnlocked(),
       color: () => "var(--color-reality)",
@@ -883,6 +885,131 @@ GameDatabase.multiplierTabValues = {
     },
   },
 
+  TP: {
+    total: {
+      name: () => "Total Tachyon Particles",
+      multValue: () => getDilationGainPerSecond(),
+      isActive: () => getDilationGainPerSecond().gt(0),
+      color: () => "var(--color-dilation)",
+      barOverlay: () => `<i class="fas fa-meteor" />`,
+    },
+    base: {
+      name: () => "Tachyon Particles",
+      isBase: () => true,
+      multValue: () => Currency.tachyonParticles.value.div(tachyonGainMultiplier()),
+      isActive: () => Currency.tachyonParticles.value.gt(0),
+      color: () => "var(--color-dilation)",
+      barOverlay: () => `<i class="fas fa-atom" />`,
+    },
+    achievement: {
+      name: () => "Achievement 132",
+      multValue: () => Achievement(132).effectOrDefault(1),
+      isActive: () => Achievement(132).canBeApplied,
+      color: () => "var(--color-v--base)",
+      barOverlay: () => `<i class="fas fa-trophy" />`,
+    },
+    dilation: {
+      name: () => "Repeatable Dilation Upgrade",
+      multValue: () => DilationUpgrade.tachyonGain.effectOrDefault(1),
+      isActive: () => DilationUpgrade.tachyonGain.canBeApplied,
+      color: () => "var(--color-dilation)",
+      barOverlay: () => `Ψ<i class="fas fa-repeat" />`,
+    },
+    realityUpgrade: {
+      name: () => "Reality Upgrades",
+      multValue: () => DC.D1.timesEffectsOf(RealityUpgrade(4), RealityUpgrade(8), RealityUpgrade(15)),
+      isActive: () => PlayerProgress.realityUnlocked(),
+      color: () => "var(--color-reality)",
+      barOverlay: () => `Ϟ`,
+    },
+    dilationGlyphSacrifice: {
+      name: () => "Dilation Glyph Sacrifice",
+      multValue: () => GlyphSacrifice.dilation.effectValue,
+      isActive: () => GlyphSacrifice.dilation.effectValue > 1,
+      color: () => "var(--color-dilation)",
+      barOverlay: () => `Ψ<i class="fas fa-turn-down" />`,
+    },
+  },
+
+  DT: {
+    total: {
+      name: () => "Dilated Time gain",
+      multValue: () => getDilationGainPerSecond(),
+      isActive: () => getDilationGainPerSecond().gt(0),
+      color: () => "var(--color-dilation)",
+      overlay: ["Ψ"],
+      barOverlay: () => `Ψ`,
+    },
+    tachyon: {
+      name: () => "Tachyon Particles",
+      displayOverride: () => {
+        const baseTPStr = format(Currency.tachyonParticles.value, 2, 2);
+        return PelleRifts.paradox.milestones[1].canBeApplied
+          ? `${baseTPStr}${formatPow(PelleRifts.paradox.milestones[1].effectValue, 1)}`
+          : baseTPStr;
+      },
+      multValue: () => Currency.tachyonParticles.value.pow(PelleRifts.paradox.milestones[1].effectOrDefault(1)),
+      isActive: () => getDilationGainPerSecond().gt(0),
+      color: () => "var(--color-dilation)",
+      barOverlay: () => `<i class="fas fa-meteor" />`,
+    },
+    achievement: {
+      name: () => "Achievements",
+      multValue: () => Achievement(132).effectOrDefault(1) * Achievement(137).effectOrDefault(1),
+      isActive: () => Achievement(132).canBeApplied || Achievement(137).canBeApplied,
+      color: () => "var(--color-v--base)",
+      barOverlay: () => `<i class="fas fa-trophy" />`,
+    },
+    dilation: {
+      name: () => "Repeatable Dilation Upgrades",
+      multValue: () => DC.D1.timesEffectsOf(
+        DilationUpgrade.dtGain,
+        DilationUpgrade.dtGainPelle,
+        DilationUpgrade.flatDilationMult
+      ),
+      isActive: () => DC.D1.timesEffectsOf(
+        DilationUpgrade.dtGain,
+        DilationUpgrade.dtGainPelle,
+        DilationUpgrade.flatDilationMult
+      ).gt(1),
+      color: () => "var(--color-dilation)",
+      barOverlay: () => `Ψ<i class="fas fa-repeat" />`,
+    },
+    realityUpgrade: {
+      name: () => "Repeatable Reality Upgrade",
+      multValue: () => RealityUpgrade(1).effectOrDefault(1),
+      isActive: () => RealityUpgrade(1).canBeApplied,
+      color: () => "var(--color-reality)",
+      barOverlay: () => `Ϟ`,
+    },
+    glyph: {
+      name: () => "Glyph Effects",
+      multValue: () => Decimal.times(getAdjustedGlyphEffect("dilationDT"),
+        Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1)),
+      isActive: () => PlayerProgress.realityUnlocked(),
+      color: () => "var(--color-reality)",
+      barOverlay: () => `<i class="fas fa-clone" />`,
+    },
+    ra: {
+      name: () => "Ra Upgrades",
+      multValue: () => DC.D1.timesEffectsOf(
+        AlchemyResource.dilation,
+        Ra.unlocks.continuousTTBoost.effects.dilatedTime,
+        Ra.unlocks.peakGamespeedDT
+      ),
+      isActive: () => Ra.unlocks.autoTP.canBeApplied,
+      color: () => "var(--color-ra--base)",
+      barOverlay: () => `<i class="fas fa-sun" />`,
+    },
+    other: {
+      name: () => "Other sources",
+      multValue: () => new Decimal(ShopPurchase.dilatedTimePurchases.currentMult ** (Pelle.isDoomed ? 0.5 : 1))
+        .times(Pelle.specialGlyphEffect.dilation),
+      isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
+      barOverlay: () => `<i class="fas fa-ellipsis" />`,
+    },
+  },
+
   // Both multValue entries are multiplied by 1e10 as a bit of a cheat; decomposeTickspeed returns a fraction, but the
   // Vue component suppresses numbers less than one. Multiplying by 1e10 is a workaround because in practice the split
   // between the components should never be that skewed
@@ -928,7 +1055,7 @@ GameDatabase.multiplierTabValues = {
     purchased: {
       name: () => "Purchased Tickspeed Upgrades",
       displayOverride: () => (Laitela.continuumActive
-        ? formay(Tickspeed.continuumValue, 2, 2)
+        ? format(Tickspeed.continuumValue, 2, 2)
         : formatInt(player.totalTickBought)),
       multValue: () => Decimal.pow10(Laitela.continuumActive ? Tickspeed.continuumValue : player.totalTickBought),
       isActive: () => true,
@@ -1009,6 +1136,10 @@ GameDatabase.multiplierTabValues = {
         ? `Achievement ${ach} on all ${dim}`
         : `Achievement ${ach}`),
       multValue: (ach, dim) => {
+        // There is also a buy10 effect, but we don't track that in the multiplier tab
+        if (ach === 141) return Achievement(141).canBeApplied ? Achievement(141).effects.ipGain.effectOrDefault(1) : 1;
+        if (!dim) return Achievement(ach).canBeApplied ? Achievement(ach).effectOrDefault(1) : 1;
+
         if (dim?.length === 2) {
           let totalEffect = DC.D1;
           for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
@@ -1020,9 +1151,6 @@ GameDatabase.multiplierTabValues = {
           }
           return totalEffect;
         }
-
-        // There is also a buy10 effect, but we don't track that in the multiplier tab
-        if (ach === 141) return Achievement(141).canBeApplied ? Achievement(141).effects.ipGain : 1;
 
         if (ach === 43) return Achievement(43).canBeApplied ? (1 + Number(dim.charAt(2)) / 100) : 1;
         return (MultiplierTabHelper.achievementDimCheck(ach, dim) && Achievement(ach).canBeApplied)
@@ -1037,6 +1165,7 @@ GameDatabase.multiplierTabValues = {
         ? `Time Study ${ts} on all ${dim}`
         : `Time Study ${ts}`),
       multValue: (ts, dim) => {
+        if (!dim) return TimeStudy(ts).canBeApplied ? TimeStudy(ts).effectOrDefault(1) : 1;
         if (dim?.length === 2) {
           let totalEffect = DC.D1;
           for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {

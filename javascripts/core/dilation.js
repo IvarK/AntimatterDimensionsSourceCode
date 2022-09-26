@@ -137,7 +137,7 @@ export function getDilationGainPerSecond() {
   return dtRate;
 }
 
-function tachyonGainMultiplier() {
+export function tachyonGainMultiplier() {
   if (Pelle.isDisabled("tpMults")) return new Decimal(1);
   const pow = Enslaved.isRunning ? Enslaved.tachyonNerf : 1;
   return DC.D1.timesEffectsOf(

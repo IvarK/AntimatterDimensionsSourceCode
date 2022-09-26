@@ -5949,8 +5949,8 @@ kbd {
 }
 
 .o-notification--error {
-  background-color: #bf352d;
-  border-color: #330000;
+  background-color: #ffaa22;
+  border-color: #553300;
 }
 
 .o-notification--info {
@@ -5989,8 +5989,8 @@ kbd {
 }
 
 .s-base--metro .o-notification--error {
-  background-color: #f44336;
-  border-color: #c62828;
+  background-color: #ffaa22;
+  border-color: #553300;
 }
 
 .s-base--metro .o-notification--info {

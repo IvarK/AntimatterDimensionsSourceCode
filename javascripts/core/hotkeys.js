@@ -296,9 +296,12 @@ GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer(Autobuyer.reality));
 (function() {
   function bindDimensionHotkeys(tier) {
     GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
+    GameKeyboard.bindRepeatableHotkey(`num${tier}`, () => buyOneDimension(tier));
     GameKeyboard.bindRepeatableHotkey(`shift+${tier}`, () => buyOneDimension(tier));
     GameKeyboard.bindHotkey(`alt+${tier}`, () => toggleAutobuyer(Autobuyer.antimatterDimension(tier)));
+    GameKeyboard.bindHotkey(`alt+num${tier}`, () => toggleAutobuyer(Autobuyer.antimatterDimension(tier)));
     GameKeyboard.bindHotkey(`shift+alt+${tier}`, () => toggleBuySingles(Autobuyer.antimatterDimension(tier)));
+    GameKeyboard.bindHotkey(`shift+alt+num${tier}`, () => toggleBuySingles(Autobuyer.antimatterDimension(tier)));
   }
   for (let i = 1; i < 9; i++) bindDimensionHotkeys(i);
 }());

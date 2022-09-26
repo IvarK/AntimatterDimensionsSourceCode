@@ -1,5 +1,10 @@
 import Mousetrap from "mousetrap";
 
+// Add all numpad keys to Mousetrap (keycodes 97-105 correspond to numpad 1-9)
+const numpadKeys = {};
+for (let num = 1; num <= 9; num++) numpadKeys[num + 96] = `num${num}`;
+Mousetrap.addKeycodes(numpadKeys);
+
 class KeySpin {
   constructor(key, action) {
     this.key = key;

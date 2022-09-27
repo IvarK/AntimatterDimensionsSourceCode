@@ -33,6 +33,21 @@ export default {
     },
     removeRow() {
       Glyphs.changeProtectedRows(-1);
+    },
+    isProtectedRowsMax() {
+      return this.protectedRows === Glyphs.totalSlots / 10 - 1;
+    },
+    addRowButtonClass() {
+      return {
+        "c-glyph-inventory-option": true,
+        "o-non-clickable": this.isProtectedRowsMax()
+      };
+    },
+    removeRowButtonClass() {
+      return {
+        "c-glyph-inventory-option": true,
+        "o-non-clickable": this.protectedRows === 0
+      };
     }
   }
 };
@@ -50,16 +65,19 @@ export default {
       Protected Slots: ({{ quantifyInt("row", protectedRows) }})
     </div>
     <button
-      class="c-glyph-inventory-option"
+      :class="addRowButtonClass()"
       @click="addRow"
     >
       Add a protected row
-      <div class="c-glyph-inventory-option__tooltip">
+      <div
+        v-if="isProtectedRowsMax()"
+        class="c-glyph-inventory-option__tooltip"
+      >
         One row is permanently un-protected for new Glyphs
       </div>
     </button>
     <button
-      class="c-glyph-inventory-option"
+      :class="removeRowButtonClass()"
       @click="removeRow"
     >
       Remove a protected row
@@ -73,5 +91,7 @@ export default {
 </template>
 
 <style scoped>
-
+.o-non-clickable {
+  cursor: auto;
+}
 </style>

@@ -2,7 +2,8 @@
 /* eslint-disable require-unicode-regexp */
 /* eslint-disable camelcase */
 import { createToken, Lexer } from "chevrotain";
-import { DC } from "../constants.js";
+
+import { DC } from "../constants";
 
 export const AutomatorLexer = (() => {
   const createCategory = name => createToken({ name, pattern: Lexer.NA, longer_alt: Identifier });
@@ -70,7 +71,6 @@ export const AutomatorLexer = (() => {
   const PrestigeEvent = createCategory("PrestigeEvent");
   const StudyPath = createCategory("StudyPath");
   const TimeUnit = createCategory("TimeUnit");
-  const TTCurrency = createCategory("TTCurrency");
 
   createInCategory(ComparisonOperator, "OpGTE", />=/, {
     $autocomplete: ">=",
@@ -102,17 +102,14 @@ export const AutomatorLexer = (() => {
   EqualSign.$compare = (a, b) => Decimal.eq(a, b);
 
   createInCategory(AutomatorCurrency, "EP", /ep/i, {
-    extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyOne(true, "ep"),
     $getter: () => Currency.eternityPoints.value
   });
   createInCategory(AutomatorCurrency, "IP", /ip/i, {
-    extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyOne(true, "ip"),
     $getter: () => Currency.infinityPoints.value
   });
   createInCategory(AutomatorCurrency, "AM", /am/i, {
-    extraCategories: [TTCurrency],
     $buyTT: () => TimeTheorems.buyOne(true, "am"),
     $getter: () => Currency.antimatter.value
   });
@@ -146,7 +143,7 @@ export const AutomatorLexer = (() => {
     $getter: () => (isRealityAvailable() ? MachineHandler.gainedRealityMachines : DC.D0)
   });
   createInCategory(AutomatorCurrency, "PendingGlyphLevel", /pending[ \t]+glyph[ \t]+level/i, {
-    $autocomplete: "pending glyph level",
+    $autocomplete: "pending Glyph level",
     $getter: () => new Decimal(isRealityAvailable() ? gainedGlyphLevel().actualLevel : 0),
   });
 
@@ -274,24 +271,23 @@ export const AutomatorLexer = (() => {
 
   createKeyword("Auto", /auto/i);
   createKeyword("Buy", /buy/i);
-  createKeyword("Blob", /blob\s\s/i);
-  createKeyword("Define", /define/i);
+  // Necessary to hide it from Codemirror's tab auto-completion
+  createKeyword("Blob", /blob\s\s/i, {
+    $unlocked: () => false,
+  });
   createKeyword("If", /if/i);
   createKeyword("Load", /load/i);
-  createKeyword("Max", /max/i);
-  createKeyword("All", /all/i, {
-    extraCategories: [TTCurrency],
-    $buyTT: () => TimeTheorems.buyOneOfEach(),
-  });
   createKeyword("Notify", /notify/i);
   createKeyword("Nowait", /nowait/i);
   createKeyword("Off", /off/i);
   createKeyword("On", /on/i);
   createKeyword("Pause", /pause/i);
-  // Presets are a little special, because they can be named anything (like ec12 or wait)
+  // Names are a little special, because they can be named anything (like ec12 or wait)
   // So, we consume the label at the same time as we consume the preset. In order to report
-  // errors, we also match just the word preset. And, we have to not match comments.
-  createKeyword("Preset", /preset([ \t]+(\/(?!\/)|[^\n#/])*)?/i);
+  // errors, we also match just the word name. And, we have to not match comments.
+  createKeyword("Name", /name([ \t]+(\/(?!\/)|[^\n#/])*)?/i);
+  createKeyword("Id", /id\b([ \t]+\d)?/i);
+  createKeyword("Purchase", /purchase/i);
   createKeyword("Respec", /respec/i);
   createKeyword("Restart", /restart/i);
   createKeyword("Start", /start/i);
@@ -303,9 +299,11 @@ export const AutomatorLexer = (() => {
   createKeyword("While", /while/i);
   createKeyword("BlackHole", /black[ \t]+hole/i, {
     $autocomplete: "black hole",
+    $unlocked: () => BlackHole(1).isUnlocked,
   });
-  createKeyword("StoreTime", /stored?[ \t]+time/i, {
-    $autocomplete: "store time",
+  createKeyword("StoreGameTime", /stored?[ \t]+game[ \t]+time/i, {
+    $autocomplete: "store game time",
+    $unlocked: () => Enslaved.isUnlocked,
   });
 
   createKeyword("Dilation", /dilation/i);
@@ -339,7 +337,6 @@ export const AutomatorLexer = (() => {
     Keyword, ...keywordTokens,
     PrestigeEvent, ...tokenLists.PrestigeEvent,
     StudyPath, ...tokenLists.StudyPath,
-    TTCurrency,
     TimeUnit, ...tokenLists.TimeUnit,
     Identifier,
   ];
@@ -366,27 +363,44 @@ export const AutomatorLexer = (() => {
 
   const automatorCurrencyNames = tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase());
 
-  const standardizeAutomatorCurrencyName = function(x) {
-    // This first line exists for this function to usually return quickly;
-    // otherwise it's called enough to cause lag.
-    if (automatorCurrencyNames.includes(x.toUpperCase())) return x.toUpperCase();
+  const standardizeAutomatorValues = function(x) {
+    try {
+      if (automatorCurrencyNames.includes(x.toUpperCase())) return x.toUpperCase();
+    } catch {
+      // This only happens if the input is a number or Decimal, in which case we don't attempt to change any formatting
+      // and simply return
+      return x;
+    }
     for (const i of tokenLists.AutomatorCurrency) {
       // Check for a match of the full string.
       if (x.match(i.PATTERN) && x.match(i.PATTERN)[0].length === x.length) {
         return i.$autocomplete.toUpperCase();
       }
     }
-    // If we get to this point something has gone wrong, a currency name didn't match any of the currency regexps.
-    throw new Error(`${x} does not seem to be an automator currency`);
+    // If we get to this point, we haven't matched a currency name and instead assume it's a defined constant and
+    // return it without any format changes since these are case-sensitive
+    return x;
   };
+
+  // In order to disallow individual words within command key words/phrases, we need to ignore certain patterns (mostly
+  // ones with special regex characters), split the rest of them up across all spaces and tabs, and then flatten the
+  // final resulting array. Note that this technically duplicates words present in multiple phrases (eg. "pending")
+  const ignoredPatterns = ["Identifier", "LCurly", "RCurly"];
+  const forbiddenConstantPatterns = lexer.lexerDefinition
+    .filter(p => !ignoredPatterns.includes(p.name))
+    .map(p => p.PATTERN.source)
+    .flatMap(p => ((p.includes("(") || p.includes(")")) ? p : p.split("[ \\t]+")));
 
   return {
     lexer,
     tokens: automatorTokens,
     tokenIds,
     tokenMap,
-    standardizeAutomatorCurrencyName,
+    standardizeAutomatorValues,
+    forbiddenConstantPatterns,
   };
 })();
 
-export const standardizeAutomatorCurrencyName = AutomatorLexer.standardizeAutomatorCurrencyName;
+export const standardizeAutomatorValues = AutomatorLexer.standardizeAutomatorValues;
+
+export const forbiddenConstantPatterns = AutomatorLexer.forbiddenConstantPatterns;

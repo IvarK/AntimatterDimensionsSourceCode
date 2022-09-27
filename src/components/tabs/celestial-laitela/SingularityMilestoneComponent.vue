@@ -12,7 +12,6 @@ export default {
     }
   },
   data: () => ({
-    isDoomed: false,
     isMaxed: false,
     progressToNext: "",
     remainingSingularities: 0,
@@ -48,7 +47,7 @@ export default {
     containerClass() {
       return {
         "c-laitela-milestone": true,
-        "o-dark-matter-dimension-button--ascend": !this.suppressGlow &&
+        "o-laitela-milestone--glow": !this.suppressGlow &&
           this.milestone.previousGoal > this.lastCheckedMilestones
       };
     },
@@ -86,11 +85,11 @@ export default {
         default:
           throw new Error("Unrecognized Singularity Milestone mode");
       }
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.isMaxed = this.milestone.isMaxed;
       this.progressToNext = this.milestone.progressToNext;
       this.remainingSingularities = this.milestone.remainingSingularities;
@@ -122,10 +121,7 @@ export default {
       :class="barClass"
       :style="barStyle"
     />
-    <span v-if="isDoomed">
-      This Singularity Milestone has no effect while in Doomed
-    </span>
-    <span v-else>
+    <span :class="{ 'o-pelle-disabled': isDoomed }">
       <b v-if="!isMaxed">
         {{ progressDisplay }}
       </b>
@@ -142,3 +138,14 @@ export default {
     </span>
   </div>
 </template>
+
+<style scoped>
+.o-laitela-milestone--glow {
+  font-weight: bold;
+  color: var(--color-laitela--base);
+  background: var(--color-laitela--accent);
+  border-color: var(--color-laitela--accent);
+  box-shadow: 0 0 0.5rem 0.1rem inset, 0 0 0.3rem 0;
+  animation: 3s a-laitela-flash infinite;
+}
+</style>

@@ -1,14 +1,14 @@
 <script>
 import AutobuyerToggles from "./AutobuyerToggles";
+import BigCrunchAutobuyerBox from "./BigCrunchAutobuyerBox";
+import DimensionAutobuyerBox from "./DimensionAutobuyerBox";
+import DimensionBoostAutobuyerBox from "./DimensionBoostAutobuyerBox";
+import EternityAutobuyerBox from "./EternityAutobuyerBox";
+import GalaxyAutobuyerBox from "./GalaxyAutobuyerBox";
 import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import RealityAutobuyerBox from "./RealityAutobuyerBox";
-import EternityAutobuyerBox from "./EternityAutobuyerBox";
-import BigCrunchAutobuyerBox from "./BigCrunchAutobuyerBox";
-import GalaxyAutobuyerBox from "./GalaxyAutobuyerBox";
-import DimensionBoostAutobuyerBox from "./DimensionBoostAutobuyerBox";
-import TickspeedAutobuyerBox from "./TickspeedAutobuyerBox";
-import DimensionAutobuyerBox from "./DimensionAutobuyerBox";
 import SimpleAutobuyersMultiBox from "./SimpleAutobuyersMultiBox";
+import TickspeedAutobuyerBox from "./TickspeedAutobuyerBox";
 
 export default {
   name: "AutobuyersTab",
@@ -26,12 +26,26 @@ export default {
   },
   data() {
     return {
+      hasInfinity: false,
       hasContinuum: false,
       displayADAutobuyersIndividually: false,
+      hasInstant: false,
     };
+  },
+  computed: {
+    // It only makes sense to show this if the player has seen gamespeed-altering effects, but we should keep it there
+    // permanently as soon as they have
+    hasSeenGamespeedAlteringEffects() {
+      const ec12 = EternityChallenge(12);
+      return PlayerProgress.realityUnlocked() || ec12.completions > 0 || ec12.isRunning;
+    },
+    gameTickLength() {
+      return `${formatInt(player.options.updateRate)} ms`;
+    }
   },
   methods: {
     update() {
+      this.hasInfinity = PlayerProgress.infinityUnlocked();
       this.hasContinuum = Laitela.continuumActive;
       this.checkADAutoStatus();
     },
@@ -44,9 +58,10 @@ export default {
           .every(x => x.hasUnlimitedBulk && x.hasMaxedInterval);
         return;
       }
-      const allMaxedInterval = ad.allMaxedInterval();
-      const allUnlocked = ad.allUnlocked();
-      const allUnlimitedBulk = ad.allUnlimitedBulk();
+      this.hasInstant = ad.hasInstant;
+      const allMaxedInterval = ad.allMaxedInterval;
+      const allUnlocked = ad.allUnlocked;
+      const allUnlimitedBulk = ad.allUnlimitedBulk;
       this.displayADAutobuyersIndividually = !(allMaxedInterval && allUnlocked && allUnlimitedBulk);
     },
   }
@@ -57,9 +72,22 @@ export default {
   <div class="l-autobuyers-tab">
     <AutobuyerToggles />
     <OpenModalHotkeysButton />
-    <RealityAutobuyerBox />
-    <EternityAutobuyerBox />
-    <BigCrunchAutobuyerBox />
+    <div v-if="hasSeenGamespeedAlteringEffects">
+      Autobuyers intervals are real time and therefore unaffected
+      <br>
+      by anything which may alter how fast the game itself is running.
+    </div>
+    <div v-if="!hasInfinity">
+      Challenges for upgrading autobuyers are unlocked by reaching Infinity.
+    </div>
+    <b>Autobuyers with no displayed bulk have unlimited bulk by default.</b>
+    <b>
+      Antimatter Dimension Autobuyers can have their bulk upgraded once interval is below {{ formatInt(100) }} ms.
+    </b>
+    <b v-if="hasInstant">Autobuyers with "Instant" interval will trigger every game tick ({{ gameTickLength }}).</b>
+    <RealityAutobuyerBox class="c-reality-pos" />
+    <EternityAutobuyerBox class="c-eternity-pos" />
+    <BigCrunchAutobuyerBox class="c-infinity-pos" />
     <GalaxyAutobuyerBox />
     <DimensionBoostAutobuyerBox />
     <TickspeedAutobuyerBox v-if="!hasContinuum" />
@@ -75,5 +103,19 @@ export default {
 </template>
 
 <style scoped>
+/* This is necessary for the ExpandingControlBox within these components to render in the right stacking order
+when they're open. It looks slightly hacky but actually can't be done any other way; each AutobuyerBox creates
+its own stacking context, which means that all z-indices specified within are essentially scoped and the
+AutobuyerBox components will always render in page order regardless of internal z-indices without these. */
+.c-reality-pos {
+  z-index: 3;
+}
 
+.c-eternity-pos {
+  z-index: 2;
+}
+
+.c-infinity-pos {
+  z-index: 1;
+}
 </style>

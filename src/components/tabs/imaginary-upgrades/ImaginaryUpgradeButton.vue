@@ -1,9 +1,9 @@
 <script>
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import CostDisplay from "@/components/CostDisplay";
 import HintText from "@/components/HintText";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "ImaginaryUpgradeButton",
@@ -22,14 +22,14 @@ export default {
   },
   data() {
     return {
-      isUseless: false,
       isAvailableForPurchase: false,
       canBeBought: false,
       isRebuyable: false,
       isBought: false,
       isPossible: false,
       isAutoUnlocked: false,
-      isAutobuyerOn: false
+      isAutobuyerOn: false,
+      etaText: ""
     };
   },
   computed: {
@@ -38,8 +38,8 @@ export default {
     },
     classObject() {
       return {
-        "c-reality-upgrade-btn--useless": this.isUseless,
-        "c-reality-upgrade-btn--bought": this.isBought && !this.isUseless,
+        "c-reality-upgrade-btn--useless": this.upgrade.pelleDisabled,
+        "c-reality-upgrade-btn--bought": this.isBought && !this.upgrade.pelleDisabled,
         "c-reality-upgrade-btn--unavailable": !this.isBought && !this.canBeBought && this.isAvailableForPurchase,
         "c-reality-upgrade-btn--possible": !this.isAvailableForPurchase && this.isPossible,
         "c-reality-upgrade-btn--locked": !this.isAvailableForPurchase && !this.isPossible,
@@ -49,7 +49,8 @@ export default {
       return {
         description: this.config.requirement
       };
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   watch: {
     isAutobuyerOn(newValue) {
@@ -64,16 +65,25 @@ export default {
       this.isRebuyable = upgrade.isRebuyable;
       this.isBought = !upgrade.isRebuyable && upgrade.isBought;
       this.isPossible = upgrade.isPossible;
-      this.isAutoUnlocked = ImaginaryUpgrade(20).isBought;
+      this.isAutoUnlocked = ImaginaryUpgrade(20).canBeApplied;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.imaginaryUpgrade(upgrade.id).isActive;
-      this.isUseless = Pelle.isDoomed;
+      this.etaText = this.getETAText();
+    },
+    getETAText() {
+      if (this.canBeBought || !this.isAvailableForPurchase || this.isBought || Pelle.isDoomed) return "";
+      const time = MachineHandler.estimateIMTimer(this.upgrade.cost);
+      if (isFinite(time)) return TimeSpan.fromSeconds(time).toString();
+      return "Never affordable";
     }
   }
 };
 </script>
 
 <template>
-  <div class="l-spoon-btn-group">
+  <div
+    v-tooltip="etaText"
+    class="l-spoon-btn-group"
+  >
     <button
       :class="classObject"
       class="l-reality-upgrade-btn c-reality-upgrade-btn"
@@ -85,10 +95,7 @@ export default {
       >
         {{ config.name }}
       </HintText>
-      <span v-if="isUseless">
-        This upgrade has no effect while in Doomed
-      </span>
-      <span v-else>
+      <span :class="{ 'o-pelle-disabled': upgrade.pelleDisabled }">
         <DescriptionDisplay :config="config" />
         <template v-if="($viewModel.shiftDown === isAvailableForPurchase) && !isRebuyable">
           <br>

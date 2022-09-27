@@ -1,4 +1,6 @@
 <script>
+import { GlyphInfo } from "../../src/components/modals/options/SelectGlyphInfoDropdown";
+
 import GlyphTooltip from "@/components/GlyphTooltip";
 
 export default {
@@ -35,6 +37,11 @@ export default {
       type: Number,
       required: false,
       default: 0
+    },
+    isInventoryGlyph: {
+      type: Boolean,
+      required: false,
+      default: false
     },
     isActiveGlyph: {
       type: Boolean,
@@ -93,12 +100,13 @@ export default {
       uncappedRefineReward: 0,
       refineReward: 0,
       displayLevel: 0,
-      isRealityGlyph: false,
-      isCursedGlyph: false,
-      glyphEffects: [],
       // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
       tooltipLoaded: false,
-      logGlyphSacrifice: 0
+      logTotalSacrifice: 0,
+      // This exists to dynamically adjust reality glyph colors over time - this used to use a keyframe animation, but
+      // applying that was causing large amounts of lag due to the number of independent and partially overlapping
+      // elements it was applying it to. Of note - null transform hacks did not seem to improve performance either.
+      colorTimer: 0,
     };
   },
   computed: {
@@ -108,8 +116,13 @@ export default {
     typeConfig() {
       return GlyphTypes[this.glyph.type];
     },
+    isBlobHeart() {
+      return this.$viewModel.theme === "S11" && this.glyph.type === "companion";
+    },
     symbol() {
       const symbol = this.glyph.symbol;
+      // \uE019 = :blobheart:
+      if (this.isBlobHeart) return "\uE019";
       if (symbol) {
         return symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol;
       }
@@ -119,6 +132,8 @@ export default {
       return { "z-index": this.isInModal ? 7 : 6 };
     },
     borderColor() {
+      if (this.isRealityGlyph) return this.realityGlyphColor();
+      if (this.isCursedGlyph) return this.cursedColor;
       return this.glyph.color || this.typeConfig.color;
     },
     overStyle() {
@@ -129,7 +144,6 @@ export default {
         "background-color": "rgba(0, 0, 0, 0)",
         "box-shadow": `0 0 ${this.glowBlur} calc(${this.glowSpread} + 0.1rem) ${this.borderColor} inset`,
         "border-radius": this.circular ? "50%" : "0",
-        animation: this.isRealityGlyph ? "a-reality-glyph-over-cycle 10s infinite" : undefined,
       };
     },
     outerStyle() {
@@ -139,22 +153,34 @@ export default {
         "background-color": this.borderColor,
         "box-shadow": `0 0 ${this.glowBlur} ${this.glowSpread} ${this.borderColor}`,
         "border-radius": this.circular ? "50%" : "0",
-        animation: this.isRealityGlyph ? "a-reality-glyph-outer-cycle 10s infinite" : undefined,
         "-webkit-user-drag": this.draggable ? "" : "none"
       };
     },
+    cursedColor() {
+      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "black" : "white";
+    },
+    cursedColorInverted() {
+      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
+    },
     innerStyle() {
-      const rarityColor = this.glyph.color || getRarity(this.glyph.strength).color;
+      const rarityColor = this.isRealityGlyph
+        ? this.realityGlyphColor()
+        : (this.glyph.color || getColor(this.glyph.strength));
+      const textShadow = this.isCursedGlyph
+        ? `-0.04em 0.04em 0.08em ${this.cursedColor}`
+        : `-0.04em 0.04em 0.08em ${rarityColor}`;
+      const defaultBG = player.options.forceDarkGlyphs || Theme.current().isDark()
+        ? "black"
+        : "white";
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
-        color: this.isCursedGlyph ? "black" : rarityColor,
-        "text-shadow": this.isCursedGlyph ? "-0.04em 0.04em 0.08em black" : `-0.04em 0.04em 0.08em ${rarityColor}`,
+        color: this.isCursedGlyph ? this.cursedColor : rarityColor,
+        "text-shadow": this.isBlobHeart ? undefined : textShadow,
         "border-radius": this.circular ? "50%" : "0",
-        animation: this.isRealityGlyph ? "a-reality-glyph-icon-cycle 10s infinite" : undefined,
         "padding-bottom": this.bottomPadding,
-        background: this.isCursedGlyph ? "white" : undefined
+        background: this.isCursedGlyph ? this.cursedColorInverted : defaultBG
       };
     },
     mouseEventHandlers() {
@@ -190,32 +216,9 @@ export default {
           return "";
       }
     },
-  },
-  watch: {
-    logGlyphSacrifice() {
-      this.tooltipLoaded = false;
-      if (this.isCurrentTooltip) this.showTooltip();
-    }
-  },
-  created() {
-    this.$on("tooltip-touched", () => this.hideTooltip());
-  },
-  beforeDestroy() {
-    if (this.isCurrentTooltip) this.hideTooltip();
-    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
-  },
-  methods: {
-    update() {
-      this.isRealityGlyph = this.glyph.type === "reality";
-      this.isCursedGlyph = this.glyph.type === "cursed";
-      this.glyphEffects = this.extractGlyphEffects();
-      this.showGlyphEffectDots = player.options.showHintText.glyphEffectDots;
-      this.logGlyphSacrifice = BASIC_GLYPH_TYPES
-        .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
-    },
     // This finds all the effects of a glyph and shifts all their IDs so that type's lowest-ID effect is 0 and all
     // other effects count up to 3 (or 6 for effarig). Used to add dots in unique positions on glyphs to show effects.
-    extractGlyphEffects() {
+    glyphEffects() {
       let minEffectID = 0;
       switch (this.glyph.type) {
         case "time":
@@ -243,15 +246,113 @@ export default {
           throw new Error(`Unrecognized glyph type "${this.glyph.type}" in glyph effect icons`);
       }
       const effectIDs = [];
-      // eslint-disable-next-line no-bitwise
       let remainingEffects = this.glyph.effects >> minEffectID;
       for (let id = 0; remainingEffects > 0; id++) {
-        // eslint-disable-next-line no-bitwise
         if ((remainingEffects & 1) === 1) effectIDs.push(id);
-        // eslint-disable-next-line no-bitwise
         remainingEffects >>= 1;
       }
       return effectIDs;
+    },
+    isRealityGlyph() {
+      return this.glyph.type === "reality";
+    },
+    isCursedGlyph() {
+      return this.glyph.type === "cursed";
+    },
+    showGlyphEffectDots() {
+      return player.options.showHintText.glyphEffectDots;
+    },
+    displayedInfo() {
+      const blacklist = ["companion", "cursed"];
+      if (!this.isInventoryGlyph || blacklist.includes(this.glyph.type)) return null;
+
+      const options = player.options.showHintText;
+      if (options.glyphInfoType === GlyphInfo.types.NONE ||
+        (!options.showGlyphInfoByDefault && !this.$viewModel.shiftDown)) {
+        return null;
+      }
+
+      const typeEnum = GlyphInfo.types;
+      switch (options.glyphInfoType) {
+        case typeEnum.LEVEL:
+          this.updateDisplayLevel();
+          return formatInt(this.displayLevel === 0 ? this.glyph.level : this.displayLevel);
+        case typeEnum.RARITY:
+          return formatRarity(strengthToRarity(Pelle.isDoomed ? Pelle.glyphStrength : this.glyph.strength));
+        case typeEnum.SAC_VALUE:
+          return format(this.sacrificeReward, 2, 2);
+        case typeEnum.FILTER_SCORE:
+          return format(AutoGlyphProcessor.filterValue(this.glyph), 1, 1);
+        case typeEnum.CURRENT_REFINE:
+          return `${format(this.refineReward, 2, 2)} ${this.symbol}`;
+        case typeEnum.MAX_REFINE:
+          return `${format(this.uncappedRefineReward, 2, 2)} ${this.symbol}`;
+        default:
+          throw new Error("Unrecognized Glyph info type in info text");
+      }
+    }
+  },
+  watch: {
+    logTotalSacrifice() {
+      this.tooltipLoaded = false;
+      if (this.isCurrentTooltip) this.showTooltip();
+    }
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
+      this.$recompute("innerStyle");
+      this.$recompute("cursedColor");
+      this.$recompute("cursedColorInverted");
+      this.$recompute("showGlyphEffectDots");
+      this.$recompute("displayedInfo");
+    });
+    this.on$("tooltip-touched", () => this.hideTooltip());
+  },
+  beforeDestroy() {
+    if (this.isCurrentTooltip) this.hideTooltip();
+    if (this.$viewModel.draggingUIID === this.componentID) this.$viewModel.draggingUIID = -1;
+  },
+  methods: {
+    update() {
+      this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value;
+      this.colorTimer = (this.colorTimer + 4) % 1000;
+      this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
+      this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+        ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
+        : 0;
+      this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
+        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
+        : 0;
+      if (this.tooltipLoaded) this.updateDisplayLevel();
+    },
+    updateDisplayLevel() {
+      if (this.ignoreModifiedLevel) {
+        this.displayLevel = 0;
+        return;
+      }
+      const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
+      let adjustedLevel = this.isActiveGlyph
+        ? getAdjustedGlyphLevel(this.glyph)
+        : this.glyph.level + levelBoost;
+      if (Pelle.isDoomed && this.isInventoryGlyph) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
+      this.displayLevel = adjustedLevel;
+    },
+    // This produces a linearly interpolated color between the basic glyph colors, but with RGB channels copied and
+    // hardcoded from the color data because that's probably preferable to a very hacky hex conversion method. The
+    // order used is {infinity, dilation, power, replication, time, infinity, ... }
+    realityGlyphColor() {
+      // RGB values for the colors to interpolate between
+      const r = [182, 100, 34, 3, 178, 182];
+      const g = [127, 221, 170, 169, 65, 127];
+      const b = [51, 23, 72, 244, 227, 51];
+
+      // Integer and fractional parts for interpolation parameter
+      const i = Math.floor(this.colorTimer / 200);
+      const f = this.colorTimer / 200 - i;
+
+      return `rgb(${r[i] * (1 - f) + r[i + 1] * f},
+        ${g[i] * (1 - f) + g[i + 1] * f},
+        ${b[i] * (1 - f) + b[i + 1] * f})`;
     },
     hideTooltip() {
       this.tooltipLoaded = false;
@@ -268,13 +369,6 @@ export default {
       glyphInfo.sacrificeValue = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
       glyphInfo.refineValue = GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph);
       this.$viewModel.tabs.reality.currentGlyphTooltip = this.componentID;
-      this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
-      this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
-        ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
-        : 0;
-      this.refineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
-        ? GlyphSacrificeHandler.glyphRefinementGain(this.glyph)
-        : 0;
       if (
         AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
         (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP && this.refineReward === 0)
@@ -284,11 +378,6 @@ export default {
         this.currentAction = "refine";
       }
       this.scoreMode = AutoGlyphProcessor.scoreMode;
-      const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
-      const adjustedLevel = this.isActiveGlyph
-        ? getAdjustedGlyphLevel(this.glyph)
-        : this.glyph.level + levelBoost;
-      this.displayLevel = this.ignoreModifiedLevel ? 0 : adjustedLevel;
     },
     moveTooltipTo(x, y) {
       // If we are just creating the tooltip now, we can't move it yet.
@@ -391,8 +480,8 @@ export default {
         this.drag(t);
       }
     },
-    glyphEffectIcon(id) {
-      if (this.glyph.type === "companion") return {};
+    // Translates 0...3 into equally-spaced coordinates around a circle 90deg apart (0...6 and 45deg for effarig)
+    effectIconPos(id) {
       // Place dots clockwise starting from the bottom left
       const angle = this.glyph.type === "effarig"
         ? (Math.PI / 4) * (id + 1)
@@ -400,17 +489,28 @@ export default {
       const scale = 0.3 * this.size.replace("rem", "");
       const dx = -scale * Math.sin(angle);
       const dy = scale * (Math.cos(angle) + 0.15);
+      return { dx, dy };
+    },
+    glyphColor() {
+      if (this.isCursedGlyph) return this.cursedColor;
+      if (this.isRealityGlyph) return this.realityGlyphColor();
+      return `${this.glyph.color || getColor(this.glyph.strength)}`;
+    },
+    // Note that the dot bigger for one of the mutually-exclusive effect pair (IDs of the only case are hardcoded)
+    glyphEffectIcon(id) {
+      if (this.glyph.type === "companion") return {};
+      const pos = this.effectIconPos(id);
+
       return {
         position: "absolute",
         width: "0.3rem",
         height: "0.3rem",
         "border-radius": "50%",
-        background: this.isCursedGlyph ? "black" : `${this.glyph.color || getRarity(this.glyph.strength).color}`,
-        transform: `translate(${dx}rem, ${dy}rem)`,
-        animation: this.isRealityGlyph ? "a-reality-glyph-dot-cycle 10s infinite" : "none",
+        background: this.glyphColor(),
+        transform: `translate(${pos.dx - 0.15 * 0.3}rem, ${pos.dy - 0.15 * 0.3}rem)`,
         opacity: Theme.current().name === "S9" ? 0 : 0.8
       };
-    }
+    },
   }
 };
 </script>
@@ -439,29 +539,35 @@ export default {
           :style="glyphEffectIcon(x)"
         />
       </template>
-      <GlyphTooltip
-        v-if="hasTooltip && tooltipLoaded"
-        v-show="isCurrentTooltip"
-        ref="tooltip"
-        v-bind="glyph"
-        :class="tooltipDirectionClass"
-        :style="zIndexStyle"
-        :sacrifice-reward="sacrificeReward"
-        :refine-reward="refineReward"
-        :uncapped-refine-reward="uncappedRefineReward"
-        :current-action="currentAction"
-        :score-mode="scoreMode"
-        :show-deletion-text="showSacrifice"
-        :display-level="displayLevel"
-        :component="componentID"
-        :change-watcher="logGlyphSacrifice"
-      />
     </div>
+    <GlyphTooltip
+      v-if="hasTooltip && tooltipLoaded"
+      v-show="isCurrentTooltip"
+      ref="tooltip"
+      v-bind="glyph"
+      :class="tooltipDirectionClass"
+      :style="zIndexStyle"
+      :sacrifice-reward="sacrificeReward"
+      :refine-reward="refineReward"
+      :uncapped-refine-reward="uncappedRefineReward"
+      :current-action="currentAction"
+      :score-mode="scoreMode"
+      :show-deletion-text="showSacrifice"
+      :display-level="displayLevel"
+      :component="componentID"
+      :change-watcher="logTotalSacrifice"
+    />
     <div
       v-if="isNew"
       class="l-new-glyph"
     >
       New!
+    </div>
+    <div
+      v-if="displayedInfo"
+      class="l-glyph-info"
+    >
+      {{ displayedInfo }}
     </div>
     <div
       ref="over"

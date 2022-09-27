@@ -14,9 +14,16 @@ export default {
       if (this.isDoomed) return "You cannot amplify a Doomed Reality";
       if (this.isDisabled) return "You cannot amplify Celestial Realities";
       if (!this.canAmplify) {
-        return "Store more or complete the Reality faster to amplify";
+        return "Store more real time or complete the Reality faster to amplify";
       }
       return null;
+    },
+    buttonClass() {
+      return {
+        "l-reality-amplify-button": true,
+        "l-reality-amplify-button--clickable": !this.isDoomed && this.canAmplify,
+        "o-enslaved-mechanic-button--storing-time": this.isActive,
+      };
     }
   },
   methods: {
@@ -26,7 +33,7 @@ export default {
       this.isDisabled = isInCelestialReality();
       this.isActive = Enslaved.boostReality;
       this.ratio = Enslaved.realityBoostRatio;
-      this.canAmplify = !this.isDisabled && this.ratio > 1 && !this.isDoomed;
+      this.canAmplify = Enslaved.canAmplify;
     },
     toggleActive() {
       if (!this.canAmplify) return;
@@ -37,31 +44,27 @@ export default {
 </script>
 
 <template>
-  <div v-if="isVisible">
-    <button
-      :class="['l-reality-amplify-button', {'o-enslaved-mechanic-button--storing-time': isActive}]"
-      class="c-button-wrapper"
-      :ach-tooltip="tooltip"
-      @click="toggleActive"
-    >
-      <div v-if="isDoomed">
-        You cannot amplify Doomed Realities.
-      </div>
-      <div v-else-if="canAmplify">
-        <span v-if="isActive">Will be amplified:</span>
-        <span v-else>Amplify this Reality:</span>
-        <br>
-        All rewards ×{{ formatInt(ratio) }}
-      </div>
-      <div v-else>
-        Not enough stored real time to amplify.
-      </div>
-    </button>
-  </div>
+  <button
+    v-if="isVisible"
+    :class="buttonClass"
+    :ach-tooltip="tooltip"
+    @click="toggleActive"
+  >
+    <div v-if="isDoomed">
+      You cannot amplify Doomed Realities.
+    </div>
+    <div v-else-if="canAmplify">
+      <span v-if="isActive">Will be amplified:</span>
+      <span v-else>Amplify this Reality:</span>
+      <br>
+      All rewards ×{{ formatInt(ratio) }}
+    </div>
+    <div v-else>
+      Not enough stored real time to amplify.
+    </div>
+  </button>
 </template>
 
 <style scoped>
-.c-button-wrapper {
-  width: 100%;
-}
+
 </style>

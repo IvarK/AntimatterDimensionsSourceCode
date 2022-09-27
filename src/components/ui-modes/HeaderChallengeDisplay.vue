@@ -32,7 +32,7 @@ export default {
       return [
         celestialReality(Teresa, "Teresa's"),
         celestialReality(Effarig, "Effarig's"),
-        celestialReality(Enslaved, "The Enslaved Ones'"),
+        celestialReality(Enslaved, "The Nameless Ones'"),
         celestialReality(V, "V's"),
         celestialReality(Ra, "Ra's"),
         celestialReality(Laitela, "Lai'tela's"),
@@ -90,7 +90,7 @@ export default {
     },
     challengeDisplay() {
       if (this.inPelle && this.activeChallengeNames.length > 0) {
-        return `a Doomed Reality + ${this.activeChallengeNames.join(" + ")}. Good luck.`;
+        return `${this.activeChallengeNames.join(" + ")} in a Doomed Reality. Good luck.`;
       }
       if (this.inPelle) return "a Doomed Reality. Good luck.";
       if (this.activeChallengeNames.length === 0) {
@@ -103,7 +103,10 @@ export default {
     update() {
       this.infinityUnlocked = PlayerProgress.infinityUnlocked();
       this.activityTokens = this.parts.map(part => part.activityToken());
-      this.showExit = this.activeChallengeNames.length !== 0;
+      // Dilation in Pelle can't be left once entered, but we still want to allow leaving more nested challenges
+      this.showExit = this.inPelle && player.dilation.active
+        ? this.activeChallengeNames.length > 1
+        : this.activeChallengeNames.length !== 0;
       this.exitText = this.exitDisplay();
       this.resetCelestial = player.options.retryCelestial;
       this.inPelle = Pelle.isDoomed;

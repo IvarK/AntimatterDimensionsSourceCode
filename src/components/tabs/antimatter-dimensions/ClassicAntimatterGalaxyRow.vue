@@ -20,11 +20,19 @@ export default {
       },
       canBeBought: false,
       distantStart: 0,
+      remoteStart: 0,
       lockText: null,
       canBulkBuy: false,
+      creditsClosed: false,
+      scalingText: {
+        distant: null,
+        remote: null,
+      },
+      hasTutorial: false,
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     dimName() {
       return AntimatterDimension(this.requirement.tier).displayName;
     },
@@ -34,12 +42,12 @@ export default {
         : this.lockText;
     },
     sumText() {
-      const parts = [this.galaxies.normal];
+      const parts = [Math.max(this.galaxies.normal, 0)];
       if (this.galaxies.replicanti > 0) parts.push(this.galaxies.replicanti);
       if (this.galaxies.dilation > 0) parts.push(this.galaxies.dilation);
-      const sum = parts.map(formatInt).join(" + ");
+      const sum = parts.map(this.formatGalaxies).join(" + ");
       if (parts.length >= 2) {
-        return `${sum} = ${formatInt(parts.sum())}`;
+        return `${sum} = ${this.formatGalaxies(parts.sum())}`;
       }
       return sum;
     },
@@ -58,15 +66,24 @@ export default {
       switch (this.type) {
         case GALAXY_TYPE.DISTANT:
           return `Each Galaxy is more expensive past ${quantifyInt("Galaxy", this.distantStart)}`;
-        case GALAXY_TYPE.REMOTE:
-          return "Increased Galaxy cost scaling: " +
-            `Quadratic past ${formatInt(this.distantStart)} (distant),
-              exponential past ${formatInt(Galaxy.remoteStart)} (remote)`;
+        case GALAXY_TYPE.REMOTE: {
+          const scalings = [
+            { type: "distant", function: "quadratic", amount: this.distantStart },
+            { type: "remote", function: "exponential", amount: this.remoteStart }
+          ];
+          return `Increased Galaxy cost scaling: ${scalings.sort((a, b) => a.amount - b.amount)
+            .map(scaling => `${scaling.function} scaling past ${this.formatGalaxies(scaling.amount)} (${scaling.type})`)
+            .join(", ").capitalize()}`;
+        }
       }
       return undefined;
     },
-    tutorialClass() {
-      return Tutorial.glowingClass(TUTORIAL_STATE.GALAXY, this.canBeBought);
+    classObject() {
+      return {
+        "o-primary-btn--galaxy l-dim-row__prestige-button": true,
+        "tutorial--glow": this.canBeBought && this.hasTutorial,
+        "o-pelle-disabled-pointer": this.creditsClosed,
+      };
     }
   },
   methods: {
@@ -80,27 +97,28 @@ export default {
       this.requirement.tier = requirement.tier;
       this.canBeBought = requirement.isSatisfied && Galaxy.canBeBought;
       this.distantStart = EternityChallenge(5).isRunning ? 0 : Galaxy.costScalingStart;
+      this.remoteStart = Galaxy.remoteStart;
       this.lockText = Galaxy.lockText;
       this.canBulkBuy = EternityMilestone.autobuyMaxGalaxies.isReached;
+      this.creditsClosed = GameEnd.creditsEverClosed;
+      this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.GALAXY);
     },
     buyGalaxy(bulk) {
       if (!this.canBeBought) return;
-      if (player.options.confirmations.antimatterGalaxy) {
-        const buyBulk = this.canBulkBuy && bulk;
-        Modal.antimatterGalaxy.show({ bulk: buyBulk });
-        return;
-      }
-      requestGalaxyReset(bulk);
+      manualRequestGalaxyReset(this.canBulkBuy && bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
+    },
+    formatGalaxies(num) {
+      return num > 1e8 ? format(num, 2) : formatInt(num);
     },
   }
 };
 </script>
 
 <template>
-  <div class="c-antimatter-dim-row">
+  <div class="c-dimension-row c-antimatter-dim-row c-antimatter-prestige-row">
     <div
-      class="c-dim-row__label c-dim-row__label--growable l-text-wrapper"
+      class="l-dim-row__prestige-text c-dim-row__label c-dim-row__label--amount l-text-wrapper"
     >
       {{ typeName }} ({{ sumText }}):
       requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
@@ -110,12 +128,15 @@ export default {
     </div>
     <PrimaryButton
       :enabled="canBeBought"
-      class="o-primary-btn--galaxy l-dim-row__button l-dim-row__button--right-offset"
-      :class="tutorialClass"
+      :class="classObject"
       @click.exact="buyGalaxy(true)"
       @click.shift.exact="buyGalaxy(false)"
     >
       {{ buttonText }}
+      <div
+        v-if="hasTutorial"
+        class="fas fa-circle-exclamation l-notification-icon"
+      />
     </PrimaryButton>
   </div>
 </template>

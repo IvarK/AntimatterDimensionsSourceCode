@@ -1,4 +1,4 @@
-import { DC } from "./constants.js";
+import { DC } from "./constants";
 
 export function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return DC.D1;
@@ -40,7 +40,7 @@ export function getTickSpeedMultiplier() {
       Achievement(178),
       InfinityChallenge(5).reward,
       PelleUpgrade.galaxyPower,
-      PelleRifts.pestilence.milestones[1]
+      PelleRifts.decay.milestones[1]
     );
     if (Pelle.isDoomed) galaxies *= 0.5;
 
@@ -60,7 +60,7 @@ export function getTickSpeedMultiplier() {
     Achievement(178),
     InfinityChallenge(5).reward,
     PelleUpgrade.galaxyPower,
-    PelleRifts.pestilence.milestones[1]
+    PelleRifts.decay.milestones[1]
   );
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");

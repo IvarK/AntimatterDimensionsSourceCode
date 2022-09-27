@@ -1,7 +1,7 @@
 <script>
-import DimensionBulkButton from "./DimensionBulkButton";
 import AutobuyerBox from "./AutobuyerBox";
 import AutobuyerIntervalButton from "./AutobuyerIntervalButton";
+import DimensionBulkButton from "./DimensionBulkButton";
 
 export default {
   name: "DimensionAutobuyerBox",
@@ -26,7 +26,7 @@ export default {
       return Autobuyer.antimatterDimension(this.tier);
     },
     name() {
-      return `${AntimatterDimension(this.tier).displayName} Dimension Autobuyer`;
+      return `${AntimatterDimension(this.tier).shortDisplayName} Dimension Autobuyer`;
     },
     modeDisplay() {
       switch (this.mode) {

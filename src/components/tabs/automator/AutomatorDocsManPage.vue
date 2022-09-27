@@ -15,7 +15,7 @@ export default {
     <b>NAME</b>
     <div
       class="c-automator-docs-page__indented"
-      v-html="command.name"
+      v-html="command.keyword"
     />
     <b>SYNTAX</b>
     <div
@@ -45,7 +45,7 @@ export default {
       </template>
     </template>
     <template v-if="command.examples">
-      <b>EXAMPLES</b>
+      <b>USAGE EXAMPLES</b>
       <div
         v-for="example in command.examples"
         :key="example"

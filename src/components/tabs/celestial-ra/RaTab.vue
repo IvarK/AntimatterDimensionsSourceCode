@@ -1,27 +1,27 @@
 <script>
-import RaPet from "./RaPet";
-import RaPetRecollectionButton from "./RaPetRecollectionButton";
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
+import RaPet from "./RaPet";
+import RaPetRemembranceButton from "./RaPetRemembranceButton";
 
 export default {
   name: "RaTab",
   components: {
     RaPet,
-    RaPetRecollectionButton,
+    RaPetRemembranceButton,
     CelestialQuoteHistory
   },
   data() {
     return {
-      isDoomed: false,
       memoriesPerChunk: 0,
       showReality: false,
       isRaCapped: false,
       totalLevels: 0,
-      showRecollection: false,
-      hasRecollection: false,
-      recollectionReq: 0,
-      recollectionMult: 1,
-      petWithRecollection: "",
+      showRemembrance: false,
+      hasRemembrance: false,
+      remembranceReq: 0,
+      remembranceMult: 1,
+      remembranceNerf: 1,
+      petWithRemembrance: "",
       isRunning: false,
       memoryBoosts: "",
     };
@@ -31,7 +31,7 @@ export default {
     pets: () => [
       {
         pet: Ra.pets.teresa,
-        scalingUpgradeVisible: () => Ra.totalCharges > 0,
+        scalingUpgradeVisible: () => Ra.unlocks.chargedInfinityUpgrades.isUnlocked,
         scalingUpgradeText: () => `You can Charge ${quantifyInt("Infinity Upgrade", Ra.totalCharges)}.`,
       },
       {
@@ -44,48 +44,51 @@ export default {
       },
       {
         pet: Ra.pets.enslaved,
-        scalingUpgradeVisible: () => Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME),
+        scalingUpgradeVisible: () => Ra.unlocks.improvedStoredTime.isUnlocked,
         scalingUpgradeText: () => `Stored game time
-          ${formatX(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification(), 2)} and real time
-          +${formatInt(RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap() / (1000 * 3600))} hours`,
+          ${formatX(Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectOrDefault(1), 2)} and real time
+          +${formatInt(Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectOrDefault(0) / (1000 * 3600))} hours`,
       },
       {
         pet: Ra.pets.v,
-        scalingUpgradeVisible: () => Math.clampMax(Math.floor(Ra.pets.v.level / 5), 4) > 0,
-        scalingUpgradeText: level => {
-          const triadCount = Math.clampMax(Math.floor(level / 5), 4);
-          return `You have unlocked ${formatInt(triadCount)}/${formatInt(4)} Triad Studies.`;
+        scalingUpgradeVisible: () => Ra.unlocks.unlockHardV.isUnlocked,
+        scalingUpgradeText: () => {
+          const triadCount = Ra.unlocks.unlockHardV.effectOrDefault(0);
+          return `You have unlocked ${quantifyInt("Triad Study", triadCount)}.`;
         },
       }
     ],
     petStyle() {
       return {
-        color: (this.petWithRecollection === "")
+        color: (this.petWithRemembrance === "")
           ? "white"
-          : this.pets.find(pet => pet.pet.name === this.petWithRecollection).pet.color,
+          : this.pets.find(pet => pet.pet.name === this.petWithRemembrance).pet.color,
       };
     },
     runButtonClassObject() {
       return {
         "c-ra-run-button__icon": true,
         "c-ra-run-button__icon--running": this.isRunning,
+        "c-celestial-run-button--clickable": !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[4].description().replace(/^\w/u, c => c.toUpperCase()).split("\n");
-    }
+      return GameDatabase.celestials.descriptions[4].effects().replace(/^\w/u, c => c.toUpperCase()).split("\n");
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.memoriesPerChunk = Ra.productionPerMemoryChunk;
       this.isRaCapped = Ra.totalPetLevel === 100;
       this.totalLevels = Ra.totalPetLevel;
-      this.showRecollection = Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK);
-      this.hasRecollection = Ra.has(RA_UNLOCKS.RA_RECOLLECTION_UNLOCK);
-      this.recollectionReq = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.totalLevels;
-      this.recollectionMult = RA_UNLOCKS.RA_RECOLLECTION_UNLOCK.effect;
-      this.petWithRecollection = Ra.petWithRecollection;
+      this.showRemembrance = Ra.unlocks.effarigUnlock.canBeApplied;
+      this.hasRemembrance = Ra.remembrance.isUnlocked;
+      this.remembranceReq = Ra.remembrance.requiredLevels;
+      this.remembranceMult = Ra.remembrance.multiplier;
+      this.remembranceNerf = Ra.remembrance.nerf;
+      this.petWithRemembrance = Ra.petWithRemembrance;
       this.isRunning = Ra.isRunning;
       this.memoryBoosts = Ra.memoryBoostResources;
     },
@@ -131,9 +134,8 @@ export default {
     </div>
     <div class="l-ra-non-pets">
       <button class="c-ra-run-button">
-        <h2>
-          <span v-if="isDoomed">You can't start<br></span>
-          <span v-else-if="isRunning">You are in </span>
+        <h2 :class="{ 'o-pelle-disabled': isDoomed }">
+          <span v-if="isRunning">You are in </span>
           <span v-else>Start </span>
           Ra's Reality
         </h2>
@@ -151,20 +153,21 @@ export default {
         </span>
       </button>
       <div
-        v-if="showRecollection && !isRaCapped"
-        class="c-ra-recollection-unlock"
+        v-if="showRemembrance && !isRaCapped"
+        class="c-ra-remembrance-unlock"
       >
         <h1 :style="petStyle">
-          Recollection
+          Remembrance
         </h1>
         <span :style="petStyle">
-          Whichever Celestial has Recollection will get {{ formatX(recollectionMult) }} Memory Chunk gain.
+          Whichever Celestial has Remembrance will get {{ formatX(remembranceMult) }} Memory Chunk gain. The other
+          Celestials will get {{ formatX(remembranceNerf, 1, 1) }} Memory Chunk gain.
         </span>
         <div
-          v-if="hasRecollection"
-          class="c-ra-recollection-unlock-inner"
+          v-if="hasRemembrance"
+          class="c-ra-remembrance-unlock-inner"
         >
-          <RaPetRecollectionButton
+          <RaPetRemembranceButton
             v-for="(pet, i) in pets"
             :key="i"
             :pet-config="pet"
@@ -172,10 +175,10 @@ export default {
         </div>
         <div
           v-else
-          class="c-ra-recollection-unlock-inner"
+          class="c-ra-remembrance-unlock-inner"
         >
-          Unlocked by getting {{ formatInt(recollectionReq) }} total Celestial Memory levels
-          (you need {{ formatInt(recollectionReq - totalLevels) }} more)
+          Unlocked by getting {{ formatInt(remembranceReq) }} total Celestial Memory levels
+          (you need {{ formatInt(remembranceReq - totalLevels) }} more)
         </div>
       </div>
     </div>

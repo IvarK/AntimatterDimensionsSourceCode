@@ -1,4 +1,6 @@
 <script>
+import FullScreenAnimationHandler from "../../../../javascripts/core/full-screen-animation-handler";
+
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
 export default {
@@ -7,9 +9,6 @@ export default {
     ModalWrapperChoice
   },
   computed: {
-    modal() {
-      return this.$viewModel.modal.current;
-    },
     message() {
       return `Dilating time will start a new Eternity, and all Dimension multiplier's exponents and
         tickspeed multiplier's exponent will be reduced to ${formatPow(0.75, 2, 2)}. If you can Eternity while Dilated,
@@ -23,16 +22,17 @@ export default {
       if (player.dilation.lastEP.eq(-1)) {
         return "This is your first Dilation";
       }
+      if (!isInCelestialReality() && Ra.unlocks.unlockDilationStartingTP.canBeApplied) {
+        return `You already have the maximum feasible amount of Tachyon Particles you can attain due to
+          Teresa's Level ${formatInt(25)} reward.`;
+      }
       return `You last completed Dilation at ${format(player.dilation.lastEP, 2, 2)} Eternity Points.`;
     }
-  },
-  created() {
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
     handleYesClick() {
       if (player.dilation.active) return;
-      if (player.options.animations.dilation && document.body.style.animation === "") {
+      if (player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying) {
         animateAndDilate();
       } else {
         startDilatedEternity();
@@ -53,6 +53,7 @@ export default {
     </template>
     <div class="c-modal-message__text">
       {{ EPSinceLabel }}
+      <br>
       <br>
       {{ message }}
     </div>

@@ -11,6 +11,10 @@ export default {
       type: Object,
       required: true
     },
+    changeEnabled: {
+      type: Boolean,
+      required: true
+    }
   },
   data() {
     return {
@@ -26,11 +30,6 @@ export default {
     },
     subtabs() {
       return this.tab.subtabs;
-    },
-    styleObjectRow() {
-      return {
-        "background-color": this.isHidden ? "var(--color-gh-purple)" : "var(--color-good)",
-      };
     },
     isCurrentTab() {
       return this.tab.id === Tabs.current.id;
@@ -71,6 +70,7 @@ export default {
       this.unlockedSubtabs = this.subtabs.filter(sub => sub.isUnlocked);
     },
     toggleVisibility() {
+      if (!this.changeEnabled) return;
       // If this tab and all unlocked subtabs are hidden, unhide all subtabs in addition to the tab
       if (this.tab.isHidden && this.unlockedSubtabs.every(t => t.isHidden)) {
         for (const subtab of this.unlockedSubtabs) {
@@ -96,6 +96,7 @@ export default {
       :key="i"
       :subtab="subtab"
       :tab="tab"
+      :change-enabled="changeEnabled"
     />
     <div
       v-tooltip="rowVisibleIndicatorTooltip"
@@ -107,12 +108,13 @@ export default {
 
 <style scoped>
 .c-indicator-icon {
-  color: black;
+  width: 2rem;
   position: absolute;
-  right: 0;
   top: 0;
-  padding: 0.2rem;
+  right: 0;
+  color: black;
   text-shadow: none;
+  padding: 0.2rem;
 }
 
 .c-hidden-tabs-background__visible {

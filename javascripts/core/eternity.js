@@ -1,5 +1,6 @@
-import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
+import { GameMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index";
+import { DC } from "./constants";
+import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
 function giveEternityRewards(auto) {
   player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);
@@ -7,7 +8,7 @@ function giveEternityRewards(auto) {
 
   const newEternities = Pelle.isDisabled("eternityMults")
     ? new Decimal(1)
-    : new Decimal(RealityUpgrade(3).effectOrDefault(1)).times(getAdjustedGlyphEffect("timeetermult"));
+    : new Decimal(getAdjustedGlyphEffect("timeetermult")).timesEffectsOf(RealityUpgrade(3), Achievement(113));
 
   if (Currency.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
@@ -24,17 +25,16 @@ function giveEternityRewards(auto) {
 
   if (EternityChallenge.isRunning) {
     const challenge = EternityChallenge.current;
-    challenge.addCompletion();
+    challenge.addCompletion(false);
     if (Perk.studyECBulk.isBought) {
       let completionCount = 0;
       while (!challenge.isFullyCompleted && challenge.canBeCompleted) {
-        challenge.addCompletion();
+        challenge.addCompletion(false);
         completionCount++;
       }
       AutomatorData.lastECCompletionCount = completionCount;
       if (Enslaved.isRunning && completionCount > 5) EnslavedProgress.ec1.giveProgress();
     }
-    // eslint-disable-next-line no-bitwise
     player.challenge.eternity.requirementBits &= ~(1 << challenge.id);
     respecTimeStudies(auto);
   }
@@ -57,14 +57,12 @@ function giveEternityRewards(auto) {
 }
 
 export function eternityAnimation() {
-  document.body.style.animation = "eternify 3s 1";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 3000);
+  FullScreenAnimationHandler.display("a-eternify", 3);
 }
 
 export function eternityResetRequest() {
   if (!Player.canEternity) return;
+  if (GameEnd.creditsEverClosed) return;
   askEternityConfirmation();
 }
 
@@ -73,6 +71,11 @@ export function eternity(force, auto, specialConditions = {}) {
     // eslint-disable-next-line no-param-reassign
     force = true;
   }
+  // We define this variable so we can use it in checking whether to give
+  // the secret achievement for respec without studies.
+  // Annoyingly, we need to check for studies right here; giveEternityRewards removes studies if we're in an EC,
+  // so doing the check later doesn't give us the initial state of having studies or not.
+  const noStudies = player.timestudy.studies.length === 0;
   if (force) {
     player.challenge.eternity.current = 0;
   } else {
@@ -82,20 +85,18 @@ export function eternity(force, auto, specialConditions = {}) {
     player.requirementChecks.reality.noEternities = false;
   }
 
-  if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) {
-    rewardTP();
-  }
+  if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) rewardTP();
 
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();
 
-  if (!EternityMilestone.keepAutobuyers.isReached) {
+  if (!EternityMilestone.keepAutobuyers.isReached && !(Pelle.isDoomed && PelleUpgrade.keepAutobuyers.canBeApplied)) {
     // Fix infinity because it can only break after big crunch autobuyer interval is maxed
     player.break = false;
   }
 
   player.challenge.eternity.current = 0;
-  if (!specialConditions.enteringEC) {
+  if (!specialConditions.enteringEC && !Pelle.isDoomed) {
     player.dilation.active = false;
   }
   resetInfinityRuns();
@@ -105,6 +106,9 @@ export function eternity(force, auto, specialConditions = {}) {
   AntimatterDimensions.reset();
 
   if (!specialConditions.enteringEC && player.respec) {
+    if (noStudies) {
+      SecretAchievement(34).unlock();
+    }
     respecTimeStudies(auto);
     player.respec = false;
   }
@@ -130,6 +134,24 @@ export function eternity(force, auto, specialConditions = {}) {
 
   EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_AFTER);
   return true;
+}
+
+export function animateAndEternity() {
+  if (!Player.canEternity) return;
+  const hasAnimation = !FullScreenAnimationHandler.isDisplaying &&
+    ((player.dilation.active && player.options.animations.dilation) ||
+    (!player.dilation.active && player.options.animations.eternity));
+
+  if (hasAnimation) {
+    if (player.dilation.active) {
+      animateAndUndilate();
+    } else {
+      eternityAnimation();
+      setTimeout(eternity, 2250);
+    }
+  } else {
+    eternity();
+  }
 }
 
 export function initializeChallengeCompletions(isReality) {
@@ -167,20 +189,18 @@ export function initializeResourcesAfterEternity() {
 }
 
 function applyRealityUpgradesAfterEternity() {
-  if (Pelle.isDoomed) return;
-  if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.isBought) {
+  if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.canBeApplied) {
     for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
   }
 }
 
 function askEternityConfirmation() {
-  if (player.options.confirmations.eternity) {
+  if (player.dilation.active && player.options.confirmations.dilation) {
+    Modal.exitDilation.show();
+  } else if (player.options.confirmations.eternity) {
     Modal.eternity.show();
-  } else if (player.options.animations.eternity && document.body.style.animation === "") {
-    eternityAnimation();
-    setTimeout(eternity, 2250);
   } else {
-    eternity();
+    animateAndEternity();
   }
 }
 
@@ -190,50 +210,18 @@ export class EternityMilestoneState {
   }
 
   get isReached() {
-    if (Pelle.isDoomed && this.config.pelleObsolete) {
-      return this.config.pelleObsolete();
+    if (Pelle.isDoomed && this.config.givenByPelle) {
+      return this.config.givenByPelle();
     }
     return Currency.eternities.gte(this.config.eternities);
   }
 }
-
-export const EternityMilestone = (function() {
-  const db = GameDatabase.eternity.milestones;
-  const infinityDims = Array.dimensionTiers
-    .map(tier => new EternityMilestoneState(db[`autobuyerID${tier}`]));
-  return {
-    autobuyerIPMult: new EternityMilestoneState(db.autobuyerIPMult),
-    keepAutobuyers: new EternityMilestoneState(db.keepAutobuyers),
-    autobuyerReplicantiGalaxy: new EternityMilestoneState(db.autobuyerReplicantiGalaxy),
-    keepInfinityUpgrades: new EternityMilestoneState(db.keepInfinityUpgrades),
-    bigCrunchModes: new EternityMilestoneState(db.bigCrunchModes),
-    autoEP: new EternityMilestoneState(db.autoEP),
-    autoIC: new EternityMilestoneState(db.autoIC),
-    autobuyMaxGalaxies: new EternityMilestoneState(db.autobuyMaxGalaxies),
-    unlockReplicanti: new EternityMilestoneState(db.unlockReplicanti),
-    autobuyerID: tier => infinityDims[tier - 1],
-    keepBreakUpgrades: new EternityMilestoneState(db.keepBreakUpgrades),
-    autoUnlockID: new EternityMilestoneState(db.autoUnlockID),
-    unlockAllND: new EternityMilestoneState(db.unlockAllND),
-    replicantiNoReset: new EternityMilestoneState(db.replicantiNoReset),
-    autobuyerReplicantiChance: new EternityMilestoneState(db.autobuyerReplicantiChance),
-    autobuyerReplicantiInterval: new EternityMilestoneState(db.autobuyerReplicantiInterval),
-    autobuyerReplicantiMaxGalaxies: new EternityMilestoneState(db.autobuyerReplicantiMaxGalaxies),
-    autobuyerEternity: new EternityMilestoneState(db.autobuyerEternity),
-    autoEternities: new EternityMilestoneState(db.autoEternities),
-    autoInfinities: new EternityMilestoneState(db.autoInfinities),
-  };
-}());
-
-export const EternityMilestones = {
-  // This is a bit of a hack because autobuyerID is a function that returns EternityMilestoneState objects instead of a
-  // EternityMilestoneState object itself
-  all: Object.values(EternityMilestone)
-    .filter(m => typeof m !== "function")
-    .concat(Array.dimensionTiers
-      .map(tier => new EternityMilestoneState(GameDatabase.eternity.milestones[`autobuyerID${tier}`]))
-    )
-};
+export const EternityMilestone = mapGameDataToObject(
+  GameDatabase.eternity.milestones,
+  config => (config.isBaseResource
+    ? new EternityMilestoneState(config)
+    : new EternityMilestoneState(config))
+);
 
 class EternityUpgradeState extends SetPurchasableMechanicState {
   get currency() {
@@ -321,16 +309,9 @@ class EPMultiplierState extends GameMechanicState {
   }
 }
 
+export const EternityUpgrade = mapGameDataToObject(
+  GameDatabase.eternity.upgrades,
+  config => new EternityUpgradeState(config)
+);
 
-export const EternityUpgrade = (function() {
-  const db = GameDatabase.eternity.upgrades;
-  return {
-    idMultEP: new EternityUpgradeState(db.idMultEP),
-    idMultEternities: new EternityUpgradeState(db.idMultEternities),
-    idMultICRecords: new EternityUpgradeState(db.idMultICRecords),
-    tdMultAchs: new EternityUpgradeState(db.tdMultAchs),
-    tdMultTheorems: new EternityUpgradeState(db.tdMultTheorems),
-    tdMultRealTime: new EternityUpgradeState(db.tdMultRealTime),
-    epMult: new EPMultiplierState(),
-  };
-}());
+EternityUpgrade.epMult = new EPMultiplierState();

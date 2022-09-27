@@ -1,7 +1,10 @@
-import { GlyphTypes } from "./glyph-effects.js";
-import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend.js";
-import { DC } from "./constants.js";
+import { AutomatorPanels } from "../../src/components/tabs/automator/AutomatorDocs";
+import { GlyphInfo } from "../../src/components/modals/options/SelectGlyphInfoDropdown";
+
+import { AUTOMATOR_MODE, AUTOMATOR_TYPE } from "./automator/automator-backend";
+import { DC } from "./constants";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { GlyphTypes } from "./glyph-effects";
 
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
@@ -114,47 +117,71 @@ window.player = {
       multiplier: DC.D2,
       isActive: true
     },
-    antimatterDims: Array.range(0, 8).map(tier => ({
-      isUnlocked: false,
-      cost: 1,
-      interval: [500, 600, 700, 800, 900, 1000, 1100, 1200][tier],
-      bulk: 1,
-      mode: AUTOBUYER_MODE.BUY_10,
+    antimatterDims: {
+      all: Array.range(0, 8).map(tier => ({
+        isUnlocked: false,
+        cost: 1,
+        interval: [500, 600, 700, 800, 900, 1000, 1100, 1200][tier],
+        bulk: 1,
+        mode: AUTOBUYER_MODE.BUY_10,
+        isActive: true,
+        lastTick: 0,
+        isBought: false
+      })),
       isActive: true,
-      lastTick: 0,
-      isBought: false
-    })),
-    infinityDims: Array.range(0, 8).map(() => ({
-      isActive: false,
-      lastTick: 0,
-    })),
-    timeDims: Array.range(0, 8).map(() => ({
-      isActive: false,
-      lastTick: 0,
-    })),
+    },
+    infinityDims: {
+      all: Array.range(0, 8).map(() => ({
+        isActive: false,
+        lastTick: 0,
+      })),
+      isActive: true,
+    },
+    timeDims: {
+      all: Array.range(0, 8).map(() => ({
+        isActive: false,
+        lastTick: 0,
+      })),
+      isActive: true,
+    },
     replicantiGalaxies: {
       isActive: false,
     },
-    replicantiUpgrades: Array.range(0, 3).map(() => ({
-      isActive: false,
-      lastTick: 0,
-    })),
+    replicantiUpgrades: {
+      all: Array.range(0, 3).map(() => ({
+        isActive: false,
+        lastTick: 0,
+      })),
+      isActive: true,
+    },
     timeTheorems: {
       isActive: false,
     },
-    dilationUpgrades: Array.range(0, 3).map(() => ({
-      isActive: false,
-      lastTick: 0,
-    })),
-    blackHolePower: Array.range(0, 2).map(() => ({
-      isActive: false,
-    })),
-    realityUpgrades: Array.range(0, 5).map(() => ({
-      isActive: false,
-    })),
-    imaginaryUpgrades: Array.range(0, 10).map(() => ({
-      isActive: false,
-    })),
+    dilationUpgrades: {
+      all: Array.range(0, 3).map(() => ({
+        isActive: false,
+        lastTick: 0,
+      })),
+      isActive: true,
+    },
+    blackHolePower: {
+      all: Array.range(0, 2).map(() => ({
+        isActive: false,
+      })),
+      isActive: true,
+    },
+    realityUpgrades: {
+      all: Array.range(0, 5).map(() => ({
+        isActive: false,
+      })),
+      isActive: true,
+    },
+    imaginaryUpgrades: {
+      all: Array.range(0, 10).map(() => ({
+        isActive: false,
+      })),
+      isActive: true,
+    },
     darkMatterDims: {
       isActive: false,
       lastTick: 0,
@@ -460,6 +487,7 @@ window.player = {
     autoSort: 0,
     autoCollapse: false,
     autoAutoClean: false,
+    applyFilterToPurge: false,
     moveGlyphsOnProtection: false,
     perkPoints: 0,
     autoEC: true,
@@ -479,10 +507,11 @@ window.player = {
       },
       scripts: {
       },
+      constants: {},
       execTimer: 0,
       type: AUTOMATOR_TYPE.BLOCK,
       forceUnlock: false,
-      currentInfoPane: 4
+      currentInfoPane: AutomatorPanels.INTRO_PAGE,
     },
     achTimer: 0,
   },
@@ -503,7 +532,7 @@ window.player = {
   celestials: {
     teresa: {
       pouredAmount: 0,
-      quotes: [],
+      quoteBits: 0,
       unlockBits: 0,
       run: false,
       bestRunAM: DC.D1,
@@ -513,9 +542,9 @@ window.player = {
     },
     effarig: {
       relicShards: 0,
-      unlocksBits: 0,
+      unlockBits: 0,
       run: false,
-      quotes: [],
+      quoteBits: 0,
       glyphWeights: {
         ep: 25,
         repl: 25,
@@ -544,11 +573,12 @@ window.player = {
       autoStoreReal: false,
       isAutoReleasing: false,
       storedFraction: 1,
-      quotes: [],
+      quoteBits: 0,
       unlocks: [],
       run: false,
       completed: false,
       tesseracts: 0,
+      hasSecretStudy: false,
       feltEternity: false,
       progressBits: 0,
       hintBits: 0,
@@ -559,7 +589,7 @@ window.player = {
     v: {
       unlockBits: 0,
       run: false,
-      quotes: [],
+      quoteBits: 0,
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0],
       STSpent: 0,
@@ -612,20 +642,20 @@ window.player = {
         dilation: 0,
         effarig: 0
       },
-      quotes: [],
+      quoteBits: 0,
       momentumTime: 0,
-      unlocksBits: 0,
+      unlockBits: 0,
       run: false,
       charged: new Set(),
       disCharge: false,
       peakGamespeed: 1,
-      petWithRecollection: ""
+      petWithRemembrance: ""
     },
     laitela: {
       darkMatter: DC.D0,
       maxDarkMatter: DC.D0,
       run: false,
-      quotes: [],
+      quoteBits: 0,
       dimensions: Array.range(0, 4).map(() =>
         ({
           amount: DC.D0,
@@ -657,14 +687,11 @@ window.player = {
       upgrades: new Set(),
       remnants: 0,
       realityShards: DC.D0,
-      // For recording which ones you permanently have
-      armageddonDuration: 0,
       records: {
         totalAntimatter: DC.D0,
         totalInfinityPoints: DC.D0,
         totalEternityPoints: DC.D0,
       },
-      maxAMThisArmageddon: DC.D0,
       rebuyables: {
         antimatterDimensionMult: 0,
         timeSpeedMult: 0,
@@ -678,12 +705,12 @@ window.player = {
         galaxyGeneratorEPMult: 0,
       },
       rifts: {
-        famine: {
+        vacuum: {
           fill: DC.D0,
           active: false,
           reducedTo: 1
         },
-        pestilence: {
+        decay: {
           fill: DC.D0,
           active: false,
           percentageSpent: 0,
@@ -694,12 +721,12 @@ window.player = {
           active: false,
           reducedTo: 1
         },
-        war: {
+        recursion: {
           fill: DC.D0,
           active: false,
           reducedTo: 1
         },
-        death: {
+        paradox: {
           fill: DC.D0,
           active: false,
           reducedTo: 1
@@ -713,7 +740,7 @@ window.player = {
         phase: 0,
         sacrificeActive: false
       },
-      quotes: [],
+      quoteBits: 0,
       collapsed: {
         upgrades: false,
         rifts: false,
@@ -722,11 +749,7 @@ window.player = {
       showBought: false,
     }
   },
-  newGame: {
-    current: 0,
-    plusRecord: 0,
-    minusRecord: 0,
-  },
+  isGameEnd: false,
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,
   tutorialState: 0,
@@ -749,7 +772,6 @@ window.player = {
     commas: true,
     updateRate: 33,
     newUI: true,
-    sidebarMinimized: false,
     offlineProgress: true,
     automaticTabSwitching: true,
     respecIntoProtected: false,
@@ -757,6 +779,7 @@ window.player = {
     showLastTenResourceGain: true,
     autosaveInterval: 30000,
     showTimeSinceSave: true,
+    saveFileName: "",
     exportedFileCount: 0,
     hideCompletedAchievementRows: false,
     glyphTextColors: true,
@@ -766,6 +789,7 @@ window.player = {
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,
+    forceDarkGlyphs: true,
     showHintText: {
       achievements: true,
       achievementUnlockStates: true,
@@ -775,13 +799,8 @@ window.player = {
       realityUpgrades: true,
       perks: true,
       alchemy: true,
-    },
-    chart: {
-      updateRate: 1000,
-      duration: 10,
-      warning: 0,
-      on: false,
-      dips: true
+      glyphInfoType: GlyphInfo.types.NONE,
+      showGlyphInfoByDefault: false,
     },
     animations: {
       bigCrunch: true,
@@ -810,7 +829,9 @@ window.player = {
       bigCrunch: true,
       replicantiGalaxy: true,
       antimatterGalaxy: true,
-      dimensionBoost: true
+      dimensionBoost: true,
+      switchAutomatorMode: true,
+      respecIAP: true
     },
     awayProgress: {
       antimatter: true,
@@ -856,11 +877,16 @@ window.player = {
     spentSTD: 0,
     IPPurchases: 0,
     EPPurchases: 0,
+    RMPurchases: 0,
     dimPurchases: 0,
-    allDimPurchases: 0
+    allDimPurchases: 0,
+    replicantiPurchases: 0,
+    dilatedTimePurchases: 0,
+    disabled: false,
+    checkoutSession: {
+      id: false,
+    }
   },
-  // TODO: Remove everything with devMode in it, we (probably?) don't want this in release
-  devMode: false,
 };
 
 export const Player = {
@@ -983,7 +1009,7 @@ export function guardFromNaNValues(obj) {
   }
 
   for (const key in obj) {
-    if (!obj.hasOwnProperty(key)) continue;
+    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
 
     // TODO: rework autobuyer saving
     if (key === "automator") continue;

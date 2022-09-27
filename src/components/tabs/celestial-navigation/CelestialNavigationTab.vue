@@ -1,10 +1,12 @@
 <script>
+import svgPanZoom from "svg-pan-zoom";
+
 import { CELESTIAL_NAV_DRAW_ORDER } from "../../../../javascripts/core/secret-formula/celestials/navigation";
-import NodeRing from "./NodeRing";
+
 import NodeBackground from "./NodeBackground";
 import NodeOverlay from "./NodeOverlay";
+import NodeRing from "./NodeRing";
 import ProgressConnector from "./ProgressConnector";
-import svgPanZoom from "svg-pan-zoom";
 
 export default {
   name: "CelestialNavigationTab",
@@ -15,18 +17,17 @@ export default {
     ProgressConnector
   },
   data: () => ({
-    nodeState: Object.keys(GameDatabase.celestials.navigation).mapToObject(
-      name => name,
-      () => ({
-        visible: false,
-        complete: 0,
-      })
-    ),
+    nodeState: null,
   }),
   computed: {
-    db: () => GameDatabase.celestials.navigation,
-    drawOrder: () => {
-      const db = GameDatabase.celestials.navigation;
+    db() {
+      return {
+        ...GameDatabase.celestials.navigation,
+        ...GameDatabase.celestials.navSigils
+      };
+    },
+    drawOrder() {
+      const db = this.db;
       const order = [];
       for (const nodeId of Object.keys(db)) {
         const node = db[nodeId];
@@ -72,6 +73,15 @@ export default {
       return order;
     }
   },
+  created() {
+    this.nodeState = Object.keys(this.db).mapToObject(
+      name => name,
+      () => ({
+        visible: false,
+        complete: 0,
+      })
+    );
+  },
   mounted() {
     // eslint-disable-next-line no-unused-vars
     const panLimiter = function(oldPan, newPan) {
@@ -87,7 +97,7 @@ export default {
         y: Math.max(topLimit, Math.min(bottomLimit, newPan.y))
       };
     };
-    this.panZoom = svgPanZoom(this.$el, {
+    this.panZoom = svgPanZoom(this.$refs.celestialNavigationSVG, {
       controlIconsEnabled: true,
       dblClickZoomEnabled: false,
       center: false,
@@ -111,6 +121,9 @@ export default {
   methods: {
     update() {
       for (const key of Object.keys(this.db)) {
+        // The GameUI code forces update() to be called upon its initialization, which may force this to be called
+        // before created() on this component is actually called; this suppresses any initial errors on-creation
+        if (!this.nodeState) continue;
         this.nodeState[key].visible = this.db[key].visible();
         this.nodeState[key].complete = this.db[key].complete();
       }
@@ -119,7 +132,6 @@ export default {
       return new Vector(x, y);
     },
     nodeVisibility(obj) {
-      if (player.devMode) return "visible";
       return this.nodeState[obj.nodeId].visible ? "visible" : "hidden";
     },
   }
@@ -136,247 +148,264 @@ const CelestialNavigationViewportCache = {
 </script>
 
 <template>
-  <svg
-    height="600"
-    width="960"
-    class="l-celestial-navigation"
-  >
-    <defs>
-      <linearGradient
-        id="grad1"
-        x1="0%"
-        y1="0%"
-        x2="100%"
-        y2="0%"
-      >
-        <stop
-          offset="0%"
-          stop-color="#ffff00"
-          stop-opacity="1"
-        />
-        <stop
-          offset="100%"
-          stop-color="#ff0000"
-          stop-opacity="1"
-        />
-      </linearGradient>
-      <linearGradient
-        id="incompleteFade"
-        x1="0"
-        x2="8"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop
-          offset="0"
-          stop-color="#888"
-          stop-opacity="0"
-        />
-        <stop
-          offset="8"
-          stop-color="#888"
-          stop-opacity="1"
-        />
-      </linearGradient>
-      <linearGradient
-        id="fadeGrad"
-        y2="0"
-        x2="1"
-      >
-        <stop
-          offset="0.5"
-          stop-color="white"
-          stop-opacity="0"
-        />
-        <stop
-          offset="1"
-          stop-color="white"
-          stop-opacity=".5"
-        />
-      </linearGradient>
-      <linearGradient
-        id="gradTeresaEffarig"
-        y2="0"
-        x2="1"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop
-          offset="0"
-          stop-color="#5151ec"
-        />
-        <stop
-          offset="1"
-          stop-color="#d13737"
-        />
-      </linearGradient>
-      <linearGradient
-        id="gradEffarigEnslaved"
-        y2="0"
-        x2="1"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop
-          offset="0"
-          stop-color="#d13737"
-        />
-        <stop
-          offset="1"
-          stop-color="#ffa337"
-        />
-      </linearGradient>
-      <linearGradient
-        id="gradEnslavedV"
-        y2="0"
-        x2="1"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop
-          offset="0"
-          stop-color="#ffa337"
-        />
-        <stop
-          offset="1"
-          stop-color="#ffe066"
-        />
-      </linearGradient>
-      <linearGradient
-        id="gradRaTeresa"
-        y2="0"
-        x2="1"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop
-          offset="0"
-          stop-color="#9063de"
-        />
-        <stop
-          offset="1"
-          stop-color="#5151ec"
-        />
-      </linearGradient>
-      <linearGradient
-        id="gradRaEffarig"
-        y2="0"
-        x2="1"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop
-          offset="0"
-          stop-color="#9063de"
-        />
-        <stop
-          offset="1"
-          stop-color="#d13737"
-        />
-      </linearGradient>
-      <linearGradient
-        id="gradRaEnslaved"
-        y2="0"
-        x2="1"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop
-          offset="0"
-          stop-color="#9063de"
-        />
-        <stop
-          offset="1"
-          stop-color="#ffa337"
-        />
-      </linearGradient>
-      <linearGradient
-        id="gradRaV"
-        y2="0"
-        x2="1"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop
-          offset="0"
-          stop-color="#9063de"
-        />
-        <stop
-          offset="1"
-          stop-color="#ffe066"
-        />
-      </linearGradient>
-      <linearGradient
-        id="gradRaLaitela"
-        y2="0"
-        x2="1"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop
-          offset="0"
-          stop-color="#9063de"
-        />
-        <stop
-          offset="1"
-          stop-color="white"
-        />
-      </linearGradient>
-      <mask
-        id="fade"
-        maskContentUnits="objectBoundingBox"
-      >
-        <rect
-          width="1"
-          height="1"
-          fill="url(#fadeGrad)"
-        />
-      </mask>
-      <filter
-        id="completeGlow"
-        x="-100%"
-        y="-100%"
-        width="300%"
-        height="300%"
-      >
-        <feGaussianBlur
-          in="SourceGraphic"
-          result="blurred"
-          stdDeviation="2"
-        />
-        <feMerge>
-          <feMergeNode in="blurred" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-      <filter
-        id="backgroundGlow"
-        x="-100%"
-        y="-100%"
-        width="300%"
-        height="300%"
-      >
-        <feGaussianBlur
-          in="SourceGraphic"
-          result="blurred"
-          stdDeviation="4"
-        />
-        <feMerge>
-          <feMergeNode in="blurred" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-    </defs>
-    <image
-      x="-250"
-      y="-350"
-      height="1503"
-      width="1503"
-      href="images/celestial-navigation-bg.webp"
-    />
-    <g
-      v-for="(obj, index) in drawOrder"
-      :key="index"
-      :visibility="nodeVisibility(obj)"
+  <!-- Need to wrap whole thing in a div because of properties applied to tabs -->
+  <div>
+    <svg
+      ref="celestialNavigationSVG"
+      class="c-wide-canvas-element l-celestial-navigation"
     >
-      <component
-        :is="obj.is"
-        :complete="nodeState[obj.nodeId].complete"
-        v-bind="obj.config"
+      <defs>
+        <linearGradient
+          id="grad1"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="0%"
+        >
+          <stop
+            offset="0%"
+            stop-color="#ffff00"
+            stop-opacity="1"
+          />
+          <stop
+            offset="100%"
+            stop-color="#ff0000"
+            stop-opacity="1"
+          />
+        </linearGradient>
+        <linearGradient
+          id="incompleteFade"
+          x1="0"
+          x2="8"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop
+            offset="0"
+            stop-color="#888"
+            stop-opacity="0"
+          />
+          <stop
+            offset="8"
+            stop-color="#888"
+            stop-opacity="1"
+          />
+        </linearGradient>
+        <linearGradient
+          id="fadeGrad"
+          y2="0"
+          x2="1"
+        >
+          <stop
+            offset="0.5"
+            stop-color="white"
+            stop-opacity="0"
+          />
+          <stop
+            offset="1"
+            stop-color="white"
+            stop-opacity=".5"
+          />
+        </linearGradient>
+        <linearGradient
+          id="gradTeresaEffarig"
+          y2="0"
+          x2="1"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop
+            offset="0"
+            stop-color="#5151ec"
+          />
+          <stop
+            offset="1"
+            stop-color="#d13737"
+          />
+        </linearGradient>
+        <linearGradient
+          id="gradEffarigEnslaved"
+          y2="0"
+          x2="1"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop
+            offset="0"
+            stop-color="#d13737"
+          />
+          <stop
+            offset="1"
+            stop-color="#ffa337"
+          />
+        </linearGradient>
+        <linearGradient
+          id="gradEnslavedV"
+          y2="0"
+          x2="1"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop
+            offset="0"
+            stop-color="#ffa337"
+          />
+          <stop
+            offset="1"
+            stop-color="#ffe066"
+          />
+        </linearGradient>
+        <linearGradient
+          id="gradRaTeresa"
+          y2="0"
+          x2="1"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop
+            offset="0"
+            stop-color="#9063de"
+          />
+          <stop
+            offset="1"
+            stop-color="#5151ec"
+          />
+        </linearGradient>
+        <linearGradient
+          id="gradRaEffarig"
+          y2="0"
+          x2="1"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop
+            offset="0"
+            stop-color="#9063de"
+          />
+          <stop
+            offset="1"
+            stop-color="#d13737"
+          />
+        </linearGradient>
+        <linearGradient
+          id="gradRaEnslaved"
+          y2="0"
+          x2="1"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop
+            offset="0"
+            stop-color="#9063de"
+          />
+          <stop
+            offset="1"
+            stop-color="#ffa337"
+          />
+        </linearGradient>
+        <linearGradient
+          id="gradRaV"
+          y2="0"
+          x2="1"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop
+            offset="0"
+            stop-color="#9063de"
+          />
+          <stop
+            offset="1"
+            stop-color="#ffe066"
+          />
+        </linearGradient>
+        <linearGradient
+          id="gradRaLaitela"
+          y2="0"
+          x2="1"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop
+            offset="0"
+            stop-color="#9063de"
+          />
+          <stop
+            offset="1"
+            stop-color="white"
+          />
+        </linearGradient>
+        <linearGradient
+          id="gradLaitelaPelle"
+          y2="0"
+          x2="1"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop
+            offset="0"
+            stop-color="white"
+          />
+          <stop
+            offset="1"
+            stop-color="crimson"
+          />
+        </linearGradient>
+        <mask
+          id="fade"
+          maskContentUnits="objectBoundingBox"
+        >
+          <rect
+            width="1"
+            height="1"
+            fill="url(#fadeGrad)"
+          />
+        </mask>
+        <filter
+          id="completeGlow"
+          x="-100%"
+          y="-100%"
+          width="300%"
+          height="300%"
+        >
+          <feGaussianBlur
+            in="SourceGraphic"
+            result="blurred"
+            stdDeviation="2"
+          />
+          <feMerge>
+            <feMergeNode in="blurred" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <filter
+          id="backgroundGlow"
+          x="-100%"
+          y="-100%"
+          width="300%"
+          height="300%"
+        >
+          <feGaussianBlur
+            in="SourceGraphic"
+            result="blurred"
+            stdDeviation="4"
+          />
+          <feMerge>
+            <feMergeNode in="blurred" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+      <image
+        x="-250"
+        y="-350"
+        height="1503"
+        width="1503"
+        href="images/celestial-navigation-bg.webp"
       />
-    </g>
-  </svg>
+      <g
+        v-for="(obj, index) in drawOrder"
+        :key="index"
+        :visibility="nodeVisibility(obj)"
+      >
+        <component
+          :is="obj.is"
+          :complete="nodeState[obj.nodeId].complete"
+          v-bind="obj.config"
+        />
+      </g>
+    </svg>
+  </div>
 </template>
 
 <style scoped>

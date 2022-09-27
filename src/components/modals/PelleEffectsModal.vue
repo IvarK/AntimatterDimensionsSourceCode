@@ -1,6 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import ModalWrapper from "@/components/modals/ModalWrapper";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "PelleEffectsModal",
@@ -44,6 +44,7 @@ export default {
         "Effects from Glyph Sacrifice, Alteration, and Alchemy are all disabled",
 
         // Celestial features
+        "You cannot enter any other Celestial Realities",
         "All rewards from Effarig are disabled",
         "All rewards from V are disabled",
         "Infinity Upgrades cannot be charged",
@@ -80,8 +81,8 @@ export default {
 
 <style scoped>
 .pelle-effects-container {
-  height: 40rem;
   overflow-y: scroll;
+  height: 40rem;
 }
 
 p {

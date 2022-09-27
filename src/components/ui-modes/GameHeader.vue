@@ -1,55 +1,16 @@
 <script>
-import HeaderEternityButton from "./HeaderEternityButton";
-import HeaderUnlockInfinityDimButton from "./HeaderUnlockInfinityDimButton";
-import HeaderBigCrunchButton from "./HeaderBigCrunchButton";
-import HeaderTickspeedRow from "./HeaderTickspeedRow";
-import HeaderAmountsLine from "./HeaderAmountsLine";
 import HeaderChallengeDisplay from "./HeaderChallengeDisplay";
-import HeaderBlackHole from "./HeaderBlackHole";
+import HeaderChallengeEffects from "./HeaderChallengeEffects";
+import HeaderGameSpeed from "./HeaderGameSpeed";
+import HeaderPrestigeGroup from "./HeaderPrestigeGroup";
 
 export default {
   name: "GameHeader",
   components: {
-    HeaderEternityButton,
-    HeaderBigCrunchButton,
-    HeaderUnlockInfinityDimButton,
-    HeaderAmountsLine,
-    HeaderTickspeedRow,
     HeaderChallengeDisplay,
-    HeaderBlackHole
-  },
-  data() {
-    return {
-      isInEffarig: false,
-      effarigMultNerfText: "",
-      effarigTickNerfText: "",
-      isInLaitela: false,
-      laitelaTimer: 0,
-      laitelaEntropy: "",
-      antimatter: new Decimal(0),
-      antimatterPerSec: new Decimal(0)
-    };
-  },
-  methods: {
-    update() {
-      this.isInEffarig = Effarig.isRunning;
-      if (this.isInEffarig) {
-        this.effarigMultNerfText = `${formatPow(0.25 + 0.25 * Effarig.nerfFactor(Currency.infinityPower.value), 0, 5)}`;
-        this.effarigTickNerfText = `${formatPow(0.7 + 0.1 * Effarig.nerfFactor(Currency.timeShards.value), 0, 5)}`;
-      }
-      this.isInLaitela = Laitela.isRunning;
-      if (this.isInLaitela) {
-        if (player.celestials.laitela.entropy > 0) {
-          this.laitelaEntropy = `${formatPercents(player.celestials.laitela.entropy, 2, 2)}`;
-          this.laitelaTimer = Time.thisRealityRealTime.toStringShort();
-        } else {
-          this.laitelaEntropy = `${formatPercents(1, 2, 2)}`;
-          this.laitelaTimer = TimeSpan.fromSeconds(player.celestials.laitela.thisCompletion).toStringShort();
-        }
-      }
-      this.antimatter.copyFrom(Currency.antimatter);
-      this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
-    }
+    HeaderChallengeEffects,
+    HeaderGameSpeed,
+    HeaderPrestigeGroup,
   },
 };
 </script>
@@ -57,28 +18,9 @@ export default {
 <template>
   <div>
     <HeaderChallengeDisplay />
-    <div v-if="isInEffarig">
-      Gamespeed and multipliers are Dilated {{ effarigMultNerfText }}
-      <br>
-      Tickspeed is Dilated {{ effarigTickNerfText }}
-    </div>
-    <div v-if="isInLaitela">
-      Entropy: {{ laitelaEntropy }} ({{ laitelaTimer }})
-    </div>
-    <HeaderAmountsLine />
-    <div>
-      <p>
-        You have <span class="c-game-header__antimatter">{{ format(antimatter, 2, 1) }}</span> antimatter.
-      </p>
-    </div>
-    <div class="l-game-header__buttons-line">
-      <HeaderBigCrunchButton />
-      <HeaderUnlockInfinityDimButton />
-      <HeaderEternityButton />
-    </div>
-    <div>You are getting {{ format(antimatterPerSec, 2, 0) }} antimatter per second.</div>
-    <HeaderTickspeedRow />
-    <HeaderBlackHole />
+    <HeaderChallengeEffects />
+    <HeaderPrestigeGroup />
+    <HeaderGameSpeed />
   </div>
 </template>
 

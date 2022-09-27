@@ -1,4 +1,4 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
 
 Autobuyer.galaxy = new class GalaxyAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
@@ -11,6 +11,10 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends UpgradeableAutobuyerSt
 
   get isUnlocked() {
     if (Pelle.isDisabled("galaxyAutobuyer")) return false;
+    return this.canBeUpgraded;
+  }
+
+  get canBeUpgraded() {
     return NormalChallenge(11).isCompleted;
   }
 

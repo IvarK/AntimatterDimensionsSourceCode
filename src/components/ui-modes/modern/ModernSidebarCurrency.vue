@@ -35,13 +35,13 @@ export default {
 </script>
 
 <template>
-  <div class="resource">
+  <div class="c-sidebar-resource">
     <template v-if="showRS">
       <h2 class="o-sidebar-currency--pelle">
         {{ format(RS, 2) }}
       </h2>
-      <div class="resource-information">
-        <span class="resource-name">{{ pluralize("Reality Shard", RS) }}</span>
+      <div class="c-sidebar-resource__information">
+        <span class="c-sidebar-resource__name">{{ pluralize("Reality Shard", RS) }}</span>
       </div>
     </template>
     <template v-else-if="showRM">
@@ -49,16 +49,16 @@ export default {
         <h2 class="o-sidebar-currency--reality">
           {{ format(RM, 2) }}
         </h2>
-        <div class="resource-information">
-          <span class="resource-name">{{ pluralize("Reality Machine", RM) }}</span>
+        <div class="c-sidebar-resource__information">
+          <span class="c-sidebar-resource__name">{{ pluralize("Reality Machine", RM) }}</span>
         </div>
       </template>
       <template v-else>
         <h3 class="o-sidebar-currency--reality">
           {{ machineStr }}
         </h3>
-        <div class="resource-information">
-          <span class="resource-name">Machines</span>
+        <div class="c-sidebar-resource__information">
+          <span class="c-sidebar-resource__name">Machines</span>
         </div>
       </template>
     </template>
@@ -66,24 +66,24 @@ export default {
       <h2 class="o-sidebar-currency--eternity">
         {{ format(EP, 2) }}
       </h2>
-      <div class="resource-information">
-        <span class="resource-name">{{ pluralize("Eternity Point", EP) }}</span>
+      <div class="c-sidebar-resource__information">
+        <span class="c-sidebar-resource__name">{{ pluralize("Eternity Point", EP) }}</span>
       </div>
     </template>
     <template v-else-if="showIP">
       <h2 class="o-sidebar-currency--infinity">
         {{ format(IP, 2) }}
       </h2>
-      <div class="resource-information">
-        <span class="resource-name">{{ pluralize("Infinity Point", IP) }}</span>
+      <div class="c-sidebar-resource__information">
+        <span class="c-sidebar-resource__name">{{ pluralize("Infinity Point", IP) }}</span>
       </div>
     </template>
     <template v-else>
       <h2 class="o-sidebar-currency--antimatter">
         {{ format(AM, 2, 1) }}
       </h2>
-      <div class="resource-information">
-        <span class="resource-name">Antimatter</span>
+      <div class="c-sidebar-resource__information">
+        <span class="c-sidebar-resource__name">Antimatter</span>
       </div>
     </template>
   </div>

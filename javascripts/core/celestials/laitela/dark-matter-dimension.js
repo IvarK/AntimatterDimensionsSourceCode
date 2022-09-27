@@ -1,5 +1,5 @@
-import { DimensionState } from "../../dimensions/dimension.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { DimensionState } from "../../dimensions/dimension";
 
 /**
  * Constants for easily adjusting values
@@ -50,8 +50,8 @@ export class DarkMatterDimensionState extends DimensionState {
     const perUpgrade = INTERVAL_PER_UPGRADE;
     const tierFactor = Math.pow(4, this.tier - 1);
     return 1000 * tierFactor * Math.pow(perUpgrade, this.data.intervalUpgrades) *
-      Math.pow(SingularityMilestone.ascensionIntervalScaling.effectValue, this.ascensions) *
-      SingularityMilestone.darkDimensionIntervalReduction.effectValue;
+      Math.pow(SingularityMilestone.ascensionIntervalScaling.effectOrDefault(1200), this.ascensions) *
+      SingularityMilestone.darkDimensionIntervalReduction.effectOrDefault(1);
   }
 
   get interval() {
@@ -70,7 +70,7 @@ export class DarkMatterDimensionState extends DimensionState {
   }
 
   get powerDMPerAscension() {
-    return POWER_DM_PER_ASCENSION + SingularityMilestone.improvedAscensionDM.effectValue;
+    return POWER_DM_PER_ASCENSION + SingularityMilestone.improvedAscensionDM.effectOrDefault(0);
   }
 
   get powerDM() {
@@ -85,7 +85,7 @@ export class DarkMatterDimensionState extends DimensionState {
   }
 
   get powerDE() {
-    if (!this.isUnlocked) return 0;
+    if (!this.isUnlocked || Pelle.isDoomed) return 0;
     const tierFactor = Math.pow(15, this.tier - 1);
     const destabilizeBoost = Laitela.isFullyDestabilized ? 8 : 1;
     return new Decimal(((1 + this.data.powerDEUpgrades * 0.1) *
@@ -102,14 +102,14 @@ export class DarkMatterDimensionState extends DimensionState {
   get intervalAfterAscension() {
     const purchases = Decimal.affordGeometricSeries(Currency.darkMatter.value, this.rawIntervalCost,
       this.intervalCostIncrease, 0).toNumber();
-    return Math.clampMin(this.intervalPurchaseCap, SingularityMilestone.ascensionIntervalScaling.effectValue *
+    return Math.clampMin(this.intervalPurchaseCap, SingularityMilestone.ascensionIntervalScaling.effectOrDefault(1200) *
       this.rawInterval * Math.pow(INTERVAL_PER_UPGRADE, purchases));
   }
 
   get adjustedStartingCost() {
     const tiers = [null, 0, 2, 5, 13];
     return 10 * Math.pow(COST_MULT_PER_TIER, tiers[this.tier]) *
-      SingularityMilestone.darkDimensionCostReduction.effectValue;
+      SingularityMilestone.darkDimensionCostReduction.effectOrDefault(1);
   }
 
   get rawIntervalCost() {
@@ -122,7 +122,7 @@ export class DarkMatterDimensionState extends DimensionState {
   }
 
   get intervalCostIncrease() {
-    return Math.pow(INTERVAL_COST_MULT, SingularityMilestone.intervalCostScalingReduction.effectValue);
+    return Math.pow(INTERVAL_COST_MULT, SingularityMilestone.intervalCostScalingReduction.effectOrDefault(1));
   }
 
   get rawPowerDMCost() {
@@ -263,7 +263,7 @@ export const DarkMatterDimensions = {
         dim.timeSinceLastUpdate -= dim.interval * ticks;
       }
     }
-    if (SingularityMilestone.dim4Generation.isUnlocked && Laitela.annihilationUnlocked) {
+    if (SingularityMilestone.dim4Generation.canBeApplied && Laitela.annihilationUnlocked) {
       DarkMatterDimension(4).amount = DarkMatterDimension(4).amount
         .plus(SingularityMilestone.dim4Generation.effectValue * realDiff / 1000);
     }

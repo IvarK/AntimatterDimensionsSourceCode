@@ -1,4 +1,4 @@
-import { GameDatabase } from "./game-database.js";
+import { GameDatabase } from "./game-database";
 
 GameDatabase.awayProgressTypes = [
   {
@@ -77,10 +77,10 @@ GameDatabase.awayProgressTypes = [
   }, {
     name: "relicShards",
     reference: ["celestials", "effarig", "relicShards"],
-    isUnlocked: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
+    isUnlocked: () => TeresaUnlocks.effarig.canBeApplied,
   }, {
     name: "celestialMemories",
-    isUnlocked: () => V.has(V_UNLOCKS.RA_UNLOCK),
+    isUnlocked: () => VUnlocks.raUnlock.isUnlocked,
     // Functions as the visible option for all Memories, never appears due to having no reference.
     appearsInAwayModal: false,
   }, {

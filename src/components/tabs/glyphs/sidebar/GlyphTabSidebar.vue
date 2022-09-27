@@ -1,8 +1,8 @@
 <script>
-import GlyphInventoryManagementPanel from "./GlyphInventoryManagementPanel";
 import GlyphFilterPanel from "./GlyphFilterPanel";
-import GlyphSetSavePanel from "./GlyphSetSavePanel";
+import GlyphInventoryManagementPanel from "./GlyphInventoryManagementPanel";
 import GlyphRejectionPanel from "./GlyphRejectionPanel";
+import GlyphSetSavePanel from "./GlyphSetSavePanel";
 
 export default {
   name: "GlyphTabSidebar",
@@ -23,13 +23,18 @@ export default {
       hasRefined: false,
     };
   },
+  computed: {
+    isDoomed() {
+      return Pelle.isDoomed;
+    }
+  },
   methods: {
     update() {
       this.type = player.reality.showSidebarPanel;
       this.sidebarEnum = GLYPH_SIDEBAR_MODE;
       this.unlockedFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.unlockedSets = EffarigUnlock.setSaves.isUnlocked;
-      this.unlockedAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.unlockedAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
       // We always have inventory management available, but there's no point in showing options if it's the only one
       this.hasMoreOptions = this.unlockedFilter || this.unlockedSets || this.unlockedAlchemy;
       this.hasRefined = AlchemyResources.all.map(res => res.amount).some(a => a > 0);
@@ -42,7 +47,8 @@ export default {
         "l-glyph-sidebar-button": true,
         "c-glyph-sidebar-button": true,
         "c-glyph-sidebar-button--active": index === player.reality.showSidebarPanel,
-        "l-glyph-sidebar-button--attention": index === this.sidebarEnum.SACRIFICE_TYPE && !this.hasRefined
+        "l-glyph-sidebar-button--attention": index === this.sidebarEnum.SACRIFICE_TYPE &&
+          !this.hasRefined && !this.isDoomed
       };
     }
   }
@@ -73,7 +79,7 @@ export default {
         :class="sidebarClass(sidebarEnum.SAVED_SETS)"
         @click="setSidebarState(sidebarEnum.SAVED_SETS)"
       >
-        Saved Glyph Sets
+        Glyph Presets
       </button>
       <button
         v-if="unlockedAlchemy"
@@ -83,7 +89,10 @@ export default {
         Sacrifice Type
       </button>
     </div>
-    <GlyphInventoryManagementPanel v-if="type === sidebarEnum.INVENTORY_MANAGEMENT" />
+    <GlyphInventoryManagementPanel
+      v-if="type === sidebarEnum.INVENTORY_MANAGEMENT"
+      :has-more-options="hasMoreOptions"
+    />
     <GlyphFilterPanel v-else-if="type === sidebarEnum.FILTER_SETTINGS && unlockedFilter" />
     <GlyphSetSavePanel v-else-if="type === sidebarEnum.SAVED_SETS && unlockedSets" />
     <GlyphRejectionPanel v-else-if="type === sidebarEnum.SACRIFICE_TYPE && unlockedAlchemy" />

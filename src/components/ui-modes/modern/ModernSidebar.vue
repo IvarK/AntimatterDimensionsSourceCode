@@ -11,6 +11,7 @@ export default {
   data() {
     return {
       isHidden: false,
+      tabVisibilities: []
     };
   },
   computed: {
@@ -19,6 +20,7 @@ export default {
   methods: {
     update() {
       this.isHidden = AutomatorData.isEditorFullscreen;
+      this.tabVisibilities = Tabs.newUI.map(x => x.isAvailable);
     },
   },
 };
@@ -27,15 +29,19 @@ export default {
 <template>
   <div
     v-if="!isHidden"
-    class="sidebar"
+    class="c-modern-sidebar"
   >
     <ModernSidebarCurrency />
-    <ModernTabButton
+    <template
       v-for="(tab, tabPosition) in tabs"
-      :key="tab.name"
-      :tab="tab"
-      :tab-position="tabPosition"
-    />
+    >
+      <ModernTabButton
+        v-if="tabVisibilities[tabPosition]"
+        :key="tab.name"
+        :tab="tab"
+        :tab-position="tabPosition"
+      />
+    </template>
   </div>
 </template>
 

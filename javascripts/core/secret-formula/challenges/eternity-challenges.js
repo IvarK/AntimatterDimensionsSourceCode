@@ -1,5 +1,5 @@
-import { GameDatabase } from "../game-database.js";
-import { DC } from "../../constants.js";
+import { DC } from "../../constants";
+import { GameDatabase } from "../game-database";
 
 const specialInfinityGlyphDisabledEffectText = () => (PelleRifts.chaos.milestones[1].canBeApplied
   ? "The Pelle-Specific effect from Infinity Glyphs is also disabled."
@@ -186,7 +186,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 12,
     description: () => (PlayerProgress.realityUnlocked()
-      ? `the game runs ×${formatInt(1000)} slower; all other gamespeed effects are disabled. The goal must be reached
+      ? `the game runs ×${formatInt(1000)} slower; all other game speed effects are disabled. The goal must be reached
         within a certain amount of time or you will fail the Challenge. ${specialInfinityGlyphDisabledEffectText()}`
       : `the game runs ×${formatInt(1000)} slower. The goal must be reached
         within a certain amount of time or you will fail the Challenge.`),

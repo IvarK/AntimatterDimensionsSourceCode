@@ -9,37 +9,38 @@ export default {
   },
   data() {
     return {
-      isUseless: false,
       isUnlocked: false,
       level: 0,
-      icon: "",
       description: "",
-      petName: ""
     };
   },
   computed: {
+    petID() {
+      return this.unlock.pet.id;
+    },
+    petName() {
+      return this.unlock.pet.name;
+    },
+    icon() {
+      return this.unlock.displayIcon;
+    },
     classObject() {
       return {
         "c-ra-upgrade-icon": true,
         "c-ra-upgrade-icon--inactive": !this.isUnlocked,
-        "c-ra-upgrade-icon--teresa": this.petName === "Teresa",
-        "c-ra-upgrade-icon--effarig": this.petName === "Effarig",
-        "c-ra-upgrade-icon--enslaved": this.petName === "Enslaved",
-        "c-ra-upgrade-icon--v": this.petName === "V"
+        [`c-ra-upgrade-icon--${this.petID}`]: true
       };
+    },
+    isUseless() {
+      return this.unlock.disabledByPelle;
     }
   },
   methods: {
     update() {
-      this.isUseless = Pelle.uselessRaMilestones.includes(this.unlock.id) && Pelle.isDoomed;
-      this.isUnlocked = Ra.has(this.unlock);
-      this.level = this.unlock.level;
-      this.icon = this.unlock.displayIcon;
-      const rewardText = typeof this.unlock.reward === "function"
-        ? this.unlock.reward()
-        : this.unlock.reward;
-      this.description = rewardText;
-      this.petName = this.unlock.pet.name;
+      const unlock = this.unlock;
+      this.isUnlocked = unlock.isUnlocked;
+      this.level = unlock.level;
+      this.description = unlock.reward;
     }
   }
 };
@@ -54,13 +55,11 @@ export default {
       <div class="c-ra-pet-upgrade__tooltip__name">
         {{ petName }} Level {{ formatInt(level) }}
       </div>
-      <div class="c-ra-pet-upgrade__tooltip__description">
-        <span v-if="isUseless">
-          This has no effect while in Doomed
-        </span>
-        <span v-else>
-          {{ description }}
-        </span>
+      <div
+        class="c-ra-pet-upgrade__tooltip__description"
+        :class="{ 'o-pelle-disabled': isUseless }"
+      >
+        {{ description }}
       </div>
     </div>
   </div>

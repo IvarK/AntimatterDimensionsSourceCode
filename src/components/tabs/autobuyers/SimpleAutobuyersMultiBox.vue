@@ -2,6 +2,7 @@
 import MultipleAutobuyersBox from "./MultipleAutobuyersBox";
 import MultipleSingleAutobuyersGroup from "./MultipleSingleAutobuyersGroup";
 
+// This component, for some reason, contains every single autobuyer except for tickspeed and prestiges
 export default {
   name: "SimpleAutobuyersMultiBox",
   components: {

@@ -1,13 +1,15 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import { STUDY_TREE_LAYOUT_TYPE, TimeStudyTreeLayout } from "./time-study-tree-layout";
-import NormalTimeStudy from "./NormalTimeStudy";
-import ECTimeStudy from "./ECTimeStudy";
+
 import DilationTimeStudy from "./DilationTimeStudy";
-import TriadTimeStudy from "./TriadTimeStudy";
+import ECTimeStudy from "./ECTimeStudy";
+import EnslavedTimeStudy from "./EnslavedTimeStudy";
+import HiddenTimeStudyConnection from "./HiddenTimeStudyConnection";
+import NormalTimeStudy from "./NormalTimeStudy";
+import PrimaryButton from "@/components/PrimaryButton";
 import SecretTimeStudy from "./SecretTimeStudy";
 import TimeStudyConnection from "./TimeStudyConnection";
-import SecretTimeStudyConnection from "./SecretTimeStudyConnection";
+import TriadTimeStudy from "./TriadTimeStudy";
 
 export default {
   name: "TimeStudiesTab",
@@ -15,11 +17,12 @@ export default {
     PrimaryButton,
     NormalTimeStudy,
     ECTimeStudy,
+    EnslavedTimeStudy,
     DilationTimeStudy,
     TriadTimeStudy,
     SecretTimeStudy,
     TimeStudyConnection,
-    SecretTimeStudyConnection
+    HiddenTimeStudyConnection
   },
   data() {
     return {
@@ -28,6 +31,8 @@ export default {
       vLevel: 0,
       renderedStudyCount: 0,
       renderedConnectionCount: 0,
+      isEnslaved: false,
+      delayTimer: 0,
     };
   },
   computed: {
@@ -85,6 +90,15 @@ export default {
     };
     incrementRenderedCount();
 
+    // CSS controlling the fade in/out for the Enslaved study is an animation happening over the course of 1 second.
+    // Removing it normally via key-switching ends up getting rid of it immediately without animating, which we do if it
+    // wasn't purchased - otherwise it animates to the unbought state and then remove it after the animation finishes.
+    this.on$(GAME_EVENT.REALITY_RESET_AFTER, () => {
+      this.delayTimer = player.celestials.enslaved.hasSecretStudy
+        ? Date.now()
+        : 0;
+    });
+
     // Scroll to top because time studies tab is rendered progressively
     // and we don't want the player to see empty space while it's loading.
     document.body.scrollTop = 0;
@@ -97,6 +111,7 @@ export default {
       this.respec = player.respec;
       this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
       this.vLevel = Ra.pets.v.level;
+      this.isEnslaved = Enslaved.isRunning || Date.now() - this.delayTimer < 1000;
     },
     studyComponent(study) {
       switch (study.type) {
@@ -136,7 +151,7 @@ export default {
       </PrimaryButton>
       <PrimaryButton
         class="o-primary-btn--subtab-option"
-        onclick="Modal.studyString.show()"
+        onclick="Modal.studyString.show({ id: -1 })"
       >
         Import tree
       </PrimaryButton>
@@ -152,6 +167,10 @@ export default {
         :setup="setup"
       />
       <SecretTimeStudy :setup="layout.secretStudy" />
+      <EnslavedTimeStudy
+        v-if="isEnslaved"
+        :setup="layout.enslavedStudy"
+      />
       <svg
         :style="treeStyleObject"
         class="l-time-study-connection"
@@ -161,7 +180,12 @@ export default {
           :key="'connection' + index"
           :setup="setup"
         />
-        <SecretTimeStudyConnection :setup="layout.secretStudyConnection" />
+        <HiddenTimeStudyConnection :setup="layout.secretStudyConnection" />
+        <HiddenTimeStudyConnection
+          v-if="isEnslaved"
+          :setup="layout.enslavedStudyConnection"
+          :is-enslaved="isEnslaved"
+        />
       </svg>
     </div>
   </div>

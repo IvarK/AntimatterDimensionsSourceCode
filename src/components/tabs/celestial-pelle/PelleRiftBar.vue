@@ -1,5 +1,8 @@
 <script>
-import CustomizeableTooltip from "@/components/CustomizeableTooltip.vue";
+import wordShift from "../../../../javascripts/core/wordShift";
+
+import CustomizeableTooltip from "@/components/CustomizeableTooltip";
+
 export default {
   name: "PelleRiftBar",
   components: {
@@ -22,32 +25,16 @@ export default {
       // Converts 1 rem to number of px
       remToPx: parseInt(getComputedStyle(document.documentElement).fontSize, 10),
       effects: [],
-      isDark: false
+      selectedMilestoneResourceText: "",
+      selectedMilestoneDescriptionText: "",
     };
   },
   computed: {
-    tooltipContentStyle() {
-      const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
-      const baseColor = this.isDark ? "#111111" : "var(--color-base)";
-      return {
-        width: "20rem",
-        border: "0.1rem solid var(--color-pelle--base)",
-        backgroundColor: hasMilestone ? "var(--color-pelle--base)" : baseColor,
-        color: hasMilestone ? "black" : "var(--color-text)",
-        fontSize: "1.1rem",
-        fontWeight: "bold",
-        zIndex: 4,
-        boxShadow: hasMilestone ? " 0 0 0.1rem 0.1rem black" : ""
-      };
-    },
     tooltipArrowStyle() {
       return {
         borderTop: "0.55rem solid var(--color-pelle--base)"
       };
     }
-  },
-  created() {
-    this.isDark = Themes.find(player.options.theme).isDark();
   },
   methods: {
     update() {
@@ -57,21 +44,27 @@ export default {
       this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
       this.percentage = rift.percentage;
       this.reducedTo = rift.reducedTo;
-      this.hasEffectiveFill = rift.config.key === "pestilence" && PelleRifts.chaos.milestones[0].canBeApplied;
+      this.hasEffectiveFill = rift.config.key === "decay" && PelleRifts.chaos.milestones[0].canBeApplied;
+
+      this.selectedMilestoneResourceText = this.milestoneResourceText(this.selectedHoverMilestone);
+      this.selectedMilestoneDescriptionText = this.milestoneDescriptionText(this.selectedHoverMilestone);
     },
     hasMilestone(ms) {
       return ms.canBeApplied;
     },
-    milestoneResourceText(rift, milestone) {
+    milestoneResourceText(milestone) {
+      const rift = this.rift;
       return `${formatPercents(milestone.requirement)}
-      (${this.formatRift(rift.config.percentageToFill(milestone.requirement))} ${rift.drainResource})`;
+      (${this.formatRift(rift.config.percentageToFill(milestone.requirement))} \
+      ${rift.id === 3 ? wordShift.wordCycle(PelleRifts.decay.name) : rift.drainResource})`;
     },
     milestoneDescriptionText(milestone) {
-      return milestone.description;
+      if (typeof milestone.description === "string") return milestone.description;
+      return milestone.description();
     },
-    // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
+    // One-off formatting function; needs to format large Decimals and a small number assumed to be an integer percent
     formatRift(value) {
-      return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
+      return typeof value === "number" ? `${formatInt(100 * value)}%` : format(value, 2);
     },
     toggle() {
       if (!this.isMaxed) this.rift.toggle();
@@ -103,7 +96,14 @@ export default {
       if (milestonesCloseTo.length) {
         this.selectedHoverMilestone = milestonesCloseTo.sort((a, b) => a.dist - b.dist)[0].m;
       }
-    }
+    },
+    tooltipContentClass() {
+      const hasMilestone = this.hasMilestone(this.selectedHoverMilestone);
+      return {
+        "c-pelle-milestone-tooltip": true,
+        "c-pelle-milestone-tooltip--unlocked": hasMilestone
+      };
+    },
   }
 };
 </script>
@@ -163,176 +163,217 @@ export default {
     </div>
     <CustomizeableTooltip
       class="o-pelle-rift-bar-milestone-hover-container"
-      :tooltip-content-style="tooltipContentStyle"
+      :tooltip-class="tooltipContentClass()"
       :tooltip-arrow-style="tooltipArrowStyle"
       :left="`calc(${selectedHoverMilestone.requirement * 100}% - 0.1rem)`"
       content-class="o-pelle-rift-bar-milestone-hover-area"
     >
       <template #tooltipContent>
-        {{ milestoneResourceText(rift, selectedHoverMilestone) }}
+        {{ selectedMilestoneResourceText }}
         <br>
         <br>
-        {{ milestoneDescriptionText(selectedHoverMilestone) }}
+        {{ selectedMilestoneDescriptionText }}
       </template>
     </CustomizeableTooltip>
   </div>
 </template>
 
 <style scoped>
-/* CONTAINER STYLES */
+@keyframes a-pelle-bar-overfill-pulse {
+  /* #ed143d66 is the base pelle colour except transparent. */
+  0% { box-shadow: 0 0 0.7rem 1rem rgba(237, 20, 61, 40%); }
+  50% { box-shadow: 0 0 1.5rem 0 rgba(237, 20, 61, 40%); }
+  100% { box-shadow: 0 0 0.7rem 1rem rgba(237, 20, 61, 40%); }
+}
 
+@keyframes a-pelle-bar-overfill-pulse-but-green {
+  0% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 53.3%); }
+  50% { box-shadow: 0 0 1.5rem 0 rgba(124, 183, 39, 53.3%); }
+  100% { box-shadow: 0 0 0.7rem 1rem rgba(124, 183, 39, 53.3%); }
+}
+
+/* ACTIVE RIFT FILLING STYLES */
+@keyframes a-pelle-bar-filling-sweep {
+  0% {
+    width: 0;
+    left: 0;
+  }
+
+  10% {
+    width: 2rem;
+    left: 0;
+  }
+
+  90% {
+    width: 2rem;
+    left: calc(100% - 2rem);
+  }
+
+  100% {
+    width: 0;
+    left: 100%;
+  }
+}
+
+@keyframes a-pelle-bar-unfinished-milestone-flash {
+  0% { opacity: 1; }
+  20% { opacity: 1; }
+  50% { opacity: 0.3; }
+  80% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+/* #region CONTAINER STYLES */
 .c-pelle-rift-bar {
-  --color-bar-bg: #1e1e1e;
-  height: 5rem;
-  border: 0.2rem solid var(--color-pelle-secondary);
-  width: 32rem;
-  border-radius: 0.5rem;
-  position: relative;
-  margin-bottom: 1rem;
   display: flex;
+  width: 32rem;
+  height: 5rem;
+  position: relative;
   justify-content: center;
   align-items: center;
-  background: var(--color-bar-bg);
+  background: linear-gradient(45deg, #ffffff, #e6e6e6);
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--secondary);
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin-bottom: 1rem;
 }
+
+.s-base--metro .c-pelle-rift-bar {
+  width: 31.9rem;
+  height: 4.8rem;
+}
+
+.s-base--dark .c-pelle-rift-bar {
+  background: linear-gradient(45deg, #1e1e1e, #262626);
+}
+
 .c-pelle-rift-bar--filling,
 .c-pelle-rift-bar--idle {
+  transition: box-shadow 0.5s;
   cursor: pointer;
 }
 
-.c-pelle-rift-bar--idle .l-overflow-hidden,
-.c-pelle-rift-bar--idle .o-pelle-rift-bar-percentage {
-  opacity: 0.6;
+.c-pelle-rift-bar--filling:hover,
+.c-pelle-rift-bar--idle:hover {
+  box-shadow: 0 0 2rem var(--color-pelle--secondary);
 }
 
 .l-overflow-hidden {
   overflow: hidden;
-  border: 0.16rem solid transparent;
   width: 32rem;
   height: 5rem;
-  border-radius: 0.5rem;
   position: absolute;
   top: -0.2rem;
   left: -0.2rem;
   z-index: 0;
+  border: var(--var-border-width, 0.16rem) solid transparent;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .o-pelle-rift-bar-overlay {
+  width: 100%;
+  height: 100%;
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 100%;
-  width: 100%;
   z-index: 0;
-  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-bar-bg);
+  box-shadow: inset 0 0 0.3rem 0.1rem #222222;
 }
 
 .c-pelle-rift-bar--filling .o-pelle-rift-bar-overlay {
-  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-pelle-secondary);
+  box-shadow: inset 0 0 0.3rem 0.1rem var(--color-pelle--secondary);
 }
+/* #endregion CONTAINER STYLES */
 
-
-/* FILLING STYLES */
+/* #region FILLING STYLES */
 .o-pelle-rift-bar-fill {
+  height: 100%;
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 100%;
-  background: var(--color-pelle-secondary);
   z-index: 0;
   opacity: 0.7;
+  background: var(--color-pelle--secondary);
 }
 
 .o-pelle-rift-bar-reducedto {
-  position: absolute;
-  bottom: 0;
-  right: 0;
   height: 100%;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
   background: var(--color-pelle--base);
-  z-index: 0;
   filter: brightness(0.5);
-  z-index: 0;
 }
+/* #endregion FILLING STYLES */
 
-
-/* SPECIAL BAR OVERLAY STYLES */
+/* #region SPECIAL BAR OVERLAY STYLES */
 .o-pelle-rift-bar-permanent {
+  width: 100%;
+  height: 100%;
   position: absolute;
   bottom: 0;
   left: 0;
-  height: 100%;
-  width: 100%;
-  filter: brightness(50%);
-  background: var(--color-pelle-secondary);
   z-index: 0;
+  opacity: 0.5;
+  background: var(--color-pelle--secondary);
+  filter: grayscale(0.6);
 }
 
 .o-pelle-rift-bar-overfilled {
-  position: absolute;
   width: 100%;
   height: 100%;
-  background: var(--color-pelle--base);
-  opacity: 0.5;
+  position: absolute;
   z-index: 1;
-}
-
-@keyframes a-pelle-bar-overfill-pulse {
-  /* #ed143d66 is the base pelle colour except transparent. */
-  0% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
-  50% { box-shadow: 0 0 1.5rem 0 #ed143d66; }
-  100% { box-shadow: 0 0 0.7rem 1rem #ed143d66; }
+  opacity: 0.5;
+  background: var(--color-pelle--base);
 }
 
 .c-pelle-rift-bar-overfill-container {
   animation: a-pelle-bar-overfill-pulse 1s infinite linear;
 }
 
-
-/* ACTIVE RIFT FILLING STYLES */
-@keyframes a-pelle-bar-filling-sweep {
-  0% { left: 0; width: 0; }
-  10% { left: 0; width: 2rem; }
-  90% { left: calc(100% - 2rem); width: 2rem;  }
-  100% { left: 100%; width: 0; }
+.t-s1 .c-pelle-rift-bar-overfill-container {
+  animation: a-pelle-bar-overfill-pulse-but-green 1s infinite linear;
 }
 
 .o-pelle-rift-bar-active-fill {
-  position: absolute;
   height: 100%;
-  background: var(--color-pelle--base);
+  position: absolute;
   z-index: 1;
   opacity: 0.3;
+  background: var(--color-pelle--base);
   animation: a-pelle-bar-filling-sweep infinite 2s linear;
 }
+/* #endregion SPECIAL BAR OVERLAY STYLES */
 
-/* PERCENTAGE STYLES */
+/* #region PERCENTAGE STYLES */
 .o-pelle-rift-bar-percentage {
-  font-size: 1.5rem;
-  color: white;
-  text-shadow: 0.1rem 0.1rem 0.2rem var(--color-pelle--base);
   z-index: 2;
+  font-size: 1.5rem;
+  color: var(--color-text);
+  filter: drop-shadow(0.1rem 0.1rem 0.1rem var(--color-pelle--base));
+
   /* This keeps the percentage from blocking the hover area */
   pointer-events: none;
 }
 
-/* MILESTONE STYLES */
+.c-pelle-rift-bar--idle .l-overflow-hidden,
+.c-pelle-rift-bar--idle .o-pelle-rift-bar-percentage {
+  opacity: 0.6;
+}
+/* #endregion PERCENTAGE STYLES */
+
+/* #region MILESTONE STYLES */
 .o-pelle-rift-bar-milestone-hover-container {
   height: 100%;
 }
 
-@keyframes a-pelle-bar-unfinished-milestone-flash {
-  0% { opacity: 1 }
-  20% { opacity: 1 }
-  50% { opacity: 0.3 }
-  80% { opacity: 1 }
-  100% { opacity: 1 }
-}
-
 .o-pelle-rift-bar-milestone-line {
-  position: absolute;
   width: 0.25rem;
   height: 100%;
-  background: var(--color-pelle--base);
+  position: absolute;
   z-index: 1;
+  background: var(--color-pelle--base);
   animation: a-pelle-bar-unfinished-milestone-flash infinite 1s linear;
 }
 
@@ -341,20 +382,39 @@ export default {
 }
 
 .o-pelle-rift-bar-milestone-line--disabled {
-  animation: none;
   filter: brightness(0.25);
+  animation: none;
 }
-
-
-.s-base--metro .c-pelle-rift-bar,
-.s-base--metro .l-overflow-hidden {
-  border-radius: 0;
-}
+/* #endregion MILESTONE STYLES */
 </style>
 
 <style>
 .o-pelle-rift-bar-milestone-hover-area {
   width: 2rem;
   height: 100%;
+}
+
+.c-pelle-milestone-tooltip {
+  width: 20rem;
+  z-index: 4;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--color-text);
+  background-color: var(--color-base);
+  border: 0.1rem solid var(--color-pelle--base);
+}
+
+.s-base--dark .c-pelle-milestone-tooltip {
+  background-color: #111111;
+}
+
+.c-pelle-milestone-tooltip--unlocked {
+  color: black;
+  background-color: var(--color-pelle--base);
+  box-shadow: 0 0 0 0.1rem black;
+}
+
+.s-base--dark .c-pelle-milestone-tooltip--unlocked {
+  background-color: var(--color-pelle--base);
 }
 </style>

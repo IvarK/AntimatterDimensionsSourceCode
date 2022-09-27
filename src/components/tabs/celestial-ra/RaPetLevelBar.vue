@@ -22,7 +22,7 @@ export default {
       return ui.view.shiftDown;
     },
     unlocks() {
-      return Object.values(RA_UNLOCKS).filter(unlock => unlock.pet === this.pet);
+      return this.pet.unlocks;
     },
     importantLevels() {
       return this.unlocks.map(u => u.level);
@@ -55,15 +55,12 @@ export default {
       return {
         "c-ra-level-up-btn": true,
         "c-ra-pet-btn--available": available,
-        "c-ra-pet-btn--teresa": available && pet.name === "Teresa",
-        "c-ra-pet-btn--effarig": available && pet.name === "Effarig",
-        "c-ra-pet-btn--enslaved": available && pet.name === "Enslaved",
-        "c-ra-pet-btn--v": available && pet.name === "V"
+        [`c-ra-pet-btn--${pet.id}`]: available
       };
     },
     nextUnlock() {
-      const unlock = Object.values(RA_UNLOCKS).find(unl => unl.pet === this.pet && unl.level === this.level + 1);
-      return unlock ? unlock : false;
+      const unlock = this.pet.unlocks.find(unl => unl.level === this.level + 1);
+      return unlock ?? false;
     },
     showNextScalingUpgrade() {
       switch (this.pet.name) {
@@ -74,7 +71,7 @@ export default {
         case "Enslaved":
           return true;
         case "V":
-          return Math.clampMax(Math.floor(this.level / 5), 4) !== Math.clampMax(Math.floor((this.level + 1) / 5), 4);
+          return Math.min(Math.floor(this.level / 6), 4) !== Math.min(Math.floor((this.level + 1) / 6), 4);
         default:
           return false;
       }

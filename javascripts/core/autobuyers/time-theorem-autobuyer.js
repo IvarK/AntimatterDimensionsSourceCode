@@ -1,4 +1,4 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer.js";
+import { Autobuyer, AutobuyerState } from "./autobuyer";
 
 Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends AutobuyerState {
   get data() {
@@ -14,7 +14,7 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends AutobuyerSta
   }
 
   get hasUnlimitedBulk() {
-    return Perk.ttBuyMax.isBought;
+    return Perk.ttBuyMax.canBeApplied;
   }
 
   tick() {

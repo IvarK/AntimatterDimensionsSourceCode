@@ -1,4 +1,4 @@
-import { GameDatabase } from "./game-database.js";
+import { GameDatabase } from "./game-database";
 
 GameDatabase.speedrunMilestones = [
   {
@@ -86,7 +86,7 @@ GameDatabase.speedrunMilestones = [
     key: "allEternityMilestones",
     name: "All Eternity Milestones",
     description: "Unlock all Eternity Milestones",
-    checkRequirement: () => EternityMilestones.all.every(m => m.isReached),
+    checkRequirement: () => EternityMilestone.all.every(m => m.isReached),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
   },
   {
@@ -164,8 +164,8 @@ GameDatabase.speedrunMilestones = [
   {
     id: 21,
     key: "completeEnslavedReality",
-    name: "The Enslaved Ones' Reality",
-    description: "Complete The Enslaved Ones' Reality",
+    name: "The Nameless Ones' Reality",
+    description: "Complete The Nameless Ones' Reality",
     checkRequirement: () => Enslaved.isRunning,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },

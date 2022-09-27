@@ -1,5 +1,6 @@
-import { DimensionState } from "./dimension.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { DimensionState } from "./dimension";
 
 export function buySingleTimeDimension(tier) {
   const dim = TimeDimension(tier);
@@ -102,9 +103,6 @@ export function timeDimensionCommonMultiplier() {
       PelleRifts.chaos
     );
 
-
-  mult = mult.times(NG.multiplier);
-
   if (EternityChallenge(9).isRunning) {
     mult = mult.times(
       Decimal.pow(
@@ -146,7 +144,7 @@ class TimeDimensionState extends DimensionState {
   nextCost(bought) {
     if (this._tier > 4 && bought < this.e6000ScalingAmount) {
       const cost = Decimal.pow(this.costMultiplier, bought).times(this.baseCost);
-      if (PelleRifts.death.milestones[0].canBeApplied) {
+      if (PelleRifts.paradox.milestones[0].canBeApplied) {
         return cost.div("1e2250").pow(0.5);
       }
       return cost;
@@ -163,7 +161,7 @@ class TimeDimensionState extends DimensionState {
     const exponent = this.e6000ScalingAmount + (bought - this.e6000ScalingAmount) * TimeDimensions.scalingPast1e6000;
     const cost = Decimal.pow(base, exponent).times(this.baseCost);
 
-    if (PelleRifts.death.milestones[0].canBeApplied && this._tier > 4) {
+    if (PelleRifts.paradox.milestones[0].canBeApplied && this._tier > 4) {
       return cost.div("1e2250").pow(0.5);
     }
     return cost;
@@ -184,11 +182,6 @@ class TimeDimensionState extends DimensionState {
   get multiplier() {
     const tier = this._tier;
 
-    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning ||
-      (Laitela.isRunning && tier > Laitela.maxAllowedDimension)) {
-      return DC.D0;
-    }
-
     if (EternityChallenge(11).isRunning) return DC.D1;
     let mult = GameCache.timeDimensionCommonMultiplier.value
       .timesEffectsOf(
@@ -207,9 +200,7 @@ class TimeDimensionState extends DimensionState {
     mult = mult.powEffectOf(AlchemyResource.time);
     mult = mult.pow(Ra.momentumValue);
     mult = mult.pow(ImaginaryUpgrade(11).effectOrDefault(1));
-    mult = mult.powEffectOf(PelleRifts.death);
-
-    mult = mult.pow(NG.power);
+    mult = mult.powEffectOf(PelleRifts.paradox);
 
     if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
       mult = dilatedValueOf(mult);
@@ -225,6 +216,10 @@ class TimeDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
+    if (EternityChallenge(1).isRunning || EternityChallenge(10).isRunning ||
+    (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
+      return DC.D0;
+    }
     if (EternityChallenge(11).isRunning) {
       return this.amount;
     }

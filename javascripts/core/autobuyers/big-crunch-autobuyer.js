@@ -1,4 +1,4 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
 
 Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
@@ -10,6 +10,12 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
   }
 
   get isUnlocked() {
+    return Pelle.isDoomed
+      ? PelleStrikes.infinity.hasStrike
+      : this.canBeUpgraded;
+  }
+
+  get canBeUpgraded() {
     return NormalChallenge(12).isCompleted;
   }
 

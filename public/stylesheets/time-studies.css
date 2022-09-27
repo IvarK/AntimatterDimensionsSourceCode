@@ -1,8 +1,8 @@
 .l-time-studies-tab {
   display: flex;
   flex-direction: column;
-  align-items: center;
   position: relative;
+  align-items: center;
 }
 
 .l-time-studies-tab__tree {
@@ -30,23 +30,23 @@
 
 .l-time-study-connection {
   position: absolute;
-  left: 0;
   top: 0;
+  left: 0;
   z-index: 0;
 }
 
-/*#region o-time-study*/
+/* #region o-time-study */
 
 .c-pelle-useless {
-  border: 0.1rem solid;
-  background-color: crimson;
-  font-weight: bold;
-  font-family: Typewriter, serif;
   width: 18rem;
   height: 10rem;
+  font-family: Typewriter, serif;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: crimson;
+  border: 0.1rem solid;
+  border-radius: var(--var-border-radius, 0.4rem);
   transition-duration: 0.2s;
-  border-radius: 0.4rem;
-  font-size: 1.0rem;
 }
 
 .c-pelle-useless-available {
@@ -55,15 +55,15 @@
 }
 
 .c-pelle-useless--unavailable {
-  animation: none;
   color: black;
   filter: grayscale(90%);
+  animation: none;
 }
 
 .c-pelle-useless--unavailable:hover {
-  cursor: default;
   background-color: var(--color-bad);
   filter: grayscale(0%);
+  cursor: default;
 }
 
 .c-pelle-useless--bought {
@@ -72,15 +72,15 @@
 }
 
 .o-time-study {
-  border: 0.1rem solid;
-  background-color: black;
-  font-weight: bold;
-  font-family: Typewriter, serif;
   width: 18rem;
   height: 10rem;
+  font-family: Typewriter, serif;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: black;
+  border: 0.1rem solid;
+  border-radius: var(--var-border-radius, 0.4rem);
   transition-duration: 0.2s;
-  border-radius: 0.4rem;
-  font-size: 1.0rem;
 }
 
 .o-time-study--available {
@@ -89,8 +89,8 @@
 }
 
 .o-time-study--available:hover {
-  animation: none;
   background-color: #00bcd4;
+  animation: none;
 }
 
 .o-time-study--unavailable {
@@ -114,21 +114,17 @@
   border: none;
 }
 
-.s-base--metro .o-time-study {
-  border-radius: 0;
-}
-
 @keyframes a-time-study {
-  0%   { box-shadow: inset 0 0 0.3rem 0 }
-  50%  { box-shadow: inset 0 0 2rem 0 }
-  100% { box-shadow: inset 0 0 0.3rem 0 }
+  0% { box-shadow: inset 0 0 0.3rem 0; }
+  50% { box-shadow: inset 0 0 2rem 0; }
+  100% { box-shadow: inset 0 0 0.3rem 0; }
 }
 
 .o-time-study--small {
   width: 12rem;
   font-size: 0.9rem;
-  padding-left: 0.5rem;
   padding-right: 0.5rem;
+  padding-left: 0.5rem;
 }
 
 .o-time-study-normal--available {
@@ -235,7 +231,7 @@
 }
 
 .o-time-study-dilation--available:hover {
-  color: #64DD17;
+  color: #64dd17;
   background-color: white;
   animation: a-time-study-dilation 10s infinite;
 }
@@ -252,9 +248,9 @@
 }
 
 .o-time-study-triad--available {
-  border-color: black;
   color: var(--color-v--base);
   background: black;
+  border-color: black;
   animation: a-time-study 1.5s infinite;
 }
 
@@ -264,11 +260,11 @@
 }
 
 @keyframes a-time-study-dilation {
-  0%   { box-shadow: inset 0.5rem  0       2rem }
-  25%  { box-shadow: inset 0       0.5rem  2rem }
-  50%  { box-shadow: inset -0.5rem 0       2rem }
-  75%  { box-shadow: inset 0       -0.5rem 2rem }
-  100% { box-shadow: inset 0.5rem  0       2rem }
+  0% { box-shadow: inset 0.5rem  0       2rem; }
+  25% { box-shadow: inset 0       0.5rem  2rem; }
+  50% { box-shadow: inset -0.5rem 0       2rem; }
+  75% { box-shadow: inset 0       -0.5rem 2rem; }
+  100% { box-shadow: inset 0.5rem  0       2rem; }
 }
 
 .o-time-study-normal--unavailable {
@@ -332,44 +328,44 @@
 
 .o-time-study-normal--bought {
   color: black;
-  border-color: black;
   background-color: var(--color-eternity);
+  border-color: black;
 }
 
 .o-time-study-antimatter-dim--bought {
   color: black;
-  border-color: black;
   background-color: #22aa48;
+  border-color: black;
 }
 
 .o-time-study-infinity-dim--bought {
   color: black;
-  border-color: black;
   background-color: #b67f33;
+  border-color: black;
 }
 
 .o-time-study-time-dim--bought {
   color: black;
-  border-color: black;
   background-color: #b241e3;
+  border-color: black;
 }
 
 .o-time-study-active--bought {
   color: black;
-  border-color: black;
   background-color: #e60000;
+  border-color: black;
 }
 
 .o-time-study-passive--bought {
   color: black;
-  border-color: black;
   background-color: #5e33b6;
+  border-color: black;
 }
 
 .o-time-study-idle--bought {
   color: black;
-  border-color: black;
   background-color: #0080ff;
+  border-color: black;
 }
 
 .o-time-study-dark--bought {
@@ -393,16 +389,16 @@
 .o-time-study-eternity-challenge--running {
   color: var(--color-eternity);
   background-color: black;
-  animation: a-eternity-challenge-running 6s infinite;
   border: 0.1rem solid var(--color-eternity);
+  animation: a-eternity-challenge-running 6s infinite;
 }
 
 @keyframes a-eternity-challenge-running {
-  0%   { box-shadow: inset 1rem  0       3rem #490066 }
-  25%  { box-shadow: inset 0     0.5rem  3rem #490066 }
-  50%  { box-shadow: inset -1rem 0       3rem #490066 }
-  75%  { box-shadow: inset 0     -0.5rem 3rem #490066 }
-  100% { box-shadow: inset 1rem  0       3rem #490066 }
+  0% { box-shadow: inset 1rem  0       3rem #490066; }
+  25% { box-shadow: inset 0     0.5rem  3rem #490066; }
+  50% { box-shadow: inset -1rem 0       3rem #490066; }
+  75% { box-shadow: inset 0     -0.5rem 3rem #490066; }
+  100% { box-shadow: inset 1rem  0       3rem #490066; }
 }
 
 .o-time-study-dilation--bought {
@@ -460,37 +456,40 @@
 }
 
 .o-time-study--secret {
+  opacity: 0;
   transition: opacity 1s;
   transition-delay: 1s;
-  opacity: 0;
   cursor: pointer;
 }
 
 .o-time-study--secret-unlocked {
-  transition: opacity 1s;
   opacity: 1;
+  transition: opacity 1s;
   transition-delay: 0s;
   cursor: pointer;
 }
 
-.o-time-study--secret-enslaved {
+.o-time-study--enslaved {
   opacity: 0.02;
-  background: #f1aa7f;
-  transition: opacity 2s 0.5s;
-  cursor: pointer;
+  background: var(--color-enslaved--base);
+  transition: all 1s;
   animation: a-time-study 0.5s infinite;
+  cursor: pointer;
 }
 
-.o-time-study--secret-enslaved-unlocked {
+.o-time-study--enslaved-unlocked {
+  opacity: 1;
+  background: var(--color-eternity);
+  animation: a-time-study 2s infinite;
   cursor: default;
 }
 
-/*#endregion o-time-study*/
+/* #endregion o-time-study */
 
 .o-time-study-connection {
+  stroke: #444444;
   /* This one should be px, because it rem svg behaves weirdly under scale */
   stroke-width: 16px;
-  stroke: #444444;
   transition: stroke 0.3s;
 }
 
@@ -567,12 +566,12 @@
 }
 
 .o-time-study-connection--secret {
-  transition: opacity 1s;
   opacity: 0;
+  transition: opacity 1s;
 }
 
 .o-time-study-connection--secret-unlocked {
+  opacity: 1;
   transition: opacity 1s;
   transition-delay: 1s;
-  opacity: 1;
 }

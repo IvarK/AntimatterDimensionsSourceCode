@@ -1,4 +1,4 @@
-import { BitPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
+import { BitPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index";
 
 class RealityUpgradeState extends BitPurchasableMechanicState {
   constructor(config) {
@@ -35,7 +35,6 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    // eslint-disable-next-line no-bitwise
     return (player.reality.upgReqs & (1 << this.id)) !== 0;
   }
 
@@ -46,7 +45,6 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
   tryUnlock() {
     const realityReached = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
     if (!realityReached || this.isAvailableForPurchase || !this.config.checkRequirement()) return;
-    // eslint-disable-next-line no-bitwise
     player.reality.upgReqs |= (1 << this.id);
     GameUI.notify.reality(`You've unlocked a Reality Upgrade: ${this.config.name}`);
   }
@@ -65,6 +63,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     if (id === 20 && player.blackHole[0].unlocked) {
       player.blackHole[1].unlocked = true;
     }
+    GameCache.staticGlyphWeights.invalidate();
   }
 }
 
@@ -101,7 +100,6 @@ export const RealityUpgrades = {
    */
   all: RealityUpgradeState.index.compact(),
   get allBought() {
-    // eslint-disable-next-line no-bitwise
     return (player.reality.upgradeBits >> 6) + 1 === 1 << (GameDatabase.reality.upgrades.length - 5);
   }
 };

@@ -4,11 +4,11 @@ import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 export default {
   name: "HardResetModal",
   components: {
-    ModalWrapperChoice,
+    ModalWrapperChoice
   },
   data() {
     return {
-      input: "",
+      input: ""
     };
   },
   computed: {
@@ -16,10 +16,13 @@ export default {
       return this.input === "Shrek is love, Shrek is life";
     },
   },
+  destroyed() {
+    if (this.willHardReset) SecretAchievement(38).unlock();
+  },
   methods: {
     hardReset() {
-      if (!this.willHardReset) return;
-      GameStorage.hardReset();
+      if (this.willHardReset) GameStorage.hardReset();
+      this.input = "";
     },
   },
 };

@@ -1,5 +1,5 @@
-import { TimeStudySetup } from "./TimeStudyButton";
 import { TimeStudyConnectionSetup } from "./TimeStudyConnection";
+import { TimeStudySetup } from "./TimeStudyButton";
 
 class TimeStudyRow {
   constructor(layout, items, isWide) {
@@ -48,7 +48,7 @@ export class TimeStudyTreeLayout {
     const normalRow = (...items) => new TimeStudyRow(normalRowLayout, items);
     const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items, true);
 
-    const TS = id => TimeStudy(id);
+    const TS = id => (TimeStudy(id).isUnlocked ? TimeStudy(id) : null);
     const EC = id => TimeStudy.eternityChallenge(id);
 
     /**
@@ -58,7 +58,7 @@ export class TimeStudyTreeLayout {
     this.rows = [
       normalRow(                       null,   TS(11),   null                         ),
       normalRow(                           TS(21), TS(22)                             ),
-      normalRow(                   TS(33), TS(31), TS(32), null                       )
+      normalRow(                   null, TS(31), TS(32), TS(33)                       )
     ];
 
     if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62 || type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_62_181 ||
@@ -111,14 +111,8 @@ export class TimeStudyTreeLayout {
     );
 
     if (type === STUDY_TREE_LAYOUT_TYPE.ALTERNATIVE_TRIAD_STUDIES && !Pelle.isDoomed) {
-      const vLevel = Ra.pets.v.level;
       this.rows.push(
-        normalRow(
-          vLevel >= 5 ? TS(301) : null,
-          vLevel >= 10 ? TS(302) : null,
-          vLevel >= 15 ? TS(303) : null,
-          vLevel >= 20 ? TS(304) : null
-        )
+        normalRow(                 TS(301), TS(302), TS(303), TS(304)                 )
       );
     }
 
@@ -156,6 +150,13 @@ export class TimeStudyTreeLayout {
     this.secretStudy = new TimeStudySetup({
       study: secretStudy,
       row: 0,
+      column: 0
+    });
+
+    const enslavedStudy = {};
+    this.enslavedStudy = new TimeStudySetup({
+      study: enslavedStudy,
+      row: 0,
       column: 2
     });
 
@@ -167,6 +168,9 @@ export class TimeStudyTreeLayout {
     this.secretStudyConnection = new TimeStudyConnectionSetup(
       new TimeStudyConnection(TS(11), secretStudy)
     );
+    this.enslavedStudyConnection = new TimeStudyConnectionSetup(
+      new TimeStudyConnection(TS(11), enslavedStudy)
+    );
 
     this.width = this.rows.map(row => row.width).max();
     const heightNoSpacing = this.rows.map(r => r.layout.itemHeight).sum();
@@ -176,11 +180,13 @@ export class TimeStudyTreeLayout {
       study.setPosition(this);
     }
     this.secretStudy.setPosition(this);
+    this.enslavedStudy.setPosition(this);
 
     for (const connection of this.connections) {
       connection.setPosition(this.studies, this.width, this.height);
     }
     this.secretStudyConnection.setPosition(this.studies.concat(this.secretStudy), this.width, this.height);
+    this.enslavedStudyConnection.setPosition(this.studies.concat(this.enslavedStudy), this.width, this.height);
   }
 
   itemPosition(row) {

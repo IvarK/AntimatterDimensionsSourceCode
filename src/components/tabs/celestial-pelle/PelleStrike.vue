@@ -11,6 +11,16 @@ export default {
       type: Object,
       required: true
     },
+  },
+  data() {
+    return {
+      strikeReward: ""
+    };
+  },
+  methods: {
+    update() {
+      this.strikeReward = this.strike.reward();
+    }
   }
 };
 </script>
@@ -19,16 +29,15 @@ export default {
   <div class="c-pelle-strike-container">
     <ExpandingControlBox container-class="c-pelle-strike">
       <template #header>
-        <div class="c-pelle-strike-text-padding c-pelle-strike-requirement-header">
+        <div class="c-pelle-strike-header">
           ▼ {{ strike.requirement }} ▼
         </div>
       </template>
       <template #dropdown>
-        <div class="c-pelle-strike-text-padding c-pelle-strike-description">
-          Penalty: {{ strike.penalty }}
-          <br><br>
-          Reward: {{ strike.reward }}
+        <div class="c-pelle-strike-dropdown">
+          <span>Penalty: {{ strike.penalty }}</span>
           <br>
+          <span>Reward: {{ strikeReward }}</span>
         </div>
       </template>
     </ExpandingControlBox>
@@ -37,36 +46,33 @@ export default {
 
 <style>
 .c-pelle-strike {
-  background: var(--color-pelle--base);
-  color: black;
-  font-size: 1.3rem;
-  border: 0.2rem solid black;
-  border-radius: 0.5rem;
-  font-weight: bold;
   min-height: 3.8rem;
   z-index: 3;
-}
-
-.s-base--metro .c-pelle-strike {
-  border-radius: 0;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: black;
+  background: var(--color-pelle--base);
+  border: var(--var-border-width, 0.2rem) solid black;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .c-pelle-strike-container {
-  padding: 0.5rem 0.5rem 2rem;
+  width: 28rem;
   height: 5rem;
   z-index: 3;
-  width: 26rem;
+  padding: 0.5rem 0.5rem 2rem;
 }
 
-.c-pelle-strike-description {
-  font-size: 1.1rem;
-}
-
-.c-pelle-strike-text-padding {
+.c-pelle-strike-header {
   padding: 0.7rem;
+  cursor: pointer;
 }
 
-.c-pelle-strike-requirement-header {
-  cursor: pointer;
+.c-pelle-strike-dropdown {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 1.05rem;
+  padding: 0.7rem;
 }
 </style>

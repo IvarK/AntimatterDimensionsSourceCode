@@ -8,7 +8,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       glyphs: [],
       dragoverIndex: -1,
       respec: player.reality.respec,
@@ -25,7 +24,8 @@ export default {
       return this.glyphs.length;
     },
     arrangementRadius() {
-      return [0, 0, 0, 4, 5, 6][this.slotCount];
+      if (this.slotCount === 0) return 0;
+      return this.slotCount + 1;
     },
     respecTooltip() {
       const reset = Pelle.isDoomed ? "Armageddon" : "Reality";
@@ -34,7 +34,6 @@ export default {
         : `Your currently-equipped Glyphs will stay equipped on ${reset}.`;
     },
     undoTooltip() {
-      if (Pelle.isDoomed) return "Undo is not available while in Doomed";
       if (!this.undoSlotsAvailable) return "You do not have available inventory space to unequip Glyphs to";
       return this.undoAvailable
         ? ("Unequip the last equipped Glyph and rewind Reality to when you equipped it." +
@@ -44,6 +43,30 @@ export default {
     unequipText() {
       if (Pelle.isDoomed) return "Unequip Glyphs on Armageddon";
       return "Unequip Glyphs on Reality";
+    },
+    isDoomed() {
+      return Pelle.isDoomed;
+    },
+    glyphRespecStyle() {
+      if (this.respec) {
+        return {
+          color: "var(--color-reality-light)",
+          "background-color": "var(--color-reality)",
+          "border-color": "#094e0b",
+          cursor: "pointer",
+        };
+      }
+      return {
+        cursor: "pointer",
+      };
+    },
+    // "Armageddon" causes the button to have text overflow, so we conditionally make the button taller; this doesn't
+    // cause container overflow due to another button being removed entirely when doomed
+    unequipClass() {
+      return {
+        "l-glyph-equip-button": this.isDoomed,
+        "l-glyph-equip-button-short": !this.isDoomed,
+      };
     }
   },
   created() {
@@ -52,40 +75,24 @@ export default {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       this.respec = player.reality.respec;
       this.respecIntoProtected = player.options.respecIntoProtected;
-      this.undoSlotsAvailable = Glyphs.findFreeIndex(player.options.respecIntoProtected) !== -1;
-      this.undoVisible = Teresa.has(TERESA_UNLOCKS.UNDO);
-      // eslint-disable-next-line max-len
-      this.undoAvailable = this.undoVisible &&
-        this.undoSlotsAvailable &&
-        player.reality.glyphs.undo.length > 0 &&
-        !this.isDoomed;
+      this.undoSlotsAvailable = this.respecIntoProtected
+        ? Glyphs.totalSlots - GameCache.glyphInventorySpace.value - Glyphs.inventoryList.length > 0
+        : GameCache.glyphInventorySpace.value > 0;
+      this.undoVisible = TeresaUnlocks.undo.canBeApplied;
+      this.undoAvailable = this.undoVisible && this.undoSlotsAvailable && player.reality.glyphs.undo.length > 0;
     },
     glyphPositionStyle(idx) {
+      const angle = 2 * Math.PI * idx / this.slotCount;
+      const dx = -this.GLYPH_SIZE / 2 + this.arrangementRadius * Math.sin(angle);
+      const dy = -this.GLYPH_SIZE / 2 + this.arrangementRadius * Math.cos(angle);
       return {
         position: "absolute",
-        left: `calc(50% + ${this.glyphX(idx, 1)}rem)`,
-        top: `calc(50% + ${this.glyphY(idx, 1)}rem)`,
+        left: `calc(50% + ${dx}rem)`,
+        top: `calc(50% + ${dy}rem)`,
         "z-index": 1,
       };
-    },
-    copyPositionStyle(glyph) {
-      return {
-        position: "absolute",
-        left: `calc(50% + ${this.glyphX(glyph.idx, 1.4)}rem)`,
-        top: `calc(50% + ${this.glyphY(glyph.idx, 1.4)}rem)`,
-        opacity: 0.4,
-      };
-    },
-    glyphX(idx, scale) {
-      return -this.GLYPH_SIZE / 2 + this.arrangementRadius * scale *
-        Math.sin(2 * Math.PI * idx / this.slotCount);
-    },
-    glyphY(idx, scale) {
-      return -this.GLYPH_SIZE / 2 + this.arrangementRadius * scale *
-        Math.cos(2 * Math.PI * idx / this.slotCount);
     },
     dragover(event, idx) {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
@@ -123,23 +130,21 @@ export default {
         drop: $event => this.drop($event, idx),
       };
     },
-    showModal() {
+    showEquippedModal() {
       // If there aren't any glyphs equipped, the array is full of nulls which get filtered out by x => x
       if (this.glyphs.filter(x => x).length === 0) return;
       Modal.glyphShowcasePanel.show({
         name: "Equipped Glyphs",
         glyphSet: this.glyphs,
         closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
-        isGlyphSelection: false,
-        showSetName: true,
-        displaySacrifice: true,
       });
     },
-    clickGlyph(glyph, idx) {
+    showOptionModal() {
+      Modal.glyphDisplayOptions.show();
+    },
+    clickGlyph(glyph, idx, increaseSound = false) {
       if (glyph.symbol === "key266b") {
-        // Random then round. If its 0, thats false, so increase by 1; otherwise its 1, which is true, so increase by 6
-        const increase = Math.round(Math.random()) ? 6 : 1;
-        const sound = idx + increase;
+        const sound = idx + (increaseSound ? 6 : 1);
         new Audio(`audio/note${sound}.mp3`).play();
       }
     }
@@ -156,7 +161,7 @@ export default {
         class="l-glyph-set-preview"
         :style="glyphPositionStyle(idx)"
         v-on="dragEvents(idx)"
-        @click="showModal"
+        @click="showEquippedModal"
       >
         <!-- the drop zone is a bit larger than the glyph itself. -->
         <div class="l-equipped-glyphs__dropzone" />
@@ -168,6 +173,8 @@ export default {
           :is-active-glyph="true"
           class="c-equipped-glyph"
           @clicked="clickGlyph(glyph, idx)"
+          @shiftClicked="clickGlyph(glyph, idx, true)"
+          @ctrlShiftClicked="clickGlyph(glyph, idx, true)"
         />
         <div
           v-else
@@ -178,8 +185,9 @@ export default {
     </div>
     <div class="l-equipped-glyphs__buttons">
       <button
-        class="l-glyph-equip-button c-reality-upgrade-btn"
-        :class="{'c-reality-upgrade-btn--bought': respec}"
+        class="c-reality-upgrade-btn"
+        :class="unequipClass"
+        :style="glyphRespecStyle"
         :ach-tooltip="respecTooltip"
         @click="toggleRespec"
       >
@@ -192,8 +200,7 @@ export default {
         :ach-tooltip="undoTooltip"
         @click="undo"
       >
-        <span v-if="!isDoomed">Rewind to <b>undo</b> the last equipped Glyph</span>
-        <span v-if="isDoomed">You can't <b>undo</b> Armageddon</span>
+        <span>Rewind to <b>undo</b> the last equipped Glyph</span>
       </button>
       <button
         class="l-glyph-equip-button c-reality-upgrade-btn"
@@ -204,6 +211,12 @@ export default {
         <span v-if="respecIntoProtected">Protected slots</span>
         <span v-else>Main inventory</span>
       </button>
+      <button
+        class="l-glyph-equip-button-short c-reality-upgrade-btn"
+        @click="showOptionModal"
+      >
+        Open Glyph Visual Options
+      </button>
     </div>
   </div>
 </template>
@@ -211,5 +224,17 @@ export default {
 <style scoped>
 .c-equipped-glyph {
   -webkit-user-drag: none;
+}
+
+.l-glyph-equip-button {
+  width: 100%;
+  height: 3.5rem;
+  margin: 0.25rem 0.5rem;
+}
+
+.l-glyph-equip-button-short {
+  width: 100%;
+  height: 2.5rem;
+  margin: 0.25rem 0.5rem;
 }
 </style>

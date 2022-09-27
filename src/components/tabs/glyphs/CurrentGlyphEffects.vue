@@ -1,6 +1,6 @@
 <script>
-import GlyphSetName from "@/components/GlyphSetName";
 import CurrentGlyphEffect from "./CurrentGlyphEffect";
+import GlyphSetName from "@/components/GlyphSetName";
 
 const glyphEffectsOrder =
   ["powerpow", "powermult", "powerdimboost", "powerbuy10",
@@ -23,9 +23,10 @@ export default {
   data() {
     return {
       effects: [],
+      isColored: false,
       hasEffarig: false,
       hasReality: false,
-      logGlyphSacrifice: 0,
+      logTotalSacrifice: 0,
       pelleChaosEffect: {},
     };
   },
@@ -58,12 +59,11 @@ export default {
       return this.pelleChaosEffect.isUnlocked && !this.noEffects;
     },
     chaosEffect() {
-      return `${this.pelleChaosEffect.description
-        .replace("{value}", formatX(this.pelleChaosEffect[Pelle.activeGlyphType], 2))}`;
+      return this.pelleChaosEffect.description;
     },
   },
   watch: {
-    logGlyphSacrifice() {
+    logTotalSacrifice() {
       this.glyphsChanged();
     }
   },
@@ -73,11 +73,11 @@ export default {
   },
   methods: {
     update() {
+      this.isColored = player.options.glyphTextColors;
       this.hasEffarig = Glyphs.active.some(g => g && g.type === "effarig");
       this.hasReality = Glyphs.active.some(g => g && g.type === "reality");
 
-      this.logGlyphSacrifice = BASIC_GLYPH_TYPES
-        .reduce((tot, type) => tot + Math.log10(player.reality.glyphs.sac[type]), 0);
+      this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value;
 
       this.pelleChaosEffect = Pelle.specialGlyphEffect;
     },
@@ -95,7 +95,7 @@ export default {
       {{ pelleGlyphText }}
     </div>
     <div class="c-current-glyph-effects__header">
-      Currently active glyph effects:
+      Currently active Glyph effects:
     </div>
     <GlyphSetName :glyph-set="glyphSet" />
     <br v-if="isSoftcapActive || hasEffarig || hasReality">
@@ -113,8 +113,9 @@ export default {
     </div>
     <CurrentGlyphEffect
       v-for="effect in effects"
-      :key="effect.id + logGlyphSacrifice"
+      :key="effect.id + logTotalSacrifice"
       :effect="effect"
+      :is-colored="isColored"
     />
     <div
       v-if="showChaosText"

@@ -1,7 +1,9 @@
-import { GameDatabase } from "../secret-formula/game-database.js";
-import { GameMechanicState } from "../game-mechanics/index.js";
-import { CelestialQuotes } from "./quotes.js";
-import { DC } from "../constants.js";
+import { BitUpgradeState } from "../game-mechanics/index";
+import { GameDatabase } from "../secret-formula/game-database";
+
+import { DC } from "../constants";
+
+import { Quotes } from "./quotes";
 
 export const EFFARIG_STAGES = {
   INFINITY: 1,
@@ -12,16 +14,12 @@ export const EFFARIG_STAGES = {
 
 export const Effarig = {
   displayName: "Effarig",
+  possessiveName: "Effarig's",
   initializeRun() {
-    const isRestarting = player.celestials.effarig.run;
     clearCelestialRuns();
     player.celestials.effarig.run = true;
     recalculateAllGlyphs();
     Tab.reality.glyphs.show(false);
-    if (!isRestarting) {
-      Modal.message.show(`Your Glyph levels have been limited to ${Effarig.glyphLevelCap}. Infinity Power
-        reduces the nerf to multipliers and game speed, and Time Shards reduce the nerf to tickspeed.`);
-    }
   },
   get isRunning() {
     return player.celestials.effarig.run;
@@ -55,16 +53,14 @@ export const Effarig = {
   get glyphEffectAmount() {
     const genEffectBitmask = Glyphs.activeList
       .filter(g => generatedTypes.includes(g.type))
-      // eslint-disable-next-line no-bitwise
       .reduce((prev, curr) => prev | curr.effects, 0);
     const nongenEffectBitmask = Glyphs.activeList
       .filter(g => !generatedTypes.includes(g.type))
-      // eslint-disable-next-line no-bitwise
       .reduce((prev, curr) => prev | curr.effects, 0);
     return countValuesFromBitmask(genEffectBitmask) + countValuesFromBitmask(nongenEffectBitmask);
   },
   get shardsGained() {
-    if (!Teresa.has(TERESA_UNLOCKS.EFFARIG)) return 0;
+    if (!TeresaUnlocks.effarig.canBeApplied) return 0;
     return Math.floor(Math.pow(Currency.eternityPoints.exponent / 7500, this.glyphEffectAmount)) *
       AlchemyResource.effarig.effectValue;
   },
@@ -101,139 +97,44 @@ export const Effarig = {
     // Will return 0 if Effarig Infinity is uncompleted
     return Math.floor(replicantiCap().pLog10() / LOG10_MAX_VALUE - 1);
   },
-  quotes: new CelestialQuotes("effarig", {
-    INITIAL: {
-      id: 1,
-      lines: [
-        "Welcome to my humble abode.",
-        "I am Effarig, and I govern Glyphs.",
-        "I am different from Teresa; not as simplistic as you think.",
-        "I use the shards of Glyphs to enforce my will.",
-        "I collect them for the bounty of this realm.",
-        "What are you waiting for? Get started.",
-      ]
-    },
-    UNLOCK_WEIGHTS: CelestialQuotes.singleLine(
-      2, "Do you like my little shop? It is not much, but it is mine."
-    ),
-    UNLOCK_GLYPH_FILTER: CelestialQuotes.singleLine(
-      3, "This purchase will help you out."
-    ),
-    UNLOCK_SET_SAVES: CelestialQuotes.singleLine(
-      4, "Is that too much? I think it is too much."
-    ),
-    UNLOCK_RUN: {
-      id: 5,
-      lines: [
-        "You bought out my entire stock... well, at least I am rich now.",
-        "The heart of my Reality is suffering. Each Layer is harder than the last.",
-        "I hope you never complete it.",
-      ]
-    },
-    COMPLETE_INFINITY: {
-      id: 6,
-      lines: [
-        "* You have completed Effarig's Infinity.",
-        "This is the first threshold. It only gets worse from here.",
-        "None but me know enough about my domain to get further.",
-      ]
-    },
-    COMPLETE_ETERNITY: {
-      id: 7,
-      lines: [
-        "* You have completed Effarig's Eternity.",
-        "This is the limit. I do not want you to proceed past this point.",
-        "You will not finish this in your lifetime.",
-        "I will just wait here until you give up.",
-      ]
-    },
-    COMPLETE_REALITY: {
-      id: 8,
-      lines: [
-        "* You have completed Effarig's Reality.",
-        "So this is the diabolical power... what frightened the others...",
-        "Do you think this was worth it? Trampling on what I have done?",
-        "And for what purpose? You could have joined, we could have cooperated.",
-        "But no. It is over. Leave while I cling onto what is left.",
-      ]
-    }
-  }),
+  quotes: Quotes.effarig,
   symbol: "Ϙ"
 };
 
-class EffarigUnlockState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
-  }
+class EffarigUnlockState extends BitUpgradeState {
+  get bits() { return player.celestials.effarig.unlockBits; }
+  set bits(value) { player.celestials.effarig.unlockBits = value; }
 
   get cost() {
     return this.config.cost;
   }
 
-  get isUnlocked() {
-    // eslint-disable-next-line no-bitwise
-    return Boolean(player.celestials.effarig.unlockBits & (1 << this.id));
-  }
-
-  get canBeApplied() {
-    return this.isUnlocked && !Pelle.isDisabled("effarig");
-  }
-
-  unlock() {
-    // eslint-disable-next-line no-bitwise
-    player.celestials.effarig.unlockBits |= (1 << this.id);
+  get isEffectActive() {
+    return !Pelle.isDisabled("effarig");
   }
 
   purchase() {
     if (this.isUnlocked || !Currency.relicShards.purchase(this.cost)) return;
     this.unlock();
-    switch (this) {
-      case EffarigUnlock.adjuster:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_WEIGHTS);
-        ui.view.tabs.reality.openGlyphWeights = true;
-        Tab.reality.glyphs.show();
-        break;
-      case EffarigUnlock.glyphFilter:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_GLYPH_FILTER);
-        player.reality.showSidebarPanel = GLYPH_SIDEBAR_MODE.FILTER_SETTINGS;
-        break;
-      case EffarigUnlock.setSaves:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_SET_SAVES);
-        player.reality.showSidebarPanel = GLYPH_SIDEBAR_MODE.SAVED_SETS;
-        break;
-      case EffarigUnlock.run:
-        Effarig.quotes.show(Effarig.quotes.UNLOCK_RUN);
-        break;
-      default:
-        throw new Error("Unknown Effarig upgrade");
-    }
+    this.config.onPurchased?.();
   }
 }
 
-export const EffarigUnlock = (function() {
-  const db = GameDatabase.celestials.effarig.unlocks;
-  return {
-    adjuster: new EffarigUnlockState(db.adjuster),
-    glyphFilter: new EffarigUnlockState(db.glyphFilter),
-    setSaves: new EffarigUnlockState(db.setSaves),
-    run: new EffarigUnlockState(db.run),
-    infinity: new EffarigUnlockState(db.infinity),
-    eternity: new EffarigUnlockState(db.eternity),
-    reality: new EffarigUnlockState(db.reality),
-  };
-}());
+export const EffarigUnlock = mapGameDataToObject(
+  GameDatabase.celestials.effarig.unlocks,
+  config => new EffarigUnlockState(config)
+);
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.effarig.isOpen) Effarig.quotes.show(Effarig.quotes.INITIAL);
+  if (Tab.celestials.effarig.isOpen) Effarig.quotes.initial.show();
 });
 
 EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_BEFORE, () => {
   if (!Effarig.isRunning) return;
-  Effarig.quotes.show(Effarig.quotes.COMPLETE_INFINITY);
+  Effarig.quotes.completeInfinity.show();
 });
 
 EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_BEFORE, () => {
   if (!Effarig.isRunning) return;
-  Effarig.quotes.show(Effarig.quotes.COMPLETE_ETERNITY);
+  Effarig.quotes.completeEternity.show();
 });

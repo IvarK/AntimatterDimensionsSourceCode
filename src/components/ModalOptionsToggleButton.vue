@@ -28,7 +28,12 @@ export default {
         "o-primary-btn--option": !this.isWide,
         "o-primary-btn--option-wide": this.isWide,
       };
-    }
+    },
+    styleObject() {
+      return {
+        "background-color": this.value ? "var(--color-good)" : "var(--color-gh-purple)",
+      };
+    },
   }
 };
 </script>
@@ -38,6 +43,7 @@ export default {
     :value="value"
     :label="text"
     :class="classObject"
+    :style="styleObject"
     @input="emitInput"
   />
 </template>

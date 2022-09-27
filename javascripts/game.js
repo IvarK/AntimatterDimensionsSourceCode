@@ -1,9 +1,11 @@
-import { playFabLogin } from "./core/playfab.js";
-import { DC } from "./core/constants.js";
-import { SpeedrunMilestones } from "./core/speedrun.js";
 import TWEEN from "tween.js";
+
+import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { playFabLogin } from "./core/playfab";
+import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
+import Payments from "./core/payments";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -84,14 +86,10 @@ export function gainedInfinityPoints() {
     Achievement(103),
     TimeStudy(111)
   );
-  const mult = NG.multiplier;
-  const pow = NG.power;
   if (Pelle.isDisabled("IPMults")) {
     return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75)
-      .timesEffectsOf(PelleRifts.famine)
+      .timesEffectsOf(PelleRifts.vacuum)
       .times(Pelle.specialGlyphEffect.infinity)
-      .times(mult)
-      .pow(pow)
       .floor();
   }
   let ip = player.break
@@ -100,7 +98,6 @@ export function gainedInfinityPoints() {
   if (Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY) {
     ip = ip.min(DC.E200);
   }
-  ip = ip.times(mult);
   ip = ip.times(GameCache.totalIPMult.value);
   if (Teresa.isRunning) {
     ip = ip.pow(0.55);
@@ -113,15 +110,13 @@ export function gainedInfinityPoints() {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
 
-  ip = ip.pow(pow);
   return ip.floor();
 }
 
 function totalEPMult() {
-  const totalMult = new Decimal(NG.multiplier);
   return Pelle.isDisabled("EPMults")
-    ? totalMult.times(Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.famine.milestones[2]))
-    : totalMult.times(getAdjustedGlyphEffect("cursedEP"))
+    ? Pelle.specialGlyphEffect.time.timesEffectOf(PelleRifts.vacuum.milestones[2])
+    : getAdjustedGlyphEffect("cursedEP")
       .times(ShopPurchase.EPPurchases.currentMult)
       .timesEffectsOf(
         EternityUpgrade.epMult,
@@ -135,9 +130,8 @@ function totalEPMult() {
 }
 
 export function gainedEternityPoints() {
-  const pow = NG.power;
   let ep = DC.D5.pow(player.records.thisEternity.maxIP.plus(
-    gainedInfinityPoints()).log10() / (308 - PelleRifts.war.effectValue.toNumber()) - 0.7).times(totalEPMult());
+    gainedInfinityPoints()).log10() / (308 - PelleRifts.recursion.effectValue.toNumber()) - 0.7).times(totalEPMult());
 
   if (Teresa.isRunning) {
     ep = ep.pow(0.55);
@@ -150,11 +144,11 @@ export function gainedEternityPoints() {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
 
-  return ep.pow(pow).floor();
+  return ep.floor();
 }
 
 export function requiredIPForEP(epAmount) {
-  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(Math.pow(epAmount, 1 / NG.power), totalEPMult()), 5) + 0.7))
+  return Decimal.pow10(308 * (Decimal.log(Decimal.divide(epAmount, totalEPMult()), 5) + 0.7))
     .clampMin(Number.MAX_VALUE);
 }
 
@@ -282,10 +276,10 @@ export function gainedInfinities() {
     TimeStudy(32),
     RealityUpgrade(5),
     RealityUpgrade(7),
-    Achievement(164)
+    Achievement(164),
+    Ra.unlocks.continuousTTBoost.effects.infinity
   );
   infGain = infGain.times(getAdjustedGlyphEffect("infinityinfmult"));
-  infGain = infGain.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
   infGain = infGain.powEffectOf(SingularityMilestone.infinitiedPow);
   return infGain;
 }
@@ -337,17 +331,13 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
         factor *= Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor);
-        if (V.has(V_UNLOCKS.ACHIEVEMENT_BH)) {
-          factor *= V_UNLOCKS.ACHIEVEMENT_BH.effect();
-        }
+        factor *= VUnlocks.achievementBH.effectOrDefault(1);
       }
     }
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.SINGULARITY_MILESTONE)) {
-    factor *= SingularityMilestone.gamespeedFromSingularities.canBeApplied
-      ? SingularityMilestone.gamespeedFromSingularities.effectValue
-      : 1;
+    factor *= SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1);
   }
 
   if (effects.includes(GAME_SPEED_EFFECT.TIME_GLYPH)) {
@@ -405,14 +395,21 @@ export function getGameSpeedupForDisplay() {
 // TODO: Clean this up, remove the disable line
 // eslint-disable-next-line complexity
 export function gameLoop(passDiff, options = {}) {
-  let diff = passDiff;
   PerformanceStats.start("Frame Time");
   PerformanceStats.start("Game Update");
+
   EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
+
+  let diff = passDiff;
   const thisUpdate = Date.now();
   const realDiff = diff === undefined
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
     : diff;
+
+  if (GameEnd.creditsEverClosed) {
+    GameUI.update();
+    return;
+  }
 
   // We want to allow for a speedrunner to be able to adjust their visual settings before actually starting the run,
   // which means that we need to effectively halt the game loop until the official start
@@ -442,7 +439,7 @@ export function gameLoop(passDiff, options = {}) {
     return;
   }
 
-  // Ra-Enslaved auto-release stored time (once every 5 ticks)
+  // Ra-Nameless auto-release stored time (once every 5 ticks)
   if (Enslaved.isAutoReleasing) {
     Enslaved.autoReleaseTick++;
   }
@@ -489,9 +486,7 @@ export function gameLoop(passDiff, options = {}) {
       const reducedTimeFactor = getGameSpeedupFactor();
       const totalTimeFactor = getGameSpeedupFactor([GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
         GAME_SPEED_EFFECT.BLACK_HOLE, GAME_SPEED_EFFECT.SINGULARITY_MILESTONE]);
-      const amplification = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-        ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.gameTimeAmplification()
-        : 1;
+      const amplification = Ra.unlocks.improvedStoredTime.effects.gameTimeAmplification.effectOrDefault(1);
       const beforeStore = player.celestials.enslaved.stored;
       player.celestials.enslaved.stored = Math.clampMax(player.celestials.enslaved.stored +
         diff * (totalTimeFactor - reducedTimeFactor) * amplification, Enslaved.timeCap);
@@ -543,7 +538,7 @@ export function gameLoop(passDiff, options = {}) {
   Currency.realities.add(uncountabilityGain);
   Currency.perkPoints.add(uncountabilityGain);
 
-  if (Perk.autocompleteEC1.isBought && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
+  if (Perk.autocompleteEC1.canBeApplied && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
 
   EternityChallenge(12).tryFail();
   Achievements._power.invalidate();
@@ -583,7 +578,7 @@ export function gameLoop(passDiff, options = {}) {
   // Unlocks dilation at a certain total TT count for free, but we add the cost first in order to make
   // sure that TT count doesn't go negative and that we can actually buy it. This technically bumps the max theorem
   // amount up as well, but at this point of the game 5k TT is insignificant to basically all other sources of TT.
-  if (Ra.has(RA_UNLOCKS.AUTO_DILATION_UNLOCK) &&
+  if (Ra.unlocks.autoUnlockDilation.canBeApplied &&
     Currency.timeTheorems.max.gte(TimeStudy.dilation.totalTimeTheoremRequirement) &&
     !isInCelestialReality() &&
     !Pelle.isDoomed) {
@@ -594,13 +589,17 @@ export function gameLoop(passDiff, options = {}) {
   applyAutoUnlockPerks();
   if (GlyphSelection.active) GlyphSelection.update(gainedGlyphLevel());
 
-  if (player.dilation.active && Ra.has(RA_UNLOCKS.AUTO_TP) && !Pelle.isDoomed) rewardTP();
+  // There are some external checks which prevent excessive resource gain with Teresa-25; it may give TP outside of
+  // dilation, but the TP gain function is also coded to behave differently if it's active
+  const teresa1 = player.dilation.active && Ra.unlocks.autoTP.canBeApplied;
+  const teresa25 = !isInCelestialReality() && Ra.unlocks.unlockDilationStartingTP.canBeApplied;
+  if ((teresa1 || teresa25) && !Pelle.isDoomed) rewardTP();
 
   if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
     player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
     if (player.celestials.enslaved.hintUnlockProgress >= TimeSpan.fromHours(5).totalMilliseconds) {
       EnslavedProgress.hintsUnlocked.giveProgress();
-      Enslaved.quotes.show(Enslaved.quotes.HINT_UNLOCK);
+      Enslaved.quotes.hintUnlock.show();
     }
   }
 
@@ -610,6 +609,11 @@ export function gameLoop(passDiff, options = {}) {
   AutomatorBackend.update(realDiff);
   Pelle.gameLoop(realDiff);
   GalaxyGenerator.loop(realDiff);
+  GameEnd.gameLoop(realDiff);
+
+  if (!Enslaved.canAmplify) {
+    Enslaved.boostReality = false;
+  }
 
   if (Tabs.current.isPermanentlyHidden) {
     const tab = Tabs.all.reverse().find(t => !t.isPermanentlyHidden && t.id !== 10);
@@ -649,10 +653,10 @@ function passivePrestigeGen() {
       infGen = infGen.plus(0.2 * Time.deltaTimeMs / Math.clampMin(33, player.records.bestInfinity.time));
       infGen = infGen.timesEffectsOf(
         RealityUpgrade(5),
-        RealityUpgrade(7)
+        RealityUpgrade(7),
+        Ra.unlocks.continuousTTBoost.effects.infinity
       );
       infGen = infGen.times(getAdjustedGlyphEffect("infinityinfmult"));
-      infGen = infGen.times(RA_UNLOCKS.TT_BOOST.effect.infinity());
     }
     if (RealityUpgrade(11).isBought) {
       infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
@@ -674,14 +678,13 @@ function passivePrestigeGen() {
 
 // Applies all perks which automatically unlock things when passing certain thresholds, needs to be checked every tick
 function applyAutoUnlockPerks() {
-  if (Pelle.isDoomed) return;
-  if (!TimeDimension(8).isUnlocked && Perk.autounlockTD.isBought) {
+  if (!TimeDimension(8).isUnlocked && Perk.autounlockTD.canBeApplied) {
     for (let dim = 5; dim <= 8; ++dim) TimeStudy.timeDimension(dim).purchase();
   }
-  if (Perk.autounlockDilation3.isBought) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
-  if (Perk.autounlockReality.isBought) TimeStudy.reality.purchase(true);
-  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.isBought) {
-    const secondRow = Object.values(EternityUpgrade).filter(u => u.id > 3);
+  if (Perk.autounlockDilation3.canBeApplied) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
+  if (Perk.autounlockReality.canBeApplied) TimeStudy.reality.purchase(true);
+  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.canBeApplied) {
+    const secondRow = EternityUpgrade.all.filter(u => u.id > 3);
     for (const upgrade of secondRow) {
       if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);
     }
@@ -711,9 +714,9 @@ function laitelaRealityTick(realDiff) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;
       completionText += laitelaBeatText(Laitela.maxAllowedDimension + 1);
-      for (const quote of Object.values(Laitela.quotes)) {
-        if (laitelaInfo.difficultyTier >= quote.destabilize) {
-          Laitela.quotes.show(quote);
+      for (const quote of Laitela.quotes.all) {
+        if (quote.requirement) {
+          quote.show();
         }
       }
     }
@@ -730,7 +733,7 @@ function laitelaRealityTick(realDiff) {
         ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()} to improve your multiplier.`;
     }
     if (Laitela.isFullyDestabilized) SpeedrunMilestones(24).tryComplete();
-    Modal.message.show(completionText);
+    Modal.message.show(completionText, {}, 2);
   }
 }
 
@@ -739,9 +742,10 @@ function laitelaBeatText(disabledDim) {
     case 1: return `<br><br>Lai'tela's Reality will now completely disable production from all Dimensions.
         The Reality can still be entered, but further destabilization is no longer possible.
         For completely destabilizing the Reality, you also get an additional ${formatX(8)} to Dark Energy gain.`;
-    case 2:
-    case 3: return `<br><br>Lai'tela's Reality will now disable production from all
-        ${disabledDim}${disabledDim === 2 ? "nd" : "rd"} Dimensions during
+    case 2: return `<br><br>Lai'tela's Reality will now disable production from all 2nd Dimensions during
+      future runs, but the reward will be ${formatInt(100)} times stronger than before. Completely destabilizing
+      the Reality for the final Dimension will give you an additional ${formatX(8)} to Dark Energy gain.`;
+    case 3: return `<br><br>Lai'tela's Reality will now disable production from all 3rd Dimensions during
         future runs, but the reward will be ${formatInt(100)} times stronger than before.`;
     case 8: return `<br><br>Lai'tela's Reality will now disable production from all 8th Dimensions during
         future runs, but the reward will be ${formatInt(100)} times stronger than before. This boost can be
@@ -756,9 +760,9 @@ function laitelaBeatText(disabledDim) {
 function applyAutoprestige(diff) {
   Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(0));
 
-  if (Teresa.has(TERESA_UNLOCKS.EPGEN) && !Pelle.isDisabled("EPgen")) {
+  if (TeresaUnlocks.epGen.canBeApplied) {
     Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D0_01)
-      .times(getGameSpeedupFactor() * diff / 1000).times(RA_UNLOCKS.TT_BOOST.effect.autoPrestige()));
+      .times(getGameSpeedupFactor() * diff / 1000).timesEffectOf(Ra.unlocks.continuousTTBoost.effects.autoPrestige));
   }
 
   if (InfinityUpgrade.ipGen.isCharged) {
@@ -795,9 +799,11 @@ function updateTachyonGalaxies() {
 
 export function getTTPerSecond() {
   // All TT multipliers (note that this is equal to 1 pre-Ra)
-  let ttMult = RA_UNLOCKS.TT_BOOST.effect.ttGen();
-  ttMult *= Achievement(137).effectOrDefault(1);
-  if (Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT)) ttMult *= RA_UNLOCKS.TT_ACHIEVEMENT.effect();
+  let ttMult = Effects.product(
+    Ra.unlocks.continuousTTBoost.effects.ttGen,
+    Ra.unlocks.achievementTTMult,
+    Achievement(137),
+  );
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 
   // Glyph TT generation
@@ -812,8 +818,8 @@ export function getTTPerSecond() {
 
   // Lai'tela TT power
   let finalTT = dilationTT.add(glyphTT);
-  if (SingularityMilestone.theoremPowerFromSingularities.isUnlocked && finalTT.gt(1) && !Pelle.isDoomed) {
-    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectValue);
+  if (finalTT.gt(1)) {
+    finalTT = finalTT.pow(SingularityMilestone.theoremPowerFromSingularities.effectOrDefault(1));
   }
 
   return finalTT;
@@ -833,12 +839,6 @@ function afterSimulation(seconds, playerBefore) {
 
   GameUI.notify.showBlackHoles = true;
 }
-
-const OFFLINE_BH_PAUSE_STATE = {
-  ACTIVE: 0,
-  INACTIVE: 1,
-  PAUSED: 2,
-};
 
 export function simulateTime(seconds, real, fast) {
   // The game is simulated at a base 50ms update rate, with a max of
@@ -881,6 +881,8 @@ export function simulateTime(seconds, real, fast) {
     Currency.infinityPoints.add(player.records.thisEternity.bestIPMsWithoutMaxAll.times(seconds * 1000 / 2));
   }
 
+  EventHub.dispatch(GAME_EVENT.OFFLINE_CURRENCY_GAINED);
+
   let remainingRealSeconds = seconds;
   // During async code the number of ticks remaining can go down suddenly
   // from "Speed up" which means tick length needs to go up, and thus
@@ -899,76 +901,17 @@ export function simulateTime(seconds, real, fast) {
   };
 
   // Simulation code which accounts for BH cycles (segments where a BH is active doesn't use diff since it splits
-  // up intervals based on real time instead in an effort to keep ticks all roughly equal in game time). With black
-  // hole auto-pausing, the simulation now becomes a three-step process:
-  // 1. Simulate until the BH dectivates (this only occurs if it's active when the simulation starts)
-  // 2. At this point, the BH we're tracking is inactive and timeToNextStateChange will return the proper value until
-  //    we should pause it, so we run until we either hit that or run out of time (this often takes very few ticks)
-  // 3. The BH is now paused and the simpler code works to finish the rest of the ticks
-  let offlineBHState = OFFLINE_BH_PAUSE_STATE.ACTIVE;
-  const trackedBH = player.blackHoleAutoPauseMode;
+  // up intervals based on real time instead in an effort to keep ticks all roughly equal in game time).
+  // Black hole auto-pausing is entirely handled by the black hole phase advancement code (for actually pausing)
+  // and calculateOfflineTick (for time calculation).
   if (BlackHoles.areUnlocked && !BlackHoles.arePaused) {
-    if (trackedBH === 0) {
-      // Auto-pause is off, don't bother doing anything fancy
-      loopFn = i => {
-        const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
-          i, 0.0001);
-        remainingRealSeconds -= realTickTime;
-        gameLoop(1000 * realTickTime, { blackHoleSpeedup });
-      };
-    } else {
-      if (!BlackHole(trackedBH).isActive) offlineBHState++;
-      loopFn = i => {
-        let realTickTime, blackHoleSpeedup, limit, diff;
-        switch (offlineBHState) {
-          case OFFLINE_BH_PAUSE_STATE.ACTIVE:
-            // If we have to reduce tick length to not overshoot the transition, we also advance the simulation state
-            // We skip past the BH going inactive by 1 ms in order to ensure that the next simulation step actually has
-            // an inactive BH in order for the logic to work out
-            [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
-              i, 0.0001);
-            limit = BlackHole(trackedBH).timeToNextStateChange + 0.001;
-            if (realTickTime > limit) {
-              remainingRealSeconds -= limit;
-              gameLoop(1000 * limit, { blackHoleSpeedup });
-              offlineBHState++;
-            } else {
-              remainingRealSeconds -= realTickTime;
-              gameLoop(1000 * realTickTime, { blackHoleSpeedup });
-            }
-            break;
-          case OFFLINE_BH_PAUSE_STATE.INACTIVE:
-            // Same as above, but this time the extra 1 ms serves the purpose of putting the game past the auto-pause
-            // threshold. Otherwise, it'll immediately auto-pause once more when online
-            [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
-              i, 0.0001);
-            limit = BlackHole(trackedBH).timeToNextStateChange - BlackHoles.ACCELERATION_TIME + 0.001;
-            if (realTickTime > limit) {
-              remainingRealSeconds -= limit;
-              gameLoop(1000 * limit, { blackHoleSpeedup });
-              offlineBHState++;
-            } else {
-              remainingRealSeconds -= realTickTime;
-              gameLoop(1000 * realTickTime, { blackHoleSpeedup });
-            }
-            break;
-          case OFFLINE_BH_PAUSE_STATE.PAUSED:
-            // At this point the BH is paused and we just use the same code as no BH at all. This isn't necessarily
-            // executed in all situations; for example short offline periods may not reach this code
-            diff = remainingRealSeconds / i;
-            gameLoop(1000 * diff);
-            remainingRealSeconds -= diff;
-            break;
-        }
-      };
-    }
+    loopFn = i => {
+      const [realTickTime, blackHoleSpeedup] = BlackHoles.calculateOfflineTick(remainingRealSeconds,
+        i, 0.0001);
+      remainingRealSeconds -= realTickTime;
+      gameLoop(1000 * realTickTime, { blackHoleSpeedup });
+    };
   }
-  const oldLoopFn = loopFn;
-  loopFn = i => {
-    Pelle.addAdditionalEnd = false;
-    oldLoopFn(i);
-    Pelle.addAdditionalEnd = true;
-  };
 
   // We don't show the offline modal here or bother with async if doing a fast simulation
   if (fast) {
@@ -1060,7 +1003,6 @@ window.onload = function() {
       }
     }
     document.getElementById("loading").style.display = "none";
-    document.body.style.overflowY = "auto";
   }, 500);
   if (!supportedBrowser) {
     GameIntervals.stop();

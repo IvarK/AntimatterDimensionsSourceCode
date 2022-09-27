@@ -1,6 +1,13 @@
 <script>
 export default {
   name: "ArmageddonButton",
+  props: {
+    isHeader: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   data() {
     return {
       remnantsGain: 0,
@@ -12,6 +19,15 @@ export default {
   computed: {
     remnants() {
       return format(this.remnantsGain, 2, this.remnantsGain > 1 ? 0 : 2);
+    },
+    buttonClassObject() {
+      return {
+        "c-armageddon-button": true,
+        "l-armageddon-button": !this.isHeader,
+        "l-reality-button": this.isHeader,
+        "l-armageddon-button--header": this.isHeader,
+        "c-armageddon-button--unavailable": !this.canArmageddon
+      };
     }
   },
   methods: {
@@ -33,10 +49,10 @@ export default {
 
 <template>
   <button
-    class="c-armageddon-button"
-    :class="{ 'c-armageddon-button--unavailable': !canArmageddon }"
+    :class="buttonClassObject"
     @click="manualArmageddon"
   >
+    <span v-if="isHeader">You cannot escape a Doomed Reality!<br></span>
     <span class="c-remnant-gain-display">
       Armageddon for
       <span class="c-remnant-gain">{{ remnants }}</span>
@@ -51,30 +67,43 @@ export default {
 
 <style scoped>
 .c-armageddon-button {
-  width: 100%;
-  padding: 1.5rem;
   display: block;
   font-family: Typewriter;
-  background: var(--color-prestige--accent);
-  border: 0.1rem solid var(--color-pelle--base);
   color: var(--color-text);
-  border-radius: 0.5rem;
+  background: var(--color-text-inverted);
+  border: 0.1rem solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+}
+
+.s-base--metro .c-armageddon-button {
+  box-shadow: 0.1rem 0.1rem 0.1rem 0 #9e9e9e;
+}
+
+.l-armageddon-button {
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.l-armageddon-button--header {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0rem;
 }
 
 .c-armageddon-button:hover {
-  cursor: pointer;
   box-shadow: 0.1rem 0.1rem 0.5rem var(--color-pelle--base);
   transition-duration: 0.12s;
+  cursor: pointer;
 }
 
 .c-armageddon-button--unavailable {
-  cursor: default;
   opacity: 0.5;
+  cursor: default !important;
 }
 
 .c-remnant-gain {
-  font-weight: bold;
   font-size: 1.5rem;
+  font-weight: bold;
   color: var(--color-pelle--base);
 }
 
@@ -85,9 +114,5 @@ export default {
 .c-reality-shard-gain {
   font-weight: bold;
   color: var(--color-pelle--base);
-}
-
-.s-base--metro .c-armageddon-button {
-  border-radius: 0;
 }
 </style>

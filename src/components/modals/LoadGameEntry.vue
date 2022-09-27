@@ -15,7 +15,8 @@ export default {
   data() {
     const save = GameStorage.saves[this.saveId];
     return {
-      antimatter: new Decimal(save ? save.antimatter || save.money : 10)
+      antimatter: new Decimal(save ? save.antimatter || save.money : 10),
+      fileName: save ? save.options.saveFileName : ""
     };
   },
   computed: {
@@ -42,6 +43,7 @@ export default {
 <template>
   <div class="l-modal-options__save-record">
     <h3>Save #{{ saveId + 1 }}:<span v-if="isSelected"> (selected)</span></h3>
+    <span v-if="fileName">File name: {{ fileName }}</span>
     <span>Antimatter: {{ formatAntimatter(antimatter) }}</span>
     <PrimaryButton
       class="o-primary-btn--width-medium"

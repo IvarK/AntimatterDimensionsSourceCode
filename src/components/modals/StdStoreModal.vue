@@ -25,7 +25,7 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper>
+  <ModalWrapper class="c-shop-modal">
     <template #header>
       Support The Developer -coins
     </template>
@@ -37,8 +37,8 @@ export default {
       <img src="images/std_coin.png">
       <div class="c-modal-store-buttons">
         <StdStoreRow
-          :amount="20"
-          :cost="1.99"
+          :amount="30"
+          :cost="2.99"
         />
         <StdStoreRow
           :amount="60"

@@ -1,5 +1,5 @@
-import { TimeStudyState } from "./time-studies.js";
-import { TimeStudy } from "./normal-time-study.js";
+import { TimeStudy } from "./normal-time-study";
+import { TimeStudyState } from "./time-studies";
 
 export class ECTimeStudyState extends TimeStudyState {
   constructor(config) {
@@ -12,6 +12,7 @@ export class ECTimeStudyState extends TimeStudyState {
   }
 
   purchase(auto) {
+    if (GameEnd.creditsEverClosed) return false;
     const clickTime = Date.now();
 
     if (this.isBought && player.challenge.eternity.current === 0 && !auto) {
@@ -33,7 +34,6 @@ export class ECTimeStudyState extends TimeStudyState {
       if (!auto) {
         Tab.challenges.eternity.show();
       }
-      // eslint-disable-next-line no-bitwise
       player.challenge.eternity.requirementBits |= 1 << this.id;
       Currency.timeTheorems.subtract(this.cost);
       TimeStudyTree.commitToGameState([TimeStudy.eternityChallenge(this.id)]);
@@ -117,7 +117,7 @@ export class ECTimeStudyState extends TimeStudyState {
   }
 
   get wasRequirementPreviouslyMet() {
-    // eslint-disable-next-line no-bitwise
+    if (this.id === 11 || this.id === 12) return false;
     return (player.challenge.eternity.requirementBits & (1 << this.id)) !== 0;
   }
 

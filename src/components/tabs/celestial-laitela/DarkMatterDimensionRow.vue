@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     name() {
-      return `${DarkMatterDimension(this.tier).displayName} Dark Matter Dimension`;
+      return `${DarkMatterDimension(this.tier).shortDisplayName} Dark Matter Dimension`;
     },
     ascensionText() {
       return `(⯅${formatInt(this.ascension)})`;
@@ -120,7 +120,7 @@ export default {
       this.isIntervalCapped = dim.interval <= dim.intervalPurchaseCap;
       this.timer = dim.timeSinceLastUpdate;
       this.timerPercent = this.timer / this.interval;
-      this.intervalAscensionBump = SingularityMilestone.ascensionIntervalScaling.effectValue;
+      this.intervalAscensionBump = SingularityMilestone.ascensionIntervalScaling.effectOrDefault(1200);
       this.intervalAfterAscension = dim.intervalAfterAscension;
       this.darkEnergyPerSecond = dim.productionPerSecond;
       this.portionDE = this.darkEnergyPerSecond / Currency.darkEnergy.productionPerSecond;

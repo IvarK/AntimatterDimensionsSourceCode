@@ -6,7 +6,7 @@ export default {
       darkMatter: new Decimal(0),
       darkMatterMult: 0,
       darkMatterMultGain: 0,
-      hasAnnihilated: false,
+      autobuyerUnlocked: false,
       annihilationButtonVisible: false,
       matterRequirement: 0,
       darkMatterMultRatio: 0,
@@ -24,8 +24,8 @@ export default {
       this.darkMatter.copyFrom(Currency.darkMatter);
       this.darkMatterMult = Laitela.darkMatterMult;
       this.darkMatterMultGain = Laitela.darkMatterMultGain;
-      this.hasAnnihilated = Laitela.darkMatterMult > 1;
-      this.annihilationButtonVisible = Laitela.canAnnihilate || this.hasAnnihilated;
+      this.autobuyerUnlocked = Autobuyer.annihilation.isUnlocked;
+      this.annihilationButtonVisible = Laitela.canAnnihilate || this.autobuyerUnlocked;
       this.matterRequirement = Laitela.annihilationDMRequirement;
       this.darkMatterMultRatio = Laitela.darkMatterMultRatio;
       this.isEnabled = player.auto.annihilation.isActive;
@@ -48,17 +48,21 @@ export default {
 <template>
   <div class="l-laitela-annihilation-container">
     <button
+      v-if="darkMatter.lt(matterRequirement)"
+      class="l-laitela-annihilation-button"
+    >
+      Annihilation requires {{ format(matterRequirement, 2) }} Dark Matter
+    </button>
+    <button
+      v-else
       class="l-laitela-annihilation-button c-laitela-annihilation-button"
       @click="annihilate"
     >
-      <span v-if="darkMatter.lt(matterRequirement)">
-        Annihilation requires {{ format(matterRequirement, 2) }} Dark Matter
-      </span>
-      <b v-else>Annihilate your Dark Matter Dimensions</b>
+      <b>Annihilate your Dark Matter Dimensions</b>
     </button>
     <br>
     <br>
-    <span v-if="hasAnnihilated">
+    <span v-if="autobuyerUnlocked">
       Current multiplier to all Dark Matter multipliers: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
       <br>
       <br>

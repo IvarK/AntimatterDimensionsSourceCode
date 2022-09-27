@@ -1,4 +1,4 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer.js";
+import { Autobuyer, AutobuyerState } from "./autobuyer";
 
 Autobuyer.annihilation = new class AnnihilationAutobuyerState extends AutobuyerState {
   get data() {
@@ -10,7 +10,7 @@ Autobuyer.annihilation = new class AnnihilationAutobuyerState extends AutobuyerS
   }
 
   get isUnlocked() {
-    return Laitela.darkMatterMult > 1;
+    return Laitela.darkMatterMult > 1 && !Pelle.isDoomed;
   }
 
   get multiplier() {

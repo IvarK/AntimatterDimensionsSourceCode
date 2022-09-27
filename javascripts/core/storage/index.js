@@ -1,6 +1,6 @@
-import "./migrations.js";
-import "./dev-migrations.js";
+import "./migrations";
+import "./dev-migrations";
 
-export * from "./serializer.js";
-export * from "./storage.js";
-export * from "./cloud-saving.js";
+export * from "./serializer";
+export * from "./storage";
+export * from "./cloud-saving";

@@ -25,9 +25,14 @@ export default {
     classObject() {
       return {
         "o-tab-btn": true,
+        "o-tab-btn--modern-tabs": true,
         "o-tab-btn--subtabs": this.showSubtabs,
+        "o-tab-btn--active": this.isCurrentTab && player.options.theme !== "S9"
       };
     },
+    isCurrentTab() {
+      return this.tab.isOpen;
+    }
   },
   methods: {
     update() {
@@ -40,11 +45,14 @@ export default {
         this.tabName = Pelle.transitionText(
           this.tab.name,
           Pelle.endTabNames[this.tabPosition],
-          Math.max(Math.min(Pelle.endState - (this.tab.id) % 4 / 10, 1), 0)
+          Math.clamp(GameEnd.endState - (this.tab.id % 4) / 10, 0, 1)
         );
       } else {
         this.tabName = this.tab.name;
       }
+    },
+    isCurrentSubtab(id) {
+      return player.options.lastOpenSubtab[this.tab.id] === id && player.options.theme !== "S9";
     }
   },
 };
@@ -59,40 +67,88 @@ export default {
       class="l-tab-btn-inner"
       @click="tab.show(true)"
     >
-      {{ tabName }} <i
+      {{ tabName }}
+      <div
         v-if="hasNotification"
-        class="fas fa-exclamation"
+        class="fas fa-circle-exclamation l-notification-icon"
       />
     </div>
     <div
       v-if="showSubtabs"
       class="subtabs"
     >
-      <span
+      <template
         v-for="(subtab, index) in tab.subtabs"
-        :key="index"
       >
         <div
           v-if="subtabVisibilities[index]"
+          :key="index"
           class="o-tab-btn o-tab-btn--subtab"
-          :class="tab.config.UIClass"
+          :class="
+            [tab.config.UIClass,
+             {'o-subtab-btn--active': isCurrentSubtab(subtab.id)}]
+          "
           @click="subtab.show(true)"
         >
-          <span v-html="subtab.symbol">
-            <i
-              v-if="subtab.hasNotification"
-              class="fas fa-exclamation"
-            />
-          </span>
+          <span v-html="subtab.symbol" />
+          <div
+            v-if="subtab.hasNotification"
+            class="fas fa-circle-exclamation l-notification-icon"
+          />
           <div class="o-subtab__tooltip">
             {{ subtab.name }}
           </div>
         </div>
-      </span>
+      </template>
     </div>
   </div>
 </template>
 
 <style scoped>
+.o-tab-btn::before {
+  content: "";
+  width: 0;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  left: 0;
+  background-color: var(--color-accent);
+  transition: width 0.15s;
+}
 
+.o-tab-btn--active::before {
+  width: 0.5rem;
+}
+
+.o-tab-btn--infinity::before {
+  background-color: var(--color-infinity);
+}
+
+.o-tab-btn--eternity::before {
+  background-color: var(--color-eternity);
+}
+
+.o-tab-btn--reality::before {
+  background-color: var(--color-reality);
+}
+
+.o-tab-btn--celestial::before {
+  background-color: var(--color-celestials);
+}
+
+.o-subtab-btn--active {
+  border-bottom-width: 0.5rem;
+}
+
+.o-tab-btn--subtab:first-child {
+  border-top-left-radius: var(--var-border-radius, 0.5rem);
+  border-bottom-left-radius: var(--var-border-radius, 0.5rem);
+  transition: border-radius 0s;
+}
+
+.o-tab-btn--subtab:last-child {
+  border-top-right-radius: var(--var-border-radius, 0.5rem);
+  border-bottom-right-radius: var(--var-border-radius, 0.5rem);
+  transition: border-radius 0s;
+}
 </style>

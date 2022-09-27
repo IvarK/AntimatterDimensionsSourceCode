@@ -5,18 +5,25 @@ export default {
     purchase: {
       type: Object,
       required: true
+    },
+    iapDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
     return {
       currentMult: 0,
-      nextMult: 0
+      nextMult: 0,
+      canAfford: false,
     };
   },
   methods: {
     update() {
-      this.currentMult = this.purchase.currentMult;
-      this.nextMult = this.purchase.nextMult;
+      this.currentMult = this.purchase.currentMultForDisplay;
+      this.nextMult = this.purchase.nextMultForDisplay;
+      this.canAfford = this.purchase.canBeBought;
     }
   },
 };
@@ -27,12 +34,17 @@ export default {
     <div class="o-shop-button-description">
       {{ purchase.description }}
       <br>
-      <span class="o-shop-button-multiplier">
-        Currently {{ formatX(currentMult, 2, 0) }}, next: {{ formatX(nextMult, 2, 0) }}
+      <span
+        v-if="purchase.shouldDisplayMult"
+        class="o-shop-button-multiplier"
+        :class="{ 'o-shop-button-multiplier--disabled': iapDisabled }"
+      >
+        Currently {{ purchase.formatEffect(currentMult) }}, next: {{ purchase.formatEffect(nextMult) }}
       </span>
     </div>
     <button
       class="o-shop-button-button"
+      :class="{ 'o-shop-button-button--disabled': !canAfford }"
       @click="purchase.purchase()"
     >
       Cost: {{ purchase.cost }}
@@ -46,37 +58,50 @@ export default {
 
 <style scoped>
 .c-shop-button-container {
+  display: flex;
+  flex-direction: column;
   width: 30rem;
-  padding: 1rem;
-  border: .2rem solid #1f7d1f;
-  border-radius: .5rem;
-  margin: .5rem;
-  background: #3c3c3c;
+  height: 16rem;
+  justify-content: space-between;
   color: white;
+  background: #3c3c3c;
+  border: var(--var-border-width, 0.2rem) solid #1f7d1f;
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin: 0.5rem;
+  padding: 1rem;
 }
 
 .o-shop-button-button {
-  background: turquoise;
-  border: none;
-  border-radius: .5rem;
   display: flex;
-  margin: auto;
   align-items: center;
   font-family: Typewriter;
-  padding: .5rem 2rem;
-  margin-top: 1rem;
+  background: turquoise;
+  border: none;
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin: 0 auto;
+  padding: 0.5rem 2rem;
   cursor: pointer;
 }
 
+.o-shop-button-button--disabled {
+  background: rgb(150, 150, 150);
+  cursor: default;
+}
+
 .o-shop-button-button__img {
-  margin-left: 1rem;
   height: 40px;
+  margin-left: 1rem;
 }
 
 .o-shop-button-multiplier {
-  font-weight: bold;
-  font-size: 1.5rem;
-  margin: 0.5rem 0;
   display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.o-shop-button-multiplier--disabled {
+  color: red;
+  text-decoration: line-through;
 }
 </style>

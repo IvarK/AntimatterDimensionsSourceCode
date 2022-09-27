@@ -1,9 +1,10 @@
 <script>
 import { DC } from "../../../../javascripts/core/constants";
-import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
+
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
-import GlyphSetPreview from "@/components/GlyphSetPreview";
 import CustomizeableTooltip from "@/components/CustomizeableTooltip";
+import GlyphSetPreview from "@/components/GlyphSetPreview";
+import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
 
 export default {
   name: "TeresaTab",
@@ -15,10 +16,10 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       pour: false,
       time: new Date().getTime(),
       pouredAmount: 0,
+      isPouredAmountCapped: false,
       rm: new Decimal(0),
       percentage: "",
       possibleFillPercentage: "",
@@ -37,7 +38,7 @@ export default {
     };
   },
   computed: {
-    unlockInfos: () => Teresa.unlockInfo,
+    unlockInfos: () => TeresaUnlocks.all,
     pouredAmountCap: () => Teresa.pouredAmountCap,
     upgrades() {
       const upgrades = [
@@ -54,18 +55,25 @@ export default {
       return {
         "c-teresa-run-button__icon": true,
         "c-teresa-run-button__icon--running": this.isRunning,
+        "c-celestial-run-button--clickable": !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed
       };
     },
     pourButtonClassObject() {
       return {
         "o-teresa-shop-button": true,
-        "o-teresa-shop-button--available": true,
         "c-teresa-pour": true,
-        "c-teresa-pour--unlock-available": this.canUnlockNextPour
+        "o-teresa-shop-button--available": !this.isPouredAmountCapped,
+        "o-teresa-shop-button--capped": this.isPouredAmountCapped,
+        "c-teresa-pour--unlock-available": this.canUnlockNextPour,
+        "c-disabled-pour": this.isPouredAmountCapped
       };
     },
+    pourText() {
+      return this.isPouredAmountCapped ? "Filled" : "Pour RM";
+    },
     runDescription() {
-      return GameDatabase.celestials.descriptions[0].description();
+      return GameDatabase.celestials.descriptions[0].effects();
     },
     lastMachinesString() {
       return this.lastMachines.lt(DC.E10000)
@@ -76,11 +84,11 @@ export default {
       return {
         borderRight: "0.5rem solid var(--color-teresa--base)"
       };
-    }
+    },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       const now = new Date().getTime();
       if (this.pour) {
         const diff = (now - this.time) / 1000;
@@ -88,13 +96,14 @@ export default {
       }
       this.time = now;
       this.pouredAmount = player.celestials.teresa.pouredAmount;
+      this.isPouredAmountCapped = this.pouredAmount === this.pouredAmountCap;
       this.percentage = `${(Teresa.fill * 100).toFixed(2)}%`;
       this.possibleFillPercentage = `${(Teresa.possibleFill * 100).toFixed(2)}%`;
       this.rmMult = Teresa.rmMultiplier;
-      this.hasReality = Teresa.has(TERESA_UNLOCKS.RUN);
-      this.hasEPGen = Teresa.has(TERESA_UNLOCKS.EPGEN);
-      this.hasPerkShop = Teresa.has(TERESA_UNLOCKS.SHOP);
-      this.raisedPerkShop = Ra.has(RA_UNLOCKS.PERK_SHOP_INCREASE);
+      this.hasReality = TeresaUnlocks.run.isUnlocked;
+      this.hasEPGen = TeresaUnlocks.epGen.isUnlocked;
+      this.hasPerkShop = TeresaUnlocks.shop.isUnlocked;
+      this.raisedPerkShop = Ra.unlocks.perkShopIncrease.canBeApplied;
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
       this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
       this.lastMachines.copyFrom(player.celestials.teresa.lastRepeatedMachines);
@@ -102,29 +111,25 @@ export default {
       this.perkPoints = Currency.perkPoints.value;
       this.rm.copyFrom(Currency.realityMachines);
       this.isRunning = Teresa.isRunning;
-      this.canUnlockNextPour = Object.values(TERESA_UNLOCKS)
-        .filter(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !Teresa.has(unlock)).length > 0;
+      this.canUnlockNextPour = TeresaUnlocks.all
+        .filter(unlock => this.rm.plus(this.pouredAmount).gte(unlock.price) && !unlock.isUnlocked).length > 0;
     },
     startRun() {
       if (this.isDoomed) return;
       Modal.celestials.show({ name: "Teresa's", number: 0 });
     },
     unlockDescriptionHeight(unlockInfo) {
-      const maxPrice = Teresa.unlockInfo[Teresa.lastUnlock].price;
+      const maxPrice = TeresaUnlocks[Teresa.lastUnlock].price;
       const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice);
       return `calc(${(100 * pos).toFixed(2)}% - 0.1rem)`;
     },
     hasUnlock(unlockInfo) {
-      return this.pouredAmount >= unlockInfo.price;
+      return unlockInfo.isUnlocked;
     },
-    unlockInfoTooltipContentStyle(unlockInfo) {
-      const hasInfo = this.hasUnlock(unlockInfo);
+    unlockInfoTooltipClass(unlockInfo) {
       return {
-        border: "0.1rem solid var(--color-teresa--base)",
-        backgroundColor: hasInfo ? "var(--color-teresa--base)" : "var(--color-teresa--accent)",
-        fontSize: "1rem",
-        color: hasInfo ? "black" : "var(--color-teresa--base)",
-        width: "14rem"
+        "c-teresa-unlock-description": true,
+        "c-teresa-unlock-description--unlocked": this.hasUnlock(unlockInfo)
       };
     }
   }
@@ -143,14 +148,15 @@ export default {
         class="l-teresa-mechanic-container"
       >
         <div class="c-teresa-unlock c-teresa-run-button">
+          <span :class="{ 'o-pelle-disabled': isDoomed }">
+            Start Teresa's Reality.
+          </span>
           <div
             :class="runButtonClassObject"
             @click="startRun()"
           >
             Ϟ
           </div>
-          <span v-if="!isDoomed">Start Teresa's Reality.</span>
-          <span v-else>You can't start Teresa's Reality while in Doomed.<br></span>
           {{ runDescription }}
           <br><br>
           <div v-if="bestAM.gt(0)">
@@ -178,10 +184,7 @@ export default {
           v-if="hasEPGen"
           class="c-teresa-unlock"
         >
-          <span v-if="isDoomed">
-            This has no effect while in Doomed
-          </span>
-          <span v-else>
+          <span :class="{ 'o-pelle-disabled': isDoomed }">
             Every second, you gain {{ formatPercents(0.01) }} of your peaked Eternity Points per minute this Reality.
           </span>
         </div>
@@ -195,7 +198,7 @@ export default {
           @touchend="pour = false"
           @mouseleave="pour = false"
         >
-          Pour RM
+          {{ pourText }}
         </button>
         <div class="c-rm-store">
           <div
@@ -214,24 +217,25 @@ export default {
           </div>
           <CustomizeableTooltip
             v-for="unlockInfo in unlockInfos"
-            :id="unlockInfo.id"
             :key="unlockInfo.id"
-            content-class="c-teresa-unlock-description"
+            content-class="c-teresa-unlock-description--hover-area"
             :bottom="unlockDescriptionHeight(unlockInfo)"
             right="0"
             mode="right"
             :show="true"
             :tooltip-arrow-style="unlockInfoTooltipArrowStyle"
-            :tooltip-content-style="unlockInfoTooltipContentStyle(unlockInfo)"
+            :tooltip-class="unlockInfoTooltipClass(unlockInfo)"
           >
             <template #mainContent>
               <div
                 class="c-teresa-milestone-line"
-                :class="{ 'c-teresa-milestone-line--attained': hasUnlock(unlockInfo) }"
+                :class="{ 'c-teresa-milestone-line--unlocked': hasUnlock(unlockInfo) }"
               />
             </template>
             <template #tooltipContent>
-              <b>{{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}</b>
+              <b :class="{ 'o-pelle-disabled': unlockInfo.pelleDisabled }">
+                {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
+              </b>
             </template>
           </CustomizeableTooltip>
         </div>
@@ -256,3 +260,10 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-disabled-pour {
+  opacity: 0.8;
+  pointer-events: none;
+}
+</style>

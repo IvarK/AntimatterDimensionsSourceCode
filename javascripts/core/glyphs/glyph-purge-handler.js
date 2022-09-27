@@ -2,11 +2,21 @@
 export const GlyphSacrificeHandler = {
   // Anything scaling on sacrifice caps at this value, even though the actual sacrifice values can go higher
   maxSacrificeForEffects: 1e100,
+  // This is used for glyph UI-related things in a few places, but is handled here as a getter which is only called
+  // sparingly - that is, whenever the cache is invalidated after a glyph is sacrificed. Thus it only gets recalculated
+  // when glyphs are actually sacrificed, rather than every render cycle.
+  get logTotalSacrifice() {
+    // We check elsewhere for this equalling zero to determine if the player has ever sacrificed. Technically this
+    // should check for -Infinity, but the clampMin works in practice because the minimum possible sacrifice
+    // value is greater than 1 for even the weakest possible glyph
+    return BASIC_GLYPH_TYPES.reduce(
+      (tot, type) => tot + Math.log10(Math.clampMin(player.reality.glyphs.sac[type], 1)), 0);
+  },
   get canSacrifice() {
     return RealityUpgrade(19).isBought;
   },
   get isRefining() {
-    return Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) && AutoGlyphProcessor.sacMode !== AUTO_GLYPH_REJECT.SACRIFICE;
+    return Ra.unlocks.unlockGlyphAlchemy.canBeApplied && AutoGlyphProcessor.sacMode !== AUTO_GLYPH_REJECT.SACRIFICE;
   },
   handleSpecialGlyphTypes(glyph) {
     switch (glyph.type) {
@@ -35,7 +45,7 @@ export const GlyphSacrificeHandler = {
     if (glyph.type === "reality") return 0.01 * glyph.level * Achievement(171).effectOrDefault(1);
     const pre10kFactor = Math.pow(Math.clampMax(glyph.level, 10000) + 10, 2.5);
     const post10kFactor = 1 + Math.clampMin(glyph.level - 10000, 0) / 100;
-    const power = Ra.has(RA_UNLOCKS.MAX_RARITY_AND_SHARD_SACRIFICE_BOOST) ? 1 + Effarig.maxRarityBoost / 100 : 1;
+    const power = Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.effectOrDefault(1);
     return Math.pow(pre10kFactor * post10kFactor * glyph.strength *
       Teresa.runRewardMultiplier * Achievement(171).effectOrDefault(1), power);
   },
@@ -50,6 +60,7 @@ export const GlyphSacrificeHandler = {
       return;
     }
     player.reality.glyphs.sac[glyph.type] += toGain;
+    GameCache.logTotalGlyphSacrifice.invalidate();
     Glyphs.removeFromInventory(glyph);
     EventHub.dispatch(GAME_EVENT.GLYPH_SACRIFICED, glyph);
   },
@@ -64,13 +75,13 @@ export const GlyphSacrificeHandler = {
   // Refined glyphs give this proportion of their maximum attainable value from their level
   glyphRefinementEfficiency: 0.05,
   glyphRawRefinementGain(glyph) {
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY)) return 0;
+    if (!Ra.unlocks.unlockGlyphAlchemy.canBeApplied) return 0;
     const glyphMaxValue = this.levelRefinementValue(glyph.level);
     const rarityModifier = strengthToRarity(glyph.strength) / 100;
     return this.glyphRefinementEfficiency * glyphMaxValue * rarityModifier;
   },
   glyphRefinementGain(glyph) {
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) || !generatedTypes.includes(glyph.type)) return 0;
+    if (!Ra.unlocks.unlockGlyphAlchemy.canBeApplied || !generatedTypes.includes(glyph.type)) return 0;
     const resource = this.glyphAlchemyResource(glyph);
     const glyphActualValue = this.glyphRawRefinementGain(glyph);
     if (resource.cap === 0) return glyphActualValue;
@@ -96,7 +107,7 @@ export const GlyphSacrificeHandler = {
       return;
     }
     const decoherence = AlchemyResource.decoherence.isUnlocked;
-    if (!Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) ||
+    if (!Ra.unlocks.unlockGlyphAlchemy.canBeApplied ||
         (this.glyphRefinementGain(glyph) === 0 && !decoherence) ||
         (decoherence && AlchemyResources.base.every(x => x.data.amount >= Ra.alchemyResourceCap))) {
       this.sacrificeGlyph(glyph, force);

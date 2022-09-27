@@ -1,4 +1,4 @@
-import { GameDatabase } from "../game-database.js";
+import { GameDatabase } from "../game-database";
 
 GameDatabase.achievements.secret = [
   {
@@ -120,7 +120,7 @@ GameDatabase.achievements.secret = [
   {
     id: 33,
     name: "A sound financial decision",
-    description: "Click on the donate link."
+    description: "Click on the button to purchase STD coins."
   },
   {
     id: 34,
@@ -146,8 +146,8 @@ GameDatabase.achievements.secret = [
   },
   {
     id: 38,
-    name: "Professional bodybuilder",
-    description: "This one is getting replaced due to a recent PR."
+    name: "Knife's edge",
+    description: "Close the Hard Reset modal after typing in the confirmation."
   },
   {
     id: 41,
@@ -161,10 +161,10 @@ GameDatabase.achievements.secret = [
   },
   {
     id: 43,
-    name: "Time fixes everything",
-    description: "Fix infinity while Dilated.",
-    checkRequirement: () => player.dilation.active,
-    checkEvent: GAME_EVENT.FIX_INFINITY
+    name: "A cacophonous chorus",
+    description: "Have all equipped Glyphs be Music Glyphs.",
+    checkRequirement: () => Glyphs.active.length && Glyphs.active.every(x => x?.symbol === "key266b"),
+    checkEvent: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED
   },
   {
     id: 44,
@@ -181,17 +181,17 @@ GameDatabase.achievements.secret = [
   },
   {
     id: 46,
-    name: "s46",
-    description: "s46"
+    name: "For a rainy day",
+    description: "Store a day of real time."
   },
   {
     id: 47,
-    name: "s47",
-    description: "s47"
+    name: "ALT+",
+    description: "Hide every possible tab."
   },
   {
     id: 48,
-    name: "s48",
-    description: "s48"
+    name: "Stack overflow",
+    description: "Have more Automator errors than lines."
   },
 ];

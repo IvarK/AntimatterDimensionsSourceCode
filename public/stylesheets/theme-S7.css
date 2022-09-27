@@ -1,40 +1,33 @@
 * {
-  font-family: "Arial";
-  transition-duration: 1ms !important;
+  font-family: Arial, Typewriter;
   border-width: 1px !important;
   border-radius: 0 !important;
   box-shadow: none !important;
+  transition-duration: 1ms !important;
   animation: none !important;
 }
 
-#ui {
+#ui,
+#ui-fixed {
   filter: saturate(0) !important;
 }
 
 button {
-  -webkit-border-radius: 0 !important;
-  -moz-border-radius: 0 !important;
-  border-radius: 0 !important;
-  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.00, rgb(222, 222, 222)), color-stop(1.00, rgb(246, 246, 246))) !important;
-  background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
-  background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
-  padding: 3px !important;
-  border: 0.1rem solid #9B9B9B !important;
   color: black !important;
   text-decoration: none !important;
+  background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+  border: 0.1rem solid #9b9b9b !important;
+  border-radius: 0 !important;
+  padding: 3px !important;
 }
 
 .o-primary-btn {
-  -webkit-border-radius: 0 !important;
-  -moz-border-radius: 0 !important;
-  border-radius: 0 !important;
-  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.00, rgb(222, 222, 222)), color-stop(1.00, rgb(246, 246, 246))) !important;
-  background-image: -moz-linear-gradient(center bottom, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
-  background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
-  padding: 3px !important;
-  border: 0.1rem solid #9B9B9B !important;
   color: black !important;
   text-decoration: none !important;
+  background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+  border: 0.1rem solid #9b9b9b !important;
+  border-radius: 0 !important;
+  padding: 3px !important;
 }
 
 button:hover {
@@ -42,8 +35,8 @@ button:hover {
 }
 
 .c-glyph-tooltip {
-  filter: saturate(0);
   text-shadow: none !important;
+  filter: saturate(0);
 }
 
 .c-glyph-tooltip__effect span {

@@ -1,10 +1,11 @@
-import { GameMechanicState } from "../game-mechanics/index.js";
+import { GameMechanicState } from "../game-mechanics/index";
 
 export const orderedEffectList = ["powerpow", "infinitypow", "replicationpow", "timepow",
   "dilationpow", "timeshardpow", "powermult", "powerdimboost", "powerbuy10",
   "dilationTTgen", "infinityinfmult", "infinityIP", "timeEP",
-  "dilationDT", "replicationdtgain", "replicationspeed", "timespeed",
+  "dilationDT", "replicationdtgain", "replicationspeed",
   "timeetermult", "dilationgalaxyThreshold", "infinityrate", "replicationglyphlevel",
+  "timespeed",
   "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
   "effarigforgotten", "effarigdimensions", "effarigantimatter",
   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
@@ -51,13 +52,15 @@ export const Glyphs = {
     const isUsableIndex = index => (useProtectedSlots ? index < this.protectedSlots : index >= this.protectedSlots);
     return this.inventory.findIndex((slot, index) => slot === null && isUsableIndex(index));
   },
+  // This is stored in GameCache and only invalidated if glyphs change; we check for free inventory space often in
+  // lots of places and this is an expensive operation
   get freeInventorySpace() {
     this.validate();
     return this.inventory.filter((e, idx) => e === null && idx >= this.protectedSlots).length;
   },
   get activeSlotCount() {
     if (Pelle.isDoomed) {
-      if (PelleRifts.famine.milestones[0].canBeApplied) return 1;
+      if (PelleRifts.vacuum.milestones[0].canBeApplied) return 1;
       return 0;
     }
     return 3 + Effects.sum(RealityUpgrade(9), RealityUpgrade(24));
@@ -115,6 +118,7 @@ export const Glyphs = {
 
     player.reality.glyphs.protectedRows = newRows;
     this.validate();
+    GameCache.glyphInventorySpace.invalidate();
   },
   // Move all glyphs from the origin row to the destination row, does nothing if a column-preserving move operation
   // isn't possible. Returns a boolean indicating success/failure on glyph moving. Row is 0-indexed
@@ -183,15 +187,38 @@ export const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
-  findByValues(finding, ignore = { level, strength, effects }) {
-    for (const glyph of this.sortedInventoryList) {
-      const type = glyph.type === finding.type;
-      const effects = glyph.effects === finding.effects ||
-            (ignore.effects && hasAtLeastGlyphEffects(glyph.effects, finding.effects));
-      const str = ignore.strength || glyph.strength === finding.strength;
-      const lvl = ignore.level || glyph.level === finding.level;
-      const sym = Boolean(glyph.symbol) || glyph.symbol === finding.symbol;
-      if (type && effects && str && lvl && sym) return glyph;
+  findByValues(targetGlyph, searchList, fuzzyMatch = { level, strength, effects }) {
+    // We need comparison to go both ways for normal matching and subset matching for partially-equipped sets
+    const compFn = (op, comp1, comp2) => {
+      switch (op) {
+        case -1:
+          return comp1 <= comp2;
+        case 0:
+          return comp1 === comp2;
+        case 1:
+          return comp1 >= comp2;
+      }
+      return false;
+    };
+
+    for (const glyph of searchList) {
+      const type = glyph.type === targetGlyph.type;
+      let eff = false;
+      switch (fuzzyMatch.effects) {
+        case -1:
+          eff = hasAtLeastGlyphEffects(targetGlyph.effects, glyph.effects);
+          break;
+        case 0:
+          eff = glyph.effects === targetGlyph.effects;
+          break;
+        case 1:
+          eff = hasAtLeastGlyphEffects(glyph.effects, targetGlyph.effects);
+          break;
+      }
+      const str = compFn(fuzzyMatch.strength, glyph.strength, targetGlyph.strength);
+      const lvl = compFn(fuzzyMatch.level, glyph.level, targetGlyph.level);
+      const sym = glyph.symbol === targetGlyph.symbol;
+      if (type && eff && str && lvl && sym) return glyph;
     }
     return undefined;
   },
@@ -216,6 +243,8 @@ export const Glyphs = {
       )
     ) return;
 
+    if (GameEnd.creditsEverClosed) return;
+
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {
       throw new Error("Inconsistent inventory indexing");
@@ -226,7 +255,8 @@ export const Glyphs = {
     }
     if (this.active[targetSlot] === null) {
       if (sameSpecialTypeIndex >= 0) {
-        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped`);
+        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped!`,
+          { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
         return;
       }
       this.removeFromInventory(glyph);
@@ -242,7 +272,8 @@ export const Glyphs = {
     } else {
       // We can only replace effarig/reality glyph
       if (sameSpecialTypeIndex >= 0 && sameSpecialTypeIndex !== targetSlot) {
-        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped`);
+        Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped!`,
+          { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
         return;
       }
       if (!player.options.confirmations.glyphReplace) {
@@ -254,9 +285,10 @@ export const Glyphs = {
     // Loading glyph sets might choose NEW! glyphs, in which case the hover-over flag clearing never got triggered
     this.removeNewFlag(glyph);
   },
-  unequipAll() {
+  unequipAll(forceToUnprotected = false) {
+    const targetRegion = forceToUnprotected ? false : player.options.respecIntoProtected;
     while (player.reality.glyphs.active.length) {
-      const freeIndex = this.findFreeIndex(player.options.respecIntoProtected);
+      const freeIndex = this.findFreeIndex(targetRegion);
       if (freeIndex < 0) break;
       const glyph = player.reality.glyphs.active.pop();
       this.active[glyph.idx] = null;
@@ -323,7 +355,7 @@ export const Glyphs = {
   },
   addToInventory(glyph, requestedInventoryIndex, isExistingGlyph = false) {
     this.validate();
-    glyph.id = GlyphGenerator.makeID();
+    if (!isExistingGlyph) glyph.id = GlyphGenerator.makeID();
     const isProtectedIndex = requestedInventoryIndex < this.protectedSlots;
     let index = this.findFreeIndex(isProtectedIndex);
     if (index < 0) return;
@@ -380,7 +412,7 @@ export const Glyphs = {
   },
   sort(sortFunction) {
     const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
-    const freeSpace = this.freeInventorySpace;
+    const freeSpace = GameCache.glyphInventorySpace.value;
     const sortOrder = ["power", "infinity", "replication", "time", "dilation", "effarig",
       "reality", "cursed", "companion"];
     const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
@@ -421,7 +453,6 @@ export const Glyphs = {
   },
   sortByEffect() {
     function reverseBitstring(eff) {
-      // eslint-disable-next-line no-bitwise
       return parseInt(((1 << 30) + (eff >>> 0)).toString(2).split("").reverse().join(""), 2);
     }
     // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
@@ -431,6 +462,7 @@ export const Glyphs = {
   // If there are enough glyphs that are better than the specified glyph, in every way, then
   // the glyph is objectively a useless piece of garbage.
   isObjectivelyUseless(glyph, threshold) {
+    if (player.reality.applyFilterToPurge && AutoGlyphProcessor.wouldKeep(glyph)) return false;
     function hasSomeBetterEffects(glyphA, glyphB, comparedEffects) {
       for (const effect of comparedEffects) {
         const c = effect.compareValues(
@@ -446,7 +478,6 @@ export const Glyphs = {
         g.type === glyph.type &&
         g.id !== glyph.id &&
         (g.level >= glyph.level || g.strength >= glyph.strength) &&
-        // eslint-disable-next-line no-bitwise
         ((g.effects & glyph.effects) === glyph.effects));
     let compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
     compareThreshold = Math.clampMax(compareThreshold, threshold);
@@ -455,6 +486,7 @@ export const Glyphs = {
     const betterCount = toCompare.countWhere(other => !hasSomeBetterEffects(glyph, other, comparedEffects));
     return betterCount >= compareThreshold;
   },
+  // Note that this same function is called with different parameters for purge (5), harsh purge (1), and sac all (0)
   autoClean(threshold = 5, deleteGlyphs = true) {
     const isHarsh = threshold < 5;
     let toBeDeleted = 0;
@@ -463,7 +495,8 @@ export const Glyphs = {
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
       const glyph = this.inventory[inventoryIndex];
-      if (glyph === null || glyph.type === "companion") continue;
+      // Never clean companion, and only clean cursed if we choose to sacrifice all
+      if (glyph === null || glyph.type === "companion" || (glyph.type === "cursed" && threshold !== 0)) continue;
       // Don't auto-clean custom glyphs (eg. music glyphs) unless it's harsh or delete all
       const isCustomGlyph = glyph.color !== undefined || glyph.symbol !== undefined;
       if (isCustomGlyph && !isHarsh) continue;
@@ -503,7 +536,7 @@ export const Glyphs = {
     }
   },
   processSortingAfterReality() {
-    if (V.has(V_UNLOCKS.AUTO_AUTOCLEAN) && player.reality.autoAutoClean) this.autoClean();
+    if (VUnlocks.autoAutoClean.canBeApplied && player.reality.autoAutoClean) this.autoClean();
     switch (player.reality.autoSort) {
       case AUTO_SORT_MODE.NONE:
         break;
@@ -609,13 +642,11 @@ export const Glyphs = {
   },
   // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
   applyGamespeed(glyph) {
-    if (!Ra.has(RA_UNLOCKS.ALWAYS_GAMESPEED)) return;
+    if (!Ra.unlocks.allGamespeedGlyphs.canBeApplied) return;
     if (BASIC_GLYPH_TYPES.includes(glyph.type)) {
-      // eslint-disable-next-line no-bitwise
-      glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timespeed.bitmaskIndex);
+      glyph.effects |= (1 << GlyphEffects.timespeed.bitmaskIndex);
       if (glyph.type === "time") {
-        // eslint-disable-next-line no-bitwise
-        glyph.effects |= (1 << GameDatabase.reality.glyphEffects.timeshardpow.bitmaskIndex);
+        glyph.effects |= (1 << GlyphEffects.timeshardpow.bitmaskIndex);
       }
     }
   },
@@ -635,23 +666,28 @@ export const Glyphs = {
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
+  },
+  // Mostly used for key-swapping glyph set UI elements; composites the entire glyph set together in a way which is
+  // relatively unlikely to cause collisions between different glyph sets unless they're actually the same glyphs.
+  // Different permutations of the same glyphs should produce the same hash, but aren't guaranteed to
+  hash(glyphSet) {
+    let hash = 1;
+    for (const glyph of glyphSet) {
+      // This should be at most around e23 or so in practice
+      const singleGlyphHash = Math.pow(glyph.level, 2) * Math.pow(glyph.strength, 4) * glyph.effects *
+        glyph.type.charCodeAt(0);
+      hash *= singleGlyphHash;
+    }
+    return hash;
   }
 };
 
 class GlyphSacrificeState extends GameMechanicState { }
 
-export const GlyphSacrifice = (function() {
-  const db = GameDatabase.reality.glyphSacrifice;
-  return {
-    time: new GlyphSacrificeState(db.time),
-    dilation: new GlyphSacrificeState(db.dilation),
-    replication: new GlyphSacrificeState(db.replication),
-    infinity: new GlyphSacrificeState(db.infinity),
-    power: new GlyphSacrificeState(db.power),
-    effarig: new GlyphSacrificeState(db.effarig),
-    reality: new GlyphSacrificeState(db.reality),
-  };
-}());
+export const GlyphSacrifice = mapGameDataToObject(
+  GameDatabase.reality.glyphSacrifice,
+  config => new GlyphSacrificeState(config)
+);
 
 export function recalculateAllGlyphs() {
   for (let i = 0; i < player.reality.glyphs.active.length; i++) {
@@ -687,18 +723,25 @@ export function getRarity(x) {
   return GlyphRarities.find(e => x >= e.minStrength);
 }
 
-export function getAdjustedGlyphLevel(glyph, realityGlyphBoost = Glyphs.levelBoost) {
+export function getColor(strength) {
+  return getRarity(strength)[(player.options.forceDarkGlyphs || Theme.current().isDark()) ? "darkColor" : "lightColor"];
+}
+
+export function getAdjustedGlyphLevel(glyph, realityGlyphBoost = Glyphs.levelBoost, ignoreCelestialEffects = false) {
   const level = glyph.level;
-  if (Pelle.isDoomed) return Math.min(level, Pelle.glyphMaxLevel);
-  if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
-  if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
+  if (!ignoreCelestialEffects) {
+    if (Pelle.isDoomed) return Math.min(level, Pelle.glyphMaxLevel);
+    if (Enslaved.isRunning) return Math.max(level, Enslaved.glyphLevelMin);
+    if (Effarig.isRunning) return Math.min(level, Effarig.glyphLevelCap);
+  }
   if (BASIC_GLYPH_TYPES.includes(glyph.type)) return level + realityGlyphBoost;
   return level;
 }
 
 export function respecGlyphs() {
   if (!Glyphs.unequipAll()) {
-    Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.");
+    Modal.message.show("Some of your Glyphs could not be unequipped due to lack of inventory space.",
+      { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
   }
   player.reality.respec = false;
 }

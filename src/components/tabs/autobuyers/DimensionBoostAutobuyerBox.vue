@@ -1,7 +1,7 @@
 <script>
 import AutobuyerBox from "./AutobuyerBox";
-import AutobuyerIntervalButton from "./AutobuyerIntervalButton";
 import AutobuyerInput from "./AutobuyerInput";
+import AutobuyerIntervalButton from "./AutobuyerIntervalButton";
 
 export default {
   name: "DimensionBoostAutobuyerBox",
@@ -58,8 +58,9 @@ export default {
       #intervalSlot
     >
       <div
-        class="c-autobuyer-box__small-text l-top-margin"
+        class="c-autobuyer-box__small-text"
       >
+        <br>
         Activates every X seconds:
       </div>
       <AutobuyerInput
@@ -69,19 +70,19 @@ export default {
       />
     </template>
     <template
-      v-else
+      v-if="!isBuyMaxUnlocked"
       #checkboxSlot
     >
-      <div
-        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text l-top-margin"
-        @click="limitDimBoosts = !limitDimBoosts"
+      <label
+        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text l-top-margin o-clickable"
       >
         <input
+          v-model="limitDimBoosts"
           type="checkbox"
-          :checked="limitDimBoosts"
+          class="o-clickable"
         >
-        <span>Limit Dimension Boosts to:</span>
-      </div>
+        Limit Dimension Boosts to:
+      </label>
       <AutobuyerInput
         :autobuyer="autobuyer"
         type="int"
@@ -89,13 +90,13 @@ export default {
       />
     </template>
     <template #toggleSlot>
-      <div
-        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text l-autobuyer-text-area"
-        @click="limitUntilGalaxies = !limitUntilGalaxies"
+      <label
+        class="o-autobuyer-toggle-checkbox c-autobuyer-box__small-text l-autobuyer-text-area o-clickable"
       >
         <input
+          v-model="limitUntilGalaxies"
           type="checkbox"
-          :checked="limitUntilGalaxies"
+          class="o-clickable"
         >
         <span v-if="isBuyMaxUnlocked">
           Only Dimboost to unlock new<br>
@@ -105,7 +106,7 @@ export default {
           Galaxies required to always<br>
           Dimboost, ignoring the limit:
         </span>
-      </div>
+      </label>
       <AutobuyerInput
         :autobuyer="autobuyer"
         type="int"
@@ -117,10 +118,14 @@ export default {
 
 <style scoped>
 .l-top-margin {
-  margin-top: 1.2rem;
+  margin-top: 0.82rem;
 }
 
 .l-dimboost-text-area {
   height: 3rem;
+}
+
+.o-clickable {
+  cursor: pointer;
 }
 </style>

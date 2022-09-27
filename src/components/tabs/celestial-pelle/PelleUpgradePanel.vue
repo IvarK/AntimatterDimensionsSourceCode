@@ -18,6 +18,8 @@ export default {
       remnants: 0,
       realityShards: new Decimal(0),
       shardRate: new Decimal(0),
+      upgrades: [],
+      boughtUpgrades: []
     };
   },
   computed: {
@@ -27,8 +29,6 @@ export default {
         : "fas fa-compress-arrows-alt";
     },
     rebuyables: () => PelleUpgrade.rebuyables,
-    upgrades() { return PelleUpgrade.singles.filter(u => !u.isBought); },
-    boughtUpgrades() { return PelleUpgrade.singles.filter(u => u.isBought); },
     visibleUpgrades() { return this.upgrades.slice(0, 5); },
     fadedUpgrades() { return this.upgrades.slice(5, 10); },
     allUpgrades() {
@@ -48,6 +48,8 @@ export default {
       this.remnants = Pelle.cel.remnants;
       this.realityShards.copyFrom(Pelle.cel.realityShards);
       this.shardRate.copyFrom(Pelle.realityShardGainPerSecond);
+      this.upgrades = PelleUpgrade.singles.filter(u => !u.isBought);
+      this.boughtUpgrades = PelleUpgrade.singles.filter(u => u.isBought);
     },
     toggleBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;
@@ -117,7 +119,7 @@ export default {
           v-for="upgrade in allUpgrades"
           :key="upgrade.config.id"
           :upgrade="upgrade"
-          :show-improved-estimate="isHovering"
+          :show-improved-estimate="showImprovedEstimate"
         />
         <PelleUpgradeVue
           v-for="upgrade in fadedUpgrades"
@@ -134,45 +136,26 @@ export default {
 </template>
 
 <style scoped>
-.c-pelle-panel-title {
-  font-weight: bold;
-  font-size: 3rem;
-  color: var(--color-pelle--base);
-  position: relative;
-}
-
 .c-collapse-icon-clickable {
   position: absolute;
-  left: 1.5rem;
   top: 50%;
+  left: 1.5rem;
+  width: 3rem;
+  align-content: center;
   transform: translateY(-50%);
-}
-
-.l-pelle-panel-container {
-  padding: 1rem;
-  margin: 1rem;
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
-  user-select: none;
-}
-
-.l-pelle-content-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  cursor: pointer;
 }
 
 .o-pelle-button {
-  background: var(--color-prestige--accent);
-  color: var(--color-text);
-  border: 0.1rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
-  padding: 1rem;
   font-family: Typewriter;
-  margin: 0 1rem;
-  margin-bottom: 1rem;
-  cursor: pointer;
+  color: var(--color-text);
+  background: var(--color-text-inverted);
+  border: 0.1rem solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin: 1rem 0 0.5rem;
+  padding: 1rem;
   transition-duration: 0.12s;
+  cursor: pointer;
 }
 
 .o-pelle-button:hover {
@@ -182,17 +165,17 @@ export default {
 .c-pelle-upgrade-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   max-width: 110rem;
+  justify-content: center;
 }
 
 .c-armageddon-container {
-  align-self: center;
   display: flex;
-  align-items: flex-start;
   justify-content: center;
-  border-radius: 0.5rem;
-  border: 0.2rem solid var(--color-pelle--base);
+  align-items: flex-start;
+  align-self: center;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
   padding: 1rem;
 }
 
@@ -206,21 +189,8 @@ export default {
 }
 
 .c-remnants-amount {
-  font-weight: bold;
   font-size: 2rem;
+  font-weight: bold;
   color: var(--color-pelle--base);
-}
-
-.c-collapse-icon-clickable {
-  cursor: pointer;
-}
-
-
-.s-base--metro .o-pelle-button {
-  border-radius: 0;
-}
-
-.s-base--metro .c-armageddon-container {
-  border-radius: 0;
 }
 </style>

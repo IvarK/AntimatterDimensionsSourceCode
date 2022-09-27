@@ -13,6 +13,7 @@ export default {
       offlineFraction: 0,
       mostRecent: {},
       isCollapsed: false,
+      timeSince: 0,
     };
   },
   computed: {
@@ -42,7 +43,10 @@ export default {
   methods: {
     update() {
       const speedrun = player.speedrun;
+      const db = GameDatabase.speedrunMilestones;
       this.isActive = speedrun.isActive;
+      // Short-circuit if speedrun isn't active; updating some later stuff can cause vue errors outside of speedruns
+      if (!this.isActive) return;
       this.isSegmented = speedrun.isSegmented;
       this.hasStarted = speedrun.hasStarted;
       this.startDate = speedrun.startDate;
@@ -52,9 +56,10 @@ export default {
       this.timePlayedStr = Time.realTimePlayed.toStringShort();
       this.offlineProgress = player.options.offlineProgress;
       this.offlineFraction = speedrun.offlineTimeUsed / Math.clampMin(player.records.realTimePlayed, 1);
-      this.mostRecent = speedrun.milestones.length === 0
-        ? 0
-        : speedrun.milestones[speedrun.milestones.length - 1];
+      this.mostRecent = speedrun.milestones[speedrun.milestones.length - 1] ?? 0;
+      const lastMilestoneKey = db.find(m => m.id === this.mostRecent)?.key;
+      this.timeSince = Time.realTimePlayed.minus(TimeSpan.fromMilliseconds(speedrun.records[lastMilestoneKey] ?? 0))
+        .toStringShort();
     },
     milestoneName(id) {
       const db = GameDatabase.speedrunMilestones;
@@ -77,12 +82,19 @@ export default {
 <template>
   <div
     v-if="isActive"
-    class="speedrun-status"
+    class="c-speedrun-status"
   >
     <div v-if="!isCollapsed">
       <b>Speedrun Status (<span v-html="statusText" />)</b>
       <br>
-      <span @click="changeName">Player Name: {{ saveName }}</span>
+      <span
+        :class="{
+          'c-speedrun-status--change-name': !hasStarted
+        }"
+        @click="changeName"
+      >
+        Player Name: {{ saveName }}
+      </span>
       <br>
       <i>{{ segmentText }}</i>
       <br>
@@ -90,11 +102,11 @@ export default {
       <br>
       Offline Progress: <span v-html="offlineText" />
       <br>
-      Most Recent Milestone: {{ milestoneName(mostRecent) }}
+      Most Recent Milestone: {{ milestoneName(mostRecent) }} <span v-if="mostRecent">({{ timeSince }} ago)</span>
       <br>
     </div>
     <div
-      class="speedrun-collapse"
+      class="c-speedrun-status--collapse"
       @click="toggleCollapse"
     >
       <i :class="collapseIcon" />
@@ -105,22 +117,29 @@ export default {
 </template>
 
 <style scoped>
-.speedrun-status {
+.c-speedrun-status {
+  white-space: nowrap;
+  position: absolute;
+  right: 2rem;
+  bottom: 1rem;
+  z-index: 5;
   font-size: 1.2rem;
   color: var(--color-text);
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
   background-color: var(--color-base);
-  white-space: nowrap;
-  border: 0.2rem solid var(--color-accent);
-  user-select: none;
+  border: var(--var-border-width, 0.2rem) solid var(--color-accent);
   padding: 0.8rem 2rem;
-  z-index: 5;
+  pointer-events: auto;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-.speedrun-collapse {
+.c-speedrun-status--change-name {
+  text-decoration: underline;
   cursor: pointer;
+}
+
+.c-speedrun-status--collapse {
   padding: 0.2rem;
+  cursor: pointer;
 }
 </style>

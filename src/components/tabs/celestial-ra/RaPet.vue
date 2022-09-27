@@ -1,6 +1,6 @@
 <script>
-import RaUpgradeIcon from "./RaUpgradeIcon";
 import RaPetLevelBar from "./RaPetLevelBar";
+import RaUpgradeIcon from "./RaUpgradeIcon";
 
 export default {
   name: "RaPet",
@@ -53,9 +53,7 @@ export default {
       };
     },
     unlocks() {
-      return Object.values(RA_UNLOCKS)
-        .filter(unlock => unlock.pet === this.pet)
-        .sort((a, b) => a.level - b.level);
+      return this.pet.unlocks;
     },
     chunkTooltip() {
       return `Based on ${this.pet.chunkGain}`;
@@ -105,8 +103,7 @@ export default {
       return "";
     },
     nextUnlockLevel() {
-      const missingUpgrades = Object.values(RA_UNLOCKS)
-        .filter(unlock => unlock.pet === this.pet)
+      const missingUpgrades = this.pet.unlocks
         .map(u => u.level)
         .filter(goal => goal > this.level);
       return missingUpgrades.length === 0 ? 25 : missingUpgrades.min();
@@ -122,15 +119,9 @@ export default {
         "c-ra-pet-upgrade-memory": type === "memory",
         "c-ra-pet-upgrade-chunk": type === "chunk",
         "c-ra-pet-btn--available": available,
-        "c-ra-pet-btn--teresa": available && pet.name === "Teresa",
-        "c-ra-pet-btn--effarig": available && pet.name === "Effarig",
-        "c-ra-pet-btn--enslaved": available && pet.name === "Enslaved",
-        "c-ra-pet-btn--v": available && pet.name === "V",
+        [`c-ra-pet-btn--${pet.id}`]: available,
         "c-ra-pet-btn--available__capped": capped,
-        "c-ra-pet-btn--teresa__capped": capped && pet.name === "Teresa",
-        "c-ra-pet-btn--effarig__capped": capped && pet.name === "Effarig",
-        "c-ra-pet-btn--enslaved__capped": capped && pet.name === "Enslaved",
-        "c-ra-pet-btn--v__capped": capped && pet.name === "V"
+        [`c-ra-pet-btn--${pet.id}__capped`]: capped
       };
     },
     barStyle(type) {
@@ -157,7 +148,8 @@ export default {
       :style="petStyle"
     >
       <div class="c-ra-pet-title">
-        {{ name }} Level {{ formatInt(level) }}/{{ formatInt(levelCap) }}
+        <!-- The full name doesn't fit here, so we shorten it as a special case -->
+        {{ pet.id === "enslaved" ? "Nameless" : name }} Level {{ formatInt(level) }}/{{ formatInt(levelCap) }}
       </div>
       <div
         v-if="showScalingUpgrade"
@@ -168,7 +160,7 @@ export default {
       <br v-else>
       <div v-if="!isCapped">
         <div>
-          {{ name }} has {{ quantify("Memory", memories, 2) }}
+          {{ name }} {{ pet.id === "enslaved" ? "have" : "has" }} {{ quantify("Memory", memories, 2) }}
         </div>
       </div>
       <div
@@ -310,11 +302,13 @@ export default {
   display: flex;
   justify-content: center;
 }
+
 .c-ra-pet-upgrade-memory {
   border-top-right-radius: 0;
-  border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
+
 .c-ra-pet-upgrade-chunk {
   border-top-left-radius: 0;
   border-top-right-radius: 0;

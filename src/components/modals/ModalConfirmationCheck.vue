@@ -18,8 +18,8 @@ export default {
     },
     confirmationClass() {
       return {
-        "c-modal__confirmation-toggle": true,
-        "c-modal__confirmation-toggle--active": this.setting
+        "c-modal__confirmation-toggle__checkbox": true,
+        "c-modal__confirmation-toggle__checkbox--active": !this.setting
       };
     },
     tooltipText() {
@@ -40,19 +40,20 @@ export default {
 
 <template>
   <div
-    :class="confirmationClass"
+    class="c-modal__confirmation-toggle"
     @click="toggle"
   >
-    <span
-      v-if="setting"
-      class="fas fa-check"
-    />
-    <span
-      v-else
-      class="fas fa-times"
-    />
-    <div class="c-modal__confirmation-toggle__tooltip">
-      {{ tooltipText }}
+    <div :class="confirmationClass">
+      <span
+        v-if="!setting"
+        class="fas fa-check"
+      />
+      <div class="c-modal__confirmation-toggle__tooltip">
+        {{ tooltipText }}
+      </div>
     </div>
+    <span class="c-modal__confirmation-toggle__text">
+      Don't show this message again
+    </span>
   </div>
 </template>

@@ -1,5 +1,6 @@
-import { DimensionState } from "./dimension.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { DimensionState } from "./dimension";
 
 export function infinityDimensionCommonMultiplier() {
   let mult = new Decimal(ShopPurchase.allDimPurchases.currentMult)
@@ -17,11 +18,8 @@ export function infinityDimensionCommonMultiplier() {
       EternityUpgrade.idMultICRecords,
       AlchemyResource.dimensionality,
       ImaginaryUpgrade(8),
-      PelleRifts.war.milestones[1]
+      PelleRifts.recursion.milestones[1]
     );
-
-
-  mult = mult.times(NG.multiplier);
 
   if (Replicanti.areUnlocked && Replicanti.amount.gt(1)) {
     mult = mult.times(replicantiMult());
@@ -99,7 +97,7 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get canUnlock() {
-    return ((Perk.bypassIDAntimatter.isBought && !Pelle.isDoomed) || this.antimatterRequirementReached) &&
+    return (Perk.bypassIDAntimatter.canBeApplied || this.antimatterRequirementReached) &&
       this.ipRequirementReached;
   }
 
@@ -127,6 +125,10 @@ class InfinityDimensionState extends DimensionState {
   }
 
   get productionPerSecond() {
+    if (EternityChallenge(2).isRunning || EternityChallenge(10).isRunning ||
+      (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
+      return DC.D0;
+    }
     let production = this.amount;
     if (EternityChallenge(11).isRunning) {
       return production;
@@ -139,11 +141,6 @@ class InfinityDimensionState extends DimensionState {
 
   get multiplier() {
     const tier = this.tier;
-
-    if (EternityChallenge(2).isRunning || EternityChallenge(10).isRunning ||
-      (Laitela.isRunning && this.tier > Laitela.maxAllowedDimension)) {
-      return DC.D0;
-    }
     if (EternityChallenge(11).isRunning) return DC.D1;
     let mult = GameCache.infinityDimensionCommonMultiplier.value
       .timesEffectsOf(
@@ -155,18 +152,16 @@ class InfinityDimensionState extends DimensionState {
 
 
     if (tier === 1) {
-      mult = mult.times(PelleRifts.pestilence.milestones[0].effectOrDefault(1));
+      mult = mult.times(PelleRifts.decay.milestones[0].effectOrDefault(1));
     }
 
-
-    mult = mult.pow(NG.power);
 
     mult = mult.pow(getAdjustedGlyphEffect("infinitypow"));
     mult = mult.pow(getAdjustedGlyphEffect("effarigdimensions"));
     mult = mult.pow(getAdjustedGlyphEffect("curseddimensions"));
     mult = mult.powEffectOf(AlchemyResource.infinity);
     mult = mult.pow(Ra.momentumValue);
-    mult = mult.powEffectOf(PelleRifts.death);
+    mult = mult.powEffectOf(PelleRifts.paradox);
 
     if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
       mult = dilatedValueOf(mult);
@@ -388,7 +383,7 @@ export const InfinityDimensions = {
   },
 
   get powerConversionRate() {
-    const multiplier = PelleRifts.death.milestones[2].effectOrDefault(1);
+    const multiplier = PelleRifts.paradox.milestones[2].effectOrDefault(1);
     return (7 + getAdjustedGlyphEffect("infinityrate") + PelleUpgrade.infConversion.effectOrDefault(0)) * multiplier;
   }
 };

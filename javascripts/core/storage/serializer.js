@@ -1,4 +1,6 @@
+/* eslint-disable import/extensions */
 import pako from "pako/dist/pako.esm.mjs";
+/* eslint-enable import/extensions */
 
 export const GameSaveSerializer = {
   serialize(save) {
@@ -39,12 +41,14 @@ export const GameSaveSerializer = {
   // also require changing some other code slightly, particularly decode).
   startingString: {
     savefile: "AntimatterDimensionsSavefileFormat",
-    "automator script": "AntimatterDimensionsAutomatorScriptFormat"
+    "automator script": "AntimatterDimensionsAutomatorScriptFormat",
+    "automator data": "AntimatterDimensionsAutomatorDataFormat"
   },
   // The ending strings aren't as verbose so that we can save a little space.
   endingString: {
     savefile: "EndOfSavefile",
     "automator script": "EndOfAutomatorScript",
+    "automator data": "EndOfAutomatorData"
   },
   // This should always be three characters long, and should ideally go AAA, AAB, AAC, etc.
   // so that we can do inequality tests on it to compare versions (though skipping a version

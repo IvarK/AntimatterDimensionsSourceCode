@@ -1,5 +1,6 @@
-import { InfinityDimensions } from "../globals.js";
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { InfinityDimensions } from "../globals";
+
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   get tier() {
@@ -11,7 +12,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get name() {
-    return this.dimension.displayName;
+    return this.dimension.shortDisplayName;
   }
 
   get fullName() {
@@ -19,7 +20,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get data() {
-    return player.auto.infinityDims[this.tier - 1];
+    return player.auto.infinityDims.all[this.tier - 1];
   }
 
   get interval() {
@@ -27,7 +28,7 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get isUnlocked() {
-    return EternityMilestone.autobuyerID(this.tier).isReached || PelleUpgrade.IDAutobuyers.canBeApplied;
+    return EternityMilestone[`autobuyerID${this.tier}`].isReached || PelleUpgrade.IDAutobuyers.canBeApplied;
   }
 
   get resetTickOn() {
@@ -49,6 +50,8 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
 
   static get entryCount() { return 8; }
   static get autobuyerGroupName() { return "Infinity Dimension"; }
+  static get isActive() { return player.auto.infinityDims.isActive; }
+  static set isActive(value) { player.auto.infinityDims.isActive = value; }
 }
 
 Autobuyer.infinityDimension = InfinityDimensionAutobuyerState.createAccessor();

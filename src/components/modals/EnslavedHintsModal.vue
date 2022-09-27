@@ -62,19 +62,17 @@ export default {
       this.canGetHint = this.currentStored >= this.nextHintCost;
       this.shownEntries = [];
 
-      this.realityHintsLeft = Object.values(EnslavedProgress).length;
-      for (const prog of Object.values(EnslavedProgress)) {
+      this.realityHintsLeft = EnslavedProgress.all.length;
+      for (const prog of EnslavedProgress.all) {
         if (prog.hasHint) {
-          this.shownEntries.push([prog.hasProgress
-            ? prog.config.progress
-            : "(You haven't figured this hint out yet)", prog.config.hint]);
+          this.shownEntries.push([false, prog]);
           this.realityHintsLeft--;
         }
       }
 
       const glyphHintCount = player.celestials.enslaved.glyphHintsGiven;
       for (let hintNum = 0; hintNum < glyphHintCount; hintNum++) {
-        this.shownEntries.push(["", GameDatabase.celestials.enslaved.glyphHints[hintNum]]);
+        this.shownEntries.push([true, GameDatabase.celestials.enslaved.glyphHints[hintNum]]);
       }
       this.glyphHintsLeft = GameDatabase.celestials.enslaved.glyphHints.length - glyphHintCount;
 
@@ -82,7 +80,7 @@ export default {
     },
     giveRealityHint(available) {
       if (available <= 0 || !Enslaved.spendTimeForHint()) return;
-      Object.values(EnslavedProgress).filter(prog => !prog.hasHint).randomElement().giveHint();
+      EnslavedProgress.all.filter(prog => !prog.hasHint).randomElement().unlock();
     },
     giveGlyphHint(available) {
       if (available <= 0 || !Enslaved.spendTimeForHint()) return;
@@ -94,55 +92,80 @@ export default {
 </script>
 
 <template>
-  <ModalWrapper class="c-enslaved-hint-modal">
+  <ModalWrapper>
     <template #header>
-      Cracks in The Enslaved Ones' Reality
+      Cracks in The Nameless Ones' Reality
     </template>
-    <div>
-      This Reality seems to be resisting your efforts to complete it. So far you have done the following:
-    </div>
-    <br>
-    <div
-      v-for="(entry, index) in shownEntries"
-      :key="index"
-    >
-      <div v-if="entry[0]">
-        <b>{{ entry[0] }}</b>
+    <div class="c-enslaved-hint-modal">
+      <div>
+        This Reality seems to be resisting your efforts to complete it. So far you have done the following:
+      </div>
+      <br>
+      <div
+        v-for="(entry, index) in shownEntries"
+        :key="index"
+      >
+        <div v-if="!entry[0]">
+          <span v-if="entry[1].hasHint && !entry[1].hasProgress">
+            <i class="c-icon-wrapper fas fa-question-circle" />
+            <b>You have not figured out what this hint means yet.</b>
+          </span>
+          <span v-else>
+            <i class="c-icon-wrapper fa-solid fa-house-crack" />
+            <b>You have exposed a crack in the Reality:</b>
+          </span>
+          <br>
+          - {{ entry[1].hintInfo }}
+          <br>
+          - {{ entry[1].hasProgress ? entry[1].completedInfo : "?????" }}
+        </div>
+        <div v-else>
+          <i class="fa-solid fa-shapes" /> <b>Glyph hint:</b>
+          <br>
+          {{ entry[1] }}
+        </div>
         <br>
-        - {{ entry[1] }}
+      </div>
+      <div v-if="realityHintsLeft + glyphHintsLeft > 0">
+        You can spend some time looking for some more cracks in the Reality, but every hint you spend Stored Time on
+        will increase the Stored Time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
+        gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
+        divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
+        <br><br>
+        The next hint will cost {{ hintCost }} of Stored Time. You currently have {{ formattedStored }}.
+        <span v-if="currentStored < nextHintCost">
+          You will reach this if you charge your Black Hole for {{ timeEstimate }}.
+        </span>
+        <br><br>
+        <PrimaryButton
+          :enabled="realityHintsLeft > 0 && canGetHint"
+          class="l-enslaved-hint-button"
+          @click="giveRealityHint(realityHintsLeft)"
+        >
+          Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
+        </PrimaryButton>
+        <br>
+        <PrimaryButton
+          :enabled="glyphHintsLeft > 0 && canGetHint"
+          class="l-enslaved-hint-button"
+          @click="giveGlyphHint(glyphHintsLeft)"
+        >
+          Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
+        </PrimaryButton>
       </div>
       <div v-else>
-        * <i>Glyph hint: {{ entry[1] }}</i>
+        <b>There are no more hints left!</b>
       </div>
-      <br>
-    </div>
-    <div v-if="realityHintsLeft + glyphHintsLeft > 0">
-      You can spend some time looking for some more cracks in the Reality, but every hint you spend Stored Time on
-      will increase the Stored Time needed for the next by a factor of {{ formatInt(3) }}. This cost bump will
-      gradually go away over {{ formatInt(24) }} hours and figuring out what the hint means will immediately
-      divide the cost by {{ formatInt(2) }}. The cost can't be reduced below {{ format(1e40) }} years.
-      <br><br>
-      The next hint will cost {{ hintCost }} Stored Time. You currently have {{ formattedStored }} stored.
-      <span v-if="currentStored < nextHintCost">
-        You will reach this if you charge your Black Hole for {{ timeEstimate }}.
-      </span>
-      <br><br>
-      <PrimaryButton
-        :enabled="realityHintsLeft > 0 && canGetHint"
-        @click="giveRealityHint(realityHintsLeft)"
-      >
-        Get a hint about the Reality itself ({{ formatInt(realityHintsLeft) }} left)
-      </PrimaryButton>
-      <br>
-      <PrimaryButton
-        :enabled="glyphHintsLeft > 0 && canGetHint"
-        @click="giveGlyphHint(glyphHintsLeft)"
-      >
-        Get a hint on what Glyphs to use ({{ formatInt(glyphHintsLeft) }} left)
-      </PrimaryButton>
-    </div>
-    <div v-else>
-      There are no more hints left!
     </div>
   </ModalWrapper>
 </template>
+
+<style scoped>
+.c-icon-wrapper {
+  margin-right: 1rem;
+}
+
+.l-enslaved-hint-button {
+  margin: 0.4rem 0;
+}
+</style>

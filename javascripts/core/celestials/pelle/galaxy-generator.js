@@ -1,5 +1,5 @@
-import { DC } from "../../constants";
 import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
+
 import { PelleRifts } from "./rifts";
 
 export const GalaxyGenerator = {
@@ -23,10 +23,7 @@ export const GalaxyGenerator = {
 
   get gainPerSecond() {
     if (!Pelle.hasGalaxyGenerator) return 0;
-    // Pretend it's here to avoid softlocks and not because the bottom code returns 1 when you don't have this upg
-    if (!GalaxyGeneratorUpgrades.additive.canBeApplied) return 0.1;
-    return DC.D1.timesEffectsOf(
-      GalaxyGeneratorUpgrades.additive,
+    return new Decimal(GalaxyGeneratorUpgrades.additive.effectValue).timesEffectsOf(
       GalaxyGeneratorUpgrades.multiplicative,
       GalaxyGeneratorUpgrades.antimatterMult,
       GalaxyGeneratorUpgrades.IPMult,
@@ -61,18 +58,35 @@ export const GalaxyGenerator = {
 
   loop(diff) {
     if (this.isCapped) {
-      Pelle.quotes.show(Pelle.quotes.GALAXY_GENERATOR_RIFTS);
+      Pelle.quotes.galaxyGeneratorRifts.show();
     }
     if (this.sacrificeActive) {
       this.capRift.reducedTo = Math.max(this.capRift.reducedTo - 0.03 * diff / 1000, 0);
       if (this.capRift.reducedTo === 0) {
         player.celestials.pelle.galaxyGenerator.sacrificeActive = false;
         player.celestials.pelle.galaxyGenerator.phase++;
+
+        const phase = player.celestials.pelle.galaxyGenerator.phase;
+        if (phase === 1) {
+          Pelle.quotes.galaxyGeneratorPhase1.show();
+        } else if (phase === 4) {
+          Pelle.quotes.galaxyGeneratorPhase4.show();
+        }
+
         if (!this.capObj) {
-          Pelle.quotes.show(Pelle.quotes.END);
+          Pelle.quotes.end.show();
         }
       }
       PelleRifts.all.forEach(x => x.checkMilestoneStates());
+
+      // Force-unequip glyphs when the player loses the respective milestone. We call the respec option as normally
+      // except for one particular case - when we want to respec into protected slots but have no room to do so. In
+      // that case, we force-respec into the inventory instead
+      if (!PelleRifts.vacuum.milestones[0].canBeApplied && Glyphs.active.filter(g => g).length > 0) {
+        Glyphs.unequipAll(player.options.respecIntoProtected && Glyphs.findFreeIndex(true) === -1);
+        Glyphs.refreshActive();
+      }
+
     }
     player.celestials.pelle.galaxyGenerator.generatedGalaxies += this.gainPerSecond * diff / 1000;
     player.celestials.pelle.galaxyGenerator.generatedGalaxies = Math.min(
@@ -106,9 +120,7 @@ export class GalaxyGeneratorUpgrade extends RebuyableMechanicState {
   }
 }
 
-export const GalaxyGeneratorUpgrades = (function() {
-  return mapGameDataToObject(
-    GameDatabase.celestials.pelle.galaxyGeneratorUpgrades,
-    config => new GalaxyGeneratorUpgrade(config)
-  );
-}());
+export const GalaxyGeneratorUpgrades = mapGameDataToObject(
+  GameDatabase.celestials.pelle.galaxyGeneratorUpgrades,
+  config => new GalaxyGeneratorUpgrade(config)
+);

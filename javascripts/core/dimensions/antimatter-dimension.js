@@ -1,5 +1,6 @@
-import { DimensionState } from "./dimension.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { DimensionState } from "./dimension";
 
 // Multiplier applied to all Antimatter Dimensions, regardless of tier. This is cached using a Lazy
 // and invalidated every update.
@@ -9,7 +10,6 @@ export function antimatterDimensionCommonMultiplier() {
   multiplier = multiplier.times(Achievements.power);
   multiplier = multiplier.times(ShopPurchase.dimPurchases.currentMult);
   multiplier = multiplier.times(ShopPurchase.allDimPurchases.currentMult);
-  multiplier = multiplier.times(NG.multiplier);
 
   if (!EternityChallenge(9).isRunning) {
     multiplier = multiplier.times(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1));
@@ -54,7 +54,6 @@ export function antimatterDimensionCommonMultiplier() {
 
 export function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Antimatter Dimension tier ${tier}`);
-  if (Laitela.isRunning && tier > Laitela.maxAllowedDimension) return DC.D0;
   if (NormalChallenge(10).isRunning && tier > 6) return DC.D1;
   if (EternityChallenge(11).isRunning) {
     return Currency.infinityPower.value.pow(
@@ -82,7 +81,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
   }
 
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
-  if (Ra.has(RA_UNLOCKS.EFFARIG_UNLOCK) && multiplier.gte(AlchemyResource.inflation.effectValue)) {
+  if (AlchemyResource.inflation.isUnlocked && multiplier.gte(AlchemyResource.inflation.effectValue)) {
     multiplier = multiplier.pow(1.05);
   }
 
@@ -147,8 +146,6 @@ function applyNDPowers(mult, tier) {
   const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
   const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
 
-  multiplier = multiplier.pow(NG.power);
-
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
   }
@@ -165,14 +162,12 @@ function applyNDPowers(mult, tier) {
       InfinityUpgrade.thisInfinityTimeMult.chargedEffect,
       AlchemyResource.power,
       Achievement(183),
-      PelleRifts.death
+      PelleRifts.paradox
     );
 
   multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
 
-  if (V.has(V_UNLOCKS.ND_POW) && !Pelle.isDoomed) {
-    multiplier = multiplier.pow(V_UNLOCKS.ND_POW.effect());
-  }
+  multiplier = multiplier.pow(VUnlocks.adPow.effectOrDefault(1));
 
   if (PelleStrikes.infinity.hasStrike) {
     multiplier = multiplier.pow(0.5);
@@ -183,6 +178,8 @@ function applyNDPowers(mult, tier) {
 }
 
 function onBuyDimension(tier) {
+  if (tier === 1) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM1);
+  if (tier === 2) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
   Achievement(10 + tier).unlock();
   Achievement(23).tryUnlock();
 
@@ -464,7 +461,7 @@ class AntimatterDimensionState extends DimensionState {
    */
   get continuumValue() {
     if (!this.isAvailableForPurchase) return 0;
-    // Enslaved limits dim 8 purchases to 1 only
+    // Nameless limits dim 8 purchases to 1 only
     // Continuum should be no different
     if (this.tier === 8 && Enslaved.isRunning) return 1;
     return this.costScale.getContinuumValue(Currency.antimatter.value, 10) * Laitela.matterExtraPurchaseFactor;
@@ -568,6 +565,7 @@ class AntimatterDimensionState extends DimensionState {
 
   get productionPerSecond() {
     const tier = this.tier;
+    if (Laitela.isRunning && tier > Laitela.maxAllowedDimension) return DC.D0;
     let amount = this.totalAmount;
     if (NormalChallenge(12).isRunning) {
       if (tier === 2) amount = amount.pow(1.6);

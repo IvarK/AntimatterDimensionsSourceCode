@@ -1,8 +1,10 @@
-import { notify } from "./notify.js";
-import { state } from "./ui.init.js";
 import VTooltip from "v-tooltip";
-import { useLongPress, useRepeatingClick } from "./longpress";
 import VueGtag from "vue-gtag";
+
+import { useLongPress, useRepeatingClick } from "./longpress";
+import { notify } from "./notify";
+import { state } from "./ui.init";
+
 import GameUIComponent from "@/components/GameUIComponent";
 
 Vue.mixin({
@@ -95,7 +97,7 @@ const ReactivityComplainer = {
       throw new Error(`Boi you fukked up - ${path} became REACTIVE (oh shite)`);
     }
     for (const key in obj) {
-      if (!obj.hasOwnProperty(key)) continue;
+      if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
       const prop = obj[key];
       if (typeof prop === "object") {
         this.checkReactivity(prop, `${path}.${key}`);
@@ -113,13 +115,13 @@ export const GameUI = {
   touchDevice: ("ontouchstart" in window ||
     window.navigator.maxTouchPoints > 0 || window.navigator.msMaxTouchPoints > 0 ||
     (window.DocumentTouch && document instanceof DocumentTouch)),
-  dispatch(event) {
+  dispatch(event, args) {
     const index = this.events.indexOf(event);
     if (index !== -1) {
       this.events.splice(index, 1);
     }
     if (event !== GAME_EVENT.UPDATE) {
-      this.events.push(event);
+      this.events.push([event, args]);
     }
     if (this.flushPromise) return;
     this.flushPromise = Promise.resolve()
@@ -132,7 +134,7 @@ export const GameUI = {
       PerformanceStats.start("Vue Update");
     }
     for (const event of this.events) {
-      EventHub.ui.dispatch(event);
+      EventHub.ui.dispatch(event[0], event[1]);
     }
     EventHub.ui.dispatch(GAME_EVENT.UPDATE);
     ReactivityComplainer.complain();

@@ -1,6 +1,6 @@
 <script>
-import BlobSnowflake from "@/components/BlobSnowflake";
 import BlobBackground from "@/components/BlobBackground";
+import BlobSnowflake from "@/components/BlobSnowflake";
 
 export default {
   name: "BlobSnowflakes",
@@ -33,8 +33,8 @@ export default {
       this.count = player.options.animations.blobSnowflakes;
     },
     updateSize() {
-      this.bounds.x = document.getElementById("ui").clientWidth;
-      this.bounds.y = document.getElementById("ui").clientHeight;
+      this.bounds.x = document.documentElement.clientWidth;
+      this.bounds.y = document.documentElement.clientHeight;
     }
   },
 };
@@ -67,27 +67,29 @@ export default {
 
 <style scoped>
 .c-blob-snowflake-container {
-  position: fixed;
-  top: 0;
-  left: 0;
+  overflow: visible;
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: 9999;
-  overflow: visible;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
   cursor: default;
 }
 
 .c-blob-background-container {
-  position: fixed;
-  top: 0;
-  left: 0;
+  overflow: visible;
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   z-index: -9999;
-  overflow: visible;
   pointer-events: none;
+  -webkit-user-select: none;
   user-select: none;
   cursor: default;
 }

@@ -1,4 +1,4 @@
-import { TimeStudyState } from "./time-studies.js";
+import { TimeStudyState } from "./time-studies";
 
 export const NormalTimeStudies = {};
 
@@ -21,6 +21,10 @@ export class NormalTimeStudyState extends TimeStudyState {
     super(config, type);
     const path = NormalTimeStudies.pathList.find(p => p.studies.includes(this.id));
     this._path = path?.path ?? TIME_STUDY_PATH.NONE;
+  }
+
+  get isUnlocked() {
+    return this.config.unlocked?.() ?? true;
   }
 
   get isTriad() {
@@ -73,6 +77,7 @@ export class NormalTimeStudyState extends TimeStudyState {
 
   purchase() {
     if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
+    if (GameEnd.creditsEverClosed) return false;
     if (this.costsST()) player.celestials.v.STSpent += this.STCost;
     player.timestudy.studies.push(this.id);
     player.requirementChecks.reality.maxStudies = Math.clampMin(player.requirementChecks.reality.maxStudies,

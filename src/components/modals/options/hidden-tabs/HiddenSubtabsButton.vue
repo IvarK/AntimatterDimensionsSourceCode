@@ -9,6 +9,10 @@ export default {
     tab: {
       type: Object,
       required: true
+    },
+    changeEnabled: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -31,6 +35,9 @@ export default {
         [`c-hide-modal-tab-button--${this.tab.key}`]: !this.isCurrentSubtab,
       };
     },
+    isModernUI() {
+      return this.$viewModel.newUI;
+    },
   },
   methods: {
     update() {
@@ -38,6 +45,7 @@ export default {
       this.hidden = this.subtab.isHidden && this.hidable;
     },
     toggleVisibility() {
+      if (!this.changeEnabled) return;
       this.subtab.toggleVisibility();
     },
   },
@@ -50,6 +58,33 @@ export default {
     :class="classObject"
     @click="toggleVisibility"
   >
-    {{ subtab.name }}
+    <div class="l-hide-modal-button">
+      <div
+        v-if="isModernUI"
+        class="l-hide-modal-button__subtab-icon"
+        v-html="subtab.symbol"
+      />
+      <div class="l-hide-modal-button__subtab-name">
+        {{ subtab.name }}
+      </div>
+    </div>
   </div>
 </template>
+
+<style scoped>
+.l-hide-modal-button {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+.l-hide-modal-button__subtab-icon {
+  font-size: 1.5rem;
+  width: 2rem;
+  margin: 0.2rem;
+}
+
+.l-hide-modal-button__subtab-name {
+  width: 8.2rem;
+}
+</style>

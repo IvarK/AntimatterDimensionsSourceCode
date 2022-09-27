@@ -233,6 +233,10 @@ window.TimeSpan = class TimeSpan {
    * @returns {String}
    */
   toStringShort(useHMS = true) {
+    // Probably not worth the trouble of importing the isEND function from formatting since this accomplishes the same
+    // thing; we do however need this to prevent strings like "02:32" from showing up though
+    if (format(0) === "END") return "END";
+
     const totalSeconds = this.totalSeconds;
     if (totalSeconds > 5e-7 && totalSeconds < 1e-3) {
       // This conditional happens when when the time is less than 1 millisecond

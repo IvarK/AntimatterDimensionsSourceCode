@@ -1,4 +1,4 @@
-import { DC } from "./constants.js";
+import { DC } from "./constants";
 
 export const MachineHandler = {
   get baseRMCap() { return DC.E1000; },
@@ -12,7 +12,7 @@ export const MachineHandler = {
   },
 
   get realityMachineMultiplier() {
-    return Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) *
+    return ShopPurchase.RMPurchases.currentMult * Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) *
       getAdjustedGlyphEffect("effarigrm") * Achievement(167).effectOrDefault(1);
   },
 
@@ -70,4 +70,15 @@ export const MachineHandler = {
     return (this.currentIMCap - Currency.imaginaryMachines.value) *
       (1 - Math.pow(2, (-diff / 1000 / this.scaleTimeForIM)));
   },
+
+  estimateIMTimer(cost) {
+    const imCap = this.currentIMCap;
+    if (imCap <= cost) return Infinity;
+    const currentIM = Currency.imaginaryMachines.value;
+    // This is doing log(a, 1/2) - log(b, 1/2) where a is % left to imCap of cost and b is % left to imCap of current
+    // iM. log(1 - x, 1/2) should be able to estimate the time taken for iM to increase from 0 to imCap * x since every
+    // fixed interval the difference between current iM to max iM should decrease by a factor of 1/2.
+    return Math.max(0, Math.log2(imCap / (imCap - cost)) - Math.log2(imCap / (imCap - currentIM))) *
+      this.scaleTimeForIM;
+  }
 };

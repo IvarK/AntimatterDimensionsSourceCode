@@ -10,6 +10,7 @@ export default {
     return {
       isAdjustableChargingUnlocked: false,
       isNegativeBHUnlocked: false,
+      isInverted: false,
       negativeSlider: 0,
       negativeBHDivisor: 1,
       maxNegativeBlackHole: 300,
@@ -23,11 +24,12 @@ export default {
   },
   methods: {
     update() {
-      this.isAdjustableChargingUnlocked = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
+      this.isAdjustableChargingUnlocked = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.isNegativeBHUnlocked = V.isFlipped && BlackHoles.arePermanent;
+      this.isInverted = BlackHoles.areNegative;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
-      this.canAdjustStoredTime = Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME);
+      this.canAdjustStoredTime = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
     },
     adjustSliderNegative(value) {
@@ -47,8 +49,7 @@ export default {
         min: 0,
         max: negative ? this.maxNegativeBlackHole : 990,
         interval: 1,
-        show: true,
-        width: "65rem",
+        width: "55rem",
         tooltip: false
       };
     },
@@ -62,7 +63,7 @@ export default {
       v-if="isAdjustableChargingUnlocked"
       class="l-black-hole-sliders"
     >
-      Black Hole charging rate: {{ storedTimeRate }}
+      <b>Black Hole charging rate: {{ storedTimeRate }}</b>
       <SliderComponent
         v-bind="sliderProps(false)"
         :value="storedFraction"
@@ -73,17 +74,29 @@ export default {
       v-if="isNegativeBHUnlocked"
       class="l-black-hole-sliders"
     >
-      Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
-      This requires both Black Holes to be permanent and only works when paused.
+      <b>
+        Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
+        (Currently {{ isInverted ? "active" : "inactive" }}<span
+          v-if="negativeSlider !== 0 && !isInverted"
+          ach-tooltip="Black Hole must be paused to activate Inverted Black Hole"
+        >
+          <i class="fas fa-question-circle l-margin-left" />
+        </span>)
+      </b>
       <SliderComponent
         v-bind="sliderProps(true)"
         :value="negativeSlider"
         @input="adjustSliderNegative($event)"
       />
+      <br>
+      Inverting the Black Hole only affects its own speedup, no other upgrades or effects, although
+      it will also indirectly affect the Effarig Game speed power effect.
     </div>
   </div>
 </template>
 
 <style scoped>
-
+.l-margin-left {
+  margin-left: 0.5rem;
+}
 </style>

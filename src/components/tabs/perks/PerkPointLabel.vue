@@ -71,7 +71,7 @@ export default {
 </template>
 
 <style scoped>
-  .perk-settings > button {
-    margin-right: 1rem;
-  }
+.perk-settings > button {
+  margin-right: 1rem;
+}
 </style>

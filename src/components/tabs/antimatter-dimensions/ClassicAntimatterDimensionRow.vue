@@ -1,9 +1,11 @@
 <script>
+import GenericDimensionRowText from "@/components/GenericDimensionRowText";
 import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "ClassicAntimatterDimensionRow",
   components: {
+    GenericDimensionRowText,
     PrimaryButton
   },
   props: {
@@ -30,19 +32,33 @@ export default {
       continuumValue: 0,
       isShown: false,
       isCostsAD: false,
+      formattedAmount: null,
+      hasTutorial: false,
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     name() {
-      return AntimatterDimension(this.tier).shortDisplayName;
+      return `${AntimatterDimension(this.tier).shortDisplayName} Antimatter Dimension`;
     },
-    amountDisplay() {
-      return this.tier < 8 ? format(this.amount, 2, 0) : formatInt(this.amount);
+    amountText() {
+      if (this.formattedAmount) return this.formattedAmount;
+      const amount = this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
+      return `${amount} (${formatInt(this.boughtBefore10)})`;
     },
-    rateOfChangeDisplay() {
-      return this.tier < 8
-        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
-        : "";
+    singleText() {
+      if (this.isCapped) return "Capped";
+      const prefix = this.showCostTitle(this.singleCost) ? "Cost: " : "";
+      const suffix = this.isCostsAD ? `${this.costUnit}` : "AM";
+      return `${prefix} ${format(this.singleCost)} ${suffix}`;
+    },
+    until10Text() {
+      if (this.isCapped) return "Capped";
+      if (this.isContinuumActive) return `Continuum: ${this.continuumString}`;
+
+      const prefix = `Until ${formatInt(10)},${this.showCostTitle(this.until10Cost) ? " Cost" : ""}`;
+      const suffix = this.isCostsAD ? `${this.costUnit}` : "AM";
+      return `${prefix} ${format(this.until10Cost)} ${suffix}`;
     },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
@@ -51,8 +67,7 @@ export default {
       return this.isShown || this.isUnlocked || this.amount.gt(0);
     },
     boughtTooltip() {
-      if (this.end) return "";
-      if (this.isCapped) return `Enslaved prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
+      if (this.isCapped) return `Nameless prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
       if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
       return `Purchased ${quantifyInt("time", this.bought)}`;
     },
@@ -62,8 +77,8 @@ export default {
   },
   methods: {
     update() {
-      this.end = Pelle.endState >= 4.5;
       const tier = this.tier;
+      if (tier === 8 && this.isDoomed) this.formattedAmount = formatInt(this.amount);
       if (tier > DimBoost.maxDimensionsUnlockable) return;
       const dimension = AntimatterDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
@@ -85,35 +100,34 @@ export default {
       this.isShown =
         (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
       this.isCostsAD = NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
+      this.hasTutorial = (tier === 1 && Tutorial.isActive(TUTORIAL_STATE.DIM1)) ||
+        (tier === 2 && Tutorial.isActive(TUTORIAL_STATE.DIM2));
     },
     buySingle() {
       if (this.isContinuumActive) return;
       buyOneDimension(this.tier);
-      if (this.tier === 2) {
-        Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
-      }
     },
     buyUntil10() {
       if (this.isContinuumActive) return;
       buyManyDimension(this.tier);
-      if (this.tier === 2) {
-        Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
-      }
     },
     showCostTitle(value) {
       return value.exponent < 1000000;
     },
+    isLongText(str) {
+      return str.length > 20;
+    },
+    textClass() {
+      return {
+        "l-dim-row-small-text": this.isLongText(this.singleText) || !this.showCostTitle(this.singleCost),
+      };
+    },
     tutorialClass() {
-      if (this.tier === 1) {
-        return Tutorial.glowingClass(TUTORIAL_STATE.DIM1, this.isAffordable);
-      }
-
-      if (this.tier === 2) {
-        return Tutorial.glowingClass(TUTORIAL_STATE.DIM2, this.isAffordable);
-      }
-
-      return {};
-    }
+      return {
+        "l-glow-container": true,
+        "tutorial--glow": this.isAffordable && this.hasTutorial
+      };
+    },
   }
 };
 </script>
@@ -121,51 +135,60 @@ export default {
 <template>
   <div
     v-show="showRow"
-    class="c-antimatter-dim-row"
+    class="c-dimension-row c-antimatter-dim-row l-dimension-single-row"
     :class="{ 'c-dim-row--not-reached': !isUnlocked }"
   >
-    <div class="c-dim-row__label c-dim-row__name">
-      {{ name }} Antimatter Dimension {{ formatX(multiplier, 1, 1) }}
-    </div>
-    <div class="c-dim-row__label c-dim-row__label--growable">
-      {{ amountDisplay }} ({{ formatInt(boughtBefore10) }})
-      <span
-        v-if="rateOfChange.neq(0)"
-        class="c-dim-row__label--small"
+    <GenericDimensionRowText
+      :tier="tier"
+      :name="name"
+      :multiplier-text="formatX(multiplier, 2, 2)"
+      :amount-text="amountText"
+      :rate="rateOfChange"
+    />
+    <div class="l-dim-row-multi-button-container">
+      <PrimaryButton
+        v-if="!isContinuumActive"
+        :ach-tooltip="boughtTooltip"
+        :enabled="isAffordable && !isCapped && isUnlocked"
+        class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad"
+        :class="textClass()"
+        @click="buySingle"
       >
-        {{ rateOfChangeDisplay }}
-      </span>
+        <div :class="tutorialClass()">
+          {{ singleText }}
+        </div>
+        <div
+          v-if="hasTutorial"
+          class="fas fa-circle-exclamation l-notification-icon"
+        />
+      </PrimaryButton>
+      <PrimaryButton
+        :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
+        class="o-primary-btn--buy-ad o-primary-btn--buy-dim"
+        :class="{
+          'o-primary-btn--buy-10-ad': !isContinuumActive,
+          'o-primary-btn--continuum-ad': isContinuumActive,
+          'l-dim-row-small-text': isLongText(until10Text) && !isContinuumActive
+        }"
+        :ach-tooltip="boughtTooltip"
+        @click="buyUntil10"
+      >
+        {{ until10Text }}
+      </PrimaryButton>
     </div>
-    <PrimaryButton
-      v-if="!isContinuumActive"
-      v-tooltip="boughtTooltip"
-      :enabled="isAffordable && !isCapped && isUnlocked"
-      class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad l-dim-row__button"
-      :class="tutorialClass()"
-      @click="buySingle"
-    >
-      <span v-if="isCapped">Capped</span>
-      <template v-else>
-        <span v-if="showCostTitle(singleCost)">Cost: </span>{{ format(singleCost) }}
-        <span v-if="isCostsAD">{{ costUnit }}</span>
-        <span v-else>AM</span>
-      </template>
-    </PrimaryButton>
-    <PrimaryButton
-      :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
-      class="o-primary-btn--buy-ad o-primary-btn--buy-10-ad l-dim-row__button"
-      :ach-tooltip="boughtTooltip"
-      @click="buyUntil10"
-    >
-      <span v-if="isCapped">Capped</span>
-      <span v-else-if="isContinuumActive">Continuum: {{ continuumString }}</span>
-      <template v-else>
-        Until {{ formatInt(10) }},
-        <span v-if="showCostTitle(until10Cost)">Cost: </span>
-        {{ format(until10Cost) }}
-        <span v-if="isCostsAD">{{ costUnit }}</span>
-        <span v-else>AM</span>
-      </template>
-    </PrimaryButton>
   </div>
 </template>
+
+<style scoped>
+.l-glow-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--var-border-radius, inherit);
+}
+</style>

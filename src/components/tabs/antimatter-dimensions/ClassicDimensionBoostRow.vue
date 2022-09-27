@@ -16,14 +16,19 @@ export default {
       purchasedBoosts: 0,
       imaginaryBoosts: 0,
       lockText: null,
-      unlockedByBoost: null
+      unlockedByBoost: null,
+      creditsClosed: false,
+      requirementText: null,
+      hasTutorial: false,
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     dimName() {
       return AntimatterDimension(this.requirement.tier).displayName;
     },
     boostCountText() {
+      if (this.requirementText) return this.requirementText;
       const parts = [this.purchasedBoosts];
       if (this.imaginaryBoosts !== 0) {
         parts.push(this.imaginaryBoosts);
@@ -34,8 +39,12 @@ export default {
       }
       return sum;
     },
-    tutorialClass() {
-      return Tutorial.glowingClass(TUTORIAL_STATE.DIMBOOST, this.isBuyable);
+    classObject() {
+      return {
+        "o-primary-btn--dimboost l-dim-row__prestige-button": true,
+        "tutorial--glow": this.isBuyable && this.hasTutorial,
+        "o-pelle-disabled-pointer": this.creditsClosed
+      };
     }
   },
   methods: {
@@ -48,14 +57,13 @@ export default {
       this.imaginaryBoosts = DimBoost.imaginaryBoosts;
       this.lockText = DimBoost.lockText;
       this.unlockedByBoost = DimBoost.unlockedByBoost;
+      this.creditsClosed = GameEnd.creditsClosed;
+      if (this.isDoomed) this.requirementText = formatInt(this.purchasedBoosts);
+      this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.DIMBOOST);
     },
     dimensionBoost(bulk) {
       if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;
-      if (player.options.confirmations.dimensionBoost) {
-        Modal.dimensionBoost.show({ bulk });
-        return;
-      }
-      requestDimensionBoost(bulk);
+      manualRequestDimensionBoost(bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   }
@@ -63,19 +71,22 @@ export default {
 </script>
 
 <template>
-  <div class="c-antimatter-dim-row">
-    <div class="c-dim-row__label c-dim-row__label--growable">
+  <div class="c-dimension-row c-antimatter-dim-row c-antimatter-prestige-row">
+    <div class="l-dim-row__prestige-text c-dim-row__label c-dim-row__label--amount">
       Dimension Boost ({{ boostCountText }}):
       requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
     </div>
     <PrimaryButton
       :enabled="isBuyable"
-      class="o-primary-btn--dimboost l-dim-row__button l-dim-row__button--right-offset"
-      :class="tutorialClass"
+      :class="classObject"
       @click.exact="dimensionBoost(true)"
       @click.shift.exact="dimensionBoost(false)"
     >
       {{ unlockedByBoost }}
+      <div
+        v-if="hasTutorial"
+        class="fas fa-circle-exclamation l-notification-icon"
+      />
     </PrimaryButton>
   </div>
 </template>

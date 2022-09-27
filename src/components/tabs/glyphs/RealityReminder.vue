@@ -60,6 +60,15 @@ export default {
     },
     clickText() {
       return `(click to ${this.isExpanded ? "collapse" : "expand"})`;
+    },
+    realityReminderClass() {
+      return {
+        "c-reality-reminder": true,
+        "c-reality-reminder-pointer": this.canBeExpanded,
+      };
+    },
+    dropDownIconClass() {
+      return this.isExpanded ? "far fa-minus-square" : "far fa-plus-square";
     }
   },
   created() {
@@ -73,13 +82,14 @@ export default {
       this.ecCount = EternityChallenges.completions;
       this.missingAchievements = Achievements.preReality.countWhere(a => !a.isUnlocked);
       // Repeatable dilation upgrades don't have isBought, but do have boughtAmount
-      this.unpurchasedDilationUpgrades = Object.values(DilationUpgrade)
+      this.unpurchasedDilationUpgrades = DilationUpgrade.all
         .countWhere(u => (u.isBought === undefined ? u.boughtAmount === 0 : !u.isBought) && !u.config.pelleOnly);
       this.currLog10EP = player.eternityPoints.log10();
       this.cheapestLog10TD = Math.min(...TimeDimensions.all.map(x => x.cost.log10()));
       this.multEPLog10Cost = EternityUpgrade.epMult.cost.log10();
       this.purchasableTS = NormalTimeStudyState.studies.countWhere(s => s && s.canBeBought && !s.isBought);
-      this.hasDilated = player.dilation.lastEP.gt(0);
+      this.hasDilated = Perk.startTP.canBeApplied ? player.dilation.lastEP.gt(0)
+        : player.dilation.tachyonParticles.gt(0);
       this.availableCharges = Ra.chargesLeft;
     },
     clicked() {
@@ -93,7 +103,7 @@ export default {
 <template>
   <div
     v-if="isVisible"
-    class="c-reality-reminder"
+    :class="realityReminderClass"
     :style="styleObject"
     @click="clicked"
   >
@@ -104,6 +114,7 @@ export default {
       You are ready to complete this Reality!
     </span>
     <span v-else>
+      <i :class="dropDownIconClass" />
       You have {{ quantifyInt("thing", suggestions.length) }}
       you may want to do before Reality. {{ clickText }}
       <div
@@ -125,5 +136,9 @@ export default {
 <style scoped>
 .l-suggestions {
   font-size: 1rem;
+}
+
+.c-reality-reminder-pointer {
+  cursor: pointer;
 }
 </style>

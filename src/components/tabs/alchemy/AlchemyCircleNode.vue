@@ -1,6 +1,6 @@
 <script>
-import HintText from "@/components/HintText";
 import AlchemyResourceArc from "./AlchemyResourceArc";
+import HintText from "@/components/HintText";
 
 export default {
   name: "AlchemyCircleNode",
@@ -49,7 +49,6 @@ export default {
         "o-alchemy-node--active": this.isReactionActive,
         "o-alchemy-node--unfocused": !this.isFocused,
         "o-alchemy-node--locked": !this.isUnlocked,
-        "o-alchemy-node--doomed": Pelle.isDoomed,
       };
     },
     hintClassObject() {
@@ -58,7 +57,7 @@ export default {
   },
   methods: {
     update() {
-      this.isReactionActive = !this.isBaseResource && this.node.resource.reaction.isActive;
+      this.isReactionActive = !Pelle.isDoomed && !this.isBaseResource && this.node.resource.reaction.isActive;
       this.amount = this.resource.amount;
       this.flow = this.resource.flow;
       this.isUnlocked = this.resource.isUnlocked;

@@ -1,4 +1,4 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer.js";
+import { Autobuyer, AutobuyerState } from "./autobuyer";
 
 class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
   get name() {
@@ -6,19 +6,26 @@ class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
   }
 
   get data() {
-    return player.auto.imaginaryUpgrades[this.id - 1];
+    return player.auto.imaginaryUpgrades.all[this.id - 1];
   }
 
   get isUnlocked() {
-    return ImaginaryUpgrade(20).isBought;
+    return ImaginaryUpgrade(20).canBeApplied;
+  }
+
+  get hasUnlimitedBulk() {
+    return true;
   }
 
   tick() {
-    ImaginaryUpgrade(this.id).purchase();
+    const upg = ImaginaryUpgrade(this.id);
+    while (Currency.imaginaryMachines.gte(upg.cost)) upg.purchase();
   }
 
   static get entryCount() { return 10; }
   static get autobuyerGroupName() { return "Imaginary Upgrade"; }
+  static get isActive() { return player.auto.imaginaryUpgrades.isActive; }
+  static set isActive(value) { player.auto.imaginaryUpgrades.isActive = value; }
 }
 
 Autobuyer.imaginaryUpgrade = ImaginaryUpgradeAutobuyerState.createAccessor();

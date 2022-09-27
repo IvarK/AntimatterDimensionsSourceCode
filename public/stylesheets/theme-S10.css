@@ -1,43 +1,44 @@
 .t-s10 #stars {
   display: block;
-  /* Make video to at least 100% wide and tall */
-  min-width: 100%;
-  min-height: 100%;
 
   /* Setting width & height to auto prevents the browser from stretching or squishing the video */
   width: auto;
   height: auto;
+
+  /* Make video to at least 100% wide and tall */
+  min-width: 100%;
+  min-height: 100%;
 
   /* Center the video */
   position: absolute;
   top: 50%;
   left: 50%;
   z-index: -1000;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
 body.t-s10 {
-  color: #999;
+  color: #999999;
   background: black;
-  background-image: url('../images/stars-bg.png');
-  background-size: 100%;
+  background-image: url("../images/stars-bg.png");
   background-position: center;
+  background-size: 100%;
 }
 
 .t-s10 .c-tt-amount {
-  color: #64DD17;
-  text-shadow: 0 0 7px #64DD17;
+  color: #64dd17;
+  text-shadow: 0 0 7px #64dd17;
 }
 
 .t-s10 .c-tt-buy-button--unlocked {
-  color: #3AACD6;
+  color: #3aacd6;
   background: black;
-  border: 0.1rem solid #3AACD6;
+  border: 0.1rem solid #3aacd6;
 }
 
 .t-s10 .c-tt-buy-button--unlocked:hover {
   color: black;
-  background: #3AACD6;
+  background: #3aacd6;
 }
 
 .t-s10 .c-tt-buy-button--locked {
@@ -53,9 +54,10 @@ body.t-s10 {
 }
 
 .t-s10 .c-rm-amount__desc {
-  color: #999;
+  color: #999999;
 }
 
-.t-s10 #realityanimbg {
-  filter: invert(1);
+.t-s10 .c-alchemy-resource-info {
+  color: white;
+  border-color: white;
 }

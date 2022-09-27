@@ -1,4 +1,4 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
   get _upgradeName() { return ["chance", "interval", "galaxies"][this.id - 1]; }
@@ -8,7 +8,7 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get data() {
-    return player.auto.replicantiUpgrades[this.id - 1];
+    return player.auto.replicantiUpgrades.all[this.id - 1];
   }
 
   get interval() {
@@ -36,6 +36,8 @@ class ReplicantiUpgradeAutobuyerState extends IntervaledAutobuyerState {
 
   static get entryCount() { return 3; }
   static get autobuyerGroupName() { return "Replicanti Upgrade"; }
+  static get isActive() { return player.auto.replicantiUpgrades.isActive; }
+  static set isActive(value) { player.auto.replicantiUpgrades.isActive = value; }
 }
 
 Autobuyer.replicantiUpgrade = ReplicantiUpgradeAutobuyerState.createAccessor();

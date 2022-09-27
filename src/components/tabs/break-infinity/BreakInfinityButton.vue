@@ -16,6 +16,7 @@ export default {
         "o-infinity-upgrade-btn--available": this.isUnlocked,
         "o-infinity-upgrade-btn--unavailable": !this.isUnlocked,
         "o-infinity-upgrade-btn--feel-eternity": this.isEnslaved,
+        "o-infinity-upgrade-btn--unclickable": this.isBroken && !this.isEnslaved,
       };
     },
     tooltip() {

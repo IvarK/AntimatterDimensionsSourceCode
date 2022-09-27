@@ -24,6 +24,16 @@ export default {
       required: false,
       default: undefined,
     },
+    buttonClass: {
+      type: String,
+      required: false,
+      default: "l-expanding-control-box__button",
+    },
+    autoClose: {
+      type: Boolean,
+      required: false,
+      default: false,
+    }
   },
   data() {
     return {
@@ -31,6 +41,8 @@ export default {
       openRequest: false,
       closedHeight: "1em",
       openHeight: "1em",
+      hasMouse: false,
+      closeTime: 0,
     };
   },
   computed: {
@@ -63,6 +75,12 @@ export default {
       };
       classes[this.containerClass] = true;
       return classes;
+    },
+    indicatorArrowClassObject() {
+      return {
+        "c-indicator-arrow": true,
+        "c-indicator-arrow--flipped": this.state === this.states.OPENING || this.state === this.states.OPEN,
+      };
     }
   },
   watch: {
@@ -93,7 +111,7 @@ export default {
   },
   created() {
     this.state = this.states.CLOSED;
-    this.$on("openrequest", () => this.openRequest = true);
+    this.on$("openrequest", () => this.openRequest = true);
   },
   mounted() {
     // Set the root and container elements to match the height of the button
@@ -102,6 +120,10 @@ export default {
     this.updateBaseWidth();
   },
   methods: {
+    update() {
+      const secSinceMouseOff = this.hasMouse ? 0 : (Date.now() - this.closeTime) / 1000;
+      if (this.autoClose && this.state === this.states.OPEN && secSinceMouseOff > 1) this.openRequest = false;
+    },
     processRequest(state, request) {
       if (request && (state === this.states.CLOSED || state === this.states.CLOSE_REQUESTED)) {
         this.state = this.states.OPEN_REQUESTED;
@@ -131,6 +153,17 @@ export default {
         this.state = this.states.CLOSED;
       }
     },
+    handleClick() {
+      this.openRequest = !this.openRequest;
+      this.hasMouse = this.openRequest;
+    },
+    mouseOn() {
+      this.hasMouse = true;
+    },
+    mouseOff() {
+      this.hasMouse = false;
+      this.closeTime = Date.now();
+    }
   }
 };
 </script>
@@ -153,19 +186,24 @@ export default {
       :class="containerClassObject"
       :style="containerStyle"
       @transitionend="transitionEnd"
+      @mouseenter="mouseOn"
+      @mouseleave="mouseOff"
     >
       <div
         v-if="!$slots.header"
         ref="expandButton"
-        class="l-expanding-control-box__button"
-        @click="openRequest = !openRequest"
+        :class="buttonClass"
+        @click="handleClick"
       >
-        {{ label }} ▼
+        {{ label }}
+        <span :class="indicatorArrowClassObject">
+          ▼
+        </span>
       </div>
       <div
         v-else
         ref="expandButton"
-        @click="openRequest = !openRequest"
+        @click="handleClick"
       >
         <slot name="header" />
       </div>
@@ -187,27 +225,38 @@ export default {
 }
 
 .l-expanding-control-box__container {
-  position: absolute;
   display: block;
-  height: auto;
   overflow: hidden;
   width: 100%;
+  height: auto;
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  -webkit-transform: translateX(-50%);
 }
 
 .l-expanding-control-box__container--transition {
   transition: max-height 0.5s;
-  -webkit-transition: max-height 0.5s;
 }
 
 .l-expanding-control-box__button {
-  cursor: pointer;
-  display: block;
-  width: 100%;
+  display: flex;
   white-space: nowrap;
-  border: none !important;
+  width: 100%;
   height: 2.5rem;
+  position: relative;
+  top: -0.5rem;
+  justify-content: center;
+  align-items: center;
+  border: none !important;
+  cursor: pointer;
+}
+
+.c-indicator-arrow--flipped {
+  transform: rotate(-180deg);
+}
+
+.c-indicator-arrow {
+  margin-left: 0.6rem;
+  transition: transform 0.25s ease-out;
 }
 </style>

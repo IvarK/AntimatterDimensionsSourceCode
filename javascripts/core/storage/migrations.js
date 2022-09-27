@@ -1,5 +1,5 @@
-import { GameStorage } from "./storage.js";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { GameStorage } from "./storage";
 
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
 GameStorage.migrations = {
@@ -146,8 +146,11 @@ GameStorage.migrations = {
       GameStorage.migrations.deleteDimboostBulk(player);
       GameStorage.migrations.deleteFloatingTextOption(player);
       GameStorage.migrations.refactorDoubleIPRebuyable(player);
+      GameStorage.migrations.infMultNameConversion(player);
       GameStorage.migrations.convertNews(player);
       GameStorage.migrations.etercreqConversion(player);
+      GameStorage.migrations.moveTS33(player);
+      GameStorage.migrations.addBestPrestigeCurrency(player);
 
       kong.migratePurchases();
     }
@@ -323,7 +326,6 @@ GameStorage.migrations = {
     if (player.challenges) {
       for (const fullID of player.challenges) {
         const parsed = parseChallengeName(fullID);
-        // eslint-disable-next-line no-bitwise
         player.challenge[parsed.type].completedBits |= 1 << parsed.id;
       }
       delete player.challenges;
@@ -546,7 +548,7 @@ GameStorage.migrations = {
     for (let i = 0; i < 8; i++) {
       const old = player.autobuyers[i];
       if (old % 1 === 0) continue;
-      const autobuyer = player.auto.antimatterDims[i];
+      const autobuyer = player.auto.antimatterDims.all[i];
       autobuyer.cost = old.cost;
       autobuyer.interval = old.interval;
       autobuyer.bulk = old.bulk;
@@ -663,7 +665,6 @@ GameStorage.migrations = {
       const number = parseInt(groups[2], 10);
       if (!player.news.seen[type]) player.news.seen[type] = [];
       while (maskLength * player.news.seen[type].length < number) player.news.seen[type].push(0);
-      // eslint-disable-next-line no-bitwise
       player.news.seen[type][Math.floor(number / maskLength)] |= 1 << (number % maskLength);
     }
 
@@ -698,35 +699,40 @@ GameStorage.migrations = {
 
   convertAchievementsToBits(player) {
     // Also switches achievement positions
-    const swaps = { "4,3": "6,4", "6,4": "7,7", "7,7": "4,3", "10,1": "11,7", "11,7": "10,1" };
-    const convertAchievementArray = (newAchievements, oldAchievements) => {
+    // So far there've been three swaps
+    // (1) a three-way swap of zero deaths, 1 million is a lot, and antitables
+    // (2) a two-way swap of costco sells dimboosts now and 8 nobody got time for that
+    // (3) a two-way swap of long lasting relationship and eternities are the new infinity
+    const swaps = { "4,3": "6,4", "6,4": "7,7", "7,7": "4,3",
+    "10,1": "11,7", "11,7": "10,1", "11,3": "12,4", "12,4": "11,3" };
+    const convertAchievementArray = (newAchievements, oldAchievements, isSecret) => {
       for (const oldId of oldAchievements) {
         let row = Math.floor(oldId / 10);
         let column = oldId % 10;
-        // eslint-disable-next-line no-bitwise
-        if (
-          [row, column].join(",") in swaps) {
+        if (!isSecret && [row, column].join(",") in swaps) {
           [row, column] = swaps[[row, column].join(",")].split(",");
         }
-        // eslint-disable-next-line no-bitwise
         newAchievements[row - 1] |= (1 << (column - 1));
       }
       // Handle the changed achievement "No DLC Required" correctly (otherwise saves could miss it).
-      if (player.infinityUpgrades.size >= 16 || player.eternities.gt(0) || player.realities > 0) {
-        // eslint-disable-next-line no-bitwise
+      if (!isSecret && (player.infinityUpgrades.size >= 16 || player.eternities.gt(0) || player.realities > 0)) {
         newAchievements[3] |= 1;
       } else {
-        // eslint-disable-next-line no-bitwise
         newAchievements[3] &= ~1;
+      }
+
+      // "Professional Bodybuilder" (s38) was changed and shouldn't be migrated
+      if (isSecret) {
+        newAchievements[2] &= ~128;
       }
     };
 
     player.achievementBits = Array.repeat(0, 15);
-    convertAchievementArray(player.achievementBits, player.achievements);
+    convertAchievementArray(player.achievementBits, player.achievements, false);
     delete player.achievements;
 
     player.secretAchievementBits = Array.repeat(0, 4);
-    convertAchievementArray(player.secretAchievementBits, player.secretAchievements);
+    convertAchievementArray(player.secretAchievementBits, player.secretAchievements, true);
     delete player.secretAchievements;
   },
 
@@ -835,10 +841,10 @@ GameStorage.migrations = {
 
   consolidateAuto(player) {
     for (let i = 0; i < 8; i++) {
-      player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
+      player.auto.infinityDims.all[i].isActive = player.infDimBuyers[i];
     }
     for (let i = 0; i < 3; i++) {
-      player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
+      player.auto.replicantiUpgrades.all[i].isActive = player.replicanti.auto[i];
     }
     player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
     player.auto.ipMultBuyer.isActive = player.infMultBuyer;
@@ -905,9 +911,22 @@ GameStorage.migrations = {
   },
 
   etercreqConversion(player) {
-    // eslint-disable-next-line no-bitwise
     if (player.etercreq) player.challenge.eternity.requirementBits |= 1 << player.etercreq;
     delete player.etercreq;
+  },
+
+  moveTS33(player) {
+    if (player.timestudy.studies.includes(33) && !player.timestudy.studies.includes(22)) {
+      player.timestudy.studies.splice(player.timestudy.studies.indexOf(33), 1);
+      player.timestudy.theorem = new Decimal(player.timestudy.theorem).plus(2);
+    }
+  },
+
+  addBestPrestigeCurrency(player) {
+    player.records.thisReality.maxEP = player.eternityPoints;
+    player.records.bestReality.bestEP = player.eternityPoints;
+    player.records.thisEternity.maxIP = player.infinityPoints;
+    player.records.thisReality.maxIP = player.infinityPoints;
   },
 
   prePatch(saveData) {

@@ -100,6 +100,7 @@ export default {
           v-if="inventory[toIndex(row, col)]"
           :glyph="inventory[toIndex(row, col)]"
           :is-new="isNew(toIndex(row, col))"
+          :is-inventory-glyph="true"
           :show-sacrifice="glyphSacrificeUnlocked"
           :draggable="true"
           @shiftClicked="removeGlyph($event, false)"

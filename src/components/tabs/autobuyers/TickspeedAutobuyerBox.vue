@@ -56,7 +56,7 @@ export default {
       </button>
       <button
         v-else
-        class="o-autobuyer-btn"
+        class="o-autobuyer-btn o-autobuyer-btn--unavailable"
       >
         Complete the challenge to change mode
       </button>

@@ -1,5 +1,6 @@
-import { GameDatabase } from "./game-database.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { GameDatabase } from "./game-database";
 
 // A = always there
 // L = locked
@@ -646,7 +647,7 @@ GameDatabase.news = [
   },
   {
     id: "a123",
-    text: "Finland declares that it's starting to import Cancer."
+    text: "Finland declares that it's starting to import Design."
   },
   {
     id: "a124",
@@ -691,15 +692,15 @@ GameDatabase.news = [
     id: "a131",
     text:
       `Warning - We have just been informed that there is a chance of infection with a mind-virus of the Basilisk
-      type, similar to the infamous winking parrot. This particular example is known as 'Fractal Cancer Type III'.
+      type, similar to the infamous winking parrot. This particular example is known as 'Fractal Disease Type III'.
       This is believed to cause a 'crashing' of the mind, similar to a computer crash, due to the mathematical
       complexity of the image causing mathematical ideas that the mind can't comprehend, a Gondelian shock input
       eventually leading to crashing through Gondelian spoilers. All who have researched it have eventually died
       the same way, so it is impossible to tell exactly, but this is the common belief. Regardless, with the
-      introduction of 'cancer' mode, as well as reports of it's spontaneous appearance, sufficient repetition
-      of this mode's appearance may lead to an image forming in the mind similar to 'Fractal Cancer Type III'.
+      introduction of 'design' mode, as well as reports of it's spontaneous appearance, sufficient repetition
+      of this mode's appearance may lead to an image forming in the mind similar to 'Fractal Disease Type III'.
       With this in mind, we have some suggestions if you find yourself plagued with it. First, refresh immediately
-      and see if that fixes the issue. If not, navigate to options, and change the theme from cancer to literally
+      and see if that fixes the issue. If not, navigate to options, and change the theme from design to literally
       anything else. And above all else, Godspeed. We can't afford to lose anymore viewers.`
   },
   {
@@ -914,7 +915,7 @@ GameDatabase.news = [
     id: "a174",
     text:
       `<span style='font-family: runescape; color: yellow; text-shadow: 0.1rem 0.1rem black; letter-spacing: 0.1rem;
-      font-size: 2rem; line-height: 0; animation: text-flash 1s steps(1, end) infinite;'
+      font-size: 2rem; line-height: 0; animation: a-text-flash 1s steps(1, end) infinite;'
       >FREE RUNE ARMOR TRIMMING</span>`,
   },
   {
@@ -929,7 +930,7 @@ GameDatabase.news = [
   },
   {
     id: "a176",
-    text: "I've been using cancer notation so long that I can actually read it now, please send help."
+    text: "I've been using emoji notation so long that I can actually read it now, please send help."
   },
   {
     id: "a177",
@@ -991,12 +992,12 @@ GameDatabase.news = [
   {
     id: "a184",
     text:
-      `<span style='animation: text-grow 1s infinite'>R̵̬̙͋͂̀̋͑̈́̇͠Ê̵͇͎͂̂̍̓̌̐̋̋̀̀̔M̶̨̲̯̘͙̬̥̮̣͚̱̫͛̽̃͌̚͝
-      "Ą̴͍̝͐Į̷̛̲̯̫̘͌́̄̏͌̀̈́͝͝Ṅ̶̛̻̠̠̤̦̞̞͗̎̊̌̊͝͠</span><span style='animation: text-shrink 1s infinite'>
+      `<span style='animation: a-text-grow 1s infinite'>R̵̬̙͋͂̀̋͑̈́̇͠Ê̵͇͎͂̂̍̓̌̐̋̋̀̀̔M̶̨̲̯̘͙̬̥̮̣͚̱̫͛̽̃͌̚͝
+      "Ą̴͍̝͐Į̷̛̲̯̫̘͌́̄̏͌̀̈́͝͝Ṅ̶̛̻̠̠̤̦̞̞͗̎̊̌̊͝͠</span><span style='animation: a-text-shrink 1s infinite'>
       Ḁ̷̛͂̈́͗̎̃̓͛́͘ͅW̶̡̖͓̗̦̃̇̌̀͝A̵͇̭͉̓̎̈̿̊́̄̚͜R̶̝͚̲̭͎͇͎͓͖͚͇̀̈́͗̃̏̂̌͝͝Ę̴̡̤͙͈̝̬̰͒͘</span><span style
-      ='animation: text-grow 1s infinite'> ̶̺̈́́̆̓͘͘Ồ̸̢̢̮͓̯̗͙͚̬̉͊̿F̶̠̤̱̱̱͊̂̍̔̃͆̆̑̿͘</span><span style='animation:
-      text-shrink 1s infinite'> ̴̨̞̠̮͚̱͉͋̔͗̽̈́́́̅ͅỴ̶̣̙̹͚̲͔̲̼̬̥̀͌̒̾͘͘O̵̪̠̗̝̗̘̜͚̮̊͒͆̃̀̌̒͝ͅU̸͎͗̍̑̎̅̅͝R̵̗͑̽̏̓͆͒̈́͌͘̕
-      </span><span style='animation: text-grow 1s infinite'> ̸̑̽̇̆͊̔̍̊̈́̈́͘ͅS̸̘͐͝U̴̥̭̚͘R̸̖̜͍͒́̋͆̈́̓
+      ='animation: a-text-grow 1s infinite'> ̶̺̈́́̆̓͘͘Ồ̸̢̢̮͓̯̗͙͚̬̉͊̿F̶̠̤̱̱̱͊̂̍̔̃͆̆̑̿͘</span><span style='animation:
+      a-text-shrink 1s infinite'> ̴̨̞̠̮͚̱͉͋̔͗̽̈́́́̅ͅỴ̶̣̙̹͚̲͔̲̼̬̥̀͌̒̾͘͘O̵̪̠̗̝̗̘̜͚̮̊͒͆̃̀̌̒͝ͅU̸͎͗̍̑̎̅̅͝R̵̗͑̽̏̓͆͒̈́͌͘̕
+      </span><span style='animation: a-text-grow 1s infinite'> ̸̑̽̇̆͊̔̍̊̈́̈́͘ͅS̸̘͐͝U̴̥̭̚͘R̸̖̜͍͒́̋͆̈́̓
       R̸̡̛̛̪̝̟̱̣̹̭̟̣̀̈̀̏̉̌͝͠Õ̶͙͈͖̠͇̬͍̟̰U̵̩̫͉̝͔̼͎̦̔̓̽͌͊̏̇̓̀̓̀Ņ̸͍͇̘̙̥̰͉̲͕͈̥̍͛̃̑͝Ḑ̵̤̻̖̱̘̯̝̖̈̌̄̕͝
       Ī̶̜̱̈́̑̃̉̄̋̔͐͋͠Ṅ̴͎̞͍̽͊͛̈́̅͛̈̅̚͠Ģ̸̢̾͊S̷̫̼̜̼͇̋͛̎͑͆̅̓̇</span>`,
   },
@@ -1013,10 +1014,10 @@ GameDatabase.news = [
   {
     id: "a186",
     text:
-      `<span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span style='animation: text-grow 1s infinite
-      '>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span style='animation:
-      text-grow 1s infinite'>\\(^_^)\\</span> <span style='animation: text-shrink 1s infinite'>/(^_^)/</span> <span
-      style='animation: text-grow 1s infinite'>\\(^_^)\\</span>`,
+      `<span style='animation: a-text-shrink 1s infinite'>/(^_^)/</span> <span style='animation: a-text-grow 1s infinite
+      '>\\(^_^)\\</span> <span style='animation: a-text-shrink 1s infinite'>/(^_^)/</span> <span style='animation:
+      a-text-grow 1s infinite'>\\(^_^)\\</span> <span style='animation: a-text-shrink 1s infinite'>/(^_^)/</span> <span
+      style='animation: a-text-grow 1s infinite'>\\(^_^)\\</span>`,
   },
   {
     id: "a187",
@@ -1042,10 +1043,10 @@ GameDatabase.news = [
   },
   {
     id: "a192",
-    text:
-      `17976931348623159077293051907890247336179769789423065727343008115773267580550096313270847732240753602112011
-      38798713933576587897688144166224928474306394741243777678934248654852763022196012460941194530829520850057688
-      38150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216`
+    // This ticker needs to be an unbroken string; using backtick strings and linebreaking will add spaces in the
+    // ticker itself where the linebreaks are
+    // eslint-disable-next-line max-len
+    text: "179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216"
   },
   {
     id: "a193",
@@ -1082,7 +1083,7 @@ GameDatabase.news = [
       random *= 255;
       const color = `hsl(${random}, 90%, 60%)`;
       return `<span style='color: ${color}; text-shadow: 0 0 0.5rem ${color};
-        animation: text-grow 0.4s infinite;'>Disco Time!</span>`;
+        animation: a-text-grow 0.4s infinite;'>Disco Time!</span>`;
     },
   },
   {
@@ -1351,8 +1352,8 @@ GameDatabase.news = [
     id: "a238",
     get text() {
       return `AD Player: "How many orders of magnitude are you on?" Normal person: "Like, maybe 5 or 6 right now, my
-      dude." AD Player: "You are like a little baby. Watch this: <span style='animation: text-crunch ${newsAnimSpd(22)}s
-      1; font-size: 0;'>C R O N C H</span>"`;
+      dude." AD Player: "You are like a little baby. Watch this: <span style='animation: a-text-crunch
+      ${newsAnimSpd(22)}s 1; font-size: 0;'>C R O N C H</span>"`;
     },
   },
   {
@@ -1440,7 +1441,7 @@ GameDatabase.news = [
   },
   {
     id: "a246",
-    text: "<span style='animation: fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
+    text: "<span style='animation: a-fade-out 3s infinite'>OoooOOOOooOOO, it's me, the infamous news ghost!</span>",
   },
   (function() {
     let isFlipped = false;
@@ -1504,7 +1505,7 @@ GameDatabase.news = [
   {
     id: "a252",
     get text() {
-      return `<span style='animation: text-stretch ${newsAnimSpd(30)}s 1'>This message is dilated.</span>`;
+      return `<span style='animation: a-text-stretch ${newsAnimSpd(35)}s 1 forwards'>This message is dilated.</span>`;
     },
   },
   {
@@ -2005,7 +2006,7 @@ GameDatabase.news = [
   {
     id: "a321",
     text:
-      `It must be hard being on your phone all alone. But don't worry; we are still here.
+      `It must be hard being on your PC all alone. But don't worry; we are still here.
       Listening and watching your every step.`
   },
   {
@@ -2255,7 +2256,7 @@ GameDatabase.news = [
   {
     id: "a352",
     get text() {
-      return `<span style='opacity: 0; animation: disappear ${newsAnimSpd(20)}s 1'>
+      return `<span style='opacity: 0; animation: a-disappear ${newsAnimSpd(20)}s 1'>
       This news message is antimemetic. You will forget that it exists shortly.</span>`;
     }
   },
@@ -2837,7 +2838,7 @@ GameDatabase.news = [
       and smote Slabdrill with his godlike power. As Slabdrill's corpse fell into the earth, he cried “ this will
       not be the last of me! Hevi will betr-“ and he fell in the Abyss of matter. Hevi gifted humanity with
       Eternity upgrades, which boosted infinity dimensions and time dimensions. And Hevi gave humanity his greatest
-      gift. EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 25 times.
+      gift. EP multipliers. He said, these will multiply all EP gained by 5, but their cost will increase 50 times.
       Use them wisely. And Humanity journeyed off with their new power, as Slabdrill's words echoed in their heads.`,
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
@@ -5217,7 +5218,7 @@ GameDatabase.news = [
   },
   {
     id: "ai529",
-    text: "Cancer is said to be America's new measuring system for everything. What does this mean for us? We don't know. But we will know in 5 hours."
+    text: "Emoji is said to be America's new measuring system for everything. What does this mean for us? We don't know. But we will know in 5 hours."
   },
   {
     id: "ai530",

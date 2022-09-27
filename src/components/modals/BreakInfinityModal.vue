@@ -17,10 +17,6 @@ export default {
         all Normal Challenge Autobuyers.`}`.split("\n");
     },
   },
-  created() {
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-  },
   methods: {
     handleYesClick() {
       breakInfinity();

@@ -1,6 +1,8 @@
 <script>
-import PelleStrike from "./PelleStrike";
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import PelleRiftBar from "./PelleRiftBar";
+import PelleStrike from "./PelleStrike";
 
 export default {
   name: "PelleRift",
@@ -37,7 +39,7 @@ export default {
       this.isMaxed = rift.isMaxed || Pelle.hasGalaxyGenerator;
       this.setValue("totalFill", rift.totalFill);
       this.setValue("resource", rift.fillCurrency.value);
-      this.hasEffectiveFill = rift.key === "pestilence" && PelleRifts.chaos.milestones[0].canBeApplied;
+      this.hasEffectiveFill = rift.key === "decay" && PelleRifts.chaos.milestones[0].canBeApplied;
     },
     // One rift has a number and the others are all Decimals; this reduces boilerplate for setting multiple values
     setValue(key, value) {
@@ -46,7 +48,15 @@ export default {
     },
     // One-off formatting function; needs to format large Decimals and a small number assumed to be a percentage
     formatRift(value) {
-      return typeof value === "number" ? formatPercents(value, 3) : format(value, 2);
+      return typeof value === "number" ? `${formatInt(100 * value)}%` : format(value, 2);
+    },
+    riftName() {
+      return wordShift.wordCycle(this.rift.name, true);
+    },
+    drainResource() {
+      if (this.rift.id !== 3) return this.rift.drainResource;
+
+      return wordShift.wordCycle(this.rift.drainResource);
     }
   },
 };
@@ -57,7 +67,7 @@ export default {
     <div class="c-pelle-rift-row">
       <div class="c-pelle-rift-column c-pelle-rift-status">
         <h2 class="c-pelle-rift-name-header">
-          {{ rift.name }}
+          {{ riftName() }}
         </h2>
         <div class="c-pelle-rift-rift-info-container">
           <div
@@ -75,10 +85,10 @@ export default {
       <div class="c-pelle-rift-status">
         <div class="c-pelle-rift-fill-status">
           <h2 class="c-pelle-rift-name-header">
-            {{ rift.name }}
+            {{ riftName() }}
           </h2>
           <div class="c-pelle-rift-rift-info-container">
-            Drains {{ rift.drainResource }} to fill.
+            Drains {{ drainResource() }} to fill.
             <br>
             <template v-if="!isMaxed">
               Current Amount: {{ formatRift(resource) }}
@@ -97,11 +107,17 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1rem;
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+
   /* transparent crimson */
-  box-shadow: inset 0 0 1rem 0.1rem rgba(237, 20, 61, 0.45), 0 0 1rem 0.1rem rgba(237, 20, 61, 0.45);
+  box-shadow: inset 0 0 1rem 0.1rem rgba(237, 20, 61, 45%), 0 0 1rem 0.1rem rgba(237, 20, 61, 45%);
+  margin-top: 1.2rem;
+  padding: 0.5rem;
+}
+
+.t-s1 .c-pelle-rift {
+  box-shadow: none;
 }
 
 .c-pelle-rift-row {
@@ -118,25 +134,20 @@ export default {
 
 .c-pelle-rift-rift-info-container {
   height: 5rem;
-  color: var(--color-text);
   font-weight: 400;
+  color: var(--color-text);
 }
 
 .c-pelle-rift-status {
   display: flex;
   flex-direction: column;
+  width: 28rem;
   align-items: center;
-  width: 26rem;
 }
 
 .c-pelle-rift-name-header {
-  color: var(--color-pelle--base);
   font-weight: bold;
+  color: var(--color-pelle--base);
   padding: 0.2rem;
-}
-
-
-.s-base--metro .c-pelle-rift {
-  border-radius: 0;
 }
 </style>

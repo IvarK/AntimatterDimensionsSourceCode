@@ -74,10 +74,10 @@ export class TimeStudyTree {
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
   // This method attempts to take the parameter array and purchase all the studies specified, using the current game
   // state to determine if they are affordable. Input array may be either an id array or a TimeStudyState array
-  static commitToGameState(studyArray) {
+  static commitToGameState(studyArray, auto = true) {
     for (const item of studyArray) {
       const study = typeof item === "number" ? TimeStudy(item) : item;
-      if (study && !study.isBought) study.purchase(true);
+      if (study && !study.isBought) study.purchase(auto);
     }
     GameCache.currentStudyTree.invalidate();
   }
@@ -93,6 +93,9 @@ export class TimeStudyTree {
       ["idle", [123, 133, 143]],
       ["light", [221, 223, 225, 227, 231, 233]],
       ["dark", [222, 224, 226, 228, 232, 234]],
+      ...(Ra.unlocks.unlockHardV.canBeApplied
+        ? [["triad", [301, 302, 303, 304].slice(0, Ra.unlocks.unlockHardV.effectOrDefault(0))]]
+        : [])
     ]);
   }
 
@@ -102,24 +105,15 @@ export class TimeStudyTree {
     this.sets.forEach((ids, name) => (internal = internal.replace(name, ids.join())));
     return internal
       .replace(/[|,]$/u, "")
-      .replaceAll(" ", "");
+      .replaceAll(" ", "")
+      // Allows 11,,21 to be parsed as 11,21 and 11,|1 to be parsed as 11|1
+      .replace(/,{2,}/gu, ",")
+      .replace(/,\|/gu, "|");
   }
 
   static formatStudyList(input) {
-    let internal = input.toLowerCase().replaceAll(" ", "");
-    // \\b means 0-width word boundry, meaning "target = 11" doesnt match 111
-    const testRegex = target => new RegExp(`\\b${target}\\b,?`, "gu");
-    // If the studylist has all IDs, replace the first instance with the shorthand, then remove the rest
-    this.sets.forEach((ids, name) => {
-      const hasAllIds = ids.every(x => testRegex(x).test(internal));
-      if (hasAllIds) {
-        internal = internal.replace(testRegex(ids[0]), `${name},`);
-        for (const i of ids) {
-          internal = internal.replace(testRegex(i), "");
-        }
-      }
-    });
-    return internal.replaceAll(",", ", ");
+    const internal = input.toLowerCase().replaceAll(" ", "");
+    return internal.replaceAll(",", ", ").replace("|", " | ");
   }
 
   // This reads off all the studies in the import string and splits them into invalid and valid study IDs. We hold on
@@ -127,19 +121,22 @@ export class TimeStudyTree {
   parseStudyImport(input) {
     const studyDB = GameDatabase.eternity.timeStudies.normal.map(s => s.id);
     const output = [];
-    const studyCluster = TimeStudyTree.truncateInput(input).split("|")[0].split(",");
-    for (const studyRange of studyCluster) {
-      const studyRangeSplit = studyRange.split("-");
-      const studyArray = studyRangeSplit[1]
-        ? this.studyRangeToArray(studyRangeSplit[0], studyRangeSplit[1])
-        : studyRangeSplit;
-      for (const study of studyArray) {
-        if (studyDB.includes(parseInt(study, 10))) {
-          const tsObject = TimeStudy(study);
-          this.selectedStudies.push(tsObject);
-          output.push(tsObject);
-        } else {
-          this.invalidStudies.push(study);
+    const studiesString = TimeStudyTree.truncateInput(input).split("|")[0];
+    if (studiesString.length) {
+      const studyCluster = studiesString.split(",");
+      for (const studyRange of studyCluster) {
+        const studyRangeSplit = studyRange.split("-");
+        const studyArray = studyRangeSplit[1]
+          ? this.studyRangeToArray(studyRangeSplit[0], studyRangeSplit[1])
+          : studyRangeSplit;
+        for (const study of studyArray) {
+          if (studyDB.includes(parseInt(study, 10))) {
+            const tsObject = TimeStudy(study);
+            this.selectedStudies.push(tsObject);
+            output.push(tsObject);
+          } else {
+            this.invalidStudies.push(study);
+          }
         }
       }
     }
@@ -237,7 +234,7 @@ export class TimeStudyTree {
   // Buys the specified study; no requirement verification beyond cost, use hasRequirements() to verify proper structure
   buySingleStudy(study, checkCosts) {
     const config = study.config;
-    const stDiscount = V.has(V_UNLOCKS.RA_UNLOCK) ? 2 : 0;
+    const stDiscount = VUnlocks.raUnlock.effectOrDefault(0);
     const stNeeded = config.STCost && config.requiresST.some(s => this.purchasedStudies.includes(TimeStudy(s)))
       ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;

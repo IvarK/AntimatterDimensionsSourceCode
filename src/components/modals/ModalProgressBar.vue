@@ -15,12 +15,10 @@ export default {
         width: `${this.progress.current / this.progress.max * 100}%`,
       };
     },
-    remaining() {
+    remainingTime() {
       const timeSinceStart = Date.now() - this.progress.startTime;
-      return formatFloat(
-        TimeSpan.fromMilliseconds(timeSinceStart / (this.progress.current / this.progress.max)).totalSeconds -
-        TimeSpan.fromMilliseconds(timeSinceStart).totalSeconds
-        , 1);
+      const ms = timeSinceStart * (this.progress.max - this.progress.current) / this.progress.current;
+      return TimeSpan.fromMilliseconds(ms).toStringShort();
     },
     buttons() {
       return this.progress.buttons || [];
@@ -40,22 +38,22 @@ export default {
       <div>
         {{ progress.info() }}
       </div>
-      <br>
-      <div>
-        {{ progress.progressName }}: {{ formatInt(progress.current) }}/{{ formatInt(progress.max) }}
-      </div>
-      <div>
-        Remaining: {{ remaining }} seconds
-      </div>
-      <div class="modal-progress-bar__hbox">
-        <div class="modal-progress-bar__bg">
-          <div
-            class="modal-progress-bar__fg"
-            :style="foregroundStyle"
-          />
+      <div class="modal-progress-bar__margin">
+        <div>
+          {{ progress.progressName }}: {{ formatInt(progress.current) }}/{{ formatInt(progress.max) }}
+        </div>
+        <div>
+          Remaining: {{ remainingTime }}
+        </div>
+        <div class="modal-progress-bar__hbox">
+          <div class="modal-progress-bar__bg">
+            <div
+              class="modal-progress-bar__fg"
+              :style="foregroundStyle"
+            />
+          </div>
         </div>
       </div>
-      <br>
       <div class="modal-progress-bar__buttons">
         <OfflineSpeedupButton
           v-for="(button, id) in buttons"
@@ -74,15 +72,17 @@ export default {
 }
 
 .modal-progress-bar {
-  position: fixed;
-  z-index: 3;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
   width: 40rem;
-  left: 50vw;
+  position: fixed;
+  /* stylelint-disable-next-line unit-allowed-list */
   top: 50vh;
+  /* stylelint-disable-next-line unit-allowed-list */
+  left: 50vw;
+  z-index: 3;
+  justify-content: space-between;
+  align-items: center;
   transform: translate(-50%, -50%);
 }
 
@@ -94,10 +94,10 @@ export default {
 
 .modal-progress-bar__bg {
   width: 20rem;
-  margin-left: 1rem;
-  margin-right: 1rem;
   height: 2rem;
   background: black;
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 
 .modal-progress-bar__fg {
@@ -116,5 +116,9 @@ export default {
 .modal-progress-bar__label {
   font-size: large;
   padding-bottom: 0.5rem;
+}
+
+.modal-progress-bar__margin {
+  margin: 1rem 0;
 }
 </style>

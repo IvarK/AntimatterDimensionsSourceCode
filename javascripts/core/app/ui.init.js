@@ -1,4 +1,3 @@
-// eslint-disable-next-line prefer-const
 export const state = {
   view: {
     modal: {
@@ -6,6 +5,11 @@ export const state = {
       current: undefined,
       cloudConflict: [],
       progressBar: undefined,
+    },
+    quotes: {
+      queue: [],
+      current: undefined,
+      history: undefined
     },
     tabs: {
       reality: {

@@ -1,10 +1,12 @@
 <script>
-import IntervalLabel from "./IntervalLabel";
+import AutobuyerIntervalLabel from "./AutobuyerIntervalLabel";
 
+// This component is used for autobuyer entries which take up an entire row and may (AD/tickspeed) or may not
+// (prestige) have an associated slow version unlockable pre-infinity
 export default {
   name: "AutobuyerBox",
   components: {
-    IntervalLabel
+    AutobuyerIntervalLabel
   },
   props: {
     autobuyer: {
@@ -92,6 +94,8 @@ export default {
     },
     purchase() {
       this.autobuyer.purchase();
+      TabNotification.newAutobuyer.clearTrigger();
+      GameCache.cheapestAntimatterAutobuyer.invalidate();
     }
   }
 };
@@ -104,7 +108,7 @@ export default {
   >
     <div class="l-autobuyer-box__header">
       {{ name }}
-      <IntervalLabel
+      <AutobuyerIntervalLabel
         v-if="showInterval"
         :autobuyer="autobuyer"
       />

@@ -66,6 +66,12 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      showChaosText: false,
+      chaosDescription: ""
+    };
+  },
   computed: {
     onTouchDevice() {
       return GameUI.touchDevice;
@@ -76,22 +82,28 @@ export default {
     sortedEffects() {
       return getGlyphEffectValuesFromBitmask(this.effects, this.effectiveLevel, this.strength, this.type)
         .filter(effect =>
-          GameDatabase.reality.glyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
+          GlyphEffects[effect.id].isGenerated === generatedTypes.includes(this.type));
     },
     rarityInfo() {
       return getRarity(this.strength);
     },
+    baseColor() {
+      if (this.type === "cursed") return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
+      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "black" : "white";
+    },
+    textColor() {
+      if (this.type === "cursed") return Theme.current().isDark() || player.options.forceDarkGlyphs ? "black" : "white";
+      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
+    },
+    mainBorderColor() {
+      if (this.type === "cursed") return this.textColor;
+      if (this.type === "companion") return GlyphTypes[this.type].color;
+      return getColor(this.strength);
+    },
     descriptionStyle() {
-      let color = this.rarityInfo.color;
-      if (this.type === "cursed") color = "black";
-      if (this.type === "companion") color = GlyphTypes[this.type].color;
+      const color = this.mainBorderColor;
       return {
         color,
-        "text-shadow": this.type === "cursed"
-          ? undefined
-          : `-0.1rem 0.1rem 0.1rem black, 0.1rem 0.1rem 0.1rem black,
-            -0.1rem -0.1rem 0.1rem black, 0.1rem -0.1rem 0.1rem black,
-            0 0 0.3rem ${color}`,
         animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
       };
     },
@@ -129,7 +141,7 @@ export default {
       // eslint-disable-next-line no-nested-ternary
       const color = this.isLevelCapped
         ? "#ff4444"
-        : (this.isLevelBoosted ? "#44FF44" : "");
+        : (this.isLevelBoosted ? "#44FF44" : undefined);
       return `Level: <span style="color: ${color}">
               ${arrow}${formatInt(this.effectiveLevel)}${arrow}
               </span>`;
@@ -144,28 +156,29 @@ export default {
     glyphTooltipStyle() {
       // With computer mice, it's nice to just totally disable mouse events on the tooltip,
       // which reduces the chances for stupidity
+      const borderColor = this.type === "cursed" ? this.textColor : GlyphTypes[this.type].color;
       return {
         "pointer-events": this.onTouchDevice ? undefined : "none",
-        "border-color": GlyphTypes[this.type].color,
-        "box-shadow": `0 0 0.5rem ${GlyphTypes[this.type].color}, 0 0 0.5rem ${GlyphTypes[this.type].color} inset`,
+        "border-color": borderColor,
+        "box-shadow": `0 0 0.5rem ${borderColor}, 0 0 0.5rem ${borderColor} inset`,
         animation: this.type === "reality" ? "a-reality-glyph-tooltip-cycle 10s infinite" : undefined,
-        color: this.type === "cursed" ? "black" : undefined,
-        background: this.type === "cursed" ? "white" : undefined
+        color: this.textColor,
+        background: this.baseColor
       };
     },
     glyphHeaderStyle() {
       const isCursed = this.type === "cursed";
       const isReality = this.type === "reality";
 
-      let color = this.rarityInfo.color;
-      if (isCursed) color = "black";
+      let color = Theme.current().isDark() ? this.rarityInfo.darkColor : this.rarityInfo.lightColor;
+      if (isCursed) color = this.textColor;
       if (this.type === "companion") color = GlyphTypes[this.type].color;
       return {
         "border-color": color,
         "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,
         animation: isReality ? "a-reality-glyph-tooltip-header-cycle 10s infinite" : undefined,
-        color: isCursed ? "black" : undefined,
-        background: isCursed ? "white" : undefined
+        color: this.textColor,
+        background: this.baseColor
       };
     }
   },
@@ -189,6 +202,12 @@ export default {
     }
   },
   methods: {
+    update() {
+      this.showChaosText = Pelle.specialGlyphEffect.isUnlocked;
+      if (this.showChaosText) {
+        this.chaosDescription = Pelle.getSpecialGlyphEffectDescription(this.type);
+      }
+    },
     touchStart() {
       // We _don't_ preventDefault here because we want the event to turn into a local
       // dragstart that we can intercept
@@ -206,11 +225,14 @@ export default {
     removeGlyph() {
       GlyphSacrificeHandler.removeGlyph(Glyphs.findById(this.id), false);
     },
+    getFontColor() {
+      return Theme.current().isDark() ? "#cccccc" : "black";
+    },
     sacrificeText() {
       if (this.type === "companion" || this.type === "cursed") return "";
       const powerText = `${format(this.sacrificeReward, 2, 2)}`;
       const isCurrentAction = this.currentAction === "sacrifice";
-      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};">
               Sacrifice: ${powerText}
               </span>`;
     },
@@ -222,7 +244,7 @@ export default {
         refinementText += ` (Actual value due to cap: ${format(this.refineReward, 2, 2)} ${GLYPH_SYMBOLS[this.type]})`;
       }
       const isCurrentAction = this.currentAction === "refine";
-      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""}; color: ${isCurrentAction ? "#ccc" : ""}">
+      return `<span style="font-weight: ${isCurrentAction ? "bold" : ""};">
               Refine: ${refinementText}
               </span>`;
     },
@@ -274,6 +296,12 @@ export default {
         :effect="e.id"
         :value="e.value"
       />
+      <div
+        v-if="showChaosText"
+        class="pelle-current-glyph-effects c-glyph-tooltip__effect"
+      >
+        {{ chaosDescription }}
+      </div>
     </div>
   </div>
 </template>

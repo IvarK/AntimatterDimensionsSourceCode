@@ -26,9 +26,7 @@ export default {
       return GlyphTypes[this.glyphType].color;
     },
     description() {
-      return typeof this.effect.genericDesc === "function"
-        ? this.effect.genericDesc()
-        : this.effect.genericDesc;
+      return this.effect.genericDesc;
     },
     classObject() {
       return this.isActive ? "c-auto-sac-type-tab__effect-desc--active" : "c-auto-sac-type-tab__effect-desc--inactive";
@@ -60,7 +58,7 @@ export default {
       const effarigSettings = AutoGlyphProcessor.types.effarig.effectChoices;
       this.effarigSettings.effarigrm = effarigSettings.effarigrm;
       this.effarigSettings.effarigglyph = effarigSettings.effarigglyph;
-      this.noExclude = Ra.has(RA_UNLOCKS.GLYPH_EFFECT_COUNT);
+      this.noExclude = Ra.unlocks.glyphEffectCount.canBeApplied;
     },
     toggleSelection() {
       this.isActive = !AutoGlyphProcessor.types[this.glyphType].effectChoices[this.effect.id];
@@ -103,22 +101,23 @@ export default {
 
 <style scoped>
 .c-selected-effect-toggle-indicator--active {
-  color: black;
-  font-size: 1rem;
   position: absolute;
+
   /* -0.1rem = -1px, needed because CSS renders a black border between the check and the border of the selector
   otherwise */
   top: -0.1rem;
   right: -0.1rem;
-  border-radius: 0 0.4rem;
-  padding: 0.2rem;
+  font-size: 1rem;
+  color: black;
   text-shadow: none;
+  border-radius: 0 var(--var-border-radius, 0.4rem);
+  padding: 0.2rem;
 }
 
 .l-dock {
   position: absolute;
-  margin: 0 4rem;
   top: 50%;
+  margin: 0 4rem;
   transform: translateY(-50%);
 }
 

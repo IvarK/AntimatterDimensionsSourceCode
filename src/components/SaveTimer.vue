@@ -38,23 +38,20 @@ export default {
 
 <style scoped>
 .o-save-timer {
-  color: var(--color-text);
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  background-color: var(--color-base);
   white-space: nowrap;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 5;
+  color: var(--color-text);
+  background-color: var(--color-base);
   border-top: 0.1rem solid var(--color-accent);
   border-right: 0.1rem solid var(--color-accent);
-  cursor: pointer;
-  user-select: none;
   padding: 0 0.5rem;
-  z-index: 5;
-}
-
-.t-inverted .o-save-timer,
-.t-inverted-metro .o-save-timer {
-  filter: invert(100%)
+  pointer-events: auto;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
 }
 
 .t-s2 .o-save-timer {
@@ -62,6 +59,6 @@ export default {
 }
 
 .t-s3 .o-save-timer {
-  animation: glasses 7s infinite;
+  animation: a-glasses 7s infinite;
 }
 </style>

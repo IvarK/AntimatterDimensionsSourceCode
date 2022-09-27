@@ -1,10 +1,12 @@
 <script>
+import GenericDimensionRowText from "@/components/GenericDimensionRowText";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "ModernTimeDimensionRow",
   components: {
+    GenericDimensionRowText,
     PrimaryButton,
     PrimaryToggleButton
   },
@@ -32,7 +34,9 @@ export default {
       requirementReached: false,
       realityUnlocked: false,
       showTTCost: false,
-      ttCost: 0
+      ttCost: 0,
+      ttGen: new Decimal(),
+      currTT: new Decimal(),
     };
   },
   computed: {
@@ -40,12 +44,7 @@ export default {
       return ui.view.shiftDown;
     },
     name() {
-      return TimeDimension(this.tier).shortDisplayName;
-    },
-    rateOfChangeDisplay() {
-      return this.tier < 8
-        ? ` (+${format(this.rateOfChange, 2, 2)}%/s)`
-        : "";
+      return `${TimeDimension(this.tier).shortDisplayName} Time Dimension`;
     },
     buttonContents() {
       if (this.showTTCost) {
@@ -54,8 +53,8 @@ export default {
       return this.formattedEPCost;
     },
     tooltipContents() {
-      if (this.showTTCost) return this.formattedEPCost;
-      if (this.isCapped) return `Enslaved prevents the purchase of more than ${format(1)} Time Dimension`;
+      if (this.showTTCost) return `${this.formattedEPCost}<br>${this.timeEstimate}`;
+      if (this.isCapped) return `Nameless prevents the purchase of more than ${format(1)} Time Dimension`;
       return `Purchased ${quantifyInt("time", this.bought)}`;
     },
     showRow() {
@@ -67,8 +66,16 @@ export default {
     formattedEPCost() {
       return this.isCapped ? "Capped" : `${this.showCostTitle ? "Cost: " : ""}${format(this.cost, 2)} EP`;
     },
+    hasLongText() {
+      return this.buttonContents.length > 15;
+    },
     showCostTitle() {
       return this.cost.exponent < 1e6;
+    },
+    timeEstimate() {
+      if (!this.showTTCost || this.ttGen.eq(0)) return "";
+      const time = Decimal.sub(this.ttCost, this.currTT).dividedBy(this.ttGen);
+      return time.gt(0) ? `Enough TT in ${TimeSpan.fromSeconds(time.toNumber()).toStringShort()}` : "";
     }
   },
   watch: {
@@ -98,6 +105,8 @@ export default {
       this.realityUnlocked = PlayerProgress.realityUnlocked();
       this.showTTCost = !this.isUnlocked && !this.shiftDown;
       if (this.tier > 4) this.ttCost = TimeStudy.timeDimension(this.tier).cost;
+      this.currTT.copyFrom(Currency.timeTheorems.value);
+      this.ttGen.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
     },
     buyTimeDimension() {
       if (!this.isUnlocked) {
@@ -116,42 +125,40 @@ export default {
 <template>
   <div
     v-show="showRow"
-    class="c-time-dim-row"
+    class="c-dimension-row l-dimension-single-row"
     :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }"
   >
-    <div class="c-dim-row__label c-dim-row__name">
-      {{ name }} Time D <span class="c-time-dim-row__multiplier">{{ formatX(multiplier, 2, 1) }}</span>
-    </div>
-    <div class="c-dim-row__label c-dim-row__label--growable">
-      {{ format(amount, 2, 0) }}
-      <span
-        v-if="rateOfChange.neq(0)"
-        class="c-dim-row__label--small"
-      >
-        {{ rateOfChangeDisplay }}
-      </span>
-    </div>
-    <PrimaryButton
-      v-tooltip="tooltipContents"
-      :enabled="isAvailableForPurchase && !isCapped"
-      class="o-primary-btn--buy-td l-dim-row__button o-primary-btn o-primary-btn--new"
-      @click="buyTimeDimension"
-    >
-      {{ buttonContents }}
-    </PrimaryButton>
-    <PrimaryToggleButton
-      v-if="areAutobuyersUnlocked"
-      v-model="isAutobuyerOn"
-      class="o-primary-btn--td-autobuyer l-dim-row__button"
-      label="Auto:"
+    <GenericDimensionRowText
+      :tier="tier"
+      :name="name"
+      :multiplier-text="formatX(multiplier, 2, 1)"
+      :amount-text="format(amount, 2)"
+      :rate="rateOfChange"
     />
-    <PrimaryButton
-      v-else
-      :enabled="isAvailableForPurchase && !isCapped"
-      class="o-primary-btn--buy-td-max l-dim-row__button"
-      @click="buyMaxTimeDimension"
-    >
-      Buy Max
-    </PrimaryButton>
+    <div class="l-dim-row-multi-button-container">
+      <PrimaryButton
+        v-tooltip="tooltipContents"
+        :enabled="isAvailableForPurchase && !isCapped"
+        class="o-primary-btn--buy-td o-primary-btn o-primary-btn--new o-primary-btn--buy-dim"
+        :class="{ 'l-dim-row-small-text': hasLongText }"
+        @click="buyTimeDimension"
+      >
+        {{ buttonContents }}
+      </PrimaryButton>
+      <PrimaryToggleButton
+        v-if="areAutobuyersUnlocked"
+        v-model="isAutobuyerOn"
+        class="o-primary-btn--buy-td-auto"
+        label="Auto:"
+      />
+      <PrimaryButton
+        v-else
+        :enabled="isAvailableForPurchase && !isCapped"
+        class="o-primary-btn--buy-td-auto"
+        @click="buyMaxTimeDimension"
+      >
+        Buy Max
+      </PrimaryButton>
+    </div>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import ModalCloseButton from "@/components/modals/ModalCloseButton";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "MessageModal",
@@ -23,11 +23,15 @@ export default {
   },
   methods: {
     update() {
-      this.message = this.modal.message;
+      // Side effect of allowing message modals to be closed by EventHub triggers - this.modal seems to become
+      // undefined for a brief moment as the event is being processed. This doesn't seem to have any adverse effects
+      // beyond a console error, which this suppresses
+      this.message = this.modal?.message;
     },
     handleClick() {
       this.modal.callback?.();
       this.emitClose();
+      EventHub.ui.offAll(this);
     }
   },
 };

@@ -117,7 +117,7 @@ export default {
                 {{ format(remnants, 2, 0) }}
               </div>
               <div class="l-remnant-factors-item">
-                {{ format(remnantsGain, 2, 0) }}
+                {{ format(remnantsGain, 2, remnantsGain >= 1 ? 0 : 2) }}
               </div>
             </div>
           </div>
@@ -138,18 +138,13 @@ export default {
 }
 
 .c-remnant-factors {
-  background-color: var(--color-prestige--accent);
-  color: var(--color-text);
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
-  padding: 0.3rem;
-  font-weight: bold;
   z-index: 4;
-}
-
-.s-base--metro .c-remnant-factors {
-  border-width: 0.1rem;
-  border-radius: 0;
+  font-weight: bold;
+  color: var(--color-text);
+  background-color: var(--color-text-inverted);
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+  padding: 0.3rem;
 }
 
 .c-remnant-factors-text {
@@ -158,15 +153,15 @@ export default {
 
 .l-remnant-factors-row {
   display: flex;
-  width: 100%
+  width: 100%;
 }
 
 .l-remnant-factors-col {
   display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
   flex-direction: column;
   margin-left: 2rem;
-  flex-shrink: 0;
-  flex-grow: 0;
 }
 
 .l-remnant-factors-col--first {

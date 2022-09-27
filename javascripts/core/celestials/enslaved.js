@@ -1,6 +1,7 @@
-import { GameDatabase } from "../secret-formula/game-database.js";
-import { GameMechanicState } from "../game-mechanics/index.js";
-import { CelestialQuotes } from "./quotes.js";
+import { BitUpgradeState } from "../game-mechanics/index";
+import { GameDatabase } from "../secret-formula/game-database";
+
+import { Quotes } from "./quotes";
 
 export const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
@@ -17,13 +18,14 @@ export const ENSLAVED_UNLOCKS = {
       const hasRarityRequirement = strengthToRarity(player.records.bestReality.glyphStrength) >= 100;
       return hasLevelRequirement && hasRarityRequirement;
     },
-    description: () => `Unlock The Enslaved Ones' Reality (requires
+    description: () => `Unlock The Nameless Ones' Reality (requires
       a level ${formatInt(5000)} Glyph and a ${formatRarity(100)} rarity Glyph)`,
   }
 };
 
 export const Enslaved = {
-  displayName: "Enslaved",
+  displayName: "The Nameless Ones",
+  possessiveName: "The Nameless Ones'",
   boostReality: false,
   BROKEN_CHALLENGES: [2, 3, 4, 5, 7, 8, 10, 11, 12],
   nextTickDiff: 50,
@@ -35,36 +37,45 @@ export const Enslaved = {
   currentBlackHoleStoreAmountPerMs: 0,
   tachyonNerf: 0.3,
   toggleStoreBlackHole() {
-    if (Pelle.isDoomed) return;
+    if (!this.canModifyGameTimeStorage) return;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
     player.celestials.enslaved.isStoringReal = false;
-    if (!Ra.has(RA_UNLOCKS.ADJUSTABLE_STORED_TIME)) {
+    if (!Ra.unlocks.adjustableStoredTime.canBeApplied) {
       player.celestials.enslaved.storedFraction = 1;
     }
   },
   toggleStoreReal() {
-    if (Pelle.isDoomed) return;
+    if (!this.canModifyRealTimeStorage && !this.isStoredRealTimeCapped) return;
     player.celestials.enslaved.isStoringReal = !player.celestials.enslaved.isStoringReal;
     player.celestials.enslaved.isStoring = false;
   },
   toggleAutoStoreReal() {
-    if (Pelle.isDoomed) return;
+    if (!this.canModifyRealTimeStorage) return;
     player.celestials.enslaved.autoStoreReal = !player.celestials.enslaved.autoStoreReal;
   },
+  get canModifyGameTimeStorage() {
+    return Enslaved.isUnlocked && !Pelle.isDoomed && !BlackHoles.arePaused && !EternityChallenge(12).isRunning &&
+      !Enslaved.isRunning && !Laitela.isRunning;
+  },
+  get canModifyRealTimeStorage() {
+    return Enslaved.isUnlocked && !Pelle.isDoomed;
+  },
+  get isStoredRealTimeCapped() {
+    return player.celestials.enslaved.storedReal < this.storedRealTimeCap;
+  },
+  // We assume that the situations where you can't modify time storage settings (of either type) are exactly the cases
+  // where they have also been explicitly disabled via other game mechanics. This also reduces UI boilerplate code.
   get isStoringGameTime() {
-    return Enslaved.isUnlocked && player.celestials.enslaved.isStoring && !BlackHoles.arePaused &&
-      !EternityChallenge(12).isRunning && !Laitela.isRunning;
+    return this.canModifyGameTimeStorage && player.celestials.enslaved.isStoring;
   },
   get isStoringRealTime() {
-    return Enslaved.isUnlocked && player.celestials.enslaved.isStoringReal;
+    return this.canModifyRealTimeStorage && player.celestials.enslaved.isStoringReal;
   },
   get storedRealTimeEfficiency() {
     return 0.7;
   },
   get storedRealTimeCap() {
-    const addedCap = Ra.has(RA_UNLOCKS.IMPROVED_STORED_TIME)
-      ? RA_UNLOCKS.IMPROVED_STORED_TIME.effect.realTimeCap()
-      : 0;
+    const addedCap = Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectOrDefault(0);
     return 1000 * 3600 * 8 + addedCap;
   },
   get isAutoReleasing() {
@@ -81,6 +92,8 @@ export const Enslaved = {
       player.celestials.enslaved.isStoringReal = false;
       player.celestials.enslaved.storedReal = maxTime;
     }
+    // More than 24 hours in milliseconds
+    if (player.celestials.enslaved.storedReal > (24 * 60 * 60 * 1000)) SecretAchievement(46).unlock();
     player.lastUpdate = thisUpdate;
   },
   autoStoreRealTime(diffMs) {
@@ -96,9 +109,7 @@ export const Enslaved = {
   },
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
-    if (Pelle.isDoomed) return;
     if (!this.canRelease(autoRelease)) return;
-    if (EternityChallenge(12).isRunning) return;
     player.requirementChecks.reality.slowestBH = 1;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) {
@@ -124,7 +135,7 @@ export const Enslaved = {
   },
   buyUnlock(info) {
     if (!this.canBuy(info)) return false;
-    if (info.id === ENSLAVED_UNLOCKS.RUN.id) this.quotes.show(this.quotes.UNLOCK_RUN);
+    if (info.id === ENSLAVED_UNLOCKS.RUN.id) this.quotes.unlockRun.show();
     player.celestials.enslaved.stored -= info.price;
     player.celestials.enslaved.unlocks.push(info.id);
     return true;
@@ -132,16 +143,26 @@ export const Enslaved = {
   initializeRun() {
     clearCelestialRuns();
     player.celestials.enslaved.run = true;
-    player.secretUnlocks.viewSecretTS = false;
+    player.celestials.enslaved.hasSecretStudy = false;
     this.feltEternity = false;
-    this.quotes.show(this.quotes.START_RUN);
+
+    // Re-validation needs to be done here because this code gets called after the automator attempts to start.
+    // This is a special case for Nameless because it's one of the only two cases where a command becomes locked
+    // again (the other being Pelle entry, which just force-stops the automator entirely).
+    AutomatorData.recalculateErrors();
+    if (AutomatorBackend.state.mode === AUTOMATOR_MODE.RUN && AutomatorData.currentErrors().length) {
+      AutomatorBackend.stop();
+      GameUI.notify.error("This Reality forbids Black Holes! (Automator stopped)");
+    }
+
+    this.quotes.startRun.show();
   },
   get isRunning() {
     return player.celestials.enslaved.run;
   },
   completeRun() {
     player.celestials.enslaved.completed = true;
-    this.quotes.show(this.quotes.COMPLETE_REALITY);
+    this.quotes.completeReality.show();
   },
   get isCompleted() {
     return player.celestials.enslaved.completed;
@@ -154,6 +175,9 @@ export const Enslaved = {
     return Math.max(baseRealityBoostRatio, Math.floor(player.celestials.enslaved.storedReal /
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
   },
+  get canAmplify() {
+    return this.realityBoostRatio > 1 && !Pelle.isDoomed && !isInCelestialReality();
+  },
   storedTimeInsideEnslaved(stored) {
     if (stored <= 1e3) return stored;
     return Math.pow(10, Math.pow(Math.log10(stored / 1e3), 0.55)) * 1e3;
@@ -162,7 +186,8 @@ export const Enslaved = {
     if (!this.feltEternity) {
       EnslavedProgress.feelEternity.giveProgress();
       this.feltEternity = true;
-      Modal.message.show("Time in Eternity will be scaled by number of Eternities");
+      Modal.message.show(`Time in this Eternity will be multiplied by number of Eternities,
+        up to a maximum of ${formatX(1e66)}.`, { closeEvent: GAME_EVENT.REALITY_RESET_AFTER }, 1);
     }
   },
   get feltEternity() {
@@ -188,101 +213,45 @@ export const Enslaved = {
     }
     return true;
   },
-  quotes: new CelestialQuotes("enslaved", {
-    INITIAL: {
-      id: 1,
-      lines: [
-        "A visitor? I have not had one... eons.",
-        "I... had a name. It has been lost... to this place.",
-        "The others... will not let me rest. I do their work with time...",
-        "Place time... into places... that need it...",
-        "Watch myself grow... pass and die.",
-        "Perhaps you... will break these chains... I will wait.",
-      ]
-    },
-    UNLOCK_RUN: {
-      id: 2,
-      lines: [
-        "The others... used me. They will use... or destroy you.",
-        "End my suffering... power will be yours...",
-      ]
-    },
-    START_RUN: {
-      id: 3,
-      lines: [
-        "So little space... but no... prison... is perfect.",
-        "They squeezed... this Reality... too tightly. Cracks appeared.",
-        "Search... everywhere. I will help... where I can.",
-      ]
-    },
-    COMPLETE_REALITY: {
-      id: 4,
-      lines: [
-        "All... fragments... clones... freed.",
-        "I have given... tools... of my imprisoning. Use them...",
-        "Freedom from torture... is torture itself.",
-      ]
-    },
-    EC6C10: CelestialQuotes.singleLine(
-      5, "... did not... underestimate you..."
-    ),
-    HINT_UNLOCK: {
-      id: 6,
-      lines: [
-        "... you need... to look harder...",
-        "I think... I can help...",
-        "* You have unlocked help from The Enslaved Ones."
-      ]
-    },
-  }),
-  symbol: "<i class='fas fa-link'></i>"
+  quotes: Quotes.enslaved,
+  // Unicode f0c1.
+  symbol: "\uf0c1"
 };
 
-class EnslavedProgressState extends GameMechanicState {
-  constructor(config) {
-    super(config);
-    if (this.id < 0 || this.id > 31) throw new Error(`Id ${this.id} out of bit range`);
-  }
+class EnslavedProgressState extends BitUpgradeState {
+  get bits() { return player.celestials.enslaved.hintBits; }
+  set bits(value) { player.celestials.enslaved.hintBits = value; }
 
   get hasProgress() {
-    // eslint-disable-next-line no-bitwise
     return Boolean(player.celestials.enslaved.progressBits & (1 << this.id));
   }
 
   get hasHint() {
-    // eslint-disable-next-line no-bitwise
-    return this.hasProgress || Boolean(player.celestials.enslaved.hintBits & (1 << this.id));
+    return this.hasProgress || this.isUnlocked;
+  }
+
+  get hintInfo() {
+    return this.config.hint;
+  }
+
+  get completedInfo() {
+    return typeof this.config.condition === "function" ? this.config.condition() : this.config.condition;
   }
 
   giveProgress() {
     // Bump the last hint time appropriately if the player found the hint
     if (this.hasHint && !this.hasProgress) {
       player.celestials.enslaved.zeroHintTime -= Math.log(2) / Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds;
-      GameUI.notify.success("You found a crack in The Enslaved Ones' Reality!");
+      GameUI.notify.success("You found a crack in The Nameless Ones' Reality!", 10000);
     }
-    // eslint-disable-next-line no-bitwise
     player.celestials.enslaved.progressBits |= (1 << this.id);
-  }
-
-  giveHint() {
-    // eslint-disable-next-line no-bitwise
-    player.celestials.enslaved.hintBits |= (1 << this.id);
   }
 }
 
-export const EnslavedProgress = (function() {
-  const db = GameDatabase.celestials.enslaved.progress;
-  return {
-    hintsUnlocked: new EnslavedProgressState(db.hintsUnlocked),
-    ec1: new EnslavedProgressState(db.ec1),
-    feelEternity: new EnslavedProgressState(db.feelEternity),
-    ec6: new EnslavedProgressState(db.ec6),
-    c10: new EnslavedProgressState(db.c10),
-    secretStudy: new EnslavedProgressState(db.secretStudy),
-    storedTime: new EnslavedProgressState(db.storedTime),
-    challengeCombo: new EnslavedProgressState(db.challengeCombo),
-  };
-}());
+export const EnslavedProgress = mapGameDataToObject(
+  GameDatabase.celestials.enslaved.progress,
+  config => new EnslavedProgressState(config)
+);
 
 export const Tesseracts = {
   get bought() {
@@ -299,6 +268,7 @@ export const Tesseracts = {
 
   buyTesseract() {
     if (!this.canBuyTesseract) return;
+    if (GameEnd.creditsEverClosed) return;
     player.celestials.enslaved.tesseracts++;
   },
 
@@ -335,5 +305,5 @@ export const Tesseracts = {
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if (Tab.celestials.enslaved.isOpen) Enslaved.quotes.show(Enslaved.quotes.INITIAL);
+  if (Tab.celestials.enslaved.isOpen) Enslaved.quotes.initial.show();
 });

@@ -1,14 +1,12 @@
 <script>
 import DilationButton from "./DilationButton";
 import DilationUpgradeButton from "./DilationUpgradeButton";
-import TachyonParticles from "./TachyonParticles";
 
 export default {
   name: "TimeDilationTab",
   components: {
     DilationButton,
-    DilationUpgradeButton,
-    TachyonParticles
+    DilationUpgradeButton
   },
   data() {
     return {
@@ -17,7 +15,6 @@ export default {
       dilatedTimeIncome: new Decimal(),
       galaxyThreshold: new Decimal(),
       galaxies: 0,
-      animateTachyons: true,
       tachyonGalaxyGain: 1,
       hasPelleDilationUpgrades: false
     };
@@ -72,7 +69,7 @@ export default {
       this.tachyons.copyFrom(Currency.tachyonParticles);
       this.dilatedTime.copyFrom(Currency.dilatedTime);
       const rawDTGain = getDilationGainPerSecond().times(getGameSpeedupForDisplay());
-      if (PelleRifts.death.isActive) {
+      if (PelleRifts.paradox.isActive) {
         // The number can be small and either positive or negative with the rift active, which means that extra care
         // needs to be taken to get the calculation as close to correct as possible. This relies on some details
         // related to tick microstructure to make things accurate, and it seems to be to roughly 1 part in 5e6
@@ -85,13 +82,13 @@ export default {
       }
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
       this.galaxies = player.dilation.totalTachyonGalaxies;
-      this.animateTachyons = player.options.animations.tachyonParticles;
-      this.hasPelleDilationUpgrades = PelleRifts.death.milestones[0].canBeApplied;
+      this.hasPelleDilationUpgrades = PelleRifts.paradox.milestones[0].canBeApplied;
       if (this.galaxies < 1000 && DilationUpgrade.doubleGalaxies.isBought) {
         this.tachyonGalaxyGain = DilationUpgrade.doubleGalaxies.effectValue;
       } else {
         this.tachyonGalaxyGain = 1;
       }
+      this.tachyonGalaxyGain *= DilationUpgrade.galaxyMultiplier.effectValue;
     }
   }
 };
@@ -112,8 +109,8 @@ export default {
       <span class="c-dilation-tab__dilated-time-income">{{ dilatedTimeGainText }}/s</span>
     </span>
     <span>
-      Next <span v-if="tachyonGalaxyGain === 2"> pair of </span>
-      <span v-else-if="tachyonGalaxyGain > 1">{{ formatInt(tachyonGalaxyGain) }}</span>
+      Next
+      <span v-if="tachyonGalaxyGain > 1">{{ formatInt(tachyonGalaxyGain) }}</span>
       {{ pluralize("Tachyon Galaxy", tachyonGalaxyGain) }} at
       <span class="c-dilation-tab__galaxy-threshold">{{ format(galaxyThreshold, 2, 1) }}</span>
       Dilated Time, gained total of
@@ -172,7 +169,6 @@ export default {
         />
       </div>
     </div>
-    <TachyonParticles v-if="animateTachyons" />
   </div>
 </template>
 

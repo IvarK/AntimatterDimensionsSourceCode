@@ -1,4 +1,14 @@
-import { GameMechanicState } from "../game-mechanics/index.js";
+import { GameMechanicState } from "../game-mechanics/index";
+
+function showSecondPreferredWarning(currTree) {
+  const canPickSecond = currTree.allowedDimPathCount === 2 && currTree.currDimPathCount < 2;
+  // Show a warning if the player can choose the second preferred dimension path and hasn't yet done so.
+  if (canPickSecond && TimeStudy.preferredPaths.dimension.path.length < 2) {
+    GameUI.notify.error("You haven't selected a second preferred Dimension path.");
+    return true;
+  }
+  return false;
+}
 
 // This is only ever called from manual player actions, which means we can immediately commit them to the game state
 // eslint-disable-next-line complexity
@@ -24,8 +34,7 @@ export function buyStudiesUntil(id, ec = -1) {
 
   // Priority for behavior when buying in the Dimension split; we follow only the first applicable entry below:
   // - If we're buying a study within the split, we first buy just the requested path up to the requested study.
-  //   If we still have additional available paths at this point, we also buy others in order specified first by the
-  //   player's chosen priority and then numerically (stops buying)
+  //   (stops buying)
   // - If we want to buy EC11 or EC12 we only buy the required dimension path unless we have the EC requirement perk
   //   (continues onward)
   // - If we can't buy any additional paths or have 3 paths available, we attempt to buy everything here, prioritizing
@@ -33,15 +42,9 @@ export function buyStudiesUntil(id, ec = -1) {
   //   (continues onward)
   // - If the player has a preferred path, we attempt to buy it (continues onward)
   // - If the player doesn't have a preferred path, we say so and do nothing (stops buying)
+  // - Otherwise we do nothing (stops buying)
   if (id < 111) {
     studyArray.push(...NormalTimeStudies.paths[requestedPath].filter(s => (s <= id)));
-    // The purchasing logic is doing the heavy lifting here; studies can't be double-bought, nor can they be bought
-    // if we don't have another available path
-    const pathBuyOrder = TimeStudy.preferredPaths.dimension.path
-      .concat([TIME_STUDY_PATH.ANTIMATTER_DIM, TIME_STUDY_PATH.INFINITY_DIM, TIME_STUDY_PATH.TIME_DIM]);
-    for (const path of pathBuyOrder) {
-      studyArray.push(...NormalTimeStudies.paths[path].filter(s => s <= lastInPrevRow));
-    }
     return studyArray;
   }
 
@@ -54,13 +57,16 @@ export function buyStudiesUntil(id, ec = -1) {
     studyArray.push(...range(71, 103));
   } else if (TimeStudy.preferredPaths.dimension.path.length > 0) {
     studyArray.push(...TimeStudy.preferredPaths.dimension.studies);
-  } else {
+  } else if (currTree.currDimPathCount === 0) {
     GameUI.notify.error("You haven't selected a preferred Dimension path.");
     return studyArray;
   }
 
   // Explicitly purchase 111 here if it's included and stop if applicable, as it isn't covered by logic in either split.
   if (id >= 111) studyArray.push(111);
+
+  const secondPreferredWarningShown = showSecondPreferredWarning(currTree);
+
   if (id < 121) return studyArray;
 
   // Priority for behavior when buying in the Pace split; we follow only the first applicable entry below. In contrast
@@ -105,13 +111,16 @@ export function buyStudiesUntil(id, ec = -1) {
     TimeStudyTree.commitToGameState(studyArray);
     studyArray = [];
 
-    // Buy the second preferred dimension path if we have one, otherwise show a warning if
-    // the player can choose the second preferred dimension path and hasn't yet done so.
-    if (TimeStudy.preferredPaths.dimension.path.length > 1) {
-      studyArray.push(...TimeStudy.preferredPaths.dimension.studies.filter(s => (s <= id)));
-    } else if (GameCache.currentStudyTree.value.allowedDimPathCount === 2) {
-      GameUI.notify.error("You haven't selected a second preferred Dimension path.");
+    // Buy the second preferred dimension path if we have one
+    if (TimeStudy.preferredPaths.dimension.path.length > 0) {
+      studyArray.push(...TimeStudy.preferredPaths.dimension.studies);
+      // We need to commit the dimension paths to the game state in order
+      // to know if we should display the second preferred path warning.
+      TimeStudyTree.commitToGameState(studyArray);
+      studyArray = [];
     }
+
+    if (!secondPreferredWarningShown) showSecondPreferredWarning(GameCache.currentStudyTree.value);
 
     studyArray.push(...range(211, Math.min(lastInPrevRow, 214)));
 
@@ -130,9 +139,6 @@ export function buyStudiesUntil(id, ec = -1) {
 export function respecTimeStudies(auto) {
   for (const study of TimeStudy.boughtNormalTS()) {
     study.refund();
-  }
-  if (player.timestudy.studies.length === 0) {
-    SecretAchievement(34).unlock();
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
@@ -160,7 +166,7 @@ export class TimeStudyState extends GameMechanicState {
 
   get STCost() {
     const base = this.config.STCost;
-    return V.has(V_UNLOCKS.RA_UNLOCK)
+    return VUnlocks.raUnlock.canBeApplied
       ? base - 2
       : base;
   }

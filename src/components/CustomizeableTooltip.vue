@@ -36,7 +36,12 @@ export default {
       default: ""
     },
     contentClass: {
-      type: String,
+      type: [Object, String],
+      required: false,
+      default: ""
+    },
+    tooltipClass: {
+      type: [Object, String],
       required: false,
       default: ""
     },
@@ -53,7 +58,8 @@ export default {
   data() {
     return {
       hovering: false,
-      mainContent: null
+      mainContent: null,
+      isDarkTheme: false
     };
   },
   computed: {
@@ -88,9 +94,39 @@ export default {
     },
     showTooltip() {
       return this.show || this.hovering;
+    },
+    // Manual light-dark differentiation instead of just slapping on a .s-base--dark .c-tooltip is needed
+    // to minimise specificity to make the custom class specify more styles
+    tooltipContentLightDarkClass() {
+      return this.isDarkTheme ? "c-tooltip-content--dark" : "";
+    },
+    tooltipArrowLightDarkClass() {
+      return this.isDarkTheme ? "c-tooltip-arrow--dark" : "";
+    },
+    tooltipInternalClass() {
+      return {
+        "c-tooltip-show": this.showTooltip,
+        [this.tooltipType]: true
+      };
+    },
+    tooltipContentClass() {
+      return [
+        this.tooltipInternalClass,
+        this.tooltipClass,
+        this.tooltipContentLightDarkClass
+      ];
+    },
+    tooltipArrowClass() {
+      return [
+        this.tooltipInternalClass,
+        this.tooltipArrowLightDarkClass
+      ];
     }
   },
   methods: {
+    update() {
+      this.isDarkTheme = Theme.current().isDark();
+    },
     showNegativeSign(axis) {
       if (axis === "X") {
         return this.left ? "-" : "";
@@ -114,14 +150,14 @@ export default {
     </div>
     <div
       class="c-tooltip-content"
-      :class=" {'c-tooltip-show': showTooltip, [tooltipType]: true } "
+      :class="tooltipContentClass"
       :style="[tooltipContentStyle, positionStyle, { transform: tooltipTransform }]"
     >
       <slot name="tooltipContent" />
     </div>
     <div
       class="c-tooltip-arrow"
-      :class=" {'c-tooltip-show': showTooltip, [tooltipType]: true } "
+      :class="tooltipArrowClass"
       :style="[tooltipArrowStyle, positionStyle, { transform: tooltipTransform }]"
     />
   </div>
@@ -137,86 +173,5 @@ export default {
   position: absolute;
 }
 
-.c-tooltip-content,
-.c-tooltip-arrow {
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.4s linear;
-  transition-property: opacity, visibility;
-}
-
-.c-tooltip-content {
-  position: absolute;
-  padding: 0.7rem;
-  width: 16rem;
-  border-radius: 0.3rem;
-  background-color: hsla(0, 0%, 5%, 0.9);
-  color: #fff;
-  content: attr(ach-tooltip);
-  text-align: center;
-  font-size: 1.4rem;
-  line-height: 1.2;
-  z-index: 4;
-}
-
-.t-dark-metro .c-tooltip-content {
-  border-radius: 0;
-}
-
-.c-tooltip-arrow {
-  position: absolute;
-  transform: translate(-50%, -100%);
-  width: 0;
-  border-top: 0.55rem solid transparent;
-  border-right: 0.55rem solid transparent;
-  border-bottom: 0.55rem solid transparent;
-  border-left: 0.55rem solid transparent;
-  content: " ";
-  font-size: 0;
-  line-height: 0;
-  transition-duration: 0.4s;
-  z-index: 4;
-}
-
-.c-tooltip--top.c-tooltip-content {
-  margin-top: -0.5rem;
-}
-
-.c-tooltip--top.c-tooltip-arrow {
-  border-top: 0.55rem solid hsla(0, 0%, 5%, 0.9);
-  border-bottom: 0;
-}
-
-.c-tooltip--bottom.c-tooltip-content {
-  margin-bottom: -0.5rem;
-}
-
-.c-tooltip--bottom.c-tooltip-arrow {
-  border-bottom: 0.55rem solid hsla(0, 0%, 5%, 0.9);
-  border-top: 0;
-}
-
-.c-tooltip--right.c-tooltip-content {
-  margin-right: -0.5rem;
-}
-
-.c-tooltip--right.c-tooltip-arrow {
-  border-right: 0.55rem solid hsla(0, 0%, 5%, 0.9);
-  border-left: 0;
-}
-
-.c-tooltip--left.c-tooltip-content {
-  margin-left: -0.5rem;
-}
-
-.c-tooltip--left.c-tooltip-arrow {
-  border-left: 0.55rem solid hsla(0, 0%, 5%, 0.9);
-  border-right: 0;
-}
-
-.c-tooltip-show {
-  visibility: visible;
-  opacity: 1;
-}
+/* c-tooltip-content styles in styles.css to make way for custom class colour styling */
 </style>

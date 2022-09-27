@@ -1,18 +1,26 @@
 <script>
-import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
-import StudyStringLine from "@/components/modals/StudyStringLine";
 import { sha512_256 } from "js-sha512";
+
+import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import PrimaryButton from "@/components/PrimaryButton";
+import StudyStringLine from "@/components/modals/StudyStringLine";
 
 export default {
   name: "StudyStringModal",
   components: {
     ModalWrapperChoice,
-    StudyStringLine
+    StudyStringLine,
+    PrimaryButton
   },
   props: {
-    modalConfig: {
-      type: Object,
+    id: {
+      type: Number,
       required: true,
+    },
+    deleting: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
   data() {
@@ -22,10 +30,9 @@ export default {
     };
   },
   computed: {
-    // This modal is used by both study importing and preset editing but only has a prop actually passed in when
-    // editing (which is the preset index). Needs to be an undefined check because index can be zero
+    // This modal is used by both study importing and preset editing, but is given an id of -1 when importing
     isImporting() {
-      return this.modalConfig.id === undefined;
+      return this.id === -1;
     },
     // This represents the state reached from importing into an empty tree
     importedTree() {
@@ -74,6 +81,7 @@ export default {
       };
     },
     modalTitle() {
+      if (this.deleting) return `Deleting Study Preset "${this.name}"`;
       return this.isImporting ? "Input your tree" : `Editing Study Preset "${this.name}"`;
     },
     invalidMessage() {
@@ -97,7 +105,7 @@ export default {
             break;
         }
       }
-      return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "")}`;
+      return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "").replaceAll(",", ", ")}`;
     },
     truncatedInput() {
       return TimeStudyTree.truncateInput(this.input);
@@ -112,13 +120,26 @@ export default {
       return TimeStudyTree.isValidImportString(this.truncatedInput);
     },
     inputIsSecret() {
-      return sha512_256(this.truncatedInput.toLowerCase()) ===
-        "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608";
+      // The button to open the modal and the actual modal itself display two different strings;
+      // we should allow either to unlock the secret achievement
+      const secretStrings = [
+        "08b819f253b684773e876df530f95dcb85d2fb052046fa16ec321c65f3330608",
+        "bb450c2a3869bae412ed0b4304dc229521fc69f0fdcc95b3b61460aaf5658fc4"
+      ];
+      return secretStrings.includes(sha512_256(this.input.toLowerCase()));
     },
+    treeInfoHeader() {
+      if (this.deleting) return "Study Preset contains";
+      return `Tree status after ${this.isImporting ? "importing" : "loading"}`;
+    },
+    confirmText() {
+      if (this.deleting) return "Delete";
+      return this.isImporting ? "Import" : "Save";
+    }
   },
   // Needs to be assigned in created() or else they will end up being undefined when importing
   created() {
-    const preset = player.timestudy.presets[this.modalConfig.id];
+    const preset = player.timestudy.presets[this.id];
     this.input = preset ? preset.studies : "";
     this.name = preset ? preset.name : "";
   },
@@ -127,8 +148,12 @@ export default {
   },
   methods: {
     confirm() {
-      if (this.isImporting) this.importTree();
+      if (this.deleting) this.deletePreset();
+      else if (this.isImporting) this.importTree();
       else this.savePreset();
+    },
+    convertInputShorthands() {
+      this.input = TimeStudyTree.formatStudyList(this.input);
     },
     importTree() {
       if (!this.inputIsValid) return;
@@ -136,14 +161,21 @@ export default {
       this.emitClose();
       // We need to use a combined tree for committing to the game state, or else it won't buy studies in the imported
       // tree are only reachable if the current tree is already bought
-      TimeStudyTree.commitToGameState(this.combinedTreeObject.purchasedStudies);
+      TimeStudyTree.commitToGameState(this.combinedTreeObject.purchasedStudies, false);
     },
     savePreset() {
       if (this.inputIsValid) {
-        player.timestudy.presets[this.modalConfig.id].studies = TimeStudyTree.formatStudyList(this.input);
+        player.timestudy.presets[this.id].studies = this.input;
         GameUI.notify.eternity(`Study Tree ${this.name} successfully edited.`);
         this.emitClose();
       }
+    },
+    deletePreset() {
+      const name = player.timestudy.presets[this.id].name;
+      const presetName = name ? `Study preset "${name}"` : "Study preset";
+      player.timestudy.presets[this.id].studies = "";
+      player.timestudy.presets[this.id].name = "";
+      GameUI.notify.eternity(`${presetName} deleted from slot ${this.id + 1}`);
     },
     studyString(study) {
       return study instanceof ECTimeStudyState ? `EC${study.id}` : `${study.id}`;
@@ -166,7 +198,10 @@ export default {
       ref="input"
       v-model="input"
       type="text"
+      maxlength="1500"
       class="c-modal-input c-modal-import-tree__input"
+      :class="{ 'l-delete-input' : deleting }"
+      :disabled="deleting"
       @keyup.enter="confirm"
       @keyup.esc="emitClose"
     >
@@ -190,7 +225,7 @@ export default {
           :into-empty="true"
         />
         <div v-if="treeStatus.firstPaths || treeStatus.ec > 0">
-          <b>Tree status after {{ isImporting ? "importing" : "loading" }}:</b>
+          <b>{{ treeInfoHeader }}:</b>
         </div>
         <div
           v-if="treeStatus.firstPaths"
@@ -215,8 +250,27 @@ export default {
         Not a valid tree
       </div>
     </div>
+    <div v-if="!isImporting && inputIsValidTree">
+      <br>
+      <PrimaryButton
+        v-if="!deleting"
+        ach-tooltip="This will format the study preset text, for example, changing 'a,b,c|d' to 'a, b, c | d'."
+        @click="convertInputShorthands"
+      >
+        Format Preset Text
+      </PrimaryButton>
+    </div>
     <template #confirm-text>
-      {{ isImporting ? "Import" : "Save" }}
+      {{ confirmText }}
     </template>
   </ModalWrapperChoice>
 </template>
+
+<style scoped>
+.l-delete-input {
+  color: var(--color-text);
+  background-color: var(--color-disabled);
+  pointer-events: none;
+  user-select: none;
+}
+</style>

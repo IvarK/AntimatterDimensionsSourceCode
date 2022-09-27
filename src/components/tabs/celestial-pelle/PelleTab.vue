@@ -1,8 +1,8 @@
 <script>
+import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
+import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
 import PelleBarPanel from "./PelleBarPanel";
 import PelleUpgradePanel from "./PelleUpgradePanel";
-import GalaxyGeneratorPanel from "./PelleGalaxyGeneratorPanel";
-import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 
 export default {
   name: "PelleTab",
@@ -17,6 +17,7 @@ export default {
       isDoomed: false,
       canEnterPelle: false,
       completedRows: 0,
+      cappedResources: 0,
       hasStrike: false,
       hasGalaxyGenerator: false
     };
@@ -24,17 +25,25 @@ export default {
   computed: {
     symbol() {
       return Pelle.symbol;
+    },
+    totalRows() {
+      return Achievements.prePelleRows.length;
+    },
+    totalAlchemyResources() {
+      return AlchemyResources.all.length;
     }
   },
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;
       if (!this.isDoomed) {
-        this.canEnterPelle = Achievements.prePelle.every(a => a.isUnlocked);
         this.completedRows = Achievements.prePelleRows.countWhere(r => r.every(a => a.isUnlocked));
+        this.cappedResources = AlchemyResources.all.countWhere(r => r.capped);
+        this.canEnterPelle = this.completedRows === this.totalRows &&
+          this.cappedResources === this.totalAlchemyResources;
       }
       this.hasStrike = PelleStrikes.all.some(s => s.hasStrike);
-      this.hasGalaxyGenerator = PelleRifts.war.milestones[2].canBeApplied || GalaxyGenerator.spentGalaxies > 0;
+      this.hasGalaxyGenerator = PelleRifts.recursion.milestones[2].canBeApplied || GalaxyGenerator.spentGalaxies > 0;
     },
     toggleBought() {
       Pelle.cel.showBought = !Pelle.cel.showBought;
@@ -56,12 +65,7 @@ export default {
       v-if="isDoomed"
       class="l-pelle-all-content-container"
     >
-      <CelestialQuoteHistory
-        celestial="pelle"
-        :visible-lines="4"
-        font-size="1.6rem"
-        line-height="2.56rem"
-      />
+      <CelestialQuoteHistory celestial="pelle" />
       <div class="button-container">
         <button
           class="o-pelle-button"
@@ -89,9 +93,13 @@ export default {
       v-else
       class="pelle-unlock-requirements"
     >
-      You must have 17 rows of achievements to unlock Doomed.
+      You must have {{ formatInt(totalRows) }} rows of achievements
+      and all of your Glyph Alchemy resources capped to unlock Pelle.
       <br>
-      {{ completedRows }} / 17
+      <br>
+      {{ formatInt(completedRows) }} / {{ formatInt(totalRows) }} Achievement rows
+      <br>
+      {{ formatInt(cappedResources) }} / {{ formatInt(totalAlchemyResources) }} Capped resources
     </div>
   </div>
 </template>
@@ -106,21 +114,20 @@ export default {
 .l-pelle-all-content-container {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   width: 100%;
+  align-items: center;
 }
 
 .o-pelle-button {
-  background: var(--color-prestige--accent);
-  color: var(--color-text);
-  border: 0.1rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
-  padding: 1rem;
   font-family: Typewriter;
-  margin: 0 1rem;
+  color: var(--color-text);
+  background: var(--color-text-inverted);
+  border: 0.1rem solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
   margin-bottom: 1rem;
-  cursor: pointer;
+  padding: 1rem;
   transition-duration: 0.12s;
+  cursor: pointer;
 }
 
 .o-pelle-button:hover {
@@ -129,36 +136,37 @@ export default {
 
 .o-pelle-quotes-button {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-pelle--base);
-  font-size: 5rem;
-  height: 7rem;
   width: 7rem;
+  height: 7rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
   font-weight: 900;
+  color: var(--color-pelle--base);
 }
 
 .pelle-unlock-requirements {
+  width: 50rem;
+  padding: 0.5rem;
   font-size: 3rem;
-  background: black;
   color: var(--color-pelle--base);
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
-  width: 40rem;
+  background: black;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .pelle-doom-button {
-  font-family: Typewriter;
-  padding: 1rem;
-  background: black;
-  color: var(--color-pelle--base);
-  font-size: 3rem;
-  border: 0.2rem solid var(--color-pelle--base);
-  border-radius: 0.5rem;
   width: 20rem;
-  cursor: pointer;
-  transition-duration: 0.4s;
   align-self: center;
+  font-family: Typewriter;
+  font-size: 3rem;
+  color: var(--color-pelle--base);
+  background: black;
+  border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
+  border-radius: var(--var-border-radius, 0.5rem);
+  padding: 1rem;
+  transition-duration: 0.4s;
+  cursor: pointer;
 }
 
 .pelle-doom-button:hover {
@@ -166,44 +174,32 @@ export default {
 }
 
 .pelle-icon-container {
-  background: white;
-  border-radius: 50%;
-  height: 15rem;
-  width: 15rem;
-  margin: auto;
-  margin-top: 3rem;
   display: flex;
+  width: 15rem;
+  height: 15rem;
   justify-content: center;
   align-items: center;
-  border: 0.4rem solid var(--color-pelle--base);
   font-size: 10rem;
-  transition-duration: 0.4s;
   text-shadow: 0 0 1.5rem #9b0101;
+  background: white;
+  border: var(--var-border-width, 0.4rem) solid var(--color-pelle--base);
+  border-radius: 50%;
   box-shadow: 0 0 1.5rem #9b0101;
+  margin: auto;
+  margin-top: 3rem;
+  transition-duration: 0.4s;
 }
 
 .pelle-doom-button:hover .pelle-icon-container {
-  background: black;
   color: var(--color-pelle--base);
+  background: black;
 }
 
-@keyframes roll {
-  100% { transform: rotateY(360deg) }
+@keyframes a-roll {
+  100% { transform: rotateY(360deg); }
 }
 
 .pelle-icon {
-  animation: roll infinite 8s linear;
-}
-
-.o-celestial-quote-history {
-  align-self: center;
-}
-
-.s-base--metro .l-pelle-panel-container {
-  border-radius: 0;
-}
-
-.s-base--metro .o-pelle-button {
-  border-radius: 0;
+  animation: a-roll infinite 8s linear;
 }
 </style>

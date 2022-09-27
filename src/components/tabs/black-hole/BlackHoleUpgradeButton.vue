@@ -1,8 +1,8 @@
 <script>
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+import CostDisplay from "@/components/CostDisplay";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
-import CostDisplay from "@/components/CostDisplay";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "BlackHoleUpgradeButton",
@@ -57,8 +57,9 @@ export default {
       this.isCapped = this.config.upgrade.value === 0;
       this.isAffordable = this.config.upgrade.isAffordable && !this.isCapped;
       const hasAutobuyer = this.config.upgrade.hasAutobuyer;
-      this.isAutoUnlocked = hasAutobuyer && Ra.has(RA_UNLOCKS.AUTO_BLACK_HOLE_POWER);
-      this.isAutobuyerOn = hasAutobuyer && Autobuyer.blackHolePower(this.config.upgrade.id).isActive;
+      const autobuyer = Autobuyer.blackHolePower(this.config.upgrade.id);
+      this.isAutoUnlocked = hasAutobuyer && autobuyer.isUnlocked;
+      this.isAutobuyerOn = hasAutobuyer && autobuyer.isActive;
     }
   }
 };

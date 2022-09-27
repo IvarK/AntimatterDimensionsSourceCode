@@ -1,10 +1,12 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
+import HeaderTickspeedRowClassic from "../../ui-modes/HeaderTickspeedRowClassic";
+
+import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import AntimatterDimensionRow from "./ClassicAntimatterDimensionRow";
 import AntimatterDimensionsTabHeader from "./ClassicAntimatterDimensionsTabHeader";
 import AntimatterGalaxyRow from "./ClassicAntimatterGalaxyRow";
-import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import DimensionBoostRow from "./ClassicDimensionBoostRow";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "ClassicAntimatterDimensionsTab",
@@ -14,53 +16,32 @@ export default {
     AntimatterDimensionsTabHeader,
     AntimatterGalaxyRow,
     DimensionBoostRow,
-    AntimatterDimensionProgressBar
+    AntimatterDimensionProgressBar,
+    HeaderTickspeedRowClassic,
   },
   data() {
     return {
-      isInMatterChallenge: false,
-      matter: new Decimal(0),
       hasDimensionBoosts: false,
-      isChallengePowerVisible: false,
-      challengePower: "",
       isQuickResetAvailable: false,
       isSacrificeUnlocked: false,
       buy10Mult: new Decimal(0),
       currentSacrifice: new Decimal(0),
-      multiplierText: "",
+      hasRealityButton: false,
+      multiplierText: ""
     };
   },
   methods: {
     update() {
-      this.isInMatterChallenge = Player.isInMatterChallenge;
-      if (this.isInMatterChallenge) {
-        this.matter.copyFrom(Currency.matter);
-      }
       this.hasDimensionBoosts = player.dimensionBoosts > 0;
-      const isC2Running = NormalChallenge(2).isRunning;
-      const isC3Running = NormalChallenge(3).isRunning;
-      const isIC6Running = InfinityChallenge(6).isRunning;
-      const isIC8Running = InfinityChallenge(8).isRunning;
-      const isChallengePowerVisible = isC2Running || isC3Running || isIC6Running || isIC8Running;
-      this.isChallengePowerVisible = isChallengePowerVisible;
-      if (isChallengePowerVisible) {
-        const powerArray = [];
-        if (isC2Running) powerArray.push(`Production: ${formatPercents(player.chall2Pow, 2, 2)}`);
-        if (isC3Running) powerArray.push(`First dimension: ${formatX(player.chall3Pow, 3, 4)}`);
-        if (isIC6Running) powerArray.push(`Matter: /
-          ${format(new Decimal(1).timesEffectOf(InfinityChallenge(6)), 2, 2)}`);
-        if (isIC8Running) powerArray.push(`Production: /
-          ${format(new Decimal(1).timesEffectOf(InfinityChallenge(8)).reciprocal(), 2, 2)}`);
-        this.challengePower = powerArray.join(", ");
-      }
       this.isQuickResetAvailable = Player.isInAntimatterChallenge && Player.antimatterChallenge.isQuickResettable;
       this.isSacrificeUnlocked = Sacrifice.isVisible;
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
-
-      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
-      if (this.isSacrificeUnlocked) this.multiplierText +=
-        ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`;
+      this.hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
+      const sacText = this.isSacrificeUnlocked
+        ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
+        : "";
+      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}${sacText}`;
     },
     quickReset() {
       softReset(-1, true, true);
@@ -73,8 +54,10 @@ export default {
   <div class="l-old-ui-antimatter-dim-tab">
     <span>{{ multiplierText }}</span>
     <AntimatterDimensionsTabHeader />
-    <span v-if="isInMatterChallenge">There is {{ format(matter, 2, 1) }} matter.</span>
-    <span v-if="isChallengePowerVisible">{{ challengePower }}</span>
+    <HeaderTickspeedRowClassic
+      v-if="hasRealityButton"
+      :in-header="false"
+    />
     <div class="l-dimensions-container">
       <AntimatterDimensionRow
         v-for="tier in 8"

@@ -1,11 +1,10 @@
-#ui-container {
-  background: url('../images/s1-bg.svg') no-repeat;
-  background-size: contain;
+html {
   align-content: center;
-  background-size: 100%;
+  background: url("../images/s1-bg.svg") no-repeat;
+  background-attachment: fixed;
   background-color: #d72621;
-  background-attachment:fixed;
-  background-position:center bottom;
+  background-position: center bottom;
+  background-size: 100%;
 }
 
 body.t-s1 {
@@ -38,26 +37,26 @@ body.t-s1 {
 
 #snow {
   display: block !important;
-  background-image: url('../images/snow1.png'), url('../images/snow2.png'), url('../images/snow3.png');
-  height: 100%;
   width: 100%;
-  left: 0;
+  height: 100%;
+  position: fixed;
   top: 0;
-	position: fixed;
+  left: 0;
   z-index: 0;
   opacity: 1;
+  background-image: url("../images/snow1.png"), url("../images/snow2.png"), url("../images/snow3.png");
+  animation: a-snow 10s linear infinite, a-snow-fade 10s cubic-bezier(0, 0.3, 1, 0.7) infinite;
   pointer-events: none;
-  animation: snow 10s linear infinite, snowFade 10s cubic-bezier(0,0.3,1,0.7) infinite;
 }
 
-@keyframes snow {
-  0% {background-position: 0 0, 0 0, 0 0;}
-  50% {background-position: 500px 500px, 100px 200px, -100px 150px;}
-  100% {background-position: 1000px 1000px, 200px 400px, -200px 300px;}
+@keyframes a-snow {
+  0% { background-position: 0 0, 0 0, 0 0; }
+  50% { background-position: 500px 500px, 100px 200px, -100px 150px; }
+  100% { background-position: 1000px 1000px, 200px 400px, -200px 300px; }
 }
 
-@keyframes snowFade {
-  0% {opacity: 0;}
-  50% {opacity: 1;}
-  100% {opacity: 0;}
+@keyframes a-snow-fade {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
 }

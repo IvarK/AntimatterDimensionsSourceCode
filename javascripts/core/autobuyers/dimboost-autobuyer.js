@@ -1,4 +1,4 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
 
 Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
@@ -11,6 +11,10 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
 
   get isUnlocked() {
     if (Pelle.isDisabled("dimBoostAutobuyer")) return false;
+    return this.canBeUpgraded;
+  }
+
+  get canBeUpgraded() {
     return NormalChallenge(10).isCompleted;
   }
 

@@ -1,6 +1,6 @@
 <script>
-import ToggleButton from "@/components/ToggleButton";
 import SliderComponent from "@/components/SliderComponent";
+import ToggleButton from "@/components/ToggleButton";
 
 export default {
   name: "GlyphLevelsAndWeights",
@@ -10,17 +10,14 @@ export default {
   },
   data() {
     return {
-      adjustVisible: false,
-      eternityVisible: false,
       perkShopVisible: false,
       penaltyVisible: false,
       rowVisible: false,
       achievementVisible: false,
-      shardVisible: false,
-      singularityVisible: false,
       showAutoAdjustWeights: false,
       isAutoAdjustWeightsOn: false,
       factors: getGlyphLevelInputs(),
+      shardsGained: 0,
       weights: Object.assign({}, player.celestials.effarig.glyphWeights),
       rows: 3,
     };
@@ -48,7 +45,7 @@ export default {
         min: 0,
         max: 100,
         interval: 1,
-        show: true,
+        disabled: this.isAutoAdjustWeightsOn,
         "dot-width": "2.2rem",
         "dot-height": "1.6rem",
         width: "13.5rem",
@@ -57,8 +54,7 @@ export default {
         "plus-minus-buttons": true,
         "dot-class": "c-glyph-levels-and-weights__slider-handle",
         "bg-class": "c-glyph-levels-and-weights__slider-bg",
-        "process-class": "c-glyph-levels-and-weights__slider-process",
-        direction: "horizontal",
+        "process-class": "c-glyph-levels-and-weights__slider-process"
       };
     },
     totalWeights() {
@@ -76,8 +72,21 @@ export default {
       if (this.achievementVisible) rows.push("achievements");
       rows.push("level");
       rows.push("info");
+      rows.push("info2");
       return rows;
     },
+    adjustVisible() {
+      return EffarigUnlock.adjuster.isUnlocked;
+    },
+    eternityVisible() {
+      return RealityUpgrade(18).isBought;
+    },
+    shardVisible() {
+      return Ra.unlocks.relicShardGlyphLevelBoost.canBeApplied && this.shardsGained !== 0;
+    },
+    singularityVisible() {
+      return SingularityMilestone.glyphLevelFromSingularities.canBeApplied;
+    }
   },
   watch: {
     isAutoAdjustWeightsOn(newValue) {
@@ -105,17 +114,13 @@ export default {
   },
   methods: {
     update() {
-      if (this.glyphWeightFields === undefined) {
+      if (this.glyphWeightFields === undefined || this.$parent.state.name === "CLOSED") {
         return;
       }
-      this.adjustVisible = EffarigUnlock.adjuster.isUnlocked;
-      this.eternityVisible = RealityUpgrade(18).isBought;
       const glyphFactors = getGlyphLevelInputs();
       this.perkShopVisible = glyphFactors.perkShop !== 1;
       this.rowVisible = glyphFactors.rowFactor > 0;
       this.achievementVisible = glyphFactors.achievementFactor > 0;
-      this.shardVisible = Ra.has(RA_UNLOCKS.SHARD_LEVEL_BOOST) && Effarig.shardsGained !== 0;
-      this.singularityVisible = SingularityMilestone.glyphLevelFromSingularities.isUnlocked;
       if (glyphFactors.scalePenalty !== 1) {
         this.penaltyVisible = true;
         this.lastInstability = Date.now();
@@ -128,6 +133,7 @@ export default {
         this.rows = 6;
       }
       this.factors = glyphFactors;
+      this.shardsGained = Effarig.shardsGained;
       let same = true;
       this.glyphWeightFields.forEach(e => {
         if (this.weights[e] !== player.celestials.effarig.glyphWeights[e]) same = false;
@@ -163,6 +169,12 @@ export default {
       return {
         "grid-row": r,
         "-ms-grid-row": r,
+      };
+    },
+    resetWeightsButtonClass() {
+      return {
+        "c-glyph-levels-and-weights__reset-btn": true,
+        "c-glyph-levels-and-weights__reset-btn-clickable": !this.isAutoAdjustWeightsOn
       };
     },
     resetWeights() {
@@ -471,7 +483,13 @@ function roundPreservingSum(data) {
       :style="rowStyle('info')"
       class="l-glyph-levels-and-weights__factor l-glyph-level-and-weights-note"
     >
-      Note: All resources here are log10 of their actual values
+      Note: All resources here are log10 of their actual values.
+    </div>
+    <div
+      :style="rowStyle('info2')"
+      class="l-glyph-levels-and-weights__factor l-glyph-level-and-weights-note"
+    >
+      Replicanti and DT use their highest values this Reality.
     </div>
     <template v-if="adjustVisible">
       <div
@@ -482,7 +500,7 @@ function roundPreservingSum(data) {
         Adjust weights
         <div class="l-glyph-levels-and-weights__reset-btn-outer">
           <div
-            class="c-glyph-levels-and-weights__reset-btn"
+            :class="resetWeightsButtonClass()"
             @click="resetWeights"
           >
             Reset
@@ -547,7 +565,6 @@ function roundPreservingSum(data) {
 
 <style scoped>
 .l-glyph-level-and-weights-note {
-  grid-column-start: 1;
-  grid-column-end: 5;
+  grid-column: 1 / 5;
 }
 </style>

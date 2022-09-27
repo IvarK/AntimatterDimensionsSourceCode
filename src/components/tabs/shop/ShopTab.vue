@@ -1,15 +1,29 @@
 <script>
+import "vue-loading-overlay/dist/vue-loading.css";
+
+import Loading from "vue-loading-overlay";
+
+import Payments from "../../../../javascripts/core/payments";
+
+import PrimaryButton from "@/components/PrimaryButton";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
+
 import ShopButton from "./ShopButton";
 
 export default {
   name: "ShopTab",
   components: {
-    ShopButton
+    ShopButton,
+    Loading,
+    PrimaryButton,
+    PrimaryToggleButton
   },
   data() {
     return {
       STD: 0,
-      kongEnabled: false,
+      isLoading: false,
+      IAPsDisabled: false,
+      creditsClosed: false,
     };
   },
   computed: {
@@ -20,21 +34,31 @@ export default {
       return steamOn ? "Buy More" : "Play Online on Steam to buy STDs";
     }
   },
+  watch: {
+    IAPsDisabled(newValue) {
+      player.IAP.disabled = newValue;
+    }
+  },
   methods: {
     update() {
       this.STD = player.IAP.totalSTD - player.IAP.spentSTD;
-      this.kongEnabled = kong.enabled;
+      this.isLoading = Boolean(player.IAP.checkoutSession.id);
+      this.IAPsDisabled = player.IAP.disabled;
+      this.creditsClosed = GameEnd.creditsEverClosed;
     },
     showStore() {
       if (!steamOn) return;
+      if (this.creditsClosed) return;
+      SecretAchievement(33).unlock();
       Modal.shop.show();
     },
-    buyTimeSkip() {
-      kong.purchaseTimeSkip(10);
+    onCancel() {
+      Payments.cancelPurchase();
     },
-    buyLongerTimeSkip() {
-      kong.purchaseLongerTimeSkip(20);
-    },
+    respec() {
+      if (this.creditsClosed) return;
+      ShopPurchase.respecRequest();
+    }
   },
 };
 </script>
@@ -43,7 +67,22 @@ export default {
   <div class="tab shop">
     <div class="c-shop-disclaimer">
       Disclaimer: These are not required to progress in the game, they are just for supporting the developer.
-      The game is balanced without the use of any microtranactions.
+      The game is balanced without the use of any microtransactions.
+    </div>
+    <div class="c-subtab-option-container">
+      <PrimaryToggleButton
+        v-model="IAPsDisabled"
+        class="o-primary-btn--subtab-option"
+        :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+        label="Disable in-app-purchases:"
+      />
+      <PrimaryButton
+        class="o-primary-btn--subtab-option"
+        :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+        @click="respec()"
+      >
+        Respec Shop
+      </PrimaryButton>
     </div>
     <div class="c-shop-header">
       <span>You have {{ STD }}</span>
@@ -63,38 +102,15 @@ export default {
         v-for="purchase in purchases"
         :key="purchase.key"
         :purchase="purchase"
+        :iap-disabled="IAPsDisabled"
       />
-      <div class="l-shop-buttons-container">
-        <div class="o-shop-button-description">
-          Get 6 hours worth of offline production. (Autobuyers don't work full speed)
-        </div>
-        <button
-          class="o-shop-button-button"
-          @click="buyTimeSkip()"
-        >
-          Cost: 10
-          <img
-            src="images/std_coin.png"
-            class="c-shop-header__img"
-          >
-        </button>
-      </div>
-      <div class="l-shop-buttons-container">
-        <div class="o-shop-button-description">
-          Get 24 hours worth of offline production. (Autobuyers don't work full speed)
-        </div>
-        <button
-          class="o-shop-button-button"
-          @click="buyLongerTimeSkip()"
-        >
-          Cost: 20
-          <img
-            src="images/std_coin.png"
-            class="c-shop-header__img"
-          >
-        </button>
-      </div>
     </div>
+    <loading
+      :active="isLoading"
+      :can-cancel="true"
+      :on-cancel="onCancel"
+      :is-full-page="true"
+    />
   </div>
 </template>
 
@@ -107,19 +123,15 @@ export default {
 }
 
 .c-shop-disclaimer {
-  color: black;
-  background: var(--color-bad);
-  width: 100rem;
+  width: 80%;
+  max-width: 100rem;
   font-size: 1.8rem;
   font-weight: bold;
-  border: 0.2rem solid black;
-  border-radius: 1rem;
+  color: black;
+  background: var(--color-bad);
+  border: var(--var-border-width, 0.2rem) solid black;
+  border-radius: var(--var-border-radius, 1rem);
   margin-top: 0.8rem;
-}
-
-.s-base--metro .c-shop-disclaimer {
-  border-width: 0.1rem;
-  border-radius: 0;
 }
 
 .t-s1 .c-shop-disclaimer,
@@ -144,22 +156,22 @@ export default {
 }
 
 .o-shop-button-button {
-  background: turquoise;
-  border: none;
-  border-radius: .5rem;
   display: flex;
-  margin: auto;
   align-items: center;
   font-family: Typewriter;
-  padding: .5rem 2rem;
+  background: turquoise;
+  border: none;
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin: auto;
   margin-top: 1rem;
+  padding: 0.5rem 2rem;
   cursor: pointer;
 }
 
 .l-shop-buttons-container {
   display: flex;
   flex-wrap: wrap;
-  width: 62rem;
+  width: 93rem;
   margin: auto;
 }
 

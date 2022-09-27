@@ -11,8 +11,15 @@ export default {
       eternityGoal: new Decimal(),
       tachyonGain: new Decimal(),
       remnantRequirement: 0,
-      showRequirement: false
+      showRequirement: false,
+      creditsClosed: false
     };
+  },
+  computed: {
+    disableText() {
+      // Doesn't need to be reactive or check strike status; it's always permanent once entered in Doomed
+      return Pelle.isDoomed ? "Dilation is permanent." : "Disable Dilation.";
+    }
   },
   methods: {
     update() {
@@ -30,6 +37,11 @@ export default {
       } else {
         this.requiredForGain.copyFrom(getTachyonReq());
       }
+      this.creditsClosed = GameEnd.creditsEverClosed;
+    },
+    dilate() {
+      if (this.creditsClosed) return;
+      startDilatedEternityRequest();
     }
   }
 };
@@ -39,7 +51,7 @@ export default {
   <button
     class="o-dilation-btn"
     :class="isUnlocked ? 'o-dilation-btn--unlocked' : 'o-dilation-btn--locked'"
-    onclick="startDilatedEternityRequest()"
+    @click="dilate()"
   >
     <span v-if="!isUnlocked">Purchase the Dilation Study to unlock.</span>
     <span v-else-if="!isRunning">
@@ -49,17 +61,17 @@ export default {
       </div>
     </span>
     <span v-else-if="canEternity && hasGain">
-      Disable Dilation.
+      {{ disableText }}
       <br>
       Gain {{ quantify("Tachyon Particle", tachyonGain, 2, 1) }}.
     </span>
     <span v-else-if="hasGain">
-      Disable Dilation.
+      {{ disableText }}
       <br>
       Reach {{ quantify("Infinity Point", eternityGoal, 1, 0) }} to Eternity and gain Tachyon Particles.
     </span>
     <span v-else>
-      Disable Dilation.
+      {{ disableText }}
       <br>
       Reach {{ format(requiredForGain, 2, 1) }} antimatter to gain more Tachyon Particles.
     </span>

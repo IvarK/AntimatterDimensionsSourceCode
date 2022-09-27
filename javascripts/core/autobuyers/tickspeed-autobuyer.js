@@ -1,5 +1,6 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
 
 Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
@@ -12,6 +13,10 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
 
   get isUnlocked() {
     if (Pelle.isDisabled("tickspeedAutobuyer")) return false;
+    return this.canBeUpgraded;
+  }
+
+  get canBeUpgraded() {
     return NormalChallenge(9).isCompleted;
   }
 
@@ -81,7 +86,7 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
   }
 
   get resetTickOn() {
-    return Perk.antimatterNoReset.isBought ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.DIMENSION_BOOST;
+    return Perk.antimatterNoReset.canBeApplied ? PRESTIGE_EVENT.ANTIMATTER_GALAXY : PRESTIGE_EVENT.DIMENSION_BOOST;
   }
 
   reset() {

@@ -1,4 +1,4 @@
-import { DC } from "./constants.js";
+import { DC } from "./constants";
 
 /**
  * Object that manages the selection of glyphs offered to the player
@@ -13,7 +13,7 @@ export const GlyphSelection = {
 
   get choiceCount() {
     return Effects.max(1, Perk.firstPerk) *
-      (Ra.has(RA_UNLOCKS.EXTRA_CHOICES_AND_RELIC_SHARD_RARITY_ALWAYS_MAX) ? 2 : 1);
+      Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.effectOrDefault(1);
   },
 
   glyphUncommonGuarantee(glyphList, rng) {
@@ -56,7 +56,6 @@ export const GlyphSelection = {
   },
 
   generate(count, level = gainedGlyphLevel()) {
-    EventHub.dispatch(GAME_EVENT.GLYPH_CHOICES_GENERATED);
     this.glyphs = this.glyphList(count, level, { isChoosingGlyph: true });
   },
 
@@ -108,12 +107,14 @@ export function simulatedRealityCount(advancePartSimCounters) {
  */
 export function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
+  if (GameEnd.creditsEverClosed) return;
   if (player.options.confirmations.glyphSelection) {
     Modal.reality.show();
     return;
   }
-  if (Glyphs.freeInventorySpace === 0) {
-    Modal.message.show("Inventory cannot hold new glyphs. Delete/sacrifice (shift-click) some glyphs.");
+  if (GameCache.glyphInventorySpace.value === 0) {
+    Modal.message.show("Inventory cannot hold new Glyphs. Delete/sacrifice (shift-click) some Glyphs.",
+      { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
     return;
   }
   processManualReality(false);
@@ -134,13 +135,16 @@ export function processManualReality(sacrifice, glyphID) {
     // modal showed up and the player decided not to pick anything
     if (glyphID === undefined) {
       if (EffarigUnlock.glyphFilter.isUnlocked) {
-        // If the player has the glyph filter, we apply the filter to the choices instead of picking randomly
-        let newGlyph = AutoGlyphProcessor.pick(GlyphSelection.glyphs);
-        if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
+        // Note that this code path is eventually followed regardless of the glyph selection popping up - if it did, we
+        // pass through the option selected there; if it didn't, then we apply the filter. If we don't handle it this
+        // way, manual realities without the modal will never sacrifice and may give bad glyphs you don't care about
+        const newGlyph = AutoGlyphProcessor.pick(GlyphSelection.glyphs);
+        const shouldSacrifice = player.options.confirmations.glyphSelection
+          ? sacrifice
+          : !AutoGlyphProcessor.wouldKeep(newGlyph);
+        if (shouldSacrifice || GameCache.glyphInventorySpace.value === 0) {
           AutoGlyphProcessor.getRidOfGlyph(newGlyph);
-          newGlyph = null;
-        }
-        if (newGlyph && Glyphs.freeInventorySpace > 0) {
+        } else {
           Glyphs.addToInventory(newGlyph);
         }
       } else {
@@ -180,9 +184,11 @@ function triggerManualReality(realityProps) {
 
 export function runRealityAnimation() {
   document.getElementById("ui").style.userSelect = "none";
-  document.getElementById("ui").style.animation = "realize 10s 1";
-  document.getElementById("realityanimbg").style.animation = "realizebg 10s 1";
+  document.getElementById("ui").style.animation = "a-realize 10s 1";
+  document.getElementById("realityanimbg").style.animation = "a-realizebg 10s 1";
   document.getElementById("realityanimbg").style.display = "block";
+  if (Theme.current().isDark()) document.getElementById("realityanimbg").style.filter = "invert(1)";
+  else document.getElementById("realityanimbg").style.filter = "";
   setTimeout(() => {
     document.getElementById("realityanimbg").play();
     document.getElementById("realityanimbg").currentTime = 0;
@@ -203,7 +209,7 @@ function processAutoGlyph(gainedLevel, rng) {
   const glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedLevel, { rng });
   if (EffarigUnlock.glyphFilter.isUnlocked) {
     newGlyph = AutoGlyphProcessor.pick(glyphs);
-    if (!AutoGlyphProcessor.wouldKeep(newGlyph) || Glyphs.freeInventorySpace === 0) {
+    if (!AutoGlyphProcessor.wouldKeep(newGlyph) || GameCache.glyphInventorySpace.value === 0) {
       AutoGlyphProcessor.getRidOfGlyph(newGlyph);
       newGlyph = null;
     }
@@ -212,7 +218,7 @@ function processAutoGlyph(gainedLevel, rng) {
     // so we might as well take the first one.
     newGlyph = glyphs[0];
   }
-  if (newGlyph && Glyphs.freeInventorySpace > 0) {
+  if (newGlyph && GameCache.glyphInventorySpace.value > 0) {
     Glyphs.addToInventory(newGlyph);
   }
 }
@@ -268,7 +274,7 @@ function giveRealityRewards(realityProps) {
     realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier);
   Currency.realities.add(realityAndPPMultiplier);
   Currency.perkPoints.add(realityAndPPMultiplier);
-  if (Teresa.has(TERESA_UNLOCKS.EFFARIG)) {
+  if (TeresaUnlocks.effarig.canBeApplied) {
     Currency.relicShards.add(realityProps.gainedShards * multiplier);
   }
   if (multiplier > 1 && Enslaved.boostReality) {
@@ -286,11 +292,12 @@ function giveRealityRewards(realityProps) {
     const current = Teresa.runRewardMultiplier;
     const newMultiplier = Teresa.rewardMultiplier(player.antimatter);
     const isHigher = newMultiplier > current;
-    Modal.message.show(`You have completed Teresa's Reality! ${isHigher
+    const modalText = `You have completed Teresa's Reality! ${isHigher
       ? `Since you gained more Antimatter, you increased your
       Glyph Sacrifice multiplier from ${format(current, 2, 2)} to ${format(newMultiplier, 2, 2)}`
       : `You did not gain more Antimatter during this run, so the Glyph Sacrifice multiplier
-      from Teresa did not increase`}.`);
+      from Teresa did not increase`}.`;
+    Modal.message.show(modalText, {}, 2);
     if (Currency.antimatter.gt(player.celestials.teresa.bestRunAM)) {
       player.celestials.teresa.bestRunAM = Currency.antimatter.value;
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
@@ -302,17 +309,17 @@ function giveRealityRewards(realityProps) {
       player.celestials.teresa.lastRepeatedMachines = player.celestials.teresa.lastRepeatedMachines
         .clampMin(machineRecord);
     }
-    Teresa.quotes.show(Teresa.quotes.COMPLETE_REALITY);
+    Teresa.quotes.completeReality.show();
   }
 
   if (Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) {
     EffarigUnlock.reality.unlock();
-    Effarig.quotes.show(Effarig.quotes.COMPLETE_REALITY);
+    Effarig.quotes.completeReality.show();
   }
 
   if (Enslaved.isRunning) Enslaved.completeRun();
 
-  if (V.isRunning) V.quotes.show(V.quotes.REALITY_COMPLETE);
+  if (V.isRunning) V.quotes.realityComplete.show();
 }
 
 // Due to simulated realities taking a long time in late game, this function might not immediately
@@ -392,6 +399,9 @@ export function beginProcessReality(realityProps) {
       addToStats(glyphSample.totalStats, sacGain);
     } else {
       processAutoGlyph(realityProps.gainedGlyphLevel, rng);
+      // We'd normally run processSortingAfterReality() here, but also sorting after every glyph is extremely intensive
+      // at this scale and largely useless if autoClean is getting run every time too
+      if (VUnlocks.autoAutoClean.canBeApplied && player.reality.autoAutoClean) Glyphs.autoClean();
     }
   };
   const glyphsToSample = 10000;
@@ -410,8 +420,8 @@ export function beginProcessReality(realityProps) {
             more than ${formatInt(glyphsToSample)} Glyphs remaining will speed up the calculation by automatically
             sacrificing all the remaining Glyphs you would get. Pressing "Skip Glyphs" will ignore all resources
             related to Glyphs and stop the simulation after giving all other resources.
-            ${Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY) ? "Pressing either button to speed up simulation will not update" +
-              " any resources within Glyph Alchemy." : ""}`,
+            ${Ra.unlocks.unlockGlyphAlchemy.canBeApplied ? `Pressing either button to speed up
+            simulation will not update any resources within Glyph Alchemy.` : ""}`,
           progressName: "Realities",
           current: doneSoFar,
           max: glyphsToProcess,
@@ -527,7 +537,9 @@ export function finishProcessReality(realityProps) {
   if (!realityProps.glyphUndo) {
     Glyphs.clearUndo();
     if (player.reality.respec) respecGlyphs();
-    if (player.celestials.ra.disCharge) disChargeAll();
+    if (player.celestials.ra.disCharge) {
+      disChargeAll();
+    }
   }
   if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
   if (player.options.automatorEvents.clearOnReality) AutomatorData.clearEventLog();
@@ -647,7 +659,7 @@ export function finishProcessReality(realityProps) {
   ECTimeStudyState.invalidateCachedRequirements();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
 
-  if (Teresa.has(TERESA_UNLOCKS.START_EU) && !Pelle.isDoomed) {
+  if (TeresaUnlocks.startEU.canBeApplied) {
     for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
   }
 
@@ -687,7 +699,7 @@ export function applyRUPG10() {
   }
   if (Pelle.isDisabled("rupg10")) return;
 
-  player.auto.antimatterDims = player.auto.antimatterDims.map(current => ({
+  player.auto.antimatterDims.all = player.auto.antimatterDims.all.map(current => ({
     isUnlocked: true,
     // These costs are approximately right; if bought manually all dimensions are slightly different from one another
     cost: 1e14,
@@ -722,13 +734,16 @@ export function clearCelestialRuns() {
   };
   player.celestials.teresa.run = false;
   player.celestials.effarig.run = false;
-  // Enslaved forces all tabs to be visible, but exiting via the header might leave the player on a tab which is
-  // otherwise normally hidden - in that case we force them to the Enslaved tab. We could scan for the lowest-index tab
-  // and subtab, but all other things being equal the Enslaved tab makes the most sense. The run flag is toggled
-  // *before* the check because otherwise isHidden will always evaluate to false due to still being in Enslaved.
+  // Nameless forces all tabs to be visible, but exiting via the header might leave the player on a tab which is
+  // otherwise normally hidden - in that case we force them to the Nameless tab. We could scan for the lowest-index tab
+  // and subtab, but all other things being equal the Nameless tab makes the most sense. The run flag is toggled
+  // *before* the check because otherwise isHidden will always evaluate to false due to still being in Nameless.
   if (Enslaved.isRunning) {
     player.celestials.enslaved.run = false;
     if (Tabs.current.isHidden || Tabs.current._currentSubtab.isHidden) Tab.celestials.enslaved.show();
+    // We specifically revalidate here and nowhere else because Nameless changes the unlock state of the BLACK HOLE
+    // command, which changes the validity of existing scripts when entering/exiting
+    AutomatorData.recalculateErrors();
   }
   player.celestials.v.run = false;
   player.celestials.ra.run = false;

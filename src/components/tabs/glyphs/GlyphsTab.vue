@@ -1,16 +1,15 @@
 <script>
-import ExpandingControlBox from "@/components/ExpandingControlBox";
-import GlyphTabSidebar from "./sidebar/GlyphTabSidebar";
-import GlyphPeek from "./GlyphPeek";
-import RealityAmplifyButton from "./RealityAmplifyButton";
-import GlyphInventory from "./GlyphInventory";
-import SacrificedGlyphs from "./SacrificedGlyphs";
 import CurrentGlyphEffects from "./CurrentGlyphEffects";
 import EquippedGlyphs from "./EquippedGlyphs";
+import ExpandingControlBox from "@/components/ExpandingControlBox";
+import GlyphInventory from "./GlyphInventory";
 import GlyphLevelsAndWeights from "./GlyphLevelsAndWeights";
-import ResetRealityButton from "./ResetRealityButton";
-import RealityButton from "./RealityButton";
+import GlyphPeek from "./GlyphPeek";
+import GlyphTabSidebar from "./sidebar/GlyphTabSidebar";
+import RealityAmplifyButton from "./RealityAmplifyButton";
 import RealityReminder from "./RealityReminder";
+import ResetRealityButton from "./ResetRealityButton";
+import SacrificedGlyphs from "./SacrificedGlyphs";
 
 export default {
   name: "GlyphsTab",
@@ -25,7 +24,6 @@ export default {
     EquippedGlyphs,
     GlyphLevelsAndWeights,
     ResetRealityButton,
-    RealityButton,
     RealityReminder
   },
   data() {
@@ -35,6 +33,7 @@ export default {
       instabilityThreshold: 0,
       hyperInstabilityThreshold: 0,
       isInCelestialReality: false,
+      canAmplify: false,
       glyphTextColors: true,
       autoRestartCelestialRuns: false,
       sacrificeUnlocked: false,
@@ -61,6 +60,7 @@ export default {
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
       this.isInCelestialReality = isInCelestialReality();
+      this.canAmplify = Enslaved.isUnlocked && !this.isInCelestialReality;
       this.autoRestartCelestialRuns = player.options.retryCelestial;
       this.glyphTextColors = player.options.glyphTextColors;
       this.enslavedHint = "";
@@ -79,14 +79,28 @@ export default {
       player.options.glyphTextColors = !player.options.glyphTextColors;
     },
     glyphInfoClass(isSacrificeOption) {
-      if (this.sacrificeDisplayed === isSacrificeOption) return "c-glyph-info-button--active";
-      return "";
+      return {
+        "l-glyph-info-button": true,
+        "c-glyph-info-button": true,
+        "c-glyph-info-button--active": isSacrificeOption,
+        "c-glyph-info-button--inactive": !isSacrificeOption
+      };
     },
     setInfoState(state) {
       player.reality.showGlyphSacrifice = state;
     },
     glyphColorPosition() {
       return this.sacrificeUnlocked ? "l-glyph-color-position__low" : "l-glyph-color-position__top";
+    },
+    glyphInfoBorderClass() {
+      return {
+        "c-current-glyph-effects-with-top-border": !this.sacrificeUnlocked
+      };
+    },
+    buttonGroupClass() {
+      return {
+        "l-half-width": this.canAmplify
+      };
     }
   }
 };
@@ -98,24 +112,38 @@ export default {
       <div class="l-reality-button-column">
         <GlyphPeek />
 
-        <div class="l-reality-button-group">
-          <div class="l-reality-button-group-half">
-            <ResetRealityButton v-if="resetRealityDisplayed" />
-
-            <div v-if="isInCelestialReality">
-              <input
-                id="autoRestart"
-                v-model="autoRestartCelestialRuns"
-                type="checkbox"
-                :value="autoRestartCelestialRuns"
-                @input="toggleAutoRestartCelestial()"
-              >
-              <label for="autoRestart">Repeat this Celestial's Reality</label>
-            </div>
-            <RealityAmplifyButton v-else />
-          </div>
-          <RealityButton />
+        <div
+          v-if="resetRealityDisplayed"
+          class="l-reality-button-group"
+        >
+          <RealityAmplifyButton
+            v-if="!isInCelestialReality"
+            :class="buttonGroupClass()"
+          />
+          <ResetRealityButton :class="buttonGroupClass()" />
         </div>
+
+        <div
+          v-if="isInCelestialReality"
+          class="l-celestial-auto-restart-checkbox"
+        >
+          <input
+            id="autoRestart"
+            v-model="autoRestartCelestialRuns"
+            type="checkbox"
+            :value="autoRestartCelestialRuns"
+            class="o-clickable"
+            @input="toggleAutoRestartCelestial()"
+          >
+          <label
+            for="autoRestart"
+            class="o-clickable"
+          >
+            Repeat this Celestial's Reality
+          </label>
+        </div>
+
+        <br>
 
         <RealityReminder />
 
@@ -164,23 +192,24 @@ export default {
               v-if="sacrificeUnlocked"
               class="c-glyph-info-options"
             >
-              <div
-                class="c-glyph-info-button l-current-glyph-effects"
-                :class="glyphInfoClass(false)"
+              <button
+                :class="glyphInfoClass(!sacrificeDisplayed)"
                 @click="setInfoState(false)"
               >
                 Current Glyph effects
-              </div>
-              <div
-                class="c-glyph-info-button"
-                :class="glyphInfoClass(true)"
+              </button>
+              <button
+                :class="glyphInfoClass(sacrificeDisplayed)"
                 @click="setInfoState(true)"
               >
                 Glyph Sacrifice totals
-              </div>
+              </button>
             </div>
             <SacrificedGlyphs v-if="sacrificeUnlocked && sacrificeDisplayed" />
-            <CurrentGlyphEffects v-else />
+            <CurrentGlyphEffects
+              v-else
+              :class="glyphInfoBorderClass()"
+            />
           </div>
         </div>
         <GlyphInventory />
@@ -194,7 +223,18 @@ export default {
   margin: 2rem;
 }
 
-.l-current-glyph-effects {
-  border-right: 0.1rem solid #b8b8b8;
+.o-clickable {
+  cursor: pointer;
+}
+
+.l-celestial-auto-restart-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  user-select: none;
+}
+
+.l-half-width {
+  width: 50%;
 }
 </style>

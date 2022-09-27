@@ -28,7 +28,7 @@ export default {
 
       return `Armageddon will start a new Doomed Reality. You will gain
       ${quantify("Remnant", this.remnantsGain, 2, 0)} ${isFirstReset}`;
-    },
+    }
   },
   methods: {
     update() {
@@ -46,8 +46,8 @@ export default {
 
       Glyphs.harshAutoClean();
       if (!Glyphs.unequipAll()) {
-        Modal.message.show(`Entering Doomed will unequip your Glyphs. Some of your
-        Glyphs could not be unequipped due to lack of inventory space.`);
+        Modal.message.show(`Dooming your Reality will unequip your Glyphs. Some of your
+          Glyphs could not be unequipped due to lack of inventory space.`, 1);
         return;
       }
       Glyphs.harshAutoClean();
@@ -62,14 +62,31 @@ export default {
       disChargeAll();
       player.buyUntil10 = true;
       player.records.realTimeDoomed = 0;
-      Pelle.quotes.show(Pelle.quotes.INITIAL);
+      for (const res of AlchemyResources.all) res.amount = 0;
+      AutomatorBackend.stop();
+
+      // Force-unhide all tabs except for the shop tab, for which we retain the hide state instead
+      const shopTab = ~1 & (1 << GameDatabase.tabs.find(t => t.key === "shop").id);
+      player.options.hiddenTabBits &= shopTab;
+
+      // Force unhide MOST subtabs, although some of the tabs get ignored since they don't contain any
+      // meaningful interactable gameplay elements in Doomed
+      const tabsToIgnore = ["statistics", "achievements", "reality", "celestials"];
+      const ignoredIDs = GameDatabase.tabs.filter(t => tabsToIgnore.includes(t.key)).map(t => t.id);
+      for (let tabIndex = 0; tabIndex < GameDatabase.tabs.length; tabIndex++) {
+        player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.includes(tabIndex) ? -1 : 0;
+      }
+      Pelle.quotes.initial.show();
     },
   },
 };
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    :option="isDoomed ? 'armageddon' : undefined"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ topLabel }}
     </template>
@@ -77,9 +94,9 @@ export default {
       v-if="!isDoomed"
       class="c-modal-message__text"
     >
-      Entering Doomed will reset everything except Challenge records, Celestial progress and anything under
+      Dooming your Reality will reset everything except Challenge records, Celestial progress and anything under
       the General and Reality header on the Statistics tab. You will not gain any rewards from your progress
-      in your current Reality. Entering Doomed will also disable certain game mechanics.
+      in your current Reality. Dooming your Reality will also disable certain game mechanics.
       <br>
       <br>
       Are you sure you want to do this?

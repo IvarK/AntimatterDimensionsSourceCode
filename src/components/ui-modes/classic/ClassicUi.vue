@@ -1,12 +1,12 @@
 <script>
 import GameHeader from "../GameHeader";
+import NewsTicker from "../NewsTicker";
+
 import ClassicBigCrunchButton from "./ClassicBigCrunchButton";
 import ClassicSubtabBar from "./ClassicSubtabBar";
 import ClassicTabBar from "./ClassicTabBar";
-import NewsTicker from "../NewsTicker";
-import InfinityPointsHeader from "@/components/InfinityPointsHeader";
 import EternityPointsHeader from "@/components/EternityPointsHeader";
-import RealityMachinesHeader from "@/components/RealityMachinesHeader";
+import InfinityPointsHeader from "@/components/InfinityPointsHeader";
 
 export default {
   name: "ClassicUi",
@@ -17,8 +17,7 @@ export default {
     ClassicTabBar,
     NewsTicker,
     InfinityPointsHeader,
-    EternityPointsHeader,
-    RealityMachinesHeader
+    EternityPointsHeader
   },
   data() {
     return {
@@ -56,7 +55,7 @@ export default {
     <template v-if="bigCrunch">
       <ClassicBigCrunchButton class="l-old-ui__big-crunch-btn" />
       <div class="o-emptiness">
-        The world has collapsed on itself due to excess of antimatter.
+        The world has collapsed due to excess of antimatter.
       </div>
     </template>
     <template v-else>
@@ -75,7 +74,7 @@ export default {
         v-show="smallCrunch"
         class="l-old-ui__big-crunch-btn l-old-ui__big-crunch-btn--overlay"
       />
-      <div class="l-old-ui-page l-old-ui__page">
+      <div class="l-old-ui__page">
         <slot />
       </div>
     </template>

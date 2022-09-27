@@ -1,4 +1,4 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 Autobuyer.darkMatterDims = new class DarkMatterDimensionAutobuyerState extends IntervaledAutobuyerState {
   get data() {
@@ -10,7 +10,7 @@ Autobuyer.darkMatterDims = new class DarkMatterDimensionAutobuyerState extends I
   }
 
   get isUnlocked() {
-    return SingularityMilestone.darkDimensionAutobuyers.isUnlocked;
+    return SingularityMilestone.darkDimensionAutobuyers.canBeApplied;
   }
 
   get interval() {

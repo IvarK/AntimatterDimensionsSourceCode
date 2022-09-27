@@ -23,6 +23,7 @@ export default {
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     singularityFormText() {
       const formText = this.singularitiesGained === 1 ? "all Dark Energy into a Singularity"
         : `all Dark Energy into ${quantify("Singularity", this.singularitiesGained, 2)}`;
@@ -83,9 +84,9 @@ export default {
       this.currentTimeToSingularity = Singularity.timeUntilCap;
       this.extraTimeAfterSingularity = Singularity.timeDelayFromAuto;
       this.singularitiesGained = Singularity.singularitiesGained;
-      this.autoSingularityFactor = SingularityMilestone.autoCondense.effectValue;
+      this.autoSingularityFactor = SingularityMilestone.autoCondense.effectOrDefault(Infinity);
       this.perStepFactor = Singularity.gainPerCapIncrease;
-      this.isAutoEnabled = player.auto.singularity.isActive && SingularityMilestone.autoCondense.isUnlocked;
+      this.isAutoEnabled = player.auto.singularity.isActive && SingularityMilestone.autoCondense.canBeApplied;
       this.hasAutoSingularity = Number.isFinite(this.autoSingularityFactor);
       this.nextLowerStep = this.singularityCap * this.autoSingularityFactor / 10;
       this.willCondenseOnDecrease = this.isAutoEnabled && this.darkEnergy > this.nextLowerStep;
@@ -103,6 +104,14 @@ export default {
       if (rate < 1 / 60) return `${format(3600 * rate, 2, 3)} per hour`;
       if (rate < 1) return `${format(60 * rate, 2, 3)} per minute`;
       return `${format(rate, 2, 3)} per second`;
+    },
+    condenseClassObject() {
+      return {
+        "c-laitela-singularity": true,
+        "c-laitela-singularity--active": this.canPerformSingularity && !this.isDoomed,
+        "o-pelle-disabled": this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed,
+      };
     }
   }
 };
@@ -112,11 +121,10 @@ export default {
   <div class="c-laitela-singularity-container">
     <div>
       <h2>
-        You have {{ quantify("Singularity", singularities, 2, 0) }}
+        You have {{ quantify("Singularity", singularities, 2) }}
       </h2>
       <button
-        class="c-laitela-singularity"
-        :class="{ 'c-laitela-singularity--active' : canPerformSingularity }"
+        :class="condenseClassObject()"
         @click="doSingularity"
       >
         <h2>
@@ -135,6 +143,7 @@ export default {
       <div v-if="unlockedBulkSingularity">
         <button
           class="c-laitela-singularity__cap-control"
+          :class="{ 'c-laitela-singularity__cap-control--available' : singularityCapIncreases > 0 }"
           :ach-tooltip="decreaseTooltip"
           @click="decreaseCap"
         >
@@ -142,6 +151,7 @@ export default {
         </button>
         <button
           class="c-laitela-singularity__cap-control"
+          :class="{ 'c-laitela-singularity__cap-control--available' : singularityCapIncreases < 50 }"
           :ach-tooltip="increaseTooltip"
           @click="increaseCap"
         >
@@ -178,6 +188,6 @@ export default {
 
 <style scoped>
 .c-laitela-singularity__cap-control {
-  margin: 0 0.3rem 1rem 0.3rem;
+  margin: 0 0.3rem 1rem;
 }
 </style>

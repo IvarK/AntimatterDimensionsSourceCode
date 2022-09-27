@@ -1,0 +1,121 @@
+<script>
+import SelectGlyphInfoDropdown, { GlyphInfo } from "./SelectGlyphInfoDropdown";
+
+import ExpandingControlBox from "@/components/ExpandingControlBox";
+import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
+import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
+
+
+export default {
+  name: "GlyphDisplayOptionsModal",
+  components: {
+    ExpandingControlBox,
+    ModalOptionsToggleButton,
+    ModalWrapperOptions,
+    SelectGlyphInfoDropdown,
+  },
+  data() {
+    return {
+      newGlyphs: false,
+      glyphEffectDots: false,
+      forceDarkGlyphs: false,
+      glyphInfoType: 0,
+      showGlyphInfoByDefault: false,
+    };
+  },
+  computed: {
+    infoLabel() {
+      return GlyphInfo.labels[this.glyphInfoType];
+    },
+  },
+  watch: {
+    newGlyphs(newValue) {
+      player.options.showNewGlyphIcon = newValue;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
+    glyphEffectDots(newValue) {
+      player.options.showHintText.glyphEffectDots = newValue;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
+    forceDarkGlyphs(newValue) {
+      player.options.forceDarkGlyphs = newValue;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
+    showGlyphInfoByDefault(newValue) {
+      player.options.showHintText.showGlyphInfoByDefault = newValue;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
+  },
+  methods: {
+    update() {
+      const options = player.options;
+      this.newGlyphs = options.showNewGlyphIcon;
+      this.glyphEffectDots = options.showHintText.glyphEffectDots;
+      this.forceDarkGlyphs = options.forceDarkGlyphs;
+      this.glyphInfoType = options.showHintText.glyphInfoType;
+      this.showGlyphInfoByDefault = options.showHintText.showGlyphInfoByDefault;
+    },
+    noEffectStyle() {
+      if (this.glyphInfoType !== 0) return null;
+      return {
+        "background-color": "var(--color-disabled)",
+      };
+    },
+  },
+};
+</script>
+
+<template>
+  <ModalWrapperOptions class="c-modal-options__large">
+    <template #header>
+      Glyph Display Options
+    </template>
+    <div class="c-modal-options__button-container">
+      <ModalOptionsToggleButton
+        v-model="newGlyphs"
+        text="New Glyph identifier:"
+      />
+      <ModalOptionsToggleButton
+        v-model="glyphEffectDots"
+        text="Always show Glyph effect dots:"
+      />
+      <ModalOptionsToggleButton
+        v-model="forceDarkGlyphs"
+        text="Force dark Glyph background:"
+      />
+      <ExpandingControlBox
+        class="o-primary-btn c-dropdown-btn"
+      >
+        <template #header>
+          <div class="c-dropdown-header">
+            ▼ Additional Glyph Info: ▼
+            <br>
+            {{ infoLabel }}
+          </div>
+        </template>
+        <template #dropdown>
+          <SelectGlyphInfoDropdown />
+        </template>
+      </ExpandingControlBox>
+      <ModalOptionsToggleButton
+        v-model="showGlyphInfoByDefault"
+        :style="noEffectStyle()"
+        text="Always show Glyph Info:"
+      />
+    </div>
+  </ModalWrapperOptions>
+</template>
+
+<style scoped>
+.c-dropdown-btn {
+  width: 24rem;
+  margin: 0.5rem;
+  padding: 0;
+}
+
+.c-dropdown-header {
+  padding: 0.75rem;
+  height: 5.5rem;
+  user-select: none;
+}
+</style>

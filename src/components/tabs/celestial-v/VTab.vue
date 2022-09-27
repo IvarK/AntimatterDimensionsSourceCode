@@ -1,7 +1,7 @@
 <script>
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
-import PrimaryButton from "@/components/PrimaryButton";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
+import PrimaryButton from "@/components/PrimaryButton";
 import VUnlockRequirement from "./VUnlockRequirement";
 
 export default {
@@ -14,7 +14,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       mainUnlock: false,
       canUnlockCelestial: false,
       mainUnlockDB: [],
@@ -63,18 +62,18 @@ export default {
           {}
         ];
     },
-    vUnlock: () => V_UNLOCKS.V_ACHIEVEMENT_UNLOCK,
+    vUnlock: () => VUnlocks.vAchievementUnlock,
     runMilestones() {
       return [
         [
-          V_UNLOCKS.SHARD_REDUCTION,
-          V_UNLOCKS.ND_POW,
-          V_UNLOCKS.FAST_AUTO_EC
+          VUnlocks.shardReduction,
+          VUnlocks.adPow,
+          VUnlocks.fastAutoEC
         ],
         [
-          V_UNLOCKS.AUTO_AUTOCLEAN,
-          V_UNLOCKS.ACHIEVEMENT_BH,
-          V_UNLOCKS.RA_UNLOCK
+          VUnlocks.autoAutoClean,
+          VUnlocks.achievementBH,
+          VUnlocks.raUnlock
         ],
       ];
     },
@@ -83,27 +82,29 @@ export default {
         "l-v-hexagon": true,
         "c-v-run-button": true,
         "c-v-run-button--running": this.isRunning,
+        "c-celestial-run-button--clickable": !this.isDoomed,
+        "o-pelle-disabled-pointer": this.isDoomed
       };
     },
     runDescription() {
-      return GameDatabase.celestials.descriptions[3].description().replace(/^\w/u, c => c.toUpperCase());
+      return GameDatabase.celestials.descriptions[3].effects().replace(/^\w/u, c => c.toUpperCase());
     },
+    isDoomed: () => Pelle.isDoomed,
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
-      this.mainUnlock = V.has(V_UNLOCKS.V_ACHIEVEMENT_UNLOCK);
+      this.mainUnlock = VUnlocks.vAchievementUnlock.isUnlocked;
       this.canUnlockCelestial = V.canUnlockCelestial;
       this.mainUnlockDB = GameDatabase.celestials.v.mainUnlock;
       this.totalUnlocks = V.spaceTheorems;
       this.pp = Currency.perkPoints.value;
-      this.showReduction = V.has(V_UNLOCKS.SHARD_REDUCTION);
+      this.showReduction = VUnlocks.shardReduction.isUnlocked;
       this.runRecords = Array.from(player.celestials.v.runRecords);
       this.runGlyphs = player.celestials.v.runGlyphs.map(gList => Glyphs.copyForRecords(gList));
       this.isFlipped = V.isFlipped;
       this.wantsFlipped = player.celestials.v.wantsFlipped;
       this.isRunning = V.isRunning;
-      this.hasAlchemy = Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY);
+      this.hasAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
     },
     unlockCelestial() {
       if (V.canUnlockCelestial) V.unlockCelestial();
@@ -113,7 +114,7 @@ export default {
       Modal.celestials.show({ name: "V's", number: 3 });
     },
     has(info) {
-      return V.has(info);
+      return info.isUnlocked;
     },
     mode(hex) {
       return hex.config.mode === V_REDUCTION_MODE.SUBTRACTION ? "reduced" : "divided";
@@ -125,11 +126,6 @@ export default {
     },
     showRecord(hex) {
       return this.runRecords[hex.id] > 0 || hex.completions > 0;
-    },
-    rewardText(milestone) {
-      return typeof milestone.reward === "function"
-        ? milestone.reward()
-        : milestone.reward;
     },
     reduceGoals(hex) {
       if (!Currency.perkPoints.purchase(hex.reductionCost)) return;
@@ -178,7 +174,7 @@ export default {
           @click="unlockCelestial"
         >
           <p>{{ vUnlock.description }}</p>
-          <p>{{ rewardText(vUnlock) }}</p>
+          <p>{{ vUnlock.rewardText }}</p>
         </div>
       </div>
     </div>
@@ -195,10 +191,11 @@ export default {
           <span v-else>Show</span>
           Hard V
         </PrimaryButton>
-        <br><br>
-        Cursed Glyphs can be created in the Effarig tab<span v-if="!isDoomed">, and the
-          Black Hole can now be used to slow down time</span>.
         <br>
+        Cursed Glyphs can be created in the Effarig tab.
+        <br>
+        <span v-if="!isDoomed">The Black Hole can now be used to slow down time if they are both permanent.</span>
+        <br><br>
         Each Hard V-Achievement counts as two V-Achievements and will award {{ formatInt(2) }} Space Theorems
         instead of {{ formatInt(1) }}.
         <br>
@@ -229,7 +226,7 @@ export default {
               v-html="hex.formattedDescription"
             />
             <p
-              v-if="has(runMilestones[0]) && hex.isReduced"
+              v-if="has(runMilestones[0][0]) && hex.isReduced"
               class="o-v-unlock-goal-reduction"
             >
               Goal has been {{ mode(hex) }} by {{ reductionValue(hex) }}
@@ -266,18 +263,17 @@ export default {
             :class="runButtonClassObject"
             @click="startRun()"
           >
-            <b class="o-v-start-text">
-              <span v-if="isDoomed">You can't start<br></span>
-              <span v-else-if="isRunning">You are in </span>
+            <b
+              class="o-v-start-text"
+              :class="{ 'o-pelle-disabled': isDoomed }"
+            >
+              <span v-if="isRunning">You are in </span>
               <span v-else>Start </span>
               V's Reality.
             </b>
             <br>
-            <div :style="{ 'font-size': hasAlchemy ? '1.1rem' : '' }">
+            <div :style="{ 'font-size': hasAlchemy ? '1.2rem' : '' }">
               {{ runDescription }}
-              <span v-if="hasAlchemy">
-                Exponential Glyph Alchemy effect is disabled.
-              </span>
             </div>
             <div class="c-v-run-button__line c-v-run-button__line--1" />
             <div class="c-v-run-button__line c-v-run-button__line--2" />
@@ -313,14 +309,11 @@ export default {
             :class="{'o-v-milestone--unlocked':
               has(milestone)}"
           >
-            <div v-if="isDoomed">
-              Disabled while in Doomed
-            </div>
-            <div v-else>
+            <div :class="{ 'o-pelle-disabled': isDoomed }">
               <p>{{ milestone.description }}</p>
-              <p>Reward: {{ rewardText(milestone) }}</p>
-              <p v-if="milestone.effect">
-                Currently: <b>{{ milestone.format(milestone.effect()) }}</b>
+              <p>Reward: {{ milestone.rewardText }}</p>
+              <p v-if="milestone.formattedEffect">
+                Currently: <b>{{ milestone.formattedEffect }}</b>
               </p>
             </div>
           </div>
@@ -340,6 +333,6 @@ export default {
 }
 
 .l-v-goal-reduction-spacer {
-  height :0.8rem;
+  height: 0.8rem;
 }
 </style>

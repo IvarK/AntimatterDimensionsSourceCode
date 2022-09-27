@@ -8,15 +8,15 @@
  */
 export function svgRingPath(d) {
   if (!d.gapDeg) {
-    if (!d.rMinor) {
-      d.rMinor = 0;
-    }
+    const rMinorCircle = d.rMinor
+      ? `m 0.2 ${d.rMajor - d.rMinor}
+a ${d.rMinor} ${d.rMinor} 0 1 1 -0.2 0
+z`
+      : "";
     return `M -0.1, ${-d.rMajor}
 a ${d.rMajor} ${d.rMajor} 0 1 0 0.2 0
 z
-m 0.2 ${d.rMajor - d.rMinor}
-a ${d.rMinor} ${d.rMinor} 0 1 1 -0.2 0
-z`;
+${rMinorCircle}`;
   }
   const toRad = Math.PI / 180;
   const gapAngleDeg = d.gapAngleDeg === undefined ? d.gapDeg / 2 : d.gapAngleDeg;

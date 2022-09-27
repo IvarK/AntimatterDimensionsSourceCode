@@ -121,12 +121,24 @@ export class Galaxy {
 function galaxyReset() {
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_BEFORE);
   player.galaxies++;
-  if (!Achievement(143).isUnlocked) player.dimensionBoosts = 0;
+  if (!Achievement(143).isUnlocked || (Pelle.isDoomed && !PelleUpgrade.galaxyNoResetDimboost.canBeApplied)) {
+    player.dimensionBoosts = 0;
+  }
   softReset(0);
   if (Notations.current === Notation.emoji) player.requirementChecks.permanent.emojiGalaxies++;
   // This is specifically reset here because the check is actually per-galaxy and not per-infinity
   player.requirementChecks.infinity.noSacrifice = true;
   EventHub.dispatch(GAME_EVENT.GALAXY_RESET_AFTER);
+}
+
+export function manualRequestGalaxyReset(bulk) {
+  if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return;
+  if (GameEnd.creditsEverClosed) return;
+  if (player.options.confirmations.antimatterGalaxy) {
+    Modal.antimatterGalaxy.show({ bulk });
+    return;
+  }
+  requestGalaxyReset(bulk);
 }
 
 export function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {

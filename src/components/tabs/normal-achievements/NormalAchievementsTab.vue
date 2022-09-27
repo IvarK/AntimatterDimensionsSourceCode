@@ -1,7 +1,7 @@
 <script>
+import NormalAchievementRow from "./NormalAchievementRow";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import SwapAchievementImagesButton from "./SwapAchievementImagesButton";
-import NormalAchievementRow from "./NormalAchievementRow";
 
 export default {
   name: "NormalAchievementsTab",
@@ -12,7 +12,6 @@ export default {
   },
   data() {
     return {
-      isDoomed: false,
       achievementPower: 0,
       achTPEffect: 0,
       achCountdown: 0,
@@ -31,6 +30,7 @@ export default {
     };
   },
   computed: {
+    isDoomed: () => Pelle.isDoomed,
     rows: () => Achievements.allRows,
     renderedRows() {
       return this.rows.filter((_, i) => this.renderedRowIndices.includes(i));
@@ -70,7 +70,6 @@ export default {
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
       const gameSpeedupFactor = getGameSpeedupFactor();
       this.achievementPower = Achievements.power;
       this.achTPEffect = RealityUpgrade(8).config.effect();
@@ -85,8 +84,8 @@ export default {
       this.achMultToIDS = Achievement(75).isUnlocked;
       this.achMultToTDS = EternityUpgrade.tdMultAchs.isBought;
       this.achMultToTP = RealityUpgrade(8).isBought;
-      this.achMultToBH = V.has(V_UNLOCKS.ACHIEVEMENT_BH);
-      this.achMultToTT = Ra.has(RA_UNLOCKS.TT_ACHIEVEMENT);
+      this.achMultToBH = VUnlocks.achievementBH.canBeApplied;
+      this.achMultToTT = Ra.unlocks.achievementTTMult.canBeApplied;
     },
     startRowRendering() {
       const unlockedRows = [];
@@ -119,6 +118,9 @@ export default {
     },
     isRendered(row) {
       return this.renderedRowIndices.includes(row);
+    },
+    isObscured(row) {
+      return this.isDoomed ? false : row === 17;
     },
     timeDisplay,
     timeDisplayNoDecimals,
@@ -174,6 +176,7 @@ export default {
         v-for="(row, i) in renderedRows"
         :key="i"
         :row="row"
+        :is-obscured="isObscured(i)"
       />
     </div>
   </div>

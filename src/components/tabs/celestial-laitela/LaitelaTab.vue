@@ -1,12 +1,12 @@
 <script>
-import LaitelaRunButton from "./LaitelaRunButton";
-import SingularityPane from "./SingularityPane";
-import SingularityMilestonePane from "./SingularityMilestonePane";
-import DarkMatterDimensionGroup from "./DarkMatterDimensionGroup";
 import AnnihilationButton from "./AnnihilationButton";
-import LaitelaAutobuyerPane from "./LaitelaAutobuyerPane";
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
+import DarkMatterDimensionGroup from "./DarkMatterDimensionGroup";
+import LaitelaAutobuyerPane from "./LaitelaAutobuyerPane";
+import LaitelaRunButton from "./LaitelaRunButton";
 import PrimaryButton from "@/components/PrimaryButton";
+import SingularityMilestonePane from "./SingularityMilestonePane";
+import SingularityPane from "./SingularityPane";
 
 export default {
   name: "LaitelaTab",
@@ -52,9 +52,9 @@ export default {
       this.maxDarkMatter.copyFrom(Currency.darkMatter.max);
       this.darkEnergy = player.celestials.laitela.darkEnergy;
       this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
-      this.autobuyersUnlocked = SingularityMilestone.darkDimensionAutobuyers.isUnlocked ||
-        SingularityMilestone.darkDimensionAutobuyers.isUnlocked ||
-        SingularityMilestone.autoCondense.isUnlocked ||
+      this.autobuyersUnlocked = SingularityMilestone.darkDimensionAutobuyers.canBeApplied ||
+        SingularityMilestone.darkDimensionAutobuyers.canBeApplied ||
+        SingularityMilestone.autoCondense.canBeApplied ||
         Laitela.darkMatterMult > 1;
       this.singularityPanelVisible = Currency.singularities.gt(0);
       this.singularitiesUnlocked = Singularity.capIsReached || this.singularityPanelVisible;
@@ -79,6 +79,7 @@ export default {
 
 <template>
   <div class="l-laitela-celestial-tab">
+    <CelestialQuoteHistory celestial="laitela" />
     <div class="c-subtab-option-container">
       <PrimaryButton
         class="o-primary-btn--subtab-option"
@@ -93,7 +94,6 @@ export default {
         Max all Dark Matter Dimensions
       </PrimaryButton>
     </div>
-    <CelestialQuoteHistory celestial="laitela" />
     <div class="o-laitela-matter-amount">
       You have
       <span :style="styleObject">{{ format(darkMatter, 2) }}</span>

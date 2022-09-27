@@ -1,5 +1,5 @@
-import { TimeStudyState } from "./time-studies.js";
-import { TimeStudy } from "./normal-time-study.js";
+import { TimeStudy } from "./normal-time-study";
+import { TimeStudyState } from "./time-studies";
 
 export class DilationTimeStudyState extends TimeStudyState {
   constructor(config) {
@@ -33,15 +33,15 @@ export class DilationTimeStudyState extends TimeStudyState {
       if (!quiet) {
         Tab.eternity.dilation.show();
       }
-      if (Perk.autounlockDilation1.isBought && !Pelle.isDoomed) {
+      if (Perk.autounlockDilation1.canBeApplied) {
         for (const id of [4, 5, 6]) player.dilation.upgrades.add(id);
       }
-      if (Perk.autounlockDilation2.isBought && !Pelle.isDoomed) {
+      if (Perk.autounlockDilation2.canBeApplied) {
         for (const id of [7, 8, 9]) player.dilation.upgrades.add(id);
       }
       if (!Pelle.isDoomed) Currency.tachyonParticles.bumpTo(Perk.startTP.effectOrDefault(0));
-      if (Ra.has(RA_UNLOCKS.START_TP) && !isInCelestialReality() && !Pelle.isDoomed) {
-        Currency.tachyonParticles.bumpTo(getTP(RA_UNLOCKS.START_TP.effect()));
+      if (Ra.unlocks.unlockDilationStartingTP.canBeApplied && !isInCelestialReality() && !Pelle.isDoomed) {
+        Currency.tachyonParticles.bumpTo(getTP(Ra.unlocks.unlockDilationStartingTP.effectOrDefault(0)));
       }
       TabNotification.dilationAfterUnlock.tryTrigger();
     }
@@ -51,7 +51,7 @@ export class DilationTimeStudyState extends TimeStudyState {
         Modal.message.show(`Reality Machine gain for your first Reality is reduced above ${format("1e6000")} Eternity
           Points and capped at ${format("1e8000")} Eternity Points. This is due to balance changes made in the Reality
           update which affect the difficulty of reaching those amounts, such as the increased Time Dimension cost
-          scaling above ${format("1e6000")}.`);
+          scaling above ${format("1e6000")}.`, {}, 3);
         EventHub.dispatch(GAME_EVENT.REALITY_FIRST_UNLOCKED);
       }
       if (!Perk.autounlockReality.isBought) Tab.reality.glyphs.show();

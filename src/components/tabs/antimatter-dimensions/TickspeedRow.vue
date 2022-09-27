@@ -1,13 +1,10 @@
 <script>
-import GameSpeedDisplay from "@/components/GameSpeedDisplay";
-
 export default {
   name: "TickspeedRow",
-  components: {
-    GameSpeedDisplay
-  },
   data() {
     return {
+      purchasedTickspeed: 0,
+      freeTickspeed: 0,
       isVisible: false,
       mult: new Decimal(0),
       cost: new Decimal(0),
@@ -16,7 +13,8 @@ export default {
       gameSpeedMult: 1,
       galaxyCount: 0,
       isContinuumActive: false,
-      continuumValue: 0
+      continuumValue: 0,
+      hasTutorial: false,
     };
   },
   computed: {
@@ -35,25 +33,23 @@ export default {
     tickspeedDisplay() {
       return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
     },
-    isGameSpeedNormal() {
-      return this.gameSpeedMult === 1;
-    },
-    isGameSpeedSlow() {
-      return this.gameSpeedMult < 1;
-    },
-    formattedFastSpeed() {
-      const gameSpeedMult = this.gameSpeedMult;
-      return gameSpeedMult < 10000 ? format(gameSpeedMult, 3, 3) : format(gameSpeedMult, 2, 0);
-    },
     showCostTitle() {
       return this.cost.exponent < 1000000;
     },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
+    },
+    upgradeCount() {
+      const purchased = this.purchasedTickspeed;
+      if (!this.freeTickspeed) return `${formatInt(purchased)} Purchased`;
+      if (purchased === 0 || this.isContinuumActive) return `${formatInt(this.freeTickspeed)} Free Upgrades`;
+      return `${formatInt(purchased)} Purchased + ${formatInt(this.freeTickspeed)} Free`;
     }
   },
   methods: {
     update() {
+      this.purchasedTickspeed = player.totalTickBought;
+      this.freeTickspeed = FreeTickspeed.amount;
       const isEC9Running = EternityChallenge(9).isRunning;
       this.isVisible = Tickspeed.isUnlocked || isEC9Running;
       if (!this.isVisible) return;
@@ -65,7 +61,21 @@ export default {
       this.galaxyCount = player.galaxies;
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
-    }
+      this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.TICKSPEED);
+    },
+    buttonClass() {
+      return {
+        "o-primary-btn": true,
+        "tickspeed-btn": true,
+        "o-primary-btn--disabled": !this.isAffordable && !this.isContinuumActive,
+        "o-non-clickable": this.isContinuumActive,
+        "tutorial--glow": this.isAffordable && this.hasTutorial
+      };
+    },
+    buyUpgrade() {
+      if (!buyTickSpeed()) return;
+      Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
+    },
   }
 };
 </script>
@@ -75,14 +85,13 @@ export default {
     <div class="tickspeed-labels">
       <span>
         {{ tickspeedDisplay }} <span>{{ multiplierDisplay }}</span>
-        <GameSpeedDisplay v-if="!isGameSpeedNormal" />
       </span>
     </div>
     <div class="tickspeed-buttons">
       <button
-        class="o-primary-btn tickspeed-btn"
-        :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
-        onclick="buyTickSpeed()"
+        v-tooltip="upgradeCount"
+        :class="buttonClass()"
+        @click="buyUpgrade"
       >
         <span v-if="isContinuumActive">
           {{ continuumString }} (cont.)
@@ -90,6 +99,10 @@ export default {
         <span v-else>
           Cost: {{ format(cost) }}
         </span>
+        <div
+          v-if="hasTutorial"
+          class="fas fa-circle-exclamation l-notification-icon"
+        />
       </button>
       <button
         v-if="!isContinuumActive"
@@ -104,7 +117,16 @@ export default {
 </template>
 
 <style scoped>
+.o-primary-btn {
+  position: relative;
+  vertical-align: middle;
+}
+
 .tickspeed-max-btn {
   margin-left: 0.5rem;
+}
+
+.o-non-clickable {
+  cursor: auto;
 }
 </style>

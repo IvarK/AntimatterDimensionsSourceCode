@@ -7,8 +7,8 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    bulk: {
+      type: Boolean,
       required: true,
     }
   },
@@ -17,11 +17,10 @@ export default {
       newGalaxies: 0,
       keepAntimatter: false,
       perkANRBought: false,
-      keepDimBoost: false,
+      keepDimBoost: false
     };
   },
   computed: {
-    bulk() { return this.modalConfig.bulk; },
     topLabel() {
       if (this.bulk) return `You are about to purchase ${quantifyInt("Antimatter Galaxy", this.newGalaxies)}`;
       return `You are about to purchase an Antimatter Galaxy`;
@@ -54,9 +53,6 @@ export default {
   created() {
     this.on$(GAME_EVENT.DIMBOOST_AFTER, () =>
       (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought ? undefined : this.emitClose()));
-    this.on$(GAME_EVENT.BIG_CRUNCH_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
   },
   methods: {
     update() {
@@ -72,13 +68,15 @@ export default {
         }
       }
       this.keepAntimatter = Achievement(111).isUnlocked;
-      this.perkANRBought = Perk.antimatterNoReset.isBought;
-      this.keepDimBoost = Achievement(143).isUnlocked;
+      this.perkANRBought = Perk.antimatterNoReset.canBeApplied;
+      this.keepDimBoost = (Achievement(143).isUnlocked && !Pelle.isDoomed) ||
+        PelleUpgrade.galaxyNoResetDimboost.canBeApplied;
     },
     handleYesClick() {
       requestGalaxyReset(this.bulk);
       Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
-    },
+      EventHub.ui.offAll(this);
+    }
   },
 };
 </script>

@@ -11,7 +11,6 @@ export default {
     return {
       isReached: false,
       isLocked: false,
-      isDoomed: false,
     };
   },
   computed: {
@@ -39,15 +38,15 @@ export default {
     activeCondition() {
       return this.config.activeCondition ? this.config.activeCondition() : null;
     },
-    disabledInDoomed() {
+    isDoomed: () => Pelle.isDoomed,
+    isUseless() {
       return this.isDoomed && this.config.pelleUseless;
     }
   },
   methods: {
     update() {
-      this.isDoomed = Pelle.isDoomed;
-      this.isLocked = this.isDoomed && this.config.pelleObsolete !== undefined;
-      this.isReached = this.milestone.isReached && !this.isLocked;
+      this.isLocked = this.isDoomed && this.config.givenByPelle !== undefined;
+      this.isReached = this.milestone.isReached;
     }
   }
 };
@@ -65,9 +64,8 @@ export default {
       v-tooltip="activeCondition"
       :class="rewardClassObject"
     >
-      <span v-if="disabledInDoomed">This milestone has no effect while in Doomed</span>
-      <span v-else>
-        {{ reward }} {{ isLocked ? "(Locked behind a Pelle Upgrade)" : "" }}
+      <span :class="{ 'o-pelle-disabled': isUseless }">
+        {{ reward }} {{ (isLocked && !isReached) ? "(Locked behind a Pelle Upgrade)" : "" }}
       </span>
     </button>
   </div>

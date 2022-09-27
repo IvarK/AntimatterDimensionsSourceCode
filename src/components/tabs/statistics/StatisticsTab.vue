@@ -1,8 +1,12 @@
 <script>
 import { MatterScale } from "./matter-scale";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "StatisticsTab",
+  components: {
+    PrimaryButton
+  },
   data() {
     return {
       isDoomed: false,
@@ -73,7 +77,7 @@ export default {
       this.secretAchievementCount = SecretAchievements.all.filter(a => a.isUnlocked).length;
 
       const progress = PlayerProgress.current;
-      const isInfinityUnlocked = progress.isInfinityUnlocked || player.devMode;
+      const isInfinityUnlocked = progress.isInfinityUnlocked;
       const infinity = this.infinity;
       const bestInfinity = records.bestInfinity;
       infinity.isUnlocked = isInfinityUnlocked;
@@ -91,7 +95,7 @@ export default {
         infinity.bestRate.copyFrom(bestInfinity.bestIPminEternity);
       }
 
-      const isEternityUnlocked = progress.isEternityUnlocked || player.devMode;
+      const isEternityUnlocked = progress.isEternityUnlocked;
       const eternity = this.eternity;
       const bestEternity = records.bestEternity;
       eternity.isUnlocked = isEternityUnlocked;
@@ -103,7 +107,7 @@ export default {
         eternity.bestRate.copyFrom(bestEternity.bestEPminReality);
       }
 
-      const isRealityUnlocked = progress.isRealityUnlocked || player.devMode;
+      const isRealityUnlocked = progress.isRealityUnlocked;
       const reality = this.reality;
       const bestReality = records.bestReality;
       reality.isUnlocked = isRealityUnlocked;
@@ -137,6 +141,9 @@ export default {
 <template>
   <div class="c-stats-tab">
     <div>
+      <PrimaryButton onclick="Modal.catchup.show(0)">
+        View Content Summary
+      </PrimaryButton>
       <div class="c-stats-tab-general">
         General
       </div>

@@ -229,37 +229,104 @@ window.GlyphRarities = [
   {
     minStrength: 3.5,
     name: "Celestial",
-    color: "#5151ec"
+    darkColor: "#5151ec",
+    lightColor: "#6666e9"
   }, {
     minStrength: 3.25,
     name: "Transcendent",
-    color: "#03ffec"
+    darkColor: "#03ffec",
+    lightColor: "#00bdad"
   }, {
     minStrength: 3,
     name: "Mythical",
-    color: "#d50000"
+    darkColor: "#d50000",
+    lightColor: "#d50000"
   }, {
     minStrength: 2.75,
     name: "Legendary",
-    color: "#ff9800"
+    darkColor: "#ff9800",
+    lightColor: "#d68100"
   }, {
     minStrength: 2.5,
     name: "Epic",
-    color: "#9c27b0"
+    darkColor: "#9c27b0",
+    lightColor: "#9c27b0"
   }, {
     minStrength: 2,
     name: "Rare",
-    color: "#2196f3"
+    darkColor: "#2196f3",
+    lightColor: "#1187ee"
   }, {
     minStrength: 1.5,
     name: "Uncommon",
-    color: "#43a047"
+    darkColor: "#43a047",
+    lightColor: "#3c9040"
   }, {
     minStrength: 1,
     name: "Common",
-    color: "white"
+    darkColor: "white",
+    lightColor: "black"
   },
 ];
+
+window.GLYPH_TYPES = [
+  "power",
+  "infinity",
+  "replication",
+  "time",
+  "dilation",
+  "effarig",
+  "reality",
+  "cursed",
+  "companion"
+];
+
+window.BASIC_GLYPH_TYPES = [
+  "power",
+  "infinity",
+  "replication",
+  "time",
+  "dilation"
+];
+
+window.ALCHEMY_BASIC_GLYPH_TYPES = [
+  "power",
+  "infinity",
+  "replication",
+  "time",
+  "dilation",
+  "effarig"
+];
+
+window.GLYPH_SYMBOLS = {
+  power: "Ω",
+  infinity: "∞",
+  replication: "Ξ",
+  time: "Δ",
+  dilation: "Ψ",
+  effarig: "Ϙ",
+  reality: "Ϟ",
+  cursed: "⸸",
+  companion: "♥"
+};
+
+window.CANCER_GLYPH_SYMBOLS = {
+  power: "⚡",
+  infinity: "8",
+  replication: "⚤",
+  time: "🕟",
+  dilation: "☎",
+  effarig: "🦒",
+  reality: "⛧",
+  cursed: "☠",
+  companion: "³"
+};
+
+window.ALTERATION_TYPE = {
+  ADDITION: 1,
+  EMPOWER: 2,
+  BOOST: 3
+};
 
 window.BLACK_HOLE_PAUSE_MODE = {
   NO_PAUSE: 0,
@@ -370,4 +437,29 @@ window.COMPLETED_MILESTONES = {
 window.SORT_ORDER = {
   ASCENDING: 0,
   DESCENDING: 1,
+};
+
+// One-indexed and ordered to simplify code elsewhere, do not change to be zero-indexed or reorder
+window.PROGRESS_STAGE = {
+  PRE_INFINITY: 1,
+
+  EARLY_INFINITY: 2,
+  BREAK_INFINITY: 3,
+  REPLICANTI: 4,
+
+  EARLY_ETERNITY: 5,
+  ETERNITY_CHALLENGES: 6,
+  EARLY_DILATION: 7,
+  LATE_ETERNITY: 8,
+
+  EARLY_REALITY: 9,
+
+  TERESA: 10,
+  EFFARIG: 11,
+  ENSLAVED: 12,
+  V: 13,
+  RA: 14,
+  IMAGINARY_MACHINES: 15,
+  LAITELA: 16,
+  PELLE: 17,
 };

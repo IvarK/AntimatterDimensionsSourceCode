@@ -1,4 +1,4 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer.js";
+import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
 
 class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   get tier() {
@@ -6,7 +6,7 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get name() {
-    return TimeDimension(this.tier).displayName;
+    return TimeDimension(this.tier).shortDisplayName;
   }
 
   get fullName() {
@@ -14,7 +14,7 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get data() {
-    return player.auto.timeDims[this.tier - 1];
+    return player.auto.timeDims.all[this.tier - 1];
   }
 
   get interval() {
@@ -46,6 +46,8 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
 
   static get entryCount() { return 8; }
   static get autobuyerGroupName() { return "Time Dimension"; }
+  static get isActive() { return player.auto.timeDims.isActive; }
+  static set isActive(value) { player.auto.timeDims.isActive = value; }
 }
 
 Autobuyer.timeDimension = TimeDimensionAutobuyerState.createAccessor();

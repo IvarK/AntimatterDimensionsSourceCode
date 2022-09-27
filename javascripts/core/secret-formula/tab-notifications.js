@@ -1,5 +1,6 @@
-import { GameDatabase } from "./game-database.js";
-import { DC } from "../constants.js";
+import { DC } from "../constants";
+
+import { GameDatabase } from "./game-database";
 
 GameDatabase.tabNotifications = {
   firstInfinity: {
@@ -107,7 +108,8 @@ GameDatabase.tabNotifications = {
       }
     ],
     condition: () => !PlayerProgress.realityUnlocked() && TimeStudy.reality.canBeBought,
-    events: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION]
+    events: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION,
+      GAME_EVENT.OFFLINE_CURRENCY_GAINED, GAME_EVENT.ACHIEVEMENT_UNLOCKED]
   },
   blackHoleUnlock: {
     id: 8,
@@ -143,7 +145,7 @@ GameDatabase.tabNotifications = {
         tab: "teresa"
       }
     ],
-    condition: () => player.celestials.teresa.pouredAmount !== 0 && Teresa.isUnlocked,
+    condition: () => player.celestials.teresa.pouredAmount === 0 && Teresa.isUnlocked,
     events: [GAME_EVENT.REALITY_UPGRADE_BOUGHT]
   },
   alchemyUnlock: {
@@ -160,5 +162,16 @@ GameDatabase.tabNotifications = {
     ],
     condition: () => player.celestials.ra.pets.effarig.level >= 2,
     events: [GAME_EVENT.GAME_TICK_AFTER]
+  },
+  newAutobuyer: {
+    id: 12,
+    tabsToHighLight: [
+      {
+        parent: "automation",
+        tab: "autobuyers"
+      },
+    ],
+    // Always externally triggered
+    condition: () => true,
   },
 };

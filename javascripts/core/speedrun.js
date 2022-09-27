@@ -1,5 +1,5 @@
 import { GameDatabase } from "./secret-formula/game-database";
-import { GameMechanicState } from "./game-mechanics/index.js";
+import { GameMechanicState } from "./game-mechanics/index";
 
 export const Speedrun = {
   unlock() {
@@ -8,7 +8,7 @@ export const Speedrun = {
     Modal.message.show(`You have unlocked Speedrun Mode! This allows you to start a new save file with some slight
       changes which can be helpful if you're trying to complete the game as quickly as possible. The option to
       start a Speedrun Save is now available in the Options tab, under Saving. Choosing to start a Speedrun Save
-      will provide you with another modal with more in-depth information.`);
+      will provide you with another modal with more in-depth information.`, {}, 3);
     player.speedrun.isUnlocked = true;
   },
   // If a name isn't given, choose a somewhat-likely-to-be-unique big number instead
@@ -40,6 +40,7 @@ export const Speedrun = {
 
     // Some time elapses after the reset and before the UI is actually ready, which ends up getting "counted" as offline
     player.speedrun.offlineTimeUsed = 0;
+    GameStorage.save();
   },
   // Speedruns are initially paused until startTimer is called, which happens as soon as the player purchases a AD or
   // uses the Konami code. Until then, they're free to do whatever they want with the UI

@@ -1,10 +1,12 @@
 <script>
+import InformationModalButton from "@/components/modals/InformationModalButton";
 import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
 export default {
   name: "InformationModal",
   components: {
     ModalCloseButton,
+    InformationModalButton
   },
 };
 </script>
@@ -26,67 +28,36 @@ export default {
       information about progressing.
     </div>
     <div class="l-socials c-socials">
-      <span
-        ach-tooltip="GitHub repository"
-        class="c-socials--icon__wrapper"
-      >
-        <a
-          href="https://github.com/IvarK/IvarK.github.io"
-          target="_blank"
-          class="c-socials--icon"
-        ><i class="fa-brands fa-github" /></a>
-      </span>
-      <span
-        ach-tooltip="Game changelog"
-        class="c-socials--icon__wrapper"
-      >
-        <a
-          href="changelog.html"
-          target="_blank"
-          class="c-socials--icon"
-        ><i class="fa-solid fa-file-lines" /></a>
-      </span>
-      <span
-        ach-tooltip="r/AntimatterDimensions"
-        class="c-socials--icon__wrapper"
-      >
-        <a
-          href="https://www.reddit.com/r/antimatterdimensions"
-          target="_blank"
-          class="c-socials--icon"
-        ><i class="fa-brands fa-reddit-alien" /></a>
-      </span>
-      <span
-        ach-tooltip="Antimatter Dimensions Discord Server"
-        class="c-socials--icon__wrapper"
-      >
-        <a
-          href="https://discord.gg/ST9NaXa"
-          target="_blank"
-          class="c-socials--icon"
-        ><i class="fa-brands fa-discord" /></a>
-      </span>
-      <span
-        ach-tooltip="Antimatter Dimensions on Google Play"
-        class="c-socials--icon__wrapper"
-      >
-        <a
-          href="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions"
-          target="_blank"
-          class="c-socials--icon"
-        ><i class="fa-brands fa-google-play" /></a>
-      </span>
-      <!-- TODO: Add way to see credits here -->
-      <span
-        ach-tooltip="Credits"
-        class="c-socials--icon__wrapper"
-      >
-        <a
-          href="https://example.com"
-          target="_blank"
-          class="c-socials--icon"
-        ><i class="fa-solid fa-users" /></a>
-      </span>
+      <InformationModalButton
+        name="GitHub repository"
+        icon="fa-brands fa-github"
+        link="https://github.com/IvarK/IvarK.github.io"
+      />
+      <InformationModalButton
+        name="r/AntimatterDimensions"
+        icon="fa-brands fa-reddit-alien"
+        link="https://www.reddit.com/r/AntimatterDimensions/"
+      />
+      <InformationModalButton
+        name="Antimatter Dimensions Discord Server"
+        icon="fa-brands fa-discord"
+        link="https://discord.gg/ST9NaXa"
+      />
+      <InformationModalButton
+        name="Antimatter Dimensions on Google Play"
+        icon="fa-brands fa-google-play"
+        link="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions"
+      />
+      <InformationModalButton
+        name="Credits"
+        icon="fa-solid fa-users"
+        show-modal="credits"
+      />
+      <InformationModalButton
+        name="Game Changelog"
+        icon="fa-solid fa-file-lines"
+        show-modal="changelog"
+      />
     </div>
   </div>
 </template>
@@ -95,6 +66,7 @@ export default {
 .l-information-modal {
   display: flex;
   flex-direction: column;
+  /* stylelint-disable-next-line unit-allowed-list */
   width: calc(100vw - 50vh);
   justify-content: space-around;
 }
@@ -104,10 +76,10 @@ export default {
 }
 
 .c-info-body {
-  margin: 1rem;
-  padding: 0.5rem;
   text-align: left;
   font-size: 2rem;
+  margin: 1rem;
+  padding: 0.5rem;
 }
 
 .c-socials {
@@ -116,24 +88,7 @@ export default {
 
 .l-socials {
   display: flex;
-  align-items: center;
   justify-content: space-evenly;
-}
-
-.c-socials--icon {
-  color: var(--color-text);
-}
-
-.c-socials--icon__wrapper {
-  transition: all .2s ease-in-out;
-}
-
-.c-socials--icon__wrapper:hover {
-  transform: scale(1.1);
-}
-
-[ach-tooltip]:before {
-  width: 20rem;
-  font-size: 1.5rem;
+  align-items: center;
 }
 </style>

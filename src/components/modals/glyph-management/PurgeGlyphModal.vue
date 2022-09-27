@@ -7,8 +7,8 @@ export default {
     ModalWrapperChoice
   },
   props: {
-    modalConfig: {
-      type: Object,
+    harsh: {
+      type: Boolean,
       required: true
     }
   },
@@ -19,9 +19,6 @@ export default {
     };
   },
   computed: {
-    harsh() {
-      return this.modalConfig.harsh;
-    },
     threshold() {
       return this.harsh ? 1 : 5;
     },

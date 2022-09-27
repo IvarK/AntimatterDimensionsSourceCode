@@ -1,20 +1,15 @@
-import { SetPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics/index.js";
-import { DC } from "./constants.js";
-import { SpeedrunMilestones } from "./speedrun.js";
+import { RebuyableMechanicState, SetPurchasableMechanicState } from "./game-mechanics/index";
+import { DC } from "./constants";
+import FullScreenAnimationHandler from "./full-screen-animation-handler";
+import { SpeedrunMilestones } from "./speedrun";
 
 export function animateAndDilate() {
-  document.body.style.animation = "dilate 2s 1 linear";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 2000);
+  FullScreenAnimationHandler.display("a-dilate", 2);
   setTimeout(startDilatedEternity, 1000);
 }
 
 export function animateAndUndilate() {
-  document.body.style.animation = "undilate 2s 1 linear";
-  setTimeout(() => {
-    document.body.style.animation = "";
-  }, 2000);
+  FullScreenAnimationHandler.display("a-undilate", 2);
   setTimeout(() => {
     eternity(false, false, { switchingDilation: true });
   }, 1000);
@@ -22,10 +17,11 @@ export function animateAndUndilate() {
 
 export function startDilatedEternityRequest() {
   if (!PlayerProgress.dilationUnlocked() || (Pelle.isDoomed && !Pelle.canDilateInPelle)) return;
-  const playAnimation = player.options.animations.dilation && document.body.style.animation === "";
+  const playAnimation = player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying;
   if (player.dilation.active) {
-    // TODO Dilation modal
-    if (playAnimation) {
+    if (player.options.confirmations.dilation) {
+      Modal.exitDilation.show();
+    } else if (playAnimation) {
       animateAndUndilate();
     } else {
       eternity(false, false, { switchingDilation: true });
@@ -37,20 +33,20 @@ export function startDilatedEternityRequest() {
   } else {
     startDilatedEternity();
   }
-  if (Pelle.isDoomed && !player.options.confirmations.dilation) {
-    PelleStrikes.dilation.trigger();
-  }
 }
 
 export function startDilatedEternity(auto) {
-  if (!PlayerProgress.dilationUnlocked()) return;
+  if (!PlayerProgress.dilationUnlocked()) return false;
+  if (GameEnd.creditsEverClosed) return false;
   if (player.dilation.active) {
     eternity(false, auto, { switchingDilation: true });
-    return;
+    return false;
   }
   Achievement(136).unlock();
   eternity(false, auto, { switchingDilation: true });
   player.dilation.active = true;
+  if (Pelle.isDoomed) PelleStrikes.dilation.trigger();
+  return true;
 }
 
 const DIL_UPG_NAMES = [
@@ -60,6 +56,7 @@ const DIL_UPG_NAMES = [
 ];
 
 export function buyDilationUpgrade(id, bulk = 1) {
+  if (GameEnd.creditsEverClosed) return false;
   // Upgrades 1-3 are rebuyable, and can be automatically bought in bulk with a perk shop upgrade
   const upgrade = DilationUpgrade[DIL_UPG_NAMES[id]];
   if (id > 3 && id < 11) {
@@ -114,12 +111,12 @@ export function getTachyonGalaxyMult(thresholdUpgrade) {
 }
 
 export function getDilationGainPerSecond() {
-  const mult = NG.multiplier;
   if (Pelle.isDoomed) {
-    const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.death.milestones[1].effectOrDefault(1));
+    const tachyonEffect = Currency.tachyonParticles.value.pow(PelleRifts.paradox.milestones[1].effectOrDefault(1));
     return new Decimal(tachyonEffect)
       .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
-      .times(Pelle.specialGlyphEffect.dilation).div(3e4).times(mult);
+      .times(ShopPurchase.dilatedTimePurchases.currentMult ** 0.5)
+      .times(Pelle.specialGlyphEffect.dilation).div(3e4);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
@@ -127,21 +124,22 @@ export function getDilationGainPerSecond() {
       Achievement(132),
       Achievement(137),
       RealityUpgrade(1),
-      AlchemyResource.dilation
+      AlchemyResource.dilation,
+      Ra.unlocks.continuousTTBoost.effects.dilatedTime,
+      Ra.unlocks.peakGamespeedDT
     );
   dtRate = dtRate.times(getAdjustedGlyphEffect("dilationDT"));
+  dtRate = dtRate.times(ShopPurchase.dilatedTimePurchases.currentMult);
   dtRate = dtRate.times(
     Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
-  dtRate = dtRate.times(Ra.gamespeedDTMult());
   if (Enslaved.isRunning && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
-  dtRate = dtRate.times(RA_UNLOCKS.TT_BOOST.effect.dilatedTime());
-  dtRate = dtRate.times(mult);
   if (V.isRunning) dtRate = dtRate.pow(0.5);
   return dtRate;
 }
 
 function tachyonGainMultiplier() {
   if (Pelle.isDisabled("tpMults")) return new Decimal(1);
+  const pow = Enslaved.isRunning ? Enslaved.tachyonNerf : 1;
   return DC.D1.timesEffectsOf(
     DilationUpgrade.tachyonGain,
     GlyphSacrifice.dilation,
@@ -149,7 +147,7 @@ function tachyonGainMultiplier() {
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15)
-  );
+  ).pow(pow);
 }
 
 export function rewardTP() {
@@ -157,13 +155,22 @@ export function rewardTP() {
   player.dilation.lastEP = Currency.eternityPoints.value;
 }
 
+// This function exists to apply Teresa-25 in a consistent way; TP multipliers can be very volatile and
+// applying the reward only once upon unlock promotes min-maxing the upgrade by unlocking dilation with
+// TP multipliers as large as possible. Applying the reward to a base TP value and letting the multipliers
+// act dynamically on this fixed base value elsewhere solves that issue
+export function getBaseTP(antimatter) {
+  const am = (isInCelestialReality() || Pelle.isDoomed)
+    ? antimatter
+    : Ra.unlocks.unlockDilationStartingTP.effectOrDefault(antimatter);
+  let baseTP = Decimal.pow(Decimal.log10(am) / 400, 1.5);
+  if (Enslaved.isRunning) baseTP = baseTP.pow(Enslaved.tachyonNerf);
+  return baseTP;
+}
+
 // Returns the TP that would be gained this run
 export function getTP(antimatter) {
-  let tachyon = Decimal
-    .pow(Decimal.log10(antimatter) / 400, 1.5)
-    .times(tachyonGainMultiplier());
-  if (Enslaved.isRunning) tachyon = tachyon.pow(Enslaved.tachyonNerf);
-  return tachyon;
+  return getBaseTP(antimatter).times(tachyonGainMultiplier());
 }
 
 // Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
@@ -227,26 +234,12 @@ class RebuyableDilationUpgradeState extends RebuyableMechanicState {
   }
 }
 
-export const DilationUpgrade = (function() {
-  const db = GameDatabase.eternity.dilation;
-  return {
-    dtGain: new RebuyableDilationUpgradeState(db.dtGain),
-    galaxyThreshold: new RebuyableDilationUpgradeState(db.galaxyThreshold),
-    tachyonGain: new RebuyableDilationUpgradeState(db.tachyonGain),
-    doubleGalaxies: new DilationUpgradeState(db.doubleGalaxies),
-    tdMultReplicanti: new DilationUpgradeState(db.tdMultReplicanti),
-    ndMultDT: new DilationUpgradeState(db.ndMultDT),
-    ipMultDT: new DilationUpgradeState(db.ipMultDT),
-    timeStudySplit: new DilationUpgradeState(db.timeStudySplit),
-    dilationPenalty: new DilationUpgradeState(db.dilationPenalty),
-    ttGenerator: new DilationUpgradeState(db.ttGenerator),
-    dtGainPelle: new RebuyableDilationUpgradeState(db.dtGainPelle),
-    galaxyMultiplier: new RebuyableDilationUpgradeState(db.galaxyMultiplier),
-    tickspeedPower: new RebuyableDilationUpgradeState(db.tickspeedPower),
-    galaxyThresholdPelle: new DilationUpgradeState(db.galaxyThresholdPelle),
-    flatDilationMult: new DilationUpgradeState(db.flatDilationMult),
-  };
-}());
+export const DilationUpgrade = mapGameDataToObject(
+  GameDatabase.eternity.dilation,
+  config => (config.rebuyable
+    ? new RebuyableDilationUpgradeState(config)
+    : new DilationUpgradeState(config))
+);
 
 export const DilationUpgrades = {
   rebuyable: [
@@ -254,11 +247,5 @@ export const DilationUpgrades = {
     DilationUpgrade.galaxyThreshold,
     DilationUpgrade.tachyonGain,
   ],
-  fromId: (function() {
-    const upgradesById = [];
-    for (const upgrade of Object.values(DilationUpgrade)) {
-      upgradesById[upgrade.id] = upgrade;
-    }
-    return id => upgradesById[id];
-  }()),
+  fromId: id => DilationUpgrade.all.find(x => x.id === Number(id))
 };

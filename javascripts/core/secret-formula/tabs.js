@@ -1,4 +1,4 @@
-import { GameDatabase } from "./game-database.js";
+import { GameDatabase } from "./game-database";
 
 GameDatabase.tabs = [
   {
@@ -160,6 +160,7 @@ GameDatabase.tabs = [
     name: "Automation",
     id: 4,
     hideAt: 2.1,
+    condition: () => player.records.totalAntimatter.gte(1e40),
     hidable: true,
     subtabs: [
       {
@@ -322,7 +323,6 @@ GameDatabase.tabs = [
     key: "reality",
     name: "Reality",
     hideAt: 2.3,
-    before: "RealityMachinesHeader",
     UIClass: "o-tab-btn--reality",
     condition: () => PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought,
     id: 8,
@@ -375,7 +375,7 @@ GameDatabase.tabs = [
         name: "Glyph Alchemy",
         symbol: "<i class='fas fa-vial'></i>",
         component: "AlchemyTab",
-        condition: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
+        condition: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
         id: 5,
         hidable: true,
       },
@@ -411,14 +411,14 @@ GameDatabase.tabs = [
         name: "Effarig",
         symbol: "Ϙ",
         component: "EffarigTab",
-        condition: () => Teresa.has(TERESA_UNLOCKS.EFFARIG),
+        condition: () => TeresaUnlocks.effarig.isUnlocked,
         id: 2,
         hidable: true,
       },
       {
         key: "enslaved",
-        name: "The Enslaved Ones",
-        symbol: "<i class='fas fa-link'></i>",
+        name: "The Nameless Ones",
+        symbol: "<div class='o-tab-btn--cel3'>\uf0c1</div>",
         component: "EnslavedTab",
         condition: () => EffarigUnlock.eternity.isUnlocked,
         id: 3,
@@ -438,7 +438,7 @@ GameDatabase.tabs = [
         name: "Ra",
         symbol: "<i class='fas fa-sun'></i>",
         component: "RaTab",
-        condition: () => V.has(V_UNLOCKS.RA_UNLOCK),
+        condition: () => VUnlocks.raUnlock.isUnlocked,
         id: 5,
         hidable: true,
       },
@@ -466,7 +466,7 @@ GameDatabase.tabs = [
     key: "shop",
     name: "Shop",
     newUIClass: "shop",
-    hideAt: 2.4,
+    hideAt: 1.5,
     condition: () => 1===1 /*kong.enabled || player.IAP.totalSTD > 0, ||*/,
     id: 10,
     hidable: true,

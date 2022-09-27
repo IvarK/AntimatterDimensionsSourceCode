@@ -1,4 +1,4 @@
-import { GameDatabase } from "./game-database.js";
+import { GameDatabase } from "./game-database";
 
 GameDatabase.confirmationTypes = [
   {
@@ -56,22 +56,30 @@ GameDatabase.confirmationTypes = [
   }, {
     name: "Glyph Undo",
     option: "glyphUndo",
-    isUnlocked: () => Teresa.has(TERESA_UNLOCKS.UNDO),
+    isUnlocked: () => TeresaUnlocks.undo.canBeApplied,
+  }, {
+    name: "Switch Automator Editor",
+    option: "switchAutomatorMode",
+    isUnlocked: () => Player.automatorUnlocked,
   }, {
     name: "Reset Celestial",
     option: "resetCelestial",
-    isUnlocked: () => Teresa.has(TERESA_UNLOCKS.RUN),
+    isUnlocked: () => TeresaUnlocks.run.canBeApplied,
   }, {
-    name: "Delete Glyph Set Save",
+    name: "Delete Glyph Preset",
     option: "deleteGlyphSetSave",
     isUnlocked: () => EffarigUnlock.setSaves.isUnlocked,
   }, {
     name: "Glyph Refine",
     option: "glyphRefine",
-    isUnlocked: () => Ra.has(RA_UNLOCKS.GLYPH_ALCHEMY),
+    isUnlocked: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
   }, {
     name: "Armageddon",
     option: "armageddon",
     isUnlocked: () => Pelle.isDoomed,
-  },
+  }, {
+    name: "Respec Shop Purchases",
+    option: "respecIAP",
+    isUnlocked: () => true
+  }
 ];

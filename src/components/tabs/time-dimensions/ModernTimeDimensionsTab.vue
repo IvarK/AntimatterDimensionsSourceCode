@@ -1,6 +1,6 @@
 <script>
-import PrimaryButton from "@/components/PrimaryButton";
 import NewTimeDimensionRow from "./ModernTimeDimensionRow";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "NewTimeDimensionsTab",

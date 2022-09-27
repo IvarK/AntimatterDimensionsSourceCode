@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     effectConfig() {
-      return GameDatabase.reality.glyphEffects[this.effect];
+      return GlyphEffects[this.effect];
     },
     boostColor() {
       return (this.effectConfig.alterationType !== undefined &&
@@ -27,18 +27,16 @@ export default {
         : undefined;
     },
     effectStringTemplate() {
-      return typeof this.effectConfig.singleDesc === "function"
-        ? this.effectConfig.singleDesc()
-        : this.effectConfig.singleDesc;
+      return this.effectConfig.singleDesc;
     },
     primaryEffectText() {
       const value = this.effectConfig.formatSingleEffect(this.value);
-      return this.boostColor ? `⯅${value}⯅` : value;
+      return this.boostColor ? `⯅${value}` : value;
     },
     secondaryEffectText() {
       const value = this.effectConfig.formatSingleSecondaryEffect(
         this.effectConfig.conversion(this.value));
-      return this.boostColor ? `⯅${value}⯅` : value;
+      return this.boostColor ? `⯅${value}` : value;
     },
     textSplits() {
       const firstSplit = this.effectStringTemplate.split("{value}");
@@ -53,7 +51,7 @@ export default {
       return this.textSplits[2] !== undefined;
     },
     isPelleDisabled() {
-      return Pelle.isDoomed && !Pelle.enabledGlyphEffects.includes(this.effect);
+      return this.effectConfig.isDisabledByDoomed;
     },
     convertedParts() {
       const parts = [];
@@ -68,13 +66,21 @@ export default {
         color: "#76EE76",
       };
     },
+    textShadowColor() {
+      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
+    },
   },
   methods: {
     convertToHTML(string) {
       return string
         .replace("\n", "<br>")
         .replace("]", "</span>")
-        .replace("[", `<span style="color:${this.additionColor}; text-shadow:#FFFFFF 0 0 0.6rem;">`);
+        .replace(
+          "[", `<span style="${Theme.current().isDark() || player.options.forceDarkGlyphs
+            ? "text-shadow: white 0 0 0.6rem;"
+            : ""}
+            font-weight: bold;">`
+        );
     }
   }
 };
@@ -83,24 +89,19 @@ export default {
 <template>
   <div
     class="c-glyph-tooltip__effect"
-    :style="{
-      textDecoration: isPelleDisabled ? 'line-through' : null,
-    }"
+    :class="{ 'o-pelle-disabled': isPelleDisabled }"
   >
     <span v-html="convertedParts[0]" />
+    <!-- Do not "fix" the spacing on these spans; moving effectText to its own line causes extra spaces to appear -->
     <span
       v-if="hasValue"
       :style="valueStyle"
-    >
-      {{ primaryEffectText }}
-    </span>
+    >{{ primaryEffectText }}</span>
     <span v-html="convertedParts[1]" />
     <span
       v-if="hasSecondaryValue"
       :style="valueStyle"
-    >
-      {{ secondaryEffectText }}
-    </span>
+    >{{ secondaryEffectText }}</span>
     <span
       v-if="hasSecondaryValue"
       v-html="convertedParts[2]"

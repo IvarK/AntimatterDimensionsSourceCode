@@ -14,28 +14,38 @@ export default {
   },
   data() {
     return {
-      name: player.timestudy.presets[this.saveslot - 1].name,
+      name: "",
+      displayName: "",
     };
   },
   computed: {
     preset() {
       return player.timestudy.presets[this.saveslot - 1];
     },
-    displayName() {
-      return this.name === "" ? this.saveslot : this.name;
-    }
   },
   methods: {
+    update() {
+      this.name = player.timestudy.presets[this.saveslot - 1].name;
+      this.displayName = this.name === "" ? this.saveslot : this.name;
+    },
     nicknameBlur(event) {
-      this.preset.name = event.target.value.slice(0, 4);
+      const newName = event.target.value.slice(0, 4).trim();
+      if (!this.isASCII(newName)) return;
+      this.preset.name = newName;
       this.name = this.preset.name;
     },
     hideContextMenu() {
       this.$viewModel.currentContextMenu = null;
     },
+    // This is largely done because of UI reasons - there is no Unicode specification for character width, which means
+    // that arbitrary Unicode inputs can allow for massive text overflow
+    isASCII(input) {
+      // eslint-disable-next-line no-control-regex
+      return !/[^\u0000-\u00ff]/u.test(input);
+    },
     save() {
       this.hideContextMenu();
-      this.preset.studies = TimeStudyTree.formatStudyList(GameCache.currentStudyTree.value.exportString);
+      this.preset.studies = GameCache.currentStudyTree.value.exportString;
       const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
       GameUI.notify.eternity(`${presetName} saved in slot ${this.saveslot}`);
     },
@@ -47,13 +57,18 @@ export default {
         const combinedTree = new TimeStudyTree();
         combinedTree.attemptBuyArray(TimeStudyTree.currentStudies, false);
         combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.preset.studies), true);
-        TimeStudyTree.commitToGameState(combinedTree.purchasedStudies);
+        TimeStudyTree.commitToGameState(combinedTree.purchasedStudies, false);
 
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
         GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
       } else {
         Modal.message.show("This Time Study list currently contains no Time Studies.");
       }
+    },
+    deletePreset() {
+      this.hideContextMenu();
+      if (this.preset.studies) Modal.studyString.show({ id: this.saveslot - 1, deleting: true });
+      else Modal.message.show("This Time Study list currently contains no Time Studies.");
     },
     handleExport() {
       this.hideContextMenu();
@@ -81,7 +96,7 @@ export default {
     </template>
     <template #menu>
       <div class="l-tt-save-load-btn__menu c-tt-save-load-btn__menu">
-        <span ach-tooltip="Set a custom name (up to 4 characters)">
+        <span ach-tooltip="Set a custom name (up to 4 ASCII characters)">
           <input
             type="text"
             size="4"
@@ -116,6 +131,12 @@ export default {
         >
           Load
         </div>
+        <div
+          class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item"
+          @click="deletePreset"
+        >
+          Delete
+        </div>
       </div>
     </template>
   </HoverMenu>
@@ -123,30 +144,30 @@ export default {
 
 <style scoped>
 .l-tt-save-load-btn__wrapper {
-  margin: 0.3em;
   position: relative;
+  margin: 0.3rem;
 }
 
 .l-tt-save-load-btn {
-  min-width: 2em;
+  min-width: 2rem;
 }
 
 .l-tt-save-load-btn__menu {
   position: absolute;
   top: -0.5rem;
   left: 50%;
-  transform: translate(-50%, -100%);
   padding: 0.5rem 0;
+  transform: translate(-50%, -100%);
 }
 
 .c-tt-save-load-btn__menu {
-  color: white;
-  background: black;
-  border-radius: 0.5rem;
   text-align: left;
-  font-weight: bold;
   font-family: Typewriter;
   font-size: 1.4rem;
+  font-weight: bold;
+  color: white;
+  background: black;
+  border-radius: var(--var-border-radius, 0.5rem);
 }
 
 .l-tt-save-load-btn__menu::after {
@@ -154,10 +175,10 @@ export default {
   position: absolute;
   top: 100%;
   left: 50%;
-  margin-left: -0.5rem;
-  border-width: 0.5rem;
-  border-style: solid;
   border-color: black transparent transparent;
+  border-style: solid;
+  border-width: var(--var-border-width, 0.5rem);
+  margin-left: -0.5rem;
 }
 
 .l-tt-save-load-btn__menu-rename {
@@ -166,11 +187,11 @@ export default {
 
 .c-tt-save-load-btn__menu-rename {
   text-align: left;
-  font-weight: bold;
   font-family: Typewriter;
   font-size: 1.4rem;
+  font-weight: bold;
   border: none;
-  border-radius: 0.3rem;
+  border-radius: var(--var-border-radius, 0.3rem);
   padding: 0.2rem;
 }
 
@@ -180,7 +201,7 @@ export default {
 }
 
 .c-tt-save-load-btn__menu-item:hover {
-  background: white;
   color: black;
+  background: white;
 }
 </style>

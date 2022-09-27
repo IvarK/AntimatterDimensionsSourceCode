@@ -1,18 +1,21 @@
 <script>
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
+import SliderComponent from "@/components/SliderComponent";
 
 export default {
   name: "AnimationOptionsModal",
   components: {
     ModalOptionsToggleButton,
     ModalWrapperOptions,
+    SliderComponent
   },
   data() {
     return {
       infinityUnlocked: false,
       eternityUnlocked: false,
       dilationUnlocked: false,
+      tachyonsUnlocked: false,
       realityUnlocked: false,
       animatedThemeUnlocked: false,
       bigCrunch: false,
@@ -24,6 +27,17 @@ export default {
       blobSnowflakes: 16,
       isS11Active: false
     };
+  },
+  computed: {
+    sliderProps() {
+      return {
+        min: 1,
+        max: 500,
+        interval: 1,
+        width: "100%",
+        tooltip: false
+      };
+    }
   },
   watch: {
     bigCrunch(newValue) {
@@ -53,7 +67,9 @@ export default {
       const progress = PlayerProgress.current;
       this.infinityUnlocked = progress.isInfinityUnlocked;
       this.eternityUnlocked = progress.isEternityUnlocked;
-      this.dilationUnlocked = progress.isRealityUnlocked || !Currency.tachyonParticles.eq(0);
+      // 136 is given upon dilating
+      this.dilationUnlocked = progress.isRealityUnlocked || Achievement(136).canBeApplied;
+      this.tachyonsUnlocked = progress.isRealityUnlocked || Currency.tachyonParticles.gt(0);
       this.realityUnlocked = progress.isRealityUnlocked;
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
       this.isS11Active = player.options.theme === "S11";
@@ -66,8 +82,12 @@ export default {
       this.reality = options.reality;
       this.background = options.background;
       this.blobSnowflakes = options.blobSnowflakes;
+    },
+    adjustSliderValue(value) {
+      this.blobSnowflakes = value;
+      player.options.blobSnowflakes = this.blobSnowflakes;
     }
-  },
+  }
 };
 </script>
 
@@ -93,7 +113,7 @@ export default {
         text="Dilation:"
       />
       <ModalOptionsToggleButton
-        v-if="dilationUnlocked"
+        v-if="tachyonsUnlocked"
         v-model="tachyonParticles"
         text="Tachyon particles:"
       />
@@ -123,14 +143,12 @@ export default {
         class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider"
       >
         <b>{{ quantifyInt("Blobflake", parseInt(blobSnowflakes)) }}</b>
-        <input
-          v-model="blobSnowflakes"
+        <SliderComponent
           class="o-primary-btn--slider__slider"
-          type="range"
-          min="1"
-          step="1"
-          max="500"
-        >
+          v-bind="sliderProps"
+          :value="blobSnowflakes"
+          @input="adjustSliderValue($event)"
+        />
       </div>
     </div>
   </ModalWrapperOptions>

@@ -10,7 +10,7 @@ export default {
     return {
       exitingEC: false,
       startingIP: new Decimal(),
-      gainedEternityPoints: new Decimal(),
+      gainedEternityPoints: new Decimal()
     };
   },
   computed: {
@@ -41,10 +41,6 @@ export default {
       return `You will gain ${quantifyInt("completion", gainedCompletions)} for Eternity Challenge ${ec.id}.`;
     }
   },
-  created() {
-    this.on$(GAME_EVENT.ETERNITY_RESET_AFTER, this.emitClose);
-    this.on$(GAME_EVENT.REALITY_RESET_AFTER, this.emitClose);
-  },
   methods: {
     update() {
       this.exitingEC = EternityChallenge.isRunning;
@@ -52,16 +48,8 @@ export default {
       this.gainedEternityPoints = gainedEternityPoints();
     },
     handleYesClick() {
-      if (player.dilation.active && player.options.animations.dilation && document.body.style.animation === "") {
-        animateAndUndilate();
-        setTimeout(eternity, 1000);
-      } else if (!player.dilation.active && player.options.animations.eternity &&
-        document.body.style.animation === "") {
-        eternityAnimation();
-        setTimeout(eternity, 2250);
-      } else {
-        eternity();
-      }
+      animateAndEternity();
+      EventHub.ui.offAll(this);
     }
   },
 };
@@ -73,12 +61,11 @@ export default {
     @confirm="handleYesClick"
   >
     <template #header>
-      {{ exitingEC ? "Complete Eternity Challenge" :"You are about to Eternity" }}
+      {{ exitingEC ? "Complete Eternity Challenge" : "You are about to Eternity" }}
     </template>
     <div v-if="!exitingEC">
       <div class="c-modal-message__text">
         {{ message }}
-        <!-- TODO: DILATION EXIT MODAL HI GAMER -->
         <br>
       </div>
       <br>

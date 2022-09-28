@@ -634,7 +634,8 @@ export function gameLoop(passDiff, options = {}) {
 function passivePrestigeGen() {
   let eternitiedGain = 0;
   if (RealityUpgrade(14).isBought) {
-    eternitiedGain = Effects.product(
+    eternitiedGain = DC.D1.timesEffectsOf(
+      Achievement(113),
       RealityUpgrade(3),
       RealityUpgrade(14)
     );

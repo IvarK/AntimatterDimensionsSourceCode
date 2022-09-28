@@ -14,7 +14,8 @@ const propList = {
   EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "other"],
   TP: ["base", "achievement", "dilation", "realityUpgrade", "dilationGlyphSacrifice"],
   DT: ["tachyon", "achievement", "dilation", "realityUpgrade", "glyph", "ra", "other"],
-  infinities: ["achievement", "timeStudy", "realityUpgrades", "glyph", "ra"]
+  infinities: ["achievement", "timeStudy", "realityUpgrades", "glyph", "ra"],
+  eternities: ["achievement", "realityUpgrades", "glyph", "alchemy"]
 };
 
 // Used for individual dimension breakdowns of effects (eg. full achievement mult into its values on individual ADs)
@@ -82,7 +83,10 @@ GameDatabase.multiplierTabTree = {
   ],
   infinities_total: [
     getProps("infinities")
-  ]
+  ],
+  eternities_total: [
+    getProps("eternities")
+  ],
 };
 
 // TP has redundant entries, so we link them together by replacing a reference

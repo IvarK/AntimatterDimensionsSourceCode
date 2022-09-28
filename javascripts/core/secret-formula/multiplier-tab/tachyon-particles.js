@@ -38,7 +38,7 @@ GameDatabase.multiplierTabValues.TP = {
     multValue: () => DC.D1.timesEffectsOf(RealityUpgrade(4), RealityUpgrade(8), RealityUpgrade(15)),
     isActive: () => PlayerProgress.realityUnlocked(),
     color: () => "var(--color-reality)",
-    barOverlay: () => `Ϟ`,
+    barOverlay: () => `Ϟ<i class="fas fa-arrow-up" />`,
   },
   dilationGlyphSacrifice: {
     name: () => "Dilation Glyph Sacrifice",

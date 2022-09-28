@@ -6,7 +6,7 @@ GameDatabase.multiplierTabValues.infinities = {
   total: {
     name: () => "Infinities gained per Crunch",
     isBase: () => true,
-    multValue: () => gainedInfinityPoints(),
+    multValue: () => gainedInfinities(),
     isActive: () => !EternityChallenge(4).isRunning && !Pelle.isDoomed,
     overlay: ["∞", "<i class='fa-solid fa-arrows-rotate' />"],
   },
@@ -35,7 +35,7 @@ GameDatabase.multiplierTabValues.infinities = {
     ),
     isActive: () => PlayerProgress.realityUnlocked(),
     color: () => "var(--color-dilation)",
-    barOverlay: () => `Ψ<i class="fas fa-arrow-up" />`,
+    barOverlay: () => `Ϟ<i class="fas fa-arrow-up" />`,
   },
   glyph: {
     name: () => "Equipped Glyphs",

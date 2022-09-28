@@ -12,7 +12,7 @@ export default {
     };
   },
   computed: {
-    options: () => ["AM", "tickspeed", "AD", "ID", "TD", "IP", "EP", "DT"],
+    options: () => ["AM", "tickspeed", "AD", "ID", "IP", "infinities", "TD", "EP", "DT"],
     resourceName() {
       return GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.name();
     },

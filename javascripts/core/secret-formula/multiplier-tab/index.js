@@ -35,3 +35,4 @@ import "./tachyon-particles";
 import "./dilated-time";
 import "./tickspeed";
 import "./galaxies";
+import "./infinities";

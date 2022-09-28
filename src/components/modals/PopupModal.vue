@@ -9,11 +9,22 @@ export default {
   },
   data() {
     return {
+      limitSize: false,
       forceDontShowModal: false
     };
   },
+  computed: {
+    classObject() {
+      return {
+        "c-modal l-modal": true,
+        "c-limit-size": this.limitSize,
+      };
+    }
+  },
   created() {
     this.on$(GAME_EVENT.CLOSE_MODAL, this.hide);
+    // The H2P modal scales dynamically to screen size and limiting it here can cause a double-scrollbar to appear
+    this.limitSize = this.modal._component.name !== "H2PModal";
   },
   destroyed() {
     document.activeElement.blur();
@@ -35,7 +46,7 @@ export default {
 <template>
   <div
     v-if="!forceDontShowModal"
-    class="c-modal l-modal"
+    :class="classObject"
   >
     <component
       :is="modal.component"
@@ -44,3 +55,10 @@ export default {
     />
   </div>
 </template>
+
+<style scoped>
+.c-limit-size {
+  max-height: 65rem;
+  overflow-y: scroll;
+}
+</style>

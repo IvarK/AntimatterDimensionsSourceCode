@@ -6835,10 +6835,8 @@ kbd {
 
 .c-enslaved-hint-modal {
   display: flex;
-  overflow-y: scroll;
   flex-direction: column;
   width: 60rem;
-  height: 57rem;
   text-align: left;
   font-size: 1.2rem;
   padding: 0.25rem 1rem;

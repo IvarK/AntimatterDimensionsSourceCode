@@ -69,7 +69,7 @@ export class ReplicantiUpgradeButtonSetup {
       class="o-primary-btn--replicanti-upgrade"
       @click="upgrade.purchase()"
     >
-      <span>{{ description }}</span>
+      <span v-html="description" />
       <template v-if="!isCapped">
         <br>
         <span>{{ costDescription }}</span>

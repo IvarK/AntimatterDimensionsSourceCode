@@ -768,6 +768,7 @@ window.player = {
     showAllChallenges: false,
     cloudEnabled: true,
     cloudSaveInterval: 300000,
+    syncSaveIntervals: true,
     hotkeys: true,
     theme: "Normal",
     commas: true,

@@ -56,10 +56,10 @@ export default {
       this.rolling = GameEnd.endState > END_STATE_MARKERS.CREDITS_START;
       this.scroll = (
         Math.clampMax(GameEnd.endState, END_STATE_MARKERS.CREDITS_END) - END_STATE_MARKERS.CREDITS_START
-      ) * 53;
+      ) * 60;
       if (this.audio) this.audio.volume = this.isMuted
         ? 0
-        : Math.clamp((GameEnd.endState - END_STATE_MARKERS.CREDITS_END), 0, 0.3);
+        : Math.clamp((GameEnd.endState - END_STATE_MARKERS.CREDITS_START), 0, 0.3);
     },
   }
 };

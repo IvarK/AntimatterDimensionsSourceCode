@@ -102,7 +102,6 @@ GameDatabase.challenges.infinity = [
         2,
         InfinityUpgrade.dimboostMult,
         InfinityChallenge(7).reward,
-        InfinityChallenge(7),
         TimeStudy(81)
       );
       return `you cannot buy Antimatter Galaxies. Base Dimension Boost multiplier is increased to a maximum

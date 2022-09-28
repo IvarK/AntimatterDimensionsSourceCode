@@ -923,9 +923,9 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Currency.infinitiesBanked.gt(DC.D2E9),
     checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
     get reward() {
-      return `After Eternity you permanently keep ${formatPercents(0.1)} of your Infinities as Banked Infinities.`;
+      return `After Eternity you permanently keep ${formatPercents(0.05)} of your Infinities as Banked Infinities.`;
     },
-    effect: () => Currency.infinities.value.times(0.1).floor()
+    effect: () => Currency.infinities.value.times(0.05).floor()
   },
   {
     id: 132,

@@ -31,6 +31,29 @@ export default {
     },
     clicksLeft() {
       return 5 - this.overwriteCounter;
+    },
+    suggestionText() {
+      const goodStyle = `style="color: var(--color-good)"`;
+      const badStyle = `style="color: var(--color-bad)"`;
+
+      const suggestions = ["Loading this Cloud save "];
+      const cloudProg = this.conflict.cloud.compositeProgress, localProg = this.conflict.local.compositeProgress;
+      const warnOverwrite = this.farther && Math.abs(cloudProg - localProg) > 0.15;
+      suggestions.push(warnOverwrite
+        ? `<b ${badStyle}>would cause your local save to lose significant progress</b>`
+        : `<b ${goodStyle}>is probably safe</b>`);
+      suggestions.push(this.hasLessSTDs
+        ? ` ${warnOverwrite ? "and" : "but"} <b ${badStyle}>will cause you to lose STDs on your local save</b>.`
+        : "."
+      );
+      if (this.hasDifferentName || this.wrongHash) {
+        suggestions.push(`<br>${warnOverwrite ? "Additionally" : "However"}, the Cloud save
+          <b ${badStyle}>may be a save from a different device</b>.`);
+      }
+      if (warnOverwrite || this.hasDifferentName || this.wrongHash) {
+        suggestions.push(`<br><b ${badStyle}>Are you sure you wish to overwrite your local save?</b>`);
+      }
+      return suggestions.join("");
     }
   },
   methods: {
@@ -54,21 +77,19 @@ export default {
     <template #header>
       Load Game from Cloud
     </template>
-    <b>
-      <span v-if="hasDifferentName">
-        Your Local and Cloud Saves have different names.
-      </span>
-      <span v-else-if="older">
-        Your Local Save appears to be older than your Cloud Save.
-      </span>
-      <span v-else-if="farther">
-        Your Local Save appears to be farther than your Cloud Save.
-      </span>
-      <span v-else>
-        Your Local Save and Cloud Save appear to have similar amounts of progress.
-      </span>
-      Please select the save you want to load.
-    </b>
+    <span v-if="hasDifferentName">
+      Your Local and Cloud Saves have <b>different names</b>.
+    </span>
+    <span v-else-if="older">
+      Loading from the Cloud would <b>load a save with less playtime</b>.
+    </span>
+    <span v-else-if="farther">
+      Loading from the Cloud would <b>cause you to lose progress</b>.
+    </span>
+    <span v-else>
+      Your Local Save and Cloud Save <b>appear to have similar amounts of progress</b>.
+    </span>
+    Please select the save you want to load.
     <br>
     <SaveInfoEntry
       :save-data="conflict.local"
@@ -84,6 +105,7 @@ export default {
       :show-name="hasDifferentName"
       save-type="Cloud Save"
     />
+    <span v-html="suggestionText" />
     <div
       v-if="hasLessSTDs"
       class="c-modal-IAP__warning"

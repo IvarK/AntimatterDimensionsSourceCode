@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       cloudEnabled: false,
+      syncSaveIntervals: false,
       showTimeSinceSave: false,
       loggedIn: false,
       userName: "",
@@ -28,6 +29,9 @@ export default {
     cloudEnabled(newValue) {
       player.options.cloudEnabled = newValue;
     },
+    syncSaveIntervals(newValue) {
+      player.options.syncSaveIntervals = newValue;
+    },
     showTimeSinceSave(newValue) {
       player.options.showTimeSinceSave = newValue;
     }
@@ -36,6 +40,7 @@ export default {
     update() {
       const options = player.options;
       this.cloudEnabled = options.cloudEnabled;
+      this.syncSaveIntervals = options.syncSaveIntervals;
       this.showTimeSinceSave = options.showTimeSinceSave;
       this.loggedIn = Cloud.loggedIn;
       this.canSpeedrun = player.speedrun.isUnlocked;
@@ -203,10 +208,16 @@ export default {
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
           label="Automatic cloud saving/loading:"
         />
+        <PrimaryToggleButton
+          v-model="syncSaveIntervals"
+          class="o-primary-btn--option l-options-grid__button"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          label="Force local save before cloud saving:"
+        />
         <AutosaveIntervalSlider
-          :min="10"
+          :min="120"
           :max="600"
-          :interval="10"
+          :interval="20"
           :is-cloud="true"
         />
       </div>

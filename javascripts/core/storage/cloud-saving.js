@@ -98,7 +98,7 @@ export const Cloud = {
   save(slot) {
     if (!this.user) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
-    GameStorage.save();
+    if (player.options.syncSaveIntervals) GameStorage.save();
     const root = {
       current: GameStorage.currentSlot,
       saves: GameStorage.saves,

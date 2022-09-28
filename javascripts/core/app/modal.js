@@ -1,3 +1,5 @@
+import { ProgressChecker } from "../storage/progress-checker";
+
 import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
 import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
 import EternityChallengeStartModal from "@/components/modals/challenges/EternityChallengeStartModal";
@@ -262,6 +264,7 @@ function getSaveInfo(save) {
     bestLevel: 0,
     totalSTD: 0,
     saveName: "",
+    compositeProgress: 0,
   };
   // This code ends up getting run on raw save data before any migrations are applied, so we need to default to props
   // which only exist on the pre-reality version when applicable. Note that new Decimal(undefined) gives zero.
@@ -278,6 +281,7 @@ function getSaveInfo(save) {
   resources.bestLevel = save.records?.bestReality.glyphLevel ?? 0;
   resources.totalSTD = save?.IAP?.totalSTD ?? 0;
   resources.saveName = save.options.saveFileName ?? "";
+  resources.compositeProgress = ProgressChecker.getCompositeProgress(save);
 
   return resources;
 }

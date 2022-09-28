@@ -52,7 +52,7 @@ GameDatabase.multiplierTabValues.DT = {
     multValue: () => RealityUpgrade(1).effectOrDefault(1),
     isActive: () => RealityUpgrade(1).canBeApplied,
     color: () => "var(--color-reality)",
-    barOverlay: () => `Ϟ`,
+    barOverlay: () => `Ϟ<i class="fas fa-arrow-up" />`,
   },
   glyph: {
     name: () => "Glyph Effects",

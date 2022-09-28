@@ -4,8 +4,8 @@ import { GameDatabase } from "../game-database";
 GameDatabase.challenges.infinity = [
   {
     id: 1,
-    description: `all Normal Challenges, with the exception of
-    Tickspeed (C9) and Big Crunch (C12) Challenges, are active at the same time.`,
+    description: `all Normal Challenge restrictions are active at once, with the exception of the
+      Tickspeed (C9) and Big Crunch (C12) Challenges.`,
     goal: DC.E650,
     isQuickResettable: true,
     reward: {
@@ -17,7 +17,7 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 2,
-    description: () => `automatically Dimensional Sacrifice every ${formatInt(400)} milliseconds once you have
+    description: () => `Dimensional Sacrifice happens automatically every ${formatInt(400)} milliseconds once you have
       an 8th Antimatter Dimension.`,
     goal: DC.E10500,
     isQuickResettable: false,
@@ -50,7 +50,7 @@ GameDatabase.challenges.infinity = [
   {
     id: 4,
     description: () =>
-      `only the latest bought Antimatter Dimension's production is normal, all other Antimatter Dimensions
+      `only the latest bought Antimatter Dimension's production is normal. All other Antimatter Dimensions
       produce less (${formatPow(0.25, 2, 2)}).`,
     goal: DC.E13000,
     isQuickResettable: true,
@@ -64,8 +64,8 @@ GameDatabase.challenges.infinity = [
   {
     id: 5,
     description:
-      `buying Antimatter Dimensions 1-4 causes all smaller Antimatter Dimension costs to increase,
-      and buying Antimatter Dimensions 5-8 causes all larger Antimatter Dimension costs to increase.`,
+      `buying Antimatter Dimensions 1-4 causes all smaller Antimatter Dimension costs to increase.
+      Buying Antimatter Dimensions 5-8 causes all larger Antimatter Dimension costs to increase.`,
     goal: DC.E16500,
     isQuickResettable: true,
     reward: {
@@ -79,8 +79,8 @@ GameDatabase.challenges.infinity = [
   {
     id: 6,
     description: () =>
-      `once you have at least ${formatInt(1)} 2nd Antimatter Dimension, exponentially rising matter
-      divides the multiplier on all of your Antimatter Dimensions.`,
+      `exponentially rising matter divides the multiplier on all of your Antimatter Dimensions
+      once you have at least ${formatInt(1)} 2nd Antimatter Dimension.`,
     goal: DC.D2E22222,
     isQuickResettable: true,
     effect: () => Currency.matter.value.clampMin(1),
@@ -94,14 +94,25 @@ GameDatabase.challenges.infinity = [
   },
   {
     id: 7,
-    description: () =>
-      `you can't get Antimatter Galaxies, but Dimension Boost multiplier
-      ${formatX(2.5, 1, 1)} ➜ ${formatX(10)}`,
+    description: () => {
+      // Copied from DimBoost.power; this is the base amount before any multipliers. Post-eternity this isn't
+      // necessarily 2.5x by the time the player sees this challenge; it's probably most accurate to say what it
+      // currently is, and this phrasing avoids 10x ➜ 10x with the old description.
+      const mult = Effects.max(
+        2,
+        InfinityUpgrade.dimboostMult,
+        InfinityChallenge(7).reward,
+        InfinityChallenge(7),
+        TimeStudy(81)
+      );
+      return `you cannot buy Antimatter Galaxies. Base Dimension Boost multiplier is increased to a maximum
+        of ${formatX(10)}. (Current base multiplier: ${formatX(mult)})`;
+    },
     goal: DC.E10000,
     isQuickResettable: false,
     effect: 10,
     reward: {
-      description: () => `Dimension Boost multiplier ${formatX(2.5, 1, 1)} ➜ ${formatX(4)}`,
+      description: () => `Dimension Boost multiplier is increased to a minimum of ${formatX(4)}`,
       effect: 4
     },
     unlockAM: DC.E23000,
@@ -109,8 +120,8 @@ GameDatabase.challenges.infinity = [
   {
     id: 8,
     description: () =>
-      `your production is at ${formatPercents(1)} after
-      purchasing anything, after that it rapidly drops down.`,
+      `your production rapidly and continually drops down over time. Purchasing an Antimatter Dimension or Tickspeed
+        upgrade sets production back to ${formatPercents(1)} before it starts dropping again.`,
     goal: DC.E27000,
     isQuickResettable: true,
     effect: () => DC.D0_8446303389034288.pow(

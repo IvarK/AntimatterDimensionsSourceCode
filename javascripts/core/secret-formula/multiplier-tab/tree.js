@@ -15,7 +15,8 @@ const propList = {
   TP: ["base", "achievement", "dilation", "realityUpgrade", "dilationGlyphSacrifice"],
   DT: ["tachyon", "achievement", "dilation", "realityUpgrade", "glyph", "ra", "other"],
   infinities: ["achievement", "timeStudy", "realityUpgrades", "glyph", "ra"],
-  eternities: ["achievement", "realityUpgrades", "glyph", "alchemy"]
+  eternities: ["achievement", "realityUpgrades", "glyph", "alchemy"],
+  gamespeed: ["glyph", "blackHoles", "pulsing", "singularity"],
 };
 
 // Used for individual dimension breakdowns of effects (eg. full achievement mult into its values on individual ADs)
@@ -86,6 +87,9 @@ GameDatabase.multiplierTabTree = {
   ],
   eternities_total: [
     getProps("eternities")
+  ],
+  gamespeed_total: [
+    getProps("gamespeed")
   ],
 };
 

@@ -220,10 +220,13 @@ class BlackHoleState {
     return this.isCharged && (this.id === 1 || BlackHole(this.id - 1).isActive) && !Pelle.isDisabled("blackhole");
   }
 
+  // Proportion of active time, scaled 0 to 1
+  get dutyCycle() {
+    return this.duration / (this.rawInterval + this.duration);
+  }
+
   get isPermanent() {
-    // If the black hole is active 99.99% of the time, the duration is exactly
-    // 9999 times longer than the interval.
-    return this.duration / this.rawInterval >= 9999;
+    return this.dutyCycle >= 0.9999;
   }
 
   /**

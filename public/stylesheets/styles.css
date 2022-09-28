@@ -6685,7 +6685,7 @@ kbd {
 
 .o-enslaved-mechanic-button {
   min-width: 18rem;
-  min-height: 7rem;
+  min-height: 9rem;
   font-family: Typewriter;
   background-color: #fdd3b0;
   border: var(--var-border-width, 0.2rem) solid sandybrown;

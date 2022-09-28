@@ -10,7 +10,9 @@ class GameProgressState extends GameMechanicState {
   }
 
   get suggestedResource() {
-    return this.config.suggestedResource;
+    return typeof this.config.suggestedResource === "function"
+      ? this.config.suggestedResource()
+      : this.config.suggestedResource;
   }
 }
 

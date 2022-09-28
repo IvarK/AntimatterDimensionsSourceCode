@@ -37,3 +37,4 @@ import "./tickspeed";
 import "./galaxies";
 import "./infinities";
 import "./eternities";
+import "./gamespeed";

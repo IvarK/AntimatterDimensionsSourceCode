@@ -49,7 +49,7 @@ export default {
     check the related How To Play entries if you want more detailed information.
     <div
       class="l-catchup-group-container"
-      :style="{ 'height' : `${Math.clamp(5 * progressStage, 15, 40)}rem` }"
+      :style="{ 'height' : `${Math.clamp(3 * progressStage + 5, 15, 35)}rem` }"
     >
       <CatchupGroup
         v-for="group of progressStage"
@@ -79,7 +79,7 @@ export default {
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-radius, 0.4rem);
   margin: 1rem;
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .l-confirm-padding {

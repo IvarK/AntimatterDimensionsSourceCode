@@ -5294,6 +5294,11 @@ br {
   transition-duration: 0.2s;
 }
 
+.c-modal--short {
+  overflow-y: scroll;
+  height: 55rem;
+}
+
 .c-modal__title {
   display: inline-block;
   width: 50rem;

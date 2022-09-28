@@ -296,7 +296,7 @@ GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer(Autobuyer.reality));
 (function() {
   function bindDimensionHotkeys(tier) {
     GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
-    GameKeyboard.bindRepeatableHotkey(`num${tier}`, () => buyOneDimension(tier));
+    GameKeyboard.bindRepeatableHotkey(`num${tier}`, () => buyManyDimension(tier));
     GameKeyboard.bindRepeatableHotkey(`shift+${tier}`, () => buyOneDimension(tier));
     GameKeyboard.bindHotkey(`alt+${tier}`, () => toggleAutobuyer(Autobuyer.antimatterDimension(tier)));
     GameKeyboard.bindHotkey(`alt+num${tier}`, () => toggleAutobuyer(Autobuyer.antimatterDimension(tier)));

@@ -96,7 +96,7 @@ export default {
     <template #header>
       Cracks in The Nameless Ones' Reality
     </template>
-    <div class="c-enslaved-hint-modal">
+    <div class="c-enslaved-hint-modal c-modal--short">
       <div>
         This Reality seems to be resisting your efforts to complete it. So far you have done the following:
       </div>

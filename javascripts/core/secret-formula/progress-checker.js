@@ -23,7 +23,7 @@ GameDatabase.progressStages = [
    */
   {
     id: PROGRESS_STAGE.PRE_INFINITY,
-    name: "Before Infinity",
+    name: "Antimatter Production",
     hasReached: () => true,
     suggestedResource: "Antimatter",
     // Galaxies are worth 1/3 each, boosts break ties within galaxies, and antimatter breaks ties within boosts
@@ -57,7 +57,7 @@ GameDatabase.progressStages = [
     id: PROGRESS_STAGE.EARLY_ETERNITY,
     name: "Eternity",
     hasReached: save => new Decimal(save.eternities).gt(0),
-    suggestedResource: "Eternity Points",
+    suggestedResource: "Eternity Points and Eternity count",
     subProgressValue: save => Math.sqrt(new Decimal(save.eternityPoints).pLog10() / 18),
   },
   {
@@ -80,10 +80,10 @@ GameDatabase.progressStages = [
     id: PROGRESS_STAGE.LATE_ETERNITY,
     name: "Late Eternity",
     hasReached: save => new Decimal(save.dilation.dilatedTime).gt(1e15),
-    suggestedResource: "Eternity Points and Dilated Time",
+    suggestedResource: "Eternity Points and/or Dilated Time",
     // Tracks up to e8000 even though many players will reality well before that; we still want to distinguish
     // which saves are farther all the way up to the zeroth-reality RM cap
-    subProgressValue: save => Math.sqrt((new Decimal(save.eternityPoints).log10() - 1300) / 6700),
+    subProgressValue: save => Math.clampMax(Math.sqrt((new Decimal(save.eternityPoints).log10() - 1300) / 6700), 1),
   },
   {
     id: PROGRESS_STAGE.EARLY_REALITY,

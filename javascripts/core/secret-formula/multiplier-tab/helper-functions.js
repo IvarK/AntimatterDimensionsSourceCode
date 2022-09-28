@@ -154,3 +154,8 @@ export const MultiplierTabHelper = {
     }
   },
 };
+
+// All the resource files in this GameDB folder set props of multiplierTabValues, but it needs to be initialized.
+// This file comes first in the import order and thus will make sure that nothing else attempts to define a prop
+// on an undefined object
+GameDatabase.multiplierTabValues = {};

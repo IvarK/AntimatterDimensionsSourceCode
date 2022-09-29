@@ -58,7 +58,7 @@ export default {
     </div>
     <div
       v-if="!nothingHappened"
-      class="c-modal-away-progress__resources"
+      class="c-modal-away-progress__resources c-modal--short"
     >
       <AwayProgressEntry
         v-for="name of offlineStats"

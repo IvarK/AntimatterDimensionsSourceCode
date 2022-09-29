@@ -1649,6 +1649,12 @@ br {
   box-sizing: border-box;
 }
 
+.o-primary-btn--modal-option {
+  width: 16rem;
+  height: 6.5rem;
+  margin: 0.3rem;
+}
+
 .o-primary-btn--option-wide {
   width: 24rem;
   height: 5.5rem;
@@ -5294,7 +5300,7 @@ br {
 
 .c-modal--short {
   overflow-y: scroll;
-  height: 55rem;
+  max-height: 55rem;
 }
 
 .c-modal__title {

@@ -166,7 +166,7 @@ export function getBaseTP(antimatter) {
   if (am.lt(1)) {
     return new Decimal(0);
   }
-  let baseTP = new Decimal(Math.pow(Decimal.log10(am), 1.5) / 8000 + Decimal.log10(am) / 10);
+  let baseTP = new Decimal(Math.pow(Decimal.log10(am), 1.5) / 8000 + (Pelle.isDoomed ? 0 : Decimal.log10(am) / 10));
   if (Enslaved.isRunning) baseTP = baseTP.pow(Enslaved.tachyonNerf);
   return baseTP;
 }
@@ -189,6 +189,11 @@ export function getTachyonReq() {
   const approx = (goal + Math.log(8000)) * (2 / 3);
   if (Math.abs(goal) > 50) {
     return (goal < 0) ? 1 : Decimal.pow10(Math.exp(approx));
+  }
+  // In Pelle, the Tachyon Particle formula only has one term, which we don't
+  // need Newton's method for.
+  if (Pelle.isDoomed) {
+    return Decimal.pow10(Math.exp(approx));
   }
   // There are a number of parameters here we could instead define within the function,
   // but having it take all these as parameters is very convenient for testing it

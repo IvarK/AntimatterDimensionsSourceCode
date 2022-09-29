@@ -35,6 +35,7 @@ export default {
         // Time studies + Dilation
         "Eternity Upgrade to Time Dimensions based on days played is based on this Armageddon time",
         `All pre-Doomed Dilated Time multipliers are disabled except the ${formatX(2)} buyable`,
+        "The Tachyon Particle formula is worse",
         "All Tachyon Particle multipliers are disabled",
         "All pre-Doomed Time Theorem generation effects are disabled except the Dilation upgrade",
 

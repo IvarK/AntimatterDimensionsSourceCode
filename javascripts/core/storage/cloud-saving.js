@@ -82,11 +82,9 @@ export const Cloud = {
       // Bring up the modal if cloud saving will overwrite a cloud save which is older or possibly farther
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
-      // Hash mismatch check should be separate from the others because otherwise it only ever shows up on the first
-      // mismatch; there are situations (eg. two devices actively saving) which can cause this to happen repeatedly.
       const hasConflict = hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
-        saveComparison.diffSTD > 0 || saveComparison.differentName);
-      if ((hasConflict && !this.hasSeenSavingConflict) || saveComparison.hashMismatch) {
+        saveComparison.diffSTD > 0 || saveComparison.differentName || saveComparison.hashMismatch);
+      if (hasConflict && !this.hasSeenSavingConflict) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
         Modal.cloudSaveConflict.show();
       } else if (!hasConflict || (this.hasSeenSavingConflict && this.shouldOverwriteCloudSave)) {

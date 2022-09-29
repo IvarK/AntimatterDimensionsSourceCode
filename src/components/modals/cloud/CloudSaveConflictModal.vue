@@ -121,10 +121,6 @@ export default {
       :show-name="hasDifferentName"
       save-type="Cloud Save"
     />
-    Would you like to overwrite the Cloud Save? Your choice here will apply for every
-    time the game automatically attempts to Cloud Save, until the page is reloaded.
-    <br>
-    <br>
     <span v-html="suggestionText" />
     <div
       v-if="hasLessSTDs"
@@ -133,6 +129,9 @@ export default {
       LOCAL SAVE HAS LESS STDs BOUGHT, YOU WILL LOSE THEM IF YOU OVERWRITE.
       <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
     </div>
+    <br>
+    Choosing to overwrite will force a save to the Cloud every time, while choosing to not
+    overwrite will effectively disable Cloud saving. This lasts until you reload the page.
     <template #cancel-text>
       Overwrite Cloud Save <span v-if="hasLessSTDs">({{ clicksLeft }})</span>
     </template>

@@ -77,7 +77,6 @@ export default {
       :show-name="hasDifferentName"
       save-type="Local Save"
     />
-    <br>
     <SaveInfoEntry
       :save-data="conflict.cloud"
       :other-data="conflict.local"

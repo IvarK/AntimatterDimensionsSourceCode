@@ -148,7 +148,6 @@ export default {
     <span v-html="formattedSTDText" />
     {{ timePlayed }}
     <br>
-    <br>
     <span v-html="antimatter" />
     <span v-html="prestigeCount" />
     <span v-html="prestigeResource" />

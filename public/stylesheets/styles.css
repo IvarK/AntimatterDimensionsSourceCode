@@ -5792,6 +5792,7 @@ br {
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-size: 1.3rem;
   margin-bottom: 1rem;
 }
 

@@ -185,24 +185,28 @@ export function getTachyonGain() {
 export function getTachyonReq() {
   let effectiveTP = Currency.tachyonParticles.value;
   if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
-  let goal = effectiveTP.dividedBy(tachyonGainMultiplier()).ln();
-  let approx = (goal + Math.log(8000)) * (2 / 3);
+  const goal = effectiveTP.dividedBy(tachyonGainMultiplier()).ln();
+  const approx = (goal + Math.log(8000)) * (2 / 3);
   if (Math.abs(goal) > 50) {
     return (goal < 0) ? 1 : Decimal.pow10(Math.exp(approx));
   }
-  let newtonsMethod = function (goal, f, start, steps) {
+  // There are a number of parameters here we could instead define within the function,
+  // but having it take all these as parameters is very convenient for testing it
+  // with small changes (e.g. 2 steps rather than 3).
+  // eslint-disable-next-line max-params
+  const newtonsMethod = function(g, f, start, steps) {
     let x = start;
     for (let i = 0; i < steps; i++) {
-      let v = f(x);
-      if (v === goal) {
+      const v = f(x);
+      if (v === g) {
         return x;
       }
-      let d = (f(x + 1e-6) - v) * 1e6;
-      x += (goal - v) / d;
+      const d = (f(x + 1e-6) - v) * 1e6;
+      x += (g - v) / d;
     }
     return x;
-  }
-  let res = newtonsMethod(goal, x => Math.log(Math.exp(x * 1.5) / 8000 + Math.exp(x) / 10), approx, 3);
+  };
+  const res = newtonsMethod(goal, x => Math.log(Math.exp(x * 1.5) / 8000 + Math.exp(x) / 10), approx, 3);
   return Decimal.pow10(Math.exp(res));
 }
 

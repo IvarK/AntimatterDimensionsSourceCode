@@ -163,7 +163,7 @@ export function getBaseTP(antimatter) {
   const am = (isInCelestialReality() || Pelle.isDoomed)
     ? antimatter
     : Ra.unlocks.unlockDilationStartingTP.effectOrDefault(antimatter);
-  let baseTP = Decimal.pow(Decimal.log10(am) / 400, 1.5);
+  let baseTP = Decimal.pow(Decimal.log10(am) / 400, 1.5) + Decimal.log10(am) / 10;
   if (Enslaved.isRunning) baseTP = baseTP.pow(Enslaved.tachyonNerf);
   return baseTP;
 }
@@ -182,13 +182,15 @@ export function getTachyonGain() {
 export function getTachyonReq() {
   let effectiveTP = Currency.tachyonParticles.value;
   if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
-  return Decimal.pow10(
-    effectiveTP
-      .times(Math.pow(400, 1.5))
-      .dividedBy(tachyonGainMultiplier())
-      .pow(2 / 3)
-      .toNumber()
-  );
+  effectiveTP = effectiveTP.dividedBy(tachyonGainMultiplier());
+  // We now need to solve a cubic equation. We do it in log10(AM)^0.5
+  // See https://math.vanderbilt.edu/schectex/courses/cubic/
+  // intermediate = -b^3/27a^3 + bc/6a^2 - d/2a
+  let pd3 = effectiveTP.pow(-1).div(30);
+  let qd2 = effectiveTP.pow(-1).div(800);
+  let sq = qd2.pow(2).plus(pd3.pow(3)).sqrt();
+  let res = qd2.negate().plus(sq).cbrt().plus(qd2.negate().minus(sq).cbrt());
+  return Decimal.pow10(res.pow(-2).toNumber());
 }
 
 export function dilatedValueOf(value) {

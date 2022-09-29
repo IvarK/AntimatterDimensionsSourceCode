@@ -46,11 +46,11 @@ export default {
         ? ` ${warnOverwrite ? "and" : "but"} <b ${badStyle}>will cause you to lose STDs on your local save</b>.`
         : "."
       );
-      if (this.hasDifferentName || this.wrongHash) {
+      if (this.hasDifferentName) {
         suggestions.push(`<br>${warnOverwrite ? "Additionally" : "However"}, the Cloud save
           <b ${badStyle}>may be a save from a different device</b>.`);
       }
-      if (warnOverwrite || this.hasDifferentName || this.wrongHash) {
+      if (warnOverwrite || this.hasDifferentName) {
         suggestions.push(`<br><b ${badStyle}>Are you sure you wish to overwrite your local save?</b>`);
       }
       return suggestions.join("");

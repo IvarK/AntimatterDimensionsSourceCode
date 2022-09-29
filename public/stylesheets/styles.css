@@ -61,6 +61,7 @@ html {
   --color-bad: #b84b5f;
   --color-gh-purple: #8957e5;
   --color-notification: red;
+  --color-overlay: rgba(30, 30, 50, 90%);
 
   --color-antimatter: #2196f3;
   --color-infinity: #b67f33;
@@ -120,6 +121,7 @@ html {
   --color-disabled: #37474f;
   --color-accent: #1256a3;
   --color-notification: yellow;
+  --color-overlay: rgba(60, 60, 100, 50%);
 
   --color-infinity: #ff9800;
   --color-reality-dark: #0ba00e;
@@ -141,6 +143,7 @@ html {
   --color-good-dark: #2e7d32;
   --color-bad: #e53935;
   --color-notification: yellow;
+  --color-overlay: rgba(60, 60, 100, 50%);
 
   --color-infinity: #ff9800;
   --color-eternity: #673ab7;
@@ -194,6 +197,7 @@ html {
   --color-good: #2f9e35;
   --color-good-dark: #08510b;
   --color-notification: yellow;
+  --color-overlay: rgba(60, 60, 100, 50%);
 
   --color-prestige--accent: black;
 
@@ -209,6 +213,7 @@ html {
   --color-base: black;
   --color-accent: #fbc21b;
   --color-notification: yellow;
+  --color-overlay: rgba(60, 60, 100, 50%);
 
   --color-prestige--accent: black;
 
@@ -5252,7 +5257,7 @@ br {
 
 @keyframes a-modal-overlay-fadein {
   from { background-color: rgba(0, 0, 0, 0%); }
-  to { background-color: rgba(60, 60, 100, 50%); }
+  to { background-color: var(--color-overlay); }
 }
 
 .l-modal-overlay {
@@ -5265,7 +5270,7 @@ br {
   left: 0;
   z-index: 6;
   animation-name: a-modal-overlay-fadein;
-  animation-duration: 2s;
+  animation-duration: 2.5s;
   animation-fill-mode: forwards;
   pointer-events: auto;
 }

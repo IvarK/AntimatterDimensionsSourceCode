@@ -25,11 +25,11 @@ export default {
 
 <template>
   <span v-if="shouldDisplay">
-    <div
-      v-if="isModern"
-      class="l-new-ui-big-crunch__container"
-    >
-      <h3 v-if="!smallCrunch">
+    <div v-if="isModern">
+      <h3
+        v-if="!smallCrunch"
+        class="l-spacing"
+      >
         The world has collapsed due to excess antimatter.
       </h3>
       <button
@@ -65,5 +65,7 @@ export default {
 </template>
 
 <style scoped>
-
+.l-spacing {
+  margin-top: 1rem;
+}
 </style>

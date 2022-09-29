@@ -22,7 +22,8 @@ export default {
       loggedIn: false,
       userName: "",
       canSpeedrun: false,
-      creditsClosed: false
+      creditsClosed: false,
+      isCloudSaving: false,
     };
   },
   watch: {
@@ -47,6 +48,7 @@ export default {
       this.creditsClosed = GameEnd.creditsEverClosed;
       if (!this.loggedIn) return;
       this.userName = Cloud.user.displayName;
+      this.isCloudSaving = Cloud.shouldOverwriteCloudSave;
     },
     importAsFile(event) {
       // This happens if the file dialog is canceled instead of a file being selected
@@ -119,7 +121,6 @@ export default {
           :min="10"
           :max="60"
           :interval="1"
-          :is-cloud="false"
         />
       </div>
       <div class="l-options-grid__row">
@@ -165,6 +166,10 @@ export default {
       <span v-if="loggedIn">Logged in as {{ userName }}</span>
       <span v-else>Not logged in</span>
     </h2>
+    <div v-if="loggedIn">
+      <span v-if="isCloudSaving">Cloud Saving will occur automatically every 5 minutes.</span>
+      <span v-else>Cloud Saving has been disabled until you refresh the page.</span>
+    </div>
     <div class="l-options-grid">
       <div
         class="l-options-grid__row"
@@ -213,12 +218,6 @@ export default {
           class="o-primary-btn--option l-options-grid__button"
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
           label="Force local save before cloud saving:"
-        />
-        <AutosaveIntervalSlider
-          :min="120"
-          :max="600"
-          :interval="20"
-          :is-cloud="true"
         />
       </div>
     </div>

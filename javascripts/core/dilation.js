@@ -163,7 +163,10 @@ export function getBaseTP(antimatter) {
   const am = (isInCelestialReality() || Pelle.isDoomed)
     ? antimatter
     : Ra.unlocks.unlockDilationStartingTP.effectOrDefault(antimatter);
-  let baseTP = Decimal.pow(Decimal.log10(am) / 400, 1.5) + Decimal.log10(am) / 10;
+  if (am.lt(1)) {
+    return new Decimal(0);
+  }
+  let baseTP = new Decimal(Math.pow(Decimal.log10(am), 1.5) / 8000 + Decimal.log10(am) / 10);
   if (Enslaved.isRunning) baseTP = baseTP.pow(Enslaved.tachyonNerf);
   return baseTP;
 }
@@ -182,15 +185,25 @@ export function getTachyonGain() {
 export function getTachyonReq() {
   let effectiveTP = Currency.tachyonParticles.value;
   if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
-  effectiveTP = effectiveTP.dividedBy(tachyonGainMultiplier());
-  // We now need to solve a cubic equation. We do it in log10(AM)^0.5
-  // See https://math.vanderbilt.edu/schectex/courses/cubic/
-  // intermediate = -b^3/27a^3 + bc/6a^2 - d/2a
-  let pd3 = effectiveTP.pow(-1).div(30);
-  let qd2 = effectiveTP.pow(-1).div(800);
-  let sq = qd2.pow(2).plus(pd3.pow(3)).sqrt();
-  let res = qd2.negate().plus(sq).cbrt().plus(qd2.negate().minus(sq).cbrt());
-  return Decimal.pow10(res.pow(-2).toNumber());
+  let goal = effectiveTP.dividedBy(tachyonGainMultiplier()).ln();
+  let approx = (goal + Math.log(8000)) * (2 / 3);
+  if (Math.abs(goal) > 50) {
+    return (goal < 0) ? 1 : Decimal.pow10(Math.exp(approx));
+  }
+  let newtonsMethod = function (goal, f, start, steps) {
+    let x = start;
+    for (let i = 0; i < steps; i++) {
+      let v = f(x);
+      if (v === goal) {
+        return x;
+      }
+      let d = (f(x + 1e-6) - v) * 1e6;
+      x += (goal - v) / d;
+    }
+    return x;
+  }
+  let res = newtonsMethod(goal, x => Math.log(Math.exp(x * 1.5) / 8000 + Math.exp(x) / 10), approx, 3);
+  return Decimal.pow10(Math.exp(res));
 }
 
 export function dilatedValueOf(value) {

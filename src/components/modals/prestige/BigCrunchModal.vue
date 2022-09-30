@@ -1,16 +1,19 @@
 <script>
-import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import ResetModal from "@/components/modals/prestige/ResetModal";
 
 // Note: This modal only shows up on the first infinity and post-break infinities; it won't appear pre-break otherwise
 export default {
   name: "BigCrunchModal",
   components: {
-    ModalWrapperChoice
+    ResetModal
   },
   data() {
     return {
       gainedInfinities: new Decimal(),
-      gainedInfinityPoints: new Decimal()
+      gainedInfinityPoints: new Decimal(),
+      startingBoosts: 0,
+      startingAM: 10,
+      willStartWithGalaxy: false
     };
   },
   computed: {
@@ -18,22 +21,34 @@ export default {
       return !PlayerProgress.infinityUnlocked();
     },
     message() {
-      const info = this.isFirstInfinity ? this.firstIntinityInfo : this.ipGainInfo;
+      const info = this.isFirstInfinity ? this.firstInfinityInfo : ``;
       return `Upon Infinity, all Dimensions, Dimension Boosts, and Antimatter Galaxies are reset. ${info}`;
     },
-    firstIntinityInfo() {
+    firstInfinityInfo() {
       return `In return, you gain an Infinity Point (IP). This allows you to buy multiple upgrades that you can
         find in the Infinity tab. You will also gain one Infinity, which is the stat shown in the Statistics tab.`;
     },
     ipGainInfo() {
-      return `You will gain ${quantify("Infinity Point", this.gainedInfinityPoints, 2, 2)}
-        and ${quantify("Infinity", this.gainedInfinities)}.`;
+      return `You will gain ${quantify("Infinity", this.gainedInfinities, 2, 0)}
+        and ${quantify("Infinity Point", this.gainedInfinityPoints, 2, 0)}.`;
+    },
+    startingResources() {
+      const gainedResources = [];
+      if (this.startingAM.gt(10)) gainedResources.push(`${quantify("Antimatter", this.startingAM, 2, 2)}`);
+      if (this.startingBoosts > 0) gainedResources.push(`${quantify("Dimension Boost", this.startingBoosts)}`);
+      if (this.willStartWithGalaxy) gainedResources.push(`${quantify("Galaxy", 1)}`);
+      if (gainedResources === []) return ``;
+
+      return `You will start your next Infinity with ${makeEnumeration(gainedResources)}.`;
     }
   },
   methods: {
     update() {
       this.gainedInfinities = gainedInfinities().round();
       this.gainedInfinityPoints = gainedInfinityPoints().round();
+      this.startingBoosts = DimBoost.startingDimensionBoosts;
+      this.startingAM = Currency.antimatter.startingValue;
+      this.willStartWithGalaxy = InfinityUpgrade.skipResetGalaxy.isBought;
     },
     handleYesClick() {
       bigCrunchResetRequest();
@@ -49,15 +64,14 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    :option="isFirstInfinity ? undefined : 'bigCrunch'"
-    @confirm="handleYesClick"
-  >
-    <template #header>
-      You are about to Infinity
-    </template>
-    <div class="c-modal-message__text">
-      {{ message }}
-    </div>
-  </ModalWrapperChoice>
+  <ResetModal
+    header="You are about to Infinity"
+    :message="message"
+    :gained-resources="ipGainInfo"
+    :starting-resources="startingResources"
+    :confirm-fn="handleYesClick"
+    :alternate-condition="isFirstInfinity"
+    :alternate-text="message"
+    :confirm-option="isFirstInfinity ? undefined : 'bigCrunch'"
+  />
 </template>

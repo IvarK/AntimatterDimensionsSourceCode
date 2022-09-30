@@ -163,6 +163,14 @@ export class DimBoost {
   static get totalBoosts() {
     return Math.floor(this.purchasedBoosts + this.imaginaryBoosts);
   }
+
+  static get startingDimensionBoosts() {
+    if (InfinityUpgrade.skipResetGalaxy.isBought) return 4;
+    if (InfinityUpgrade.skipReset3.isBought) return 3;
+    if (InfinityUpgrade.skipReset2.isBought) return 2;
+    if (InfinityUpgrade.skipReset1.isBought) return 1;
+    return 0;
+  }
 }
 
 export function softReset(tempBulk, forcedNDReset = false, forcedAMReset = false) {

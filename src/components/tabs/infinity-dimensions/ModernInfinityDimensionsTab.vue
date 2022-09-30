@@ -28,6 +28,7 @@ export default {
       boughtTesseracts: 0,
       extraTesseracts: 0,
       creditsClosed: false,
+      showLockedDimCostNote: true,
     };
   },
   computed: {
@@ -44,6 +45,7 @@ export default {
   },
   methods: {
     update() {
+      this.showLockedDimCostNote = !InfinityDimension(8).isUnlocked;
       this.isEC9Running = EternityChallenge(9).isRunning;
       this.infinityPower.copyFrom(Currency.infinityPower);
       this.conversionRate = InfinityDimensions.powerConversionRate;
@@ -160,7 +162,8 @@ export default {
     >
       You have {{ quantifyInt("purchase", EC8PurchasesLeft) }} left.
     </div>
-    <br>
-    Hold shift to see the Infinity Point cost for locked Infinity Dimensions.
+    <div v-if="showLockedDimCostNote">
+      Hold shift to see the Infinity Point cost for locked Infinity Dimensions.
+    </div>
   </div>
 </template>

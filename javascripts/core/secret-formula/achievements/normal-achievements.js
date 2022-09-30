@@ -1139,7 +1139,8 @@ GameDatabase.achievements.normal = [
     description: "Reality without buying Time Theorems.",
     checkRequirement: () => player.requirementChecks.reality.noPurchasedTT,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    reward: "Free coupon to McDonalds™️."
+    get reward() { return `Gain ${formatX(2)} Time Theorems, and a free coupon to McDonalds™️.`; },
+    effect: 2
   },
   {
     id: 157,

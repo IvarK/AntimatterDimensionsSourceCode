@@ -116,7 +116,7 @@ export function getDilationGainPerSecond() {
     return new Decimal(tachyonEffect)
       .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
       .times(ShopPurchase.dilatedTimePurchases.currentMult ** 0.5)
-      .times(Pelle.specialGlyphEffect.dilation).div(8e4);
+      .times(Pelle.specialGlyphEffect.dilation).div(6e4);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
@@ -163,7 +163,7 @@ export function getBaseTP(antimatter) {
   const am = (isInCelestialReality() || Pelle.isDoomed)
     ? antimatter
     : Ra.unlocks.unlockDilationStartingTP.effectOrDefault(antimatter);
-  let baseTP = Decimal.pow(Decimal.log10(am) / 250, 1.5);
+  let baseTP = Decimal.pow(Decimal.log10(am) / 400, 1.5);
   if (Enslaved.isRunning) baseTP = baseTP.pow(Enslaved.tachyonNerf);
   return baseTP;
 }
@@ -184,7 +184,7 @@ export function getTachyonReq() {
   if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
   return Decimal.pow10(
     effectiveTP
-      .times(Math.pow(250, 1.5))
+      .times(Math.pow(400, 1.5))
       .dividedBy(tachyonGainMultiplier())
       .pow(2 / 3)
       .toNumber()

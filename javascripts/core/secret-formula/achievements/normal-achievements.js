@@ -919,9 +919,9 @@ GameDatabase.achievements.normal = [
   {
     id: 131,
     name: "No ethical consumption",
-    get description() { return `Get ${format(DC.D5E9)} Banked Infinities.`; },
-    checkRequirement: () => Currency.infinitiesBanked.gt(DC.D5E9),
-    checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+    get description() { return `Get ${format(DC.D2E9)} Banked Infinities.`; },
+    checkRequirement: () => Currency.infinitiesBanked.gt(DC.D2E9),
+    checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
     get reward() {
       return `After Eternity you permanently keep ${formatPercents(0.05)} of your Infinities as Banked Infinities.`;
     },

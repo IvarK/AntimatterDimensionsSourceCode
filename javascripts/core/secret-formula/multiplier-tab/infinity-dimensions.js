@@ -113,20 +113,33 @@ GameDatabase.multiplierTabValues.ID = {
   },
   timeStudy: {
     name: dim => (dim
-      ? `ID ${dim} from Time Studies and Eternity Upgrades`
-      : "Total from Time Studies and Eternity Upgrades"),
+      ? `ID ${dim} from Time Studies`
+      : "Total from Time Studies"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         TimeStudy(82),
         TimeStudy(92),
-        TimeStudy(162),
-        EternityUpgrade.idMultEP,
-        EternityUpgrade.idMultEternities,
-        EternityUpgrade.idMultICRecords,
+        TimeStudy(162)
       );
       if (dim) return dim === 4 ? allMult.times(TimeStudy(72).effectOrDefault(1)) : allMult;
       const maxActiveDim = MultiplierTabHelper.activeDimCount("ID");
       return Decimal.pow(allMult, maxActiveDim).times(maxActiveDim >= 4 ? TimeStudy(72).effectOrDefault(1) : DC.D1);
+    },
+    isActive: () => Achievement(75).canBeApplied,
+    color: () => "var(--color-eternity)",
+    barOverlay: () => `<i class="fas fa-book" />`,
+  },
+  eternityUpgrades: {
+    name: dim => (dim
+      ? `ID ${dim} from Eternity Upgrades`
+      : "Total from Eternity Upgrades"),
+    multValue: dim => {
+      const allMult = DC.D1.timesEffectsOf(
+        EternityUpgrade.idMultEP,
+        EternityUpgrade.idMultEternities,
+        EternityUpgrade.idMultICRecords,
+      );
+      return Decimal.pow(allMult, dim ? 1 : MultiplierTabHelper.activeDimCount("ID"));
     },
     isActive: () => Achievement(75).canBeApplied,
     color: () => "var(--color-eternity)",
@@ -152,10 +165,15 @@ GameDatabase.multiplierTabValues.ID = {
         EternityChallenge(4).reward,
         EternityChallenge(9).reward,
       );
-      if (dim) return dim === 1 ? allMult.times(EternityChallenge(2).reward.effectOrDefault(1)) : allMult;
+      if (dim) {
+        if (dim === 1) return allMult.times(EternityChallenge(2).reward.effectOrDefault(1));
+        if (dim === 8) return allMult.times(EternityChallenge(7).reward.effectOrDefault(1));
+        return allMult;
+      }
       const maxActiveDim = MultiplierTabHelper.activeDimCount("ID");
       return Decimal.pow(allMult, maxActiveDim)
-        .times(maxActiveDim >= 1 ? EternityChallenge(2).reward.effectOrDefault(1) : DC.D1);
+        .times(maxActiveDim >= 1 ? EternityChallenge(2).reward.effectOrDefault(1) : DC.D1)
+        .times(maxActiveDim === 8 ? EternityChallenge(7).reward.effectOrDefault(1) : DC.D1);
     },
     isActive: () => EternityChallenge(2).completions > 0,
     color: () => "var(--color-eternity)",

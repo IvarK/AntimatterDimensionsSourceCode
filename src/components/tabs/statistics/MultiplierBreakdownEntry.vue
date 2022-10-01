@@ -42,9 +42,8 @@ export default {
   methods: {
     update() {
       this.currentGroupKeys = this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
-      this.baseMultList = this.currentGroupKeys
-        .map(key => Decimal.max(this.getProp(key, "multValue") ?? 1, 1));
-      this.powList = this.currentGroupKeys.map(key => this.getProp(key, "powValue") ?? 1);
+      this.baseMultList = this.currentGroupKeys.map(key => Decimal.max(this.getMult(key), 1));
+      this.powList = this.currentGroupKeys.map(key => this.getPow(key));
       this.calculatePercents();
     },
     changeGroup() {
@@ -52,17 +51,23 @@ export default {
       this.showGroup = Array.repeat(false, this.currentGroupKeys.length);
     },
     calculatePercents() {
-      const totalBaseMult = this.baseMultList.reduce((x, y) => Decimal.multiply(x, y), DC.D1);
       const totalPow = this.powList.reduce((x, y) => x * y, 1);
-      this.isEmpty = totalBaseMult.eq(1);
+      const log10Mult = (this.getProp(this.resource, "fakeValue") ?? this.getMult(this.resource)).log10() / totalPow;
+      this.isEmpty = log10Mult === 0;
       this.percentList = [];
       for (let index = 0; index < this.baseMultList.length; index++) {
-        const multFrac = totalBaseMult.log10() === 0
+        const multFrac = log10Mult === 0
           ? 0
-          : Decimal.log10(this.baseMultList[index]) / totalBaseMult.log10();
+          : Decimal.log10(this.baseMultList[index]) / log10Mult;
         const powFrac = totalPow === 1 ? 0 : Math.log(this.powList[index]) / Math.log(totalPow);
         this.percentList.push(multFrac / totalPow + powFrac * (1 - 1 / totalPow));
       }
+
+      // Shortly after a prestige, these may add up to a lot more than the base amount as production catches up. This
+      // is also necessary to suppress some visual weirdness for certain categories which have lots of exponents but
+      // actually apply only to specific dimensions (eg. charged infinity upgrades)
+      const totalPerc = this.percentList.sum();
+      this.percentList = this.percentList.map(p => p / Math.max(totalPerc, 1));
     },
     getProp(key, attr) {
       const args = key.split("_");
@@ -73,9 +78,14 @@ export default {
         // Arguments can potentially be Numbers or Strings, so we cast the ones which are Numbers
         : dbAttr(...args.slice(2).map(a => (a.match("^\\d+$") ? Number(a) : a)));
     },
+    getMult(key) {
+      return new Decimal(this.getProp(key, "multValue") ?? 1);
+    },
+    getPow(key) {
+      return this.getProp(key, "powValue") ?? 1;
+    },
     isVisible(key) {
-      const noEffect = new Decimal(this.getProp(key, "multValue") ?? 1).eq(1) &&
-        new Decimal(this.getProp(key, "powValue") ?? 1).eq(1);
+      const noEffect = this.getMult(key).eq(1) && this.getPow(key) === 1;
       return this.getProp(key, "isActive") && !noEffect;
     },
 
@@ -137,7 +147,7 @@ export default {
       const overrideStr = this.getProp(this.resource, "displayOverride");
       if (overrideStr) return `${name}: ${overrideStr}`;
 
-      const val = this.getProp(this.resource, "multValue");
+      const val = this.getMult(this.resource);
       const baseProp = this.getProp(this.resource, "isBase");
       if (baseProp) return `${name}: ${format(val, 2, 2)}`;
       return `${name}: ${formatX(val, 2, 2)}`;

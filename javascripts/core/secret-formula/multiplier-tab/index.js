@@ -14,6 +14,8 @@ import "./tree";
  *    exists in order to avoid copy-pasting extensive entries in multValue
  *  @property {function: @return Decimal} displayOverride If present, displays this string instead of multipliers. This
  *    has higher priority than isBase
+ *  @property {function: @return Decimal|Number} fakeValue  Value to be used as a stand-in for a total when this entry
+ *    is the parent resource of a list of other resources. Mostly used in tickspeed-related entries
  *  @property {function: @return Decimal|Number} multValue  Value for multipliers given by this effect. Note that some
  *    entries may have a pow10 applied to them in order to "undo" logarithmic scaling in the UI
  *  @property {function: @return Number} powValue         Numerical value for powers given by this effect

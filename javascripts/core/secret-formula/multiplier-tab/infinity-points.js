@@ -14,6 +14,7 @@ GameDatabase.multiplierTabValues.IP = {
   base: {
     name: () => "Base Infinity Points",
     isBase: () => true,
+    fakeValue: () => Decimal.pow10(308 / Effects.min(308, Achievement(103), TimeStudy(111))),
     multValue: () => {
       const div = Effects.min(
         308,

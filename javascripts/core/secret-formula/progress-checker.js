@@ -13,8 +13,9 @@ GameDatabase.progressStages = [
    *  @property {function: @return Boolean} hasReached        Checking function for whether this stage has been
    *    reached; all checks are run in descending order, starting at the end of the list and moving upward. The
    *    last one checked (first entry) always returns true as a catch-all condition
-   *  @property {String} suggestedResource                    A resource or multiple resources which may be
-   *    useful for the player to aim for at this stage
+   *  @property {String | function: @return Number} suggestedResource     A resource or multiple resources which may be
+   *    useful for the player to aim for at this stage. It's okay to reference the player object in this prop because
+   *    it's only ever used in the catchup modal and not in the cloud save conflict checker.
    *  @property {function: @return Number} subProgressValue   A value between 0 and 1 corresponding approximately
    *    to the progress within a stage. Values near 0 correspond to near the end of the previous stage and values
    *    near 1 correspond to near the start of the next stage; however in-between values are not an indicator of
@@ -23,7 +24,7 @@ GameDatabase.progressStages = [
    */
   {
     id: PROGRESS_STAGE.PRE_INFINITY,
-    name: "Before Infinity",
+    name: "Antimatter Production",
     hasReached: () => true,
     suggestedResource: "Antimatter",
     // Galaxies are worth 1/3 each, boosts break ties within galaxies, and antimatter breaks ties within boosts
@@ -57,7 +58,7 @@ GameDatabase.progressStages = [
     id: PROGRESS_STAGE.EARLY_ETERNITY,
     name: "Eternity",
     hasReached: save => new Decimal(save.eternities).gt(0),
-    suggestedResource: "Eternity Points",
+    suggestedResource: "Eternity Points and Eternity count",
     subProgressValue: save => Math.sqrt(new Decimal(save.eternityPoints).pLog10() / 18),
   },
   {
@@ -80,10 +81,13 @@ GameDatabase.progressStages = [
     id: PROGRESS_STAGE.LATE_ETERNITY,
     name: "Late Eternity",
     hasReached: save => new Decimal(save.dilation.dilatedTime).gt(1e15),
-    suggestedResource: "Eternity Points and Dilated Time",
+    suggestedResource: () => (new Decimal(player.eternityPoints).log10() > 4000
+      ? "Eternity Points and/or Dilated Time. Alternatively, you can unlock and perform your first Reality"
+      : "Eternity Points and/or Dilated Time"
+    ),
     // Tracks up to e8000 even though many players will reality well before that; we still want to distinguish
     // which saves are farther all the way up to the zeroth-reality RM cap
-    subProgressValue: save => Math.sqrt((new Decimal(save.eternityPoints).log10() - 1300) / 6700),
+    subProgressValue: save => Math.clampMax(Math.sqrt((new Decimal(save.eternityPoints).log10() - 1300) / 6700), 1),
   },
   {
     id: PROGRESS_STAGE.EARLY_REALITY,

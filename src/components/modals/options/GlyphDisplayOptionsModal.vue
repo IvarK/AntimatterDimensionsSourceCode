@@ -109,13 +109,13 @@ export default {
 <style scoped>
 .c-dropdown-btn {
   width: 24rem;
-  margin: 0.5rem;
+  margin: 0.3rem;
   padding: 0;
 }
 
 .c-dropdown-header {
-  padding: 0.75rem;
-  height: 5.5rem;
+  padding: 0.9rem;
+  height: 6.5rem;
   user-select: none;
 }
 </style>

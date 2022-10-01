@@ -2,7 +2,7 @@
 import GameSpeedDisplay from "@/components/GameSpeedDisplay";
 
 export default {
-  name: "HeaderTickspeedRowModern",
+  name: "HeaderTickspeedInfo",
   components: {
     GameSpeedDisplay
   },
@@ -11,23 +11,27 @@ export default {
       mult: new Decimal(0),
       tickspeed: new Decimal(0),
       galaxyCount: 0,
+      purchasedTickspeed: 0,
+      freeTickspeed: 0,
     };
   },
   computed: {
     tickspeedDisplay() {
-      return `AD Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
+      return `Total Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
     },
     perUpgrade() {
       if (InfinityChallenge(3).isRunning) return `Tickspeed upgrades give
         ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)} to all ADs`;
-      return `${formatX(this.mult.reciprocal(), 2, 3)} faster per upgrade`;
-    }
+      return `ADs produce ${formatX(this.mult.reciprocal(), 2, 3)} faster per Tickspeed upgrade`;
+    },
   },
   methods: {
     update() {
       this.mult.copyFrom(Tickspeed.multiplier);
       this.tickspeed.copyFrom(Tickspeed.perSecond);
       this.galaxyCount = player.galaxies;
+      this.purchasedTickspeed = player.totalTickBought;
+      this.freeTickspeed = FreeTickspeed.amount;
     },
   },
 };
@@ -36,9 +40,9 @@ export default {
 <template>
   <div>
     <br>
-    {{ tickspeedDisplay }}
-    <br>
     {{ perUpgrade }}
+    <br>
+    {{ tickspeedDisplay }}
     <br>
     <GameSpeedDisplay />
   </div>

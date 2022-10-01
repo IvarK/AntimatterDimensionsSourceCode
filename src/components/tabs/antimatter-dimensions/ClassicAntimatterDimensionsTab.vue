@@ -1,12 +1,11 @@
 <script>
-import HeaderTickspeedRowClassic from "../../ui-modes/HeaderTickspeedRowClassic";
-
 import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import AntimatterDimensionRow from "./ClassicAntimatterDimensionRow";
 import AntimatterDimensionsTabHeader from "./ClassicAntimatterDimensionsTabHeader";
 import AntimatterGalaxyRow from "./ClassicAntimatterGalaxyRow";
 import DimensionBoostRow from "./ClassicDimensionBoostRow";
 import PrimaryButton from "@/components/PrimaryButton";
+import TickspeedRow from "./TickspeedRow";
 
 export default {
   name: "ClassicAntimatterDimensionsTab",
@@ -17,7 +16,7 @@ export default {
     AntimatterGalaxyRow,
     DimensionBoostRow,
     AntimatterDimensionProgressBar,
-    HeaderTickspeedRowClassic,
+    TickspeedRow,
   },
   data() {
     return {
@@ -27,6 +26,7 @@ export default {
       buy10Mult: new Decimal(0),
       currentSacrifice: new Decimal(0),
       hasRealityButton: false,
+      multiplierText: ""
     };
   },
   methods: {
@@ -37,6 +37,10 @@ export default {
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
+      const sacText = this.isSacrificeUnlocked
+        ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
+        : "";
+      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}${sacText}`;
     },
     quickReset() {
       softReset(-1, true, true);
@@ -47,12 +51,9 @@ export default {
 
 <template>
   <div class="l-old-ui-antimatter-dim-tab">
-    <span>{{ multiplierText }}</span>
     <AntimatterDimensionsTabHeader />
-    <HeaderTickspeedRowClassic
-      v-if="hasRealityButton"
-      :in-header="false"
-    />
+    {{ multiplierText }}
+    <TickspeedRow />
     <div class="l-dimensions-container">
       <AntimatterDimensionRow
         v-for="tier in 8"

@@ -24,7 +24,7 @@ function rebuyable(config) {
 GameDatabase.eternity.dilation = {
   dtGain: rebuyable({
     id: 1,
-    initialCost: 1e5,
+    initialCost: 1e4,
     increment: 10,
     description: () =>
       ((SingularityMilestone.dilatedTimeFromSingularities.canBeApplied || Achievement(187).canBeApplied)

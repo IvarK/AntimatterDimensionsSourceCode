@@ -497,40 +497,6 @@ body.t-s9 {
   margin-top: 0.3rem;
 }
 
-.l-tickspeed-container {
-  display: flex;
-  justify-content: center;
-  padding: 1rem 5rem 0 9rem;
-}
-
-.l-tickspeed-container--hidden {
-  visibility: hidden;
-}
-
-.tickspeed-labels {
-  display: flex;
-}
-
-.tickspeed-btn {
-  height: 3rem;
-  min-width: 15rem;
-  max-width: 20rem;
-  font-size: 1.1rem;
-  padding: 0.5rem;
-}
-
-.tickspeed-max-btn {
-  width: 10rem;
-  height: 3rem;
-  padding: 0.5rem;
-}
-
-.tickspeed-labels span {
-  height: 3rem;
-  color: var(--color-text);
-  padding: 0.5rem 1rem;
-}
-
 .particle {
   width: 1rem;
   height: 1rem;

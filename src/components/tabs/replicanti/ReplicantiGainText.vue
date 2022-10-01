@@ -70,7 +70,8 @@ export default {
 
       if (this.remainingTimeText === "") {
         if (remainingTime === 0) {
-          this.remainingTimeText = "At Infinite Replicanti";
+          this.remainingTimeText = `At Infinite Replicanti (normally takes
+            ${TimeSpan.fromSeconds(secondsPerGalaxy.toNumber())})`;
         } else {
           this.remainingTimeText = `${TimeSpan.fromSeconds(remainingTime)} remaining until Infinite Replicanti`;
         }

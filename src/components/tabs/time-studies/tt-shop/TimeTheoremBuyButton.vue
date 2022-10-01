@@ -14,23 +14,23 @@ export default {
   },
   data() {
     return {
-      isLimitedByPelle: false
+      isLocked: false
     };
   },
   computed: {
     isEnabled() {
-      if (this.isLimitedByPelle) return false;
+      if (this.isLocked) return false;
       return this.budget.gte(this.cost);
     },
     enabledClass() {
-      if (!this.isEnabled || this.isLimitedByPelle) return "c-tt-buy-button--locked";
+      if (!this.isEnabled || this.isLocked) return "c-tt-buy-button--locked";
 
       return "c-tt-buy-button--unlocked";
     }
   },
   methods: {
     update() {
-      this.isLimitedByPelle = Pelle.isDoomed && player.eternities.eq(0);
+      this.isLocked = player.eternities.eq(0);
     }
   }
 };
@@ -42,6 +42,6 @@ export default {
     :class="enabledClass"
     @click="action"
   >
-    {{ isLimitedByPelle ? "Requires Eternity to unlock" : formatCost(cost) }}
+    {{ isLocked ? "Requires Eternity to unlock" : formatCost(cost) }}
   </button>
 </template>

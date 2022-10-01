@@ -59,7 +59,7 @@ export default {
     buttonPrefix() {
       if (this.isCapped) return "Shattered by Nameless";
       if (this.isContinuumActive) return "Continuum: ";
-      return `Buy ${this.howManyCanBuy}, `;
+      return `Buy ${this.howManyCanBuy}`;
     },
     buttonValue() {
       if (this.isCapped) return "";
@@ -108,9 +108,6 @@ export default {
       } else {
         buyAsManyAsYouCanBuy(this.tier);
       }
-
-      if (this.tier === 1) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM1);
-      if (this.tier === 2) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
     },
     showCostTitle(value) {
       return value.exponent < 1000000;

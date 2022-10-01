@@ -99,7 +99,6 @@ export default {
       :show-name="hasDifferentName"
       save-type="Cloud Save"
     />
-    <br>
     Would you like to overwrite the Cloud Save? Your choice here will apply for every
     time the game automatically attempts to Cloud Save, until the page is reloaded.
     <div

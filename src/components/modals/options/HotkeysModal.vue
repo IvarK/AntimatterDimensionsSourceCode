@@ -115,7 +115,6 @@ export default {
           {{ moreShiftKeyInfo }}
         </span>
         <br>
-        <br>
         <div class="l-modal-hotkeys-row">
           <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Autobuyer Controls</span>
           <kbd>alt</kbd>
@@ -128,7 +127,6 @@ export default {
           and Tickspeed Autobuyers instead.
         </span>
         <br>
-        <br>
         <div class="l-modal-hotkeys-row">
           <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Tab Movement</span>
           <div>
@@ -139,6 +137,15 @@ export default {
           Using the Arrow Keys will cycle you through the game's pages.
           The Up and Down arrows cycle you through tabs,
           and the Left and Right arrows cycle you through that tab's subtabs.
+        </span>
+        <br>
+        <div class="l-modal-hotkeys-row">
+          <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Numpad Support</span>
+        </div>
+        <span class="c-modal-hotkeys__shift-description">
+          Due to technical reasons, pressing a numpad key will purchase 10 of a Dimension if possible, but pressing
+          a numpad key with <kbd>shift</kbd> will not buy a single Dimension. It may instead, depending on your device,
+          cause the page to scroll or change game tabs. <kbd>alt</kbd> will still work as expected.
         </span>
       </div>
     </span>

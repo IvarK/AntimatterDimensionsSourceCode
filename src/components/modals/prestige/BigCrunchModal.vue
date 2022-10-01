@@ -1,7 +1,6 @@
 <script>
 import ResetModal from "@/components/modals/prestige/ResetModal";
 
-// Note: This modal only shows up on the first infinity and post-break infinities; it won't appear pre-break otherwise
 export default {
   name: "BigCrunchModal",
   components: {

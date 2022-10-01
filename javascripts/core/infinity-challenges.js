@@ -150,8 +150,10 @@ export const InfinityChallenges = {
       if (ic.isUnlocked || ic.isCompleted) continue;
       if (value.lt(ic.unlockAM)) break;
       // This has a reasonably high likelihood of happening when the player isn't looking at the game, so
-      // we leave it there for 5 minutes unless they click it away early
-      GameUI.notify.infinity(`You have unlocked Infinity Challenge ${ic.id}`, 300000);
+      // we also give it a tab notification
+      TabNotification.ICUnlock.clearTrigger();
+      GameUI.notify.infinity(`You have unlocked Infinity Challenge ${ic.id}`, 7000);
+      TabNotification.ICUnlock.tryTrigger();
     }
   },
   /**

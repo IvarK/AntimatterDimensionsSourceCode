@@ -16,12 +16,6 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      startTime: 0,
-      remainingTime: 0,
-    };
-  },
   computed: {
     progressStage: () => ProgressChecker.getProgressStage(player).id,
     suggestedResource() {
@@ -36,19 +30,7 @@ export default {
       return this.diff ? "Content Catch-up" : "Content Summary";
     }
   },
-  created() {
-    // This is a particularly important modal which cannot be opened again, so we make the close button unclickable
-    // for the first few seconds to reduce the chance of a player instinctively clicking through and not reading it.
-    // It can still be closed preemptively with escape, but that should be likely significantly less likely to happen.
-    // Additionally, if diff is 0 then we assume that this was manually opened and remove the delay
-    this.startTime = this.diff ? Date.now() : 0;
-  },
   methods: {
-    update() {
-      const timeSinceOpen = Date.now() - this.startTime;
-      // Track remainingTime in seconds, starting at 5 and counting down to 0
-      this.remainingTime = Math.max(Math.floor(5 - timeSinceOpen / 1000), 0);
-    },
     stageName(stage) {
       return GameProgress(stage).name;
     }
@@ -67,7 +49,7 @@ export default {
     check the related How To Play entries if you want more detailed information.
     <div
       class="l-catchup-group-container"
-      :style="{ 'height' : `${Math.clamp(5 * progressStage, 15, 40)}rem` }"
+      :style="{ 'height' : `${Math.clamp(3 * progressStage + 5, 15, 35)}rem` }"
     >
       <CatchupGroup
         v-for="group of progressStage"
@@ -81,16 +63,9 @@ export default {
     </span>
     <div class="l-confirm-padding">
       <PrimaryButton
-        v-if="remainingTime === 0"
         @click="emitClose"
       >
         Confirm
-      </PrimaryButton>
-      <PrimaryButton
-        v-else
-        :enabled="false"
-      >
-        Confirm ({{ formatInt(remainingTime) }})
       </PrimaryButton>
     </div>
   </div>
@@ -104,7 +79,7 @@ export default {
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-radius, 0.4rem);
   margin: 1rem;
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .l-confirm-padding {

@@ -11,6 +11,11 @@ function handleChallengeCompletion() {
     NormalChallenge(1).complete();
   }
   if (!challenge) return;
+
+  // Clear the IC notification after the first completion (only) so that it can show it again for the next one
+  const inIC = InfinityChallenge.isRunning;
+  if (inIC && !InfinityChallenge.current.isCompleted) TabNotification.ICUnlock.clearTrigger();
+
   challenge.complete();
   challenge.updateChallengeTime();
   if (!player.options.retryChallenge) {
@@ -22,9 +27,7 @@ function handleChallengeCompletion() {
 export function manualBigCrunchResetRequest() {
   if (!Player.canCrunch) return;
   if (GameEnd.creditsEverClosed) return;
-  // Before the player has broken infinity, the confirmation modal should never be shown
-  if ((player.break || PlayerProgress.eternityUnlocked()) &&
-    player.options.confirmations.bigCrunch) {
+  if (player.options.confirmations.bigCrunch) {
     Modal.bigCrunch.show();
   } else {
     bigCrunchResetRequest();

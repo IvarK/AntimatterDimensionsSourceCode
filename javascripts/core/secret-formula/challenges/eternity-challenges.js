@@ -80,12 +80,12 @@ GameDatabase.challenges.eternity = [
     description: () => {
       if (Enslaved.isRunning) {
         return Notations.current === Notation.shi
-          ? "yo̶u̶ ̶c̶a̶n̶'̶t̶ ̶g̶a̶i̶n̶ ̶A̶n̶t̶i̶m̶a̶t̶t̶e̶r̶ ̶G̶a̶l̶a̶x̶i̶e̶s̶ ̶n̶o̶r̶m̶a̶l̶l̶y̶,̶ ̶b̶u̶t̶ ̶the " +
+          ? "yo̶u̶ ̶c̶a̶n̶not̶ ̶g̶a̶i̶n̶ ̶A̶n̶t̶i̶m̶a̶t̶t̶e̶r̶ ̶G̶a̶l̶a̶x̶i̶e̶s̶ ̶n̶o̶r̶m̶a̶l̶l̶y̶. ̶ ̶ ̶The " +
             " cost of upgrading your max Replicanti Galaxies is massively reduced."
           : "you c㏰'퐚 gai鸭 Ant꟢matterﻪﶓa⁍axie㮾랜䂇rma㦂l the cost of upgrading your max Replicanti" +
             " Galaxies is massively reduced";
       }
-      return "you can't gain Antimatter Galaxies normally, but the cost of upgrading your max Replicanti" +
+      return "you cannot gain Antimatter Galaxies normally. The cost of upgrading your max Replicanti" +
               " Galaxies is massively reduced.";
     },
     goal: DC.E850,
@@ -103,7 +103,7 @@ GameDatabase.challenges.eternity = [
   {
     id: 7,
     description:
-      "1st Time Dimension produces 8th Infinity Dimensions, and 1st Infinity Dimension produces " +
+      "1st Time Dimensions produce 8th Infinity Dimensions and 1st Infinity Dimensions produce " +
       "7th Antimatter Dimensions. Tickspeed also directly applies to Infinity and Time Dimensions.",
     goal: DC.E2000,
     pelleGoal: DC.E2700,
@@ -133,7 +133,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 9,
-    description: () => `you can't buy Tickspeed upgrades. Infinity Power instead multiplies
+    description: () => `you cannot buy Tickspeed upgrades. Infinity Power instead multiplies
       Time Dimensions with greatly reduced effect. ${specialInfinityGlyphDisabledEffectText()}`,
     goal: DC.E1750,
     pelleGoal: DC.E2900,
@@ -168,7 +168,7 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 11,
-    description: () => `all dimension multipliers and powers are disabled except for the multipliers from
+    description: () => `all Dimension multipliers and powers are disabled except for the multipliers from
       Infinity Power and Dimension Boosts (to Antimatter Dimensions). ${specialInfinityGlyphDisabledEffectText()}`,
     goal: DC.E500,
     pelleGoal: DC.E11200,

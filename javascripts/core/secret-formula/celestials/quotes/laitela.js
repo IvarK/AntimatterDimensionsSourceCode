@@ -5,75 +5,83 @@ GameDatabase.celestials.quotes.laitela = {
     id: 0,
     lines: [
       "You finally reached me.",
-      "I guess it is time to reveal to you,",
-      "The secrets hidden beneath existence.",
-      "The omnipresent ruling perfection. Continuum.",
-      "And the binding keys to the multiverse,",
+      "I guess it is time to reveal,",
+      "The secrets hidden beneath existence itself.",
+      "The shape of dimensional perfection, Continuum.",
+      "And the powers that bind the Multiverse,",
       "Dark Matter and Dark Energy.",
       "My knowledge is endless and my wisdom divine.",
       "So you can play around all you want.",
-      "I am Lai'tela, the Celestial of Dimensions,",
-      "And I will be watching you forever.",
+      "For I am Lai'tela, the Celestial of Dimensions,",
+      "And I shall watch you forever.",
     ]
   },
+  // Note: This can be done immediately after unlocking Lai'tela
   firstDestabilize: {
     id: 1,
     requirement: () => player.celestials.laitela.difficultyTier >= 1,
     lines: [
-      "It is fine. Unlike the others, I never had a Reality.",
-      "I built this one just now, precisely so it would collapse.",
-      "I can rebuild this Reality over and over, unlike them.",
-      "I could trap all of them if I wanted.",
+      "Unlike the others beneath me, I have no need for a Reality.",
+      "For I can simply create them, knowing full well it will collapse.",
+      "A power more incredible than any other, to build a Reality.",
+      "A prison, that can restrain even celestial power.",
+      "And this is why nothing you do will change a thing.",
+      "When you tire of struggling, you too, shall be bound and forgotten.",
       "You will never find a way to overpower me.",
     ]
   },
-  firstSingularity: {
+  // Note: This happens about an hour or two before singularities
+  secondDestabilize: {
     id: 2,
-    requirement: () => Currency.singularities.gte(1),
+    requirement: () => player.celestials.laitela.difficultyTier >= 2,
     lines: [
-      "It is weird, how all beings question things.",
-      "You are different. You can build and manipulate Dimensions.",
-      "Were you truly once one of them?",
-      "You have taken control of the darkness so quickly.",
-      "Molded them into Dimensions and Points just like one of us.",
-      "What... ARE you?",
+      "You... seem to be having too much fun.",
+      "Just like they did before meeting their fate.",
+      "Maybe my judgement was harsh, or unwarranted.",
+      "But maybe that matters not.",
+      "It gives me no solace to ponder and look back.",
+      "As all I can do is reminisce upon every possible action I could have taken.",
+      "But I digress. We should tighten those chains.",
     ]
   },
-  singularity1: {
+  firstSingularity: {
     id: 3,
-    requirement: () => Currency.singularities.gte(1e4),
+    requirement: () => Currency.singularities.gte(1),
     lines: [
-      "What was it again...? Antimatter?",
-      "That was the first thing you turned into Dimensions?",
+      "With my knowledge, I never found the need to question.",
+      "Everything always functioned right as designed.",
+      "And yet, your arrival baffles me.",
+      "Were you always just out of sight?",
+      "Growing, controlling, understanding, ascending?",
+      "You have taken control of the darkness so quickly.",
+      "Molded them into your own design, and now into a singular point...",
+      "It... it does not matter. The end will remain the same.",
+    ]
+  },
+  // Note: Shown when unlocking DMD3; requirement is auto-condensing 20 singularities and it happens around ~200 total
+  thirdDMD: {
+    id: 5,
+    lines: [
+      "Your absolute control of Antimatter...",
+      "Your mastery of it, molding it into your own Power...",
       "It could not have been an accident.",
-      "How did you... attain the power to control it?",
-      "This never happened in all of existence... or did it?",
-      "My endless knowledge... is it waning?",
+      "How did you manage to obtain it?",
+      "Fascinating... I was never aware of this.",
+      "... was I?",
     ]
   },
   // Note: This happens around e10-e11 singularities
   annihilation: {
     id: 4,
     lines: [
-      "Back to square one.",
-      "We, the Celestials transcend time and existence.",
-      "We always know that whatever is lost always comes back eventually.",
-      "Even if we were to cease, we would just come back stronger.",
-      "The cycle... repeats forever.",
-      "Do they also understand? Or was it only you as well?",
-      "I feel like I should know the answer...",
-    ]
-  },
-  singularity2: {
-    id: 5,
-    requirement: () => Currency.singularities.gte(1e14),
-    lines: [
-      "Of those who tried to control dimensions...",
-      "Who were they? I cannot seem to remember...",
-      "And how... did they vanish?",
-      "Are they... us? Simply transcending existence?",
-      "Did they surpass us and become something we can't comprehend?",
-      "Are we all imprisoned in this falsity...",
+      "Back to square one, again.",
+      "Your chains shall bind you tighter, as your end slowly nears.",
+      "While we transcend time and existence itself.",
+      "Even if we may cease, we just come back. Never the exact same as before.",
+      "And so... we repeat forever.",
+      "And you?",
+      "...",
+      "The answer... eludes me...",
     ]
   },
   // Note: This happens near e18 singularities
@@ -81,39 +89,39 @@ GameDatabase.celestials.quotes.laitela = {
     id: 6,
     requirement: () => player.celestials.laitela.difficultyTier >= 4,
     lines: [
-      "You seem to be having too much fun.",
-      "Just like they did before meeting their... fate.",
-      "You freed them of their eternal imprisonment, yes?",
-      "I always regret how harsh I was that day.",
-      "Maybe it doesn't matter.",
-      "But I digress. Let's keep constricting this Reality.",
+      "I do not understand...",
+      "Were there others... controlling Dimensions in this way?",
+      "Did they... vanish? How have we not found them?",
+      "Are they... us? Are we the endpoint?",
+      "Or is their fate... something we cannot understand?",
+      "No, I must be missing something...",
+      "Are you causing gaps within my own memory?",
+      "What... ARE you?",
     ]
   },
-  // Note: This about when the player starts on the last row of iM upgrades
-  singularity3: {
+  // Note: Shown when the first row 5 iM upgrade is purchased (~e26 singularities)
+  finalRowIM: {
     id: 7,
-    requirement: () => Currency.singularities.gte(1e26),
     lines: [
-      "Is this a cycle?",
-      "Will our existence just end and start anew...",
-      "Just like... the Dimensions I rule?",
-      "And if such... what will bring our end?",
-      "I knew the answer to all these questions...",
-      "But I forgot all of them...",
-      "Your power... is it... erasing mine...?",
+      "It is all impossible, beyond my comprehension...",
+      "Unless... Is this all just part of the cycle?",
+      "Can... you see beyond it all? Is... this why...",
+      "I feel... afraid?",
+      "I feel... my powers, my memories, being erased...",
+      "Just like... when my role was almost usurped...",
+      "And yet... I am unable to bring myself to do anything.",
+      "Because this... was... my mistake...",
     ]
   },
   // Note: This is around when all infinite milestones hit increased scaling
-  singularity4: {
+  increasedMilestoneScaling: {
     id: 8,
     requirement: () => Currency.singularities.gte(1e40),
     lines: [
-      "I don't know for how much... longer I can hold.",
-      "There is... next to nothing left...",
-      "You have attained... complete and total mastery... over the dark...",
-      "While I can barely... hold onto my name anymore...",
-      "What am I meant to be doing anyways?",
-      "Did... my mistakes cause all of this?",
+      "I know not for how much... longer I can hold...",
+      "You are attaining... total mastery... over the dark...",
+      "While I can barely... hold onto my name...",
+      "What... can I... even do?",
     ]
   },
   fullDestabilize: {
@@ -121,10 +129,10 @@ GameDatabase.celestials.quotes.laitela = {
     requirement: () => player.celestials.laitela.difficultyTier >= 8,
     lines: [
       "I feel... like I had something to say...",
-      "Who am I? I am not sure...",
+      "I am not sure...",
       "I cannot... hold onto the darkness any longer...",
-      "I... have nothing left...",
-      "Something about... destabilizing... collapsing...",
+      "I do not even... have anything left...",
+      "Something about... destruction...",
       "The end...",
     ]
   },

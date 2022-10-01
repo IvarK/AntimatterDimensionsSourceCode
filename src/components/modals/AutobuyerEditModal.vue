@@ -41,11 +41,20 @@ export default {
       We only include these autobuyers as these are (probably) the ones that users will want to change
       most often.
     -->
-    <RealityAutobuyerBox class="c-reality-pos c-autobuyer-box__modal" />
-    <EternityAutobuyerBox class="c-eternity-pos c-autobuyer-box__modal" />
-    <BigCrunchAutobuyerBox class="c-infinity-pos c-autobuyer-box__modal" />
-    <GalaxyAutobuyerBox class="c-autobuyer-box__modal" />
-    <DimensionBoostAutobuyerBox class="c-autobuyer-box__modal" />
+    <RealityAutobuyerBox
+      class="c-reality-pos"
+      is-modal
+    />
+    <EternityAutobuyerBox 
+      class="c-eternity-pos"
+      is-modal
+    />
+    <BigCrunchAutobuyerBox
+      class="c-infinity-pos"
+      is-modal
+    />
+    <GalaxyAutobuyerBox is-modal />
+    <DimensionBoostAutobuyerBox is-modal />
   </ModalWrapper>
 </template>
 
@@ -65,13 +74,6 @@ AutobuyerBox components will always render in page order regardless of internal 
 
 .c-infinity-pos {
   z-index: 1;
-}
-
-/* For some reason, we need to specifically define the font size here or else it balloons up to a size
-bigger than that of the autobuyer tab. */
-.c-autobuyer-box__modal {
-  font-size: 1.1rem;
-  border-color: var(--color-text);
 }
 
 .c-modal-message__text-fit {

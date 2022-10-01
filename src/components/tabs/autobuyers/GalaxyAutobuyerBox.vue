@@ -10,6 +10,13 @@ export default {
     AutobuyerIntervalButton,
     AutobuyerInput
   },
+  props: {
+    isModal: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   data() {
     return {
       hasMaxedInterval: false,
@@ -42,6 +49,7 @@ export default {
 <template>
   <AutobuyerBox
     :autobuyer="autobuyer"
+    :is-modal="isModal"
     name="Automatic Antimatter Galaxies"
     :show-interval="!isBuyMaxUnlocked"
   >

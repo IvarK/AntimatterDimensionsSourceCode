@@ -12,6 +12,13 @@ export default {
     ExpandingControlBox,
     AutobuyerDropdownEntry
   },
+  props: {
+    isModal: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   data() {
     return {
       mode: AUTO_REALITY_MODE.RM,
@@ -50,6 +57,7 @@ export default {
 <template>
   <AutobuyerBox
     :autobuyer="autobuyer"
+    :is-modal="isModal"
     name="Automatic Reality"
   >
     <template #intervalSlot>

@@ -21,6 +21,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    isModal: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
@@ -44,6 +49,12 @@ export default {
         "o-primary-btn--disabled": !this.isUnlockable
       };
     },
+    autobuyerBoxRowClass() {
+      return {
+        "c-autobuyer-box-row": true,
+        "c-autobuyer-box-row__modal": this.isModal
+      };
+    },
     autobuyerToggleClass() {
       if (!this.globalToggle) {
         return this.isActive ? "fas fa-pause" : "fas fa-times";
@@ -54,6 +65,7 @@ export default {
       if (!this.globalToggle) {
         return {
           "o-autobuyer-toggle-checkbox__label": true,
+          "o-autobuyer-toggle-checkbox__label-modal": this.isModal,
           "o-autobuyer-toggle-checkbox__label--active-paused": this.isActive,
           "o-autobuyer-toggle-checkbox__label--deactive-paused": !this.isActive,
           "o-autobuyer-toggle-checkbox__label--disabled": !this.globalToggle
@@ -61,6 +73,7 @@ export default {
       }
       return {
         "o-autobuyer-toggle-checkbox__label": true,
+        "o-autobuyer-toggle-checkbox__label-modal": this.isModal,
         "o-autobuyer-toggle-checkbox__label--active": this.isActive,
         "o-autobuyer-toggle-checkbox__label--disabled": !this.globalToggle
       };
@@ -104,7 +117,7 @@ export default {
 <template>
   <div
     v-if="isUnlocked || isBought"
-    class="c-autobuyer-box-row"
+    :class="autobuyerBoxRowClass"
   >
     <div class="l-autobuyer-box__header">
       {{ name }}

@@ -10,6 +10,13 @@ export default {
     AutobuyerIntervalButton,
     AutobuyerInput
   },
+  props: {
+    isModal: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   data() {
     return {
       hasMaxedInterval: false,
@@ -44,6 +51,7 @@ export default {
 <template>
   <AutobuyerBox
     :autobuyer="autobuyer"
+    :is-modal="isModal"
     :show-interval="!isBuyMaxUnlocked"
     name="Automatic Dimension Boosts"
   >

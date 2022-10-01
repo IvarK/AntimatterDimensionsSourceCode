@@ -73,6 +73,11 @@ export default {
         // Arguments can potentially be Numbers or Strings, so we cast the ones which are Numbers
         : dbAttr(...args.slice(2).map(a => (a.match("^\\d+$") ? Number(a) : a)));
     },
+    isVisible(key) {
+      const noEffect = new Decimal(this.getProp(key, "multValue") ?? 1).eq(1) &&
+        new Decimal(this.getProp(key, "powValue") ?? 1).eq(1);
+      return this.getProp(key, "isActive") && !noEffect;
+    },
 
     styleObject(index) {
       return {
@@ -183,21 +188,22 @@ export default {
         v-for="(key, index) in currentGroupKeys"
         v-else
         :key="key"
-        :class="singleEntryClass(index)"
         @mouseover="mouseoverIndex = index"
         @mouseleave="mouseoverIndex = -1"
       >
         <div
-          v-if="getProp(key, 'isActive')"
-          @click="showGroup[index] = !showGroup[index]"
+          v-if="isVisible(key)"
+          :class="singleEntryClass(index)"
         >
-          <span :class="hideIcon(index)" />
-          {{ entryString(index) }}
+          <div @click="showGroup[index] = !showGroup[index]">
+            <span :class="hideIcon(index)" />
+            {{ entryString(index) }}
+          </div>
+          <MultiplierBreakdownEntry
+            v-if="showGroup[index] && hasChildComp(key)"
+            :resource="key"
+          />
         </div>
-        <MultiplierBreakdownEntry
-          v-if="showGroup[index] && hasChildComp(key)"
-          :resource="key"
-        />
       </div>
     </div>
   </div>

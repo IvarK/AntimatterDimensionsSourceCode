@@ -42,7 +42,7 @@ GameDatabase.multiplierTabValues.general = {
       if (!dim) return TimeStudy(ts).canBeApplied ? TimeStudy(ts).effectOrDefault(1) : 1;
       if (dim?.length === 2) {
         let totalEffect = DC.D1;
-        for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
+        for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount(dim); tier++) {
           totalEffect = totalEffect.times((MultiplierTabHelper.timeStudyDimCheck(ts, `${dim}${tier}`) &&
               TimeStudy(ts).isBought) ? TimeStudy(ts).effectOrDefault(1) : 1);
         }

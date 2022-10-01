@@ -13,7 +13,7 @@ const propList = {
   IP: ["base", "infinityUpgrade", "achievement", "timeStudy", "dilationUpgrade", "glyph", "other"],
   EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "other"],
   TP: ["base", "achievement", "dilation", "realityUpgrade", "dilationGlyphSacrifice"],
-  DT: ["tachyon", "achievement", "dilation", "realityUpgrade", "glyph", "ra", "other"],
+  DT: ["tachyon", "achievement", "dilation", "gamespeed", "realityUpgrade", "glyph", "ra", "other"],
   infinities: ["achievement", "timeStudy", "realityUpgrades", "glyph", "ra"],
   eternities: ["achievement", "realityUpgrades", "glyph", "alchemy"],
   gamespeed: ["glyph", "blackHoles", "pulsing", "singularity"],

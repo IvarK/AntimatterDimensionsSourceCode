@@ -41,7 +41,7 @@ GameDatabase.multiplierTabValues.EP = {
     barOverlay: () => `<i class='fas fa-calculator' />`,
   },
   eternityUpgrade: {
-    name: () => "Repeatable Eternity Upgrade",
+    name: () => `Repeatable ${formatX(5)} Eternity Upgrade`,
     multValue: () => EternityUpgrade.epMult.effectOrDefault(1),
     isActive: () => PlayerProgress.eternityUnlocked() && !Pelle.isDoomed,
     color: () => "var(--color-eternity)",
@@ -71,7 +71,7 @@ GameDatabase.multiplierTabValues.EP = {
     barOverlay: () => `<i class="fas fa-clone" />`,
   },
   other: {
-    name: () => "IP Multipliers from Other sources",
+    name: () => "EP Multipliers from Other sources",
     multValue: () => DC.D1.times(ShopPurchase.EPPurchases.currentMult)
       .timesEffectsOf(PelleRifts.vacuum.milestones[2])
       .times(Pelle.specialGlyphEffect.time),

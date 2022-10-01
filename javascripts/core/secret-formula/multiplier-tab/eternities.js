@@ -31,7 +31,7 @@ GameDatabase.multiplierTabValues.eternities = {
     barOverlay: () => `<i class="fas fa-clone" />`,
   },
   alchemy: {
-    name: () => "Glyph Alchemy",
+    name: () => "Eternity Alchemy Resource",
     multValue: () => 1,
     powValue: () => AlchemyResource.eternity.effectOrDefault(1),
     isActive: () => AlchemyResource.eternity.canBeApplied,

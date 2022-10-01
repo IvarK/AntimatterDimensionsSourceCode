@@ -7,7 +7,7 @@ import { MultiplierTabHelper } from "./helper-functions";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.TD = {
   total: {
-    name: dim => (dim ? `Total TD ${dim} Multiplier` : "All TD Multipliers"),
+    name: dim => (dim ? `TD ${dim} Multiplier` : "All TD Multipliers"),
     multValue: dim => (dim
       ? TimeDimension(dim).multiplier
       : TimeDimensions.all
@@ -20,7 +20,7 @@ GameDatabase.multiplierTabValues.TD = {
     barOverlay: dim => `Δ${dim ?? ""}`,
   },
   purchase: {
-    name: dim => (dim ? `TD ${dim} from Purchases` : "Total from Purchases"),
+    name: dim => (dim ? `Purchased TD ${dim}` : "Purchases"),
     multValue: dim => {
       const getMult = td => {
         const d = TimeDimension(td);
@@ -39,7 +39,7 @@ GameDatabase.multiplierTabValues.TD = {
   },
 
   basePurchase: {
-    name: () => "Base Multiplier from purchases",
+    name: () => "Base purchases",
     multValue: dim => {
       const getMult = td => Decimal.pow(4,
         td === 8 ? Math.clampMax(TimeDimension(td).bought, 1e8) : TimeDimension(td).bought);
@@ -56,7 +56,7 @@ GameDatabase.multiplierTabValues.TD = {
     barOverlay: () => `<i class="fas fa-arrow-up-right-dots" />`,
   },
   timeGlyphSacrifice: {
-    name: () => "Extra multiplier from Time Glyph sacrifice",
+    name: () => "Time Glyph Sacrifice",
     multValue: () => (TimeDimension(8).isProducing
       ? Decimal.pow(GlyphSacrifice.time.effectValue, Math.clampMax(TimeDimension(8).bought, 1e8))
       : DC.D1),
@@ -73,7 +73,7 @@ GameDatabase.multiplierTabValues.TD = {
   },
 
   achievement: {
-    name: dim => (dim ? `TD ${dim} from Achievements` : "Total from Achievements"),
+    name: () => "Achievements",
     multValue: dim => {
       const baseMult = DC.D1.timesEffectsOf(
         Achievement(105),
@@ -88,8 +88,8 @@ GameDatabase.multiplierTabValues.TD = {
   },
   timeStudy: {
     name: dim => (dim
-      ? `TD ${dim} from Time Studies and Eternity Upgrades`
-      : "Total from Time Studies and Eternity Upgrades"),
+      ? `Time Studies and Eternity Upgrades (TD ${dim})`
+      : "Time Studies and Eternity Upgrades"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         TimeStudy(93),
@@ -122,7 +122,7 @@ GameDatabase.multiplierTabValues.TD = {
     barOverlay: () => `<i class="fas fa-book" />`,
   },
   eternityChallenge: {
-    name: dim => (dim ? `TD ${dim} from Eternity Challenges` : "Total from Eternity Challenges"),
+    name: dim => (dim ? `Eternity Challenges (TD ${dim})` : "Eternity Challenges"),
     multValue: dim => {
       let allMult = DC.D1.timesEffectsOf(
         EternityChallenge(1).reward,
@@ -140,7 +140,7 @@ GameDatabase.multiplierTabValues.TD = {
     barOverlay: () => `Δ<i class="fas fa-arrow-down-wide-short" />`,
   },
   glyph: {
-    name: dim => (dim ? `TD ${dim} from Glyph Effects` : "Total from Glyph Effects"),
+    name: () => "Glyph Effects",
     multValue: () => 1,
     powValue: () => getAdjustedGlyphEffect("timepow") * getAdjustedGlyphEffect("effarigdimensions"),
     isActive: () => PlayerProgress.realityUnlocked(),
@@ -148,9 +148,9 @@ GameDatabase.multiplierTabValues.TD = {
     barOverlay: () => `<i class="fas fa-clone" />`,
   },
   alchemy: {
-    name: dim => {
+    name: () => {
       const imStr = MachineHandler.isIMUnlocked ? " and Imaginary Upgrades" : "";
-      return dim ? `TD ${dim} from Glyph Alchemy${imStr}` : `Total from Glyph Alchemy${imStr}`;
+      return `Glyph Alchemy${imStr}`;
     },
     multValue: dim => {
       const mult = DC.D1.timesEffectsOf(
@@ -165,7 +165,7 @@ GameDatabase.multiplierTabValues.TD = {
     barOverlay: () => `<i class="fas fa-vial" />`,
   },
   other: {
-    name: dim => (dim ? `TD ${dim} from Other sources` : "Total from Other sources"),
+    name: () => "Other sources",
     multValue: dim => {
       const mult = new Decimal(ShopPurchase.allDimPurchases.currentMult).timesEffectsOf(
         Replicanti.areUnlocked && Replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,

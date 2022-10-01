@@ -7,7 +7,7 @@ import { MultiplierTabHelper } from "./helper-functions";
 GameDatabase.multiplierTabValues.general = {
   achievement: {
     name: (ach, dim) => (dim?.length === 2
-      ? `Achievement ${ach} on all ${dim}`
+      ? `Achievement ${ach} (${dim})`
       : `Achievement ${ach}`),
     multValue: (ach, dim) => {
       // There is also a buy10 effect, but we don't track that in the multiplier tab
@@ -36,7 +36,7 @@ GameDatabase.multiplierTabValues.general = {
   },
   timeStudy: {
     name: (ts, dim) => (dim?.length === 2
-      ? `Time Study ${ts} on all ${dim}`
+      ? `Time Study ${ts} (${dim})`
       : `Time Study ${ts}`),
     multValue: (ts, dim) => {
       if (!dim) return TimeStudy(ts).canBeApplied ? TimeStudy(ts).effectOrDefault(1) : 1;
@@ -58,7 +58,7 @@ GameDatabase.multiplierTabValues.general = {
     barOverlay: ts => `<i class="fas fa-book" />${ts}`,
   },
   infinityChallenge: {
-    name: ic => `Effect from Infinity Challenge ${ic}`,
+    name: ic => `Infinity Challenge ${ic}`,
     multValue: (ic, dim) => {
       if (ic === 4) return 1;
       if (dim?.length === 2) {
@@ -78,7 +78,7 @@ GameDatabase.multiplierTabValues.general = {
     barOverlay: ic => `∞<i class="fas fa-arrow-down-wide-short" />${ic}`,
   },
   eternityChallenge: {
-    name: ec => `Effect from Eternity Challenge ${ec}`,
+    name: ec => `Eternity Challenge ${ec}`,
     multValue: (ec, dim) => {
       if (dim?.length === 2) {
         let totalEffect = DC.D1;

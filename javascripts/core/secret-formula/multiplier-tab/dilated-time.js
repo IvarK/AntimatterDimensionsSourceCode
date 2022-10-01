@@ -6,7 +6,8 @@ import { PlayerProgress } from "../../app/player-progress";
 GameDatabase.multiplierTabValues.DT = {
   total: {
     name: () => "Dilated Time gain",
-    multValue: () => getDilationGainPerSecond(),
+    displayOverride: () => `${format(getDilationGainPerSecond().times(getGameSpeedupForDisplay()), 2, 2)}/sec`,
+    multValue: () => getDilationGainPerSecond().times(getGameSpeedupForDisplay()),
     isActive: () => getDilationGainPerSecond().gt(0),
     color: () => "var(--color-dilation)",
     overlay: ["Ψ"],
@@ -15,12 +16,13 @@ GameDatabase.multiplierTabValues.DT = {
   tachyon: {
     name: () => "Tachyon Particles",
     displayOverride: () => {
-      const baseTPStr = format(Currency.tachyonParticles.value, 2, 2);
+      const baseTPStr = format(new Decimal(Currency.tachyonParticles.value), 2, 2);
       return PelleRifts.paradox.milestones[1].canBeApplied
         ? `${baseTPStr}${formatPow(PelleRifts.paradox.milestones[1].effectValue, 1)}`
         : baseTPStr;
     },
-    multValue: () => Currency.tachyonParticles.value.pow(PelleRifts.paradox.milestones[1].effectOrDefault(1)),
+    multValue: () => new Decimal(Currency.tachyonParticles.value)
+      .pow(PelleRifts.paradox.milestones[1].effectOrDefault(1)),
     isActive: () => getDilationGainPerSecond().gt(0),
     color: () => "var(--color-dilation)",
     barOverlay: () => `<i class="fas fa-meteor" />`,
@@ -46,6 +48,12 @@ GameDatabase.multiplierTabValues.DT = {
     ).gt(1),
     color: () => "var(--color-dilation)",
     barOverlay: () => `Ψ<i class="fas fa-repeat" />`,
+  },
+  gamespeed: {
+    name: () => "Current Game speed",
+    multValue: () => getGameSpeedupForDisplay(),
+    isActive: () => getGameSpeedupForDisplay() > 1,
+    barOverlay: () => `<i class="fas fa-clock" />`,
   },
   realityUpgrade: {
     name: () => "Repeatable Reality Upgrade",

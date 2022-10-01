@@ -6,16 +6,17 @@ import { PlayerProgress } from "../../app/player-progress";
 GameDatabase.multiplierTabValues.TP = {
   total: {
     name: () => "Total Tachyon Particles",
-    multValue: () => getDilationGainPerSecond(),
-    isActive: () => getDilationGainPerSecond().gt(0),
+    isBase: () => true,
+    multValue: () => new Decimal(Currency.tachyonParticles.value),
+    isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
     color: () => "var(--color-dilation)",
     barOverlay: () => `<i class="fas fa-meteor" />`,
   },
   base: {
     name: () => "Tachyon Particles",
     isBase: () => true,
-    multValue: () => Currency.tachyonParticles.value.div(tachyonGainMultiplier()),
-    isActive: () => Currency.tachyonParticles.value.gt(0),
+    multValue: () => new Decimal(Currency.tachyonParticles.value).div(tachyonGainMultiplier()),
+    isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
     color: () => "var(--color-dilation)",
     barOverlay: () => `<i class="fas fa-atom" />`,
   },

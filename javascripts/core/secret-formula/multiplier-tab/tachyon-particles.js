@@ -13,7 +13,7 @@ GameDatabase.multiplierTabValues.TP = {
     barOverlay: () => `<i class="fas fa-meteor" />`,
   },
   base: {
-    name: () => "Tachyon Particles",
+    name: () => "Tachyon Particle Count",
     isBase: () => true,
     multValue: () => new Decimal(Currency.tachyonParticles.value).div(tachyonGainMultiplier()),
     isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
@@ -28,7 +28,7 @@ GameDatabase.multiplierTabValues.TP = {
     barOverlay: () => `<i class="fas fa-trophy" />`,
   },
   dilation: {
-    name: () => "Repeatable Dilation Upgrade",
+    name: () => `Dilation Upgrade (Repeatable TP multiplier)`,
     multValue: () => DilationUpgrade.tachyonGain.effectOrDefault(1),
     isActive: () => DilationUpgrade.tachyonGain.canBeApplied,
     color: () => "var(--color-dilation)",

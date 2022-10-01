@@ -7,7 +7,7 @@ import { MultiplierTabHelper } from "./helper-functions";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.AD = {
   total: {
-    name: dim => (dim ? `Total AD ${dim} Multiplier` : "All AD Multipliers"),
+    name: dim => (dim ? `AD ${dim} Multiplier` : "All AD Multipliers"),
     multValue: dim => (dim
       ? AntimatterDimension(dim).multiplier
       : AntimatterDimensions.all
@@ -20,7 +20,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: dim => `Ω${dim ?? ""}`,
   },
   purchase: {
-    name: dim => (dim ? `AD ${dim} from Purchases` : "Total from Purchases"),
+    name: dim => (dim ? `Purchased AD ${dim}` : "Purchases"),
     multValue: dim => {
       const getPurchases = ad => (Laitela.continuumActive
         ? AntimatterDimension(ad).continuumValue
@@ -37,7 +37,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: dim => `<i class="fas fa-arrow-up-right-dots" />${dim ?? ""}`,
   },
   dimboost: {
-    name: dim => (dim ? `AD ${dim} from Dimboosts` : "Total from Dimboosts"),
+    name: dim => (dim ? `Dimboosts on AD ${dim}` : "Dimboosts"),
     multValue: dim => (dim
       ? DimBoost.multiplierToNDTier(dim)
       : AntimatterDimensions.all
@@ -49,14 +49,14 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: () => `<i class="fas fa-angles-up" />`,
   },
   sacrifice: {
-    name: dim => (dim ? "AD 8 from Sacrifice" : "Sacrifice Multiplier"),
+    name: () => "Sacrifice Multiplier",
     multValue: dim => ((!dim || dim === 8) ? Sacrifice.totalBoost : DC.D1),
     isActive: dim => (!dim || dim === 8) && Sacrifice.totalBoost.gt(1),
     color: () => "var(--color-antimatter)",
     barOverlay: () => `Ω<i class="fas fa-turn-down" />`,
   },
   achievement: {
-    name: dim => (dim ? `AD ${dim} from Achievements` : "Total from Achievements"),
+    name: () => "Achievements",
     multValue: dim => {
       const allMult = new Decimal(Achievements.power).timesEffectsOf(
         Achievement(48),
@@ -104,7 +104,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: () => `<i class="fas fa-trophy" />`,
   },
   infinityUpgrade: {
-    name: dim => (dim ? `AD ${dim} from Infinity Upgrades` : "Total from Infinity Upgrades"),
+    name: dim => (dim ? `Infinity Upgrades (AD ${dim})` : "Infinity Upgrades"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         InfinityUpgrade.totalTimeMult,
@@ -152,7 +152,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: () => `∞<i class="fas fa-arrow-up" />`,
   },
   breakInfinityUpgrade: {
-    name: dim => (dim ? `AD ${dim} from Break Infinity Upgrades` : "Total from Break Infinity Upgrades"),
+    name: () => "Break Infinity Upgrades",
     multValue: dim => {
       const mult = DC.D1.timesEffectsOf(
         BreakInfinityUpgrade.totalAMMult,
@@ -168,7 +168,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: () => `<i class="fab fa-skyatlas" />`,
   },
   infinityPower: {
-    name: dim => (dim ? `AD ${dim} from Infinity Power` : "Total from Infinity Power"),
+    name: () => "Infinity Power",
     multValue: dim => {
       const mult = Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1);
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
@@ -178,7 +178,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: () => `∞<i class="fas fa-arrows-turn-right" />`,
   },
   infinityChallenge: {
-    name: dim => (dim ? `AD ${dim} from Infinity Challenges` : "Total from Infinity Challenges"),
+    name: dim => (dim ? `Infinity Challenges (AD ${dim})` : "Infinity Challenges"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         InfinityChallenge(3),
@@ -205,7 +205,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: () => `∞<i class="fas fa-arrow-down-wide-short" />`,
   },
   timeStudy: {
-    name: dim => (dim ? `AD ${dim} from Time Studies` : "Total from Time Studies"),
+    name: dim => (dim ? `Time Studies (AD ${dim})` : "Time Studies"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         TimeStudy(91),
@@ -247,7 +247,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: () => `<i class="fas fa-book" />`,
   },
   eternityChallenge: {
-    name: dim => (dim ? `AD ${dim} from Eternity Challenges` : "Total from Eternity Challenges"),
+    name: () => "Eternity Challenges",
     multValue: dim => Decimal.pow(EternityChallenge(10).effectValue,
       dim ? 1 : MultiplierTabHelper.activeDimCount("AD")),
     isActive: () => EternityChallenge(10).isRunning,
@@ -255,7 +255,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: () => `Δ<i class="fas fa-arrow-down-wide-short" />`,
   },
   glyph: {
-    name: dim => (dim ? `AD ${dim} from Glyph Effects` : "Total from Glyph Effects"),
+    name: () => "Glyph Effects",
     multValue: dim => {
       const mult = getAdjustedGlyphEffect("powermult");
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
@@ -266,7 +266,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: () => `<i class="fas fa-clone" />`,
   },
   alchemy: {
-    name: dim => (dim ? `AD ${dim} from Glyph Alchemy` : "Total from Glyph Alchemy"),
+    name: () => "Glyph Alchemy",
     multValue: dim => {
       const mult = AlchemyResource.dimensionality.effectOrDefault(1)
         .times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));
@@ -278,7 +278,7 @@ GameDatabase.multiplierTabValues.AD = {
     barOverlay: () => `<i class="fas fa-vial" />`,
   },
   other: {
-    name: dim => (dim ? `AD ${dim} from Other sources` : "Total from Other sources"),
+    name: () => "Other sources",
     multValue: dim => {
       const mult = ShopPurchase.dimPurchases.currentMult * ShopPurchase.allDimPurchases.currentMult;
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));

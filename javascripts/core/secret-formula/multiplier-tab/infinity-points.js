@@ -48,7 +48,7 @@ GameDatabase.multiplierTabValues.IP = {
     barOverlay: () => `<i class='fas fa-calculator' />`,
   },
   infinityUpgrade: {
-    name: () => "Repeatable Infinity Upgrade",
+    name: () => `Repeatable ${formatX(2)} Infinity Upgrade`,
     multValue: () => InfinityUpgrade.ipMult.effectOrDefault(1),
     isActive: () => player.break && !Pelle.isDoomed,
     color: () => "var(--color-infinity)",
@@ -81,7 +81,7 @@ GameDatabase.multiplierTabValues.IP = {
     barOverlay: () => `<i class="fas fa-book" />`,
   },
   dilationUpgrade: {
-    name: () => "Dilation Upgrades",
+    name: () => "Dilation Upgrade (IP based on DT)",
     multValue: () => DilationUpgrade.ipMultDT.effectOrDefault(1),
     isActive: () => player.break && !Pelle.isDoomed && DilationUpgrade.ipMultDT.canBeApplied,
     color: () => "var(--color-dilation)",

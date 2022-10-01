@@ -7,7 +7,7 @@ import { MultiplierTabHelper } from "./helper-functions";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.ID = {
   total: {
-    name: dim => (dim ? `Total ID ${dim} Multiplier` : "All ID Multipliers"),
+    name: dim => (dim ? `ID ${dim} Multiplier` : "All ID Multipliers"),
     multValue: dim => (dim
       ? InfinityDimension(dim).multiplier
       : InfinityDimensions.all
@@ -20,7 +20,7 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: dim => `∞${dim ?? ""}`,
   },
   purchase: {
-    name: dim => (dim ? `ID ${dim} from Purchases` : "Total from Purchases"),
+    name: dim => (dim ? `Purchased ID ${dim}` : "Purchases"),
     multValue: dim => {
       const getMult = id => Decimal.pow(InfinityDimension(id).powerMultiplier,
         Math.floor(InfinityDimension(id).baseAmount / 10));
@@ -36,7 +36,7 @@ GameDatabase.multiplierTabValues.ID = {
   },
 
   basePurchase: {
-    name: dim => (dim ? `Multiplier from base purchases` : "Total Multiplier from base purchases"),
+    name: () => "Base purchases",
     multValue: dim => {
       const getMult = id => {
         const purchases = id === 8
@@ -57,7 +57,7 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: () => `<i class="fas fa-arrows-up-to-line" />`,
   },
   tesseractPurchase: {
-    name: dim => (dim ? "Extra multiplier from Tesseracts" : "Total extra multiplier from Tesseracts"),
+    name: () => "Tesseracts",
     multValue: dim => {
       const getMult = id => {
         if (id === 8) return DC.D1;
@@ -76,7 +76,7 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: () => `<i class="fas fa-up-right-and-down-left-from-center" />`,
   },
   infinityGlyphSacrifice: {
-    name: () => "Extra multiplier from Infinity Glyph sacrifice",
+    name: () => "Infinity Glyph sacrifice",
     multValue: () => (InfinityDimension(8).isProducing
       ? Decimal.pow(GlyphSacrifice.infinity.effectValue, Math.floor(InfinityDimension(8).baseAmount / 10))
       : DC.D1),
@@ -85,7 +85,7 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: () => `∞<i class="fas fa-turn-down" />`,
   },
   powPurchase: {
-    name: () => "Power effect from Imaginary Upgrades",
+    name: () => "Imaginary Upgrades",
     powValue: () => ImaginaryUpgrade(14).effectOrDefault(1),
     isActive: () => ImaginaryUpgrade(14).canBeApplied,
     color: () => "var(--color-ra--base)",
@@ -93,14 +93,14 @@ GameDatabase.multiplierTabValues.ID = {
   },
 
   replicanti: {
-    name: dim => (dim ? `ID ${dim} from Replicanti` : "Total from Replicanti"),
+    name: () => "Replicanti Multiplier",
     multValue: dim => Decimal.pow(replicantiMult(), dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
     isActive: () => Replicanti.areUnlocked,
     color: () => GameDatabase.reality.glyphTypes.replication.color,
     barOverlay: () => `Ξ`,
   },
   achievement: {
-    name: dim => (dim ? `ID ${dim} from Achievements` : "Total from Achievements"),
+    name: dim => (dim ? `Achievements (ID ${dim})` : "Achievements"),
     multValue: dim => {
       const baseMult = new Decimal(Achievement(75).effectOrDefault(1));
       if (dim) return dim === 1 ? baseMult.times(Achievement(94).effectOrDefault(1)) : baseMult;
@@ -112,9 +112,7 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: () => `<i class="fas fa-trophy" />`,
   },
   timeStudy: {
-    name: dim => (dim
-      ? `ID ${dim} from Time Studies`
-      : "Total from Time Studies"),
+    name: dim => (dim ? `Time Studies (ID ${dim})` : "Time Studies"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         TimeStudy(82),
@@ -130,9 +128,7 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: () => `<i class="fas fa-book" />`,
   },
   eternityUpgrades: {
-    name: dim => (dim
-      ? `ID ${dim} from Eternity Upgrades`
-      : "Total from Eternity Upgrades"),
+    name: () => "Eternity Upgrades",
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         EternityUpgrade.idMultEP,
@@ -146,7 +142,7 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: () => `<i class="fas fa-book" />`,
   },
   infinityChallenge: {
-    name: dim => (dim ? `ID ${dim} from Infinity Challenges` : "Total from Infinity Challenges"),
+    name: () => "Infinity Challenges",
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         InfinityChallenge(1).reward,
@@ -159,7 +155,7 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: () => `∞<i class="fas fa-arrow-down-wide-short" />`,
   },
   eternityChallenge: {
-    name: dim => (dim ? `ID ${dim} from Eternity Challenges` : "Total from Eternity Challenges"),
+    name: dim => (dim ? `Eternity Challenges (ID ${dim})` : " Eternity Challenges"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         EternityChallenge(4).reward,
@@ -180,7 +176,7 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: () => `Δ<i class="fas fa-arrow-down-wide-short" />`,
   },
   glyph: {
-    name: dim => (dim ? `ID ${dim} from Glyph Effects` : "Total from Glyph Effects"),
+    name: () => "Glyph Effects",
     multValue: () => 1,
     powValue: () => getAdjustedGlyphEffect("infinitypow") * getAdjustedGlyphEffect("effarigdimensions"),
     isActive: () => PlayerProgress.realityUnlocked(),
@@ -188,9 +184,9 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: () => `<i class="fas fa-clone" />`,
   },
   alchemy: {
-    name: dim => {
+    name: () => {
       const imStr = MachineHandler.isIMUnlocked ? " and Imaginary Upgrades" : "";
-      return dim ? `ID ${dim} from Glyph Alchemy${imStr}` : `Total from Glyph Alchemy${imStr}`;
+      return `Glyph Alchemy${imStr}`;
     },
     multValue: dim => {
       const mult = DC.D1.timesEffectsOf(
@@ -205,7 +201,7 @@ GameDatabase.multiplierTabValues.ID = {
     barOverlay: () => `<i class="fas fa-vial" />`,
   },
   other: {
-    name: dim => (dim ? `ID ${dim} from Other sources` : "Total from Other sources"),
+    name: () => "Other sources",
     multValue: dim => {
       const mult = new Decimal(ShopPurchase.allDimPurchases.currentMult).timesEffectsOf(
         PelleRifts.recursion.milestones[1]

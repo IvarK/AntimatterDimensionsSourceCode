@@ -1,21 +1,23 @@
-import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
-
-import { MultiplierTabHelper } from "./helper-functions";
 
 // See index.js for documentation
 GameDatabase.multiplierTabValues.AM = {
   total: {
     name: () => "Antimatter Production",
-    multValue: () => {
-      const totalMult = AntimatterDimensions.all
-        .filter(ad => ad.isProducing)
-        .map(ad => ad.multiplier)
-        .reduce((x, y) => x.times(y), DC.D1);
-      const totalTickspeed = Tickspeed.perSecond.pow(MultiplierTabHelper.activeDimCount("AD"));
-      return totalMult.times(totalTickspeed);
-    },
+    displayOverride: () => `${format(Currency.antimatter.productionPerSecond, 2, 2)}/sec`,
+    multValue: () => new Decimal(Currency.antimatter.productionPerSecond),
     isActive: () => AntimatterDimension(1).isProducing,
     overlay: ["<i class='fas fa-atom' />"],
+  },
+  effarigAM: {
+    name: () => "Glyph Effect (Effarig Antimatter Production)",
+    powValue: () => {
+      const ad1 = AntimatterDimension(1);
+      const baseProd = ad1.totalAmount.times(ad1.multiplier).times(Tickspeed.perSecond);
+      return Math.pow(baseProd.log10(), getAdjustedGlyphEffect("effarigantimatter") - 1);
+    },
+    isActive: () => getAdjustedGlyphEffect("effarigantimatter") > 1,
+    color: () => "var(--color-effarig--base)",
+    barOverlay: () => "Ϙ",
   }
 };

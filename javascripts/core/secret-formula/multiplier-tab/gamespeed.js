@@ -6,7 +6,7 @@ GameDatabase.multiplierTabValues.gamespeed = {
     name: () => "Average Game speed",
     isBase: () => true,
     multValue: () => {
-      if (Enslaved.isAutoReleasing) return Math.max(Enslaved.autoReleaseSpeed / getGameSpeedupFactor(), 1);
+      if (Enslaved.isAutoReleasing) return Math.max(Enslaved.autoReleaseSpeed, getGameSpeedupFactor());
       let factor = BlackHoles.list
         .map(bh => bh.dutyCycle * bh.power)
         .reduce((x, y) => x * y, 1);
@@ -34,6 +34,14 @@ GameDatabase.multiplierTabValues.gamespeed = {
     isActive: () => BlackHole(1).isUnlocked,
     color: () => "var(--color-reality)",
     barOverlay: () => `<i class="fas fa-circle" />`,
+  },
+  v: {
+    name: () => "V Achievements",
+    multValue: () => Math.pow(VUnlocks.achievementBH.effectOrDefault(1),
+      BlackHoles.list.countWhere(bh => bh.isUnlocked)),
+    isActive: () => !BlackHoles.arePaused && VUnlocks.achievementBH.canBeApplied,
+    color: () => "var(--color-v--base)",
+    barOverlay: () => `<i class="fas fa-trophy" />`,
   },
   pulsing: {
     name: () => "Auto-releasing Stored Time",

@@ -117,7 +117,7 @@ GameDatabase.multiplierTabValues.TD = {
       }
       return totalMult;
     },
-    isActive: () => Achievement(75).canBeApplied,
+    isActive: () => TimeDimension(1).isProducing,
     color: () => "var(--color-eternity)",
     barOverlay: () => `<i class="fas fa-book" />`,
   },

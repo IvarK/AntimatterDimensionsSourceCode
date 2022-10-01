@@ -16,7 +16,7 @@ GameDatabase.multiplierTabValues.general = {
 
       if (dim?.length === 2) {
         let totalEffect = DC.D1;
-        for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
+        for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount(dim); tier++) {
           let singleEffect;
           if (ach === 43) singleEffect = Achievement(43).canBeApplied ? (1 + tier / 100) : 1;
           else singleEffect = (MultiplierTabHelper.achievementDimCheck(ach, `${dim}${tier}`) &&
@@ -63,7 +63,7 @@ GameDatabase.multiplierTabValues.general = {
       if (ic === 4) return 1;
       if (dim?.length === 2) {
         let totalEffect = DC.D1;
-        for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
+        for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount(dim); tier++) {
           totalEffect = totalEffect.times((MultiplierTabHelper.ICDimCheck(ic, `${dim}${tier}`) &&
               InfinityChallenge(ic).isCompleted) ? InfinityChallenge(ic).reward.effectOrDefault(1) : 1);
         }
@@ -82,7 +82,7 @@ GameDatabase.multiplierTabValues.general = {
     multValue: (ec, dim) => {
       if (dim?.length === 2) {
         let totalEffect = DC.D1;
-        for (let tier = 1; tier < MultiplierTabHelper.activeDimCount(dim); tier++) {
+        for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount(dim); tier++) {
           totalEffect = totalEffect.times((MultiplierTabHelper.ECDimCheck(ec, `${dim}${tier}`) &&
               EternityChallenge(ec).completions > 0) ? EternityChallenge(ec).reward.effectOrDefault(1) : 1);
         }

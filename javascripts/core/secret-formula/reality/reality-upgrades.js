@@ -201,7 +201,7 @@ GameDatabase.reality.upgrades = [
     checkRequirement: () => Currency.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
     description: () => `Boost Tachyon Particle gain based on ${formatX(5)} Eternity Point multiplier`,
-    effect: () => Math.max(Math.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)) / 3, 1),
+    effect: () => Math.max(Math.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)) / 9, 1),
     formatEffect: value => formatX(value, 2, 2)
   },
   {

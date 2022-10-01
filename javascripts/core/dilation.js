@@ -116,7 +116,7 @@ export function getDilationGainPerSecond() {
     return new Decimal(tachyonEffect)
       .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
       .times(ShopPurchase.dilatedTimePurchases.currentMult ** 0.5)
-      .times(Pelle.specialGlyphEffect.dilation).div(3e4);
+      .times(Pelle.specialGlyphEffect.dilation).div(1e5);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(

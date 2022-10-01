@@ -937,7 +937,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => player.galaxies >= 569 && player.requirementChecks.eternity.noRG,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
     reward: "Gain a multiplier to Tachyon Particle and Dilated Time gain based on Antimatter Galaxies.",
-    effect: () => Math.max(Math.pow(player.galaxies, 0.04), 1),
+    effect: () => 1.22 * Math.max(Math.pow(player.galaxies, 0.04), 1),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },
   {
@@ -1139,7 +1139,8 @@ GameDatabase.achievements.normal = [
     description: "Reality without buying Time Theorems.",
     checkRequirement: () => player.requirementChecks.reality.noPurchasedTT,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    reward: "Free coupon to McDonalds™️."
+    get reward() { return `Gain ${formatX(2.5, 0, 1)} Time Theorems, and a free coupon to McDonalds™️.`; },
+    effect: 2.5
   },
   {
     id: 157,

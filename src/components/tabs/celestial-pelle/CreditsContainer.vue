@@ -218,7 +218,7 @@ perfectly the same. */
 }
 
 .c-teresa-credits {
-  top: 130rem;
+  top: 145rem;
   left: 65%;
   color: var(--color-teresa--base);
   animation: a-teresa-credits 10s ease-in-out infinite;
@@ -232,21 +232,21 @@ perfectly the same. */
 }
 
 .c-enslaved-credits {
-  top: 220rem;
+  top: 235rem;
   left: 52%;
   color: var(--color-enslaved--base);
   animation: a-enslaved-credits 10s linear infinite;
 }
 
 .c-v-credits {
-  top: 170rem;
+  top: 185rem;
   left: 20%;
   color: var(--color-v--base);
   animation: a-v-credits 15s ease-in-out infinite;
 }
 
 .c-ra-credits {
-  top: 300rem;
+  top: 315rem;
   left: 44%;
   color: var(--color-ra--base);
   animation: a-ra-credits 10s ease-in-out infinite;
@@ -257,7 +257,7 @@ perfectly the same. */
 }
 
 .c-laitela-credits {
-  top: 90rem;
+  top: 105rem;
   left: 13%;
   color: #ffffff;
   animation: a-laitela-credits 5s ease-in-out infinite;

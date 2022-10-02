@@ -475,7 +475,10 @@ let konamiStep = 0;
 
 function testKonami(character) {
   if (SecretAchievement(17).isUnlocked) return;
+  // This conditional is structured weirdly in order to make sure more than 2 consecutive "up" inputs doesn't
+  // reset the sequence state unnecessarily
   if (konamiCode[konamiStep] === character) konamiStep++;
+  else if (konamiStep === 2 && character === "up") konamiStep = 2;
   else konamiStep = 0;
   if (konamiCode.length <= konamiStep) {
     SecretAchievement(17).unlock();

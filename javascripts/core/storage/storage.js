@@ -55,6 +55,7 @@ export const GameStorage = {
     this.save(true);
     this.loadPlayerObject(this.saves[slot] ?? Player.defaultStart);
     Tabs.all.find(t => t.id === player.options.lastOpenTab).show(true);
+    Cloud.resetTempState();
     GameUI.notify.info("Game loaded");
   },
 
@@ -73,6 +74,7 @@ export const GameStorage = {
     this.loadPlayerObject(player, overrideLastUpdate);
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
+    Cloud.resetTempState();
 
     // This is to fix a very specific exploit: When the game is ending, some tabs get hidden
     // The options tab is the first one of those, which makes the player redirect to the Pelle tab
@@ -194,6 +196,7 @@ export const GameStorage = {
     player.IAP = IAP;
     this.save(true);
     Tab.dimensions.antimatter.show();
+    Cloud.resetTempState();
   },
 
   loadPlayerObject(playerObject, overrideLastUpdate = undefined) {

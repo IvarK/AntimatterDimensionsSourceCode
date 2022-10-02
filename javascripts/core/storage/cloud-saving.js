@@ -31,6 +31,14 @@ export const Cloud = {
   shouldOverwriteCloudSave: true,
   lastCloudHash: null,
 
+  resetTempState() {
+    this.hasSeenSavingConflict = false;
+    this.shouldOverwriteCloudSave = true;
+    this.lastCloudHash = null;
+    GameStorage.lastCloudSave = Date.now();
+    GameIntervals.checkCloudSave.restart();
+  },
+
   get loggedIn() {
     return this.user !== null;
   },
@@ -57,7 +65,7 @@ export const Cloud = {
       older: ProgressChecker.compareSaveTimes(cloud, local),
       diffSTD: (cloud?.IAP?.totalSTD ?? 0) - (local?.IAP?.totalSTD ?? 0),
       differentName: cloud?.options.saveFileName !== local?.options.saveFileName,
-      hashMismatch: hash && this.lastCloudHash !== hash,
+      hashMismatch: this.lastCloudHash && this.lastCloudHash !== hash,
     };
   },
 

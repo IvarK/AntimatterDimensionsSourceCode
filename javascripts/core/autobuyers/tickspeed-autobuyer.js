@@ -95,5 +95,6 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
     this.data.mode = AUTOBUYER_MODE.BUY_SINGLE;
     this.data.isUnlocked = false;
     this.data.isBought = false;
+    TabNotification.newAutobuyer.clearTrigger();
   }
 }();

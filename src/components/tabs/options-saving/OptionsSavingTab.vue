@@ -59,6 +59,12 @@ export default {
         const contents = reader.result;
         const toImport = GameSaveSerializer.deserialize(contents);
         const showWarning = (toImport?.IAP?.totalSTD ?? 0) < player.IAP.totalSTD;
+
+        // By default, use the settings on the save pre-import. Note: Do not move this into GameStorage.import as
+        // this would cause the offline progress choice in the text import modal to always be overridden
+        GameStorage.offlineEnabled = player.options.offlineProgress;
+        GameStorage.offlineTicks = player.options.offlineTicks;
+
         if (showWarning) {
           Modal.addImportConflict(toImport, GameStorage.saves[GameStorage.currentSlot]);
           Modal.importWarning.show({

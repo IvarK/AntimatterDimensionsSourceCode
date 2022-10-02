@@ -841,9 +841,10 @@ function afterSimulation(seconds, playerBefore) {
   GameUI.notify.showBlackHoles = true;
 }
 
+// eslint-disable-next-line max-params
 export function simulateTime(seconds, real, fast) {
   // The game is simulated at a base 50ms update rate, with a max of
-  // player.options.offlineTicks ticks. additional ticks are converted
+  // offlineTicks ticks. additional ticks are converted
   // into a higher diff per tick
   // warning: do not call this function with real unless you know what you're doing
   // calling it with fast will only simulate it with a max of 50 ticks
@@ -851,8 +852,8 @@ export function simulateTime(seconds, real, fast) {
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
-  if (ticks > player.options.offlineTicks && !real && !fast) {
-    ticks = player.options.offlineTicks;
+  if (ticks > GameStorage.offlineTicks && !real && !fast) {
+    ticks = GameStorage.offlineTicks;
   } else if (ticks > 50 && fast) {
     ticks = 50;
   }

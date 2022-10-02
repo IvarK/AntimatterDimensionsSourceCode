@@ -26,7 +26,8 @@ export default {
   },
   methods: {
     update() {
-      this.showLockedDimCostNote = !TimeDimension(8).isUnlocked;
+      this.showLockedDimCostNote = !TimeDimension(4).isUnlocked ||
+        (!TimeDimension(8).isUnlocked && player.realities >= 1);
       this.totalUpgrades = player.totalTickGained;
       this.multPerTickspeed = FreeTickspeed.multToNext;
       this.tickspeedSoftcap = FreeTickspeed.softcap;
@@ -97,6 +98,7 @@ export default {
       {{ format(costIncreases[1]) }} Eternity Points,
       <br>
       and costs increase much faster after {{ format(costIncreases[2]) }} Eternity Points.
+      <br>
       <div v-if="showLockedDimCostNote">
         Hold shift to see the Eternity Point cost for locked Time Dimensions.
       </div>

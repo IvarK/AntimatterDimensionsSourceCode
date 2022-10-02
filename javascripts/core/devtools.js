@@ -578,7 +578,8 @@ dev.testGlyphs = function(config) {
     const glyphData = glyphSets[index].map(glyphToShortString).sum();
     console.log(`${done} ${glyphData} rm=${rm} gl=${gl} ep=${ep} ip=${ip} am=${am} ` +
       `dimboosts=${dimboosts} galaxies=${galaxies}`);
-    GameStorage.import(save, Date.now());
+    GameStorage.offlineEnabled = false;
+    GameStorage.import(save);
     if (index < glyphSets.length - 1) {
       setTimeout(runTrial, 100, index + 1);
     }

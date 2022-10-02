@@ -12,6 +12,8 @@ export const GameStorage = {
   saved: 0,
   lastSaveTime: Date.now(),
   lastCloudSave: Date.now(),
+  offlineEnabled: undefined,
+  offlineTicks: undefined,
 
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
@@ -59,7 +61,7 @@ export const GameStorage = {
     GameUI.notify.info("Game loaded");
   },
 
-  import(saveData, overrideLastUpdate = undefined) {
+  import(saveData) {
     if (tryImportSecret(saveData) || Theme.tryUnlock(saveData)) {
       return;
     }
@@ -71,7 +73,7 @@ export const GameStorage = {
     Modal.hideAll();
     Quote.clearAll();
     AutomatorBackend.clearEditor();
-    this.loadPlayerObject(player, overrideLastUpdate);
+    this.loadPlayerObject(player);
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
     Cloud.resetTempState();
@@ -199,8 +201,15 @@ export const GameStorage = {
     Cloud.resetTempState();
   },
 
-  loadPlayerObject(playerObject, overrideLastUpdate = undefined) {
+  loadPlayerObject(playerObject) {
     this.saved = 0;
+
+    // These will be changed elsewhere during importing; otherwise, it's assumed to be a local load
+    // from being offline, and we can use the props in the player object instead
+    if (this.offlineEnabled === undefined) {
+      this.offlineEnabled = player.options.offlineEnabled;
+      this.offlineTicks = player.options.offlineTicks;
+    }
 
     const checkString = this.checkPlayerObject(playerObject);
     if (playerObject === Player.defaultStart || checkString !== "") {
@@ -248,11 +257,8 @@ export const GameStorage = {
     AutomatorBackend.initializeFromSave();
     Lazy.invalidateAll();
 
-    if (overrideLastUpdate) {
-      player.lastUpdate = overrideLastUpdate;
-    }
     const rawDiff = Date.now() - player.lastUpdate;
-    if (player.options.offlineProgress && !Speedrun.isPausedAtStart()) {
+    if (GameStorage.offlineEnabled && !Speedrun.isPausedAtStart()) {
       let diff = rawDiff;
       player.speedrun.offlineTimeUsed += diff;
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {

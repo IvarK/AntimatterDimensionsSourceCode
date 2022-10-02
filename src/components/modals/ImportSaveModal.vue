@@ -2,6 +2,12 @@
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import PrimaryButton from "@/components/PrimaryButton";
 
+const OFFLINE_PROGRESS_TYPE = {
+  IMPORTED: 0,
+  LOCAL: 1,
+  IGNORED: 2,
+};
+
 export default {
   name: "ImportSaveModal",
   components: {
@@ -12,6 +18,7 @@ export default {
     return {
       input: "",
       importCounter: 0,
+      offlineImport: OFFLINE_PROGRESS_TYPE.IMPORTED,
     };
   },
   computed: {
@@ -56,12 +63,56 @@ export default {
     },
     clicksLeft() {
       return 5 - this.importCounter;
+    },
+    timeSinceSave() {
+      return TimeSpan.fromMilliseconds(Date.now() - this.player.lastUpdate).toString();
+    },
+    offlineType() {
+      this.updateOfflineSettings();
+      switch (this.offlineImport) {
+        case OFFLINE_PROGRESS_TYPE.IMPORTED:
+          return "Using Imported save settings";
+        case OFFLINE_PROGRESS_TYPE.LOCAL:
+          return "Using Current save settings";
+        case OFFLINE_PROGRESS_TYPE.IGNORED:
+          return "Will not simulate";
+        default:
+          throw new Error("Unrecognized offline progress setting for importing");
+      }
+    },
+    offlineDetails() {
+      if (this.offlineImport === OFFLINE_PROGRESS_TYPE.IGNORED) {
+        return `Save will be imported without offline progress.`;
+      }
+      const ticks = GameStorage.offlineTicks;
+      return GameStorage.offlineEnabled
+        ? `After importing, will simulate ${formatInt(ticks)} ticks of duration
+          ${TimeSpan.fromMilliseconds((Date.now() - this.player.lastUpdate) / ticks).toStringShort()} each.`
+        : "This setting will not apply any offline progress after importing.";
     }
   },
   mounted() {
     this.$refs.input.select();
   },
   methods: {
+    changeOfflineSetting() {
+      this.offlineImport = (this.offlineImport + 1) % 3;
+    },
+    updateOfflineSettings() {
+      switch (this.offlineImport) {
+        case OFFLINE_PROGRESS_TYPE.IMPORTED:
+          GameStorage.offlineEnabled = this.player.options.offlineProgress;
+          GameStorage.offlineTicks = this.player.options.offlineTicks;
+          break;
+        case OFFLINE_PROGRESS_TYPE.LOCAL:
+          GameStorage.offlineEnabled = player.options.offlineProgress;
+          GameStorage.offlineTicks = player.options.offlineTicks;
+          break;
+        case OFFLINE_PROGRESS_TYPE.IGNORED:
+          GameStorage.offlineEnabled = false;
+          break;
+      }
+    },
     importSave() {
       this.importCounter++;
       if (this.hasLessSTDs && this.clicksLeft > 0) return;
@@ -108,7 +159,18 @@ export default {
           Realities: {{ formatPostBreak(player.realities, 2) }}
         </div>
         <div class="c-modal-import__warning">
-          (your current save file will be overwritten!)
+          (Your current save file will be overwritten!)
+        </div>
+        <br>
+        <div>
+          This save was last opened {{ timeSinceSave }} ago.
+          <div
+            class="o-primary-btn"
+            @click="changeOfflineSetting"
+          >
+            Offline Progress: {{ offlineType }}
+          </div>
+          <span v-html="offlineDetails" />
         </div>
         <div
           v-if="hasLessSTDs"

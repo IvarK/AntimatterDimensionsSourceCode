@@ -262,7 +262,11 @@ export const shortcuts = [
     keys: ["mod", "alt", "a"],
     type: "bind",
     function: () => keyboardEditAutobuyers(),
-    visible: () => player.break
+    visible: () => [Autobuyer.dimboost,
+      Autobuyer.galaxy,
+      Autobuyer.bigCrunch,
+      Autobuyer.eternity,
+      Autobuyer.reality].some(autobuyer => autobuyer.isUnlocked)
   },
 ];
 
@@ -421,6 +425,11 @@ function keyboardEditAutobuyers() {
     return;
   }
   if (Modal.isOpen) return;
+  if (![Autobuyer.dimboost,
+    Autobuyer.galaxy,
+    Autobuyer.bigCrunch,
+    Autobuyer.eternity,
+    Autobuyer.reality].some(autobuyer => autobuyer.isUnlocked)) return;
   Modal.autobuyerEditModal.show();
 }
 

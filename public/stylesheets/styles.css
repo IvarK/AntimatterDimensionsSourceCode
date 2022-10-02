@@ -4163,7 +4163,7 @@ br {
 }
 
 .t-dark .o-autobuyer-toggle-checkbox__label-modal {
-  border-color: var(--color-text);
+  border-color: var(--color-good-dark);
 }
 
 .t-dark-metro .o-autobuyer-toggle-checkbox__label {
@@ -4171,7 +4171,7 @@ br {
 }
 
 .t-dark-metro .o-autobuyer-toggle-checkbox__label-modal {
-  border-color: var(--color-text);
+  border-color: var(--color-good-dark);
 }
 
 .t-s1 .o-autobuyer-toggle-checkbox__label {
@@ -4414,7 +4414,8 @@ properly on certain themes. */
 }
 
 .t-dark .c-autobuyer-box-row__modal {
-  border-color: var(--color-text);
+  background-color: rgb(55, 71, 79);
+  border-color: var(--color-good-dark);
 }
 
 .t-dark-metro .c-autobuyer-box-row {
@@ -4422,12 +4423,29 @@ properly on certain themes. */
 }
 
 .t-dark-metro .c-autobuyer-box-row__modal {
-  border-color: var(--color-text);
+  background-color: rgb(55, 71, 79);
+  border-color: var(--color-good-dark);
 }
 
 .t-s1 .c-autobuyer-box-row {
   background: var(--color-base);
   border-color: black;
+}
+
+.t-s2 .c-autobuyer-box-row__modal {
+  background-color: rgb(230, 230, 255);
+}
+
+.t-s3 .c-autobuyer-box-row__modal {
+  background-color: var(--color-base);
+}
+
+.t-s4 .c-autobuyer-box-row__modal {
+  background-color: red;
+}
+
+.t-s5 .c-autobuyer-box-row__modal {
+  background-color: var(--color-base);
 }
 
 .t-s6 .c-autobuyer-box-row,

@@ -663,6 +663,34 @@ body.t-s9 {
   border-color: var(--color-accent);
 }
 
+.c-autobuyer-box-row__modal {
+  background-color: #111014;
+  border-color: #383232;
+}
+
+.t-metro .c-autobuyer-box-row__modal {
+  background-color: var(--color-base);
+  border-color: var(--color-text);
+}
+
+.t-inverted .c-autobuyer-box-row__modal,
+.t-inverted-metro .c-autobuyer-box-row__modal  {
+  background-color: var(--color-base);
+  border-color: var(--color-text);
+}
+
+.t-s7 .c-autobuyer-box-row__modal {
+  background-color: var(--color-base);
+}
+
+.o-autobuyer-toggle-checkbox__label-modal {
+  border-color: #383232;
+}
+
+.t-inverted .o-autobuyer-toggle-checkbox__label-modal {
+  border-color: var(--color-text);
+}
+
 .o-autobuyer-input,
 .c-autobuyer-box__mode-select {
   color: var(--color-accent);
@@ -690,6 +718,11 @@ body.t-s9 {
 .t-s1 .c-autobuyer-box__mode-select {
   background-color: var(--color-base);
   border: 0.1rem solid black;
+}
+
+.t-s4 .o-autobuyer-input,
+.t-s7 .o-autobuyer-input {
+  background-color: white;
 }
 
 .t-s6 .o-autobuyer-input,

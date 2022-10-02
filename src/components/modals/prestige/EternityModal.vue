@@ -1,16 +1,17 @@
 <script>
-import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import ResetModal from "@/components/modals/prestige/ResetModal";
 
 export default {
   name: "EternityModal",
   components: {
-    ModalWrapperChoice
+    ResetModal
   },
   data() {
     return {
       exitingEC: false,
       startingIP: new Decimal(),
-      gainedEternityPoints: new Decimal()
+      gainedEternityPoints: new Decimal(),
+      gainedEternities: new Decimal()
     };
   },
   computed: {
@@ -22,7 +23,8 @@ export default {
           on the Statistics tab. You will also gain an Eternity Point and unlock various upgrades.`;
     },
     gainedEPOnEternity() {
-      return `You will gain ${quantify("Eternity Point", this.gainedEternityPoints, 2)} on Eternity.`;
+      return `You will gain ${quantify("Eternity", this.gainedEternities, 2)} 
+      and ${quantify("Eternity Point", this.gainedEternityPoints, 2)} on Eternity.`;
     },
     startWithIP() {
       return this.startingIP.gt(0)
@@ -46,6 +48,7 @@ export default {
       this.exitingEC = EternityChallenge.isRunning;
       this.startingIP = Currency.infinityPoints.startingValue;
       this.gainedEternityPoints = gainedEternityPoints();
+      this.gainedEternities = gainedEternities();
     },
     handleYesClick() {
       animateAndEternity();
@@ -56,31 +59,14 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice
-    option="eternity"
-    @confirm="handleYesClick"
-  >
-    <template #header>
-      {{ exitingEC ? "Complete Eternity Challenge" : "You are about to Eternity" }}
-    </template>
-    <div v-if="!exitingEC">
-      <div class="c-modal-message__text">
-        {{ message }}
-        <br>
-      </div>
-      <br>
-      <div class="c-modal-message__text">
-        {{ gainedEPOnEternity }}
-      </div>
-      <br>
-      <div class="c-modal-message__text">
-        {{ startWithIP }}
-      </div>
-    </div>
-    <div v-else>
-      <div class="c-modal-message__text">
-        {{ eternityChallenge }}
-      </div>
-    </div>
-  </ModalWrapperChoice>
+  <ResetModal
+    :header="exitingEC ? 'Complete Eternity Challenge' : 'You are about to Eternity'"
+    :message="message"
+    :gained-resources="gainedEPOnEternity"
+    :starting-resources="startWithIP"
+    :confirm-fn="handleYesClick"
+    :alternate-condition="exitingEC"
+    :alternate-text="exitingEC ? eternityChallenge : undefined"
+    confirm-option="eternity"
+  />
 </template>

@@ -1,5 +1,7 @@
 import { GameDatabase } from "../game-database";
 
+import { MultiplierTabIcons } from "./icons";
+
 // See index.js for documentation
 GameDatabase.multiplierTabValues.gamespeed = {
   total: {
@@ -23,8 +25,7 @@ GameDatabase.multiplierTabValues.gamespeed = {
     multValue: () => getAdjustedGlyphEffect("timespeed"),
     powValue: () => getAdjustedGlyphEffect("effarigblackhole"),
     isActive: () => PlayerProgress.realityUnlocked(),
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-clone" />`,
+    icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   blackHoles: {
     name: () => "Black Holes",
@@ -32,16 +33,14 @@ GameDatabase.multiplierTabValues.gamespeed = {
       .map(bh => bh.dutyCycle * bh.power)
       .reduce((x, y) => x * y, 1),
     isActive: () => BlackHole(1).isUnlocked,
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-circle" />`,
+    icon: MultiplierTabIcons.BLACK_HOLE,
   },
   v: {
     name: () => "V Achievements",
     multValue: () => Math.pow(VUnlocks.achievementBH.effectOrDefault(1),
       BlackHoles.list.countWhere(bh => bh.isUnlocked)),
     isActive: () => !BlackHoles.arePaused && VUnlocks.achievementBH.canBeApplied,
-    color: () => "var(--color-v--base)",
-    barOverlay: () => `<i class="fas fa-trophy" />`,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   pulsing: {
     name: () => "Auto-releasing Stored Time",
@@ -49,14 +48,12 @@ GameDatabase.multiplierTabValues.gamespeed = {
       ? Math.max(Enslaved.autoReleaseSpeed / getGameSpeedupFactor(), 1)
       : getGameSpeedupFactor()),
     isActive: () => Enslaved.isAutoReleasing,
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-expand-arrows-alt" />`,
-
+    icon: MultiplierTabIcons.BH_PULSE,
   },
   singularity: {
     name: () => "Singularity Milestones",
     multValue: () => SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1),
     isActive: () => SingularityMilestone.gamespeedFromSingularities.canBeApplied,
-    barOverlay: () => `<i class="fas fa-arrows-to-dot" />`,
+    icon: MultiplierTabIcons.SINGULARITY,
   },
 };

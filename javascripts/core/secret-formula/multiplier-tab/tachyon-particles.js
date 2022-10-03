@@ -2,6 +2,8 @@ import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../app/player-progress";
 
+import { MultiplierTabIcons } from "./icons";
+
 // See index.js for documentation
 GameDatabase.multiplierTabValues.TP = {
   total: {
@@ -9,43 +11,37 @@ GameDatabase.multiplierTabValues.TP = {
     isBase: () => true,
     multValue: () => new Decimal(Currency.tachyonParticles.value),
     isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
-    color: () => "var(--color-dilation)",
-    barOverlay: () => `<i class="fas fa-meteor" />`,
+    icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },
   base: {
     name: () => "Tachyon Particle Count",
     isBase: () => true,
     multValue: () => new Decimal(Currency.tachyonParticles.value).div(tachyonGainMultiplier()),
     isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
-    color: () => "var(--color-dilation)",
-    barOverlay: () => `<i class="fas fa-atom" />`,
+    icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },
   achievement: {
     name: () => "Achievement 132",
     multValue: () => Achievement(132).effectOrDefault(1),
     isActive: () => Achievement(132).canBeApplied,
-    color: () => "var(--color-v--base)",
-    barOverlay: () => `<i class="fas fa-trophy" />`,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   dilation: {
     name: () => `Dilation Upgrade (Repeatable TP multiplier)`,
     multValue: () => DilationUpgrade.tachyonGain.effectOrDefault(1),
     isActive: () => DilationUpgrade.tachyonGain.canBeApplied,
-    color: () => "var(--color-dilation)",
-    barOverlay: () => `Ψ<i class="fas fa-repeat" />`,
+    icon: MultiplierTabIcons.UPGRADE("dilation"),
   },
   realityUpgrade: {
     name: () => "Reality Upgrades",
     multValue: () => DC.D1.timesEffectsOf(RealityUpgrade(4), RealityUpgrade(8), RealityUpgrade(15)),
     isActive: () => PlayerProgress.realityUnlocked(),
-    color: () => "var(--color-reality)",
-    barOverlay: () => `Ϟ<i class="fas fa-arrow-up" />`,
+    icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   dilationGlyphSacrifice: {
     name: () => "Dilation Glyph Sacrifice",
     multValue: () => GlyphSacrifice.dilation.effectValue,
     isActive: () => GlyphSacrifice.dilation.effectValue > 1,
-    color: () => "var(--color-dilation)",
-    barOverlay: () => `Ψ<i class="fas fa-turn-down" />`,
+    icon: MultiplierTabIcons.SACRIFICE("dilation"),
   },
 };

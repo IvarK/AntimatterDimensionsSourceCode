@@ -1,6 +1,7 @@
 import { GameDatabase } from "../game-database";
 
 import { MultiplierTabHelper } from "./helper-functions";
+import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
 GameDatabase.multiplierTabValues.galaxies = {
@@ -14,9 +15,8 @@ GameDatabase.multiplierTabValues.galaxies = {
       return `${formatInt(num)}, ${formatX(mult, 2, 2)} strength`;
     },
     multValue: () => Decimal.pow10(player.galaxies + GalaxyGenerator.galaxies),
-    isActive: () => true,
-    color: () => GameDatabase.reality.glyphTypes.power.color,
-    barOverlay: () => `<i class='fas fa-atom' />`,
+    isActive: true,
+    icon: MultiplierTabIcons.ANTIMATTER,
   },
   replicanti: {
     name: () => "Replicanti Galaxies",
@@ -39,8 +39,7 @@ GameDatabase.multiplierTabValues.galaxies = {
       return Decimal.pow10(rg);
     },
     isActive: () => Replicanti.areUnlocked,
-    color: () => GameDatabase.reality.glyphTypes.replication.color,
-    barOverlay: () => `Ξ`,
+    icon: MultiplierTabIcons.REPLICANTI,
   },
   tachyon: {
     name: () => "Tachyon Galaxies",
@@ -56,7 +55,6 @@ GameDatabase.multiplierTabValues.galaxies = {
       return Decimal.pow10(num * mult);
     },
     isActive: () => player.dilation.totalTachyonGalaxies > 0,
-    color: () => "var(--color-dilation)",
-    barOverlay: () => `Ψ`,
+    icon: MultiplierTabIcons.SPECIFIC_GLYPH("dilation"),
   },
 };

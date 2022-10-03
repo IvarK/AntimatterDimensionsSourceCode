@@ -1,6 +1,8 @@
 import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
 
+import { MultiplierTabIcons } from "./icons";
+
 // See index.js for documentation
 GameDatabase.multiplierTabValues.infinities = {
   total: {
@@ -17,15 +19,13 @@ GameDatabase.multiplierTabValues.infinities = {
       Achievement(164)
     ),
     isActive: () => Achievement(87).isUnlocked,
-    color: () => "var(--color-v--base)",
-    barOverlay: () => `<i class="fas fa-trophy" />`,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
     name: () => "Time Study 32",
     multValue: () => TimeStudy(32).effectOrDefault(1),
     isActive: () => TimeStudy(32).isBought,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `<i class="fas fa-book" />`,
+    icon: MultiplierTabIcons.TIME_STUDY,
   },
   realityUpgrades: {
     name: () => "Reality Upgrades",
@@ -34,28 +34,25 @@ GameDatabase.multiplierTabValues.infinities = {
       RealityUpgrade(7)
     ),
     isActive: () => PlayerProgress.realityUnlocked(),
-    color: () => "var(--color-dilation)",
-    barOverlay: () => `Ϟ<i class="fas fa-arrow-up" />`,
+    icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   glyph: {
     name: () => "Equipped Glyphs",
     multValue: () => getAdjustedGlyphEffect("infinityinfmult"),
     isActive: () => PlayerProgress.realityUnlocked(),
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-clone" />`,
+    icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   ra: {
     name: () => "Ra Boost from Time Theorems",
     multValue: () => Ra.unlocks.continuousTTBoost.effects.infinity.effectOrDefault(1),
     isActive: () => Ra.unlocks.continuousTTBoost.isUnlocked,
-    color: () => "var(--color-ra--base)",
-    barOverlay: () => `<i class="fas fa-sun" />`,
+    icon: MultiplierTabIcons.GENERIC_RA,
   },
   singularity: {
     name: () => "Singularity Milestones",
     multValue: () => 1,
     powValue: () => SingularityMilestone.infinitiedPow.effectOrDefault(1),
     isActive: () => SingularityMilestone.infinitiedPow.canBeApplied,
-    barOverlay: () => `<i class="fas fa-arrows-to-dot" />`,
+    icon: MultiplierTabIcons.SINGULARITY,
   },
 };

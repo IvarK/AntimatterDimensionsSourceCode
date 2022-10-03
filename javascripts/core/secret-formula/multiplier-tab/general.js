@@ -2,6 +2,7 @@ import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
 
 import { MultiplierTabHelper } from "./helper-functions";
+import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
 GameDatabase.multiplierTabValues.general = {
@@ -31,8 +32,13 @@ GameDatabase.multiplierTabValues.general = {
         ? Achievement(ach).effectOrDefault(1) : 1;
     },
     isActive: ach => Achievement(ach).canBeApplied,
-    color: () => "var(--color-v--base)",
-    barOverlay: ach => `<i class="fas fa-trophy" />${ach}`,
+    icon: ach => {
+      const base = MultiplierTabIcons.ACHIEVEMENT;
+      return {
+        color: base.color,
+        text: `${base.text}${ach}`,
+      };
+    },
   },
   timeStudy: {
     name: (ts, dim) => (dim?.length === 2
@@ -54,8 +60,13 @@ GameDatabase.multiplierTabValues.general = {
         ? new Decimal(TimeStudy(ts).effectOrDefault(1)) : 1;
     },
     isActive: ts => TimeStudy(ts).isBought,
-    color: () => "var(--color-eternity)",
-    barOverlay: ts => `<i class="fas fa-book" />${ts}`,
+    icon: ts => {
+      const base = MultiplierTabIcons.TIME_STUDY;
+      return {
+        color: base.color,
+        text: `${base.text}${ts}`,
+      };
+    },
   },
   infinityChallenge: {
     name: ic => `Infinity Challenge ${ic}`,
@@ -74,8 +85,13 @@ GameDatabase.multiplierTabValues.general = {
     },
     powValue: ic => (ic === 4 ? InfinityChallenge(4).reward.effectValue : 1),
     isActive: ic => InfinityChallenge(ic).isCompleted,
-    color: () => "var(--color-infinity)",
-    barOverlay: ic => `∞<i class="fas fa-arrow-down-wide-short" />${ic}`,
+    icon: ic => {
+      const base = MultiplierTabIcons.CHALLENGE("infinity");
+      return {
+        color: base.color,
+        text: `${base.text}${ic}`,
+      };
+    },
   },
   eternityChallenge: {
     name: ec => `Eternity Challenge ${ec}`,
@@ -92,7 +108,12 @@ GameDatabase.multiplierTabValues.general = {
       return EternityChallenge(ec).reward.effectValue;
     },
     isActive: ec => EternityChallenge(ec).completions > 0,
-    color: () => "var(--color-eternity)",
-    barOverlay: ec => `Δ<i class="fas fa-arrow-down-wide-short" />${ec}`,
+    icon: ec => {
+      const base = MultiplierTabIcons.CHALLENGE("eternity");
+      return {
+        color: base.color,
+        text: `${base.text}${ec}`,
+      };
+    },
   },
 };

@@ -1,5 +1,7 @@
 import { GameDatabase } from "../game-database";
 
+import { MultiplierTabIcons } from "./icons";
+
 // See index.js for documentation
 GameDatabase.multiplierTabValues.eternities = {
   total: {
@@ -13,29 +15,25 @@ GameDatabase.multiplierTabValues.eternities = {
     name: () => "Achievement 113",
     multValue: () => Achievement(113).effectOrDefault(1),
     isActive: () => Achievement(113).canBeApplied,
-    color: () => "var(--color-v--base)",
-    barOverlay: () => `<i class="fas fa-trophy" />`,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   realityUpgrades: {
     name: () => "Eternal Amplifier",
     multValue: () => RealityUpgrade(3).effectOrDefault(1),
     isActive: () => RealityUpgrade(3).canBeApplied,
-    color: () => "var(--color-dilation)",
-    barOverlay: () => `Ϟ<i class="fas fa-arrow-up" />`,
+    icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   glyph: {
     name: () => "Equipped Glyphs",
     multValue: () => getAdjustedGlyphEffect("timeetermult"),
     isActive: () => PlayerProgress.realityUnlocked(),
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-clone" />`,
+    icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   alchemy: {
     name: () => "Eternity Alchemy Resource",
     multValue: () => 1,
     powValue: () => AlchemyResource.eternity.effectOrDefault(1),
     isActive: () => AlchemyResource.eternity.canBeApplied,
-    color: () => "var(--color-ra-pet--effarig)",
-    barOverlay: () => `<i class="fas fa-vial" />`,
+    icon: MultiplierTabIcons.ALCHEMY,
   },
 };

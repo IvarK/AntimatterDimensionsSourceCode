@@ -2,6 +2,7 @@ import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
 
 import { MultiplierTabHelper } from "./helper-functions";
+import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
 GameDatabase.multiplierTabValues.tickspeed = {
@@ -16,9 +17,8 @@ GameDatabase.multiplierTabValues.tickspeed = {
     fakeValue: () => DC.E100,
     multValue: () => Tickspeed.perSecond.pow(MultiplierTabHelper.activeDimCount("AD")),
     isActive: () => true,
-    color: () => "var(--color-eternity)",
     overlay: ["<i class='fa-solid fa-clock' />"],
-    barOverlay: () => `<i class="fas fa-clock" />`,
+    icon: MultiplierTabIcons.TICKSPEED,
   },
   upgrades: {
     name: () => "Tickspeed Upgrades",
@@ -27,8 +27,7 @@ GameDatabase.multiplierTabValues.tickspeed = {
     fakeValue: () => Decimal.pow10(Tickspeed.totalUpgrades),
     multValue: () => new Decimal.pow10(100 * MultiplierTabHelper.decomposeTickspeed().tickspeed),
     isActive: () => true,
-    color: () => GameDatabase.reality.glyphTypes.power.color,
-    barOverlay: () => `<i class="fas fa-arrow-up" />`,
+    icon: MultiplierTabIcons.PURCHASE("AD"),
   },
   galaxies: {
     name: () => "Galaxies",
@@ -42,8 +41,7 @@ GameDatabase.multiplierTabValues.tickspeed = {
     fakeValue: () => Decimal.pow10(effectiveBaseGalaxies()),
     multValue: () => new Decimal.pow10(100 * MultiplierTabHelper.decomposeTickspeed().galaxies),
     isActive: () => true,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `<i class="fas fa-bahai" />`,
+    icon: MultiplierTabIcons.GALAXY,
   },
 };
 
@@ -55,15 +53,13 @@ GameDatabase.multiplierTabValues.tickspeedUpgrades = {
       : formatInt(player.totalTickBought)),
     multValue: () => Decimal.pow10(Laitela.continuumActive ? Tickspeed.continuumValue : player.totalTickBought),
     isActive: () => true,
-    color: () => GameDatabase.reality.glyphTypes.power.color,
-    barOverlay: () => `<i class="fas fa-arrow-up-right-dots" />`,
+    icon: MultiplierTabIcons.PURCHASE("AD"),
   },
   free: {
     name: () => "Tickspeed Upgrades from TD",
     displayOverride: () => formatInt(player.totalTickGained),
     multValue: () => Decimal.pow10(player.totalTickGained),
     isActive: () => Currency.timeShards.gt(0),
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `Δ`,
+    icon: MultiplierTabIcons.SPECIFIC_GLYPH("time"),
   }
 };

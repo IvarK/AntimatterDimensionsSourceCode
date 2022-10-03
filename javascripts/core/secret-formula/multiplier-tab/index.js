@@ -20,10 +20,10 @@ import "./tree";
  *    entries may have a pow10 applied to them in order to "undo" logarithmic scaling in the UI
  *  @property {function: @return Number} powValue         Numerical value for powers given by this effect
  *  @property {function: @return Boolean} isActive        Conditional determining if this component should be visible
- *  @property {function: @return String} color            CSS entry or string specifying this component's color
  *  @property {Array String} overlay                      String array to be used as HTML for an overlay on the tab; all
  *    entries in the array are rendered on top of each other
- *  @property {function: @return String} barOverlay       String to be used as HTML for an overlay on the percentage bar
+ *  @property {function: @return Object} icon             An object containing text and color for the bar that this
+ *    entry has in the Vue component
  * }
  */
 import "./general";

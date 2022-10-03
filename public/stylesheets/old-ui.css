@@ -83,6 +83,17 @@
   box-shadow: none;
 }
 
+.t-s11 .o-autobuyer-input,
+.t-s11 .c-autobuyer-box__mode-select {
+  color: var(--color-accent);
+  background: var(--color-base);
+  border: 0.1rem solid var(--color-accent);
+}
+
+.t-s11 .o-autobuyer-btn {
+  border: 0.1rem solid var(--color-accent);
+}
+
 .o-tab-btn--secondary {
   width: 18.5rem;
   height: 2.5rem;

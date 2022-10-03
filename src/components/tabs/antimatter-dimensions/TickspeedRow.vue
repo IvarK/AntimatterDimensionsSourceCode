@@ -15,6 +15,7 @@ export default {
       isContinuumActive: false,
       continuumValue: 0,
       hasTutorial: false,
+      hasRealityButton: false,
     };
   },
   computed: {
@@ -33,21 +34,19 @@ export default {
     tickspeedDisplay() {
       return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
     },
-    showCostTitle() {
-      return this.cost.exponent < 1000000;
-    },
     continuumString() {
       return formatFloat(this.continuumValue, 2);
     },
     upgradeCount() {
       const purchased = this.purchasedTickspeed;
-      if (!this.freeTickspeed) return `${formatInt(purchased)} Purchased`;
+      if (!this.freeTickspeed) return `${formatInt(purchased)} Purchased Upgrades`;
       if (purchased === 0 || this.isContinuumActive) return `${formatInt(this.freeTickspeed)} Free Upgrades`;
       return `${formatInt(purchased)} Purchased + ${formatInt(this.freeTickspeed)} Free`;
     }
   },
   methods: {
     update() {
+      this.hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
       this.purchasedTickspeed = player.totalTickBought;
       this.freeTickspeed = FreeTickspeed.amount;
       const isEC9Running = EternityChallenge(9).isRunning;
@@ -76,17 +75,16 @@ export default {
       if (!buyTickSpeed()) return;
       Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
     },
+    buyMaxUpgrade() {
+      if (!buyMaxTickSpeed()) return;
+      Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
+    },
   }
 };
 </script>
 
 <template>
   <div :class="classObject">
-    <div class="tickspeed-labels">
-      <span>
-        {{ tickspeedDisplay }} <span>{{ multiplierDisplay }}</span>
-      </span>
-    </div>
     <div class="tickspeed-buttons">
       <button
         v-tooltip="upgradeCount"
@@ -94,10 +92,10 @@ export default {
         @click="buyUpgrade"
       >
         <span v-if="isContinuumActive">
-          {{ continuumString }} (cont.)
+          Tickspeed Continuum: {{ continuumString }}
         </span>
         <span v-else>
-          Cost: {{ format(cost) }}
+          Tickspeed Cost: {{ format(cost) }}
         </span>
         <div
           v-if="hasTutorial"
@@ -108,10 +106,16 @@ export default {
         v-if="!isContinuumActive"
         class="o-primary-btn tickspeed-max-btn"
         :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
-        onclick="buyMaxTickSpeed()"
+        @click="buyMaxUpgrade"
       >
         Buy Max
       </button>
+    </div>
+    <div
+      v-if="hasRealityButton"
+      class="tickspeed-labels"
+    >
+      {{ tickspeedDisplay }} | {{ multiplierDisplay }}
     </div>
   </div>
 </template>
@@ -122,8 +126,35 @@ export default {
   vertical-align: middle;
 }
 
+.tickspeed-btn {
+  position: relative;
+  width: 30rem;
+  height: 2.5rem;
+  padding: 0.25rem;
+}
+
+.tickspeed-labels {
+  color: var(--color-text);
+  padding: 0.25rem;
+}
+
+.l-tickspeed-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 0.5rem;
+}
+
+.l-tickspeed-container--hidden {
+  visibility: hidden;
+}
+
 .tickspeed-max-btn {
   margin-left: 0.5rem;
+  width: 10rem;
+  height: 2.5rem;
+  padding: 0.25rem;
 }
 
 .o-non-clickable {

@@ -20,7 +20,7 @@ export default {
       return this.challenge.isFullyCompleted;
     },
     message() {
-      return `You will Eternity, if possible, and start a new Eternity within the Challenge, with all the
+      return `You will Eternity (if possible) and start a new Eternity within the Challenge, with all the
         Challenge-specific restrictions and modifiers active.
         To complete the Challenge${this.challengeIsCompleted ? "" : " and gain its reward"},
         you must reach the Challenge goal of

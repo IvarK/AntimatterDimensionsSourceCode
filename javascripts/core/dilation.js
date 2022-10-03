@@ -116,7 +116,7 @@ export function getDilationGainPerSecond() {
     return new Decimal(tachyonEffect)
       .timesEffectsOf(DilationUpgrade.dtGain, DilationUpgrade.dtGainPelle, DilationUpgrade.flatDilationMult)
       .times(ShopPurchase.dilatedTimePurchases.currentMult ** 0.5)
-      .times(Pelle.specialGlyphEffect.dilation).div(3e4);
+      .times(Pelle.specialGlyphEffect.dilation).div(1e5);
   }
   let dtRate = new Decimal(Currency.tachyonParticles.value)
     .timesEffectsOf(
@@ -160,6 +160,7 @@ export function rewardTP() {
 // TP multipliers as large as possible. Applying the reward to a base TP value and letting the multipliers
 // act dynamically on this fixed base value elsewhere solves that issue
 export function getBaseTP(antimatter) {
+  if (!Player.canEternity) return DC.D0;
   const am = (isInCelestialReality() || Pelle.isDoomed)
     ? antimatter
     : Ra.unlocks.unlockDilationStartingTP.effectOrDefault(antimatter);

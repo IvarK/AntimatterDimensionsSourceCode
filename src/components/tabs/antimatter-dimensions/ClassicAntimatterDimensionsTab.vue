@@ -1,12 +1,11 @@
 <script>
-import HeaderTickspeedRowClassic from "../../ui-modes/HeaderTickspeedRowClassic";
-
 import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import AntimatterDimensionRow from "./ClassicAntimatterDimensionRow";
 import AntimatterDimensionsTabHeader from "./ClassicAntimatterDimensionsTabHeader";
 import AntimatterGalaxyRow from "./ClassicAntimatterGalaxyRow";
 import DimensionBoostRow from "./ClassicDimensionBoostRow";
 import PrimaryButton from "@/components/PrimaryButton";
+import TickspeedRow from "./TickspeedRow";
 
 export default {
   name: "ClassicAntimatterDimensionsTab",
@@ -17,7 +16,7 @@ export default {
     AntimatterGalaxyRow,
     DimensionBoostRow,
     AntimatterDimensionProgressBar,
-    HeaderTickspeedRowClassic,
+    TickspeedRow,
   },
   data() {
     return {
@@ -52,12 +51,9 @@ export default {
 
 <template>
   <div class="l-old-ui-antimatter-dim-tab">
-    <span>{{ multiplierText }}</span>
     <AntimatterDimensionsTabHeader />
-    <HeaderTickspeedRowClassic
-      v-if="hasRealityButton"
-      :in-header="false"
-    />
+    {{ multiplierText }}
+    <TickspeedRow />
     <div class="l-dimensions-container">
       <AntimatterDimensionRow
         v-for="tier in 8"

@@ -68,8 +68,7 @@ export class TimeTheoremPurchaseType {
   }
 
   get canAfford() {
-    return this.currency.gte(this.cost) &&
-      !(Pelle.isDoomed && player.eternities.eq(0));
+    return this.currency.gte(this.cost) && !player.eternities.eq(0);
   }
 
   reset() {

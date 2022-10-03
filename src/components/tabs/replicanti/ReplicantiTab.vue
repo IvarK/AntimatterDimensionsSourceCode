@@ -79,11 +79,13 @@ export default {
       return new ReplicantiUpgradeButtonSetup(
         upgrade,
         value => {
-          let description = `Max Replicanti Galaxies: ${formatInt(value)}`;
+          let description = `Max Replicanti Galaxies: `;
           const extra = upgrade.extra;
           if (extra > 0) {
             const total = value + extra;
-            description += ` + ${formatInt(extra)} = ${formatInt(total)}`;
+            description += `<br>${formatInt(value)} + ${formatInt(extra)} = ${formatInt(total)}`;
+          } else {
+            description += formatInt(value);
           }
           return description;
         },

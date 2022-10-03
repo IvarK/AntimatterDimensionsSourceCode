@@ -17,7 +17,8 @@ export default {
       upgradeThreshold: new Decimal(0),
       shardsPerSecond: new Decimal(0),
       incomeType: "",
-      areAutobuyersUnlocked: false
+      areAutobuyersUnlocked: false,
+      showLockedDimCostNote: true,
     };
   },
   computed: {
@@ -25,6 +26,7 @@ export default {
   },
   methods: {
     update() {
+      this.showLockedDimCostNote = !TimeDimension(8).isUnlocked && player.realities >= 1;
       this.totalUpgrades = player.totalTickGained;
       this.multPerTickspeed = FreeTickspeed.multToNext;
       this.tickspeedSoftcap = FreeTickspeed.softcap;
@@ -94,7 +96,10 @@ export default {
       <br>
       and costs increase much faster after {{ format(costIncreases[2]) }} Eternity Points.
       <br>
-      Hold shift to see the Eternity Point cost for locked Time Dimensions.
+      <div v-if="showLockedDimCostNote">
+        Hold shift to see the Eternity Point cost for locked Time Dimensions.
+      </div>
+      Any 8th Time Dimensions purchased above {{ format(1e8) }} will not further increase the multiplier.
     </div>
   </div>
 </template>

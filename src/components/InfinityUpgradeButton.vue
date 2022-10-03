@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       showWorstChallenge: false,
+      worstChallengeString: "",
       isUseless: false,
       canBeBought: false,
       chargePossible: false,

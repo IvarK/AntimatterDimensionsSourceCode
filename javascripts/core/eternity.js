@@ -6,9 +6,7 @@ function giveEternityRewards(auto) {
   player.records.bestEternity.time = Math.min(player.records.thisEternity.time, player.records.bestEternity.time);
   Currency.eternityPoints.add(gainedEternityPoints());
 
-  const newEternities = Pelle.isDisabled("eternityMults")
-    ? new Decimal(1)
-    : new Decimal(getAdjustedGlyphEffect("timeetermult")).timesEffectsOf(RealityUpgrade(3), Achievement(113));
+  const newEternities = gainedEternities();
 
   if (Currency.eternities.eq(0) && newEternities.lte(10)) {
     Tab.dimensions.time.show();
@@ -202,6 +200,12 @@ function askEternityConfirmation() {
   } else {
     animateAndEternity();
   }
+}
+
+export function gainedEternities() {
+  return Pelle.isDisabled("eternityMults")
+    ? new Decimal(1)
+    : new Decimal(getAdjustedGlyphEffect("timeetermult")).timesEffectsOf(RealityUpgrade(3), Achievement(113));
 }
 
 export class EternityMilestoneState {

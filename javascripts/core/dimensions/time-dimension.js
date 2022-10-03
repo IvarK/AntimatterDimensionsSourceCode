@@ -35,11 +35,11 @@ export function toggleAllTimeDims() {
   }
 }
 
-export function buyMaxTimeDimension(tier) {
+export function buyMaxTimeDimension(tier, eternityPoints = Currency.eternityPoints.value) {
   const dim = TimeDimension(tier);
   if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
   if (Enslaved.isRunning) return buySingleTimeDimension(tier);
-  const bulk = bulkBuyBinarySearch(Currency.eternityPoints.value, {
+  const bulk = bulkBuyBinarySearch(eternityPoints, {
     costFunction: bought => dim.nextCost(bought),
     cumulative: true,
     firstCost: dim.cost,
@@ -52,33 +52,23 @@ export function buyMaxTimeDimension(tier) {
   return true;
 }
 
-export function maxAllTimeDimensions(checkAutobuyers = false) {
-  // Default behavior: Buy as many as possible, starting with the highest dimension first
-  // (reduces overhead at higher EP)
-  if (Currency.eternityPoints.exponent >= 10) {
-    for (let i = 8; i > 0; i--) {
-      if (!checkAutobuyers || Autobuyer.timeDimension(i).isActive) buyMaxTimeDimension(i);
-    }
-  } else {
-    // Low EP behavior: Try to buy the highest affordable new dimension, then loop buying the cheapest possible
-    for (let i = 4; i > 0 && TimeDimension(i).bought === 0; i--) {
-      if (!checkAutobuyers || Autobuyer.timeDimension(i).isActive) buySingleTimeDimension(i);
-    }
+export function maxAllTimeDimensions() {
+  // Try to buy single from the highest affordable new dimensions
+  for (let i = 8; i > 0 && TimeDimension(i).bought === 0; i--) {
+    buySingleTimeDimension(i);
+  }
 
-    // Should never take more than like 50 iterations; explicit infinite loops make me nervous
-    for (let stop = 0; stop < 1000; stop++) {
-      let cheapestDim = 0;
-      let cheapestCost = 1e10;
-      for (let i = 1; i <= 4; i++) {
-        if (TimeDimension(i).cost.lte(cheapestCost) && (!checkAutobuyers || Autobuyer.timeDimension(i).isActive)) {
-          cheapestDim = i;
-          cheapestCost = TimeDimension(i).cost;
-        }
-      }
-      let bought = false;
-      if (cheapestDim !== 0 && Currency.eternityPoints.gte(cheapestCost)) bought = buySingleTimeDimension(cheapestDim);
-      if (!bought) break;
-    }
+  // Buy everything costing less than 1% of initial EP
+  const eternityPoints = Currency.eternityPoints.value.times(0.01);
+  for (let i = 8; i > 0; i--) {
+    buyMaxTimeDimension(i, eternityPoints);
+  }
+
+  // Loop buying the cheapest dimension possible; explicit infinite loops make me nervous
+  const unlockedDimensions = TimeDimensions.all.filter(d => d.isUnlocked);
+  for (let stop = 0; stop < 1000; stop++) {
+    const cheapestDim = unlockedDimensions.reduce((a, b) => (b.cost.gte(a.cost) ? a : b));
+    if (!buySingleTimeDimension(cheapestDim.tier)) break;
   }
 }
 

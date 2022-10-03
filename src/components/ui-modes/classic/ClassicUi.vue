@@ -1,8 +1,9 @@
 <script>
+import BigCrunchButton from "../BigCrunchButton";
 import GameHeader from "../GameHeader";
 import NewsTicker from "../NewsTicker";
 
-import ClassicBigCrunchButton from "./ClassicBigCrunchButton";
+
 import ClassicSubtabBar from "./ClassicSubtabBar";
 import ClassicTabBar from "./ClassicTabBar";
 import EternityPointsHeader from "@/components/EternityPointsHeader";
@@ -12,12 +13,12 @@ export default {
   name: "ClassicUi",
   components: {
     GameHeader,
-    ClassicBigCrunchButton,
     ClassicSubtabBar,
     ClassicTabBar,
     NewsTicker,
     InfinityPointsHeader,
-    EternityPointsHeader
+    EternityPointsHeader,
+    BigCrunchButton
   },
   data() {
     return {
@@ -34,9 +35,7 @@ export default {
   methods: {
     update() {
       const crunchButtonVisible = !player.break && Player.canCrunch;
-      const reachedInfinityInMinute = Time.bestInfinityRealTime.totalMinutes <= 1;
-      this.bigCrunch = crunchButtonVisible && !reachedInfinityInMinute;
-      this.smallCrunch = crunchButtonVisible && reachedInfinityInMinute;
+      this.bigCrunch = crunchButtonVisible && Time.bestInfinityRealTime.totalMinutes > 1;
     }
   },
 };
@@ -52,13 +51,8 @@ export default {
       type="text/css"
       href="stylesheets/old-ui.css"
     >
-    <template v-if="bigCrunch">
-      <ClassicBigCrunchButton class="l-old-ui__big-crunch-btn" />
-      <div class="o-emptiness">
-        The world has collapsed due to excess of antimatter.
-      </div>
-    </template>
-    <template v-else>
+    <BigCrunchButton />
+    <template v-if="!bigCrunch">
       <NewsTicker
         v-if="news"
         class="l-old-ui__news-bar"
@@ -70,10 +64,6 @@ export default {
         v-if="tab.config.before"
       />
       <ClassicSubtabBar />
-      <ClassicBigCrunchButton
-        v-show="smallCrunch"
-        class="l-old-ui__big-crunch-btn l-old-ui__big-crunch-btn--overlay"
-      />
       <div class="l-old-ui__page">
         <slot />
       </div>

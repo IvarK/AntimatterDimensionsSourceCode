@@ -803,6 +803,7 @@ export function getTTPerSecond() {
     Ra.unlocks.continuousTTBoost.effects.ttGen,
     Ra.unlocks.achievementTTMult,
     Achievement(137),
+    Achievement(156),
   );
   if (GlyphAlteration.isAdded("dilation")) ttMult *= getSecondaryGlyphEffect("dilationTTgen");
 

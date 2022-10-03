@@ -7,11 +7,6 @@ export default {
     PrimaryToggleButton
   },
   props: {
-    isWide: {
-      type: Boolean,
-      required: false,
-      default: true,
-    },
     value: {
       type: Boolean,
       required: false,
@@ -23,12 +18,6 @@ export default {
     }
   },
   computed: {
-    classObject() {
-      return {
-        "o-primary-btn--option": !this.isWide,
-        "o-primary-btn--option-wide": this.isWide,
-      };
-    },
     styleObject() {
       return {
         "background-color": this.value ? "var(--color-good)" : "var(--color-gh-purple)",
@@ -42,7 +31,7 @@ export default {
   <PrimaryToggleButton
     :value="value"
     :label="text"
-    :class="classObject"
+    class="o-primary-btn--modal-option"
     :style="styleObject"
     @input="emitInput"
   />

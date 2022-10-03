@@ -49,7 +49,7 @@ class NormalChallengeState extends GameMechanicState {
     return player.challenge.normal.current === this.id || (isPartOfIC1 && InfinityChallenge(1).isRunning);
   }
 
-  get isActuallyRunning() {
+  get isOnlyActiveChallenge() {
     return player.challenge.normal.current === this.id;
   }
 

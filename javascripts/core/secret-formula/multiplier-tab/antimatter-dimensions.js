@@ -3,6 +3,7 @@ import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../app/player-progress";
 
 import { MultiplierTabHelper } from "./helper-functions";
+import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
 GameDatabase.multiplierTabValues.AD = {
@@ -15,9 +16,8 @@ GameDatabase.multiplierTabValues.AD = {
         .map(ad => ad.multiplier)
         .reduce((x, y) => x.times(y), DC.D1)),
     isActive: dim => AntimatterDimension(dim ?? 1).isProducing,
-    color: () => "var(--color-antimatter)",
     overlay: ["Ω", "<i class='fas fa-cube' />"],
-    barOverlay: dim => `Ω${dim ?? ""}`,
+    icon: dim => MultiplierTabIcons.DIMENSION("AD", dim),
   },
   purchase: {
     name: dim => (dim ? `Purchased AD ${dim}` : "Purchases"),
@@ -33,8 +33,7 @@ GameDatabase.multiplierTabValues.AD = {
         .reduce((x, y) => x.times(y), DC.D1);
     },
     isActive: () => !EternityChallenge(11).isRunning,
-    color: () => "var(--color-antimatter)",
-    barOverlay: dim => `<i class="fas fa-arrow-up-right-dots" />${dim ?? ""}`,
+    icon: dim => MultiplierTabIcons.PURCHASE("AD", dim),
   },
   dimboost: {
     name: dim => (dim ? `Dimboosts on AD ${dim}` : "Dimboosts"),
@@ -45,15 +44,13 @@ GameDatabase.multiplierTabValues.AD = {
         .map(ad => DimBoost.multiplierToNDTier(ad.tier))
         .reduce((x, y) => x.times(y), DC.D1)),
     isActive: () => true,
-    color: () => GameDatabase.reality.glyphTypes.power.color,
-    barOverlay: () => `<i class="fas fa-angles-up" />`,
+    icon: MultiplierTabIcons.DIMBOOST,
   },
   sacrifice: {
     name: () => "Sacrifice Multiplier",
     multValue: dim => ((!dim || dim === 8) ? Sacrifice.totalBoost : DC.D1),
     isActive: dim => (!dim || dim === 8) && Sacrifice.totalBoost.gt(1),
-    color: () => "var(--color-antimatter)",
-    barOverlay: () => `Ω<i class="fas fa-turn-down" />`,
+    icon: MultiplierTabIcons.SACRIFICE("antimatter"),
   },
   achievement: {
     name: () => "Achievements",
@@ -100,8 +97,7 @@ GameDatabase.multiplierTabValues.AD = {
     },
     powValue: () => Achievement(183).effectOrDefault(1),
     isActive: () => true,
-    color: () => "var(--color-v--base)",
-    barOverlay: () => `<i class="fas fa-trophy" />`,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   infinityUpgrade: {
     name: dim => (dim ? `Infinity Upgrades (AD ${dim})` : "Infinity Upgrades"),
@@ -148,8 +144,7 @@ GameDatabase.multiplierTabValues.AD = {
         .map(n => Math.log(n)).sum() / MultiplierTabHelper.activeDimCount("AD"));
     },
     isActive: () => PlayerProgress.infinityUnlocked(),
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `∞<i class="fas fa-arrow-up" />`,
+    icon: MultiplierTabIcons.UPGRADE("infinity"),
   },
   breakInfinityUpgrade: {
     name: () => "Break Infinity Upgrades",
@@ -164,8 +159,7 @@ GameDatabase.multiplierTabValues.AD = {
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
     },
     isActive: () => player.break,
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `<i class="fab fa-skyatlas" />`,
+    icon: MultiplierTabIcons.BREAK_INFINITY,
   },
   infinityPower: {
     name: () => "Infinity Power",
@@ -174,8 +168,7 @@ GameDatabase.multiplierTabValues.AD = {
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
     },
     isActive: () => Currency.infinityPower.value.gt(1) && !EternityChallenge(9).isRunning,
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `∞<i class="fas fa-arrows-turn-right" />`,
+    icon: MultiplierTabIcons.INFINITY_POWER,
   },
   infinityChallenge: {
     name: dim => (dim ? `Infinity Challenges (AD ${dim})` : "Infinity Challenges"),
@@ -201,8 +194,7 @@ GameDatabase.multiplierTabValues.AD = {
     },
     powValue: () => (InfinityChallenge(4).isCompleted ? InfinityChallenge(4).reward.effectValue : 1),
     isActive: () => player.break,
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `∞<i class="fas fa-arrow-down-wide-short" />`,
+    icon: MultiplierTabIcons.CHALLENGE("infinity"),
   },
   timeStudy: {
     name: dim => (dim ? `Time Studies (AD ${dim})` : "Time Studies"),
@@ -243,16 +235,14 @@ GameDatabase.multiplierTabValues.AD = {
       return totalMult;
     },
     isActive: () => PlayerProgress.eternityUnlocked(),
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `<i class="fas fa-book" />`,
+    icon: MultiplierTabIcons.TIME_STUDY,
   },
   eternityChallenge: {
     name: () => "Eternity Challenges",
     multValue: dim => Decimal.pow(EternityChallenge(10).effectValue,
       dim ? 1 : MultiplierTabHelper.activeDimCount("AD")),
     isActive: () => EternityChallenge(10).isRunning,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `Δ<i class="fas fa-arrow-down-wide-short" />`,
+    icon: MultiplierTabIcons.CHALLENGE("eternity"),
   },
   glyph: {
     name: () => "Glyph Effects",
@@ -262,8 +252,7 @@ GameDatabase.multiplierTabValues.AD = {
     },
     powValue: () => getAdjustedGlyphEffect("powerpow") * getAdjustedGlyphEffect("effarigdimensions"),
     isActive: () => PlayerProgress.realityUnlocked(),
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-clone" />`,
+    icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   alchemy: {
     name: () => "Glyph Alchemy",
@@ -274,8 +263,7 @@ GameDatabase.multiplierTabValues.AD = {
     },
     powValue: () => AlchemyResource.power.effectOrDefault(1) * Ra.momentumValue,
     isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
-    color: () => "var(--color-ra-pet--effarig)",
-    barOverlay: () => `<i class="fas fa-vial" />`,
+    icon: MultiplierTabIcons.ALCHEMY,
   },
   other: {
     name: () => "Other sources",
@@ -285,6 +273,6 @@ GameDatabase.multiplierTabValues.AD = {
     },
     powValue: () => VUnlocks.adPow.effectOrDefault(1) * PelleRifts.paradox.effectOrDefault(1),
     isActive: () => player.IAP.totalSTD > 0 || PlayerProgress.realityUnlocked(),
-    barOverlay: () => `<i class="fas fa-ellipsis" />`,
+    icon: MultiplierTabIcons.OTHER,
   },
 };

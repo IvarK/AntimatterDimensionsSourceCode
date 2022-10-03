@@ -2,6 +2,8 @@ import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../app/player-progress";
 
+import { MultiplierTabIcons } from "./icons";
+
 // See index.js for documentation
 GameDatabase.multiplierTabValues.EP = {
   total: {
@@ -17,8 +19,7 @@ GameDatabase.multiplierTabValues.EP = {
     multValue: () => DC.D5.pow(player.records.thisEternity.maxIP.plus(
       gainedInfinityPoints()).log10() / (308 - PelleRifts.recursion.effectValue.toNumber()) - 0.7),
     isActive: () => PlayerProgress.eternityUnlocked(),
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `∞<i class='fa-solid fa-arrow-right-arrow-left' />`,
+    icon: MultiplierTabIcons.CONVERT_FROM("IP"),
   },
   IP: {
     name: () => "Eternity Points from Infinity Points",
@@ -26,8 +27,7 @@ GameDatabase.multiplierTabValues.EP = {
     // This just needs to be larger than 1 to make sure it's visible, the math is handled in powValue for divisor
     multValue: () => 10,
     isActive: () => PlayerProgress.eternityUnlocked(),
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `∞`,
+    icon: MultiplierTabIcons.SPECIFIC_GLYPH("infinity"),
   },
   divisor: {
     name: () => "Formula Improvement",
@@ -37,15 +37,13 @@ GameDatabase.multiplierTabValues.EP = {
     },
     powValue: () => 308 / (308 - PelleRifts.recursion.effectValue.toNumber()),
     isActive: () => PelleRifts.recursion.isActive,
-    color: () => "var(--color-pelle--base)",
-    barOverlay: () => `<i class='fas fa-calculator' />`,
+    icon: MultiplierTabIcons.DIVISOR("EP"),
   },
   eternityUpgrade: {
     name: () => `Repeatable ${formatX(5)} Eternity Upgrade`,
     multValue: () => EternityUpgrade.epMult.effectOrDefault(1),
     isActive: () => PlayerProgress.eternityUnlocked() && !Pelle.isDoomed,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `Δ<i class="fas fa-arrow-up" />`,
+    icon: MultiplierTabIcons.UPGRADE("eternity"),
   },
   timeStudy: {
     name: () => "Time Studies",
@@ -56,8 +54,7 @@ GameDatabase.multiplierTabValues.EP = {
       TimeStudy(123),
     ),
     isActive: () => PlayerProgress.eternityUnlocked() && !Pelle.isDoomed,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `<i class="fas fa-book" />`,
+    icon: MultiplierTabIcons.TIME_STUDY,
   },
   glyph: {
     name: () => "Equipped Glyphs and Reality Upgrades",
@@ -67,8 +64,7 @@ GameDatabase.multiplierTabValues.EP = {
     ),
     powValue: () => (GlyphAlteration.isAdded("time") ? getSecondaryGlyphEffect("timeEP") : 1),
     isActive: () => PlayerProgress.realityUnlocked(),
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-clone" />`,
+    icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   other: {
     name: () => "EP Multipliers from Other sources",
@@ -76,6 +72,6 @@ GameDatabase.multiplierTabValues.EP = {
       .timesEffectsOf(PelleRifts.vacuum.milestones[2])
       .times(Pelle.specialGlyphEffect.time),
     isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
-    barOverlay: () => `<i class="fas fa-ellipsis" />`,
+    icon: MultiplierTabIcons.OTHER
   },
 };

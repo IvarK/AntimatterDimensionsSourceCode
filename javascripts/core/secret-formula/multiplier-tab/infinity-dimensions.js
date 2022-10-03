@@ -3,6 +3,7 @@ import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../app/player-progress";
 
 import { MultiplierTabHelper } from "./helper-functions";
+import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
 GameDatabase.multiplierTabValues.ID = {
@@ -15,9 +16,8 @@ GameDatabase.multiplierTabValues.ID = {
         .map(id => id.multiplier)
         .reduce((x, y) => x.times(y), DC.D1)),
     isActive: dim => InfinityDimension(dim ?? 1).isProducing,
-    color: () => "var(--color-infinity)",
     overlay: ["∞", "<i class='fa-solid fa-cube' />"],
-    barOverlay: dim => `∞${dim ?? ""}`,
+    icon: dim => MultiplierTabIcons.DIMENSION("ID", dim),
   },
   purchase: {
     name: dim => (dim ? `Purchased ID ${dim}` : "Purchases"),
@@ -31,8 +31,7 @@ GameDatabase.multiplierTabValues.ID = {
         .reduce((x, y) => x.times(y), DC.D1);
     },
     isActive: () => !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning,
-    color: () => "var(--color-infinity)",
-    barOverlay: dim => `<i class="fas fa-arrow-up-right-dots" />${dim ?? ""}`,
+    icon: dim => MultiplierTabIcons.PURCHASE("ID", dim),
   },
 
   basePurchase: {
@@ -53,8 +52,7 @@ GameDatabase.multiplierTabValues.ID = {
     },
     isActive: dim => ImaginaryUpgrade(14).canBeApplied ||
         (dim === 8 ? GlyphSacrifice.infinity.effectValue > 1 : Tesseracts.bought > 0),
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `<i class="fas fa-arrows-up-to-line" />`,
+    icon: MultiplierTabIcons.PURCHASE("baseID"),
   },
   tesseractPurchase: {
     name: () => "Tesseracts",
@@ -72,8 +70,7 @@ GameDatabase.multiplierTabValues.ID = {
         .reduce((x, y) => x.times(y), DC.D1);
     },
     isActive: () => Tesseracts.bought > 0,
-    color: () => "var(--color-enslaved--base)",
-    barOverlay: () => `<i class="fas fa-up-right-and-down-left-from-center" />`,
+    icon: MultiplierTabIcons.PURCHASE("tesseractID"),
   },
   infinityGlyphSacrifice: {
     name: () => "Infinity Glyph sacrifice",
@@ -81,23 +78,20 @@ GameDatabase.multiplierTabValues.ID = {
       ? Decimal.pow(GlyphSacrifice.infinity.effectValue, Math.floor(InfinityDimension(8).baseAmount / 10))
       : DC.D1),
     isActive: () => GlyphSacrifice.infinity.effectValue > 1,
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `∞<i class="fas fa-turn-down" />`,
+    icon: MultiplierTabIcons.SACRIFICE("infinity"),
   },
   powPurchase: {
     name: () => "Imaginary Upgrades",
     powValue: () => ImaginaryUpgrade(14).effectOrDefault(1),
     isActive: () => ImaginaryUpgrade(14).canBeApplied,
-    color: () => "var(--color-ra--base)",
-    barOverlay: () => `<i class="far fa-lightbulb" />`,
+    icon: MultiplierTabIcons.UPGRADE("imaginary"),
   },
 
   replicanti: {
     name: () => "Replicanti Multiplier",
     multValue: dim => Decimal.pow(replicantiMult(), dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
     isActive: () => Replicanti.areUnlocked,
-    color: () => GameDatabase.reality.glyphTypes.replication.color,
-    barOverlay: () => `Ξ`,
+    icon: MultiplierTabIcons.REPLICANTI,
   },
   achievement: {
     name: dim => (dim ? `Achievements (ID ${dim})` : "Achievements"),
@@ -108,8 +102,7 @@ GameDatabase.multiplierTabValues.ID = {
       return Decimal.pow(baseMult, maxActiveDim).times(maxActiveDim > 0 ? Achievement(94).effectOrDefault(1) : DC.D1);
     },
     isActive: () => Achievement(75).canBeApplied,
-    color: () => "var(--color-v--base)",
-    barOverlay: () => `<i class="fas fa-trophy" />`,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
     name: dim => (dim ? `Time Studies (ID ${dim})` : "Time Studies"),
@@ -124,8 +117,7 @@ GameDatabase.multiplierTabValues.ID = {
       return Decimal.pow(allMult, maxActiveDim).times(maxActiveDim >= 4 ? TimeStudy(72).effectOrDefault(1) : DC.D1);
     },
     isActive: () => Achievement(75).canBeApplied,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `<i class="fas fa-book" />`,
+    icon: MultiplierTabIcons.TIME_STUDY,
   },
   eternityUpgrades: {
     name: () => "Eternity Upgrades",
@@ -138,8 +130,7 @@ GameDatabase.multiplierTabValues.ID = {
       return Decimal.pow(allMult, dim ? 1 : MultiplierTabHelper.activeDimCount("ID"));
     },
     isActive: () => Achievement(75).canBeApplied,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `<i class="fas fa-book" />`,
+    icon: MultiplierTabIcons.UPGRADE("eternity"),
   },
   infinityChallenge: {
     name: () => "Infinity Challenges",
@@ -151,8 +142,7 @@ GameDatabase.multiplierTabValues.ID = {
       return Decimal.pow(allMult, dim ? 1 : MultiplierTabHelper.activeDimCount("ID"));
     },
     isActive: () => InfinityChallenge(1).isCompleted,
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `∞<i class="fas fa-arrow-down-wide-short" />`,
+    icon: MultiplierTabIcons.CHALLENGE("infinity"),
   },
   eternityChallenge: {
     name: dim => (dim ? `Eternity Challenges (ID ${dim})` : " Eternity Challenges"),
@@ -172,16 +162,14 @@ GameDatabase.multiplierTabValues.ID = {
         .times(maxActiveDim === 8 ? EternityChallenge(7).reward.effectOrDefault(1) : DC.D1);
     },
     isActive: () => EternityChallenge(2).completions > 0,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `Δ<i class="fas fa-arrow-down-wide-short" />`,
+    icon: MultiplierTabIcons.CHALLENGE("eternity"),
   },
   glyph: {
     name: () => "Glyph Effects",
     multValue: () => 1,
     powValue: () => getAdjustedGlyphEffect("infinitypow") * getAdjustedGlyphEffect("effarigdimensions"),
     isActive: () => PlayerProgress.realityUnlocked(),
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-clone" />`,
+    icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   alchemy: {
     name: () => {
@@ -197,8 +185,7 @@ GameDatabase.multiplierTabValues.ID = {
     },
     powValue: () => AlchemyResource.infinity.effectOrDefault(1) * Ra.momentumValue,
     isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
-    color: () => "var(--color-ra-pet--effarig)",
-    barOverlay: () => `<i class="fas fa-vial" />`,
+    icon: MultiplierTabIcons.ALCHEMY,
   },
   other: {
     name: () => "Other sources",
@@ -212,13 +199,12 @@ GameDatabase.multiplierTabValues.ID = {
     },
     powValue: () => PelleRifts.paradox.effectOrDefault(1),
     isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
-    barOverlay: () => `<i class="fas fa-ellipsis" />`,
+    icon: MultiplierTabIcons.OTHER,
   },
   powerConversion: {
     name: () => "Infinity Power Conversion",
     powValue: () => InfinityDimensions.powerConversionRate,
     isActive: () => Currency.infinityPower.value.gt(1) && !EternityChallenge(9).isRunning,
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `<i class="fas fa-arrow-down-up-across-line" />`,
+    icon: MultiplierTabIcons.IPOW_CONVERSION,
   }
 };

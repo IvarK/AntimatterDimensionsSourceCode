@@ -1,5 +1,7 @@
 import { GameDatabase } from "../game-database";
 
+import { MultiplierTabIcons } from "./icons";
+
 // See index.js for documentation
 GameDatabase.multiplierTabValues.AM = {
   total: {
@@ -17,7 +19,6 @@ GameDatabase.multiplierTabValues.AM = {
       return Math.pow(baseProd.log10(), getAdjustedGlyphEffect("effarigantimatter") - 1);
     },
     isActive: () => getAdjustedGlyphEffect("effarigantimatter") > 1,
-    color: () => "var(--color-effarig--base)",
-    barOverlay: () => "Ϙ",
+    icon: MultiplierTabIcons.SPECIFIC_GLYPH("effarig"),
   }
 };

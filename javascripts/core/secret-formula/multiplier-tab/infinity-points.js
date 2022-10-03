@@ -2,6 +2,8 @@ import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../app/player-progress";
 
+import { MultiplierTabIcons } from "./icons";
+
 // See index.js for documentation
 GameDatabase.multiplierTabValues.IP = {
   total: {
@@ -24,8 +26,7 @@ GameDatabase.multiplierTabValues.IP = {
       return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75);
     },
     isActive: () => player.break,
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `<i class='fas fa-atom' /><i class='fa-solid fa-arrow-right-arrow-left' />`,
+    icon: MultiplierTabIcons.CONVERT_FROM("AM"),
   },
   antimatter: {
     name: () => "Infinity Points from Antimatter",
@@ -33,8 +34,7 @@ GameDatabase.multiplierTabValues.IP = {
     // This just needs to be larger than 1 to make sure it's visible, the math is handled in powValue for divisor
     multValue: () => 10,
     isActive: () => player.break,
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `<i class='fas fa-atom' />`,
+    icon: MultiplierTabIcons.ANTIMATTER,
   },
   divisor: {
     name: () => "Formula Improvement",
@@ -44,15 +44,13 @@ GameDatabase.multiplierTabValues.IP = {
     },
     powValue: () => 308 / Effects.min(308, Achievement(103), TimeStudy(111)),
     isActive: () => player.break,
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `<i class='fas fa-calculator' />`,
+    icon: MultiplierTabIcons.DIVISOR("IP"),
   },
   infinityUpgrade: {
     name: () => `Repeatable ${formatX(2)} Infinity Upgrade`,
     multValue: () => InfinityUpgrade.ipMult.effectOrDefault(1),
     isActive: () => player.break && !Pelle.isDoomed,
-    color: () => "var(--color-infinity)",
-    barOverlay: () => `∞<i class="fas fa-arrow-up" />`,
+    icon: MultiplierTabIcons.UPGRADE("infinity"),
   },
   achievement: {
     name: () => "Achievements",
@@ -64,8 +62,7 @@ GameDatabase.multiplierTabValues.IP = {
       Achievement(141).effects.ipGain,
     ),
     isActive: () => player.break && !Pelle.isDoomed,
-    color: () => "var(--color-v--base)",
-    barOverlay: () => `<i class="fas fa-trophy" />`,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
     name: () => "Time Studies",
@@ -77,15 +74,13 @@ GameDatabase.multiplierTabValues.IP = {
       TimeStudy(143),
     ),
     isActive: () => player.break && !Pelle.isDoomed,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `<i class="fas fa-book" />`,
+    icon: MultiplierTabIcons.TIME_STUDY,
   },
   dilationUpgrade: {
     name: () => "Dilation Upgrade (IP based on DT)",
     multValue: () => DilationUpgrade.ipMultDT.effectOrDefault(1),
     isActive: () => player.break && !Pelle.isDoomed && DilationUpgrade.ipMultDT.canBeApplied,
-    color: () => "var(--color-dilation)",
-    barOverlay: () => `Ψ<i class="fas fa-arrow-up" />`,
+    icon: MultiplierTabIcons.UPGRADE("dilation"),
   },
   glyph: {
     name: () => (Ra.unlocks.unlockGlyphAlchemy.canBeApplied
@@ -95,8 +90,7 @@ GameDatabase.multiplierTabValues.IP = {
       .times(getAdjustedGlyphEffect("infinityIP")),
     powValue: () => (GlyphAlteration.isAdded("infinity") ? getSecondaryGlyphEffect("infinityIP") : 1),
     isActive: () => PlayerProgress.realityUnlocked() && !Pelle.isDoomed,
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-clone" />`,
+    icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   other: {
     name: () => "IP Multipliers from Other sources",
@@ -104,6 +98,6 @@ GameDatabase.multiplierTabValues.IP = {
       .timesEffectsOf(PelleRifts.vacuum)
       .times(Pelle.specialGlyphEffect.infinity),
     isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
-    barOverlay: () => `<i class="fas fa-ellipsis" />`,
+    icon: MultiplierTabIcons.OTHER,
   },
 };

@@ -2,6 +2,8 @@ import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../app/player-progress";
 
+import { MultiplierTabIcons } from "./icons";
+
 // See index.js for documentation
 GameDatabase.multiplierTabValues.DT = {
   total: {
@@ -11,7 +13,6 @@ GameDatabase.multiplierTabValues.DT = {
     isActive: () => getDilationGainPerSecond().gt(0),
     color: () => "var(--color-dilation)",
     overlay: ["Ψ"],
-    barOverlay: () => `Ψ`,
   },
   tachyon: {
     name: () => "Tachyon Particles",
@@ -24,15 +25,13 @@ GameDatabase.multiplierTabValues.DT = {
     multValue: () => new Decimal(Currency.tachyonParticles.value)
       .pow(PelleRifts.paradox.milestones[1].effectOrDefault(1)),
     isActive: () => getDilationGainPerSecond().gt(0),
-    color: () => "var(--color-dilation)",
-    barOverlay: () => `<i class="fas fa-meteor" />`,
+    icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },
   achievement: {
     name: () => "Achievements",
     multValue: () => Achievement(132).effectOrDefault(1) * Achievement(137).effectOrDefault(1),
     isActive: () => Achievement(132).canBeApplied || Achievement(137).canBeApplied,
-    color: () => "var(--color-v--base)",
-    barOverlay: () => `<i class="fas fa-trophy" />`,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   dilation: {
     name: () => "Repeatable Dilation Upgrades",
@@ -46,29 +45,26 @@ GameDatabase.multiplierTabValues.DT = {
       DilationUpgrade.dtGainPelle,
       DilationUpgrade.flatDilationMult
     ).gt(1),
-    color: () => "var(--color-dilation)",
-    barOverlay: () => `Ψ<i class="fas fa-repeat" />`,
+    icon: MultiplierTabIcons.UPGRADE("dilation"),
   },
   gamespeed: {
     name: () => "Current Game speed",
     multValue: () => getGameSpeedupForDisplay(),
     isActive: () => getGameSpeedupForDisplay() > 1,
-    barOverlay: () => `<i class="fas fa-clock" />`,
+    icon: MultiplierTabIcons.GAMESPEED,
   },
   realityUpgrade: {
     name: () => "Repeatable Reality Upgrade",
     multValue: () => RealityUpgrade(1).effectOrDefault(1),
     isActive: () => RealityUpgrade(1).canBeApplied,
-    color: () => "var(--color-reality)",
-    barOverlay: () => `Ϟ<i class="fas fa-arrow-up" />`,
+    icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   glyph: {
     name: () => "Glyph Effects",
     multValue: () => Decimal.times(getAdjustedGlyphEffect("dilationDT"),
       Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1)),
     isActive: () => PlayerProgress.realityUnlocked(),
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-clone" />`,
+    icon: MultiplierTabIcons.GENERIC_GLYPH
   },
   ra: {
     name: () => "Ra Upgrades",
@@ -78,14 +74,13 @@ GameDatabase.multiplierTabValues.DT = {
       Ra.unlocks.peakGamespeedDT
     ),
     isActive: () => Ra.unlocks.autoTP.canBeApplied,
-    color: () => "var(--color-ra--base)",
-    barOverlay: () => `<i class="fas fa-sun" />`,
+    icon: MultiplierTabIcons.GENERIC_RA,
   },
   other: {
     name: () => "Other sources",
     multValue: () => new Decimal(ShopPurchase.dilatedTimePurchases.currentMult ** (Pelle.isDoomed ? 0.5 : 1))
       .times(Pelle.specialGlyphEffect.dilation),
     isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
-    barOverlay: () => `<i class="fas fa-ellipsis" />`,
+    icon: MultiplierTabIcons.OTHER,
   },
 };

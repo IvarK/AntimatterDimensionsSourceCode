@@ -73,6 +73,7 @@ export default {
       const args = key.split("_");
       const dbAttr = this.valueDB[args[0]][args[1]][attr];
       if (!dbAttr) return null;
+      if (typeof dbAttr !== "function") return dbAttr;
       return args.length < 3
         ? dbAttr()
         // Arguments can potentially be Numbers or Strings, so we cast the ones which are Numbers
@@ -96,7 +97,7 @@ export default {
         height: `${100 * this.percentList[index]}%`,
         width: "100%",
         border: this.isEmpty ? "" : "0.1rem solid var(--color-text)",
-        "background-color": this.getProp(this.currentGroupKeys[index], "color")
+        "background-color": this.getProp(this.currentGroupKeys[index], "icon")?.color
       };
     },
     singleEntryClass(index) {
@@ -106,7 +107,7 @@ export default {
       };
     },
     barSymbol(index) {
-      return this.getProp(this.currentGroupKeys[index], "barOverlay") ?? null;
+      return this.getProp(this.currentGroupKeys[index], "icon")?.text ?? null;
     },
 
     hasChildComp(key) {

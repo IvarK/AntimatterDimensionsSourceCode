@@ -3,6 +3,7 @@ import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../app/player-progress";
 
 import { MultiplierTabHelper } from "./helper-functions";
+import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
 GameDatabase.multiplierTabValues.TD = {
@@ -15,9 +16,8 @@ GameDatabase.multiplierTabValues.TD = {
         .map(td => td.multiplier)
         .reduce((x, y) => x.times(y), DC.D1)),
     isActive: dim => TimeDimension(dim ?? 1).isProducing,
-    color: () => "var(--color-eternity)",
     overlay: ["Δ", "<i class='fa-solid fa-cube' />"],
-    barOverlay: dim => `Δ${dim ?? ""}`,
+    icon: dim => MultiplierTabIcons.DIMENSION("TD", dim),
   },
   purchase: {
     name: dim => (dim ? `Purchased TD ${dim}` : "Purchases"),
@@ -34,8 +34,7 @@ GameDatabase.multiplierTabValues.TD = {
         .reduce((x, y) => x.times(y), DC.D1);
     },
     isActive: () => !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning,
-    color: () => "var(--color-eternity)",
-    barOverlay: dim => `<i class="fas fa-arrow-up-right-dots" />${dim ?? ""}`,
+    icon: dim => MultiplierTabIcons.PURCHASE("TD", dim),
   },
 
   basePurchase: {
@@ -52,8 +51,7 @@ GameDatabase.multiplierTabValues.TD = {
     isActive: dim => (dim
       ? ImaginaryUpgrade(14).canBeApplied || (dim === 8 && GlyphSacrifice.time.effectValue > 1)
       : TimeDimension(1).isProducing),
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `<i class="fas fa-arrow-up-right-dots" />`,
+    icon: dim => MultiplierTabIcons.PURCHASE("TD", dim),
   },
   timeGlyphSacrifice: {
     name: () => "Time Glyph Sacrifice",
@@ -61,15 +59,13 @@ GameDatabase.multiplierTabValues.TD = {
       ? Decimal.pow(GlyphSacrifice.time.effectValue, Math.clampMax(TimeDimension(8).bought, 1e8))
       : DC.D1),
     isActive: () => GlyphSacrifice.time.effectValue > 1,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `Δ<i class="fas fa-turn-down" />`,
+    icon: MultiplierTabIcons.SACRIFICE("time"),
   },
   powPurchase: {
     name: () => "Power effect from Imaginary Upgrades",
     powValue: () => ImaginaryUpgrade(14).effectOrDefault(1),
     isActive: () => ImaginaryUpgrade(14).canBeApplied,
-    color: () => "var(--color-ra--base)",
-    barOverlay: () => `<i class="far fa-lightbulb" />`,
+    icon: MultiplierTabIcons.UPGRADE("imaginary"),
   },
 
   achievement: {
@@ -83,8 +79,7 @@ GameDatabase.multiplierTabValues.TD = {
       return Decimal.pow(baseMult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
     },
     isActive: () => Achievement(75).canBeApplied,
-    color: () => "var(--color-v--base)",
-    barOverlay: () => `<i class="fas fa-trophy" />`,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
     name: dim => (dim
@@ -118,8 +113,7 @@ GameDatabase.multiplierTabValues.TD = {
       return totalMult;
     },
     isActive: () => TimeDimension(1).isProducing,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `<i class="fas fa-book" />`,
+    icon: MultiplierTabIcons.TIME_STUDY
   },
   eternityChallenge: {
     name: dim => (dim ? `Eternity Challenges (TD ${dim})` : "Eternity Challenges"),
@@ -136,16 +130,14 @@ GameDatabase.multiplierTabValues.TD = {
       return Decimal.pow(allMult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
     },
     isActive: () => EternityChallenge(1).completions > 0,
-    color: () => "var(--color-eternity)",
-    barOverlay: () => `Δ<i class="fas fa-arrow-down-wide-short" />`,
+    icon: MultiplierTabIcons.CHALLENGE("eternity")
   },
   glyph: {
     name: () => "Glyph Effects",
     multValue: () => 1,
     powValue: () => getAdjustedGlyphEffect("timepow") * getAdjustedGlyphEffect("effarigdimensions"),
     isActive: () => PlayerProgress.realityUnlocked(),
-    color: () => "var(--color-reality)",
-    barOverlay: () => `<i class="fas fa-clone" />`,
+    icon: MultiplierTabIcons.GENERIC_GLYPH
   },
   alchemy: {
     name: () => {
@@ -161,8 +153,7 @@ GameDatabase.multiplierTabValues.TD = {
     },
     powValue: () => AlchemyResource.time.effectOrDefault(1) * Ra.momentumValue,
     isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
-    color: () => "var(--color-v--base)",
-    barOverlay: () => `<i class="fas fa-vial" />`,
+    icon: MultiplierTabIcons.ALCHEMY,
   },
   other: {
     name: () => "Other sources",
@@ -177,6 +168,6 @@ GameDatabase.multiplierTabValues.TD = {
     },
     powValue: () => PelleRifts.paradox.effectOrDefault(1),
     isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
-    barOverlay: () => `<i class="fas fa-ellipsis" />`,
+    icon: MultiplierTabIcons.OTHER,
   },
 };

@@ -97,7 +97,7 @@ const SteamFunctions = {
     ConfirmSteamPurchase(OrderIdentifier) {
         console.log(OrderIdentifier);
         PlayFab.ClientApi.ConfirmPurchase({ OrderId: OrderIdentifier }, (result, error) => {
-            if (result !== null) {
+            if (result !== null && result.data.Items != null) {
                 console.log(result);
                 const PurchaseName = result.data.Items[0].ItemId;
                 const PurchaseInstance = result.data.Items[0].ItemInstanceId;

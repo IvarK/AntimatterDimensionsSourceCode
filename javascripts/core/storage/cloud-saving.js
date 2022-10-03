@@ -2,8 +2,8 @@
 import pako from "pako/dist/pako.esm.mjs";
 /* eslint-enable import/extensions */
 
-import { get, getDatabase, ref, set } from "firebase/database";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+//import { get, getDatabase, ref, set } from "firebase/database";
+//import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase, ref, get, set } from "firebase/database";

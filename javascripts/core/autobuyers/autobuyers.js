@@ -64,6 +64,14 @@ export const Autobuyers = (function() {
       return Autobuyers.all.filter(a => a.isUnlocked || a.isBought);
     },
 
+    get hasAutobuyersForEditModal() {
+      return [Autobuyer.dimboost,
+        Autobuyer.galaxy,
+        Autobuyer.bigCrunch,
+        Autobuyer.eternity,
+        Autobuyer.reality].some(autobuyer => autobuyer.isUnlocked);
+    },
+
     toggle() {
       player.auto.autobuyersOn = !player.auto.autobuyersOn;
     },

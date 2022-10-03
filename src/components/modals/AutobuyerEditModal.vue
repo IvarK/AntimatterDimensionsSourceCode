@@ -21,7 +21,11 @@ export default {
       return `Edit Autobuyers`;
     },
     message() {
-      return `Using this modal, you can edit various values inside your autobuyers.`;
+      // We have to have this edge-case due to a weird happening where you could open this modal
+      // during the Reality animation, which would then show an empty modal.
+      return Autobuyers.hasAutobuyersForEditModal
+        ? `Using this modal, you can edit various values inside your autobuyers.`
+        : `You currently have no autobuyers which could be shown here.`;
     },
   },
 };
@@ -45,7 +49,7 @@ export default {
       class="c-reality-pos"
       is-modal
     />
-    <EternityAutobuyerBox 
+    <EternityAutobuyerBox
       class="c-eternity-pos"
       is-modal
     />

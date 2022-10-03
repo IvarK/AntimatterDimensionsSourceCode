@@ -262,11 +262,7 @@ export const shortcuts = [
     keys: ["mod", "alt", "a"],
     type: "bind",
     function: () => keyboardEditAutobuyers(),
-    visible: () => [Autobuyer.dimboost,
-      Autobuyer.galaxy,
-      Autobuyer.bigCrunch,
-      Autobuyer.eternity,
-      Autobuyer.reality].some(autobuyer => autobuyer.isUnlocked)
+    visible: () => Autobuyers.hasAutobuyersForEditModal
   },
 ];
 
@@ -425,11 +421,7 @@ function keyboardEditAutobuyers() {
     return;
   }
   if (Modal.isOpen) return;
-  if (![Autobuyer.dimboost,
-    Autobuyer.galaxy,
-    Autobuyer.bigCrunch,
-    Autobuyer.eternity,
-    Autobuyer.reality].some(autobuyer => autobuyer.isUnlocked)) return;
+  if (!Autobuyers.hasAutobuyersForEditModal) return;
   Modal.autobuyerEditModal.show();
 }
 

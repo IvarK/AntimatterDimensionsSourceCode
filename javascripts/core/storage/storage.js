@@ -204,13 +204,6 @@ export const GameStorage = {
   loadPlayerObject(playerObject) {
     this.saved = 0;
 
-    // These will be changed elsewhere during importing; otherwise, it's assumed to be a local load
-    // from being offline, and we can use the props in the player object instead
-    if (this.offlineEnabled === undefined) {
-      this.offlineEnabled = player.options.offlineEnabled;
-      this.offlineTicks = player.options.offlineTicks;
-    }
-
     const checkString = this.checkPlayerObject(playerObject);
     if (playerObject === Player.defaultStart || checkString !== "") {
       if (checkString !== "") {
@@ -258,7 +251,9 @@ export const GameStorage = {
     Lazy.invalidateAll();
 
     const rawDiff = Date.now() - player.lastUpdate;
-    if (GameStorage.offlineEnabled && !Speedrun.isPausedAtStart()) {
+    // We set offlineEnabled externally on importing; otherwise this is just a local load
+    const simulateOffline = this.offlineEnabled ?? player.options.offlineEnabled;
+    if (simulateOffline && !Speedrun.isPausedAtStart()) {
       let diff = rawDiff;
       player.speedrun.offlineTimeUsed += diff;
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {

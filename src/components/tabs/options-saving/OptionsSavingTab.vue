@@ -60,8 +60,11 @@ export default {
         const toImport = GameSaveSerializer.deserialize(contents);
         const showWarning = (toImport?.IAP?.totalSTD ?? 0) < player.IAP.totalSTD;
 
-        // By default, use the settings on the save pre-import. Note: Do not move this into GameStorage.import as
-        // this would cause the offline progress choice in the text import modal to always be overridden
+        // File importing behavior should use the behavior on the existing and to-be-overwritten save instead of the
+        // settings in the to-be-imported save. This is largely because the former is more easily edited by the player,
+        // and in contrast with the import-as-string case which allows the player to choose.
+        // Note: Do not move this into GameStorage.import, as this would cause the offline progress choice in the text
+        // import modal (the only other place GameStorage.import is called) to always be overridden
         GameStorage.offlineEnabled = player.options.offlineProgress;
         GameStorage.offlineTicks = player.options.offlineTicks;
 

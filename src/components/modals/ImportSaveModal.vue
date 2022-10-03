@@ -68,14 +68,17 @@ export default {
       return TimeSpan.fromMilliseconds(Date.now() - this.player.lastUpdate).toString();
     },
     offlineType() {
+      // We update here in the computed method instead of elsewhere because otherwise it initializes the text
+      // to a wrong or undefined setting
       this.updateOfflineSettings();
+
       switch (this.offlineImport) {
         case OFFLINE_PROGRESS_TYPE.IMPORTED:
-          return "Using Imported save settings";
+          return "Using imported save settings";
         case OFFLINE_PROGRESS_TYPE.LOCAL:
-          return "Using Current save settings";
+          return "Using existing save settings";
         case OFFLINE_PROGRESS_TYPE.IGNORED:
-          return "Will not simulate";
+          return "Will not simulate offline time";
         default:
           throw new Error("Unrecognized offline progress setting for importing");
       }

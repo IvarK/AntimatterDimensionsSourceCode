@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     update() {
-      this.tachyonGain.copyFrom(getTachyonGain());
+      this.tachyonGain.copyFrom(getTachyonGain(true));
       this.isDoomed = Pelle.isDoomed;
     },
     handleYesClick() {

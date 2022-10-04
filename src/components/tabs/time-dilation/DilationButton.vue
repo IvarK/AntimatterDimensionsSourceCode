@@ -29,9 +29,10 @@ export default {
       this.showRequirement = Pelle.isDoomed && !Pelle.canDilateInPelle;
       if (!this.isRunning) return;
       this.canEternity = Player.canEternity;
-      this.hasGain = getTachyonGain().gt(0);
+      // This lets this.hasGain be true even before eternity.
+      this.hasGain = getTachyonGain(false).gt(0);
       if (this.canEternity && this.hasGain) {
-        this.tachyonGain.copyFrom(getTachyonGain());
+        this.tachyonGain.copyFrom(getTachyonGain(true));
       } else if (this.hasGain) {
         this.eternityGoal.copyFrom(Player.eternityGoal);
       } else {

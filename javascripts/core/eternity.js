@@ -83,7 +83,7 @@ export function eternity(force, auto, specialConditions = {}) {
     player.requirementChecks.reality.noEternities = false;
   }
 
-  if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) rewardTP();
+  if (player.dilation.active) rewardTP();
 
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();

@@ -150,7 +150,7 @@ export default {
           ? EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT
           : EP_BUTTON_DISPLAY_TYPE.DILATION;
         this.currentTachyons.copyFrom(Currency.tachyonParticles);
-        this.gainedTachyons.copyFrom(getTachyonGain());
+        this.gainedTachyons.copyFrom(getTachyonGain(true));
         return;
       }
 

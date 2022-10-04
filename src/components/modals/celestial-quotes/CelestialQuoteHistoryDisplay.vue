@@ -29,38 +29,38 @@ export default {
     currentQuoteLine() {
       return this.focusedQuote.currentLine;
     },
-    commonArrowClass() {
+    commonButtonClass() {
       const lightBG = this.name === "laitela" && !Theme.current().isDark();
       return {
         "fas c-modal-celestial-quote-history__arrow": true,
-        "o-dark-arrow": lightBG,
-        "o-light-arrow": !lightBG,
+        "o-dark-button": lightBG,
+        "o-light-button": !lightBG,
       };
     },
     upClass() {
       return {
-        ...this.commonArrowClass,
+        ...this.commonButtonClass,
         "c-modal-celestial-quote-history__arrow-up fa-chevron-circle-up": true,
         "c-modal-celestial-quote-history__arrow--disabled": this.focusedQuoteId <= 0,
       };
     },
     downClass() {
       return {
-        ...this.commonArrowClass,
+        ...this.commonButtonClass,
         "c-modal-celestial-quote-history__arrow-down fa-chevron-circle-down": true,
         "c-modal-celestial-quote-history__arrow--disabled": this.focusedQuoteId >= this.unlockedQuotes.length - 1,
       };
     },
     leftClass() {
       return {
-        ...this.commonArrowClass,
+        ...this.commonButtonClass,
         "c-modal-celestial-quote-history__arrow-left fa-chevron-circle-left": true,
         "c-modal-celestial-quote-history__arrow--disabled": this.currentQuoteLine <= 0,
       };
     },
     rightClass() {
       return {
-        ...this.commonArrowClass,
+        ...this.commonButtonClass,
         "c-modal-celestial-quote-history__arrow-right fa-chevron-circle-right": true,
         "c-modal-celestial-quote-history__arrow--disabled":
           this.currentQuoteLine >= this.focusedQuote.quote.totalLines - 1,
@@ -143,7 +143,7 @@ function easeOut(x) {
 <template>
   <div class="l-modal-overlay c-modal-overlay">
     <i
-      class="c-modal-celestial-quote-history__close fas fa-circle-xmark"
+      class="c-modal-celestial-quote-history__close fas fa-circle-xmark o-light-button"
       @click="close"
     />
     <div
@@ -216,11 +216,11 @@ function easeOut(x) {
   cursor: pointer;
 }
 
-.o-light-arrow {
+.o-light-button {
   color: white;
 }
 
-.o-dark-arrow {
+.o-dark-button {
   color: black;
 }
 

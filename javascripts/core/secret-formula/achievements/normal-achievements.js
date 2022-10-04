@@ -134,7 +134,7 @@ GameDatabase.achievements.normal = [
     id: 32,
     name: "The Gods are pleased",
     get description() { return `Get over ${formatX(600)} from Dimensional Sacrifice outside of Challenge 8.`; },
-    checkRequirement: () => !NormalChallenge(8).isRunning && Sacrifice.totalBoost.gte(600),
+    checkRequirement: () => !NormalChallenge(8).isOnlyActiveChallenge && Sacrifice.totalBoost.gte(600),
     checkEvent: GAME_EVENT.SACRIFICE_RESET_AFTER,
     get reward() {
       return `Dimensional Sacrifice is stronger.
@@ -337,7 +337,7 @@ GameDatabase.achievements.normal = [
     get description() {
       return `Complete the 2nd Antimatter Dimension Autobuyer Challenge in ${formatInt(3)} minutes or less.`;
     },
-    checkRequirement: () => NormalChallenge(2).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
+    checkRequirement: () => NormalChallenge(2).isOnlyActiveChallenge && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() {
       return `All Antimatter Dimensions are stronger in the first ${formatInt(3)} minutes of Infinities.`;
@@ -352,7 +352,7 @@ GameDatabase.achievements.normal = [
     get description() {
       return `Complete the 8th Antimatter Dimension Autobuyer Challenge in ${formatInt(3)} minutes or less.`;
     },
-    checkRequirement: () => NormalChallenge(8).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
+    checkRequirement: () => NormalChallenge(8).isOnlyActiveChallenge && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() {
       return `Dimensional Sacrifice is stronger.
@@ -365,7 +365,7 @@ GameDatabase.achievements.normal = [
     id: 58,
     name: "This is fine.",
     get description() { return `Complete the Tickspeed Autobuyer Challenge in ${formatInt(3)} minutes or less.`; },
-    checkRequirement: () => NormalChallenge(9).isRunning && Time.thisInfinityRealTime.totalMinutes <= 3,
+    checkRequirement: () => NormalChallenge(9).isOnlyActiveChallenge && Time.thisInfinityRealTime.totalMinutes <= 3,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() {
       return `Increase the multiplier for buying ${formatInt(10)} Antimatter Dimensions by +${formatPercents(0.01)}.`;
@@ -442,7 +442,7 @@ GameDatabase.achievements.normal = [
     get description() {
       return `Complete the 3rd Antimatter Dimension Autobuyer Challenge in ${formatInt(10)} seconds or less.`;
     },
-    checkRequirement: () => NormalChallenge(3).isRunning && Time.thisInfinityRealTime.totalSeconds <= 10,
+    checkRequirement: () => NormalChallenge(3).isOnlyActiveChallenge && Time.thisInfinityRealTime.totalSeconds <= 10,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
     get reward() { return `1st Antimatter Dimensions are ${formatPercents(0.5)} stronger.`; },
     effect: 1.5
@@ -454,7 +454,7 @@ GameDatabase.achievements.normal = [
       `Get to Infinity with only a single 1st Antimatter Dimension without Dimension Boosts
       or Antimatter Galaxies, while in the 2nd Antimatter Dimension Autobuyer Challenge.`,
     checkRequirement: () =>
-      NormalChallenge(2).isRunning &&
+      NormalChallenge(2).isOnlyActiveChallenge &&
       AntimatterDimension(1).amount.eq(1) &&
       DimBoost.purchasedBoosts === 0 &&
       player.galaxies === 0,

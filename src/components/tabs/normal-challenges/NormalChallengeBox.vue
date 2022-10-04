@@ -45,7 +45,8 @@ export default {
     update() {
       this.isDisabled = this.challenge.isDisabled;
       this.isUnlocked = this.challenge.isUnlocked;
-      this.isRunning = this.challenge.isRunning;
+      // This stops normal challenges from appearing like they're running during IC1
+      this.isRunning = this.challenge.isOnlyActiveChallenge;
       this.lockedAt = this.challenge.config.lockedAt;
       this.isBroken = Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.challengeId);
       this.isCompleted = this.challenge.isCompleted && !this.isBroken;

@@ -4151,25 +4151,50 @@ br {
   cursor: pointer;
 }
 
+.o-autobuyer-toggle-checkbox__label-modal {
+  border-color: var(--color-text);
+}
+
 .s-base--metro .o-autobuyer-toggle-checkbox__label {
   border-color: black;
+}
+
+.s-base--metro .o-autobuyer-toggle-checkbox__label-modal {
+  border-color: var(--color-text);
 }
 
 .t-dark .o-autobuyer-toggle-checkbox__label {
   border-color: var(--color-base);
 }
 
+.t-dark .o-autobuyer-toggle-checkbox__label-modal {
+  border-color: var(--color-good-dark);
+}
+
 .t-dark-metro .o-autobuyer-toggle-checkbox__label {
   border-color: var(--color-base);
+}
+
+.t-dark-metro .o-autobuyer-toggle-checkbox__label-modal {
+  border-color: var(--color-good-dark);
 }
 
 .t-s1 .o-autobuyer-toggle-checkbox__label {
   border-color: black;
 }
 
+.t-s1 .o-autobuyer-toggle-checkbox__label-modal {
+  border-color: var(--color-text);
+}
+
 .t-s6 .o-autobuyer-toggle-checkbox__label,
 .t-s10 .o-autobuyer-toggle-checkbox__label {
   border-color: #cccccc;
+}
+
+.t-s6 .o-autobuyer-toggle-checkbox__label,
+.t-s10 .o-autobuyer-toggle-checkbox__label {
+  border-color: var(--color-text);
 }
 
 .o-autobuyer-toggle-checkbox__label:hover {
@@ -4377,6 +4402,14 @@ br {
   padding: 1rem 2rem;
 }
 
+/* For some reason, we need to specifically define the font size here or else it balloons up to a size
+bigger than that of the autobuyer tab. We also explicitly set the border color in order for it to appear
+properly on certain themes. */
+.c-autobuyer-box-row__modal {
+  font-size: 1.1rem;
+  border-color: var(--color-text);
+}
+
 .s-base--metro .c-autobuyer-box-row {
   border-color: black;
 }
@@ -4385,13 +4418,39 @@ br {
   border-color: var(--color-base);
 }
 
+.t-dark .c-autobuyer-box-row__modal {
+  background-color: rgb(55, 71, 79);
+  border-color: var(--color-good-dark);
+}
+
 .t-dark-metro .c-autobuyer-box-row {
   border-color: var(--color-base);
+}
+
+.t-dark-metro .c-autobuyer-box-row__modal {
+  background-color: rgb(55, 71, 79);
+  border-color: var(--color-good-dark);
 }
 
 .t-s1 .c-autobuyer-box-row {
   background: var(--color-base);
   border-color: black;
+}
+
+.t-s2 .c-autobuyer-box-row__modal {
+  background-color: rgb(230, 230, 255);
+}
+
+.t-s3 .c-autobuyer-box-row__modal {
+  background-color: var(--color-base);
+}
+
+.t-s4 .c-autobuyer-box-row__modal {
+  background-color: red;
+}
+
+.t-s5 .c-autobuyer-box-row__modal {
+  background-color: var(--color-base);
 }
 
 .t-s6 .c-autobuyer-box-row,

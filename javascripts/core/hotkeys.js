@@ -256,7 +256,14 @@ export const shortcuts = [
     type: "bind",
     function: () => SecretAchievement(41).unlock(),
     visible: false
-  }
+  },
+  {
+    name: "Adjust Autobuyers",
+    keys: ["mod", "alt", "a"],
+    type: "bind",
+    function: () => keyboardEditAutobuyers(),
+    visible: () => Autobuyers.hasAutobuyersForEditModal
+  },
 ];
 
 for (const hotkey of shortcuts) {
@@ -409,6 +416,16 @@ function keyboardH2PToggle() {
   }
   if (Modal.isOpen) return;
   Modal.h2p.show();
+}
+
+function keyboardEditAutobuyers() {
+  if (Modal.autobuyerEditModal.isOpen) {
+    EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+    return;
+  }
+  if (Modal.isOpen) return;
+  if (!Autobuyers.hasAutobuyersForEditModal) return;
+  Modal.autobuyerEditModal.show();
 }
 
 function keyboardVisibleTabsToggle() {

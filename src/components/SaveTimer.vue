@@ -25,7 +25,7 @@ export default {
   methods: {
     update() {
       this.currentTime = Date.now();
-      this.cloudSaveEnabled = player.options.cloudEnabled;
+      this.cloudSaveEnabled = player.options.cloudEnabled && Cloud.loggedIn;
       this.lastLocalSave = GameStorage.lastSaveTime;
       this.lastCloudSave = GameStorage.lastCloudSave;
       this.showTimeSinceSave = player.options.showTimeSinceSave;

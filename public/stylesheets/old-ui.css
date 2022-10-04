@@ -94,6 +94,10 @@
   border: 0.1rem solid var(--color-accent);
 }
 
+.t-s11 .c-challenge-box--normal {
+  border-color: var(--color-accent);
+}
+
 .o-tab-btn--secondary {
   width: 18.5rem;
   height: 2.5rem;

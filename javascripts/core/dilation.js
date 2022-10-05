@@ -151,7 +151,7 @@ function tachyonGainMultiplier() {
 }
 
 export function rewardTP() {
-  Currency.tachyonParticles.bumpTo(getTP(Currency.antimatter.value));
+  Currency.tachyonParticles.bumpTo(getTP(Currency.antimatter.value, true));
   player.dilation.lastEP = Currency.eternityPoints.value;
 }
 
@@ -159,8 +159,8 @@ export function rewardTP() {
 // applying the reward only once upon unlock promotes min-maxing the upgrade by unlocking dilation with
 // TP multipliers as large as possible. Applying the reward to a base TP value and letting the multipliers
 // act dynamically on this fixed base value elsewhere solves that issue
-export function getBaseTP(antimatter) {
-  if (!Player.canEternity) return DC.D0;
+export function getBaseTP(antimatter, requireEternity) {
+  if (!Player.canEternity && requireEternity) return DC.D0;
   const am = (isInCelestialReality() || Pelle.isDoomed)
     ? antimatter
     : Ra.unlocks.unlockDilationStartingTP.effectOrDefault(antimatter);
@@ -170,13 +170,14 @@ export function getBaseTP(antimatter) {
 }
 
 // Returns the TP that would be gained this run
-export function getTP(antimatter) {
-  return getBaseTP(antimatter).times(tachyonGainMultiplier());
+export function getTP(antimatter, requireEternity) {
+  return getBaseTP(antimatter, requireEternity).times(tachyonGainMultiplier());
 }
 
 // Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
-export function getTachyonGain() {
-  return getTP(Currency.antimatter.value).minus(Currency.tachyonParticles.value).clampMin(0);
+// and for "exit dilation" button (saying whether you need more antimatter)
+export function getTachyonGain(requireEternity) {
+  return getTP(Currency.antimatter.value, requireEternity).minus(Currency.tachyonParticles.value).clampMin(0);
 }
 
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes

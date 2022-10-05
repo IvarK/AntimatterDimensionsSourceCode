@@ -74,16 +74,19 @@ export function eternity(force, auto, specialConditions = {}) {
   // Annoyingly, we need to check for studies right here; giveEternityRewards removes studies if we're in an EC,
   // so doing the check later doesn't give us the initial state of having studies or not.
   const noStudies = player.timestudy.studies.length === 0;
-  if (force) {
-    player.challenge.eternity.current = 0;
-  } else {
+  if (!force) {
     if (!Player.canEternity) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     if (!player.dilation.active) giveEternityRewards(auto);
     player.requirementChecks.reality.noEternities = false;
   }
 
-  if (player.dilation.active && (!force || Currency.infinityPoints.gte(Number.MAX_VALUE))) rewardTP();
+  if (player.dilation.active) rewardTP();
+
+  // This needs to be after the dilation check for the "can gain TP" check in rewardTP to be correct.
+  if (force) {
+    player.challenge.eternity.current = 0;
+  }
 
   initializeChallengeCompletions();
   initializeResourcesAfterEternity();

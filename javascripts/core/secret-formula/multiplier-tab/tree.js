@@ -6,7 +6,8 @@ import { MultiplierTabHelper } from "./helper-functions";
 
 const propList = {
   AD: ["purchase", "achievement", "dimboost", "sacrifice", "infinityUpgrade", "breakInfinityUpgrade",
-    "infinityPower", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph", "alchemy", "v", "pelle", "iap"],
+    "infinityPower", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph", "alchemy", "v", "pelle", "iap",
+    "nerfIC", "nerfV", "nerfCursed", "nerfPelle"],
   ID: ["purchase", "achievement", "replicanti", "infinityChallenge", "timeStudy", "eternityUpgrades",
     "eternityChallenge", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap"],
   TD: ["purchase", "achievement", "timeStudy", "eternityUpgrade", "eternityChallenge", "dilationUpgrade",
@@ -138,6 +139,7 @@ for (const res of dimTypes) {
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
 // entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
 const removedProps = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_alchemy", "AD_v", "AD_pelle", "AD_iap",
+  "AD_nerfIC", "nerfPelle",
   "ID_replicanti", "ID_infinityChallenge", "ID_eternityUpgrades", "ID_alchemy", "ID_imaginaryUpgrade",
   "TD_achievement", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade", "TD_alchemy",
   "TD_imaginaryUpgrade"];

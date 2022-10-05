@@ -103,4 +103,17 @@ GameDatabase.multiplierTabValues.IP = {
     isActive: () => player.IAP.totalSTD > 0,
     icon: MultiplierTabIcons.IAP,
   },
+
+  nerfTeresa: {
+    name: "Teresa's Reality",
+    powValue: () => 0.55,
+    isActive: () => Teresa.isRunning,
+    icon: MultiplierTabIcons.GENERIC_TERESA,
+  },
+  nerfV: {
+    name: "V's Reality",
+    powValue: () => 0.5,
+    isActive: () => V.isRunning,
+    icon: MultiplierTabIcons.GENERIC_V,
+  },
 };

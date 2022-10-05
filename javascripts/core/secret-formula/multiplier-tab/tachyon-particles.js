@@ -44,4 +44,11 @@ GameDatabase.multiplierTabValues.TP = {
     isActive: () => GlyphSacrifice.dilation.effectValue > 1,
     icon: MultiplierTabIcons.SACRIFICE("dilation"),
   },
+
+  nerfEnslaved: {
+    name: "The Nameless Ones' Reality",
+    powValue: () => Enslaved.tachyonNerf,
+    isActive: () => Enslaved.isRunning,
+    icon: MultiplierTabIcons.GENERIC_ENSLAVED,
+  }
 };

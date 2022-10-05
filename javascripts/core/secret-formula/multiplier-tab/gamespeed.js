@@ -5,18 +5,9 @@ import { MultiplierTabIcons } from "./icons";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.gamespeed = {
   total: {
-    name: "Average Game speed",
+    name: "Current Game speed",
     isBase: true,
-    multValue: () => {
-      if (Enslaved.isAutoReleasing) return Math.max(Enslaved.autoReleaseSpeed, getGameSpeedupFactor());
-      let factor = BlackHoles.list
-        .map(bh => bh.dutyCycle * bh.power)
-        .reduce((x, y) => x * y, 1);
-      factor *= SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1);
-      factor *= getAdjustedGlyphEffect("timespeed");
-      factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
-      return factor;
-    },
+    multValue: () => getGameSpeedupForDisplay(),
     isActive: () => !Pelle.isDoomed,
     overlay: ["Δ", `<i class="fas fa-clock" />`, `<i class="fas fa-circle" />`],
   },
@@ -32,7 +23,7 @@ GameDatabase.multiplierTabValues.gamespeed = {
     multValue: () => BlackHoles.list
       .map(bh => bh.dutyCycle * bh.power)
       .reduce((x, y) => x * y, 1),
-    isActive: () => BlackHole(1).isUnlocked,
+    isActive: () => BlackHole(1).isUnlocked && !BlackHoles.arePaused,
     icon: MultiplierTabIcons.BLACK_HOLE,
   },
   v: {
@@ -62,4 +53,23 @@ GameDatabase.multiplierTabValues.gamespeed = {
     isActive: () => Pelle.isDoomed,
     icon: MultiplierTabIcons.PELLE,
   },
+
+  ec12: {
+    name: "Eternity Challenge 12",
+    multValue: () => 0.001 / getGameSpeedupForDisplay(),
+    isActive: () => EternityChallenge(12).isRunning,
+    icon: MultiplierTabIcons.CHALLENGE("eternity"),
+  },
+  invertedBH: {
+    name: "Inverted Black Hole",
+    multValue: () => player.blackHoleNegative,
+    isActive: () => BlackHoles.areNegative,
+    icon: MultiplierTabIcons.CHALLENGE("eternity"),
+  },
+  nerfLaitela: {
+    name: "Lai'tela's Reality",
+    powValue: () => Math.clampMax(Time.thisRealityRealTime.totalMinutes / 10, 1),
+    isActive: () => Laitela.isRunning,
+    icon: MultiplierTabIcons.GENERIC_LAITELA,
+  }
 };

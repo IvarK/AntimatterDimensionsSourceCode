@@ -4,22 +4,25 @@ import { GameDatabase } from "../game-database";
 
 import { MultiplierTabHelper } from "./helper-functions";
 
+const dynamicGenProps = ["AD", "TP", "DT", "infinities", "eternities", "gamespeed"];
 const propList = {
-  AD: ["purchase", "achievement", "dimboost", "sacrifice", "infinityUpgrade", "breakInfinityUpgrade",
-    "infinityPower", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph", "alchemy", "v", "pelle", "iap",
-    "nerfIC", "nerfV", "nerfCursed", "nerfPelle"],
   ID: ["purchase", "achievement", "replicanti", "infinityChallenge", "timeStudy", "eternityUpgrades",
-    "eternityChallenge", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap"],
+    "eternityChallenge", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed", "nerfPelle"],
   TD: ["purchase", "achievement", "timeStudy", "eternityUpgrade", "eternityChallenge", "dilationUpgrade",
-    "realityUpgrade", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap"],
-  IP: ["base", "infinityUpgrade", "achievement", "timeStudy", "dilationUpgrade", "glyph", "alchemy", "pelle", "iap"],
-  EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "realityUpgrade", "pelle", "iap"],
-  TP: ["base", "achievement", "dilation", "realityUpgrade", "dilationGlyphSacrifice"],
-  DT: ["tachyon", "achievement", "dilation", "gamespeed", "realityUpgrade", "glyph", "ra", "alchemy", "iap"],
-  infinities: ["achievement", "timeStudy", "realityUpgrades", "glyph", "ra", "singularity"],
-  eternities: ["achievement", "realityUpgrades", "glyph", "alchemy"],
-  gamespeed: ["glyph", "blackHoles", "v", "pulsing", "singularity", "pelle"],
+    "realityUpgrade", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed"],
+  IP: ["base", "infinityUpgrade", "achievement", "timeStudy", "dilationUpgrade", "glyph", "alchemy", "pelle", "iap",
+    "nerfTeresa", "nerfV"],
+  EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "realityUpgrade", "pelle", "iap", "nerfTeresa", "nerfV"],
 };
+
+// Some of the props above would contain every entry except "total" in their respective value GameDB entry, so we
+// generate them dynamically instead
+for (const prop of dynamicGenProps) {
+  propList[prop] = [];
+  for (const toCopy of Object.keys(GameDatabase.multiplierTabValues[prop])) {
+    if (toCopy !== "total") propList[prop].push(toCopy);
+  }
+}
 
 // Used for individual dimension breakdowns of effects (eg. full achievement mult into its values on individual ADs)
 // Results in an array of ["key_1", "key_2", ... , "key_8"]

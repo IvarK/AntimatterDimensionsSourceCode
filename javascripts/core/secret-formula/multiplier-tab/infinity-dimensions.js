@@ -211,5 +211,24 @@ GameDatabase.multiplierTabValues.ID = {
     powValue: () => InfinityDimensions.powerConversionRate,
     isActive: () => Currency.infinityPower.value.gt(1) && !EternityChallenge(9).isRunning,
     icon: MultiplierTabIcons.IPOW_CONVERSION,
+  },
+
+  nerfV: {
+    name: "V's Reality",
+    powValue: () => 0.5,
+    isActive: () => V.isRunning,
+    icon: MultiplierTabIcons.GENERIC_V,
+  },
+  nerfCursed: {
+    name: "Cursed Glyphs",
+    powValue: () => getAdjustedGlyphEffect("curseddimensions"),
+    isActive: () => getAdjustedGlyphEffect("curseddimensions") !== 1,
+    icon: MultiplierTabIcons.SPECIFIC_GLYPH("cursed"),
+  },
+  nerfPelle: {
+    name: "Doomed Nerfs",
+    powValue: 0.5,
+    isActive: () => PelleStrikes.powerGalaxies.hasStrike,
+    icon: MultiplierTabIcons.PELLE,
   }
 };

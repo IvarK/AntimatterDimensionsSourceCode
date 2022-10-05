@@ -18,6 +18,7 @@ import "./helper-functions";
  *  @property {function: @return Decimal|Number} multValue  Value for multipliers given by this effect. Note that some
  *    entries may have a pow10 applied to them in order to "undo" logarithmic scaling in the UI
  *  @property {function: @return Number} powValue         Numerical value for powers given by this effect
+ *  @property {function: @return Number} dilationEffect   Exponent to use for dilation effect
  *  @property {function: @return Boolean} isActive        Conditional determining if this component should be visible
  *  @property {Array String} overlay                      String array to be used as HTML for an overlay on the tab; all
  *    entries in the array are rendered on top of each other

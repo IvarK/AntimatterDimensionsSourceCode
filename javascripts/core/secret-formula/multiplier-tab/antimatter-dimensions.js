@@ -16,6 +16,12 @@ GameDatabase.multiplierTabValues.AD = {
         .map(ad => ad.multiplier)
         .reduce((x, y) => x.times(y), DC.D1)),
     isActive: dim => AntimatterDimension(dim ?? 1).isProducing,
+    dilationEffect: () => {
+      const baseEff = (player.dilation.active || Enslaved.isRunning)
+        ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty)
+        : 1;
+      return baseEff * (Effarig.isRunning ? Effarig.multDilation : 1);
+    },
     overlay: ["Ω", "<i class='fas fa-cube' />"],
     icon: dim => MultiplierTabIcons.DIMENSION("AD", dim),
   },

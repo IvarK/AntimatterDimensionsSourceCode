@@ -11,6 +11,7 @@ GameDatabase.multiplierTabValues.EP = {
     isBase: true,
     multValue: () => gainedEternityPoints(),
     isActive: () => PlayerProgress.eternityUnlocked(),
+    dilationEffect: () => (Laitela.isRunning ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty) : 1),
     overlay: ["Δ", "<i class='fa-solid fa-layer-group' />"],
   },
   base: {

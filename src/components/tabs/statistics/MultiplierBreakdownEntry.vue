@@ -22,6 +22,7 @@ export default {
       mouseoverIndex: -1,
       currentGroupKeys: [],
       isEmpty: false,
+      isDilated: false,
     };
   },
   computed: {
@@ -35,13 +36,14 @@ export default {
         "c-multiplier-entry-container": true,
         "c-multiplier-entry-root-container": this.isRoot,
       };
-    }
+    },
   },
   methods: {
     update() {
       this.currentGroupKeys = this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
       this.baseMultList = this.currentGroupKeys.map(key => this.getMult(key));
       this.powList = this.currentGroupKeys.map(key => this.getPow(key));
+      this.isDilated = (this.getProp(this.resource, "dilationEffect") ?? 1) !== 1;
       this.calculatePercents();
     },
     changeGroup() {
@@ -176,6 +178,13 @@ export default {
       const baseProp = this.getProp(this.resource, "isBase");
       if (baseProp) return `${name}: ${format(val, 2, 2)}`;
       return `${name}: ${formatX(val, 2, 2)}`;
+    },
+    dilationString() {
+      const pow = this.getProp(this.resource, "dilationEffect");
+      const beforeMult = this.getMult(this.resource);
+      const afterMult = Decimal.pow10(beforeMult.log10() ** pow);
+      return `Dilation Effect: Exponent${formatPow(pow, 2, 3)}
+        (${format(beforeMult, 2, 2)} ➜ ${format(afterMult, 2, 2)})`;
     }
   },
 };
@@ -240,6 +249,13 @@ export default {
             v-if="showGroup[index] && hasChildComp(key)"
             :resource="key"
           />
+        </div>
+      </div>
+      <div v-if="isDilated">
+        <div class="c-single-entry c-dilation-entry">
+          <div>
+            {{ dilationString() }}
+          </div>
         </div>
       </div>
     </div>
@@ -333,9 +349,17 @@ export default {
 }
 
 @keyframes a-glow-text {
-  0% {}
   50% { background-color: var(--color-accent); }
-  100% {}
+}
+
+.c-dilation-entry {
+  border: 0.2rem solid;
+  font-weight: bold;
+  animation: a-glow-dilation-nerf 3s infinite;
+}
+
+@keyframes a-glow-dilation-nerf {
+  50% { background-color: var(--color-bad); }
 }
 
 .c-no-icon {

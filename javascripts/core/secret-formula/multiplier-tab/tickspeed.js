@@ -17,6 +17,7 @@ GameDatabase.multiplierTabValues.tickspeed = {
     fakeValue: DC.E100,
     multValue: () => Tickspeed.perSecond.pow(MultiplierTabHelper.activeDimCount("AD")),
     isActive: true,
+    dilationEffect: () => (Effarig.isRunning ? Effarig.tickDilation : 1),
     overlay: ["<i class='fa-solid fa-clock' />"],
     icon: MultiplierTabIcons.TICKSPEED,
   },

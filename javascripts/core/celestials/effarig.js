@@ -83,15 +83,19 @@ export const Effarig = {
     }
     return 3 * (1 - c / (c + Math.sqrt(power.pLog10())));
   },
+  get tickDilation() {
+    return 0.7 + 0.1 * this.nerfFactor(Currency.timeShards.value);
+  },
+  get multDilation() {
+    return 0.25 + 0.25 * this.nerfFactor(Currency.infinityPower.value);
+  },
   get tickspeed() {
     const base = 3 + Tickspeed.baseValue.reciprocal().log10();
-    const pow = 0.7 + 0.1 * this.nerfFactor(Currency.timeShards.value);
-    return Decimal.pow10(Math.pow(base, pow)).reciprocal();
+    return Decimal.pow10(Math.pow(base, this.tickDilation)).reciprocal();
   },
   multiplier(mult) {
     const base = new Decimal(mult).pLog10();
-    const pow = 0.25 + 0.25 * this.nerfFactor(Currency.infinityPower.value);
-    return Decimal.pow10(Math.pow(base, pow));
+    return Decimal.pow10(Math.pow(base, this.multDilation));
   },
   get bonusRG() {
     // Will return 0 if Effarig Infinity is uncompleted

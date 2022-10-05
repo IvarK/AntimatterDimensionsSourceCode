@@ -9,6 +9,7 @@ GameDatabase.multiplierTabValues.gamespeed = {
     isBase: true,
     multValue: () => getGameSpeedupForDisplay(),
     isActive: () => !Pelle.isDoomed,
+    dilationEffect: () => (Effarig.isRunning ? Effarig.multDilation : 1),
     overlay: ["Δ", `<i class="fas fa-clock" />`, `<i class="fas fa-circle" />`],
   },
   glyph: {

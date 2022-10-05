@@ -97,6 +97,12 @@ export default {
   mounted() {
     this.$refs.input.select();
   },
+  destroyed() {
+    // Explicitly setting this to undefined after closing forces the game to fall-back to the stored settings within
+    // the player object if this modal is closed - ie. it makes sure actions in the modal don't persist
+    GameStorage.offlineEnabled = undefined;
+    GameStorage.offlineTicks = undefined;
+  },
   methods: {
     changeOfflineSetting() {
       this.offlineImport = (this.offlineImport + 1) % 3;
@@ -104,8 +110,9 @@ export default {
     updateOfflineSettings() {
       switch (this.offlineImport) {
         case OFFLINE_PROGRESS_TYPE.IMPORTED:
-          GameStorage.offlineEnabled = this.player.options.offlineProgress;
-          GameStorage.offlineTicks = this.player.options.offlineTicks;
+          // These are default values from a new save, used if importing from pre-reality where these props don't exist
+          GameStorage.offlineEnabled = this.player.options.offlineProgress ?? true;
+          GameStorage.offlineTicks = this.player.options.offlineTicks ?? 1000;
           break;
         case OFFLINE_PROGRESS_TYPE.LOCAL:
           GameStorage.offlineEnabled = player.options.offlineProgress;

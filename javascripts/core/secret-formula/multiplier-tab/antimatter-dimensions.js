@@ -284,4 +284,50 @@ GameDatabase.multiplierTabValues.AD = {
     isActive: () => player.IAP.totalSTD > 0 && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.IAP,
   },
+
+  nerfIC: {
+    name: dim => (dim ? `Infinity Challenge Nerf (AD ${dim})` : "Infinity Challenge Nerf"),
+    multValue: dim => {
+      let dimMults = Array.repeat(DC.D1, 9);
+      if (InfinityChallenge(4).isRunning) {
+        for (let tier = 1; tier <= 8; tier++) {
+          if (player.postC4Tier !== tier) {
+            dimMults[tier] = dimMults[tier].pow(1 - InfinityChallenge(4).effectValue).reciprocal();
+          }
+        }
+      } else if (InfinityChallenge(6).isRunning) {
+        dimMults = Array.repeat(DC.D1.dividedByEffectOf(InfinityChallenge(6)), 9);
+      } else if (InfinityChallenge(8).isRunning) {
+        dimMults = Array.repeat(DC.D1.timesEffectsOf(InfinityChallenge(8)), 9);
+      }
+
+      if (dim) return dimMults[dim];
+      let totalMult = DC.D1;
+      for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount("AD"); tier++) {
+        totalMult = totalMult.times(dimMults[tier]);
+      }
+      return totalMult;
+    },
+    isActive: () => [4, 6, 8].some(ic => InfinityChallenge(ic).isRunning),
+    icon: MultiplierTabIcons.CHALLENGE("infinity"),
+  },
+  nerfV: {
+    name: "V's Reality",
+    powValue: () => 0.5,
+    isActive: () => V.isRunning,
+    icon: MultiplierTabIcons.GENERIC_V,
+  },
+  nerfCursed: {
+    name: "Cursed Glyphs",
+    powValue: () => getAdjustedGlyphEffect("curseddimensions"),
+    isActive: () => getAdjustedGlyphEffect("curseddimensions") !== 1,
+    icon: MultiplierTabIcons.SPECIFIC_GLYPH("cursed"),
+  },
+  nerfPelle: {
+    name: "Doomed Nerfs",
+    multValue: 0.1,
+    powValue: () => (PelleStrikes.infinity.hasStrike ? 0.5 : 1),
+    isActive: () => Pelle.isDoomed,
+    icon: MultiplierTabIcons.PELLE,
+  }
 };

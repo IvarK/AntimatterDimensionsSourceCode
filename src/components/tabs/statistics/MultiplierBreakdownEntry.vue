@@ -40,7 +40,7 @@ export default {
   methods: {
     update() {
       this.currentGroupKeys = this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
-      this.baseMultList = this.currentGroupKeys.map(key => Decimal.max(this.getMult(key), 1));
+      this.baseMultList = this.currentGroupKeys.map(key => this.getMult(key));
       this.powList = this.currentGroupKeys.map(key => this.getPow(key));
       this.calculatePercents();
     },
@@ -64,8 +64,8 @@ export default {
       // Shortly after a prestige, these may add up to a lot more than the base amount as production catches up. This
       // is also necessary to suppress some visual weirdness for certain categories which have lots of exponents but
       // actually apply only to specific dimensions (eg. charged infinity upgrades)
-      const totalPerc = this.percentList.sum();
-      this.percentList = this.percentList.map(p => p / totalPerc);
+      const totalPerc = this.percentList.filter(p => p > 0).sum();
+      this.percentList = this.percentList.map(p => Math.clamp(p / totalPerc, -1, 1));
     },
     getProp(key, attr) {
       const args = key.split("_");
@@ -89,13 +89,19 @@ export default {
     },
 
     styleObject(index) {
+      const netPerc = this.percentList.sum();
+      const isNerf = this.percentList[index] < 0;
+      const baseColor = this.getProp(this.currentGroupKeys[index], "icon")?.color;
+      const barSize = perc => (perc > 0 ? perc * netPerc : -perc);
       return {
         position: "absolute",
-        top: `${100 * this.percentList.slice(0, index).sum()}%`,
-        height: `${100 * this.percentList[index]}%`,
+        top: `${100 * this.percentList.slice(0, index).map(p => barSize(p)).sum()}%`,
+        height: `${100 * barSize(this.percentList[index])}%`,
         width: "100%",
         border: this.isEmpty ? "" : "0.1rem solid var(--color-text)",
-        "background-color": this.getProp(this.currentGroupKeys[index], "icon")?.color
+        background: isNerf
+          ? `repeating-linear-gradient(-45deg, var(--color-bad), ${baseColor} 0.8rem)`
+          : baseColor,
       };
     },
     singleEntryClass(index) {
@@ -117,6 +123,8 @@ export default {
       return this.showGroup[index] ? "far fa-minus-square" : "far fa-plus-square";
     },
     entryString(index) {
+      if (this.percentList[index] < 0) return this.nerfString(index);
+
       // We want to handle very small numbers carefully to distinguish between "disabled/inactive" and
       // "too small to be relevant"
       let percString;
@@ -135,6 +143,24 @@ export default {
           ? x => format(x, 2, 2)
           : x => formatX(x, 2, 2);
         if (Decimal.neq(this.baseMultList[index], 1)) values.push(formatFn(this.baseMultList[index]));
+        if (this.powList[index] !== 1) values.push(formatPow(this.powList[index], 2, 3));
+        valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
+      }
+
+      return `${percString}: ${this.getProp(this.currentGroupKeys[index], "name")} ${valueStr}`;
+    },
+    nerfString(index) {
+      const percString = `${formatPercents(this.percentList[index], 1)}`;
+
+      // Display both multiplier and powers, but make sure to give an empty string if there's neither
+      const overrideStr = this.getProp(this.currentGroupKeys[index], "displayOverride");
+      let valueStr;
+      if (overrideStr) valueStr = `(${overrideStr})`;
+      else {
+        const values = [];
+        if (Decimal.neq(this.baseMultList[index], 1)) {
+          values.push(`/${format(this.baseMultList[index].reciprocal(), 2, 2)}`);
+        }
         if (this.powList[index] !== 1) values.push(formatPow(this.powList[index], 2, 3));
         valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
       }
@@ -192,6 +218,8 @@ export default {
       </div>
       <div v-if="isEmpty">
         No Active Multipliers
+        <br>
+        Total effect disabled or reduced to {{ formatX(1) }}.
       </div>
       <div
         v-for="(key, index) in currentGroupKeys"

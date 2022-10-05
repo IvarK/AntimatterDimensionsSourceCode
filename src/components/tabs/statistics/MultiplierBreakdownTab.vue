@@ -14,7 +14,7 @@ export default {
   computed: {
     options: () => ["AM", "tickspeed", "AD", "ID", "IP", "infinities", "TD", "EP", "eternities", "DT", "gamespeed"],
     resourceName() {
-      return GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.name();
+      return this.accessProp(GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.name);
     },
     resourceKey() {
       return `${this.options[this.currentOption]}_total`;
@@ -28,8 +28,11 @@ export default {
       do {
         this.currentOption = (this.currentOption + 1) % this.options.length;
         this.$recompute("resourceKey");
-      } while (!GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.isActive());
+      } while (!this.accessProp(GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.isActive));
     },
+    accessProp(prop) {
+      return typeof prop === "function" ? prop() : prop;
+    }
   }
 };
 </script>

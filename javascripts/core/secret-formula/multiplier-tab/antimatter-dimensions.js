@@ -43,17 +43,17 @@ GameDatabase.multiplierTabValues.AD = {
         .filter(ad => ad.isProducing)
         .map(ad => DimBoost.multiplierToNDTier(ad.tier))
         .reduce((x, y) => x.times(y), DC.D1)),
-    isActive: () => true,
+    isActive: true,
     icon: MultiplierTabIcons.DIMBOOST,
   },
   sacrifice: {
-    name: () => "Sacrifice Multiplier",
+    name: "Sacrifice Multiplier",
     multValue: dim => ((!dim || dim === 8) ? Sacrifice.totalBoost : DC.D1),
-    isActive: dim => (!dim || dim === 8) && Sacrifice.totalBoost.gt(1),
+    isActive: dim => (!dim || dim === 8) && Sacrifice.totalBoost.gt(1) && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.SACRIFICE("antimatter"),
   },
   achievement: {
-    name: () => "Achievements",
+    name: "Achievements",
     multValue: dim => {
       const allMult = new Decimal(Achievements.power).timesEffectsOf(
         Achievement(48),
@@ -96,7 +96,7 @@ GameDatabase.multiplierTabValues.AD = {
       return totalMult;
     },
     powValue: () => Achievement(183).effectOrDefault(1),
-    isActive: () => true,
+    isActive: () => !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   infinityUpgrade: {
@@ -143,11 +143,11 @@ GameDatabase.multiplierTabValues.AD = {
       return allPow * Math.exp(dimPow.slice(1)
         .map(n => Math.log(n)).sum() / MultiplierTabHelper.activeDimCount("AD"));
     },
-    isActive: () => PlayerProgress.infinityUnlocked(),
+    isActive: () => PlayerProgress.infinityUnlocked() && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.UPGRADE("infinity"),
   },
   breakInfinityUpgrade: {
-    name: () => "Break Infinity Upgrades",
+    name: "Break Infinity Upgrades",
     multValue: dim => {
       const mult = DC.D1.timesEffectsOf(
         BreakInfinityUpgrade.totalAMMult,
@@ -158,11 +158,12 @@ GameDatabase.multiplierTabValues.AD = {
       );
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
     },
-    isActive: () => player.break,
+    isActive: () => player.break && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.BREAK_INFINITY,
   },
   infinityPower: {
-    name: () => "Infinity Power",
+    name: "Infinity Power",
+    fakeValue: () => Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate),
     multValue: dim => {
       const mult = Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1);
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
@@ -192,8 +193,8 @@ GameDatabase.multiplierTabValues.AD = {
       }
       return totalMult;
     },
-    powValue: () => (InfinityChallenge(4).isCompleted ? InfinityChallenge(4).reward.effectValue : 1),
-    isActive: () => player.break,
+    powValue: () => InfinityChallenge(4).reward.effectOrDefault(1),
+    isActive: () => player.break && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.CHALLENGE("infinity"),
   },
   timeStudy: {
@@ -208,12 +209,6 @@ GameDatabase.multiplierTabValues.AD = {
 
       const dimMults = Array.repeat(DC.D1, 9);
       for (let tier = 1; tier <= 8; tier++) {
-        if (tier === 1) {
-          dimMults[tier] = dimMults[tier].timesEffectsOf(
-            TimeStudy(234)
-          );
-        }
-
         // We don't want to double-count the base effect that TS31 boosts
         const infinitiedMult = DC.D1.timesEffectsOf(
           AntimatterDimension(tier).infinityUpgrade,
@@ -224,6 +219,7 @@ GameDatabase.multiplierTabValues.AD = {
         dimMults[tier] = dimMults[tier].timesEffectsOf(
           tier < 8 ? TimeStudy(71) : null,
           tier === 8 ? TimeStudy(214) : null,
+          tier === 1 ? TimeStudy(234) : null,
         );
       }
 
@@ -234,45 +230,58 @@ GameDatabase.multiplierTabValues.AD = {
       }
       return totalMult;
     },
-    isActive: () => PlayerProgress.eternityUnlocked(),
+    isActive: () => PlayerProgress.eternityUnlocked() && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.TIME_STUDY,
   },
   eternityChallenge: {
-    name: () => "Eternity Challenges",
+    name: "Eternity Challenges",
     multValue: dim => Decimal.pow(EternityChallenge(10).effectValue,
       dim ? 1 : MultiplierTabHelper.activeDimCount("AD")),
     isActive: () => EternityChallenge(10).isRunning,
     icon: MultiplierTabIcons.CHALLENGE("eternity"),
   },
   glyph: {
-    name: () => "Glyph Effects",
+    name: "Glyph Effects",
     multValue: dim => {
       const mult = getAdjustedGlyphEffect("powermult");
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
     },
     powValue: () => getAdjustedGlyphEffect("powerpow") * getAdjustedGlyphEffect("effarigdimensions"),
-    isActive: () => PlayerProgress.realityUnlocked(),
+    isActive: () => PlayerProgress.realityUnlocked() && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
+  v: {
+    name: "V-Achievements",
+    powValue: () => VUnlocks.adPow.effectOrDefault(1),
+    isActive: () => PlayerProgress.realityUnlocked() && !EternityChallenge(11).isRunning,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
+  },
   alchemy: {
-    name: () => "Glyph Alchemy",
+    name: "Glyph Alchemy",
     multValue: dim => {
       const mult = AlchemyResource.dimensionality.effectOrDefault(1)
         .times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
     },
     powValue: () => AlchemyResource.power.effectOrDefault(1) * Ra.momentumValue,
-    isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
+    isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.ALCHEMY,
   },
-  other: {
-    name: () => "Other sources",
+  pelle: {
+    name: "Pelle Effects",
+    multValue: dim => Decimal.pow(PelleUpgrade.antimatterDimensionMult.effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("AD")),
+    powValue: () => PelleRifts.paradox.effectOrDefault(1).toNumber(),
+    isActive: () => Pelle.isDoomed && !EternityChallenge(11).isRunning,
+    icon: MultiplierTabIcons.PELLE,
+  },
+  iap: {
+    name: "Shop Tab Purchases",
     multValue: dim => {
       const mult = ShopPurchase.dimPurchases.currentMult * ShopPurchase.allDimPurchases.currentMult;
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
     },
-    powValue: () => VUnlocks.adPow.effectOrDefault(1) * PelleRifts.paradox.effectOrDefault(1),
-    isActive: () => player.IAP.totalSTD > 0 || PlayerProgress.realityUnlocked(),
-    icon: MultiplierTabIcons.OTHER,
+    isActive: () => player.IAP.totalSTD > 0 && !EternityChallenge(11).isRunning,
+    icon: MultiplierTabIcons.IAP,
   },
 };

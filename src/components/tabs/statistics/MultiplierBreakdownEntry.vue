@@ -1,6 +1,4 @@
 <script>
-import { DC } from "../../../../javascripts/core/constants";
-
 export default {
   name: "MultiplierBreakdownEntry",
   props: {
@@ -67,7 +65,7 @@ export default {
       // is also necessary to suppress some visual weirdness for certain categories which have lots of exponents but
       // actually apply only to specific dimensions (eg. charged infinity upgrades)
       const totalPerc = this.percentList.sum();
-      this.percentList = this.percentList.map(p => p / Math.max(totalPerc, 1));
+      this.percentList = this.percentList.map(p => p / totalPerc);
     },
     getProp(key, attr) {
       const args = key.split("_");
@@ -112,7 +110,7 @@ export default {
 
     hasChildComp(key) {
       const dbEntry = this.treeDB[key];
-      return dbEntry && dbEntry[0].filter(k => this.getProp(k, "isActive")).length > 1;
+      return dbEntry && dbEntry[0].filter(k => this.getProp(k, "isActive") && this.getMult(k).neq(1)).length > 1;
     },
     hideIcon(index) {
       if (!this.hasChildComp(this.currentGroupKeys[index])) return "c-no-icon";

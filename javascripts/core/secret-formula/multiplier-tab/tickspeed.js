@@ -7,30 +7,30 @@ import { MultiplierTabIcons } from "./icons";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.tickspeed = {
   total: {
-    name: () => "Total Tickspeed",
+    name: "Total Tickspeed",
     displayOverride: () => {
       const tickRate = Tickspeed.perSecond;
       const activeDims = MultiplierTabHelper.activeDimCount("AD");
       return `${format(tickRate, 2, 2)}/sec on ${formatInt(activeDims)} ${pluralize("Dimension", activeDims)}
-          ➜ ${formatX(tickRate.pow(activeDims), 2, 2)}`;
+        ➜ ${formatX(tickRate.pow(activeDims), 2, 2)}`;
     },
-    fakeValue: () => DC.E100,
+    fakeValue: DC.E100,
     multValue: () => Tickspeed.perSecond.pow(MultiplierTabHelper.activeDimCount("AD")),
-    isActive: () => true,
+    isActive: true,
     overlay: ["<i class='fa-solid fa-clock' />"],
     icon: MultiplierTabIcons.TICKSPEED,
   },
   upgrades: {
-    name: () => "Tickspeed Upgrades",
+    name: "Tickspeed Upgrades",
     displayOverride: () => `${formatInt(Tickspeed.totalUpgrades)} Total`,
     // Must be pow10 due to logarithmic scaling
     fakeValue: () => Decimal.pow10(Tickspeed.totalUpgrades),
     multValue: () => new Decimal.pow10(100 * MultiplierTabHelper.decomposeTickspeed().tickspeed),
-    isActive: () => true,
+    isActive: true,
     icon: MultiplierTabIcons.PURCHASE("AD"),
   },
   galaxies: {
-    name: () => "Galaxies",
+    name: "Galaxies",
     displayOverride: () => {
       const ag = player.galaxies + GalaxyGenerator.galaxies;
       const rg = Replicanti.galaxies.total;
@@ -40,14 +40,14 @@ GameDatabase.multiplierTabValues.tickspeed = {
     // Must be pow10 due to logarithmic scaling
     fakeValue: () => Decimal.pow10(effectiveBaseGalaxies()),
     multValue: () => new Decimal.pow10(100 * MultiplierTabHelper.decomposeTickspeed().galaxies),
-    isActive: () => true,
+    isActive: true,
     icon: MultiplierTabIcons.GALAXY,
   },
 };
 
 GameDatabase.multiplierTabValues.tickspeedUpgrades = {
   purchased: {
-    name: () => "Purchased Tickspeed Upgrades",
+    name: "Purchased Tickspeed Upgrades",
     displayOverride: () => (Laitela.continuumActive
       ? formatFloat(Tickspeed.continuumValue, 2, 2)
       : formatInt(player.totalTickBought)),
@@ -56,7 +56,7 @@ GameDatabase.multiplierTabValues.tickspeedUpgrades = {
     icon: MultiplierTabIcons.PURCHASE("AD"),
   },
   free: {
-    name: () => "Tickspeed Upgrades from TD",
+    name: "Tickspeed Upgrades from TD",
     displayOverride: () => formatInt(player.totalTickGained),
     multValue: () => Decimal.pow10(player.totalTickGained),
     isActive: () => Currency.timeShards.gt(0),

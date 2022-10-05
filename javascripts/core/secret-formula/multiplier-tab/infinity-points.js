@@ -7,37 +7,33 @@ import { MultiplierTabIcons } from "./icons";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.IP = {
   total: {
-    name: () => "Total IP Gained",
-    isBase: () => true,
+    name: "Total IP Gained",
+    isBase: true,
     multValue: () => gainedInfinityPoints(),
     isActive: () => player.break,
     overlay: ["∞", "<i class='fa-solid fa-layer-group' />"],
   },
   base: {
-    name: () => "Base Infinity Points",
-    isBase: () => true,
-    fakeValue: () => Decimal.pow10(308 / Effects.min(308, Achievement(103), TimeStudy(111))),
+    name: "Base Infinity Points",
+    isBase: true,
+    fakeValue: DC.D5,
     multValue: () => {
-      const div = Effects.min(
-        308,
-        Achievement(103),
-        TimeStudy(111)
-      );
+      const div = Effects.min(308, Achievement(103), TimeStudy(111));
       return Decimal.pow10(player.records.thisInfinity.maxAM.log10() / div - 0.75);
     },
     isActive: () => player.break,
     icon: MultiplierTabIcons.CONVERT_FROM("AM"),
   },
   antimatter: {
-    name: () => "Infinity Points from Antimatter",
+    name: "Infinity Points from Antimatter",
     displayOverride: () => `${format(player.records.thisInfinity.maxAM, 2, 2)} AM`,
-    // This just needs to be larger than 1 to make sure it's visible, the math is handled in powValue for divisor
-    multValue: () => 10,
+    // Just needs to match the value in base and be larger than 1
+    multValue: DC.D5,
     isActive: () => player.break,
     icon: MultiplierTabIcons.ANTIMATTER,
   },
   divisor: {
-    name: () => "Formula Improvement",
+    name: "Formula Improvement",
     displayOverride: () => {
       const div = Effects.min(308, Achievement(103), TimeStudy(111));
       return `log(AM)/${formatInt(308)} ➜ log(AM)/${format(div, 2, 1)}`;
@@ -53,7 +49,7 @@ GameDatabase.multiplierTabValues.IP = {
     icon: MultiplierTabIcons.UPGRADE("infinity"),
   },
   achievement: {
-    name: () => "Achievements",
+    name: "Achievements",
     multValue: () => DC.D1.timesEffectsOf(
       Achievement(85),
       Achievement(93),
@@ -65,7 +61,7 @@ GameDatabase.multiplierTabValues.IP = {
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
-    name: () => "Time Studies",
+    name: "Time Studies",
     multValue: () => DC.D1.timesEffectsOf(
       TimeStudy(41),
       TimeStudy(51),
@@ -77,27 +73,34 @@ GameDatabase.multiplierTabValues.IP = {
     icon: MultiplierTabIcons.TIME_STUDY,
   },
   dilationUpgrade: {
-    name: () => "Dilation Upgrade (IP based on DT)",
+    name: "Dilation Upgrade (Based on DT)",
     multValue: () => DilationUpgrade.ipMultDT.effectOrDefault(1),
-    isActive: () => player.break && !Pelle.isDoomed && DilationUpgrade.ipMultDT.canBeApplied,
+    isActive: () => DilationUpgrade.ipMultDT.canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("dilation"),
   },
   glyph: {
-    name: () => (Ra.unlocks.unlockGlyphAlchemy.canBeApplied
-      ? "Equipped Glyphs and Glyph Alchemy"
-      : "Equipped Glyphs"),
-    multValue: () => Replicanti.amount.powEffectOf(AlchemyResource.exponential)
-      .times(getAdjustedGlyphEffect("infinityIP")),
+    name: "Equipped Glyphs",
+    multValue: () => Pelle.specialGlyphEffect.infinity.times(getAdjustedGlyphEffect("infinityIP")),
     powValue: () => (GlyphAlteration.isAdded("infinity") ? getSecondaryGlyphEffect("infinityIP") : 1),
     isActive: () => PlayerProgress.realityUnlocked() && !Pelle.isDoomed,
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
-  other: {
-    name: () => "IP Multipliers from Other sources",
-    multValue: () => DC.D1.times(ShopPurchase.IPPurchases.currentMult)
-      .timesEffectsOf(PelleRifts.vacuum)
-      .times(Pelle.specialGlyphEffect.infinity),
-    isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
-    icon: MultiplierTabIcons.OTHER,
+  alchemy: {
+    name: "Glyph Alchemy",
+    multValue: () => Replicanti.amount.powEffectOf(AlchemyResource.exponential),
+    isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
+    icon: MultiplierTabIcons.ALCHEMY,
+  },
+  pelle: {
+    name: "Pelle Effects",
+    multValue: () => DC.D1.timesEffectsOf(PelleRifts.vacuum).times(Pelle.specialGlyphEffect.infinity),
+    isActive: () => !Pelle.isDoomed,
+    icon: MultiplierTabIcons.PELLE,
+  },
+  iap: {
+    name: "Shop Tab Purchases",
+    multValue: () => ShopPurchase.IPPurchases.currentMult,
+    isActive: () => player.IAP.totalSTD > 0,
+    icon: MultiplierTabIcons.IAP,
   },
 };

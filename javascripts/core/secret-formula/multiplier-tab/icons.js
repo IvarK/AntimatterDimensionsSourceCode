@@ -181,6 +181,15 @@ export const MultiplierTabIcons = {
     text: `<i class="fas fa-arrows-to-dot" />`,
     color: "var(--color-laitela--base)",
   },
+  PELLE: {
+    text: "♅",
+    color: "var(--color-pelle--base)",
+  },
+  IAP: {
+    // TODO Fill this in properly
+    text: "",
+    color: "",
+  },
 
   // TODO This probably shouldn't exist? Make sure all entries referencing it are properly expanded out before merge
   OTHER: {

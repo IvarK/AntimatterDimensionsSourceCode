@@ -252,7 +252,7 @@ export const GameStorage = {
 
     const rawDiff = Date.now() - player.lastUpdate;
     // We set offlineEnabled externally on importing; otherwise this is just a local load
-    const simulateOffline = this.offlineEnabled ?? player.options.offlineEnabled;
+    const simulateOffline = this.offlineEnabled ?? player.options.offlineProgress;
     if (simulateOffline && !Speedrun.isPausedAtStart()) {
       let diff = rawDiff;
       player.speedrun.offlineTimeUsed += diff;

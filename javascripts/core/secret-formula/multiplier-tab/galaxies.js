@@ -8,7 +8,7 @@ GameDatabase.multiplierTabValues.galaxies = {
   // Note: none of the galaxy types use the global multiplier that applies to all of them within multValue, which
   // very slightly reduces performance impact and is okay because it's applied consistently
   antimatter: {
-    name: () => "Antimatter Galaxies",
+    name: "Antimatter Galaxies",
     displayOverride: () => {
       const num = player.galaxies + GalaxyGenerator.galaxies;
       const mult = MultiplierTabHelper.globalGalaxyMult();
@@ -19,7 +19,7 @@ GameDatabase.multiplierTabValues.galaxies = {
     icon: MultiplierTabIcons.ANTIMATTER,
   },
   replicanti: {
-    name: () => "Replicanti Galaxies",
+    name: "Replicanti Galaxies",
     displayOverride: () => {
       const num = Replicanti.galaxies.total;
       let rg = Replicanti.galaxies.bought;
@@ -42,7 +42,7 @@ GameDatabase.multiplierTabValues.galaxies = {
     icon: MultiplierTabIcons.REPLICANTI,
   },
   tachyon: {
-    name: () => "Tachyon Galaxies",
+    name: "Tachyon Galaxies",
     displayOverride: () => {
       const num = player.dilation.totalTachyonGalaxies;
       const mult = MultiplierTabHelper.globalGalaxyMult() *

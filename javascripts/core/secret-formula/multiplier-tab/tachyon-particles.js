@@ -7,39 +7,39 @@ import { MultiplierTabIcons } from "./icons";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.TP = {
   total: {
-    name: () => "Total Tachyon Particles",
-    isBase: () => true,
+    name: "Total Tachyon Particles",
+    isBase: true,
     multValue: () => new Decimal(Currency.tachyonParticles.value),
     isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
     icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },
   base: {
-    name: () => "Tachyon Particle Count",
-    isBase: () => true,
+    name: "Base Tachyon Particle Count",
+    isBase: true,
     multValue: () => new Decimal(Currency.tachyonParticles.value).div(tachyonGainMultiplier()),
     isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
     icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },
   achievement: {
-    name: () => "Achievement 132",
+    name: "Achievement 132",
     multValue: () => Achievement(132).effectOrDefault(1),
     isActive: () => Achievement(132).canBeApplied,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   dilation: {
-    name: () => `Dilation Upgrade (Repeatable TP multiplier)`,
+    name: `Dilation Upgrade (Repeatable TP multiplier)`,
     multValue: () => DilationUpgrade.tachyonGain.effectOrDefault(1),
     isActive: () => DilationUpgrade.tachyonGain.canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("dilation"),
   },
   realityUpgrade: {
-    name: () => "Reality Upgrades",
+    name: "Reality Upgrades",
     multValue: () => DC.D1.timesEffectsOf(RealityUpgrade(4), RealityUpgrade(8), RealityUpgrade(15)),
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   dilationGlyphSacrifice: {
-    name: () => "Dilation Glyph Sacrifice",
+    name: "Dilation Glyph Sacrifice",
     multValue: () => GlyphSacrifice.dilation.effectValue,
     isActive: () => GlyphSacrifice.dilation.effectValue > 1,
     icon: MultiplierTabIcons.SACRIFICE("dilation"),

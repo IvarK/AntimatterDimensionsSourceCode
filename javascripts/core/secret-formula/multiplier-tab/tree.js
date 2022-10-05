@@ -6,17 +6,18 @@ import { MultiplierTabHelper } from "./helper-functions";
 
 const propList = {
   AD: ["purchase", "achievement", "dimboost", "sacrifice", "infinityUpgrade", "breakInfinityUpgrade",
-    "infinityPower", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph", "alchemy", "other"],
+    "infinityPower", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph", "alchemy", "v", "pelle", "iap"],
   ID: ["purchase", "achievement", "replicanti", "infinityChallenge", "timeStudy", "eternityUpgrades",
-    "eternityChallenge", "glyph", "alchemy", "other"],
-  TD: ["purchase", "achievement", "timeStudy", "eternityChallenge", "glyph", "alchemy", "other"],
-  IP: ["base", "infinityUpgrade", "achievement", "timeStudy", "dilationUpgrade", "glyph", "other"],
-  EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "other"],
+    "eternityChallenge", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap"],
+  TD: ["purchase", "achievement", "timeStudy", "eternityUpgrade", "eternityChallenge", "dilationUpgrade",
+    "realityUpgrade", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap"],
+  IP: ["base", "infinityUpgrade", "achievement", "timeStudy", "dilationUpgrade", "glyph", "alchemy", "pelle", "iap"],
+  EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "realityUpgrade", "pelle", "iap"],
   TP: ["base", "achievement", "dilation", "realityUpgrade", "dilationGlyphSacrifice"],
-  DT: ["tachyon", "achievement", "dilation", "gamespeed", "realityUpgrade", "glyph", "ra", "other"],
+  DT: ["tachyon", "achievement", "dilation", "gamespeed", "realityUpgrade", "glyph", "ra", "alchemy", "iap"],
   infinities: ["achievement", "timeStudy", "realityUpgrades", "glyph", "ra", "singularity"],
   eternities: ["achievement", "realityUpgrades", "glyph", "alchemy"],
-  gamespeed: ["glyph", "blackHoles", "v", "pulsing", "singularity"],
+  gamespeed: ["glyph", "blackHoles", "v", "pulsing", "singularity", "pelle"],
 };
 
 // Used for individual dimension breakdowns of effects (eg. full achievement mult into its values on individual ADs)
@@ -106,7 +107,7 @@ const targetedEffects = {
     ID: [75, 94],
     TD: [105, 128],
     IP: [85, 93, 116, 125, 141],
-    DT: [132, 137]
+    DT: [132, 137, 156]
   },
   timeStudy: {
     checkFn: MultiplierTabHelper.timeStudyDimCheck,
@@ -136,8 +137,10 @@ for (const res of dimTypes) {
 
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
 // entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
-const removedProps = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_alchemy", "ID_replicanti", "ID_infinityChallenge",
-  "ID_eternityUpgrades", "ID_alchemy", "TD_achievement", "TD_alchemy"];
+const removedProps = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_alchemy", "AD_v", "AD_pelle", "AD_iap",
+  "ID_replicanti", "ID_infinityChallenge", "ID_eternityUpgrades", "ID_alchemy", "ID_imaginaryUpgrade",
+  "TD_achievement", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade", "TD_alchemy",
+  "TD_imaginaryUpgrade"];
 for (const prop of removedProps) {
   GameDatabase.multiplierTabTree[prop] = undefined;
 }

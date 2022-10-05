@@ -15,7 +15,7 @@ GameDatabase.multiplierTabValues.TD = {
         .filter(td => td.isProducing)
         .map(td => td.multiplier)
         .reduce((x, y) => x.times(y), DC.D1)),
-    isActive: dim => TimeDimension(dim ?? 1).isProducing,
+    isActive: dim => TimeDimension(dim ?? 1).isProducing && !EternityChallenge(11).isRunning,
     overlay: ["Δ", "<i class='fa-solid fa-cube' />"],
     icon: dim => MultiplierTabIcons.DIMENSION("TD", dim),
   },
@@ -38,7 +38,7 @@ GameDatabase.multiplierTabValues.TD = {
   },
 
   basePurchase: {
-    name: () => "Base purchases",
+    name: "Base purchases",
     multValue: dim => {
       const getMult = td => Decimal.pow(4,
         td === 8 ? Math.clampMax(TimeDimension(td).bought, 1e8) : TimeDimension(td).bought);
@@ -54,7 +54,7 @@ GameDatabase.multiplierTabValues.TD = {
     icon: dim => MultiplierTabIcons.PURCHASE("TD", dim),
   },
   timeGlyphSacrifice: {
-    name: () => "Time Glyph Sacrifice",
+    name: "Time Glyph Sacrifice",
     multValue: () => (TimeDimension(8).isProducing
       ? Decimal.pow(GlyphSacrifice.time.effectValue, Math.clampMax(TimeDimension(8).bought, 1e8))
       : DC.D1),
@@ -62,29 +62,23 @@ GameDatabase.multiplierTabValues.TD = {
     icon: MultiplierTabIcons.SACRIFICE("time"),
   },
   powPurchase: {
-    name: () => "Power effect from Imaginary Upgrades",
+    name: "Reflection of Intrusion",
     powValue: () => ImaginaryUpgrade(14).effectOrDefault(1),
     isActive: () => ImaginaryUpgrade(14).canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("imaginary"),
   },
 
   achievement: {
-    name: () => "Achievements",
+    name: "Achievements",
     multValue: dim => {
-      const baseMult = DC.D1.timesEffectsOf(
-        Achievement(105),
-        Achievement(128),
-        EternityUpgrade.tdMultAchs,
-      );
+      const baseMult = DC.D1.timesEffectsOf(Achievement(105), Achievement(128), EternityUpgrade.tdMultAchs);
       return Decimal.pow(baseMult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
     },
     isActive: () => Achievement(75).canBeApplied,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
-    name: dim => (dim
-      ? `Time Studies and Eternity Upgrades (TD ${dim})`
-      : "Time Studies and Eternity Upgrades"),
+    name: dim => (dim ? `Time Studies (TD ${dim})` : "Time Studies"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         TimeStudy(93),
@@ -92,8 +86,6 @@ GameDatabase.multiplierTabValues.TD = {
         TimeStudy(151),
         TimeStudy(221),
         TimeStudy(301),
-        EternityUpgrade.tdMultTheorems,
-        EternityUpgrade.tdMultRealTime,
       );
 
       const dimMults = Array.repeat(DC.D1, 9);
@@ -115,13 +107,25 @@ GameDatabase.multiplierTabValues.TD = {
     isActive: () => TimeDimension(1).isProducing,
     icon: MultiplierTabIcons.TIME_STUDY
   },
+  eternityUpgrade: {
+    name: dim => (dim ? `Eternity Upgrades (TD ${dim})` : "Eternity Upgrades"),
+    multValue: dim => {
+      const allMult = DC.D1.timesEffectsOf(
+        EternityUpgrade.tdMultTheorems,
+        EternityUpgrade.tdMultRealTime,
+      );
+      return Decimal.pow(allMult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
+    },
+    isActive: () => TimeDimension(1).isProducing,
+    icon: MultiplierTabIcons.UPGRADE("eternity"),
+  },
   eternityChallenge: {
     name: dim => (dim ? `Eternity Challenges (TD ${dim})` : "Eternity Challenges"),
     multValue: dim => {
       let allMult = DC.D1.timesEffectsOf(
         EternityChallenge(1).reward,
         EternityChallenge(10).reward,
-      );
+      ).times(EternityChallenge(7).isRunning ? Tickspeed.perSecond : DC.D1);
       if (EternityChallenge(9).isRunning) {
         allMult = allMult.times(
           Decimal.pow(Math.clampMin(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate / 7)
@@ -132,42 +136,58 @@ GameDatabase.multiplierTabValues.TD = {
     isActive: () => EternityChallenge(1).completions > 0,
     icon: MultiplierTabIcons.CHALLENGE("eternity")
   },
+  dilationUpgrade: {
+    name: "Dilation Upgrade (Based on Replicanti)",
+    multValue: dim => {
+      const mult = Replicanti.areUnlocked && Replicanti.amount.gt(1)
+        ? DilationUpgrade.tdMultReplicanti.effectValue
+        : DC.D1;
+      return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
+    },
+    isActive: () => DilationUpgrade.tdMultReplicanti.canBeApplied,
+    icon: MultiplierTabIcons.UPGRADE("dilation"),
+  },
+  realityUpgrade: {
+    name: "Temporal Transcendence",
+    multValue: dim => Decimal.pow(RealityUpgrade(22).effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
+    isActive: () => RealityUpgrade(22).canBeApplied,
+    icon: MultiplierTabIcons.UPGRADE("reality"),
+  },
   glyph: {
-    name: () => "Glyph Effects",
-    multValue: () => 1,
+    name: "Glyph Effects",
     powValue: () => getAdjustedGlyphEffect("timepow") * getAdjustedGlyphEffect("effarigdimensions"),
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.GENERIC_GLYPH
   },
   alchemy: {
-    name: () => {
-      const imStr = MachineHandler.isIMUnlocked ? " and Imaginary Upgrades" : "";
-      return `Glyph Alchemy${imStr}`;
-    },
-    multValue: dim => {
-      const mult = DC.D1.timesEffectsOf(
-        AlchemyResource.dimensionality,
-        ImaginaryUpgrade(11),
-      );
-      return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
-    },
+    name: "Glyph Alchemy",
+    multValue: dim => Decimal.pow(AlchemyResource.dimensionality.effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
     powValue: () => AlchemyResource.time.effectOrDefault(1) * Ra.momentumValue,
     isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
     icon: MultiplierTabIcons.ALCHEMY,
   },
-  other: {
-    name: () => "Other sources",
-    multValue: dim => {
-      const mult = new Decimal(ShopPurchase.allDimPurchases.currentMult).timesEffectsOf(
-        Replicanti.areUnlocked && Replicanti.amount.gt(1) ? DilationUpgrade.tdMultReplicanti : null,
-        Pelle.isDoomed ? null : RealityUpgrade(22),
-        PelleRifts.chaos
-      );
-      const maxActiveDim = MultiplierTabHelper.activeDimCount("TD");
-      return Decimal.pow(mult, dim ? 1 : maxActiveDim);
-    },
+  imaginaryUpgrade: {
+    name: "Suspicion of Interference",
+    multValue: dim => Decimal.pow(ImaginaryUpgrade(11).effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
+    isActive: () => ImaginaryUpgrade(11).canBeApplied,
+    icon: MultiplierTabIcons.UPGRADE("imaginary"),
+  },
+  pelle: {
+    name: "Pelle Rift Effects",
+    multValue: dim => Decimal.pow(PelleRifts.chaos.effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
     powValue: () => PelleRifts.paradox.effectOrDefault(1),
-    isActive: () => player.IAP.totalSTD > 0 || Pelle.isDoomed,
-    icon: MultiplierTabIcons.OTHER,
+    isActive: () => Pelle.isDoomed,
+    icon: MultiplierTabIcons.PELLE,
+  },
+  iap: {
+    name: "Shop Tab Purchases",
+    multValue: dim => Decimal.pow(ShopPurchase.allDimPurchases.currentMult,
+      dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
+    isActive: () => player.IAP.totalSTD > 0,
+    icon: MultiplierTabIcons.IAP,
   },
 };

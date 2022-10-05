@@ -246,7 +246,10 @@ GameDatabase.multiplierTabValues.AD = {
       const mult = getAdjustedGlyphEffect("powermult");
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
     },
-    powValue: () => getAdjustedGlyphEffect("powerpow") * getAdjustedGlyphEffect("effarigdimensions"),
+    powValue: () => {
+      const totalPow = getAdjustedGlyphEffect("powerpow") * getAdjustedGlyphEffect("effarigdimensions");
+      return totalPow * (player.dilation.active ? getAdjustedGlyphEffect("dilationpow") : 1);
+    },
     isActive: () => PlayerProgress.realityUnlocked() && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
@@ -263,7 +266,21 @@ GameDatabase.multiplierTabValues.AD = {
         .times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
     },
-    powValue: () => AlchemyResource.power.effectOrDefault(1) * Ra.momentumValue,
+    powValue: dim => {
+      const basePow = AlchemyResource.power.effectOrDefault(1) * Ra.momentumValue;
+      // Not entirely accurate, but returns the geometric mean of all producing dimensions (which should be close)
+      let inflationPow;
+      if (AlchemyResource.inflation.isUnlocked) {
+        if (dim) {
+          inflationPow = AntimatterDimension(dim).multiplier.gte(AlchemyResource.inflation.effectValue) ? 1.05 : 1;
+        } else {
+          const inflated = AntimatterDimensions.all
+            .countWhere(ad => ad.isProducing && ad.multiplier.gte(AlchemyResource.inflation.effectValue));
+          inflationPow = Math.pow(1.05, inflated / AntimatterDimensions.all.countWhere(ad => ad.isProducing));
+        }
+      }
+      return basePow * inflationPow;
+    },
     isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.ALCHEMY,
   },

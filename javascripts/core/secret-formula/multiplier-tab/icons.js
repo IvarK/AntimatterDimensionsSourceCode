@@ -165,6 +165,14 @@ export const MultiplierTabIcons = {
     text: `<i class="fas fa-clock" />`,
     color: "var(--color-reality)",
   },
+  GENERIC_TERESA: {
+    text: "Ϟ",
+    color: "var(--color-teresa--base)",
+  },
+  GENERIC_ENSLAVED: {
+    text: `<div class="o-tab-btn--cel3">\uf0c1</div>`,
+    color: "var(--color-enslaved--base)",
+  },
   GENERIC_V: {
     text: "⌬",
     color: "var(--color-v--base)",
@@ -180,6 +188,10 @@ export const MultiplierTabIcons = {
   BH_PULSE: {
     text: `<i class="fas fa-expand-arrows-alt" />`,
     color: "var(--color-reality)",
+  },
+  GENERIC_LAITELA: {
+    text: "ᛝ",
+    color: "var(--color-laitela--base)",
   },
   SINGULARITY: {
     text: `<i class="fas fa-arrows-to-dot" />`,

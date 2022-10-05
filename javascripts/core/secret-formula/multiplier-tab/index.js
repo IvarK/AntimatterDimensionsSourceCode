@@ -1,6 +1,5 @@
 
 import "./helper-functions";
-import "./tree";
 
 /**
  * Most of the GameDB entries in this folder follow largely the same structure, but have been split into multiple
@@ -40,3 +39,6 @@ import "./galaxies";
 import "./infinities";
 import "./eternities";
 import "./gamespeed";
+
+// Some props in the tree are dynamically generated from value structure in the GameDB
+import "./tree";

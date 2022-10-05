@@ -87,4 +87,17 @@ GameDatabase.multiplierTabValues.DT = {
     isActive: () => player.IAP.totalSTD > 0,
     icon: MultiplierTabIcons.IAP,
   },
+
+  nerfV: {
+    name: "V's Reality",
+    powValue: () => 0.5,
+    isActive: () => V.isRunning,
+    icon: MultiplierTabIcons.GENERIC_V,
+  },
+  nerfPelle: {
+    name: "Doomed Nerfs",
+    multValue: 1e-5,
+    isActive: () => Pelle.isDoomed,
+    icon: MultiplierTabIcons.PELLE,
+  }
 };

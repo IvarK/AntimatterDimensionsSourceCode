@@ -52,6 +52,11 @@ export class PlayerProgress {
     return PlayerProgress.current.isRealityUnlocked;
   }
 
+  static seenAlteredSpeed() {
+    const ec12 = EternityChallenge(12);
+    return this.realityUnlocked() || ec12.completions > 0 || ec12.isRunning;
+  }
+
   static challengeCompleted() {
     return NormalChallenges.all.slice(1).some(c => c.isCompleted);
   }

@@ -1,6 +1,20 @@
 <script>
 import MultiplierBreakdownEntry from "./MultiplierBreakdownEntry";
 
+const MULT_TAB_OPTIONS = [
+  { id: 0, key: "AM", text: "Antimatter Production" },
+  { id: 1, key: "tickspeed", text: "Tickspeed" },
+  { id: 2, key: "AD", text: "Antimatter Dimensions" },
+  { id: 3, key: "IP", text: "Infinity Points" },
+  { id: 4, key: "ID", text: "Infinity Dimensions" },
+  { id: 5, key: "infinities", text: "Infinities" },
+  { id: 6, key: "EP", text: "Eternity Points" },
+  { id: 7, key: "TD", text: "Time Dimensions" },
+  { id: 8, key: "eternities", text: "Eternities" },
+  { id: 9, key: "DT", text: "Dilated Time" },
+  { id: 10, key: "gamespeed", text: "Game Speed" },
+];
+
 export default {
   name: "MultiplierBreakdownTab",
   components: {
@@ -8,30 +22,40 @@ export default {
   },
   data() {
     return {
-      currentOption: 0,
+      currentID: player.options.currentMultiplierSubtab,
     };
   },
   computed: {
-    options: () => ["AM", "tickspeed", "AD", "ID", "IP", "infinities", "TD", "EP", "eternities", "DT", "gamespeed"],
-    resourceName() {
-      return this.accessProp(GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.name);
+    availableOptions() {
+      const checkActiveKey = key => {
+        const act = GameDatabase.multiplierTabValues[key].total.isActive;
+        return typeof act === "function" ? act() : act;
+      };
+      return MULT_TAB_OPTIONS.filter(opt => checkActiveKey(opt.key));
+    },
+    currentKey() {
+      return MULT_TAB_OPTIONS.find(opt => opt.id === this.currentID).key;
     },
     resourceKey() {
-      return `${this.options[this.currentOption]}_total`;
+      return `${this.currentKey}_total`;
     },
     resourceSymbols() {
-      return GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.overlay;
+      return GameDatabase.multiplierTabValues[this.currentKey].total.overlay;
     }
   },
   methods: {
-    changeResource() {
-      do {
-        this.currentOption = (this.currentOption + 1) % this.options.length;
-        this.$recompute("resourceKey");
-      } while (!this.accessProp(GameDatabase.multiplierTabValues[this.options[this.currentOption]].total.isActive));
-    },
     accessProp(prop) {
       return typeof prop === "function" ? prop() : prop;
+    },
+    subtabClassObject(option) {
+      return {
+        "c-multiplier-subtab-btn": true,
+        "c-multiplier-subtab-btn--active": option.key === this.currentKey,
+      };
+    },
+    clickSubtab(index) {
+      this.currentID = index;
+      player.options.currentMultiplierSubtab = MULT_TAB_OPTIONS.find(opt => opt.key === this.currentKey).id;
     }
   }
 };
@@ -39,20 +63,20 @@ export default {
 
 <template>
   <div class="c-stats-tab">
-    <div class="c-multiplier-tab-text-line">
-      Currently viewing multiplier breakdown for {{ resourceName }}
-      <span
-        class="o-primary-btn"
-        @click="changeResource"
+    <div class="l-multiplier-subtab-btn-container">
+      <button
+        v-for="(option, index) in availableOptions"
+        :key="option.key"
+        :class="subtabClassObject(option)"
+        @click="clickSubtab(index)"
       >
-        Change Resource
-      </span>
+        {{ option.text }}
+      </button>
     </div>
-    <br>
     <div class="c-list-container">
       <span
-        v-for="(symbol, index) in resourceSymbols"
-        :key="index"
+        v-for="symbol in resourceSymbols"
+        :key="symbol"
       >
         <span
           class="c-symbol-overlay"
@@ -67,7 +91,7 @@ export default {
       <div class="c-multiplier-tab-text-line">
         Note: Entries are only expandable if they contain multiple sources which can be different values.
         For example, any effects which affect all Dimensions of any type equally will not expand into a
-        list of eight identical numbers.
+        list of eight identical numbers. <b>Some entries may cause lag if expanded out fully.</b>
       </div>
     </div>
   </div>
@@ -78,14 +102,39 @@ export default {
   position: relative;
 }
 
-.c-multiplier-tab-text-line {
+.l-multiplier-subtab-btn-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  color: var(--color-text);
-  width: 80rem;
+  width: 90rem;
+  height: calc(4rem - var(--var-border-radius, 0.2rem));
+}
+
+.c-multiplier-subtab-btn {
+  width: 100%;
+  height: 4rem;
+  margin: 0 0.5rem -0.1rem;
+  z-index: 1;
+  text-align: center;
+  font-family: Typewriter;
+  font-size: 1rem;
   font-weight: bold;
+  color: var(--color-text);
+  background-color: var(--color-base);
+  border: var(--var-border-width, 0.2rem) solid;
+  border-radius: var(--var-border-radius, 0.5rem) var(--var-border-radius, 0.5rem) 0 0;
+  cursor: pointer;
+}
+
+.c-multiplier-subtab-btn--active {
+  border-bottom: none;
+  padding-bottom: 0.2rem;
+  cursor: default;
+}
+
+.c-multiplier-tab-text-line {
+  color: var(--color-text);
+  width: 90rem;
   font-size: 1.3rem;
 }
 

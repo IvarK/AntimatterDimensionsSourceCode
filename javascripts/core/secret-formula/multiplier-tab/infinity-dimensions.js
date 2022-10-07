@@ -97,7 +97,7 @@ GameDatabase.multiplierTabValues.ID = {
     name: "Replicanti Multiplier",
     multValue: dim => Decimal.pow(replicantiMult(), dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
     isActive: () => Replicanti.areUnlocked,
-    icon: MultiplierTabIcons.REPLICANTI,
+    icon: MultiplierTabIcons.SPECIFIC_GLYPH("replication"),
   },
   achievement: {
     name: dim => (dim ? `Achievements (ID ${dim})` : "Achievements"),

@@ -39,7 +39,7 @@ GameDatabase.multiplierTabValues.galaxies = {
       return Decimal.pow10(rg);
     },
     isActive: () => Replicanti.areUnlocked,
-    icon: MultiplierTabIcons.REPLICANTI,
+    icon: MultiplierTabIcons.SPECIFIC_GLYPH("replication"),
   },
   tachyon: {
     name: "Tachyon Galaxies",

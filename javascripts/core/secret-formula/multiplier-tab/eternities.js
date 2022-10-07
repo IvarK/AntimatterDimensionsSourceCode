@@ -8,7 +8,7 @@ GameDatabase.multiplierTabValues.eternities = {
     name: "Eternities gained per Eternity",
     isBase: true,
     multValue: () => gainedEternities(),
-    isActive: () => !Pelle.isDoomed,
+    isActive: () => Achievement(113).isUnlocked,
     overlay: ["Δ", "<i class='fa-solid fa-arrows-rotate' />"],
   },
   achievement: {

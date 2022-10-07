@@ -217,13 +217,12 @@ export default {
         <b>
           {{ totalString() }}
         </b>
-        <span
+        <i
           v-if="groups.length > 1"
-          class="o-primary-btn"
+          v-tooltip="'Change Multiplier Grouping'"
+          class="o-primary-btn c-change-breakdown-btn fas fa-arrows-rotate"
           @click="changeGroup"
-        >
-          Change Grouping
-        </span>
+        />
       </div>
       <div v-if="isEmpty">
         No Active Multipliers
@@ -268,8 +267,8 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  max-width: 80rem;
-  border: 0.2rem solid;
+  max-width: 90rem;
+  border: var(--var-border-width, 0.2rem) solid var(--color-text);
   padding: 0.5rem;
   font-weight: normal;
   background-color: var(--color-base);
@@ -320,6 +319,12 @@ export default {
   height: 100%;
   width: 90%;
   padding: 0.2rem;
+}
+
+.c-change-breakdown-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .c-total-mult {

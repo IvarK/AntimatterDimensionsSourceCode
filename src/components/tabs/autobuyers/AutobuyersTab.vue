@@ -36,8 +36,7 @@ export default {
     // It only makes sense to show this if the player has seen gamespeed-altering effects, but we should keep it there
     // permanently as soon as they have
     hasSeenGamespeedAlteringEffects() {
-      const ec12 = EternityChallenge(12);
-      return PlayerProgress.realityUnlocked() || ec12.completions > 0 || ec12.isRunning;
+      return PlayerProgress.seenAlteredSpeed();
     },
     gameTickLength() {
       return `${formatInt(player.options.updateRate)} ms`;

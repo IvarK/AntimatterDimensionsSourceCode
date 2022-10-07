@@ -8,7 +8,7 @@ GameDatabase.multiplierTabValues.gamespeed = {
     name: "Current Game speed",
     isBase: true,
     multValue: () => getGameSpeedupForDisplay(),
-    isActive: () => !Pelle.isDoomed,
+    isActive: () => PlayerProgress.seenAlteredSpeed(),
     dilationEffect: () => (Effarig.isRunning ? Effarig.multDilation : 1),
     overlay: ["Δ", `<i class="fas fa-clock" />`, `<i class="fas fa-circle" />`],
   },

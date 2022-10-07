@@ -36,7 +36,7 @@ GameDatabase.multiplierTabValues.general = {
       const base = MultiplierTabIcons.ACHIEVEMENT;
       return {
         color: base.color,
-        text: `${base.text}${ach}`,
+        symbol: `${base.symbol}${ach}`,
       };
     },
   },
@@ -64,7 +64,7 @@ GameDatabase.multiplierTabValues.general = {
       const base = MultiplierTabIcons.TIME_STUDY;
       return {
         color: base.color,
-        text: `${base.text}${ts}`,
+        symbol: `${base.symbol}${ts}`,
       };
     },
   },
@@ -89,7 +89,7 @@ GameDatabase.multiplierTabValues.general = {
       const base = MultiplierTabIcons.CHALLENGE("infinity");
       return {
         color: base.color,
-        text: `${base.text}${ic}`,
+        symbol: `${base.symbol}${ic}`,
       };
     },
   },
@@ -112,7 +112,7 @@ GameDatabase.multiplierTabValues.general = {
       const base = MultiplierTabIcons.CHALLENGE("eternity");
       return {
         color: base.color,
-        text: `${base.text}${ec}`,
+        symbol: `${base.symbol}${ec}`,
       };
     },
   },

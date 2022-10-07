@@ -93,7 +93,7 @@ export default {
     styleObject(index) {
       const netPerc = this.percentList.sum();
       const isNerf = this.percentList[index] < 0;
-      const baseColor = this.getProp(this.currentGroupKeys[index], "icon")?.color;
+      const iconObj = this.getProp(this.currentGroupKeys[index], "icon");
       const barSize = perc => (perc > 0 ? perc * netPerc : -perc);
       return {
         position: "absolute",
@@ -101,9 +101,10 @@ export default {
         height: `${100 * barSize(this.percentList[index])}%`,
         width: "100%",
         border: this.isEmpty ? "" : "0.1rem solid var(--color-text)",
+        color: iconObj?.textColor ?? "black",
         background: isNerf
-          ? `repeating-linear-gradient(-45deg, var(--color-bad), ${baseColor} 0.8rem)`
-          : baseColor,
+          ? `repeating-linear-gradient(-45deg, var(--color-bad), ${iconObj?.color} 0.8rem)`
+          : iconObj?.color,
       };
     },
     singleEntryClass(index) {
@@ -113,7 +114,7 @@ export default {
       };
     },
     barSymbol(index) {
-      return this.getProp(this.currentGroupKeys[index], "icon")?.text ?? null;
+      return this.getProp(this.currentGroupKeys[index], "icon")?.symbol ?? null;
     },
 
     hasChildComp(key) {
@@ -161,7 +162,10 @@ export default {
       else {
         const values = [];
         if (Decimal.neq(this.baseMultList[index], 1)) {
-          values.push(`/${format(this.baseMultList[index].reciprocal(), 2, 2)}`);
+          const formatFn = this.getProp(this.currentGroupKeys[index], "isBase")
+            ? x => format(x, 2, 2)
+            : x => `/${format(x.reciprocal(), 2, 2)}`;
+          values.push(formatFn(this.baseMultList[index]));
         }
         if (this.powList[index] !== 1) values.push(formatPow(this.powList[index], 2, 3));
         valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
@@ -294,7 +298,6 @@ export default {
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
-  color: var(--color-text);
   pointer-events: none;
   user-select: none;
   overflow: hidden;

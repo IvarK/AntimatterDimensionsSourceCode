@@ -1,32 +1,39 @@
-
+/**
+ * Every entry in this object is a styling specification for bars within the multiplier tab.
+ * {
+ *  @property {String} text       String specifying the color to render the background of the bar (often a CSS var)
+ *  @property {String} symbol     String to show as text on the bar, may be HTML (allows for font awesome icons)
+ *  @property {String} textColor  A text color to override the default --color-text for better contrast
+ * }
+ */
 export const MultiplierTabIcons = {
   DIMENSION(type, tier) {
     const tierText = tier ?? "";
     switch (type) {
       case "AD":
-        return { text: `Ω${tierText}`, color: "var(--color-antimatter)" };
+        return { symbol: `<b>Ω${tierText}</b>`, color: "var(--color-antimatter)" };
       case "ID":
-        return { text: `∞${tierText}`, color: "var(--color-infinity)" };
+        return { symbol: `<b>∞${tierText}</b>`, color: "var(--color-infinity)" };
       case "TD":
-        return { text: `Δ${tierText}`, color: "var(--color-eternity)" };
+        return { symbol: `<b>Δ${tierText}</b>`, color: "var(--color-eternity)" };
       default:
         throw new Error("Unrecognized dimension type in multiplier tab icons");
     }
   },
   PURCHASE(type, tier) {
-    const text = `<i class="fas fa-arrow-up-right-dots" />${tier ?? ""}`;
+    const symbol = `<i class="fas fa-arrow-up-right-dots" />${tier ?? ""}`;
     switch (type) {
       case "AD":
-        return { text, color: "var(--color-antimatter)" };
+        return { symbol, color: "var(--color-antimatter)" };
       case "ID":
-        return { text, color: "var(--color-infinity)" };
+        return { symbol, color: "var(--color-infinity)" };
       case "TD":
-        return { text, color: "var(--color-eternity)" };
+        return { symbol, color: "var(--color-eternity)" };
       case "baseID":
-        return { text: `<i class="fas fa-arrows-up-to-line" />`, color: "var(--color-infinity)" };
+        return { symbol: `<i class="fas fa-arrows-up-to-line" />`, color: "var(--color-infinity)" };
       case "tesseractID":
         return {
-          text: `<i class="fas fa-up-right-and-down-left-from-center" />`,
+          symbol: `<i class="fas fa-up-right-and-down-left-from-center" />`,
           color: "var(--color-enslaved--base)"
         };
       default:
@@ -37,9 +44,9 @@ export const MultiplierTabIcons = {
     const tierText = `<i class="fas fa-arrow-down-wide-short" />${tier ?? ""}`;
     switch (type) {
       case "infinity":
-        return { text: `∞${tierText}`, color: "var(--color-infinity)" };
+        return { symbol: `<b>∞</b>${tierText}`, color: "var(--color-infinity)" };
       case "eternity":
-        return { text: `Δ${tierText}`, color: "var(--color-eternity)" };
+        return { symbol: `<b>Δ</b>${tierText}`, color: "var(--color-eternity)" };
       default:
         throw new Error("Unrecognized challenge type in multiplier tab icons");
     }
@@ -49,13 +56,13 @@ export const MultiplierTabIcons = {
     const icon = `<i class="fas fa-turn-down" />`;
     switch (type) {
       case "antimatter":
-        return { text: `Ω${icon}`, color: "var(--color-antimatter)" };
+        return { symbol: `<b>Ω</b>${icon}`, color: "var(--color-antimatter)" };
       case "infinity":
-        return { text: `∞${icon}`, color: "var(--color-infinity)" };
+        return { symbol: `<b>∞</b>${icon}`, color: "var(--color-infinity)" };
       case "time":
-        return { text: `Δ${icon}`, color: "var(--color-eternity)" };
+        return { symbol: `<b>Δ</b>${icon}`, color: "var(--color-eternity)" };
       case "dilation":
-        return { text: `Ψ${icon}`, color: "var(--color-dilation)" };
+        return { symbol: `<b>Ψ</b>${icon}`, color: "var(--color-dilation)", textColor: "black" };
       default:
         throw new Error("Unrecognized sacrifice type in multiplier tab icons");
     }
@@ -64,15 +71,15 @@ export const MultiplierTabIcons = {
     const icon = `<i class="fas fa-arrow-up" />`;
     switch (type) {
       case "infinity":
-        return { text: `∞${icon}`, color: "var(--color-infinity)" };
+        return { symbol: `<b>∞</b>${icon}`, color: "var(--color-infinity)" };
       case "eternity":
-        return { text: `Δ${icon}`, color: "var(--color-eternity)" };
+        return { symbol: `<b>Δ</b>${icon}`, color: "var(--color-eternity)" };
       case "dilation":
-        return { text: `Ψ${icon}`, color: "var(--color-dilation)" };
+        return { symbol: `<b>Ψ</b>${icon}`, color: "var(--color-dilation)" };
       case "reality":
-        return { text: `Ϟ${icon}`, color: "var(--color-reality)" };
+        return { symbol: `<b>Ϟ</b>${icon}`, color: "var(--color-reality)" };
       case "imaginary":
-        return { text: `<i class="far fa-lightbulb" />${icon}`, color: "var(--color-ra--base)" };
+        return { symbol: `<i class="far fa-lightbulb" />${icon}`, color: "var(--color-ra--base)" };
       default:
         throw new Error("Unrecognized upgrade type in multiplier tab icons");
     }
@@ -81,13 +88,13 @@ export const MultiplierTabIcons = {
   CONVERT_FROM(currency) {
     if (currency === "AM") {
       return {
-        text: `<i class='fas fa-atom' /><i class='fa-solid fa-arrow-right-arrow-left' />`,
+        symbol: `<i class='fas fa-atom' /><i class='fa-solid fa-arrow-right-arrow-left' />`,
         color: "var(--color-antimatter)",
       };
     }
     if (currency === "IP") {
       return {
-        text: `∞<i class='fa-solid fa-arrow-right-arrow-left' />`,
+        symbol: `<b>∞</b><i class='fa-solid fa-arrow-right-arrow-left' />`,
         color: "var(--color-infinity)",
       };
     }
@@ -99,110 +106,113 @@ export const MultiplierTabIcons = {
     if (currency === "IP") color = "var(--color-infinity)";
     if (currency === "EP") color = "var(--color-eternity)";
     return {
-      text: `<i class='fas fa-calculator' />`,
+      symbol: `<i class='fas fa-calculator' />`,
       color,
     };
   },
   ANTIMATTER: {
-    text: `<i class='fas fa-atom' />`,
+    symbol: `<i class='fas fa-atom' />`,
     color: "var(--color-antimatter)",
   },
   DIMBOOST: {
-    text: `<i class="fas fa-angles-up" />`,
+    symbol: `<i class="fas fa-angles-up" />`,
     color: GameDatabase.reality.glyphTypes.power.color,
   },
   TICKSPEED: {
-    text: `<i class="fas fa-clock" />`,
+    symbol: `<i class="fas fa-clock" />`,
     color: "var(--color-eternity)",
   },
   GALAXY: {
-    text: `<i class="fas fa-bahai" />`,
+    symbol: `<i class="fas fa-bahai" />`,
     color: "var(--color-eternity)",
   },
   ACHIEVEMENT: {
-    text: `<i class="fas fa-trophy" />`,
+    symbol: `<i class="fas fa-trophy" />`,
     color: "var(--color-v--base)",
+    textColor: "black",
   },
   BREAK_INFINITY: {
-    text: `<i class="fab fa-skyatlas" />`,
+    symbol: `<i class="fab fa-skyatlas" />`,
     color: "var(--color-infinity)",
+    textColor: "black",
   },
   INFINITY_POWER: {
-    text: `∞<i class="fas fa-arrows-turn-right" />`,
+    symbol: `<b>∞</b><i class="fas fa-arrows-turn-right" />`,
     color: "var(--color-infinity)",
+    textColor: "black",
   },
   IPOW_CONVERSION: {
-    text: `<i class="fas fa-arrow-down-up-across-line" />`,
+    symbol: `<i class="fas fa-arrow-down-up-across-line" />`,
     color: "var(--color-infinity)",
-  },
-  REPLICANTI: {
-    text: "Ξ",
-    color: GameDatabase.reality.glyphTypes.replication.color,
+    textColor: "black",
   },
   TIME_STUDY: {
-    text: `<i class="fas fa-book" />`,
+    symbol: `<i class="fas fa-book" />`,
     color: "var(--color-eternity)",
   },
   TACHYON_PARTICLES: {
-    text: `<i class="fas fa-meteor" />`,
+    symbol: `<i class="fas fa-meteor" />`,
     color: "var(--color-dilation)",
   },
   GENERIC_GLYPH: {
-    text: `<i class="fas fa-clone" />`,
+    symbol: `<i class="fas fa-clone" />`,
     color: "var(--color-reality)",
   },
   SPECIFIC_GLYPH(type) {
     return {
-      text: GameDatabase.reality.glyphTypes[type].symbol,
+      symbol: `<b>${GameDatabase.reality.glyphTypes[type].symbol}</b>`,
       color: GameDatabase.reality.glyphTypes[type].color,
     };
   },
   BLACK_HOLE: {
-    text: `<i class="fas fa-circle" />`,
+    symbol: `<i class="fas fa-circle" />`,
     color: "var(--color-reality)",
   },
   GAMESPEED: {
-    text: `<i class="fas fa-clock" />`,
+    symbol: `<i class="fas fa-clock" />`,
     color: "var(--color-reality)",
   },
   GENERIC_TERESA: {
-    text: "Ϟ",
+    symbol: "<b>Ϟ</b>",
     color: "var(--color-teresa--base)",
   },
   GENERIC_ENSLAVED: {
-    text: `<div class="o-tab-btn--cel3">\uf0c1</div>`,
+    symbol: `<div class="o-tab-btn--cel3">\uf0c1</div>`,
     color: "var(--color-enslaved--base)",
   },
   GENERIC_V: {
-    text: "⌬",
+    symbol: "<b>⌬</b>",
     color: "var(--color-v--base)",
+    textColor: "black",
   },
   GENERIC_RA: {
-    text: `<i class="fas fa-sun" />`,
+    symbol: `<i class="fas fa-sun" />`,
     color: "var(--color-ra--base)",
   },
   ALCHEMY: {
-    text: `<i class="fas fa-vial" />`,
+    symbol: `<i class="fas fa-vial" />`,
     color: "var(--color-ra-pet--effarig)",
   },
   BH_PULSE: {
-    text: `<i class="fas fa-expand-arrows-alt" />`,
+    symbol: `<i class="fas fa-expand-arrows-alt" />`,
     color: "var(--color-reality)",
   },
   GENERIC_LAITELA: {
-    text: "ᛝ",
+    symbol: "<b>ᛝ</b>",
     color: "var(--color-laitela--base)",
+    textColor: "var(--color-laitela--accent)",
   },
   SINGULARITY: {
-    text: `<i class="fas fa-arrows-to-dot" />`,
+    symbol: `<i class="fas fa-arrows-to-dot" />`,
     color: "var(--color-laitela--base)",
+    textColor: "var(--color-laitela--accent)",
   },
   PELLE: {
-    text: "♅",
+    symbol: "<b>♅</b>",
     color: "var(--color-pelle--base)",
   },
   IAP: {
-    text: `<i class="fas fa-coins" />`,
+    symbol: `<i class="fas fa-coins" />`,
     color: "var(--color-accent)",
   },
 };

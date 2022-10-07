@@ -54,7 +54,7 @@ export default {
       };
     },
     clickSubtab(index) {
-      this.currentID = index;
+      this.currentID = this.availableOptions[index].id;
       player.options.currentMultiplierSubtab = MULT_TAB_OPTIONS.find(opt => opt.key === this.currentKey).id;
     }
   }
@@ -91,7 +91,9 @@ export default {
       <div class="c-multiplier-tab-text-line">
         Note: Entries are only expandable if they contain multiple sources which can be different values.
         For example, any effects which affect all Dimensions of any type equally will not expand into a
-        list of eight identical numbers. <b>Some entries may cause lag if expanded out fully.</b>
+        list of eight identical numbers.
+        <br>
+        <b>Some entries may cause lag if expanded out fully.</b>
       </div>
     </div>
   </div>

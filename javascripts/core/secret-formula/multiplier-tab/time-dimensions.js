@@ -176,8 +176,7 @@ GameDatabase.multiplierTabValues.TD = {
   },
   imaginaryUpgrade: {
     name: "Suspicion of Interference",
-    multValue: dim => Decimal.pow(ImaginaryUpgrade(11).effectOrDefault(1),
-      dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
+    powValue: () => ImaginaryUpgrade(11).effectOrDefault(1),
     isActive: () => ImaginaryUpgrade(11).canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("imaginary"),
   },

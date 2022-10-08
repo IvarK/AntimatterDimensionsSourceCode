@@ -40,7 +40,7 @@ GameDatabase.multiplierTabValues.IP = {
       return `log(AM)/${formatInt(308)} ➜ log(AM)/${format(div, 2, 1)}`;
     },
     powValue: () => 308 / Effects.min(308, Achievement(103), TimeStudy(111)),
-    isActive: () => player.break,
+    isActive: () => Achievement(103).canBeApplied || TimeStudy(111).isBought,
     icon: MultiplierTabIcons.DIVISOR("IP"),
   },
   infinityUpgrade: {

@@ -71,6 +71,9 @@ export const MultiplierTabHelper = {
       galFrac = (1 + effectiveCount / logBase * logPerGalaxy);
     }
 
+    // Artificially inflate the galaxy portion in order to make the breakdown closer to 50/50 in common situations
+    galFrac *= 3;
+
     const sum = tickFrac + galFrac;
     return {
       tickspeed: tickFrac / sum,

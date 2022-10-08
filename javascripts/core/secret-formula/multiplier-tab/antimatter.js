@@ -8,7 +8,7 @@ GameDatabase.multiplierTabValues.AM = {
     name: "Antimatter Production",
     displayOverride: () => `${format(Currency.antimatter.productionPerSecond, 2, 2)}/sec`,
     multValue: () => new Decimal(Currency.antimatter.productionPerSecond),
-    isActive: () => AntimatterDimension(1).isProducing,
+    isActive: true,
     overlay: ["<i class='fas fa-atom' />"],
   },
   effarigAM: {

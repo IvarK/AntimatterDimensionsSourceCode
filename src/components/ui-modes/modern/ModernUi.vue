@@ -6,6 +6,8 @@ import HeaderChallengeEffects from "../HeaderChallengeEffects";
 import HeaderPrestigeGroup from "../HeaderPrestigeGroup";
 import NewsTicker from "../NewsTicker";
 
+import GameSpeedDisplay from "@/components/GameSpeedDisplay";
+
 
 export default {
   name: "ModernUi",
@@ -15,11 +17,13 @@ export default {
     HeaderChallengeEffects,
     NewsTicker,
     HeaderBlackHole,
-    HeaderPrestigeGroup
+    HeaderPrestigeGroup,
+    GameSpeedDisplay,
   },
   data() {
     return {
-      bigCrunch: false
+      bigCrunch: false,
+      hasReality: false,
     };
   },
   computed: {
@@ -34,6 +38,7 @@ export default {
     update() {
       const crunchButtonVisible = !player.break && Player.canCrunch;
       this.bigCrunch = crunchButtonVisible && Time.bestInfinityRealTime.totalMinutes > 1;
+      this.hasReality = PlayerProgress.realityUnlocked();
     },
     handleClick() {
       if (PlayerProgress.infinityUnlocked()) manualBigCrunchResetRequest();
@@ -64,6 +69,8 @@ export default {
         <div class="information-header">
           <HeaderChallengeDisplay />
           <HeaderChallengeEffects />
+          <GameSpeedDisplay v-if="hasReality" />
+          <br v-if="hasReality">
           <HeaderBlackHole />
         </div>
         <slot />

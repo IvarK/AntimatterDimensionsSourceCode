@@ -78,6 +78,7 @@ export const Cloud = {
       const saveId = GameStorage.currentSlot;
       const cloudSave = root.saves[saveId];
       const thisCloudHash = sha512_256(GameSaveSerializer.serialize(cloudSave));
+      if (!this.lastCloudHash) this.lastCloudHash = thisCloudHash;
       const localSave = GameStorage.saves[saveId];
       const saveComparison = this.compareSaves(cloudSave, localSave, thisCloudHash);
 
@@ -91,8 +92,8 @@ export const Cloud = {
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
       const hasConflict = hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
-        saveComparison.diffSTD > 0 || saveComparison.differentName || saveComparison.hashMismatch);
-      if (hasConflict && !this.hasSeenSavingConflict) {
+        saveComparison.diffSTD > 0 || saveComparison.differentName);
+      if ((hasConflict && !this.hasSeenSavingConflict) || saveComparison.hashMismatch) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
         Modal.cloudSaveConflict.show();
       } else if (!hasConflict || (this.hasSeenSavingConflict && this.shouldOverwriteCloudSave)) {

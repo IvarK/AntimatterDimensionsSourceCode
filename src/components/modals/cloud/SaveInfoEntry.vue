@@ -124,7 +124,7 @@ export default {
       // Style it appropriately
       if (isBetter === 0) return `${layerName} ${layerValue}`;
       const parseColor = color => getComputedStyle(document.body).getPropertyValue(`--color-${color}`).split("#")[1];
-      const colorTag = `<span style="color:#${parseColor(isBetter === 1 ? "good" : "bad")}">`;
+      const colorTag = `<span style="color:#${parseColor(isBetter === 1 ? "good" : "infinity")}">`;
       return isSameLayer
         ? `${layerName} ${colorTag}${layerValue}</span>`
         : `${colorTag}${layerName} ${layerValue}</span>`;

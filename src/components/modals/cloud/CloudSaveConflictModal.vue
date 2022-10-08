@@ -37,7 +37,7 @@ export default {
     },
     suggestionText() {
       const goodStyle = `style="color: var(--color-good)"`;
-      const badStyle = `style="color: var(--color-bad)"`;
+      const badStyle = `style="color: var(--color-infinity)"`;
 
       const suggestions = ["Saving to the Cloud "];
       const cloudProg = this.conflict.cloud.compositeProgress, localProg = this.conflict.local.compositeProgress;

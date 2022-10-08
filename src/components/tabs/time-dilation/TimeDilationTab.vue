@@ -12,6 +12,7 @@ export default {
     return {
       tachyons: new Decimal(),
       dilatedTime: new Decimal(),
+      currentDTGain: new Decimal(),
       dilatedTimeIncome: new Decimal(),
       galaxyThreshold: new Decimal(),
       galaxies: 0,
@@ -62,13 +63,27 @@ export default {
     },
     ttGenerator() {
       return DilationUpgrade.ttGenerator;
+    },
+    timeEstimate() {
+      if (this.currentDTGain.eq(0)) return null;
+      if (PelleRifts.paradox.isActive) {
+        const drain = Pelle.riftDrainPercent;
+        const rawDTGain = this.currentDTGain.times(getGameSpeedupForDisplay());
+        const goalNetRate = rawDTGain.minus(Decimal.multiply(this.galaxyThreshold, drain));
+        const currNetRate = rawDTGain.minus(this.currentDT.multiply(drain));
+        if (goalNetRate.lt(0)) return "Never affordable due to Rift drain";
+        return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln() / drain).toTimeEstimate();
+      }
+      return TimeSpan.fromSeconds(Decimal.sub(this.galaxyThreshold, this.dilatedTime)
+        .div(this.currentDTGain.times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
     }
   },
   methods: {
     update() {
       this.tachyons.copyFrom(Currency.tachyonParticles);
       this.dilatedTime.copyFrom(Currency.dilatedTime);
-      const rawDTGain = getDilationGainPerSecond().times(getGameSpeedupForDisplay());
+      this.currentDTGain.copyFrom(getDilationGainPerSecond());
+      const rawDTGain = this.currentDTGain.times(getGameSpeedupForDisplay());
       if (PelleRifts.paradox.isActive) {
         // The number can be small and either positive or negative with the rift active, which means that extra care
         // needs to be taken to get the calculation as close to correct as possible. This relies on some details
@@ -112,7 +127,10 @@ export default {
       Next
       <span v-if="tachyonGalaxyGain > 1">{{ formatInt(tachyonGalaxyGain) }}</span>
       {{ pluralize("Tachyon Galaxy", tachyonGalaxyGain) }} at
-      <span class="c-dilation-tab__galaxy-threshold">{{ format(galaxyThreshold, 2, 1) }}</span>
+      <span
+        class="c-dilation-tab__galaxy-threshold"
+        :ach-tooltip="timeEstimate"
+      >{{ format(galaxyThreshold, 2, 1) }}</span>
       Dilated Time, gained total of
       <span class="c-dilation-tab__galaxies">{{ formatInt(galaxies) }}</span>
       {{ pluralize("Tachyon Galaxy", galaxies) }}

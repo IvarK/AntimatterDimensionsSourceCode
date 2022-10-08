@@ -308,6 +308,30 @@ GameDatabase.multiplierTabValues.AD = {
     icon: MultiplierTabIcons.IAP,
   },
 
+  effectNC: {
+    name: dim => (dim ? `Normal Challenge Effect (AD ${dim})` : "Infinity Challenge Nerf"),
+    multValue: dim => {
+      let dimMults = Array.repeat(DC.D1, 9);
+      if (NormalChallenge(2).isRunning) {
+        dimMults = Array.repeat(new Decimal(player.chall2Pow), 9);
+      } else if (NormalChallenge(3).isRunning) {
+        dimMults[0] = new Decimal(player.chall3Pow);
+      } else if (NormalChallenge(12).isRunning) {
+        dimMults[2] = AntimatterDimension(2).totalAmount.pow(0.6);
+        dimMults[4] = AntimatterDimension(4).totalAmount.pow(0.4);
+        dimMults[6] = AntimatterDimension(6).totalAmount.pow(0.2);
+      }
+
+      if (dim) return dimMults[dim];
+      let totalMult = DC.D1;
+      for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount("AD"); tier++) {
+        totalMult = totalMult.times(dimMults[tier]);
+      }
+      return totalMult;
+    },
+    isActive: () => [2, 3, 12].some(c => NormalChallenge(c).isRunning),
+    icon: MultiplierTabIcons.CHALLENGE("infinity"),
+  },
   nerfIC: {
     name: dim => (dim ? `Infinity Challenge Nerf (AD ${dim})` : "Infinity Challenge Nerf"),
     multValue: dim => {

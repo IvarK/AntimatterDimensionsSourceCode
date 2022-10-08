@@ -39,7 +39,7 @@ GameDatabase.multiplierTabValues.gamespeed = {
     multValue: () => (Enslaved.isAutoReleasing
       ? Math.max(Enslaved.autoReleaseSpeed / getGameSpeedupFactor(), 1)
       : getGameSpeedupFactor()),
-    isActive: () => Enslaved.isAutoReleasing,
+    isActive: () => Enslaved.canRelease && Enslaved.isAutoReleasing,
     icon: MultiplierTabIcons.BH_PULSE,
   },
   singularity: {

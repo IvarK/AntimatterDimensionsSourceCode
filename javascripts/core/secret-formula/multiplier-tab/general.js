@@ -104,7 +104,7 @@ GameDatabase.multiplierTabValues.general = {
         }
         return totalEffect;
       }
-      if (ec === 2) return dim === 1 ? EternityChallenge(ec).reward.effectValue : DC.D1;
+      if (ec === 2) return dim === "ID1" ? EternityChallenge(ec).reward.effectValue : DC.D1;
       return EternityChallenge(ec).reward.effectValue;
     },
     isActive: ec => EternityChallenge(ec).completions > 0,

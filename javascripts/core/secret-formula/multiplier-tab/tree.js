@@ -116,7 +116,7 @@ const targetedEffects = {
   timeStudy: {
     checkFn: MultiplierTabHelper.timeStudyDimCheck,
     AD: [71, 91, 101, 161, 193, 214, 234],
-    ID: [72, 82, 92, 162],
+    ID: [72, 82, 92, 102, 162],
     TD: [11, 73, 93, 103, 151, 221, 227, 301],
     IP: [41, 51, 141, 142, 143],
     EP: [61, 121, 122, 123],

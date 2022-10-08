@@ -100,7 +100,7 @@ export default {
       <ModalOptionsToggleButton
         v-if="infinityUnlocked"
         v-model="bigCrunch"
-        text="Big crunch:"
+        text="Big Crunch:"
       />
       <ModalOptionsToggleButton
         v-if="eternityUnlocked"

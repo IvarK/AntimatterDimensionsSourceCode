@@ -61,7 +61,7 @@ html {
   --color-bad: #b84b5f;
   --color-gh-purple: #8957e5;
   --color-notification: red;
-  --color-overlay: rgba(30, 30, 50, 90%);
+  --color-overlay: rgba(30, 30, 50, 70%);
 
   --color-antimatter: #2196f3;
   --color-infinity: #b67f33;
@@ -5784,7 +5784,7 @@ properly on certain themes. */
 .c-modal-IAP__warning {
   font-size: 1.6rem;
   font-weight: bold;
-  color: #ff6666;
+  color: var(--color-notification);
 }
 
 /* #endregion c-modal-import */

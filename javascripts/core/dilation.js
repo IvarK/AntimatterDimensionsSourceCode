@@ -151,7 +151,7 @@ function tachyonGainMultiplier() {
 }
 
 export function rewardTP() {
-  Currency.tachyonParticles.bumpTo(getTP(Currency.antimatter.value, true));
+  Currency.tachyonParticles.bumpTo(getTP(player.records.thisEternity.maxAM, true));
   player.dilation.lastEP = Currency.eternityPoints.value;
 }
 

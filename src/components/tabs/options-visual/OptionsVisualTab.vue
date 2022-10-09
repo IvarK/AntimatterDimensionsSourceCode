@@ -51,7 +51,7 @@ export default {
   methods: {
     update() {
       const options = player.options;
-      this.theme = options.theme;
+      this.theme = Theme.currentName();
       this.notation = options.notation;
       this.commas = options.commas;
       this.headerTextColored = options.headerTextColored;

@@ -72,7 +72,7 @@ export default {
       this.tachyonsUnlocked = progress.isRealityUnlocked || Currency.tachyonParticles.gt(0);
       this.realityUnlocked = progress.isRealityUnlocked;
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
-      this.isS11Active = player.options.theme === "S11";
+      this.isS11Active = Theme.currentName() === "S11";
 
       const options = player.options.animations;
       this.bigCrunch = options.bigCrunch;
@@ -126,7 +126,7 @@ export default {
         <ModalOptionsToggleButton
           v-if="animatedThemeUnlocked"
           v-model="background"
-          onclick="Themes.find(player.options.theme).set();"
+          onclick="Themes.find(Theme.currentName()).set();"
           text="Background:"
         />
       </div>
@@ -134,7 +134,7 @@ export default {
         <ModalOptionsToggleButton
           v-if="animatedThemeUnlocked"
           v-model="background"
-          onclick="Themes.find(player.options.theme).set();"
+          onclick="Themes.find(Theme.currentName()).set();"
           text="Blobsnow:"
         />
       </div>

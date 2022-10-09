@@ -167,9 +167,10 @@ function getGlyphLevelSources() {
   // Glyph levels are the product of 3 or 4 sources (eternities are enabled via upgrade).
   // Once Effarig is unlocked, these contributions can be adjusted; the math is described in detail
   // in getGlyphLevelInputs. These *Base values are the nominal inputs, as they would be multiplied without Effarig
-  const eternityPoints = Player.canEternity
+  let eternityPoints = Player.canEternity
     ? Currency.eternityPoints.value.plus(gainedEternityPoints())
     : Currency.eternityPoints.value;
+  eternityPoints = Decimal.max(player.records.thisReality.maxEP, eternityPoints);
   const epCoeff = 0.016;
   const epBase = Math.pow(Math.max(1, eternityPoints.pLog10()), 0.5) * epCoeff;
   const replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");

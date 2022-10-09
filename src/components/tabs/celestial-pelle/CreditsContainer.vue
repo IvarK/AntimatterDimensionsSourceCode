@@ -48,6 +48,14 @@ export default {
       if (!oldVal && newVal && this.audio === null) {
         this.audio = new Audio(`audio/credits.mp3`);
         this.audio.play();
+
+        // Use a hardcoded 33ms in order to make the end credits scroll smoothly; if the player normally plays
+        // at a much slower rate, this causes the credits to have a jumpy-looking scroll. Since this is a setting
+        // which persists across new games, we want to make sure we still preserve the old value too
+        const oldRate = player.options.updateRate;
+        player.options.updateRate = 33;
+        GameOptions.refreshUpdateRate();
+        player.options.updateRate = oldRate;
       }
     }
   },

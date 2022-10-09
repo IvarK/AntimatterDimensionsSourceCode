@@ -206,7 +206,7 @@ GameDatabase.tabs = [
         name: "Infinity Challenges",
         symbol: "∞",
         component: "infinity-challenges-tab",
-        condition: () => PlayerProgress.hasBroken() || Pelle.isDoomed,
+        condition: () => PlayerProgress.realityUnlocked() || PlayerProgress.hasBroken() || Pelle.isDoomed,
         id: 1,
         hidable: true
       },

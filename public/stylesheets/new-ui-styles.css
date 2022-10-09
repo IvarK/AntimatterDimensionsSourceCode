@@ -277,6 +277,7 @@ body.t-s9 {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  color: var(--color-text);
 }
 
 .l-antimatter-dim-tab {

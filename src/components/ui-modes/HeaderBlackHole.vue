@@ -70,7 +70,10 @@ export default {
 </script>
 
 <template>
-  <span v-if="canModifyBlackHoles">
+  <span
+    v-if="canModifyBlackHoles"
+    class="c-black-hole-header"
+  >
     <PrimaryButton
       class="o-primary-btn--buy-max c-primary-btn--black-hole-header"
       onclick="BlackHoles.togglePause()"
@@ -122,6 +125,11 @@ export default {
 </template>
 
 <style scoped>
+.c-black-hole-header {
+  font-weight: bold;
+  color: var(--color-text);
+}
+
 .c-primary-btn--black-hole-header {
   vertical-align: middle;
   margin: 0.2rem;

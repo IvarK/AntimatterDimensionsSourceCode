@@ -1466,6 +1466,8 @@ GameStorage.devMigrations = {
         player.options.themeClassic = player.options.theme;
       }
       delete player.options.theme;
+
+      if (BlackHole(1).isUnlocked) player.records.timePlayedAtBHUnlock = player.records.totalTimePlayed;
     },
   ],
 

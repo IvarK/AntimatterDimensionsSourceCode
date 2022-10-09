@@ -351,6 +351,7 @@ export const BlackHoles = {
     Currency.realityMachines.purchase(100);
     SpeedrunMilestones(17).tryComplete();
     Achievement(144).unlock();
+    player.records.timePlayedAtBHUnlock = player.records.totalTimePlayed;
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UNLOCKED);
   },
 
@@ -364,7 +365,7 @@ export const BlackHoles = {
     // whether the player's using negative BH (i.e. BH inversion); if going paused -> unpaused,
     // use "unpaused".
     // eslint-disable-next-line no-nested-ternary
-    const pauseType = player.blackHolePause ? (BlackHoles.areNegative ? "inverted" : "paused") : 'unpaused';
+    const pauseType = player.blackHolePause ? (BlackHoles.areNegative ? "inverted" : "paused") : "unpaused";
     const automaticString = automatic ? "automatically " : "";
     GameUI.notify.blackHole(`${blackHoleString} ${automaticString}${pauseType}`);
   },
@@ -560,18 +561,18 @@ export const BlackHoles = {
   timeToNextPause(bhNum, steps = 100) {
     if (bhNum === 1) {
       // This is a simple case that we can do mathematically.
-     const bh = BlackHole(1);
-     // If no blackhole gaps are as long as the warmup time, we never pause.
-     if (bh.interval <= BlackHoles.ACCELERATION_TIME) {
-       return null;
-     }
-     // Find the time until next activation.
-     const t = (bh.isCharged ? bh.duration : 0) + bh.interval - bh.phase;
-     // If the time until next activation is less than the acceleration time,
-     // we have to wait until the activation after that;
-     // otherwise, we can just use the next activation.
-     return (t < BlackHoles.ACCELERATION_TIME)
-     ? t + bh.duration + bh.interval - BlackHoles.ACCELERATION_TIME : t - BlackHoles.ACCELERATION_TIME;
+      const bh = BlackHole(1);
+      // If no blackhole gaps are as long as the warmup time, we never pause.
+      if (bh.interval <= BlackHoles.ACCELERATION_TIME) {
+        return null;
+      }
+      // Find the time until next activation.
+      const t = (bh.isCharged ? bh.duration : 0) + bh.interval - bh.phase;
+      // If the time until next activation is less than the acceleration time,
+      // we have to wait until the activation after that;
+      // otherwise, we can just use the next activation.
+      return (t < BlackHoles.ACCELERATION_TIME)
+        ? t + bh.duration + bh.interval - BlackHoles.ACCELERATION_TIME : t - BlackHoles.ACCELERATION_TIME;
     }
     // Look at the next 100 black hole transitions.
     // This is called every tick if BH pause setting is set to BH2, so we try to optimize it.
@@ -609,11 +610,11 @@ export const BlackHoles = {
       const phaseBounds = phaseBoundList[current];
       // Compute time until some phase reaches its bound.
       const minTime = current > 0 ? Math.min(phaseBounds[0] - phases[0], phaseBounds[1] - phases[1])
-      : phaseBounds[0] - phases[0];
+        : phaseBounds[0] - phases[0];
       if (current === 2) {
         // Check if there was enough time before this activation to pause.
         if (inactiveTime >= BlackHoles.ACCELERATION_TIME) {
-         return totalTime - BlackHoles.ACCELERATION_TIME;
+          return totalTime - BlackHoles.ACCELERATION_TIME;
         }
         // Not enough time, reset inactive time to 0.
         inactiveTime = 0;

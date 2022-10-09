@@ -489,7 +489,7 @@ function roundPreservingSum(data) {
       :style="rowStyle('info2')"
       class="l-glyph-levels-and-weights__factor l-glyph-level-and-weights-note"
     >
-      Replicanti and DT use their highest values this Reality.
+      EP, Replicanti, and DT use their highest values this Reality.
     </div>
     <template v-if="adjustVisible">
       <div

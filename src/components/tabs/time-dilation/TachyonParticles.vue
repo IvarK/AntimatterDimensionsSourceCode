@@ -30,7 +30,7 @@ export default {
       this.count = Currency.tachyonParticles.gte(1)
         ? Math.clampMin(Math.floor(20 * Math.log10(Currency.tachyonParticles.exponent)), 1)
         : 0;
-      this.isBlob = player.options.theme === "S11";
+      this.isBlob = Theme.currentName() === "S11";
     },
     updateSize() {
       this.bounds.x = this.$el.clientWidth;

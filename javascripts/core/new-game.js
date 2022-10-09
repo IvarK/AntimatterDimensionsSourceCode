@@ -23,7 +23,7 @@ export const NG = {
     player.reality.automator.scripts = JSON.parse(automatorScripts);
     ui.view.newUI = player.options.newUI;
     ui.view.news = player.options.news.enabled;
-    Themes.find(player.options.theme).set();
+    Themes.find(Theme.currentName()).set();
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
     ADNotations.Settings.exponentCommas.show = player.options.commas;
     player.lastUpdate = Date.now();

@@ -2304,7 +2304,9 @@ br {
   justify-content: center;
   align-items: center;
   font-size: 1.2rem;
+  font-weight: bold;
   margin: 0.5rem;
+  color: var(--color-text);
 }
 
 .l-game-header__buttons-line {
@@ -2502,6 +2504,7 @@ br {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: var(--color-text);
 }
 
 .l-infinity-dim-tab__ec8-purchases {
@@ -2616,6 +2619,7 @@ br {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: var(--color-text);
 }
 
 /* #endregion l-time-dim-tab */

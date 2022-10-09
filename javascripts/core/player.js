@@ -267,6 +267,7 @@ window.player = {
   records: {
     gameCreatedTime: Date.now(),
     totalTimePlayed: 0,
+    timePlayedAtBHUnlock: Number.MAX_VALUE,
     realTimePlayed: 0,
     realTimeDoomed: 0,
     totalAntimatter: DC.E1,

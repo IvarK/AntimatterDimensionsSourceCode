@@ -140,7 +140,7 @@ export default {
       </div>
       <div
         v-if="isS11Active"
-        class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider"
+        class="c-blobflake-slider o-primary-btn o-primary-btn--modal-option o-primary-btn--slider"
       >
         <b>{{ quantifyInt("Blobflake", parseInt(blobSnowflakes)) }}</b>
         <SliderComponent
@@ -153,3 +153,9 @@ export default {
     </div>
   </ModalWrapperOptions>
 </template>
+
+<style scoped>
+.c-blobflake-slider {
+  padding: 1.2rem;
+}
+</style>

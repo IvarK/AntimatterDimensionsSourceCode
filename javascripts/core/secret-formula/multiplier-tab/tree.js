@@ -6,10 +6,10 @@ import { MultiplierTabHelper } from "./helper-functions";
 
 const dynamicGenProps = ["AD", "TP", "DT", "infinities", "eternities", "gamespeed"];
 const propList = {
-  ID: ["purchase", "achievement", "replicanti", "infinityChallenge", "timeStudy", "eternityUpgrades",
+  ID: ["purchase", "achievementMult", "achievement", "replicanti", "infinityChallenge", "timeStudy", "eternityUpgrade",
     "eternityChallenge", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed", "nerfPelle"],
-  TD: ["purchase", "achievement", "timeStudy", "eternityUpgrade", "eternityChallenge", "dilationUpgrade",
-    "realityUpgrade", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed"],
+  TD: ["purchase", "achievementMult", "achievement", "timeStudy", "eternityUpgrade", "eternityChallenge",
+    "dilationUpgrade", "realityUpgrade", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed"],
   IP: ["base", "infinityUpgrade", "achievement", "timeStudy", "dilationUpgrade", "glyph", "alchemy", "pelle", "iap",
     "nerfTeresa", "nerfV"],
   EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "realityUpgrade", "pelle", "iap", "nerfTeresa", "nerfV"],
@@ -108,7 +108,6 @@ const targetedEffects = {
   achievement: {
     checkFn: MultiplierTabHelper.achievementDimCheck,
     AD: [23, 28, 31, 34, 43, 48, 56, 64, 65, 68, 71, 72, 73, 74, 76, 84, 91, 92],
-    ID: [75, 94],
     TD: [105, 128],
     IP: [85, 93, 116, 125, 141],
     DT: [132, 137, 156]
@@ -141,11 +140,12 @@ for (const res of dimTypes) {
 
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
 // entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
-const removedProps = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_alchemy", "AD_v", "AD_pelle", "AD_iap",
-  "AD_nerfIC", "nerfPelle",
-  "ID_replicanti", "ID_infinityChallenge", "ID_eternityUpgrades", "ID_alchemy", "ID_imaginaryUpgrade",
-  "TD_achievement", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade", "TD_alchemy",
-  "TD_imaginaryUpgrade"];
+const removedProps = ["AD_sacrifice", "AD_achievementMult", "AD_breakInfinityUpgrade", "AD_alchemy", "AD_v", "AD_pelle",
+  "AD_iap", "AD_nerfIC", "AD_nerfPelle",
+  "ID_replicanti", "ID_achievementMult", "ID_infinityChallenge", "ID_eternityUpgrades", "ID_alchemy",
+  "ID_imaginaryUpgrade", "ID_pelle", "ID_nerfPelle",
+  "TD_achievement", "TD_achievementMult", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade", "TD_alchemy",
+  "TD_imaginaryUpgrade", "TD_pelle"];
 for (const prop of removedProps) {
   GameDatabase.multiplierTabTree[prop] = undefined;
 }
@@ -198,4 +198,12 @@ for (const res of singleRes) {
       GameDatabase.multiplierTabTree[`${res}_${eff}`][0].push(`general_${eff}_${ach}`);
     }
   }
+}
+
+// Fill in eternity upgrade entries
+GameDatabase.multiplierTabTree.ID_eternityUpgrade = [[`ID_eu1`, `ID_eu2`, `ID_eu3`]];
+GameDatabase.multiplierTabTree.TD_eternityUpgrade = [[`TD_eu1`, `TD_eu2`]];
+for (let dim = 1; dim <= 8; dim++) {
+  GameDatabase.multiplierTabTree[`ID_eternityUpgrade_${dim}`] = [[`ID_eu1_${dim}`, `ID_eu2_${dim}`, `ID_eu3_${dim}`]];
+  GameDatabase.multiplierTabTree[`TD_eternityUpgrade_${dim}`] = [[`TD_eu1_${dim}`, `TD_eu2_${dim}`]];
 }

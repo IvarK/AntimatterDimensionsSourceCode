@@ -5,8 +5,22 @@ import { MultiplierTabIcons } from "./icons";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.gamespeed = {
   total: {
-    name: "Current Game speed",
+    name: "Game speed",
     isBase: true,
+    displayOverride: () => {
+      if (EternityChallenge(12).isRunning) return `${formatX(1)}/${formatInt(1000)} (fixed)`;
+      const curr = getGameSpeedupFactor();
+      const currBH = BlackHoles.list
+        .map(bh => (bh.isActive ? bh.power : 1))
+        .reduce((x, y) => x * y, 1);
+      const avgBH = BlackHoles.list
+        .map(bh => bh.dutyCycle * bh.power)
+        .reduce((x, y) => x * y, 1);
+      const avgSpeed = Enslaved.isAutoReleasing
+        ? getGameSpeedupForDisplay()
+        : curr / currBH * avgBH;
+      return `${formatX(curr, 2, 2)} (current) | ${formatX(avgSpeed, 2, 2)} (average)`;
+    },
     multValue: () => getGameSpeedupForDisplay(),
     isActive: () => PlayerProgress.seenAlteredSpeed(),
     dilationEffect: () => (Effarig.isRunning ? Effarig.multDilation : 1),
@@ -16,7 +30,7 @@ GameDatabase.multiplierTabValues.gamespeed = {
     name: "Equipped Glyphs",
     multValue: () => getAdjustedGlyphEffect("timespeed"),
     powValue: () => getAdjustedGlyphEffect("effarigblackhole"),
-    isActive: () => PlayerProgress.realityUnlocked(),
+    isActive: () => PlayerProgress.realityUnlocked() && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   blackHoles: {
@@ -24,14 +38,14 @@ GameDatabase.multiplierTabValues.gamespeed = {
     multValue: () => BlackHoles.list
       .map(bh => bh.dutyCycle * bh.power)
       .reduce((x, y) => x * y, 1),
-    isActive: () => BlackHole(1).isUnlocked && !BlackHoles.arePaused,
+    isActive: () => BlackHole(1).isUnlocked && !BlackHoles.arePaused && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.BLACK_HOLE,
   },
-  v: {
-    name: "V Achievements",
+  achievementMult: {
+    name: "Achievement Multiplier",
     multValue: () => Math.pow(VUnlocks.achievementBH.effectOrDefault(1),
       BlackHoles.list.countWhere(bh => bh.isUnlocked)),
-    isActive: () => !BlackHoles.arePaused && VUnlocks.achievementBH.canBeApplied,
+    isActive: () => !BlackHoles.arePaused && VUnlocks.achievementBH.canBeApplied && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   pulsing: {
@@ -39,19 +53,19 @@ GameDatabase.multiplierTabValues.gamespeed = {
     multValue: () => (Enslaved.isAutoReleasing
       ? Math.max(Enslaved.autoReleaseSpeed / getGameSpeedupFactor(), 1)
       : getGameSpeedupFactor()),
-    isActive: () => Enslaved.canRelease && Enslaved.isAutoReleasing,
+    isActive: () => Enslaved.canRelease && Enslaved.isAutoReleasing && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.BH_PULSE,
   },
   singularity: {
     name: "Singularity Milestones",
     multValue: () => SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1),
-    isActive: () => SingularityMilestone.gamespeedFromSingularities.canBeApplied,
+    isActive: () => SingularityMilestone.gamespeedFromSingularities.canBeApplied && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.SINGULARITY,
   },
   pelle: {
-    name: "Pelle Game speed Upgrade",
+    name: "Pelle game speed Upgrade",
     multValue: () => PelleUpgrade.timeSpeedMult.effectValue.toNumber(),
-    isActive: () => Pelle.isDoomed,
+    isActive: () => Pelle.isDoomed && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.PELLE,
   },
 

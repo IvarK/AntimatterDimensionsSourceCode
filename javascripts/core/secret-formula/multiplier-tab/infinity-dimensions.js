@@ -99,15 +99,17 @@ GameDatabase.multiplierTabValues.ID = {
     isActive: () => Replicanti.areUnlocked,
     icon: MultiplierTabIcons.SPECIFIC_GLYPH("replication"),
   },
+  achievementMult: {
+    name: "Achievement Multiplier",
+    multValue: dim => Decimal.pow(Achievements.power, dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
+    isActive: () => Achievement(75).canBeApplied && !Pelle.isDoomed,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
+  },
   achievement: {
-    name: dim => (dim ? `Achievements (ID ${dim})` : "Achievements"),
-    multValue: dim => {
-      const baseMult = new Decimal(Achievement(75).effectOrDefault(1));
-      if (dim) return dim === 1 ? baseMult.times(Achievement(94).effectOrDefault(1)) : baseMult;
-      const maxActiveDim = MultiplierTabHelper.activeDimCount("ID");
-      return Decimal.pow(baseMult, maxActiveDim).times(maxActiveDim > 0 ? Achievement(94).effectOrDefault(1) : DC.D1);
-    },
-    isActive: () => Achievement(75).canBeApplied,
+    // Note: This only applies to ID1
+    name: () => "Achievement 94",
+    multValue: dim => ((dim ?? 1) === 1 ? Achievement(94).effectOrDefault(1) : 1),
+    isActive: () => Achievement(94).canBeApplied,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
@@ -125,7 +127,7 @@ GameDatabase.multiplierTabValues.ID = {
     isActive: () => PlayerProgress.eternityUnlocked(),
     icon: MultiplierTabIcons.TIME_STUDY,
   },
-  eternityUpgrades: {
+  eternityUpgrade: {
     name: "Eternity Upgrades",
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
@@ -138,6 +140,29 @@ GameDatabase.multiplierTabValues.ID = {
     isActive: () => PlayerProgress.eternityUnlocked(),
     icon: MultiplierTabIcons.UPGRADE("eternity"),
   },
+
+  eu1: {
+    name: () => "Unspent Eternity Points",
+    multValue: dim => Decimal.pow(EternityUpgrade.idMultEP.effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
+    isActive: () => EternityUpgrade.idMultEP.canBeApplied,
+    icon: MultiplierTabIcons.UPGRADE("eternity"),
+  },
+  eu2: {
+    name: () => "Eternity Count",
+    multValue: dim => Decimal.pow(EternityUpgrade.idMultEternities.effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
+    isActive: () => EternityUpgrade.idMultEternities.canBeApplied,
+    icon: MultiplierTabIcons.UPGRADE("eternity"),
+  },
+  eu3: {
+    name: () => "Infinity Challenge Records",
+    multValue: dim => Decimal.pow(EternityUpgrade.idMultICRecords.effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
+    isActive: () => EternityUpgrade.idMultICRecords.canBeApplied,
+    icon: MultiplierTabIcons.UPGRADE("eternity"),
+  },
+
   infinityChallenge: {
     name: "Infinity Challenges",
     multValue: dim => {
@@ -200,7 +225,7 @@ GameDatabase.multiplierTabValues.ID = {
       return Decimal.pow(mult, dim ? 1 : maxActiveDim)
         .times(maxActiveDim >= 1 ? PelleRifts.decay.milestones[0].effectOrDefault(1) : DC.D1);
     },
-    powValue: () => PelleRifts.paradox.effectOrDefault(1),
+    powValue: () => PelleRifts.paradox.effectOrDefault(1).toNumber(),
     isActive: () => Pelle.isDoomed,
     icon: MultiplierTabIcons.PELLE,
   },

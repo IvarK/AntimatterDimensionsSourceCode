@@ -7,10 +7,10 @@ import { MultiplierTabIcons } from "./icons";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.EP = {
   total: {
-    name: "Total EP Gained",
+    name: "Total EP Gained on Eternity",
     isBase: true,
     multValue: () => gainedEternityPoints(),
-    isActive: () => PlayerProgress.eternityUnlocked(),
+    isActive: () => new Decimal(Currency.eternities.value).gt(0) || gainedEternityPoints().gt(0),
     dilationEffect: () => (Laitela.isRunning ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty) : 1),
     overlay: ["Δ", "<i class='fa-solid fa-layer-group' />"],
   },
@@ -68,7 +68,7 @@ GameDatabase.multiplierTabValues.EP = {
   realityUpgrade: {
     name: "The Knowing Existence",
     multValue: () => RealityUpgrade(12).effectOrDefault(1),
-    isActive: () => RealityUpgrade(12).canBeApplied,
+    isActive: () => RealityUpgrade(12).canBeApplied && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   pelle: {

@@ -74,13 +74,20 @@ GameDatabase.multiplierTabValues.TD = {
     icon: MultiplierTabIcons.UPGRADE("imaginary"),
   },
 
+  achievementMult: {
+    name: "Achievement Multiplier",
+    multValue: dim => Decimal.pow(EternityUpgrade.tdMultAchs.effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
+    isActive: () => EternityUpgrade.tdMultAchs.canBeApplied && !Pelle.isDoomed,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
+  },
   achievement: {
-    name: "Achievements",
+    name: "Achievement Rewards",
     multValue: dim => {
-      const baseMult = DC.D1.timesEffectsOf(Achievement(105), Achievement(128), EternityUpgrade.tdMultAchs);
+      const baseMult = DC.D1.timesEffectsOf(Achievement(105), Achievement(128));
       return Decimal.pow(baseMult, dim ? 1 : MultiplierTabHelper.activeDimCount("TD"));
     },
-    isActive: () => Achievement(75).canBeApplied,
+    isActive: () => Achievement(105).canBeApplied || Achievement(128).canBeApplied,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {
@@ -125,6 +132,22 @@ GameDatabase.multiplierTabValues.TD = {
     isActive: () => TimeDimension(1).isProducing,
     icon: MultiplierTabIcons.UPGRADE("eternity"),
   },
+
+  eu1: {
+    name: () => "Unspent Time Theorems",
+    multValue: dim => Decimal.pow(EternityUpgrade.tdMultTheorems.effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
+    isActive: () => EternityUpgrade.tdMultTheorems.canBeApplied,
+    icon: MultiplierTabIcons.UPGRADE("eternity"),
+  },
+  eu2: {
+    name: () => "Days played",
+    multValue: dim => Decimal.pow(EternityUpgrade.tdMultRealTime.effectOrDefault(1),
+      dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
+    isActive: () => EternityUpgrade.tdMultRealTime.canBeApplied,
+    icon: MultiplierTabIcons.UPGRADE("eternity"),
+  },
+
   eternityChallenge: {
     name: dim => (dim ? `Eternity Challenges (TD ${dim})` : "Eternity Challenges"),
     multValue: dim => {
@@ -184,7 +207,7 @@ GameDatabase.multiplierTabValues.TD = {
     name: "Pelle Rift Effects",
     multValue: dim => Decimal.pow(PelleRifts.chaos.effectOrDefault(1),
       dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
-    powValue: () => PelleRifts.paradox.effectOrDefault(1),
+    powValue: () => PelleRifts.paradox.effectOrDefault(1).toNumber(),
     isActive: () => Pelle.isDoomed,
     icon: MultiplierTabIcons.PELLE,
   },

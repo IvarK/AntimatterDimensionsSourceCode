@@ -80,7 +80,8 @@ GameDatabase.multiplierTabValues.general = {
         }
         return totalEffect;
       }
-      if (ic === 8) return (dim > 1 && dim < 8) ? InfinityChallenge(ic).reward.effectValue : DC.D1;
+      const num = Number(dim.charAt(2));
+      if (ic === 8) return (num > 1 && num < 8) ? InfinityChallenge(ic).reward.effectValue : DC.D1;
       return InfinityChallenge(ic).reward.effectValue;
     },
     powValue: ic => (ic === 4 ? InfinityChallenge(4).reward.effectValue : 1),

@@ -58,10 +58,16 @@ GameDatabase.multiplierTabValues.AD = {
     isActive: dim => (!dim || dim === 8) && Sacrifice.totalBoost.gt(1) && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.SACRIFICE("antimatter"),
   },
+  achievementMult: {
+    name: "Achievement Multiplier",
+    multValue: dim => Decimal.pow(Achievements.power, dim ? 1 : MultiplierTabHelper.activeDimCount("AD")),
+    isActive: () => !Pelle.isDoomed,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
+  },
   achievement: {
-    name: "Achievements",
+    name: "Achievement Rewards",
     multValue: dim => {
-      const allMult = new Decimal(Achievements.power).timesEffectsOf(
+      const allMult = DC.D1.timesEffectsOf(
         Achievement(48),
         Achievement(56),
         Achievement(65),
@@ -315,7 +321,7 @@ GameDatabase.multiplierTabValues.AD = {
       if (NormalChallenge(2).isRunning) {
         dimMults = Array.repeat(new Decimal(player.chall2Pow), 9);
       } else if (NormalChallenge(3).isRunning) {
-        dimMults[0] = new Decimal(player.chall3Pow);
+        dimMults[1] = new Decimal(player.chall3Pow);
       } else if (NormalChallenge(12).isRunning) {
         dimMults[2] = AntimatterDimension(2).totalAmount.pow(0.6);
         dimMults[4] = AntimatterDimension(4).totalAmount.pow(0.4);

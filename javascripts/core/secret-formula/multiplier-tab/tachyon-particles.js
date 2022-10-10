@@ -20,8 +20,14 @@ GameDatabase.multiplierTabValues.TP = {
     isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
     icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },
+  achievementMult: {
+    name: "Achievement Multiplier",
+    multValue: () => RealityUpgrade(8).effectOrDefault(1),
+    isActive: () => RealityUpgrade(8).canBeApplied && !Pelle.isDoomed,
+    icon: MultiplierTabIcons.ACHIEVEMENT,
+  },
   achievement: {
-    name: "Achievement 132",
+    name: "Achievement 132 Reward",
     multValue: () => Achievement(132).effectOrDefault(1),
     isActive: () => Achievement(132).canBeApplied,
     icon: MultiplierTabIcons.ACHIEVEMENT,
@@ -34,7 +40,7 @@ GameDatabase.multiplierTabValues.TP = {
   },
   realityUpgrade: {
     name: "Reality Upgrades",
-    multValue: () => DC.D1.timesEffectsOf(RealityUpgrade(4), RealityUpgrade(8), RealityUpgrade(15)),
+    multValue: () => DC.D1.timesEffectsOf(RealityUpgrade(4), RealityUpgrade(15)),
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },

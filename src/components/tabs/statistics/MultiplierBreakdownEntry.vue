@@ -119,8 +119,10 @@ export default {
 
     hasChildComp(key) {
       const dbEntry = this.treeDB[key];
-      return dbEntry && dbEntry[0]
-        .filter(k => this.getProp(k, "isActive") && (this.getMult(k).neq(1) || this.getPow(k) !== 1)).length > 1;
+      return dbEntry && dbEntry
+        .some(group => group
+          .filter(k => this.getProp(k, "isActive") && (this.getMult(k).neq(1) || this.getPow(k) !== 1)).length > 1
+        );
     },
     hideIcon(index) {
       if (!this.hasChildComp(this.currentGroupKeys[index])) return "c-no-icon";

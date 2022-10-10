@@ -203,7 +203,7 @@ export const MultiplierTabIcons = {
     textColor: "var(--color-laitela--accent)",
   },
   SINGULARITY: {
-    symbol: `<i class="fas fa-arrows-to-dot" />`,
+    symbol: `<i class="fas fa-arrows-up-down-left-right" />`,
     color: "var(--color-laitela--base)",
     textColor: "var(--color-laitela--accent)",
   },

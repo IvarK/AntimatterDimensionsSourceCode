@@ -5,12 +5,15 @@ import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import PrimaryButton from "@/components/PrimaryButton";
 import StudyStringLine from "@/components/modals/StudyStringLine";
 
+import StudyTreeInfo from "./StudyTreeInfo";
+
 export default {
   name: "StudyStringModal",
   components: {
     ModalWrapperChoice,
     StudyStringLine,
-    PrimaryButton
+    PrimaryButton,
+    StudyTreeInfo
   },
   props: {
     id: {
@@ -46,6 +49,7 @@ export default {
         firstPaths: makeEnumeration(importedTree.dimensionPaths),
         secondPaths: makeEnumeration(importedTree.pacePaths),
         ec: importedTree.ec,
+        hasInfo: makeEnumeration(importedTree.dimensionPaths) || importedTree.ec > 0,
       };
     },
     // This is only shown when importing; when modifying a preset we assume that generally the current state of the
@@ -62,6 +66,7 @@ export default {
         firstPaths: makeEnumeration(combinedTree.dimensionPaths),
         secondPaths: makeEnumeration(combinedTree.pacePaths),
         ec: combinedTree.ec,
+        hasInfo: makeEnumeration(combinedTree.dimensionPaths) || combinedTree.ec > 0,
       };
     },
     combinedTreeObject() {
@@ -69,16 +74,6 @@ export default {
       combinedTree.attemptBuyArray(TimeStudyTree.currentStudies, false);
       combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.truncatedInput), true);
       return combinedTree;
-    },
-    // We show information about the after-load tree, but which tree (imported from empty vs combined) info is shown
-    // depends on if we're importing vs editing
-    treeStatus() {
-      const showingTree = this.isImporting ? this.importedTree : this.combinedTree;
-      return {
-        firstPaths: showingTree.firstPaths,
-        secondPaths: showingTree.secondPaths,
-        ec: showingTree.ec,
-      };
     },
     modalTitle() {
       if (this.deleting) return `Deleting Study Preset "${this.name}"`;
@@ -105,7 +100,8 @@ export default {
             break;
         }
       }
-      return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "").replaceAll(",", ", ")}`;
+      return `Your import string has invalid study IDs: ${coloredString.replaceAll("#", "").replaceAll(",", ", ")}
+        <br><br>`;
     },
     truncatedInput() {
       return TimeStudyTree.truncateInput(this.input);
@@ -127,10 +123,6 @@ export default {
         "bb450c2a3869bae412ed0b4304dc229521fc69f0fdcc95b3b61460aaf5658fc4"
       ];
       return secretStrings.includes(sha512_256(this.input.toLowerCase()));
-    },
-    treeInfoHeader() {
-      if (this.deleting) return "Study Preset contains";
-      return `Tree status after ${this.isImporting ? "importing" : "loading"}`;
     },
     confirmText() {
       if (this.deleting) return "Delete";
@@ -224,27 +216,21 @@ export default {
           :tree="importedTree"
           :into-empty="true"
         />
-        <div v-if="treeStatus.firstPaths || treeStatus.ec > 0">
-          <b>{{ treeInfoHeader }}:</b>
-        </div>
-        <div
-          v-if="treeStatus.firstPaths"
-          class="l-modal-import-tree__tree-info-line"
-        >
-          Dimension Split: {{ treeStatus.firstPaths }}
-        </div>
-        <div
-          v-if="treeStatus.secondPaths"
-          class="l-modal-import-tree__tree-info-line"
-        >
-          Pace Split: {{ treeStatus.secondPaths }}
-        </div>
-        <div
-          v-if="treeStatus.ec > 0"
-          class="l-modal-import-tree__tree-info-line"
-        >
-          Eternity Challenge: {{ treeStatus.ec }}
-        </div>
+        <StudyTreeInfo
+          v-if="deleting && importedTree.hasInfo"
+          header-text="Study Preset contains:"
+          :tree-status="importedTree"
+        />
+        <StudyTreeInfo
+          v-if="!deleting && !isImporting && importedTree.hasInfo"
+          header-text="Status after loading with <b>no studies</b>:"
+          :tree-status="importedTree"
+        />
+        <StudyTreeInfo
+          v-if="!deleting && combinedTree.hasInfo"
+          header-text="Status after loading with <b>current tree</b>:"
+          :tree-status="combinedTree"
+        />
       </template>
       <div v-else-if="hasInput">
         Not a valid tree

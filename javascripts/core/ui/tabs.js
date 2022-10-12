@@ -144,8 +144,6 @@ class TabState {
     const tabNotificationKey = this.key + this._currentSubtab.key;
     if (player.tabNotifications.has(tabNotificationKey)) player.tabNotifications.delete(tabNotificationKey);
 
-    // Makes it so that the glyph tooltip doesn't stay on tab change
-    ui.view.tabs.reality.currentGlyphTooltip = -1;
     if (manual) Modal.hideAll();
     EventHub.dispatch(GAME_EVENT.TAB_CHANGED, this, this._currentSubtab);
   }

@@ -75,6 +75,12 @@ GameDatabase.multiplierTabValues.gamespeed = {
     isActive: () => EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.CHALLENGE("eternity"),
   },
+  chargingBH: {
+    name: "Black Hole Charging",
+    multValue: () => 1 - player.celestials.enslaved.storedFraction,
+    isActive: () => Enslaved.isStoringGameTime,
+    icon: MultiplierTabIcons.BLACK_HOLE,
+  },
   invertedBH: {
     name: "Inverted Black Hole",
     multValue: () => player.blackHoleNegative,

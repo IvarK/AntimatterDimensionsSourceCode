@@ -842,18 +842,19 @@ function afterSimulation(seconds, playerBefore) {
 }
 
 export function simulateTime(seconds, real, fast) {
-  // The game is simulated at a base 50ms update rate, with a max of
-  // player.options.offlineTicks ticks. additional ticks are converted
-  // into a higher diff per tick
-  // warning: do not call this function with real unless you know what you're doing
-  // calling it with fast will only simulate it with a max of 50 ticks
+  // The game is simulated at a base 50ms update rate, with a maximum tick count based on the values of real and fast
+  // - Calling with real === true will always simulate at full accuracy with no tick count reduction
+  // - Calling with fast === true will only simulate it with a max of 50 ticks
+  // - Otherwise, tick count will be limited to the offline tick count (which may be set externally during save import)
+  // Tick count is never *increased*, and only ever decreased if needed.
   let ticks = Math.floor(seconds * 20);
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
-  if (ticks > player.options.offlineTicks && !real && !fast) {
-    ticks = player.options.offlineTicks;
-  } else if (ticks > 50 && fast) {
+  const maxTicks = GameStorage.offlineTicks ?? player.options.offlineTicks;
+  if (ticks > maxTicks && !real && !fast) {
+    ticks = maxTicks;
+  } else if (ticks > 50 && !real && fast) {
     ticks = 50;
   }
 

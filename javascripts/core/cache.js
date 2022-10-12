@@ -85,7 +85,7 @@ export const GameCache = {
   // Cached because it needs to be checked upon any change to antimatter, but that's a hot path and we want to keep
   // unnecessary repetitive calculations and accessing to a minimum
   cheapestAntimatterAutobuyer: new Lazy(() => Autobuyer.antimatterDimension.zeroIndexed.concat(Autobuyer.tickspeed)
-    .filter(ab => !ab.isBought)
+    .filter(ab => !(ab.isBought || ab.isUnlocked))
     .map(ab => ab.antimatterCost.toNumber())
     .min()
   ),

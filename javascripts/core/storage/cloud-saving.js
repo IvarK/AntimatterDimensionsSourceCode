@@ -33,6 +33,14 @@ export const Cloud = {
   shouldOverwriteCloudSave: true,
   lastCloudHash: null,
 
+  resetTempState() {
+    this.hasSeenSavingConflict = false;
+    this.shouldOverwriteCloudSave = true;
+    this.lastCloudHash = null;
+    GameStorage.lastCloudSave = Date.now();
+    GameIntervals.checkCloudSave.restart();
+  },
+
   get loggedIn() {
     return this.user !== null;
   },
@@ -78,12 +86,11 @@ export const Cloud = {
       older: ProgressChecker.compareSaveTimes(cloud, local),
       diffSTD: (cloud?.IAP?.totalSTD ?? 0) - (local?.IAP?.totalSTD ?? 0),
       differentName: cloud?.options.saveFileName !== local?.options.saveFileName,
-      hashMismatch: hash && this.lastCloudHash !== hash,
+      hashMismatch: this.lastCloudHash && this.lastCloudHash !== hash,
     };
   },
 
   async saveCheck() {
-    GameIntervals.checkCloudSave.restart();
     const save = await this.load();
     if (save === null) {
       this.save();
@@ -91,8 +98,9 @@ export const Cloud = {
       const root = GameSaveSerializer.deserialize(save);
       const saveId = GameStorage.currentSlot;
       const cloudSave = root.saves[saveId];
+      const thisCloudHash = sha512_256(GameSaveSerializer.serialize(cloudSave));
       const localSave = GameStorage.saves[saveId];
-      const saveComparison = this.compareSaves(cloudSave, localSave, sha512_256(save));
+      const saveComparison = this.compareSaves(cloudSave, localSave, thisCloudHash);
 
       // eslint-disable-next-line no-loop-func
       const overwriteAndSendCloudSave = () => {
@@ -103,11 +111,9 @@ export const Cloud = {
       // Bring up the modal if cloud saving will overwrite a cloud save which is older or possibly farther
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
-      // Hash mismatch check should be separate from the others because otherwise it only ever shows up on the first
-      // mismatch; there are situations (eg. two devices actively saving) which can cause this to happen repeatedly.
       const hasConflict = hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
-        saveComparison.diffSTD > 0 || saveComparison.differentName);
-      if ((hasConflict && !this.hasSeenSavingConflict) || saveComparison.hashMismatch) {
+        saveComparison.diffSTD > 0 || saveComparison.differentName || saveComparison.hashMismatch);
+      if (hasConflict && !this.hasSeenSavingConflict) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
         Modal.cloudSaveConflict.show();
       } else if (!hasConflict || (this.hasSeenSavingConflict && this.shouldOverwriteCloudSave)) {
@@ -119,14 +125,16 @@ export const Cloud = {
   save(slot) {
     if (!this.user) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
+    if (player.options.syncSaveIntervals) GameStorage.save();
     const root = {
       current: GameStorage.currentSlot,
       saves: GameStorage.saves,
     };
 
-    const toSave = GameSaveSerializer.serialize(root);
-    this.lastCloudHash = sha512_256(toSave);
-    set(ref(this.db, `users/${this.user.id}/web`), toSave);
+    this.lastCloudHash = sha512_256(GameSaveSerializer.serialize(root.saves[slot]));
+    GameStorage.lastCloudSave = Date.now();
+    GameIntervals.checkCloudSave.restart();
+    set(ref(this.db, `users/${this.user.id}/web`), GameSaveSerializer.serialize(root));
     GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud`);/* with user ${this.user.displayName}`);*/
   },
 

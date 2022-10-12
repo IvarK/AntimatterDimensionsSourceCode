@@ -34,6 +34,29 @@ export default {
     },
     clicksLeft() {
       return 5 - this.overwriteCounter;
+    },
+    suggestionText() {
+      const goodStyle = `style="color: var(--color-good)"`;
+      const badStyle = `style="color: var(--color-bad)"`;
+
+      const suggestions = ["Saving to the Cloud "];
+      const cloudProg = this.conflict.cloud.compositeProgress, localProg = this.conflict.local.compositeProgress;
+      const warnOverwrite = this.farther && Math.abs(cloudProg - localProg) > 0.15;
+      suggestions.push(warnOverwrite
+        ? `<b ${badStyle}>would overwrite a save with significantly more progress</b>`
+        : `<b ${goodStyle}>is probably safe</b>`);
+      suggestions.push(this.hasLessSTDs
+        ? ` ${warnOverwrite ? "and" : "but"} <b ${badStyle}>will cause your Cloud save to lose STDs</b>.`
+        : "."
+      );
+      if (this.hasDifferentName || this.wrongHash) {
+        suggestions.push(` ${warnOverwrite ? "Additionally" : "However"}, you may be overwriting a 
+          <b ${badStyle}>save from a different device</b>.`);
+      }
+      if (warnOverwrite || this.hasDifferentName || this.wrongHash) {
+        suggestions.push(`<br><b ${badStyle}>Are you sure you wish to overwrite the Cloud save?</b>`);
+      }
+      return suggestions.join("");
     }
   },
   methods: {
@@ -43,6 +66,7 @@ export default {
       if (accepted) {
         this.conflict.onAccept?.();
       }
+      EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
     cancel() {
       this.overwriteCounter++;
@@ -67,23 +91,21 @@ export default {
     <template #header>
       Save Game to Cloud
     </template>
-    <b>
-      <span v-if="wrongHash">
-        Your Cloud Save has been changed by someone else since you last saved to the Cloud this session.
-      </span>
-      <span v-else-if="hasDifferentName">
-        Your Local and Cloud Saves have different names.
-      </span>
-      <span v-else-if="older">
-        Your Cloud Save appears to be older than your Local Save.
-      </span>
-      <span v-else-if="farther">
-        Your Cloud Save appears to be farther than your Local Save.
-      </span>
-      <span v-else>
-        Your Local Save and Cloud Save appear to have similar amounts of progress.
-      </span>
-    </b>
+    <span v-if="wrongHash">
+      Your Cloud Save has been <b>changed by a different device</b> since you last saved to the Cloud this session.
+    </span>
+    <span v-else-if="hasDifferentName">
+      Your Local and Cloud Saves have <b>different names</b>.
+    </span>
+    <span v-else-if="older">
+      Saving to the Cloud would <b>overwrite an older save</b>.
+    </span>
+    <span v-else-if="farther">
+      Saving to the Cloud would <b>overwrite a save with more progress</b>.
+    </span>
+    <span v-else>
+      Your Local Save and Cloud Save <b>appear to have similar amounts of progress</b>.
+    </span>
     <br>
     <SaveInfoEntry
       :save-data="conflict.local"
@@ -99,8 +121,7 @@ export default {
       :show-name="hasDifferentName"
       save-type="Cloud Save"
     />
-    Would you like to overwrite the Cloud Save? Your choice here will apply for every
-    time the game automatically attempts to Cloud Save, until the page is reloaded.
+    <span v-html="suggestionText" />
     <div
       v-if="hasLessSTDs"
       class="c-modal-IAP__warning"
@@ -108,6 +129,9 @@ export default {
       LOCAL SAVE HAS LESS STDs BOUGHT, YOU WILL LOSE THEM IF YOU OVERWRITE.
       <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
     </div>
+    <br>
+    Choosing to overwrite will force a save to the Cloud every time, while choosing to not
+    overwrite will effectively disable Cloud saving. This lasts until you reload the page.
     <template #cancel-text>
       Overwrite Cloud Save <span v-if="hasLessSTDs">({{ clicksLeft }})</span>
     </template>

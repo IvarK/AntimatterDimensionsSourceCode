@@ -256,7 +256,14 @@ export const shortcuts = [
     type: "bind",
     function: () => SecretAchievement(41).unlock(),
     visible: false
-  }
+  },
+  {
+    name: "Adjust Autobuyers",
+    keys: ["mod", "alt", "a"],
+    type: "bind",
+    function: () => keyboardEditAutobuyers(),
+    visible: () => Autobuyers.hasAutobuyersForEditModal
+  },
 ];
 
 for (const hotkey of shortcuts) {
@@ -411,6 +418,16 @@ function keyboardH2PToggle() {
   Modal.h2p.show();
 }
 
+function keyboardEditAutobuyers() {
+  if (Modal.autobuyerEditModal.isOpen) {
+    EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
+    return;
+  }
+  if (Modal.isOpen) return;
+  if (!Autobuyers.hasAutobuyersForEditModal) return;
+  Modal.autobuyerEditModal.show();
+}
+
 function keyboardVisibleTabsToggle() {
   if (Modal.hiddenTabs.isOpen) {
     EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
@@ -458,7 +475,12 @@ let konamiStep = 0;
 
 function testKonami(character) {
   if (SecretAchievement(17).isUnlocked) return;
+  // This conditional is structured weirdly in order to make sure more than 2 consecutive "up" inputs doesn't
+  // reset the sequence state unnecessarily, and that interrupting the sequence later on with the starting
+  // input will correctly set the state to one step in
   if (konamiCode[konamiStep] === character) konamiStep++;
+  else if (konamiStep === 2 && character === "up") konamiStep = 2;
+  else if (character === konamiCode[0]) konamiStep = 1;
   else konamiStep = 0;
   if (konamiCode.length <= konamiStep) {
     SecretAchievement(17).unlock();

@@ -11,6 +11,9 @@ export const GameStorage = {
   },
   saved: 0,
   lastSaveTime: Date.now(),
+  lastCloudSave: Date.now(),
+  offlineEnabled: undefined,
+  offlineTicks: undefined,
 
   get localStorageKey() {
     return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
@@ -54,11 +57,12 @@ export const GameStorage = {
     this.save(true);
     this.loadPlayerObject(this.saves[slot] ?? Player.defaultStart);
     Tabs.all.find(t => t.id === player.options.lastOpenTab).show(true);
+    Cloud.resetTempState();
     GameUI.notify.info("Game loaded");
     SteamFunctions.BackfillAchievements()
   },
 
-  import(saveData, overrideLastUpdate = undefined) {
+  import(saveData) {
     if (tryImportSecret(saveData) || Theme.tryUnlock(saveData)) {
       return;
     }
@@ -70,9 +74,10 @@ export const GameStorage = {
     Modal.hideAll();
     Quote.clearAll();
     AutomatorBackend.clearEditor();
-    this.loadPlayerObject(player, overrideLastUpdate);
+    this.loadPlayerObject(player);
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
+    Cloud.resetTempState();
 
     // This is to fix a very specific exploit: When the game is ending, some tabs get hidden
     // The options tab is the first one of those, which makes the player redirect to the Pelle tab
@@ -195,9 +200,10 @@ export const GameStorage = {
     player.IAP = IAP;
     this.save(true);
     Tab.dimensions.antimatter.show();
+    Cloud.resetTempState();
   },
 
-  loadPlayerObject(playerObject, overrideLastUpdate = undefined) {
+  loadPlayerObject(playerObject) {
     this.saved = 0;
 
     const checkString = this.checkPlayerObject(playerObject);
@@ -246,11 +252,10 @@ export const GameStorage = {
     AutomatorBackend.initializeFromSave();
     Lazy.invalidateAll();
 
-    if (overrideLastUpdate) {
-      player.lastUpdate = overrideLastUpdate;
-    }
     const rawDiff = Date.now() - player.lastUpdate;
-    if (player.options.offlineProgress && !Speedrun.isPausedAtStart()) {
+    // We set offlineEnabled externally on importing; otherwise this is just a local load
+    const simulateOffline = this.offlineEnabled ?? player.options.offlineProgress;
+    if (simulateOffline && !Speedrun.isPausedAtStart()) {
       let diff = rawDiff;
       player.speedrun.offlineTimeUsed += diff;
       if (diff > 5 * 60 * 1000 && player.celestials.enslaved.autoStoreReal) {

@@ -17,16 +17,21 @@ export default {
   data() {
     return {
       cloudEnabled: false,
+      syncSaveIntervals: false,
       showTimeSinceSave: false,
       loggedIn: false,
       userName: "",
       canSpeedrun: false,
-      creditsClosed: false
+      creditsClosed: false,
+      isCloudSaving: false,
     };
   },
   watch: {
     cloudEnabled(newValue) {
       player.options.cloudEnabled = newValue;
+    },
+    syncSaveIntervals(newValue) {
+      player.options.syncSaveIntervals = newValue;
     },
     showTimeSinceSave(newValue) {
       player.options.showTimeSinceSave = newValue;
@@ -36,12 +41,14 @@ export default {
     update() {
       const options = player.options;
       this.cloudEnabled = options.cloudEnabled;
+      this.syncSaveIntervals = options.syncSaveIntervals;
       this.showTimeSinceSave = options.showTimeSinceSave;
       this.loggedIn = Cloud.loggedIn;
       this.canSpeedrun = player.speedrun.isUnlocked;
       this.creditsClosed = GameEnd.creditsEverClosed;
       if (!this.loggedIn) return;
       this.userName = Cloud.user.displayName;
+      this.isCloudSaving = Cloud.shouldOverwriteCloudSave;
     },
     importAsFile(event) {
       // This happens if the file dialog is canceled instead of a file being selected
@@ -52,6 +59,15 @@ export default {
         const contents = reader.result;
         const toImport = GameSaveSerializer.deserialize(contents);
         const showWarning = (toImport?.IAP?.totalSTD ?? 0) < player.IAP.totalSTD;
+
+        // File importing behavior should use the behavior on the existing and to-be-overwritten save instead of the
+        // settings in the to-be-imported save. This is largely because the former is more easily edited by the player,
+        // and in contrast with the import-as-string case which allows the player to choose.
+        // Note: Do not move this into GameStorage.import, as this would cause the offline progress choice in the text
+        // import modal (the only other place GameStorage.import is called) to always be overridden
+        GameStorage.offlineEnabled = player.options.offlineProgress;
+        GameStorage.offlineTicks = player.options.offlineTicks;
+
         if (showWarning) {
           Modal.addImportConflict(toImport, GameStorage.saves[GameStorage.currentSlot]);
           Modal.importWarning.show({
@@ -110,7 +126,11 @@ export default {
         >
           Choose save
         </OptionsButton>
-        <AutosaveIntervalSlider />
+        <AutosaveIntervalSlider
+          :min="10"
+          :max="60"
+          :interval="1"
+        />
       </div>
       <div class="l-options-grid__row">
         <OptionsButton
@@ -155,31 +175,28 @@ export default {
       <span v-if="loggedIn">Logged in as {{ userName }}</span>
       <span v-else>Not logged in</span>
     </h2>
+    <div v-if="loggedIn">
+      <span v-if="isCloudSaving">Cloud Saving will occur automatically every 5 minutes.</span>
+      <span v-else>Cloud Saving has been disabled until you refresh the page or switch saves.</span>
+    </div>
     <div class="l-options-grid">
       <div
-        v-if="loggedIn"
         class="l-options-grid__row"
       >
         <OptionsButton
+          v-if="loggedIn"
           onclick="GameOptions.cloudSave()"
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         >
           Cloud save
         </OptionsButton>
         <OptionsButton
+          v-if="loggedIn"
           onclick="GameOptions.cloudLoad()"
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         >
           Cloud load
         </OptionsButton>
-        <PrimaryToggleButton
-          v-model="cloudEnabled"
-          class="o-primary-btn--option l-options-grid__button"
-          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
-          label="Automatic cloud saving/loading:"
-        />
-      </div>
-      <div class="l-options-grid__row">
         <OptionsButton
           v-if="loggedIn"
           onclick="GameOptions.logout()"
@@ -193,6 +210,23 @@ export default {
         >
           Login with Google to enable Cloud Saving
         </OptionsButton>
+      </div>
+      <div
+        v-if="loggedIn"
+        class="l-options-grid__row"
+      >
+        <PrimaryToggleButton
+          v-model="cloudEnabled"
+          class="o-primary-btn--option l-options-grid__button"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          label="Automatic cloud saving/loading:"
+        />
+        <PrimaryToggleButton
+          v-model="syncSaveIntervals"
+          class="o-primary-btn--option l-options-grid__button"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          label="Force local save before cloud saving:"
+        />
       </div>
     </div>
   </div>

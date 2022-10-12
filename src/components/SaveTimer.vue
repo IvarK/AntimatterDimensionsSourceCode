@@ -4,19 +4,30 @@ export default {
   data() {
     return {
       currentTime: 0,
-      lastSave: 0,
+      cloudSaveEnabled: false,
+      lastLocalSave: 0,
+      lastCloudSave: 0,
       showTimeSinceSave: false
     };
   },
   computed: {
-    time() {
-      return timeDisplayShort(this.currentTime - this.lastSave);
-    }
+    localString() {
+      const desc = this.cloudSaveEnabled
+        ? "Time since last local save:"
+        : "Time since last save:";
+      return `${desc} ${timeDisplayShort(this.currentTime - this.lastLocalSave)}`;
+    },
+    cloudString() {
+      if (!this.cloudSaveEnabled) return null;
+      return `Time since last cloud save: ${timeDisplayShort(this.currentTime - this.lastCloudSave)}`;
+    },
   },
   methods: {
     update() {
-      this.lastSave = GameStorage.lastSaveTime;
       this.currentTime = Date.now();
+      this.cloudSaveEnabled = player.options.cloudEnabled && Cloud.loggedIn;
+      this.lastLocalSave = GameStorage.lastSaveTime;
+      this.lastCloudSave = GameStorage.lastCloudSave;
       this.showTimeSinceSave = player.options.showTimeSinceSave;
     },
     save() {
@@ -32,7 +43,9 @@ export default {
     class="o-save-timer"
     @click="save"
   >
-    Time since last save: {{ time }}
+    {{ localString }}
+    <br>
+    {{ cloudString }}
   </div>
 </template>
 
@@ -42,6 +55,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
+  text-align: left;
   z-index: 5;
   color: var(--color-text);
   background-color: var(--color-base);

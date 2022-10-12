@@ -1,3 +1,5 @@
+import { ProgressChecker } from "../storage/progress-checker";
+
 import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
 import CloudManualLoginModal from "@/components/modals/cloud/CloudManualLoginModal";
 import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
@@ -40,6 +42,7 @@ import PurgeGlyphModal from "@/components/modals/glyph-management/PurgeGlyphModa
 import RefineGlyphModal from "@/components/modals/glyph-management/RefineGlyphModal";
 import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeGlyphModal";
 
+import AutobuyerEditModal from "@/components/modals/AutobuyerEditModal";
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
 import BreakInfinityModal from "@/components/modals/BreakInfinityModal";
@@ -240,6 +243,7 @@ Modal.importScriptData = new Modal(ImportAutomatorDataModal);
 Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
 Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);
 Modal.switchAutomatorEditorMode = new Modal(SwitchAutomatorEditorModal);
+Modal.autobuyerEditModal = new Modal(AutobuyerEditModal);
 Modal.shop = new Modal(StdStoreModal);
 Modal.studyString = new Modal(StudyStringModal);
 Modal.singularityMilestones = new Modal(SingularityMilestonesModal);
@@ -263,6 +267,7 @@ function getSaveInfo(save) {
     bestLevel: 0,
     totalSTD: 0,
     saveName: "",
+    compositeProgress: 0,
   };
   // This code ends up getting run on raw save data before any migrations are applied, so we need to default to props
   // which only exist on the pre-reality version when applicable. Note that new Decimal(undefined) gives zero.
@@ -279,6 +284,7 @@ function getSaveInfo(save) {
   resources.bestLevel = save.records?.bestReality.glyphLevel ?? 0;
   resources.totalSTD = save?.IAP?.totalSTD ?? 0;
   resources.saveName = save.options.saveFileName ?? "";
+  resources.compositeProgress = ProgressChecker.getCompositeProgress(save);
 
   return resources;
 }

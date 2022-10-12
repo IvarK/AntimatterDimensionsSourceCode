@@ -2,6 +2,12 @@
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import PrimaryButton from "@/components/PrimaryButton";
 
+const OFFLINE_PROGRESS_TYPE = {
+  IMPORTED: 0,
+  LOCAL: 1,
+  IGNORED: 2,
+};
+
 export default {
   name: "ImportSaveModal",
   components: {
@@ -12,6 +18,7 @@ export default {
     return {
       input: "",
       importCounter: 0,
+      offlineImport: OFFLINE_PROGRESS_TYPE.IMPORTED,
     };
   },
   computed: {
@@ -56,12 +63,66 @@ export default {
     },
     clicksLeft() {
       return 5 - this.importCounter;
+    },
+    timeSinceSave() {
+      return TimeSpan.fromMilliseconds(Date.now() - this.player.lastUpdate).toString();
+    },
+    offlineType() {
+      // We update here in the computed method instead of elsewhere because otherwise it initializes the text
+      // to a wrong or undefined setting
+      this.updateOfflineSettings();
+
+      switch (this.offlineImport) {
+        case OFFLINE_PROGRESS_TYPE.IMPORTED:
+          return "Using imported save settings";
+        case OFFLINE_PROGRESS_TYPE.LOCAL:
+          return "Using existing save settings";
+        case OFFLINE_PROGRESS_TYPE.IGNORED:
+          return "Will not simulate offline time";
+        default:
+          throw new Error("Unrecognized offline progress setting for importing");
+      }
+    },
+    offlineDetails() {
+      if (this.offlineImport === OFFLINE_PROGRESS_TYPE.IGNORED) {
+        return `Save will be imported without offline progress.`;
+      }
+      const ticks = GameStorage.offlineTicks;
+      return GameStorage.offlineEnabled
+        ? `After importing, will simulate ${formatInt(ticks)} ticks of duration
+          ${TimeSpan.fromMilliseconds((Date.now() - this.player.lastUpdate) / ticks).toStringShort()} each.`
+        : "This setting will not apply any offline progress after importing.";
     }
   },
   mounted() {
     this.$refs.input.select();
   },
+  destroyed() {
+    // Explicitly setting this to undefined after closing forces the game to fall-back to the stored settings within
+    // the player object if this modal is closed - ie. it makes sure actions in the modal don't persist
+    GameStorage.offlineEnabled = undefined;
+    GameStorage.offlineTicks = undefined;
+  },
   methods: {
+    changeOfflineSetting() {
+      this.offlineImport = (this.offlineImport + 1) % 3;
+    },
+    updateOfflineSettings() {
+      switch (this.offlineImport) {
+        case OFFLINE_PROGRESS_TYPE.IMPORTED:
+          // These are default values from a new save, used if importing from pre-reality where these props don't exist
+          GameStorage.offlineEnabled = this.player.options.offlineProgress ?? true;
+          GameStorage.offlineTicks = this.player.options.offlineTicks ?? 1000;
+          break;
+        case OFFLINE_PROGRESS_TYPE.LOCAL:
+          GameStorage.offlineEnabled = player.options.offlineProgress;
+          GameStorage.offlineTicks = player.options.offlineTicks;
+          break;
+        case OFFLINE_PROGRESS_TYPE.IGNORED:
+          GameStorage.offlineEnabled = false;
+          break;
+      }
+    },
     importSave() {
       this.importCounter++;
       if (this.hasLessSTDs && this.clicksLeft > 0) return;
@@ -108,7 +169,18 @@ export default {
           Realities: {{ formatPostBreak(player.realities, 2) }}
         </div>
         <div class="c-modal-import__warning">
-          (your current save file will be overwritten!)
+          (Your current save file will be overwritten!)
+        </div>
+        <br>
+        <div>
+          This save was last opened {{ timeSinceSave }} ago.
+          <div
+            class="o-primary-btn"
+            @click="changeOfflineSetting"
+          >
+            Offline Progress: {{ offlineType }}
+          </div>
+          <span v-html="offlineDetails" />
         </div>
         <div
           v-if="hasLessSTDs"

@@ -14,6 +14,13 @@ export default {
     ExpandingControlBox,
     AutobuyerDropdownEntry
   },
+  props: {
+    isModal: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  },
   data() {
     return {
       isDoomed: false,
@@ -84,6 +91,7 @@ export default {
   <AutobuyerBox
     :autobuyer="autobuyer"
     :show-interval="!postBreak"
+    :is-modal="isModal"
     name="Automatic Big Crunch"
   >
     <template

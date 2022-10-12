@@ -109,11 +109,11 @@ ShopPurchase.respecRequest = function() {
 };
 
 kong.purchaseTimeSkip = function() {
-  simulateTime(3600 * 6);
+  simulateTime(3600 * 6, true);
 };
 
 kong.purchaseLongerTimeSkip = function() {
-  simulateTime(3600 * 24);
+  simulateTime(3600 * 24, true);
 };
 
 kong.updatePurchases = function() {

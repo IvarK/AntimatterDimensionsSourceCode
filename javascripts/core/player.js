@@ -767,6 +767,7 @@ window.player = {
     retryCelestial: false,
     showAllChallenges: false,
     cloudEnabled: true,
+    syncSaveIntervals: true,
     hotkeys: true,
     theme: "Normal",
     commas: true,

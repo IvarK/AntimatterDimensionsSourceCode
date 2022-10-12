@@ -119,7 +119,7 @@ export default {
         // Sac isn't passed through confirm so we have to close it manually
         this.emitClose();
       }
-      processManualReality(sacrifice, this.selectedGlyph);
+      startManualReality(sacrifice, this.selectedGlyph);
     }
   },
 };

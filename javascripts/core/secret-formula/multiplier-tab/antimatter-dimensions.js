@@ -300,7 +300,7 @@ GameDatabase.multiplierTabValues.AD = {
     name: "Pelle Effects",
     multValue: dim => Decimal.pow(PelleUpgrade.antimatterDimensionMult.effectOrDefault(1),
       dim ? 1 : MultiplierTabHelper.activeDimCount("AD")),
-    powValue: () => PelleRifts.paradox.effectOrDefault(1).toNumber(),
+    powValue: () => PelleRifts.paradox.effectOrDefault(DC.D1).toNumber(),
     isActive: () => Pelle.isDoomed && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.PELLE,
   },

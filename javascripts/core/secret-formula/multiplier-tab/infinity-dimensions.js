@@ -225,7 +225,7 @@ GameDatabase.multiplierTabValues.ID = {
       return Decimal.pow(mult, dim ? 1 : maxActiveDim)
         .times(maxActiveDim >= 1 ? PelleRifts.decay.milestones[0].effectOrDefault(1) : DC.D1);
     },
-    powValue: () => PelleRifts.paradox.effectOrDefault(1).toNumber(),
+    powValue: () => PelleRifts.paradox.effectOrDefault(DC.D1).toNumber(),
     isActive: () => Pelle.isDoomed,
     icon: MultiplierTabIcons.PELLE,
   },

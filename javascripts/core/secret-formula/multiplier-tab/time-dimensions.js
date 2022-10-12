@@ -207,7 +207,7 @@ GameDatabase.multiplierTabValues.TD = {
     name: "Pelle Rift Effects",
     multValue: dim => Decimal.pow(PelleRifts.chaos.effectOrDefault(1),
       dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
-    powValue: () => PelleRifts.paradox.effectOrDefault(1).toNumber(),
+    powValue: () => PelleRifts.paradox.effectOrDefault(DC.D1).toNumber(),
     isActive: () => Pelle.isDoomed,
     icon: MultiplierTabIcons.PELLE,
   },

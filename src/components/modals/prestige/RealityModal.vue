@@ -40,9 +40,9 @@ export default {
     },
     selectInfo() {
       if (!this.hasChoice) {
-        return `<b style="color: var(--color-infinity)">You only have a single choice for new Glyphs every Reality.
-          You can unlock the ability to choose from multiple Glyphs by canceling out of this modal and unlocking
-          your first Perk.</b>`;
+        return `<b style="color: var(--color-infinity)">You currently only have a single option for new Glyphs every
+          Reality. You can unlock the ability to choose from multiple Glyphs by canceling out of this modal and
+          purchasing the START Perk.</b>`;
       }
 
       const sacText = this.canSacrifice ? "or Sacrifice " : "";

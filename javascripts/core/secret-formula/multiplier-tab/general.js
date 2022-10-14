@@ -70,8 +70,17 @@ GameDatabase.multiplierTabValues.general = {
   },
   infinityChallenge: {
     name: ic => `Infinity Challenge ${ic}`,
+    displayOverride: ic => (ic === 4 ? formatPow(InfinityChallenge(4).reward.effectValue, 0, 3) : ""),
     multValue: (ic, dim) => {
-      if (ic === 4) return 1;
+      // We cheat here by actually giving IC4 a multiplier of a value equal to its effect on the final
+      // value in order to represent its proportion accurately. It's hidden by displayOverride
+      if (ic === 4) {
+        const ic4Pow = InfinityChallenge(4).reward.effectValue;
+        const mults = AntimatterDimensions.all.map(ad => ad.multiplier.pow((ic4Pow - 1) / ic4Pow));
+        if (dim?.length === 2) return mults.reduce((x, y) => x.times(y), DC.D1);
+        return mults[Number(dim.charAt(2)) - 1];
+      }
+
       if (dim?.length === 2) {
         let totalEffect = DC.D1;
         for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount(dim); tier++) {

@@ -22,17 +22,11 @@ export default {
   },
   data() {
     return {
+      availableOptions: [],
       currentID: player.options.currentMultiplierSubtab,
     };
   },
   computed: {
-    availableOptions() {
-      const checkActiveKey = key => {
-        const act = GameDatabase.multiplierTabValues[key].total.isActive;
-        return typeof act === "function" ? act() : act;
-      };
-      return MULT_TAB_OPTIONS.filter(opt => checkActiveKey(opt.key));
-    },
     currentKey() {
       return MULT_TAB_OPTIONS.find(opt => opt.id === this.currentID).key;
     },
@@ -44,6 +38,16 @@ export default {
     }
   },
   methods: {
+    update() {
+      this.availableOptions = MULT_TAB_OPTIONS.map(opt => ({
+        ...opt,
+        isActive: this.checkActiveKey(opt.key)
+      })).filter(opt => opt.isActive);
+    },
+    checkActiveKey(key) {
+      const act = GameDatabase.multiplierTabValues[key].total.isActive;
+      return typeof act === "function" ? act() : act;
+    },
     accessProp(prop) {
       return typeof prop === "function" ? prop() : prop;
     },
@@ -66,7 +70,7 @@ export default {
     <div class="l-multiplier-subtab-btn-container">
       <button
         v-for="(option, index) in availableOptions"
-        :key="option.key"
+        :key="option.key + option.isActive"
         :class="subtabClassObject(option)"
         @click="clickSubtab(index)"
       >
@@ -93,7 +97,11 @@ export default {
         For example, any effects which affect all Dimensions of any type equally will not expand into a
         list of eight identical numbers.
         <br>
-        <b>Some entries may cause lag if expanded out fully.</b>
+        <b>
+          Some entries may cause lag if expanded out fully. Resizing happens over 200 ms (instead of instantly)
+          in order to reduce possible adverse effects due to photosensitivity. This may cause some visual weirdness
+          after prestige events.
+        </b>
       </div>
     </div>
   </div>

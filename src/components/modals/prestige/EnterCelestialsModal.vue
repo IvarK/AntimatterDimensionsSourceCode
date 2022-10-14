@@ -44,8 +44,12 @@ export default {
     },
     extraLine() {
       switch (this.number) {
-        case 0: return `Your highest Teresa completion was for ${format(this.teresaBestAM, 2, 2)}
-          antimatter, gaining you a ${formatX(this.teresaRunMult, 2)} multiplier to Glyph Sacrifice power.`;
+        case 0:
+          return this.teresaBestAM.eq(1)
+            ? `You have not unlocked the reward for Teresa's Reality yet. Unlocking the reward requires
+              purchasing the Reality study and completing the Reality for the first time.`
+            : `Your highest Teresa completion was for ${format(this.teresaBestAM, 2, 2)} antimatter,
+              gaining you a ${formatX(this.teresaRunMult, 2)} multiplier to Glyph Sacrifice power.`;
         case 1: return this.effarigDone
           ? "Effarig is completed!"
           : `You are currently on the ${this.effarigLayer} Layer.`;
@@ -58,8 +62,7 @@ export default {
         case 5: return this.laitelaFastest >= 300
           ? "You have not completed Lai'tela at this tier."
           : `Your fastest completion on this tier is ${this.laitelaTime}.`;
-        // TODO: Address pelle being its own modal instead of here
-        case 6: return `Pe-lle is Dea-th. You is Doo-med.`;
+        case 6: return "";
         default: throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
       }
     }

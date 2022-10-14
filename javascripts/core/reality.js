@@ -629,6 +629,7 @@ export function finishProcessReality(realityProps) {
   player.dilation.lastEP = DC.DM1;
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
+  player.celestials.enslaved.hasSecretStudy = false;
   player.celestials.laitela.entropy = 0;
 
   playerInfinityUpgradesOnReset();

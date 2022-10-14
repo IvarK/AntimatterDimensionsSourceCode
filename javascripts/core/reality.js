@@ -542,7 +542,9 @@ export function finishProcessReality(realityProps) {
       disChargeAll();
     }
   }
-  if (AutomatorBackend.state.forceRestart) AutomatorBackend.start(player.reality.automator.state.editorScript);
+  if (Player.automatorUnlocked && AutomatorBackend.state.forceRestart) {
+    AutomatorBackend.start(player.reality.automator.state.editorScript);
+  }
   if (player.options.automatorEvents.clearOnReality) AutomatorData.clearEventLog();
 
   const celestialRunState = clearCelestialRuns();

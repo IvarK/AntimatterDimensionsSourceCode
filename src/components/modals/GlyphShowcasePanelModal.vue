@@ -19,10 +19,6 @@ export default {
       type: Array,
       required: true
     },
-    closeOn: {
-      type: String,
-      required: true
-    },
     isGlyphSelection: {
       type: Boolean,
       default: false
@@ -52,9 +48,6 @@ export default {
       }
       return maxEffects;
     },
-  },
-  created() {
-    this.on$(this.closeOn, this.emitClose);
   },
   methods: {
     update() {

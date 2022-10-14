@@ -40,7 +40,7 @@ export default {
       return `${this.name} Reality`;
     },
     message() {
-      return `Perform a Reality reset, and enter ${this.name} Reality, in which:`;
+      return `Perform a Reality reset and enter ${this.name} Reality, in which:`;
     },
     extraLine() {
       switch (this.number) {
@@ -57,8 +57,8 @@ export default {
           ? "Have... we... not helped enough..."
           : "We... can help... Let us... help...";
         case 3: return "";
-        case 4: return `Inside of Ra's Reality, some resources will generate Memory Chunks
-          for a specific Celestial Memory based on their amount.`;
+        case 4: return `Within Ra's Reality, some resources will generate Memory Chunks
+          for Celestial Memories based on their amounts:`;
         case 5: return this.laitelaFastest >= 300
           ? "You have not completed Lai'tela at this tier."
           : `Your fastest completion on this tier is ${this.laitelaTime}.`;

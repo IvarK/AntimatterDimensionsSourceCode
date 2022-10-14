@@ -7388,8 +7388,8 @@ kbd {
 .c-ra-run-button {
   display: flex;
   flex-direction: column;
-  width: 31rem;
-  height: 33rem;
+  width: 33rem;
+  height: 36rem;
   justify-content: center;
   align-items: center;
   font-family: Typewriter;
@@ -7466,8 +7466,8 @@ kbd {
 .c-ra-remembrance-unlock {
   display: flex;
   flex-direction: column;
-  width: 31rem;
-  height: 33rem;
+  width: 33rem;
+  height: 36rem;
   justify-content: center;
   align-items: center;
   color: white;

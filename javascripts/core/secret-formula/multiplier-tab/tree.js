@@ -141,7 +141,7 @@ for (const res of dimTypes) {
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
 // entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
 const removedProps = ["AD_sacrifice", "AD_achievementMult", "AD_breakInfinityUpgrade", "AD_alchemy", "AD_v", "AD_pelle",
-  "AD_iap", "AD_nerfIC", "AD_nerfPelle",
+  "AD_iap", "AD_nerfIC", "AD_nerfPelle", "AD_infinityUpgrade",
   "ID_replicanti", "ID_achievementMult", "ID_infinityChallenge", "ID_eternityUpgrades", "ID_alchemy",
   "ID_imaginaryUpgrade", "ID_pelle", "ID_nerfPelle",
   "TD_achievement", "TD_achievementMult", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade", "TD_alchemy",

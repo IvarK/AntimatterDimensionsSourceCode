@@ -23,6 +23,9 @@ export default {
       currentGroupKeys: [],
       isEmpty: false,
       isDilated: false,
+      // This is used to temporarily remove the transition function from the bar styling when changing the way
+      // multipliers are split up; the animation which results from not doing this looks very awkward
+      lastLayoutChange: Date.now(),
     };
   },
   computed: {
@@ -49,25 +52,29 @@ export default {
     changeGroup() {
       this.selected = (this.selected + 1) % this.groups.length;
       this.showGroup = Array.repeat(false, this.currentGroupKeys.length);
+      this.lastLayoutChange = Date.now();
     },
     calculatePercents() {
-      const totalPow = this.powList.reduce((x, y) => x * y, 1);
-      const log10Mult = (this.getProp(this.resource, "fakeValue") ?? this.getMult(this.resource)).log10() / totalPow;
+      const totalPosPow = this.powList.filter(p => p > 1).reduce((x, y) => x * y, 1);
+      const totalNegPow = this.powList.filter(p => p < 1).reduce((x, y) => x * y, 1);
+      const log10Mult = (this.getProp(this.resource, "fakeValue") ?? this.getMult(this.resource)).log10() / totalPosPow;
       this.isEmpty = log10Mult === 0;
       this.percentList = [];
       for (let index = 0; index < this.baseMultList.length; index++) {
         const multFrac = log10Mult === 0
           ? 0
           : Decimal.log10(this.baseMultList[index]) / log10Mult;
-        const powFrac = totalPow === 1 ? 0 : Math.log(this.powList[index]) / Math.log(totalPow);
-        this.percentList.push(multFrac / totalPow + powFrac * (1 - 1 / totalPow));
+        const powFrac = totalPosPow === 1 ? 0 : Math.log(this.powList[index]) / Math.log(totalPosPow);
+        // Handle nerf powers differently from everything else in order to render them with the correct bar percentage
+        if (this.powList[index] >= 1) this.percentList.push(multFrac / totalPosPow + powFrac * (1 - 1 / totalPosPow));
+        else this.percentList.push(Math.log(this.powList[index]) / Math.log(totalNegPow) * (totalNegPow - 1));
       }
 
       // Shortly after a prestige, these may add up to a lot more than the base amount as production catches up. This
       // is also necessary to suppress some visual weirdness for certain categories which have lots of exponents but
       // actually apply only to specific dimensions (eg. charged infinity upgrades)
       const totalPerc = this.percentList.filter(p => p > 0).sum();
-      this.percentList = this.percentList.map(p => Math.clamp(p / totalPerc, -1, 1));
+      this.percentList = this.percentList.map(p => (p > 0 ? p / totalPerc : p));
     },
     getProp(key, attr) {
       const args = key.split("_");
@@ -100,6 +107,7 @@ export default {
         top: `${100 * this.percentList.slice(0, index).map(p => barSize(p)).sum()}%`,
         height: `${100 * barSize(this.percentList[index])}%`,
         width: "100%",
+        "transition-duration": (Date.now() - this.lastLayoutChange < 100) ? undefined : "0.2s",
         border: this.isEmpty ? "" : "0.1rem solid var(--color-text)",
         color: iconObj?.textColor ?? "black",
         background: isNerf

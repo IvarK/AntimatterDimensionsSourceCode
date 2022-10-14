@@ -5,6 +5,7 @@ export default {
     return {
       isActive: false,
       isSegmented: false,
+      usedSTD: false,
       hasStarted: false,
       startDate: 0,
       saveName: "",
@@ -51,7 +52,7 @@ export default {
       // Short-circuit if speedrun isn't active; updating some later stuff can cause vue errors outside of speedruns
       if (!this.isActive) return;
       this.isSegmented = speedrun.isSegmented;
-      this.usedIAP = speedrun.usedSTD;
+      this.usedSTD = speedrun.usedSTD;
       this.hasStarted = speedrun.hasStarted;
       this.startDate = speedrun.startDate;
       this.saveName = speedrun.name;

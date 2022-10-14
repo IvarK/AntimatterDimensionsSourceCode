@@ -40,7 +40,7 @@ export default {
       player.IAP.exportSTD = newValue;
     },
     IAPsDisabled(newValue) {
-      if (newValue) Speedrun.setSTDUse(true);
+      if (!newValue) Speedrun.setSTDUse(true);
       player.IAP.disabled = newValue;
     }
   },

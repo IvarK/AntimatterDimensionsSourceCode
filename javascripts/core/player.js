@@ -335,6 +335,7 @@ window.player = {
     isUnlocked: false,
     isActive: false,
     isSegmented: false,
+    usedSTD: false,
     hasStarted: false,
     hideInfo: false,
     startDate: 0,
@@ -878,6 +879,7 @@ window.player = {
   IAP: {
     totalSTD: 0,
     spentSTD: 0,
+    exportSTD: false,
     IPPurchases: 0,
     EPPurchases: 0,
     RMPurchases: 0,

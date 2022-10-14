@@ -78,6 +78,7 @@ export function buyTickSpeed() {
   if (NormalChallenge(9).isRunning) {
     Tickspeed.multiplySameCosts();
   }
+  Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
   Currency.antimatter.subtract(Tickspeed.cost);
   player.totalTickBought++;
   player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
@@ -91,6 +92,7 @@ export function buyMaxTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
   let boughtTickspeed = false;
 
+  Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     const goal = Player.infinityGoal;
     let cost = Tickspeed.cost;

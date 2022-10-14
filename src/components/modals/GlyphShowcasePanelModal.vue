@@ -19,10 +19,6 @@ export default {
       type: Array,
       required: true
     },
-    closeOn: {
-      type: String,
-      required: true
-    },
     isGlyphSelection: {
       type: Boolean,
       default: false
@@ -58,9 +54,6 @@ export default {
         "c-glyph-choice-container-single": this.glyphs.length === 1,
       };
     }
-  },
-  created() {
-    this.on$(this.closeOn, this.emitClose);
   },
   methods: {
     update() {

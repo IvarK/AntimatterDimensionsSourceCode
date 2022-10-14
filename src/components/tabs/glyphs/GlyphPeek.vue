@@ -41,7 +41,7 @@ export default {
       Modal.glyphShowcasePanel.show({
         name: "Potential Glyphs for this Reality",
         glyphSet: this.glyphs,
-        closeOn: GAME_EVENT.REALITY_RESET_AFTER,
+        closeEvent: GAME_EVENT.REALITY_RESET_AFTER,
         isGlyphSelection: true,
         showSetName: false,
       });

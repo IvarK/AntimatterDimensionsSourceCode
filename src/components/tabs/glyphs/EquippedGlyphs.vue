@@ -136,7 +136,7 @@ export default {
       Modal.glyphShowcasePanel.show({
         name: "Equipped Glyphs",
         glyphSet: this.glyphs,
-        closeOn: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
+        closeEvent: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED,
       });
     },
     showOptionModal() {

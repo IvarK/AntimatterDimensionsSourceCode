@@ -98,7 +98,7 @@ export default {
       Modal.glyphShowcasePanel.show({
         name: this.text,
         glyphSet: this.glyphs,
-        closeOn: GAME_EVENT.GLYPH_SET_SAVE_CHANGE,
+        closeEvent: GAME_EVENT.GLYPH_SET_SAVE_CHANGE,
         displaySacrifice: this.showSacrifice,
       });
     }

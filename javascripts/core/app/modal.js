@@ -103,6 +103,7 @@ export class Modal {
     this._uniqueID = nextModalID++;
     this._props = Object.assign({}, modalConfig || {});
     if (this._closeEvent) this.applyCloseListeners(this._closeEvent);
+    if (modalConfig?.closeEvent) this.applyCloseListeners(modalConfig.closeEvent);
 
     const modalQueue = ui.view.modal.queue;
     // Add this modal to the front of the queue and sort based on priority to ensure priority is maintained.

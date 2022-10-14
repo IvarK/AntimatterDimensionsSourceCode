@@ -22,6 +22,7 @@ export default {
     return {
       STD: 0,
       isLoading: false,
+      exportIAP: false,
       IAPsDisabled: false,
       creditsClosed: false,
     };
@@ -35,7 +36,11 @@ export default {
     }
   },
   watch: {
+    exportIAP(newValue) {
+      player.IAP.exportSTD = newValue;
+    },
     IAPsDisabled(newValue) {
+      if (newValue) Speedrun.setSTDUse(true);
       player.IAP.disabled = newValue;
     }
   },
@@ -43,6 +48,7 @@ export default {
     update() {
       this.STD = player.IAP.totalSTD - player.IAP.spentSTD;
       this.isLoading = Boolean(player.IAP.checkoutSession.id);
+      this.exportIAP = player.IAP.exportSTD;
       this.IAPsDisabled = player.IAP.disabled;
       this.creditsClosed = GameEnd.creditsEverClosed;
     },
@@ -69,6 +75,12 @@ export default {
       The game is balanced without the use of any microtransactions.
     </div>
     <div class="c-subtab-option-container">
+      <PrimaryToggleButton
+        v-model="exportIAP"
+        class="o-primary-btn--subtab-option"
+        :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+        label="Include IAP in export:"
+      />
       <PrimaryToggleButton
         v-model="IAPsDisabled"
         class="o-primary-btn--subtab-option"

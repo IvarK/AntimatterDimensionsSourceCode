@@ -59,7 +59,10 @@ export const Speedrun = {
   setSegmented(state) {
     if (this.isPausedAtStart()) return;
     player.speedrun.isSegmented = state;
-  }
+  },
+  setSTDUse(state) {
+    player.speedrun.usedSTD = state;
+  },
 };
 
 class SpeedrunMilestone extends GameMechanicState {

@@ -167,11 +167,39 @@ export const GameStorage = {
   },
 
   export() {
+    // There are a few props which we explicitly change before exporting, but we need to save the old values
+    // in order to restore them again
     const segmented = player.speedrun.isSegmented;
+    const iap = JSON.stringify(player.IAP);
+
+    // Now we modify all the relevant values before actually exporting
     Speedrun.setSegmented(true);
+    if (!player.IAP.exportSTD) {
+      for (const prop in player.IAP) {
+        if (Object.prototype.hasOwnProperty.call(player.IAP, prop)) {
+          switch (typeof player.IAP[prop]) {
+            case "number":
+              player.IAP[prop] = 0;
+              break;
+            case "boolean":
+              player.IAP[prop] = false;
+              break;
+            case "object":
+              player.IAP[prop] = { id: false };
+              break;
+          }
+        }
+      }
+    }
+
+    // Serialize and export the altered data
     const save = GameSaveSerializer.serialize(player);
-    Speedrun.setSegmented(segmented);
     copyToClipboard(save);
+
+    // Return all the relevant props back to their old values
+    Speedrun.setSegmented(segmented);
+    player.IAP = JSON.parse(iap);
+
     GameUI.notify.info("Exported current savefile to your clipboard");
   },
 

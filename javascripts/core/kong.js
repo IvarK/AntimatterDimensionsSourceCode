@@ -77,6 +77,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
     if (GameEnd.creditsEverClosed) return false;
     if (this.config.singleUse && ui.$viewModel.modal.progressBar) return false;
     player.IAP.spentSTD += this.cost;
+    Speedrun.setSTDUse(true);
     if (this.config.singleUse) {
       this.config.onPurchase();
     } else {
@@ -109,10 +110,12 @@ ShopPurchase.respecRequest = function() {
 };
 
 kong.purchaseTimeSkip = function() {
+  Speedrun.setSTDUse(true);
   simulateTime(3600 * 6);
 };
 
 kong.purchaseLongerTimeSkip = function() {
+  Speedrun.setSTDUse(true);
   simulateTime(3600 * 24);
 };
 

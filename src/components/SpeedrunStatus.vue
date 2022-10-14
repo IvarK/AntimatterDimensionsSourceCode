@@ -25,6 +25,9 @@ export default {
     segmentText() {
       return this.isSegmented ? "Segmented Speedrun (imported save)" : "Single-segment Speedrun (no save import)";
     },
+    iapText() {
+      return this.usedSTD ? "IAPs have been used" : "No IAPs Used";
+    },
     offlineText() {
       const stateText = this.offlineProgress
         ? `<span style="color: var(--color-good)">Enabled</span>`
@@ -48,6 +51,7 @@ export default {
       // Short-circuit if speedrun isn't active; updating some later stuff can cause vue errors outside of speedruns
       if (!this.isActive) return;
       this.isSegmented = speedrun.isSegmented;
+      this.usedIAP = speedrun.usedSTD;
       this.hasStarted = speedrun.hasStarted;
       this.startDate = speedrun.startDate;
       this.saveName = speedrun.name;
@@ -97,6 +101,8 @@ export default {
       </span>
       <br>
       <i>{{ segmentText }}</i>
+      <br>
+      <i>{{ iapText }}</i>
       <br>
       Total real playtime since start: {{ timePlayedStr }}
       <br>

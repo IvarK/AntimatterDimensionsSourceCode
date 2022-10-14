@@ -71,14 +71,6 @@ export default {
         "tutorial--glow": this.isAffordable && this.hasTutorial
       };
     },
-    buyUpgrade() {
-      if (!buyTickSpeed()) return;
-      Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
-    },
-    buyMaxUpgrade() {
-      if (!buyMaxTickSpeed()) return;
-      Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
-    },
   }
 };
 </script>
@@ -89,7 +81,7 @@ export default {
       <button
         v-tooltip="upgradeCount"
         :class="buttonClass()"
-        @click="buyUpgrade"
+        onclick="buyTickSpeed()"
       >
         <span v-if="isContinuumActive">
           Tickspeed Continuum: {{ continuumString }}
@@ -106,7 +98,7 @@ export default {
         v-if="!isContinuumActive"
         class="o-primary-btn tickspeed-max-btn"
         :class="{ 'o-primary-btn--disabled': !isAffordable && !isContinuumActive }"
-        @click="buyMaxUpgrade"
+        onclick="buyMaxTickSpeed()"
       >
         Buy Max
       </button>

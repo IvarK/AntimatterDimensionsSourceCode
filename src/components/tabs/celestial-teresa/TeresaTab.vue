@@ -40,6 +40,9 @@ export default {
   computed: {
     unlockInfos: () => TeresaUnlocks.all,
     pouredAmountCap: () => Teresa.pouredAmountCap,
+    showRunReward() {
+      return this.bestAM.gt(1);
+    },
     upgrades() {
       const upgrades = [
         PerkShopUpgrade.glyphLevel,
@@ -161,25 +164,30 @@ export default {
           </div>
           {{ runDescription }}
           <br><br>
-          <div v-if="bestAM.gt(0)">
+          <div>
             This Reality can be repeated for a stronger reward based on the antimatter gained within it.
             <br><br>
-            Your record antimatter in Teresa's Reality is {{ format(bestAM, 2) }},
-            achieved with {{ lastMachinesString }}.
-            <br><br>
-            Glyph Set used:
-            <GlyphSetPreview
-              text="Teresa's Best Glyph Set"
-              :text-hidden="true"
-              :force-name-color="false"
-              :glyphs="bestAMSet"
-            />
-          </div>
-          <div v-else>
-            You have not completed Teresa's Reality yet.
+            <span v-if="showRunReward">
+              Your record antimatter in Teresa's Reality is {{ format(bestAM, 2) }},
+              achieved with {{ lastMachinesString }}.
+              <br><br>
+              Glyph Set used:
+              <GlyphSetPreview
+                text="Teresa's Best Glyph Set"
+                :text-hidden="true"
+                :force-name-color="false"
+                :glyphs="bestAMSet"
+              />
+            </span>
+            <span v-else>
+              You have not completed Teresa's Reality yet.
+            </span>
           </div>
         </div>
-        <div class="c-teresa-unlock">
+        <div
+          v-if="showRunReward"
+          class="c-teresa-unlock"
+        >
           Teresa Reality reward: Glyph Sacrifice power {{ formatX(runReward, 2, 2) }}
         </div>
         <div

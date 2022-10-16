@@ -77,7 +77,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
     if (GameEnd.creditsEverClosed) return false;
     if (this.config.singleUse && ui.$viewModel.modal.progressBar) return false;
     player.IAP.spentSTD += this.cost;
-    Speedrun.setSTDUse(true);
+    if (!player.IAP.disabled) Speedrun.setSTDUse(true);
     if (this.config.singleUse) {
       this.config.onPurchase();
     } else {

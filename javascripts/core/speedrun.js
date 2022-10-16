@@ -49,6 +49,14 @@ export const Speedrun = {
     player.speedrun.hasStarted = true;
     player.speedrun.startDate = Date.now();
     player.lastUpdate = Date.now();
+
+    // This needs to be calculated "live" because using spentSTD includes any offline progress purchases too
+    let currentSpent = 0;
+    for (const purchase of ShopPurchase.all) {
+      if (purchase.config.singleUse) continue;
+      currentSpent += purchase.purchases * purchase.cost;
+    }
+    this.setSTDUse(!player.IAP.disabled && currentSpent > 0);
   },
   isPausedAtStart() {
     return player.speedrun.isActive && !player.speedrun.hasStarted;
@@ -61,6 +69,7 @@ export const Speedrun = {
     player.speedrun.isSegmented = state;
   },
   setSTDUse(state) {
+    if (this.isPausedAtStart() || player.IAP.spentSTD === 0) return;
     player.speedrun.usedSTD = state;
   },
 };

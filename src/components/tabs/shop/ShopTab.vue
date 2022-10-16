@@ -20,7 +20,8 @@ export default {
   },
   data() {
     return {
-      STD: 0,
+      availableSTD: 0,
+      spentSTD: 0,
       isLoading: false,
       exportIAP: false,
       IAPsDisabled: false,
@@ -40,13 +41,14 @@ export default {
       player.IAP.exportSTD = newValue;
     },
     IAPsDisabled(newValue) {
-      if (!newValue) Speedrun.setSTDUse(true);
+      if (!newValue && this.spentSTD > 0) Speedrun.setSTDUse(true);
       player.IAP.disabled = newValue;
     }
   },
   methods: {
     update() {
-      this.STD = player.IAP.totalSTD - player.IAP.spentSTD;
+      this.availableSTD = player.IAP.totalSTD - player.IAP.spentSTD;
+      this.spentSTD = player.IAP.spentSTD;
       this.isLoading = Boolean(player.IAP.checkoutSession.id);
       this.exportIAP = player.IAP.exportSTD;
       this.IAPsDisabled = player.IAP.disabled;
@@ -96,7 +98,7 @@ export default {
       </PrimaryButton>
     </div>
     <div class="c-shop-header">
-      <span>You have {{ STD }}</span>
+      <span>You have {{ availableSTD }}</span>
       <img
         src="images/std_coin.png"
         class="c-shop-header__img"

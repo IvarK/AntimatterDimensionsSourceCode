@@ -90,6 +90,7 @@ export default {
       <br>
       <br>
       <div class="c-modal-hard-reset-danger">
+        <!-- TODO: Change the wording of this; originally this assumed it's only unlockable from a completed save -->
         Starting a speedrun will overwrite your current save, replacing this save with the new speedrun save. Export
         this save first if you want to keep a save with a beaten game. Type in "Gotta Go Fast!" below to confirm and
         start the run.

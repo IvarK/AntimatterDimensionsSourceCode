@@ -167,8 +167,28 @@ export const GameStorage = {
   },
 
   export() {
-    // There are a few props which we explicitly change before exporting, but we need to save the old values
-    // in order to restore them again
+    copyToClipboard(this.exportModifiedSave());
+    GameUI.notify.info("Exported current savefile to your clipboard");
+  },
+
+  exportAsFile() {
+    player.options.exportedFileCount++;
+    this.save(true);
+    const saveFileName = player.options.saveFileName ? ` - ${player.options.saveFileName},` : "";
+    const dateObj = new Date();
+    const y = dateObj.getFullYear();
+    const m = dateObj.getMonth() + 1;
+    const d = dateObj.getDate();
+    const save = this.exportModifiedSave();
+    download(
+      `AD Save, Slot ${GameStorage.currentSlot + 1}${saveFileName} #${player.options.exportedFileCount} \
+(${y}-${m}-${d}).txt`, save);
+    GameUI.notify.info("Successfully downloaded current save file to your computer");
+  },
+
+  // There are a couple props which may need to export with different values, so we handle that here
+  exportModifiedSave() {
+    // Speedrun segmented is exported as true and IAP variables may be conditionally ignored
     const segmented = player.speedrun.isSegmented;
     const iap = JSON.stringify(player.IAP);
 
@@ -192,32 +212,11 @@ export const GameStorage = {
       }
     }
 
-    // Serialize and export the altered data
+    // Serialize the altered data, then restore all the old prop values afterwards and return
     const save = GameSaveSerializer.serialize(player);
-    copyToClipboard(save);
-
-    // Return all the relevant props back to their old values
     Speedrun.setSegmented(segmented);
     player.IAP = JSON.parse(iap);
-
-    GameUI.notify.info("Exported current savefile to your clipboard");
-  },
-
-  exportAsFile() {
-    player.options.exportedFileCount++;
-    this.save(true);
-    const saveFileName = player.options.saveFileName ? ` - ${player.options.saveFileName},` : "";
-    const dateObj = new Date();
-    const y = dateObj.getFullYear();
-    const m = dateObj.getMonth() + 1;
-    const d = dateObj.getDate();
-    const segmented = player.speedrun.isSegmented;
-    Speedrun.setSegmented(true);
-    download(
-      `AD Save, Slot ${GameStorage.currentSlot + 1}${saveFileName} #${player.options.exportedFileCount} \
-(${y}-${m}-${d}).txt`, GameSaveSerializer.serialize(player));
-    Speedrun.setSegmented(segmented);
-    GameUI.notify.info("Successfully downloaded current save file to your computer");
+    return save;
   },
 
   hardReset() {

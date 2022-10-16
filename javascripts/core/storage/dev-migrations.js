@@ -246,6 +246,19 @@ GameStorage.devMigrations = {
       // These are unused now
       delete player.celestials.effarig.typePriorityOrder;
       delete player.celestials.teresa.typePriorityOrder;
+      // This property didn't even exist at the time of this change
+      movePropIfPossible("teresa", "effarig", "glyphScoreSettings", {
+        mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
+        simpleEffectCount: 0,
+        types: GlyphTypes.list.mapToObject(t => t.id, t => ({
+          rarityThreshold: 0,
+          scoreThreshold: 0,
+          effectCount: 0,
+          effectChoices: t.effects.mapToObject(e => e.id, () => false),
+          effectScores: t.effects.mapToObject(e => e.id, () => 0),
+        })),
+      });
+      movePropIfPossible("effarig", "teresa", "bestAMSet", []);
     },
     player => {
       player.blackHole = player.wormhole;
@@ -453,18 +466,17 @@ GameStorage.devMigrations = {
     GameStorage.migrations.removeDimensionCosts,
     GameStorage.migrations.renameTickspeedPurchaseBumps,
     player => {
-      player.celestials.teresa.unlockBits = arrayToBits(player.celestials.teresa.unlocks);
+      let safeArrayToBits = x => (x === undefined) ? 0 : arrayToBits(x);
+      player.celestials.teresa.unlockBits = safeArrayToBits(player.celestials.teresa.unlocks);
       delete player.celestials.teresa.unlocks;
-      player.celestials.effarig.unlockBits = arrayToBits(player.celestials.effarig.unlocks);
+      player.celestials.effarig.unlockBits = safeArrayToBits(player.celestials.effarig.unlocks);
       delete player.celestials.effarig.unlocks;
-      player.celestials.v.unlockBits = arrayToBits(player.celestials.v.unlocks);
+      player.celestials.v.unlockBits = safeArrayToBits(player.celestials.v.unlocks);
       delete player.celestials.v.unlocks;
-      player.celestials.ra.unlockBits = arrayToBits(player.celestials.ra.unlocks);
+      player.celestials.ra.unlockBits = safeArrayToBits(player.celestials.ra.unlocks);
       delete player.celestials.ra.unlocks;
-      if (player.celestials.laitela.unlocks !== undefined) {
-        player.celestials.laitela.unlockBits = arrayToBits(player.celestials.laitela.unlocks);
-        delete player.celestials.laitela.unlocks;
-      }
+      player.celestials.laitela.unlockBits = safeArrayToBits(player.celestials.laitela.unlocks);
+      delete player.celestials.laitela.unlocks;
     },
     player => {
       player.reality.seed = Math.floor(Math.abs(player.reality.seed)) % 0xFFFFFFFF;

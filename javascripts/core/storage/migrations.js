@@ -883,8 +883,9 @@ GameStorage.migrations = {
   },
 
   removePriority(player) {
+    const dims = player.auto.antimatterDims.all ?? player.auto.antimatterDims;
     for (let i = 0; i < 8; i++) {
-      delete player.auto.antimatterDims[i].priority;
+      delete dims[i].priority;
     }
     delete player.auto.tickspeed.priority;
   },

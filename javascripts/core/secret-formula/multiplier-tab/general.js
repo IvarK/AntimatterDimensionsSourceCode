@@ -93,7 +93,6 @@ GameDatabase.multiplierTabValues.general = {
       if (ic === 8) return (num > 1 && num < 8) ? InfinityChallenge(ic).reward.effectValue : DC.D1;
       return InfinityChallenge(ic).reward.effectValue;
     },
-    powValue: ic => (ic === 4 ? InfinityChallenge(4).reward.effectValue : 1),
     isActive: ic => InfinityChallenge(ic).isCompleted,
     icon: ic => {
       const base = MultiplierTabIcons.CHALLENGE("infinity");
@@ -109,15 +108,17 @@ GameDatabase.multiplierTabValues.general = {
       if (dim?.length === 2) {
         let totalEffect = DC.D1;
         for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount(dim); tier++) {
-          totalEffect = totalEffect.times((MultiplierTabHelper.ECDimCheck(ec, `${dim}${tier}`) &&
-              EternityChallenge(ec).completions > 0) ? EternityChallenge(ec).reward.effectOrDefault(1) : 1);
+          totalEffect = totalEffect.times(
+            (MultiplierTabHelper.ECDimCheck(ec, `${dim}${tier}`) && EternityChallenge(ec).reward.canBeApplied)
+              ? EternityChallenge(ec).reward.effectOrDefault(1).clampMin(1)
+              : 1);
         }
         return totalEffect;
       }
       if (ec === 2) return dim === "ID1" ? EternityChallenge(ec).reward.effectValue : DC.D1;
-      return EternityChallenge(ec).reward.effectValue;
+      return EternityChallenge(ec).reward.effectOrDefault(1);
     },
-    isActive: ec => EternityChallenge(ec).completions > 0,
+    isActive: ec => EternityChallenge(ec).reward.canBeApplied,
     icon: ec => {
       const base = MultiplierTabIcons.CHALLENGE("eternity");
       return {

@@ -74,7 +74,7 @@ export default {
       // is also necessary to suppress some visual weirdness for certain categories which have lots of exponents but
       // actually apply only to specific dimensions (eg. charged infinity upgrades)
       const totalPerc = this.percentList.filter(p => p > 0).sum();
-      this.percentList = this.percentList.map(p => (p > 0 ? p / totalPerc : p));
+      this.percentList = this.percentList.map(p => (p > 0 ? p / totalPerc : Math.clampMin(p, -1)));
     },
     getProp(key, attr) {
       const args = key.split("_");

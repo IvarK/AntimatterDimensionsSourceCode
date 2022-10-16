@@ -13,13 +13,18 @@ GameDatabase.multiplierTabValues.gamespeed = {
       const currBH = BlackHoles.list
         .map(bh => (bh.isActive ? bh.power : 1))
         .reduce((x, y) => x * y, 1);
-      const avgBH = BlackHoles.list
-        .map(bh => bh.dutyCycle * bh.power)
-        .reduce((x, y) => x * y, 1);
+
+      // Calculate an average black hole speedup factor
+      const bh1 = BlackHole(1);
+      const bh2 = BlackHole(2);
+      const avgBH = 1 + (bh1.isUnlocked ? bh1.dutyCycle * (bh1.power - 1) : 0) +
+        (bh2.isUnlocked ? bh1.dutyCycle * bh2.dutyCycle * bh1.power * (bh2.power - 1) : 0);
+
       const avgSpeed = Enslaved.isAutoReleasing
         ? getGameSpeedupForDisplay()
         : curr / currBH * avgBH;
-      return `${formatX(curr, 2, 2)} (current) | ${formatX(avgSpeed, 2, 2)} (average)`;
+      const avgString = ` (current) | ${formatX(avgSpeed, 2, 2)} (average)`;
+      return `${formatX(curr, 2, 2)}${curr === avgSpeed ? "" : avgString}`;
     },
     multValue: () => getGameSpeedupForDisplay(),
     isActive: () => PlayerProgress.seenAlteredSpeed(),

@@ -1505,9 +1505,9 @@ GameStorage.devMigrations = {
     },
     player => {
       if (player.options.newUI) {
-        player.options.themeModern ??= player.options.theme;
+        player.options.themeModern = player.options.theme ?? player.options.themeModern;
       } else {
-        player.options.themeClassic ??= player.options.theme;
+        player.options.themeClassic = player.options.theme ?? player.options.themeClassic;
       }
       delete player.options.theme;
 

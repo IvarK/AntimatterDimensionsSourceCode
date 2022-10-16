@@ -901,21 +901,27 @@ GameStorage.devMigrations = {
       delete player.dilation.freeGalaxies;
     },
     player => {
+      player.auto.infinityDims = Array.range(0, 8).map(() => ({lastTick: 0}));
       for (let i = 0; i < 8; i++) {
         player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
       }
+      player.auto.timeDims = Array.range(0, 8).map(() => ({lastTick: 0}));
       for (let i = 0; i < 8; i++) {
         player.auto.timeDims[i].isActive = player.reality.tdbuyers[i];
       }
+      player.auto.replicantiUpgrades = Array.range(0, 3).map(() => ({lastTick: 0}));
       for (let i = 0; i < 3; i++) {
         player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
       }
+      player.auto.dilationUpgrades = Array.range(0, 3).map(() => ({lastTick: 0}));
       for (let i = 0; i < 3; i++) {
         player.auto.dilationUpgrades[i].isActive = player.dilation.auto[i];
       }
+      player.auto.blackHolePower = Array.range(0, 2).map(() => ({lastTick: 0}));
       for (let i = 0; i < 2; i++) {
         player.auto.blackHolePower[i].isActive = player.blackHole[i].autoPower;
       }
+      player.auto.realityUpgrades = Array.range(0, 5).map(() => ({lastTick: 0}));
       for (let i = 0; i < 5; i++) {
         player.auto.realityUpgrades[i].isActive = player.reality.rebuyablesAuto[i];
       }
@@ -1391,6 +1397,10 @@ GameStorage.devMigrations = {
       const toMove = ["antimatterDims", "infinityDims", "timeDims", "replicantiUpgrades", "dilationUpgrades",
         "blackHolePower", "realityUpgrades", "imaginaryUpgrades"];
       for (const x of toMove) {
+        if ('all' in player.auto[x]) {
+          // Already up to date
+          continue;
+        }
         const all = player.auto[x];
         delete player.auto[x];
         player.auto[x] = { all, isActive: true };

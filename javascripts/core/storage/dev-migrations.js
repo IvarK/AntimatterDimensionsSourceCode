@@ -461,8 +461,10 @@ GameStorage.devMigrations = {
       delete player.celestials.v.unlocks;
       player.celestials.ra.unlockBits = arrayToBits(player.celestials.ra.unlocks);
       delete player.celestials.ra.unlocks;
-      player.celestials.laitela.unlockBits = arrayToBits(player.celestials.laitela.unlocks);
-      delete player.celestials.laitela.unlocks;
+      if (player.celestials.laitela.unlocks !== undefined) {
+        player.celestials.laitela.unlockBits = arrayToBits(player.celestials.laitela.unlocks);
+        delete player.celestials.laitela.unlocks;
+      }
     },
     player => {
       player.reality.seed = Math.floor(Math.abs(player.reality.seed)) % 0xFFFFFFFF;
@@ -713,21 +715,25 @@ GameStorage.devMigrations = {
       }
     },
     player => {
-      for (let i = 0; i < player.dimensions.normal.length; i++) {
-        const dimension = player.dimensions.normal[i];
-        player.dimensions.antimatter[i].bought = dimension.bought;
-        player.dimensions.antimatter[i].costBumps = dimension.costBumps;
-        player.dimensions.antimatter[i].amount = new Decimal(dimension.amount);
+      if (player.dimensions.normal !== undefined) {
+        for (let i = 0; i < player.dimensions.normal.length; i++) {
+          const dimension = player.dimensions.normal[i];
+          player.dimensions.antimatter[i].bought = dimension.bought;
+          player.dimensions.antimatter[i].costBumps = dimension.costBumps;
+          player.dimensions.antimatter[i].amount = new Decimal(dimension.amount);
+        }
+        delete player.dimensions.normal;
       }
-      delete player.dimensions.normal;
     },
     player => {
-      player.options.news = {
-        enabled: player.options.news,
-        repeatBuffer: 40,
-        AIChance: 0,
-        speed: 1
-      };
+      if (player.options.news.enabled === undefined) {
+        player.options.news = {
+          enabled: player.options.news,
+          repeatBuffer: 40,
+          AIChance: 0,
+          speed: 1
+        };
+      }
     },
     player => {
       delete player.options.confirmations.glyphTrash;
@@ -913,6 +919,10 @@ GameStorage.devMigrations = {
       for (let i = 0; i < 3; i++) {
         player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
       }
+      if (player.dilation.auto === undefined) {
+        // not defined on old saves, we define it only to delete it later in this migration
+        player.dilation.auto = [true, true, true];
+      }
       player.auto.dilationUpgrades = Array.range(0, 3).map(() => ({lastTick: 0}));
       for (let i = 0; i < 3; i++) {
         player.auto.dilationUpgrades[i].isActive = player.dilation.auto[i];
@@ -921,11 +931,18 @@ GameStorage.devMigrations = {
       for (let i = 0; i < 2; i++) {
         player.auto.blackHolePower[i].isActive = player.blackHole[i].autoPower;
       }
+      if (player.reality.rebuyablesAuto === undefined) {
+        // not defined on old saves, we define it only to delete it later in this migration
+        player.reality.rebuyablesAuto = [true, true, true, true, true];
+      }
       player.auto.realityUpgrades = Array.range(0, 5).map(() => ({lastTick: 0}));
       for (let i = 0; i < 5; i++) {
         player.auto.realityUpgrades[i].isActive = player.reality.rebuyablesAuto[i];
       }
-      player.auto.antimatterDims = player.auto.dimensions;
+      // player.autobuyers, the old way of storing autobuyers, seems to have gotten lost in dev migrations
+      if (player.auto.antimatterDims === undefined) {
+        player.auto.antimatterDims = player.auto.dimensions;  
+      }
       player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
       player.auto.ipMultBuyer.isActive = player.infMultBuyer;
       player.auto.epMultBuyer.isActive = player.reality.epmultbuyer;
@@ -1093,12 +1110,14 @@ GameStorage.devMigrations = {
       delete player.celestials.v.maxGlyphsThisRun;
 
       // Refactor news storage format to bitmask array
-      const oldNewsArray = player.news;
-      delete player.news;
-      player.news = {};
-      player.news.seen = {};
-      for (const id of oldNewsArray) NewsHandler.addSeenNews(id);
-      player.news.totalSeen = NewsHandler.uniqueTickersSeen;
+      if (Array.isArray(player.news)) {
+        const oldNewsArray = player.news;
+        delete player.news;
+        player.news = {};
+        player.news.seen = {};
+        for (const id of oldNewsArray) NewsHandler.addSeenNews(id);
+        player.news.totalSeen = NewsHandler.uniqueTickersSeen;
+      }
 
       // Separate news-specific data
       player.news.specialTickerData = {
@@ -1177,8 +1196,10 @@ GameStorage.devMigrations = {
         script.content = script.content.replaceAll(triadRegex, "30$1");
       }
 
-      player.timestudy.studies = player.timestudy.studies.concat(player.celestials.v.triadStudies.map(id => id + 300));
-      delete player.celestials.v.triadStudies;
+      if (player.celestials.v.triadStudies !== undefined) {
+        player.timestudy.studies = player.timestudy.studies.concat(player.celestials.v.triadStudies.map(id => id + 300));
+        delete player.celestials.v.triadStudies;
+      }
     },
     player => {
       delete player.options.confirmations.harshAutoClean;
@@ -1397,7 +1418,7 @@ GameStorage.devMigrations = {
       const toMove = ["antimatterDims", "infinityDims", "timeDims", "replicantiUpgrades", "dilationUpgrades",
         "blackHolePower", "realityUpgrades", "imaginaryUpgrades"];
       for (const x of toMove) {
-        if ('all' in player.auto[x]) {
+        if (player.auto[x].all !== undefined) {
           // Already up to date
           continue;
         }
@@ -1471,9 +1492,9 @@ GameStorage.devMigrations = {
     },
     player => {
       if (player.options.newUI) {
-        player.options.themeModern = player.options.theme;
+        player.options.themeModern ??= player.options.theme;
       } else {
-        player.options.themeClassic = player.options.theme;
+        player.options.themeClassic ??= player.options.theme;
       }
       delete player.options.theme;
 

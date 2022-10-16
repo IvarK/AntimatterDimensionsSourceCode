@@ -466,7 +466,7 @@ GameStorage.devMigrations = {
     GameStorage.migrations.removeDimensionCosts,
     GameStorage.migrations.renameTickspeedPurchaseBumps,
     player => {
-      let safeArrayToBits = x => (x === undefined) ? 0 : arrayToBits(x);
+      const safeArrayToBits = x => ((x === undefined) ? 0 : arrayToBits(x));
       player.celestials.teresa.unlockBits = safeArrayToBits(player.celestials.teresa.unlocks);
       delete player.celestials.teresa.unlocks;
       player.celestials.effarig.unlockBits = safeArrayToBits(player.celestials.effarig.unlocks);
@@ -919,41 +919,41 @@ GameStorage.devMigrations = {
       delete player.dilation.freeGalaxies;
     },
     player => {
-      player.auto.infinityDims = Array.range(0, 8).map(() => ({lastTick: 0}));
+      player.auto.infinityDims = Array.range(0, 8).map(() => ({ lastTick: 0 }));
       for (let i = 0; i < 8; i++) {
         player.auto.infinityDims[i].isActive = player.infDimBuyers[i];
       }
-      player.auto.timeDims = Array.range(0, 8).map(() => ({lastTick: 0}));
+      player.auto.timeDims = Array.range(0, 8).map(() => ({ lastTick: 0 }));
       for (let i = 0; i < 8; i++) {
         player.auto.timeDims[i].isActive = player.reality.tdbuyers[i];
       }
-      player.auto.replicantiUpgrades = Array.range(0, 3).map(() => ({lastTick: 0}));
+      player.auto.replicantiUpgrades = Array.range(0, 3).map(() => ({ lastTick: 0 }));
       for (let i = 0; i < 3; i++) {
         player.auto.replicantiUpgrades[i].isActive = player.replicanti.auto[i];
       }
       if (player.dilation.auto === undefined) {
-        // not defined on old saves, we define it only to delete it later in this migration
+        // Not defined on old saves, we define it only to delete it later in this migration
         player.dilation.auto = [true, true, true];
       }
-      player.auto.dilationUpgrades = Array.range(0, 3).map(() => ({lastTick: 0}));
+      player.auto.dilationUpgrades = Array.range(0, 3).map(() => ({ lastTick: 0 }));
       for (let i = 0; i < 3; i++) {
         player.auto.dilationUpgrades[i].isActive = player.dilation.auto[i];
       }
-      player.auto.blackHolePower = Array.range(0, 2).map(() => ({lastTick: 0}));
+      player.auto.blackHolePower = Array.range(0, 2).map(() => ({ lastTick: 0 }));
       for (let i = 0; i < 2; i++) {
         player.auto.blackHolePower[i].isActive = player.blackHole[i].autoPower;
       }
       if (player.reality.rebuyablesAuto === undefined) {
-        // not defined on old saves, we define it only to delete it later in this migration
+        // Not defined on old saves, we define it only to delete it later in this migration
         player.reality.rebuyablesAuto = [true, true, true, true, true];
       }
-      player.auto.realityUpgrades = Array.range(0, 5).map(() => ({lastTick: 0}));
+      player.auto.realityUpgrades = Array.range(0, 5).map(() => ({ lastTick: 0 }));
       for (let i = 0; i < 5; i++) {
         player.auto.realityUpgrades[i].isActive = player.reality.rebuyablesAuto[i];
       }
-      // player.autobuyers, the old way of storing autobuyers, seems to have gotten lost in dev migrations
+      // Note: player.autobuyers, the old way of storing autobuyers, seems to have gotten lost in dev migrations
       if (player.auto.antimatterDims === undefined) {
-        player.auto.antimatterDims = player.auto.dimensions;  
+        player.auto.antimatterDims = player.auto.dimensions;
       }
       player.auto.replicantiGalaxies.isActive = player.replicanti.galaxybuyer;
       player.auto.ipMultBuyer.isActive = player.infMultBuyer;
@@ -1209,7 +1209,8 @@ GameStorage.devMigrations = {
       }
 
       if (player.celestials.v.triadStudies !== undefined) {
-        player.timestudy.studies = player.timestudy.studies.concat(player.celestials.v.triadStudies.map(id => id + 300));
+        player.timestudy.studies = player.timestudy.studies.concat(
+          player.celestials.v.triadStudies.map(id => id + 300));
         delete player.celestials.v.triadStudies;
       }
     },

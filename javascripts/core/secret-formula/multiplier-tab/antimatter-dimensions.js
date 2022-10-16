@@ -15,7 +15,7 @@ GameDatabase.multiplierTabValues.AD = {
         .filter(ad => ad.isProducing)
         .map(ad => ad.multiplier)
         .reduce((x, y) => x.times(y), DC.D1)),
-    isActive: dim => AntimatterDimension(dim ?? 1).isProducing,
+    isActive: true,
     dilationEffect: () => {
       const baseEff = (player.dilation.active || Enslaved.isRunning)
         ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty)
@@ -315,7 +315,7 @@ GameDatabase.multiplierTabValues.AD = {
   },
 
   effectNC: {
-    name: dim => (dim ? `Normal Challenge Effect (AD ${dim})` : "Infinity Challenge Nerf"),
+    name: dim => (dim ? `Normal Challenge Effect (AD ${dim})` : "Normal Challenge Effects"),
     multValue: dim => {
       let dimMults = Array.repeat(DC.D1, 9);
       if (NormalChallenge(2).isRunning) {

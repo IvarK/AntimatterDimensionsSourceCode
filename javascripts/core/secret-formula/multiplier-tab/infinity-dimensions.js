@@ -184,13 +184,13 @@ GameDatabase.multiplierTabValues.ID = {
       ).times(EternityChallenge(7).isRunning ? Tickspeed.perSecond : DC.D1);
       if (dim) {
         if (dim === 1) return allMult.times(EternityChallenge(2).reward.effectOrDefault(1));
-        if (dim === 8) return allMult.times(EternityChallenge(7).reward.effectOrDefault(1));
+        if (dim === 8) return allMult.times(EternityChallenge(7).reward.effectOrDefault(1).clampMin(1));
         return allMult;
       }
       const maxActiveDim = MultiplierTabHelper.activeDimCount("ID");
       return Decimal.pow(allMult, maxActiveDim)
         .times(maxActiveDim >= 1 ? EternityChallenge(2).reward.effectOrDefault(1) : DC.D1)
-        .times(maxActiveDim === 8 ? EternityChallenge(7).reward.effectOrDefault(1) : DC.D1);
+        .times(maxActiveDim === 8 ? EternityChallenge(7).reward.effectOrDefault(1).clampMin(1) : DC.D1);
     },
     isActive: () => EternityChallenge(2).completions > 0,
     icon: MultiplierTabIcons.CHALLENGE("eternity"),

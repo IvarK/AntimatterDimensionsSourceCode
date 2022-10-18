@@ -1464,6 +1464,7 @@ br {
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
   transition: opacity 0.3s, visibility 0.3s;
+  pointer-events: none;
 }
 
 .s-base--dark .infotooltip .infotooltiptext {

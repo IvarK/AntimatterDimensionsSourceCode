@@ -4396,7 +4396,7 @@ br {
 
 .c-autobuyer-box-row {
   display: flex;
-  width: 90rem;
+  width: 96rem;
   position: relative;
   justify-content: center;
   align-items: center;
@@ -4472,7 +4472,7 @@ properly on certain themes. */
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
-  width: 91rem;
+  width: 97rem;
 }
 
 .c-small-autobuyer-input {

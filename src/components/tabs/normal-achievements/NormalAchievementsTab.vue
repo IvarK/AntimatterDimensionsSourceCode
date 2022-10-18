@@ -167,7 +167,7 @@ export default {
       </div>
       <div v-if="totalCountdown > 0">
         You will regain all remaining achievements after {{ timeDisplayNoDecimals(totalCountdown) }} if Auto
-        Achievement stays enabled.
+        Achievement <span v-if="isAutoAchieveActive">stays enabled</span><span v-else>is turned on</span>.
       </div>
       <br>
     </div>

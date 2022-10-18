@@ -185,4 +185,26 @@ GameDatabase.tabNotifications = {
     condition: () => MachineHandler.isIMUnlocked,
     events: [GAME_EVENT.GAME_TICK_AFTER]
   },
+  laitelaUnlock: {
+    id: 14,
+    tabsToHighLight: [
+      {
+        parent: "celestials",
+        tab: "laitela"
+      },
+    ],
+    // Always externally triggered
+    condition: () => true,
+  },
+  pelleUnlock: {
+    id: 15,
+    tabsToHighLight: [
+      {
+        parent: "celestials",
+        tab: "pelle"
+      },
+    ],
+    // Always externally triggered
+    condition: () => true,
+  },
 };

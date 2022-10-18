@@ -49,11 +49,12 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
     EventHub.dispatch(GAME_EVENT.REALITY_UPGRADE_BOUGHT);
     if (this.id >= 15 && this.id <= 18) {
       DarkMatterDimension(this.id - 14).amount = DC.D1;
-      Tab.celestials.laitela.show();
       if (this.id === 17) Laitela.quotes.thirdDMD.show();
     }
-    if (this.id === 19) {
-      Tab.celestials.laitela.show();
+    if (this.id >= 15 && this.id <= 19) {
+      // Need to clear before retriggering, or else it won't actually show up on subsequent upgrades
+      TabNotification.laitelaUnlock.clearTrigger();
+      TabNotification.laitelaUnlock.tryTrigger();
     }
     if (this.id === 21) {
       Laitela.quotes.finalRowIM.show();
@@ -62,7 +63,7 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
       BASIC_GLYPH_TYPES.forEach(x => player.reality.glyphs.sac[x] = ImaginaryUpgrade(22).effectValue);
     }
     if (this.id === 25) {
-      Tab.celestials.pelle.show();
+      TabNotification.pelleUnlock.tryTrigger();
     }
   }
 }

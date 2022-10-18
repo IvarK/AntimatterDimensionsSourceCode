@@ -97,8 +97,11 @@ export default {
       return reactionArrow.product.resource.isUnlocked && reactionArrow.reagent.resource.isUnlocked;
     },
     isCapped(reactionArrow) {
-      return reactionArrow.product.resource.amount > 0 &&
-        reactionArrow.product.resource.amount >= reactionArrow.reagent.resource.amount;
+      const inRes = reactionArrow.reagent.resource;
+      const outRes = reactionArrow.product.resource;
+      // We render the reaction as capped if it won't trigger; this can happen under two conditions - either the
+      // output is higher than this particular input amount, or it's at its cap due to a different input
+      return (outRes.amount > 0 && outRes.amount >= inRes.amount) || outRes.amount >= outRes.cap;
     },
     isLessThanRequired(reactionArrow) {
       return reactionArrow.product.resource.amount > 0 &&

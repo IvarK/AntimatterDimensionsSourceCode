@@ -49,9 +49,10 @@ class InfinityChallengeState extends GameMechanicState {
 
   start() {
     if (!this.isUnlocked || this.isRunning) return;
+    // Forces big crunch reset but ensures IP gain, if any.
+    bigCrunchReset(true, true);
     player.challenge.normal.current = 0;
     player.challenge.infinity.current = this.id;
-    bigCrunchResetValues();
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
     player.break = true;
     if (EternityChallenge.isRunning) Achievement(115).unlock();
@@ -96,7 +97,7 @@ class InfinityChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.infinity.current = 0;
-    bigCrunchResetValues();
+    bigCrunchReset(true, false);
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }

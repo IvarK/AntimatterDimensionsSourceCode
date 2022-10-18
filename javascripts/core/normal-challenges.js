@@ -81,9 +81,10 @@ class NormalChallengeState extends GameMechanicState {
   start() {
     if (this.id === 1 || this.isOnlyActiveChallenge) return;
     if (!Tab.challenges.isUnlocked) return;
+    // Forces big crunch reset but ensures IP gain, if any.
+    bigCrunchReset(true, true);
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
-    bigCrunchResetValues();
     if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) {
       EnslavedProgress.challengeCombo.giveProgress();
       Enslaved.quotes.ec6C10.show();
@@ -124,7 +125,7 @@ class NormalChallengeState extends GameMechanicState {
 
   exit() {
     player.challenge.normal.current = 0;
-    bigCrunchResetValues();
+    bigCrunchReset(true, false);
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }

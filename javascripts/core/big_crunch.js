@@ -44,11 +44,24 @@ export function bigCrunchResetRequest(disableAnimation = false) {
   }
 }
 
-export function bigCrunchReset() {
-  if (!Player.canCrunch) return;
+export function bigCrunchReset(
+  forced = false,
+  enteringAntimatterChallenge = Player.isInAntimatterChallenge && player.options.retryChallenge
+) {
+  if (!forced && !Player.canCrunch) return;
 
-  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
+  if (Player.canCrunch) {
+    EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
+    bigCrunchGiveRewards();
+  }
 
+  bigCrunchResetValues(enteringAntimatterChallenge);
+  if (Pelle.isDoomed) PelleStrikes.infinity.trigger();
+
+  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
+}
+
+function bigCrunchGiveRewards() {
   bigCrunchUpdateStatistics();
 
   const infinityPoints = gainedInfinityPoints();
@@ -56,12 +69,7 @@ export function bigCrunchReset() {
   Currency.infinities.add(gainedInfinities().round());
 
   bigCrunchTabChange(!PlayerProgress.infinityUnlocked());
-  bigCrunchResetValues();
   bigCrunchCheckUnlocks();
-
-  if (Pelle.isDoomed) PelleStrikes.infinity.trigger();
-
-  EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
 }
 
 function bigCrunchUpdateStatistics() {
@@ -108,13 +116,13 @@ function bigCrunchTabChange(firstInfinity) {
   }
 }
 
-export function bigCrunchResetValues() {
+export function bigCrunchResetValues(enteringAntimatterChallenge) {
   const currentReplicanti = Replicanti.amount;
   const currentReplicantiGalaxies = player.replicanti.galaxies;
   // For unknown reasons, everything but keeping of RGs (including resetting of RGs)
   // is done in the function called below. For now, we're just trying to keep
   // code structure similar to what it was before to avoid new bugs.
-  secondSoftReset(true);
+  secondSoftReset(true, enteringAntimatterChallenge);
 
   let remainingGalaxies = 0;
   if (Achievement(95).isUnlocked) {
@@ -142,12 +150,12 @@ function bigCrunchCheckUnlocks() {
   }
 }
 
-export function secondSoftReset(forcedNDReset = false) {
+export function secondSoftReset(enteringAntimatterChallenge) {
   player.dimensionBoosts = 0;
   player.galaxies = 0;
   player.records.thisInfinity.maxAM = DC.D0;
   Currency.antimatter.reset();
-  softReset(0, forcedNDReset);
+  softReset(0, true, true, enteringAntimatterChallenge);
   InfinityDimensions.resetAmount();
   if (player.replicanti.unl) Replicanti.amount = DC.D1;
   player.replicanti.galaxies = 0;

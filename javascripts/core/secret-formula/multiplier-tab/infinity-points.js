@@ -12,6 +12,7 @@ GameDatabase.multiplierTabValues.IP = {
     multValue: () => gainedInfinityPoints(),
     isActive: () => new Decimal(Currency.infinities.value).gt(0) || gainedInfinityPoints().gt(0),
     dilationEffect: () => (Laitela.isRunning ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty) : 1),
+    isDilated: true,
     overlay: ["∞", "<i class='fa-solid fa-layer-group' />"],
   },
   base: {

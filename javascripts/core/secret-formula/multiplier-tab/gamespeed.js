@@ -29,6 +29,7 @@ GameDatabase.multiplierTabValues.gamespeed = {
     multValue: () => getGameSpeedupForDisplay(),
     isActive: () => PlayerProgress.seenAlteredSpeed(),
     dilationEffect: () => (Effarig.isRunning ? Effarig.multDilation : 1),
+    isDilated: true,
     overlay: ["Δ", `<i class="fas fa-clock" />`, `<i class="fas fa-circle" />`],
   },
   glyph: {

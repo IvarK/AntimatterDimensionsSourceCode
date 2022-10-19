@@ -75,10 +75,13 @@ export const GlyphSelection = {
   },
 
   select(glyphID, sacrifice) {
+    const chosenGlyph = this.glyphs[glyphID];
     if (sacrifice) {
-      GlyphSacrificeHandler.removeGlyph(this.glyphs[glyphID], true);
+      GlyphSacrificeHandler.removeGlyph(chosenGlyph, true);
+    } else if (GameCache.glyphInventorySpace.value > 0) {
+      Glyphs.addToInventory(chosenGlyph);
     } else {
-      Glyphs.addToInventory(this.glyphs[glyphID]);
+      AutoGlyphProcessor.getRidOfGlyph(chosenGlyph);
     }
     this.glyphs = [];
     this.realityProps = undefined;
@@ -113,7 +116,7 @@ export function requestManualReality() {
     return;
   }
   if (GameCache.glyphInventorySpace.value === 0) {
-    Modal.message.show("Inventory cannot hold new Glyphs. Delete/sacrifice (shift-click) some Glyphs.",
+    Modal.message.show("No available inventory space; free up space by shift-clicking Glyphs to get rid of them.",
       { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
     return;
   }
@@ -208,19 +211,20 @@ function processAutoGlyph(gainedLevel, rng) {
   // Always generate a list of glyphs to avoid RNG diverging based on whether
   // a reality is done automatically.
   const glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedLevel, { rng });
+  let keepGlyph;
   if (EffarigUnlock.glyphFilter.isUnlocked) {
     newGlyph = AutoGlyphProcessor.pick(glyphs);
-    if (!AutoGlyphProcessor.wouldKeep(newGlyph) || GameCache.glyphInventorySpace.value === 0) {
-      AutoGlyphProcessor.getRidOfGlyph(newGlyph);
-      newGlyph = null;
-    }
+    keepGlyph = AutoGlyphProcessor.wouldKeep(newGlyph);
   } else {
     // It really doesn't matter which we pick since they're random,
     // so we might as well take the first one.
     newGlyph = glyphs[0];
+    keepGlyph = true;
   }
-  if (newGlyph && GameCache.glyphInventorySpace.value > 0) {
+  if (keepGlyph && GameCache.glyphInventorySpace.value > 0) {
     Glyphs.addToInventory(newGlyph);
+  } else {
+    AutoGlyphProcessor.getRidOfGlyph(newGlyph);
   }
 }
 

@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       firstReality: false,
+      hasSpace: true,
       hasChoice: false,
       hasFilter: false,
       glyphs: [],
@@ -47,9 +48,9 @@ export default {
 
       const sacText = this.canSacrifice ? "or Sacrifice " : "";
       const choiceResult = this.hasFilter
-        ? "choose a Glyph based on your filter settings"
-        : "randomly select a Glyph from your available choices";
-      return `Selecting Confirm ${sacText}without selecting a Glyph will ${choiceResult}.`;
+        ? "select one based on your filter settings"
+        : "randomly select one from your available choices";
+      return `Clicking Confirm ${sacText}without choosing a Glyph will ${choiceResult}.`;
     },
     gained() {
       const gainedResources = [];
@@ -84,6 +85,7 @@ export default {
       this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.level = gainedGlyphLevel().actualLevel;
       this.simRealities = 1 + simulatedRealityCount(false);
+      this.hasSpace = GameCache.glyphInventorySpace.value > this.simRealities;
       const simRMGained = MachineHandler.gainedRealityMachines.times(this.simRealities);
       this.realityMachines.copyFrom(simRMGained.clampMax(MachineHandler.distanceToRMCap));
       this.shardsGained = Effarig.shardsGained * (simulatedRealityCount(false) + 1);
@@ -170,6 +172,19 @@ export default {
       automatically choosing another {{ quantifyInt("Glyph", simRealities - 1) }}
       based on your Glyph filter settings.
     </div>
+    <div
+      v-if="!hasSpace"
+      class="o-warning"
+    >
+      <span v-if="simRealities > 1">
+        You will be simulating more Realities than you have open inventory space for;
+        this may result in some Glyphs being Sacrificed.
+      </span>
+      <span v-else>
+        You do not have any free inventory space - your selected Glyph will be automatically
+        {{ canSacrifice ? "Sacrificed" : "deleted" }}!
+      </span>
+    </div>
     <template
       v-if="canSacrifice"
       #extra-buttons
@@ -183,3 +198,9 @@ export default {
     </template>
   </ModalWrapperChoice>
 </template>
+
+<style scoped>
+.o-warning {
+  color: var(--color-infinity);
+}
+</style>

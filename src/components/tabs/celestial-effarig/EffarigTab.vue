@@ -89,7 +89,7 @@ export default {
     },
     createCursedGlyph() {
       if (GameCache.glyphInventorySpace.value === 0) {
-        Modal.message.show("Inventory cannot hold new Glyphs. Sacrifice (shift-click) some Glyphs.",
+        Modal.message.show("No available inventory space; Sacrifice some Glyphs to free up space.",
           { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
         return;
       }

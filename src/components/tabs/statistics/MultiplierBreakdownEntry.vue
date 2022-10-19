@@ -1,4 +1,6 @@
 <script>
+import { DC } from "../../../../javascripts/core/constants";
+
 export default {
   name: "MultiplierBreakdownEntry",
   props: {
@@ -22,6 +24,7 @@ export default {
       mouseoverIndex: -1,
       currentGroupKeys: [],
       isEmpty: false,
+      dilationExponent: 1,
       isDilated: false,
       // This is used to temporarily remove the transition function from the bar styling when changing the way
       // multipliers are split up; the animation which results from not doing this looks very awkward
@@ -46,7 +49,8 @@ export default {
       this.currentGroupKeys = this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
       this.baseMultList = this.currentGroupKeys.map(key => this.getMult(key));
       this.powList = this.currentGroupKeys.map(key => this.getPow(key));
-      this.isDilated = (this.getProp(this.resource, "dilationEffect") ?? 1) !== 1;
+      this.dilationExponent = this.getProp(this.resource, "dilationEffect") ?? 1;
+      this.isDilated = this.dilationExponent !== 1;
       this.calculatePercents();
     },
     changeGroup() {
@@ -153,9 +157,16 @@ export default {
       if (overrideStr) valueStr = `(${overrideStr})`;
       else {
         const values = [];
-        const formatFn = this.getProp(this.currentGroupKeys[index], "isBase")
-          ? x => format(x, 2, 2)
-          : x => formatX(x, 2, 2);
+        const formatFn = x => {
+          const isDilated = this.getProp(this.currentGroupKeys[index], "isDilated");
+          if (isDilated) {
+            const undilated = this.applyDilationExp(x, 1 / this.dilationExponent);
+            return `${formatX(undilated, 2, 2)} ➜ ${formatX(x, 2, 2)}`;
+          }
+          return this.getProp(this.currentGroupKeys[index], "isBase")
+            ? format(x, 2, 2)
+            : `${formatX(x, 2, 2)}`;
+        };
         if (Decimal.neq(this.baseMultList[index], 1)) values.push(formatFn(this.baseMultList[index]));
         if (this.powList[index] !== 1) values.push(formatPow(this.powList[index], 2, 3));
         valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
@@ -194,12 +205,36 @@ export default {
       if (baseProp) return `${name}: ${format(val, 2, 2)}`;
       return `${name}: ${formatX(val, 2, 2)}`;
     },
+    applyDilationExp(value, exp) {
+      return Decimal.pow10(value.log10() ** exp);
+    },
     dilationString() {
-      const pow = this.getProp(this.resource, "dilationEffect");
-      const beforeMult = this.getMult(this.resource);
-      const afterMult = Decimal.pow10(beforeMult.log10() ** pow);
-      return `Dilation Effect: Exponent${formatPow(pow, 2, 3)}
-        (${format(beforeMult, 2, 2)} ➜ ${format(afterMult, 2, 2)})`;
+      const baseMult = this.getMult(this.resource);
+
+      // This is tricky to handle properly; if we're not careful, sometimes the dilation gets applied twice since
+      // it's already applied in the multiplier itself. In that case we need to apply an appropriate "anti-dilation"
+      // to make the UI look correct. However, this cause some mismatches in individual dimension breakdowns due to
+      // the dilation function not being linear (ie. multiply=>dilate gives a different result than dilate=>multiply).
+      // In that case we check for isDilated one level down and combine the actual multipliers together instead.
+      let beforeMult, afterMult;
+      if (this.isDilated && this.getProp(this.resource, "isDilated")) {
+        const dilProd = this.currentGroupKeys
+          .filter(key => this.isVisible(key) && this.getProp(key, "isDilated"))
+          .map(key => this.getMult(key))
+          .map(val => this.applyDilationExp(val, 1 / this.dilationExponent))
+          .reduce((x, y) => x.times(y), DC.D1);
+        beforeMult = dilProd.neq(1) ? dilProd : this.applyDilationExp(baseMult, 1 / this.dilationExponent);
+        afterMult = this.getMult(this.resource);
+      } else {
+        beforeMult = baseMult;
+        afterMult = this.applyDilationExp(beforeMult, this.dilationExponent);
+      }
+
+      const formatFn = this.getProp(this.resource, "isBase")
+        ? x => format(x, 2, 2)
+        : x => formatX(x, 2, 2);
+      return `Dilation Effect: Exponent${formatPow(this.dilationExponent, 2, 3)}
+        (${formatFn(beforeMult, 2, 2)} ➜ ${formatFn(afterMult, 2, 2)})`;
     }
   },
 };

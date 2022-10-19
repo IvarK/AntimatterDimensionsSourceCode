@@ -8,10 +8,12 @@ import { MultiplierTabIcons } from "./icons";
 GameDatabase.multiplierTabValues.DT = {
   total: {
     name: "Dilated Time gain",
+    isBase: true,
     displayOverride: () => `${format(getDilationGainPerSecond().times(getGameSpeedupForDisplay()), 2, 2)}/sec`,
     multValue: () => getDilationGainPerSecond().times(getGameSpeedupForDisplay()),
     isActive: () => getDilationGainPerSecond().gt(0),
     dilationEffect: () => (Enslaved.isRunning ? 0.85 : 1),
+    isDilated: true,
     overlay: ["Ψ"],
   },
   tachyon: {

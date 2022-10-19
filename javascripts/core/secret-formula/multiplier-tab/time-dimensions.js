@@ -22,6 +22,7 @@ GameDatabase.multiplierTabValues.TD = {
         : 1;
       return baseEff * (Effarig.isRunning ? Effarig.multDilation : 1);
     },
+    isDilated: true,
     overlay: ["Δ", "<i class='fa-solid fa-cube' />"],
     icon: dim => MultiplierTabIcons.DIMENSION("TD", dim),
   },

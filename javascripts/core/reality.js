@@ -644,7 +644,7 @@ export function finishProcessReality(realityProps) {
   fullResetTimeDimensions();
   resetChallengeStuff();
   AntimatterDimensions.reset();
-  secondSoftReset();
+  secondSoftReset(false);
   player.celestials.ra.peakGamespeed = 1;
 
   InfinityDimensions.resetAmount();

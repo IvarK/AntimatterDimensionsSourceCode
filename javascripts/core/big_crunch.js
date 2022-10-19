@@ -122,7 +122,7 @@ export function bigCrunchResetValues(enteringAntimatterChallenge) {
   // For unknown reasons, everything but keeping of RGs (including resetting of RGs)
   // is done in the function called below. For now, we're just trying to keep
   // code structure similar to what it was before to avoid new bugs.
-  secondSoftReset(true, enteringAntimatterChallenge);
+  secondSoftReset(enteringAntimatterChallenge);
 
   let remainingGalaxies = 0;
   if (Achievement(95).isUnlocked) {

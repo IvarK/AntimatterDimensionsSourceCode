@@ -52,14 +52,14 @@ export default {
     darkMatterClassObject() {
       return {
         "o-dark-matter-dimension-button": true,
-        "o-dark-matter-dimension-button--available": this.canBuyPowerDM,
+        "o-dark-matter-dimension-button--available": this.hoverOverAscension || this.canBuyPowerDM,
         "o-dark-matter-dimension-button--accent": this.hoverOverAscension
       };
     },
     darkEnergyClassObject() {
       return {
         "o-dark-matter-dimension-button": true,
-        "o-dark-matter-dimension-button--available": this.canBuyPowerDE,
+        "o-dark-matter-dimension-button--available": this.hoverOverAscension || this.canBuyPowerDE,
         "o-dark-matter-dimension-button--accent": this.hoverOverAscension
       };
     },
@@ -71,7 +71,7 @@ export default {
       let line2;
       if (this.isIntervalCapped) line2 = this.hoverOverAscension ? "On ascend ➜" : "Ascend!";
       else line2 = `Cost: ${this.formatDMCost(this.intervalCost)} DM`;
-      return `${line1}<br>${line2}`;
+      return ` ${line1}<br>${line2}`;
     },
     darkMatterText() {
       const dm = this.powerDM.times(this.hoverOverAscension ? this.powerDMPerAscension : 1);

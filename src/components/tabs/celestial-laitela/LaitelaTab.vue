@@ -113,6 +113,7 @@ export default {
       ({{ format(darkEnergy, 2, 2) }}/{{ format(singularityCap, 2) }} Dark Energy)
     </h2>
     <SingularityPane v-if="singularitiesUnlocked" />
+    <LaitelaAutobuyerPane v-if="autobuyersUnlocked" />
     <div class="l-laitela-mechanics-container">
       <LaitelaRunButton />
       <div>
@@ -121,6 +122,5 @@ export default {
       </div>
       <SingularityMilestonePane v-if="singularityPanelVisible" />
     </div>
-    <LaitelaAutobuyerPane v-if="autobuyersUnlocked" />
   </div>
 </template>

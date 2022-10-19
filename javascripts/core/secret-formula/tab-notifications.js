@@ -174,4 +174,15 @@ GameDatabase.tabNotifications = {
     // Always externally triggered
     condition: () => true,
   },
+  imaginaryMachineUnlock: {
+    id: 13,
+    tabsToHighLight: [
+      {
+        parent: "reality",
+        tab: "imag_upgrades"
+      }
+    ],
+    condition: () => MachineHandler.isIMUnlocked,
+    events: [GAME_EVENT.GAME_TICK_AFTER]
+  },
 };

@@ -129,9 +129,10 @@ export const SingularityMilestones = {
       case SINGULARITY_MILESTONE_SORT.CURRENT_COMPLETIONS:
         // Also counts partial completion on the current step
         sortFn = m => {
-          const currComp = Math.clampMax(Math.log(Currency.singularities.value / m.previousGoal) /
-            Math.log(m.nextGoal / m.previousGoal), 1);
-          return (m.completions + currComp) / 20;
+          // For never-completed repeatable milestones, this is zero and will cause NaN bugs if we don't set it to 1
+          const prev = Math.clampMin(m.previousGoal, 1);
+          const part = Math.clamp(Math.log(Currency.singularities.value / prev) / Math.log(m.nextGoal / prev), 0, 1);
+          return (m.completions + part) / 20;
         };
         break;
       case SINGULARITY_MILESTONE_SORT.PERCENT_COMPLETIONS:

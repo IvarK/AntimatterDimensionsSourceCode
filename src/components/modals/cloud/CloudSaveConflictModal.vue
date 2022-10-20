@@ -60,12 +60,9 @@ export default {
     }
   },
   methods: {
-    saveClick(accepted) {
+    saveClick() {
       Cloud.hasSeenSavingConflict = true;
-      Cloud.shouldOverwriteCloudSave = accepted;
-      if (accepted) {
-        this.conflict.onAccept?.();
-      }
+      Cloud.shouldOverwriteCloudSave = false;
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
     cancel() {
@@ -86,7 +83,7 @@ export default {
     :cancel-class="'c-modal-message__okay-btn'"
     :confirm-class="'c-modal-message__okay-btn c-modal__confirm-btn'"
     :cancel-fn="cancel"
-    @confirm="saveClick(false)"
+    @confirm="saveClick()"
   >
     <template #header>
       Save Game to Cloud

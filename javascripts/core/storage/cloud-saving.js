@@ -93,7 +93,8 @@ export const Cloud = {
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
       const hasConflict = hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
         saveComparison.diffSTD > 0 || saveComparison.differentName);
-      if ((hasConflict && !this.hasSeenSavingConflict) || saveComparison.hashMismatch) {
+      if ((hasConflict && !this.hasSeenSavingConflict) ||
+        (saveComparison.hashMismatch && this.shouldOverwriteCloudSave)) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
         Modal.cloudSaveConflict.show();
       } else if (!hasConflict || (this.hasSeenSavingConflict && this.shouldOverwriteCloudSave)) {

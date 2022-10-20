@@ -11,11 +11,11 @@ new class DarkMatterDimensionAscensionAutobuyerState extends IntervaledAutobuyer
   }
 
   get isUnlocked() {
-    return SingularityMilestone.darkDimensionAutobuyers.canBeApplied;
+    return SingularityMilestone.ascensionAutobuyers.canBeApplied;
   }
 
   get interval() {
-    return 1000 * SingularityMilestone.darkAutobuyerSpeed.effectValue;
+    return 1000 * SingularityMilestone.ascensionAutobuyerSpeed.effectValue;
   }
 
   get hasUnlimitedBulk() {
@@ -24,7 +24,7 @@ new class DarkMatterDimensionAscensionAutobuyerState extends IntervaledAutobuyer
 
   tick() {
     super.tick();
-    for (let i = 1; i <= SingularityMilestone.darkDimensionAutobuyers.effectValue; i++) {
+    for (let i = 1; i <= SingularityMilestone.ascensionAutobuyers.effectValue; i++) {
       DarkMatterDimension(i).ascend();
     }
   }

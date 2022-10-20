@@ -222,7 +222,7 @@ GameDatabase.celestials.singularityMilestones = {
     start: 5e11,
     repeat: 0,
     limit: 1,
-    description: "Annihilation multiplier generates 4th Dark Matter Dimensions when Annihilation is available",
+    description: "Annihilation mult. generates 4th DMD when Annihilation is available",
     effect: () => Laitela.darkMatterMult,
     effectFormat: x => `${format(x, 2, 1)}/s`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,

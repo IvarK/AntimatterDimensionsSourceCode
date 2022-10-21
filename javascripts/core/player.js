@@ -1016,7 +1016,6 @@ export function guardFromNaNValues(obj) {
   for (const key in obj) {
     if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
 
-    // TODO: rework autobuyer saving
     if (key === "automator") continue;
 
     let value = obj[key];

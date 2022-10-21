@@ -122,8 +122,7 @@ class NormalChallengeState extends GameMechanicState {
     if (bestTimes[this.id - 2] <= player.records.thisInfinity.time) {
       return;
     }
-    // TODO: remove splice once player.challenge.infinity.bestTimes is not reactive
-    bestTimes.splice(this.id - 2, 1, player.records.thisInfinity.time);
+    player.challenge.normal.bestTimes[this.id - 2] = player.records.thisInfinity.time;
     GameCache.challengeTimeSum.invalidate();
     GameCache.worstChallengeTime.invalidate();
   }

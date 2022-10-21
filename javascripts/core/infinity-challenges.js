@@ -90,8 +90,7 @@ class InfinityChallengeState extends GameMechanicState {
     if (bestTimes[this.id - 1] <= player.records.thisInfinity.time) {
       return;
     }
-    // TODO: remove splice once player.challenge.infinity.bestTimes is not reactive
-    bestTimes.splice(this.id - 1, 1, player.records.thisInfinity.time);
+    player.challenge.infinity.bestTimes[this.id - 1] = player.records.thisInfinity.time;
     GameCache.infinityChallengeTimeSum.invalidate();
   }
 

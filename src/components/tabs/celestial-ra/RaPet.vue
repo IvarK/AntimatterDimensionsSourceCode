@@ -86,21 +86,8 @@ export default {
       this.currentMemoryMult = pet.memoryUpgradeCurrentMult;
       this.currentChunkMult = pet.chunkUpgradeCurrentMult;
 
-      this.nextMemoryUpgradeEstimate = this.timeToGoalString((this.memoryUpgradeCost - this.memories));
-      this.nextMemoryChunkUpgradeEstimate = this.timeToGoalString((this.chunkUpgradeCost - this.memories));
-    },
-    timeToGoalString(expToGain) {
-      // Quadratic formula for growth (uses constant growth for a = 0)
-      const a = Ra.productionPerMemoryChunk * this.currentMemoryMult * this.memoryChunksPerSecond / 2;
-      const b = Ra.productionPerMemoryChunk * this.currentMemoryMult * this.memoryChunks;
-      const c = -expToGain;
-      const estimate = a === 0
-        ? -c / b
-        : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
-      if (Number.isFinite(estimate)) {
-        return `in ${TimeSpan.fromSeconds(estimate).toStringShort()}`;
-      }
-      return "";
+      this.nextMemoryUpgradeEstimate = Ra.timeToGoalString(pet, this.memoryUpgradeCost - this.memories);
+      this.nextMemoryChunkUpgradeEstimate = Ra.timeToGoalString(pet, this.chunkUpgradeCost - this.memories);
     },
     nextUnlockLevel() {
       const missingUpgrades = this.pet.unlocks

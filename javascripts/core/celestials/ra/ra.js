@@ -248,13 +248,6 @@ export const Ra = {
     data.peakGamespeed = 1;
     for (const pet of Ra.pets.all) pet.reset();
   },
-  // Scans through all glyphs and fills base resources to the maximum allowed by the cap
-  // TODO update/delete this function when we get back to alchemy, it's outdated since it's not linear any more
-  fillAlchemyResources() {
-    for (const resource of AlchemyResources.base) {
-      resource.amount = Math.min(this.alchemyResourceCap, player.records.bestReality.glyphLevel);
-    }
-  },
   memoryTick(realDiff, generateChunks) {
     if (!this.isUnlocked) return;
     for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
@@ -284,12 +277,19 @@ export const Ra = {
     const post15Scaling = Math.pow(1.5, Math.max(0, level - 15));
     return Math.floor(Math.pow(adjustedLevel, 5.52) * post15Scaling * 1e6);
   },
-  // Calculates the cumulative exp needed to REACH a level starting from nothing.
-  // TODO mathematically optimize this once Ra exp curves and balancing are finalized
-  totalExpForLevel(maxLevel) {
-    let runningTotal = 0;
-    for (let lv = 1; lv < maxLevel; lv++) runningTotal += this.requiredMemoriesForLevel(lv);
-    return runningTotal;
+  // Returns a string containing a time estimate for gaining a specific amount of exp (UI only)
+  timeToGoalString(pet, expToGain) {
+    // Quadratic formula for growth (uses constant growth for a = 0)
+    const a = Ra.productionPerMemoryChunk * pet.memoryUpgradeCurrentMult * pet.memoryChunksPerSecond / 2;
+    const b = Ra.productionPerMemoryChunk * pet.memoryUpgradeCurrentMult * pet.memoryChunks;
+    const c = -expToGain;
+    const estimate = a === 0
+      ? -c / b
+      : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
+    if (Number.isFinite(estimate)) {
+      return `in ${TimeSpan.fromSeconds(estimate).toStringShort()}`;
+    }
+    return "";
   },
   get totalPetLevel() {
     return this.pets.all.map(pet => (pet.isUnlocked ? pet.level : 0)).sum();

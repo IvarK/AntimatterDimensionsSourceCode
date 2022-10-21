@@ -53,11 +53,10 @@ export function bigCrunchReset(
   if (Player.canCrunch) {
     EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_BEFORE);
     bigCrunchGiveRewards();
+    if (Pelle.isDoomed) PelleStrikes.infinity.trigger();
   }
 
   bigCrunchResetValues(enteringAntimatterChallenge);
-  if (Pelle.isDoomed) PelleStrikes.infinity.trigger();
-
   EventHub.dispatch(GAME_EVENT.BIG_CRUNCH_AFTER);
 }
 

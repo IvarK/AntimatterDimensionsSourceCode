@@ -4,8 +4,11 @@ import { GameDatabase } from "../game-database";
 
 import { MultiplierTabHelper } from "./helper-functions";
 
-const dynamicGenProps = ["AD", "TP", "DT", "infinities", "eternities", "gamespeed"];
+const dynamicGenProps = ["TP", "DT", "infinities", "eternities", "gamespeed"];
 const propList = {
+  AD: ["purchase", "dimboost", "sacrifice", "achievementMult", "achievement", "infinityUpgrade",
+    "breakInfinityUpgrade", "infinityPower", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph", "v",
+    "alchemy", "pelle", "iap", "effectNC", "nerfIC", "nerfV", "nerfCursed", "nerfPelle"],
   ID: ["purchase", "achievementMult", "achievement", "replicanti", "infinityChallenge", "timeStudy", "eternityUpgrade",
     "eternityChallenge", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed", "nerfPelle"],
   TD: ["purchase", "achievementMult", "achievement", "timeStudy", "eternityUpgrade", "eternityChallenge",
@@ -132,6 +135,18 @@ const targetedEffects = {
   },
 };
 
+// Highest actively-producing dimensions need a special case
+for (const dim of dimTypes) {
+  GameDatabase.multiplierTabTree[`${dim}_total`][0].push(`${dim}_highestDim`);
+  GameDatabase.multiplierTabTree[`${dim}_total`][1].push(`${dim}_highestDim`);
+}
+
+// EC7 also needs a special case for tickspeed, since it doesn't appear on the multipliers themselves
+for (const dim of ["ID", "TD"]) {
+  GameDatabase.multiplierTabTree[`${dim}_total`][0].push(`${dim}_tickspeed`);
+  GameDatabase.multiplierTabTree[`${dim}_total`][1].push(`${dim}_tickspeed`);
+}
+
 // Dynamically generate all values from existing values, but broken down by dimension
 for (const res of dimTypes) {
   for (const prop of getProps(res)) GameDatabase.multiplierTabTree[prop] = [append8(prop)];
@@ -141,7 +156,7 @@ for (const res of dimTypes) {
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
 // entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
 const removedProps = ["AD_sacrifice", "AD_achievementMult", "AD_breakInfinityUpgrade", "AD_alchemy", "AD_v", "AD_pelle",
-  "AD_iap", "AD_nerfIC", "AD_nerfPelle", "AD_infinityUpgrade",
+  "AD_iap", "AD_nerfIC", "AD_nerfPelle", "AD_infinityUpgrade", "AD_glyph",
   "ID_replicanti", "ID_achievementMult", "ID_infinityChallenge", "ID_eternityUpgrades", "ID_alchemy",
   "ID_imaginaryUpgrade", "ID_pelle", "ID_nerfPelle",
   "TD_achievement", "TD_achievementMult", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade", "TD_alchemy",

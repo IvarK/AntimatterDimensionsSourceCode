@@ -8,7 +8,15 @@ import { MultiplierTabIcons } from "./icons";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.TD = {
   total: {
-    name: dim => (dim ? `TD ${dim} Multiplier` : "All TD Multipliers"),
+    name: dim => {
+      if (dim) return `TD ${dim} Multiplier`;
+      if (EternityChallenge(7).isRunning) return "ID8 Production";
+      return "Time Shard Production";
+    },
+    displayOverride: dim => (dim
+      ? formatX(TimeDimension(dim).multiplier, 2)
+      : `${format(TimeDimension(1).productionPerSecond, 2)}/sec`
+    ),
     multValue: dim => (dim
       ? TimeDimension(dim).multiplier
       : TimeDimensions.all
@@ -42,6 +50,16 @@ GameDatabase.multiplierTabValues.TD = {
     },
     isActive: () => !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning,
     icon: dim => MultiplierTabIcons.PURCHASE("TD", dim),
+  },
+  highestDim: {
+    name: () => `Amount of highest Dimension`,
+    displayOverride: () => {
+      const dim = MultiplierTabHelper.activeDimCount("TD");
+      return `TD ${dim}, ${formatInt(TimeDimension(dim).amount)}`;
+    },
+    multValue: () => TimeDimension(MultiplierTabHelper.activeDimCount("TD")).amount,
+    isActive: () => TimeDimension(1).isProducing,
+    icon: MultiplierTabIcons.DIMENSION("TD"),
   },
 
   basePurchase: {
@@ -165,6 +183,18 @@ GameDatabase.multiplierTabValues.TD = {
     },
     isActive: () => EternityChallenge(1).completions > 0,
     icon: MultiplierTabIcons.CHALLENGE("eternity")
+  },
+  tickspeed: {
+    name: () => "Tickspeed (EC7)",
+    displayOverride: () => {
+      const tickRate = Tickspeed.perSecond;
+      const activeDims = MultiplierTabHelper.activeDimCount("TD");
+      return `${format(tickRate, 2, 2)}/sec on ${formatInt(activeDims)} ${pluralize("Dimension", activeDims)}
+        ➜ ${formatX(tickRate.pow(activeDims), 2, 2)}`;
+    },
+    multValue: () => Tickspeed.perSecond.pow(MultiplierTabHelper.activeDimCount("TD")),
+    isActive: () => EternityChallenge(7).isRunning,
+    icon: MultiplierTabIcons.TICKSPEED,
   },
   dilationUpgrade: {
     name: "Dilation Upgrade (Based on Replicanti)",

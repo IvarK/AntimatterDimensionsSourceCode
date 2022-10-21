@@ -159,7 +159,7 @@ export default {
         const values = [];
         const formatFn = x => {
           const isDilated = this.getProp(this.currentGroupKeys[index], "isDilated");
-          if (isDilated) {
+          if (isDilated && this.dilationExponent !== 1) {
             const undilated = this.applyDilationExp(x, 1 / this.dilationExponent);
             return `${formatX(undilated, 2, 2)} ➜ ${formatX(x, 2, 2)}`;
           }

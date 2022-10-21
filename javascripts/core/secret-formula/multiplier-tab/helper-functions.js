@@ -5,7 +5,10 @@ export const MultiplierTabHelper = {
   activeDimCount(type) {
     switch (type) {
       case "AD":
-        return AntimatterDimensions.all.filter(ad => ad.isProducing).length;
+        // Technically not 100% correct, but within EC7 any AD8 production is going to be irrelevant compared to AD7
+        // and making the UI behave as if it's inactive produces a better look overall
+        return Math.clamp(AntimatterDimensions.all.filter(ad => ad.isProducing).length,
+          1, EternityChallenge(7).isRunning ? 7 : 8);
       case "ID":
         return InfinityDimensions.all.filter(id => id.isProducing).length;
       case "TD":

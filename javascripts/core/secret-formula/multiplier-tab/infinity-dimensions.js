@@ -8,7 +8,15 @@ import { MultiplierTabIcons } from "./icons";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.ID = {
   total: {
-    name: dim => (dim ? `ID ${dim} Multiplier` : "All ID Multipliers"),
+    name: dim => {
+      if (dim) return `ID ${dim} Multiplier`;
+      if (EternityChallenge(7).isRunning) return "AD7 Production";
+      return "Infinity Power Production";
+    },
+    displayOverride: dim => (dim
+      ? formatX(InfinityDimension(dim).multiplier, 2)
+      : `${format(InfinityDimension(1).productionPerSecond, 2)}/sec`
+    ),
     multValue: dim => (dim
       ? InfinityDimension(dim).multiplier
       : InfinityDimensions.all
@@ -39,6 +47,16 @@ GameDatabase.multiplierTabValues.ID = {
     },
     isActive: () => !EternityChallenge(2).isRunning && !EternityChallenge(10).isRunning,
     icon: dim => MultiplierTabIcons.PURCHASE("ID", dim),
+  },
+  highestDim: {
+    name: () => `Amount of highest Dimension`,
+    displayOverride: () => {
+      const dim = MultiplierTabHelper.activeDimCount("ID");
+      return `ID ${dim}, ${format(InfinityDimension(dim).amount, 2)}`;
+    },
+    multValue: () => InfinityDimension(MultiplierTabHelper.activeDimCount("ID")).amount,
+    isActive: () => InfinityDimension(1).isProducing,
+    icon: MultiplierTabIcons.DIMENSION("ID"),
   },
 
   basePurchase: {
@@ -185,16 +203,26 @@ GameDatabase.multiplierTabValues.ID = {
       ).times(EternityChallenge(7).isRunning ? Tickspeed.perSecond : DC.D1);
       if (dim) {
         if (dim === 1) return allMult.times(EternityChallenge(2).reward.effectOrDefault(1));
-        if (dim === 8) return allMult.times(EternityChallenge(7).reward.effectOrDefault(1).clampMin(1));
         return allMult;
       }
       const maxActiveDim = MultiplierTabHelper.activeDimCount("ID");
       return Decimal.pow(allMult, maxActiveDim)
-        .times(maxActiveDim >= 1 ? EternityChallenge(2).reward.effectOrDefault(1) : DC.D1)
-        .times(maxActiveDim === 8 ? EternityChallenge(7).reward.effectOrDefault(1).clampMin(1) : DC.D1);
+        .times(maxActiveDim >= 1 ? EternityChallenge(2).reward.effectOrDefault(1) : DC.D1);
     },
     isActive: () => EternityChallenge(2).completions > 0,
     icon: MultiplierTabIcons.CHALLENGE("eternity"),
+  },
+  tickspeed: {
+    name: () => "Tickspeed (EC7)",
+    displayOverride: () => {
+      const tickRate = Tickspeed.perSecond;
+      const activeDims = MultiplierTabHelper.activeDimCount("ID");
+      return `${format(tickRate, 2, 2)}/sec on ${formatInt(activeDims)} ${pluralize("Dimension", activeDims)}
+        ➜ ${formatX(tickRate.pow(activeDims), 2, 2)}`;
+    },
+    multValue: () => Tickspeed.perSecond.pow(8),
+    isActive: () => EternityChallenge(7).isRunning,
+    icon: MultiplierTabIcons.TICKSPEED,
   },
   glyph: {
     name: "Glyph Effects",

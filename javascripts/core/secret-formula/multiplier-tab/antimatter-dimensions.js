@@ -8,14 +8,29 @@ import { MultiplierTabIcons } from "./icons";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.AD = {
   total: {
-    name: dim => (dim ? `AD ${dim} Multiplier` : "All AD Multipliers"),
-    multValue: dim => (dim
-      ? AntimatterDimension(dim).multiplier
-      : AntimatterDimensions.all
+    name: dim => (dim ? `AD ${dim} Multiplier` : "Base AD Production"),
+    displayOverride: dim => {
+      if (dim) return formatX(AntimatterDimension(dim).multiplier, 2);
+      const highestDim = AntimatterDimension(
+        EternityChallenge(7).isRunning ? 7 : MultiplierTabHelper.activeDimCount("AD")).totalAmount;
+      return `${format(AntimatterDimensions.all
         .filter(ad => ad.isProducing)
         .map(ad => ad.multiplier)
-        .reduce((x, y) => x.times(y), DC.D1)),
-    isActive: true,
+        .reduce((x, y) => x.times(y), DC.D1)
+        .times(highestDim), 2)}/sec`;
+    },
+    multValue: dim => {
+      const mult = dim
+        ? AntimatterDimension(dim).multiplier
+        : AntimatterDimensions.all
+          .filter(ad => ad.isProducing)
+          .map(ad => ad.multiplier)
+          .reduce((x, y) => x.times(y), DC.D1);
+      const highestDim = AntimatterDimension(
+        EternityChallenge(7).isRunning ? 7 : MultiplierTabHelper.activeDimCount("AD")).totalAmount;
+      return mult.times(highestDim);
+    },
+    isActive: dim => (dim ? dim <= MultiplierTabHelper.activeDimCount("AD") : true),
     dilationEffect: () => {
       const baseEff = (player.dilation.active || Enslaved.isRunning)
         ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty)
@@ -42,6 +57,20 @@ GameDatabase.multiplierTabValues.AD = {
     isActive: () => !EternityChallenge(11).isRunning,
     icon: dim => MultiplierTabIcons.PURCHASE("AD", dim),
   },
+  highestDim: {
+    name: () => `Amount of highest Dimension`,
+    displayOverride: () => {
+      const dim = EternityChallenge(7).isRunning ? 7 : MultiplierTabHelper.activeDimCount("AD");
+      return `AD ${dim}, ${format(AntimatterDimension(dim).totalAmount, 2)}`;
+    },
+    multValue: () => {
+      const dim = EternityChallenge(7).isRunning ? 7 : MultiplierTabHelper.activeDimCount("AD");
+      return AntimatterDimension(dim).totalAmount;
+    },
+    isActive: () => AntimatterDimension(1).isProducing,
+    icon: MultiplierTabIcons.DIMENSION("AD"),
+  },
+
   dimboost: {
     name: dim => (dim ? `Dimboosts on AD ${dim}` : "Dimboosts"),
     multValue: dim => (dim
@@ -62,7 +91,7 @@ GameDatabase.multiplierTabValues.AD = {
   achievementMult: {
     name: "Achievement Multiplier",
     multValue: dim => Decimal.pow(Achievements.power, dim ? 1 : MultiplierTabHelper.activeDimCount("AD")),
-    isActive: () => !Pelle.isDoomed,
+    isActive: () => !Pelle.isDoomed && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   achievement: {

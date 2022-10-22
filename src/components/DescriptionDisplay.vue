@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../javascripts/core/wordShift";
+
 import { isFunction, isString } from "@/utility";
 
 /* eslint-disable no-empty-function */
@@ -71,9 +73,18 @@ export default {
         const value = description();
 
         if (isString(value)) {
+          // This is a special case for scrambling EC6 description text
+          if (this.config.scrambleText) {
+            this.description = capitalize(value).replace("*", wordShift.wordCycle(this.config.scrambleText, true));
+            this.updateFunction = () =>
+              this.description = capitalize(description()).replace("*", wordShift.wordCycle(this.config.scrambleText, true));
+            return;
+          }
           this.description = capitalize(value);
           this.updateFunction = () => this.description = capitalize(description());
           return;
+
+
         }
 
         throw new Error(`DescriptionDisplay config.description is a function ` +

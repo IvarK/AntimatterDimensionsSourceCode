@@ -16,7 +16,9 @@ GameDatabase.challenges.eternity = [
       effect: completions =>
         Decimal.pow(Math.max(player.records.thisEternity.time / 10, 0.9), 0.3 + (completions * 0.05)),
       formatEffect: value => formatX(value, 2, 1)
-    }
+    },
+    // These will get notation-formatted and scrambled between for the final goal
+    scrambleText: ["1e2600", "1e201600"],
   },
   {
     id: 2,
@@ -77,14 +79,9 @@ GameDatabase.challenges.eternity = [
   },
   {
     id: 6,
+    // The asterisk, if present, will get replaced with strings generated from the scramble text
     description: () => {
-      if (Enslaved.isRunning) {
-        return Notations.current === Notation.shi
-          ? "yo̶u̶ ̶c̶a̶n̶not̶ ̶g̶a̶i̶n̶ ̶A̶n̶t̶i̶m̶a̶t̶t̶e̶r̶ ̶G̶a̶l̶a̶x̶i̶e̶s̶ ̶n̶o̶r̶m̶a̶l̶l̶y̶. ̶ ̶ ̶The " +
-            " cost of upgrading your max Replicanti Galaxies is massively reduced."
-          : "you c㏰'퐚 gai鸭 Ant꟢matterﻪﶓa⁍axie㮾랜䂇rma㦂l the cost of upgrading your max Replicanti" +
-            " Galaxies is massively reduced";
-      }
+      if (Enslaved.isRunning) return "you *. The cost of upgrading your max Replicanti Galaxies is massively reduced.";
       return "you cannot gain Antimatter Galaxies normally. The cost of upgrading your max Replicanti" +
               " Galaxies is massively reduced.";
     },
@@ -98,7 +95,8 @@ GameDatabase.challenges.eternity = [
         const total = Math.round(Player.dimensionMultDecrease + Effects.sum(EternityChallenge(6).reward)) - value;
         return `-${format(value, 2, 1)} (${formatX(total, 2, 1)} total)`;
       }
-    }
+    },
+    scrambleText: ["cannot gain Antimatter Galaxies normally", "c㏰'퐚 gai鸭 Anti꟢at랜erﻪﶓa⁍axie㮾 䂇orma㦂l"],
   },
   {
     id: 7,

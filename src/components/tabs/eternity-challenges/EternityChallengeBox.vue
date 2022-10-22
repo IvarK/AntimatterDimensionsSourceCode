@@ -1,4 +1,6 @@
 <script>
+import wordShift from "../../../../javascripts/core/wordShift";
+
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
 import EternityChallengeBoxWrapper from "./EternityChallengeBoxWrapper";
@@ -24,7 +26,7 @@ export default {
       canBeUnlocked: false,
       completions: 0,
       showGoalSpan: false,
-      enslavedSpanOverride: false,
+      lastGoal: "",
     };
   },
   computed: {
@@ -41,19 +43,6 @@ export default {
     },
     firstGoal() {
       return this.goalAtCompletions(0);
-    },
-    lastGoal() {
-      const goal = this.goalAtCompletions(this.challenge.maxCompletions - 1);
-      if (this.enslavedSpanOverride) {
-        // Fuck up the text
-        let mangled = "";
-        for (let idx = 0; idx < goal.length; ++idx) {
-          const badChar = Math.random() > 0.4 ? goal.charCodeAt(idx) : Math.floor(Math.random() * 65000 + 65);
-          mangled += String.fromCharCode(badChar);
-        }
-        return mangled;
-      }
-      return goal;
     },
     currentRewardConfig() {
       const challenge = this.challenge;
@@ -85,8 +74,11 @@ export default {
       this.isCompleted = challenge.isFullyCompleted;
       this.completions = challenge.completions;
       this.showGoalSpan = PlayerProgress.realityUnlocked();
-      this.enslavedSpanOverride = Enslaved.isRunning && challenge.id === 1;
       this.canBeUnlocked = TimeStudy.eternityChallenge(challenge.id).canBeBought;
+
+      this.lastGoal = (Enslaved.isRunning && this.challenge.id === 1)
+        ? wordShift.wordCycle(this.config.scrambleText.map(x => format(x)))
+        : this.goalAtCompletions(this.challenge.maxCompletions - 1);
     },
     start() {
       if (this.canBeUnlocked) {

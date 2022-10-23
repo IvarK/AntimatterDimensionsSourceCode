@@ -234,7 +234,7 @@ import { AutomatorLexer } from "./lexer";
           // things like new Decimal("11,21,31") return 11 instead of something indicating an error.
           return value.match(/^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?$/u);
         case AUTOMATOR_VAR_TYPES.STUDIES:
-          return new TimeStudyTree(value).purchasedStudies.length > 0;
+          return TimeStudyTree.isValidImportString(value);
         case AUTOMATOR_VAR_TYPES.DURATION:
           return !Number.isNaN(parseInt(1000 * value, 10));
         default:

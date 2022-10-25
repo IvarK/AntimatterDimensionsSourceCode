@@ -27,10 +27,13 @@ GameDatabase.eternity.milestones = {
     eternities: 6,
     reward: () => {
       const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds);
+      const em200 = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds, true).gt(0);
+      const em1000 = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds, true).gt(0);
       if (!player.options.offlineProgress) return `This milestone would give offline EP generation, but offline progress
         is currently disabled.`;
+      const effectText = (em200 || em1000) ? "Inactive" : `Currently ${format(EPmin, 2, 2)} EP/min`;
       return `While offline, gain ${formatPercents(0.25)} of your best Eternity Points per minute from previous
-        Eternities. (Currently ${format(EPmin, 2, 2)} EP/min)`;
+        Eternities. (${effectText})`;
     },
     activeCondition: () => (player.options.offlineProgress
       ? `Active as long as neither of the other offline milestones
@@ -139,10 +142,10 @@ GameDatabase.eternity.milestones = {
       // which seems messy to say the least.
       // eslint-disable-next-line prefer-template
       return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest Eternity. ` +
-        (eternities.gt(0) ? `(currently ${format(eternities, 2, 2)}/hour)` : "(disabled)");
+        (eternities.gt(0) ? `(Currently ${format(eternities, 2, 2)}/hour)` : "(Inactive)");
     },
     activeCondition: () => (player.options.offlineProgress
-      ? `Must be outside of all Challenges and Dilation
+      ? `Must be outside of all Challenges and Dilation,
         and the Eternity Autobuyer must be turned on and set to zero EP.`
       : ""),
   },
@@ -155,7 +158,7 @@ GameDatabase.eternity.milestones = {
       // eslint-disable-next-line prefer-template
       return `While offline, gain Infinities equal to ${formatPercents(0.5)}
         your best Infinities/hour this Eternity. ` +
-        (infinities.gt(0) ? `(currently ${format(infinities, 2, 2)}/hour)` : "(disabled)");
+        (infinities.gt(0) ? `(Currently ${format(infinities, 2, 2)}/hour)` : "(Inactive)");
     },
     activeCondition: () => (player.options.offlineProgress
       ? `Must be outside of Normal/Infinity Challenges and outside of EC4 and EC12,

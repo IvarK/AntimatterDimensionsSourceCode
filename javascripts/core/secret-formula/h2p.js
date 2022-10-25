@@ -1048,8 +1048,8 @@ Duration - How long each speed burst lasts before going back to normal speed,
 increased by ${formatPercents(0.3)} per upgrade.
 <br>
 <br>
-Once you have ${formatInt(1)} year of <i>game time</i> on your save, you unlock a Reality Upgrade that allows
-you to have a second Black Hole. 
+${formatInt(100)} days of <i>game time</i> after unlocking the Black Hole, you unlock the ability to purchase
+a Reality Upgrade that allows you to have a second Black Hole. 
 The timer on the second Black Hole only advances when the first Black Hole is active. So, for example, if the first
 Black Hole has a duration of ${formatInt(4)} minutes and the second has an interval of ${formatInt(8)} minutes, the
 second Black Hole will only activate once every two cycles of the first Black Hole regardless of how short the

@@ -28,7 +28,7 @@ GameDatabase.multiplierTabValues.AD = {
           .reduce((x, y) => x.times(y), DC.D1);
       const highestDim = AntimatterDimension(
         EternityChallenge(7).isRunning ? 7 : MultiplierTabHelper.activeDimCount("AD")).totalAmount;
-      return mult.times(highestDim);
+      return mult.times(highestDim).clampMin(1);
     },
     isActive: dim => (dim ? dim <= MultiplierTabHelper.activeDimCount("AD") : true),
     dilationEffect: () => {

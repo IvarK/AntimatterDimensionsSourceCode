@@ -1,5 +1,6 @@
 import { GameDatabase } from "../game-database";
 
+import { MultiplierTabHelper } from "./helper-functions";
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
@@ -8,17 +9,13 @@ GameDatabase.multiplierTabValues.gamespeed = {
     name: "Game speed",
     isBase: true,
     displayOverride: () => {
+      if (Enslaved.isStoringRealTime) return `Set to ${format(0)} (storing real time)`;
       if (EternityChallenge(12).isRunning) return `${formatX(1)}/${formatInt(1000)} (fixed)`;
       const curr = getGameSpeedupFactor();
-      const currBH = BlackHoles.list
-        .map(bh => (bh.isActive ? bh.power : 1))
-        .reduce((x, y) => x * y, 1);
 
-      // Calculate an average black hole speedup factor
-      const bh1 = BlackHole(1);
-      const bh2 = BlackHole(2);
-      const avgBH = 1 + (bh1.isUnlocked ? bh1.dutyCycle * (bh1.power - 1) : 0) +
-        (bh2.isUnlocked ? bh1.dutyCycle * bh2.dutyCycle * bh1.power * (bh2.power - 1) : 0);
+      const bh = MultiplierTabHelper.blackHoleSpeeds();
+      const currBH = bh.current;
+      const avgBH = bh.average;
 
       const avgSpeed = Enslaved.isAutoReleasing
         ? getGameSpeedupForDisplay()
@@ -39,11 +36,15 @@ GameDatabase.multiplierTabValues.gamespeed = {
     isActive: () => PlayerProgress.realityUnlocked() && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
-  blackHoles: {
-    name: "Black Holes",
-    multValue: () => BlackHoles.list
-      .map(bh => bh.dutyCycle * bh.power)
-      .reduce((x, y) => x * y, 1),
+  blackHoleCurr: {
+    name: "Current Black Hole Speedup",
+    multValue: () => MultiplierTabHelper.blackHoleSpeeds().current,
+    isActive: () => BlackHole(1).isUnlocked && !BlackHoles.arePaused && !EternityChallenge(12).isRunning,
+    icon: MultiplierTabIcons.BLACK_HOLE,
+  },
+  blackHoleAvg: {
+    name: "Average Black Hole Speedup",
+    multValue: () => MultiplierTabHelper.blackHoleSpeeds().average,
     isActive: () => BlackHole(1).isUnlocked && !BlackHoles.arePaused && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.BLACK_HOLE,
   },

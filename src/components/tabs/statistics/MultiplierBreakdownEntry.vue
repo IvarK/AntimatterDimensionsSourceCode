@@ -43,6 +43,11 @@ export default {
         "c-multiplier-entry-root-container": this.isRoot,
       };
     },
+    // A few props are special-cased because they're base values which can be less than 1, but we don't want to
+    // show them as nerfs
+    nerfBlacklist() {
+      return ["IP_base", "EP_base", "TP_base"];
+    }
   },
   methods: {
     update() {
@@ -69,9 +74,16 @@ export default {
           ? 0
           : Decimal.log10(this.baseMultList[index]) / log10Mult;
         const powFrac = totalPosPow === 1 ? 0 : Math.log(this.powList[index]) / Math.log(totalPosPow);
+
         // Handle nerf powers differently from everything else in order to render them with the correct bar percentage
-        if (this.powList[index] >= 1) this.percentList.push(multFrac / totalPosPow + powFrac * (1 - 1 / totalPosPow));
-        else this.percentList.push(Math.log(this.powList[index]) / Math.log(totalNegPow) * (totalNegPow - 1));
+        const perc = this.powList[index] >= 1
+          ? multFrac / totalPosPow + powFrac * (1 - 1 / totalPosPow)
+          : Math.log(this.powList[index]) / Math.log(totalNegPow) * (totalNegPow - 1);
+
+        // This is clamped to a minimum of something that's still nonzero in order to show it at <0.1% instead of 0%
+        this.percentList.push(
+          this.nerfBlacklist.includes(this.currentGroupKeys[index]) ? Math.clampMin(perc, 0.0001) : perc
+        );
       }
 
       // Shortly after a prestige, these may add up to a lot more than the base amount as production catches up. This
@@ -141,7 +153,9 @@ export default {
       return this.showGroup[index] ? "far fa-minus-square" : "far fa-plus-square";
     },
     entryString(index) {
-      if (this.percentList[index] < 0) return this.nerfString(index);
+      if (this.percentList[index] < 0 && !this.nerfBlacklist.includes(this.currentGroupKeys[index])) {
+        return this.nerfString(index);
+      }
 
       // We want to handle very small numbers carefully to distinguish between "disabled/inactive" and
       // "too small to be relevant"

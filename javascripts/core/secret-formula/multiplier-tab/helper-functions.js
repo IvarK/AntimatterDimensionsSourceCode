@@ -161,6 +161,24 @@ export const MultiplierTabHelper = {
         return false;
     }
   },
+
+  blackHoleSpeeds() {
+    const currBH = BlackHoles.list
+      .filter(bh => bh.isUnlocked)
+      .map(bh => (bh.isActive ? bh.power : 1))
+      .reduce((x, y) => x * y, 1);
+
+    // Calculate an average black hole speedup factor
+    const bh1 = BlackHole(1);
+    const bh2 = BlackHole(2);
+    const avgBH = 1 + (bh1.isUnlocked ? bh1.dutyCycle * (bh1.power - 1) : 0) +
+        (bh2.isUnlocked ? bh1.dutyCycle * bh2.dutyCycle * bh1.power * (bh2.power - 1) : 0);
+
+    return {
+      current: currBH,
+      average: avgBH
+    };
+  }
 };
 
 // All the resource files in this GameDB folder set props of multiplierTabValues, but it needs to be initialized.

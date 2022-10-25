@@ -7,12 +7,12 @@ GameDatabase.multiplierTabValues.AM = {
   total: {
     name: "Antimatter Production",
     displayOverride: () => `${format(Currency.antimatter.productionPerSecond, 2, 2)}/sec`,
-    multValue: () => new Decimal(Currency.antimatter.productionPerSecond),
+    multValue: () => new Decimal(Currency.antimatter.productionPerSecond).clampMin(1),
     isActive: true,
     overlay: ["<i class='fas fa-atom' />"],
   },
   effarigAM: {
-    name: "Glyph Effect (Effarig Antimatter Production)",
+    name: "Glyph Effect - Effarig Antimatter Production",
     powValue: () => {
       const ad1 = AntimatterDimension(1);
       const baseProd = ad1.totalAmount.times(ad1.multiplier).times(Tickspeed.perSecond);

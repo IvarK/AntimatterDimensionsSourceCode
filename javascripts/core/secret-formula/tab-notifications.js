@@ -171,8 +171,8 @@ GameDatabase.tabNotifications = {
         tab: "autobuyers"
       },
     ],
-    // Always externally triggered
-    condition: () => true,
+    // Always externally triggered, but needs to be ignored in cel7 because they're unlocked differently
+    condition: () => !Pelle.isDoomed,
   },
   imaginaryMachineUnlock: {
     id: 13,

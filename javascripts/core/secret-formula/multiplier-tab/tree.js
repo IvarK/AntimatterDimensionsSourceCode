@@ -101,6 +101,12 @@ GameDatabase.multiplierTabTree = {
   ],
 };
 
+// Gamespeed's two alternate displays are current and average gamespeed, distinguished by which of two
+// mutually-exclusive entries appear in the list. We explicity modify props here as needed
+const allGamespeed = GameDatabase.multiplierTabTree.gamespeed_total[0];
+GameDatabase.multiplierTabTree.gamespeed_total[0] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleAvg");
+GameDatabase.multiplierTabTree.gamespeed_total[1] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleCurr");
+
 // TP has redundant entries, so we link them together by replacing a reference
 GameDatabase.multiplierTabTree.DT_total[0][0] = "TP_total";
 
@@ -113,7 +119,7 @@ const targetedEffects = {
     AD: [23, 28, 31, 34, 43, 48, 56, 64, 65, 68, 71, 72, 73, 74, 76, 84, 91, 92],
     TD: [105, 128],
     IP: [85, 93, 116, 125, 141],
-    DT: [132, 137, 156]
+    DT: [132, 137]
   },
   timeStudy: {
     checkFn: MultiplierTabHelper.timeStudyDimCheck,
@@ -155,12 +161,14 @@ for (const res of dimTypes) {
 
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
 // entries or have 8 identical entries, so we explicitly remove those lists for a cleaner appearance on the UI
-const removedProps = ["AD_sacrifice", "AD_achievementMult", "AD_breakInfinityUpgrade", "AD_alchemy", "AD_v", "AD_pelle",
-  "AD_iap", "AD_nerfIC", "AD_nerfPelle", "AD_infinityUpgrade", "AD_glyph",
-  "ID_replicanti", "ID_achievementMult", "ID_infinityChallenge", "ID_eternityUpgrades", "ID_alchemy",
-  "ID_imaginaryUpgrade", "ID_pelle", "ID_nerfPelle",
-  "TD_achievement", "TD_achievementMult", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade", "TD_alchemy",
-  "TD_imaginaryUpgrade", "TD_pelle"];
+const removedRegexes = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_nerfIC", "AD_infinityUpgrade", "AD_v",
+  "ID_replicanti", "ID_infinityChallenge", "ID_eternityUpgrades",
+  "TD_achievement", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade",
+  ".._achievementMult", ".._glyph", ".._alchemy", ".._imaginaryUpgrade", ".._iap",
+  ".._nerfV", ".._nerfCursed", ".._nerfPelle", ".._pelle"
+];
+const removedProps = Object.keys(GameDatabase.multiplierTabTree)
+  .filter(key => removedRegexes.some(regex => key.match(regex)));
 for (const prop of removedProps) {
   GameDatabase.multiplierTabTree[prop] = undefined;
 }

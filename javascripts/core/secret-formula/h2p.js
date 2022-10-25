@@ -1292,7 +1292,7 @@ The Nameless Ones won't directly unlock the next Celestial.
       // TODO Add the rest of the testers here too before release; this is all only pre wave 1
       tags: ["reality", "time", "blackhole", "lategame", "endgame", "testers", "celestial",
         "ikerstream", "realrapidjazz", "saturnus", "earth", "garnet", "pichusuperlover"],
-      tab: "celestials/nameless"
+      tab: "celestials/enslaved"
     }, {
       name: "Tesseracts",
       info: () => `

@@ -1040,7 +1040,7 @@ GameDatabase.achievements.normal = [
       ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} times higher Eternity Points than the previous one.`;
     },
     checkRequirement: () => {
-      if (player.records.lastTenInfinities.some(i => i[0] === Number.MAX_VALUE)) return false;
+      if (player.records.lastTenEternities.some(i => i[0] === Number.MAX_VALUE)) return false;
       const eternities = player.records.lastTenEternities.map(run => run[1]);
       for (let i = 0; i < eternities.length - 1; i++) {
         if (eternities[i].lt(eternities[i + 1].times(Decimal.NUMBER_MAX_VALUE))) return false;

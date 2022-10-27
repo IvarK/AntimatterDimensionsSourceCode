@@ -10,7 +10,7 @@ Autobuyer.annihilation = new class AnnihilationAutobuyerState extends AutobuyerS
   }
 
   get isUnlocked() {
-    return Laitela.darkMatterMult > 1 && !Pelle.isDoomed;
+    return SingularityMilestone.annihilationAutobuyer.canBeApplied;
   }
 
   get multiplier() {

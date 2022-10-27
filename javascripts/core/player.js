@@ -192,7 +192,7 @@ window.player = {
     },
     annihilation: {
       isActive: false,
-      multiplier: 5
+      multiplier: 1.05,
     },
     singularity: { isActive: false },
     ipMultBuyer: { isActive: false, },

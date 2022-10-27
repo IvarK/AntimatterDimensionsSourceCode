@@ -381,7 +381,7 @@ export const BlackHoles = {
   },
 
   get areNegative() {
-    return this.arePaused && player.blackHoleNegative < 1;
+    return this.arePaused && !Laitela.isRunning && player.blackHoleNegative < 1;
   },
 
   get arePermanent() {

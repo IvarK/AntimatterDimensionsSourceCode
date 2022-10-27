@@ -98,7 +98,7 @@ GameDatabase.celestials.descriptions = [
 
       return `Infinity Point and Eternity Point gain are Dilated.
       Game speed is reduced to ${formatInt(1)} and gradually comes back over ${formatInt(10)} minutes.
-      Black Hole storing, discharging, and pulsing are disabled.
+      Black Hole storing, discharging, pulsing, and inversion are all disabled.
       ${disabledText}`;
     },
     description() {

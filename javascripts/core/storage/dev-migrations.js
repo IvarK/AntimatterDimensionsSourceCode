@@ -1459,6 +1459,16 @@ GameStorage.devMigrations = {
         player.achievementBits[10] &= ~4;
       }
     },
+    player => {
+      if (player.options.newUI) {
+        player.options.themeModern = player.options.theme;
+      } else {
+        player.options.themeClassic = player.options.theme;
+      }
+      delete player.options.theme;
+
+      if (BlackHole(1).isUnlocked) player.records.timePlayedAtBHUnlock = player.records.totalTimePlayed;
+    },
   ],
 
   patch(player) {

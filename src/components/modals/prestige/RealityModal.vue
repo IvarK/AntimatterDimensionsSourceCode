@@ -12,7 +12,8 @@ export default {
   },
   data() {
     return {
-      firstPerk: false,
+      firstReality: false,
+      hasChoice: false,
       hasFilter: false,
       glyphs: [],
       bestLevel: 0,
@@ -27,7 +28,7 @@ export default {
     };
   },
   computed: {
-    firstReality() {
+    firstRealityText() {
       return `Reality will reset everything except Challenge records and anything under the General header on the
         Statistics tab. Your Achievements are also reset, but you will automatically get one back every
         ${timeDisplayNoDecimals(30 * 60000)}. You will also gain Reality Machines based on your Eternity Points, a
@@ -38,9 +39,17 @@ export default {
       return RealityUpgrade(19).isEffectActive;
     },
     selectInfo() {
-      return `Selecting Confirm ${this.canSacrifice ? "or Sacrifice " : ""}
-        without selecting a Glyph will
-        ${this.hasFilter ? "choose a Glyph based on your filter settings" : "randomly select a Glyph"}.`;
+      if (!this.hasChoice) {
+        return `<b style="color: var(--color-infinity)">You currently only have a single option for new Glyphs every
+          Reality. You can unlock the ability to choose from multiple Glyphs by canceling out of this modal and
+          purchasing the START Perk.</b>`;
+      }
+
+      const sacText = this.canSacrifice ? "or Sacrifice " : "";
+      const choiceResult = this.hasFilter
+        ? "choose a Glyph based on your filter settings"
+        : "randomly select a Glyph from your available choices";
+      return `Selecting Confirm ${sacText}without selecting a Glyph will ${choiceResult}.`;
     },
     gained() {
       const gainedResources = [];
@@ -69,7 +78,8 @@ export default {
   },
   methods: {
     update() {
-      this.firstPerk = Perk.firstPerk.isEffectActive;
+      this.firstReality = player.realities === 0;
+      this.hasChoice = Perk.firstPerk.isEffectActive;
       this.effarigUnlocked = TeresaUnlocks.effarig.canBeApplied;
       this.hasFilter = EffarigUnlock.glyphFilter.isUnlocked;
       this.level = gainedGlyphLevel().actualLevel;
@@ -77,7 +87,7 @@ export default {
       const simRMGained = MachineHandler.gainedRealityMachines.times(this.simRealities);
       this.realityMachines.copyFrom(simRMGained.clampMax(MachineHandler.distanceToRMCap));
       this.shardsGained = Effarig.shardsGained * (simulatedRealityCount(false) + 1);
-      if (!this.firstPerk) return;
+      if (this.firstReality) return;
       for (let i = 0; i < this.glyphs.length; ++i) {
         const currentGlyph = this.glyphs[i];
         const newGlyph = GlyphSelection.glyphList(
@@ -109,7 +119,7 @@ export default {
         // Sac isn't passed through confirm so we have to close it manually
         this.emitClose();
       }
-      processManualReality(sacrifice, this.selectedGlyph);
+      startManualReality(sacrifice, this.selectedGlyph);
     }
   },
 };
@@ -124,17 +134,17 @@ export default {
       You are about to Reality
     </template>
     <div
-      v-if="!firstPerk"
+      v-if="firstReality"
       class="c-modal-message__text"
     >
-      {{ firstReality }}
+      {{ firstRealityText }}
     </div>
 
     <div class="c-modal-message__text">
       {{ gained }}
     </div>
     <div
-      v-if="firstPerk"
+      v-if="!firstReality"
       class="l-glyph-selection__row"
     >
       <GlyphComponent
@@ -148,10 +158,10 @@ export default {
         @click.native="select(index)"
       />
     </div>
-    <div v-if="firstPerk">
+    <div v-if="!firstReality">
       {{ levelStats }}
       <br>
-      {{ selectInfo }}
+      <span v-html="selectInfo" />
     </div>
     <div v-if="simRealities > 1">
       <br>

@@ -117,7 +117,16 @@ export function requestManualReality() {
       { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
     return;
   }
-  processManualReality(false);
+  startManualReality(false);
+}
+
+export function startManualReality(sacrifice, glyphID) {
+  if (player.options.animations.reality) {
+    runRealityAnimation();
+    setTimeout(processManualReality, 3000, sacrifice, glyphID);
+  } else {
+    processManualReality(sacrifice, glyphID);
+  }
 }
 
 export function processManualReality(sacrifice, glyphID) {
@@ -167,16 +176,8 @@ export function processManualReality(sacrifice, glyphID) {
 
   // We've already gotten a glyph at this point, so the second value has to be true.
   // If we haven't sacrificed, we need to sort and purge glyphs, as applicable.
-  triggerManualReality(getRealityProps(false, true));
-}
+  beginProcessReality(getRealityProps(false, true));
 
-function triggerManualReality(realityProps) {
-  if (player.options.animations.reality) {
-    runRealityAnimation();
-    setTimeout(beginProcessReality, 3000, realityProps);
-  } else {
-    beginProcessReality(realityProps);
-  }
   // Should be here so that the perk graphics update even when we're on the perk subtab, while also keeping its
   // relatively expensive operations off of the reality reset hot path for when realities are significantly faster
   PerkNetwork.updatePerkColor();
@@ -541,7 +542,7 @@ export function finishProcessReality(realityProps) {
       disChargeAll();
     }
   }
-  if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
+  if (AutomatorBackend.state.forceRestart) AutomatorBackend.start(player.reality.automator.state.editorScript);
   if (player.options.automatorEvents.clearOnReality) AutomatorData.clearEventLog();
 
   const celestialRunState = clearCelestialRuns();

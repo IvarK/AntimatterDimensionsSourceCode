@@ -93,6 +93,8 @@ export default {
       if (this.pour) {
         const diff = (now - this.time) / 1000;
         Teresa.pourRM(diff);
+      } else {
+        Teresa.timePoured = 0;
       }
       this.time = now;
       this.pouredAmount = player.celestials.teresa.pouredAmount;

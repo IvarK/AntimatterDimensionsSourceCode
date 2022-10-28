@@ -66,9 +66,7 @@ export default {
       const hasTextErrors = this.automatorType === AUTOMATOR_TYPE.TEXT &&
         (BlockAutomator.hasUnparsableCommands(currScript) || AutomatorData.currentErrors().length !== 0);
 
-      // While we normally have the player option override the modal, script deletion due to failed parsing can have a
-      // big enough adverse impact on the gameplay experience that we force the modal here regardless of the setting
-      if (hasTextErrors || (player.options.confirmations.switchAutomatorMode && AutomatorBackend.isRunning)) {
+      if (player.options.confirmations.switchAutomatorMode && (hasTextErrors || AutomatorBackend.isRunning)) {
         const blockified = AutomatorGrammar.blockifyTextAutomator(currScript);
 
         // We explicitly pass in 0 for lostBlocks if converting from block to text since nothing is ever lost in that

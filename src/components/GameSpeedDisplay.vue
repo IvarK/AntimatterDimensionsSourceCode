@@ -58,14 +58,17 @@ export default {
 </script>
 
 <template>
-  <b>
+  <span class="c-gamespeed">
     <span>
       {{ baseText }}
     </span>
     <span v-if="isPulsing">(<i class="fas fa-expand-arrows-alt u-fa-padding" /> {{ pulseSpeedText }})</span>
-  </b>
+  </span>
 </template>
 
 <style scoped>
-
+.c-gamespeed {
+  font-weight: bold;
+  color: var(--color-text);
+}
 </style>

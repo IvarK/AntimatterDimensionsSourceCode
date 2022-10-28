@@ -27,7 +27,7 @@ export default {
         "o-tab-btn": true,
         "o-tab-btn--modern-tabs": true,
         "o-tab-btn--subtabs": this.showSubtabs,
-        "o-tab-btn--active": this.isCurrentTab && player.options.theme !== "S9"
+        "o-tab-btn--active": this.isCurrentTab && Theme.currentName() !== "S9"
       };
     },
     isCurrentTab() {
@@ -52,7 +52,7 @@ export default {
       }
     },
     isCurrentSubtab(id) {
-      return player.options.lastOpenSubtab[this.tab.id] === id && player.options.theme !== "S9";
+      return player.options.lastOpenSubtab[this.tab.id] === id && Theme.currentName() !== "S9";
     }
   },
 };

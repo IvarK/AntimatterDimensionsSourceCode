@@ -267,6 +267,7 @@ window.player = {
   records: {
     gameCreatedTime: Date.now(),
     totalTimePlayed: 0,
+    timePlayedAtBHUnlock: Number.MAX_VALUE,
     realTimePlayed: 0,
     realTimeDoomed: 0,
     totalAntimatter: DC.E1,
@@ -769,7 +770,8 @@ window.player = {
     cloudEnabled: true,
     syncSaveIntervals: true,
     hotkeys: true,
-    theme: "Normal",
+    themeClassic: "Normal",
+    themeModern: "Normal",
     commas: true,
     updateRate: 33,
     newUI: true,

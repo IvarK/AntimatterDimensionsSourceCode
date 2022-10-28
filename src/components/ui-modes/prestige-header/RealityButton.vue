@@ -97,7 +97,7 @@ export default {
       this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
       this.ppGained = multiplier;
       this.shardsGained = Effarig.shardsGained * multiplier;
-      this.currentShardsRate = (this.shardsGained / Time.thisRealityRealTime.totalSeconds);
+      this.currentShardsRate = (this.shardsGained / Time.thisRealityRealTime.totalMinutes);
 
       const teresaReward = this.formatScalingMultiplierText(
         "Glyph Sacrifice",
@@ -162,7 +162,7 @@ export default {
           <div>Other resources gained:</div>
           <div>{{ quantifyInt("Perk Point", ppGained) }}</div>
           <div v-if="shardsGained !== 0">
-            {{ shardsGainedText }} ({{ format(currentShardsRate, 2) }}/s)
+            {{ shardsGainedText }} ({{ format(currentShardsRate, 2) }}/min)
           </div>
           <div
             v-for="(celestialInfo, i) in celestialRunText"

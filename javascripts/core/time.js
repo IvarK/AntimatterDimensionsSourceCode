@@ -78,6 +78,16 @@ export const Time = {
   /**
    * @returns {TimeSpan}
    */
+  get timeSinceBlackHole() {
+    return this.fromMilliseconds(() => {
+      const diff = player.records.totalTimePlayed - player.records.timePlayedAtBHUnlock;
+      return Math.max(0, diff);
+    });
+  },
+
+  /**
+   * @returns {TimeSpan}
+   */
   get realTimeDoomed() {
     return this.fromMilliseconds(() => player.records.realTimeDoomed);
   },

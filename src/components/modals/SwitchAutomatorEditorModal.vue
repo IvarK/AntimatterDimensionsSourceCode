@@ -78,6 +78,11 @@ export default {
         </span>
       </b>
       <br>
+      <span class="l-lost-text">
+        Hiding this confirmation is not recommended, as it may cause parts of scripts to be immediately and irreversibly
+        lost if your script has errors when attempting to switch modes.
+      </span>
+      <br>
       <br>
       Are you sure you want to change to the {{ otherMode }} editor?
     </div>

@@ -36,7 +36,7 @@ export default {
     update() {
       this.isAvailable = this.subtab.isAvailable;
       this.hasNotification = this.subtab.hasNotification;
-      this.isCurrentSubtab = this.subtab.isOpen && player.options.theme !== "S9";
+      this.isCurrentSubtab = this.subtab.isOpen && Theme.currentName() !== "S9";
       this.tabName = Pelle.transitionText(
         this.subtab.name,
         this.subtab.name,

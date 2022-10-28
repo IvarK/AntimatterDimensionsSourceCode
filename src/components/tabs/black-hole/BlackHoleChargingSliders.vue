@@ -1,4 +1,6 @@
 <script>
+import { Laitela } from "../../../../javascripts/core/globals";
+
 import SliderComponent from "@/components/SliderComponent";
 
 export default {
@@ -11,6 +13,7 @@ export default {
       isAdjustableChargingUnlocked: false,
       isNegativeBHUnlocked: false,
       isInverted: false,
+      isLaitela: false,
       negativeSlider: 0,
       negativeBHDivisor: 1,
       maxNegativeBlackHole: 300,
@@ -21,12 +24,18 @@ export default {
     storedTimeRate() {
       return formatPercents(this.storedFraction / 1000, 1);
     },
+    infoTooltip() {
+      return this.isLaitela
+        ? "The physics of this Reality do not allow Black Hole Inversion"
+        : "Black Hole must be paused to activate Inversion";
+    }
   },
   methods: {
     update() {
       this.isAdjustableChargingUnlocked = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.isNegativeBHUnlocked = V.isFlipped && BlackHoles.arePermanent;
       this.isInverted = BlackHoles.areNegative;
+      this.isLaitela = Laitela.isRunning;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
       this.canAdjustStoredTime = Ra.unlocks.adjustableStoredTime.canBeApplied;
@@ -78,7 +87,7 @@ export default {
         Inverted Black Hole divides game speed by {{ format(negativeBHDivisor, 2, 2) }}.
         (Currently {{ isInverted ? "active" : "inactive" }}<span
           v-if="negativeSlider !== 0 && !isInverted"
-          ach-tooltip="Black Hole must be paused to activate Inverted Black Hole"
+          :ach-tooltip="infoTooltip"
         >
           <i class="fas fa-question-circle l-margin-left" />
         </span>)

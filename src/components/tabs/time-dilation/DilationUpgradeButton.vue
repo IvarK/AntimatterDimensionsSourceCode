@@ -54,17 +54,8 @@ export default {
       };
     },
     timeEstimate() {
-      if (this.isAffordable || this.isCapped || this.upgrade.isBought || this.currentDTGain.eq(0)) return null;
-      if (PelleRifts.paradox.isActive) {
-        const drain = Pelle.riftDrainPercent;
-        const rawDTGain = this.currentDTGain.times(getGameSpeedupForDisplay());
-        const goalNetRate = rawDTGain.minus(Decimal.multiply(this.upgrade.cost, drain));
-        const currNetRate = rawDTGain.minus(this.currentDT.multiply(drain));
-        if (goalNetRate.lt(0)) return "Never affordable due to Rift drain";
-        return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln() / drain).toTimeEstimate();
-      }
-      return TimeSpan.fromSeconds(Decimal.sub(this.upgrade.cost, this.currentDT)
-        .div(this.currentDTGain.times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
+      if (this.isAffordable || this.isCapped || this.upgrade.isBought) return null;
+      return getDilationTimeEstimate(this.upgrade.cost);
     },
     isUseless() {
       return Pelle.isDoomed && this.upgrade.id === 7;

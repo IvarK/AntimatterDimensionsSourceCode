@@ -65,17 +65,7 @@ export default {
       return DilationUpgrade.ttGenerator;
     },
     timeEstimate() {
-      if (this.currentDTGain.eq(0)) return null;
-      if (PelleRifts.paradox.isActive) {
-        const drain = Pelle.riftDrainPercent;
-        const rawDTGain = this.currentDTGain.times(getGameSpeedupForDisplay());
-        const goalNetRate = rawDTGain.minus(Decimal.multiply(this.galaxyThreshold, drain));
-        const currNetRate = rawDTGain.minus(this.currentDT.multiply(drain));
-        if (goalNetRate.lt(0)) return "Never affordable due to Rift drain";
-        return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln() / drain).toTimeEstimate();
-      }
-      return TimeSpan.fromSeconds(Decimal.sub(this.galaxyThreshold, this.dilatedTime)
-        .div(this.currentDTGain.times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
+      return getDilationTimeEstimate(this.galaxyThreshold);
     }
   },
   methods: {

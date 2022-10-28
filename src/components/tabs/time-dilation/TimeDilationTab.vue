@@ -62,6 +62,9 @@ export default {
     },
     ttGenerator() {
       return DilationUpgrade.ttGenerator;
+    },
+    timeEstimate() {
+      return getDilationTimeEstimate(this.galaxyThreshold);
     }
   },
   methods: {
@@ -112,7 +115,10 @@ export default {
       Next
       <span v-if="tachyonGalaxyGain > 1">{{ formatInt(tachyonGalaxyGain) }}</span>
       {{ pluralize("Tachyon Galaxy", tachyonGalaxyGain) }} at
-      <span class="c-dilation-tab__galaxy-threshold">{{ format(galaxyThreshold, 2, 1) }}</span>
+      <span
+        class="c-dilation-tab__galaxy-threshold"
+        :ach-tooltip="timeEstimate"
+      >{{ format(galaxyThreshold, 2, 1) }}</span>
       Dilated Time, gained total of
       <span class="c-dilation-tab__galaxies">{{ formatInt(galaxies) }}</span>
       {{ pluralize("Tachyon Galaxy", galaxies) }}

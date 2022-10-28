@@ -192,6 +192,22 @@ export function getTachyonReq() {
   );
 }
 
+export function getDilationTimeEstimate(goal) {
+  const currentDTGain = getDilationGainPerSecond();
+  const rawDTGain = currentDTGain.times(getGameSpeedupForDisplay());
+  const currentDT = Currency.dilatedTime.value;
+  if (currentDTGain.eq(0)) return null;
+  if (PelleRifts.paradox.isActive) {
+    const drain = Pelle.riftDrainPercent;
+    const goalNetRate = rawDTGain.minus(Decimal.multiply(goal, drain));
+    const currNetRate = rawDTGain.minus(currentDT.times(drain));
+    if (goalNetRate.lt(0)) return "Never affordable due to Rift drain";
+    return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln() / drain).toTimeEstimate();
+  }
+  return TimeSpan.fromSeconds(Decimal.sub(goal, currentDT)
+    .div(rawDTGain).toNumber()).toTimeEstimate();
+}
+
 export function dilatedValueOf(value) {
   const log10 = value.log10();
   const dilationPenalty = 0.75 * Effects.product(DilationUpgrade.dilationPenalty);

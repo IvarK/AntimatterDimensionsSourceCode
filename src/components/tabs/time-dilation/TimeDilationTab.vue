@@ -12,7 +12,6 @@ export default {
     return {
       tachyons: new Decimal(),
       dilatedTime: new Decimal(),
-      currentDTGain: new Decimal(),
       dilatedTimeIncome: new Decimal(),
       galaxyThreshold: new Decimal(),
       galaxies: 0,
@@ -72,8 +71,7 @@ export default {
     update() {
       this.tachyons.copyFrom(Currency.tachyonParticles);
       this.dilatedTime.copyFrom(Currency.dilatedTime);
-      this.currentDTGain.copyFrom(getDilationGainPerSecond());
-      const rawDTGain = this.currentDTGain.times(getGameSpeedupForDisplay());
+      const rawDTGain = getDilationGainPerSecond().times(getGameSpeedupForDisplay());
       if (PelleRifts.paradox.isActive) {
         // The number can be small and either positive or negative with the rift active, which means that extra care
         // needs to be taken to get the calculation as close to correct as possible. This relies on some details

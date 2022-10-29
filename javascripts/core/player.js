@@ -769,6 +769,8 @@ window.player = {
     retryCelestial: false,
     showAllChallenges: false,
     cloudEnabled: true,
+    showCloudModal: true,
+    forceCloudOverwrite: false,
     syncSaveIntervals: true,
     hotkeys: true,
     themeClassic: "Normal",

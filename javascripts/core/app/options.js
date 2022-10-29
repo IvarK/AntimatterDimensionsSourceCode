@@ -20,9 +20,7 @@ export class GameOptions {
   }
 
   static cloudSave() {
-    // This flag suppresses the modal on autosave, but this function is only called with manual saves
-    Cloud.hasSeenSavingConflict = false;
-    Cloud.saveCheck();
+    Cloud.saveCheck(true);
   }
 
   static cloudLoad() {

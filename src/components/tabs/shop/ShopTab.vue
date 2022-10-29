@@ -26,6 +26,8 @@ export default {
       exportIAP: false,
       IAPsDisabled: false,
       creditsClosed: false,
+      loggedIn: false,
+      username: "",
     };
   },
   computed: {
@@ -53,6 +55,8 @@ export default {
       this.exportIAP = player.IAP.exportSTD;
       this.IAPsDisabled = player.IAP.disabled;
       this.creditsClosed = GameEnd.creditsEverClosed;
+      this.loggedIn = Cloud.loggedIn;
+      this.username = Cloud.user.displayName;
     },
     showStore() {
       if (this.creditsClosed) return;
@@ -97,6 +101,30 @@ export default {
         Respec Shop
       </PrimaryButton>
     </div>
+    <div
+      v-if="loggedIn"
+      class="c-login-info"
+    >
+      You are logged in as {{ username }}.
+      <button
+        class="o-shop-button-button"
+        onclick="GameOptions.logout()"
+      >
+        Disconnect Google Account
+      </button>
+    </div>
+    <div
+      v-else
+      class="c-login-info"
+    >
+      You must be logged in to purchase STD coins.
+      <button
+        class="o-shop-button-button"
+        onclick="GameOptions.login()"
+      >
+        Login with Google
+      </button>
+    </div>
     <div class="c-shop-header">
       <span>You have {{ availableSTD }}</span>
       <img
@@ -105,6 +133,7 @@ export default {
       >
       <button
         class="o-shop-button-button"
+        :class="{ 'o-shop-button-button--disabled': !loggedIn }"
         @click="showStore()"
       >
         {{ buySTDText }}
@@ -155,6 +184,10 @@ export default {
   border-color: var(--color-bad);
 }
 
+.c-login-info {
+  font-size: 1.5rem;
+}
+
 .c-shop-header {
   display: flex;
   justify-content: center;
@@ -179,6 +212,12 @@ export default {
   margin-top: 1rem;
   padding: 0.5rem 2rem;
   cursor: pointer;
+}
+
+.o-shop-button-button--disabled {
+  background: rgb(150, 150, 150);
+  cursor: default;
+  pointer-events: none;
 }
 
 .l-shop-buttons-container {

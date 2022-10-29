@@ -217,17 +217,16 @@ export default {
         </OptionsButton>
       </div>
       <div
+        v-if="loggedIn"
         class="l-options-grid__row"
       >
         <OptionsButton
-          v-if="loggedIn"
           onclick="GameOptions.cloudSave()"
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         >
           Cloud save
         </OptionsButton>
         <OptionsButton
-          v-if="loggedIn"
           onclick="GameOptions.cloudLoad()"
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         >

@@ -16,7 +16,28 @@ export default {
       ascension: false,
       singularity: false,
       annihilation: false,
+
+      maxAutobuy: 0,
+      maxAutoAscend: 0,
+      autoSingularityFactor: 0,
     };
+  },
+  computed: {
+    autobuyStr() {
+      return this.maxAutobuy === 4
+        ? "ON (all DMD)"
+        : `ON (max. DMD ${this.maxAutobuy})`;
+    },
+    autoAscendStr() {
+      return this.maxAutoAscend === 4
+        ? "ON (all DMD)"
+        : `ON (max. DMD ${this.maxAutoAscend})`;
+    },
+    autoSingularityStr() {
+      return this.autoSingularityFactor === 1
+        ? "At Cap"
+        : `At Cap ${formatX(this.autoSingularityFactor, 2, 2)}`;
+    },
   },
   watch: {
     dimension(newValue) {
@@ -43,6 +64,10 @@ export default {
       this.ascension = auto.ascension.isActive;
       this.singularity = auto.singularity.isActive;
       this.annihilation = auto.annihilation.isActive;
+
+      this.maxAutobuy = SingularityMilestone.darkDimensionAutobuyers.effectValue;
+      this.maxAutoAscend = SingularityMilestone.ascensionAutobuyers.effectValue;
+      this.autoSingularityFactor = SingularityMilestone.autoCondense.effectValue;
     },
   }
 };
@@ -57,19 +82,22 @@ export default {
       v-if="hasDimension"
       v-model="dimension"
       class="c-laitela-automation-toggle"
-      label="Auto-buy DM Dimensions:"
+      label="Auto-buy DMD:"
+      :on="autobuyStr"
     />
     <PrimaryToggleButton
       v-if="hasAscension"
       v-model="ascension"
       class="c-laitela-automation-toggle"
       label="Auto-Ascend:"
+      :on="autoAscendStr"
     />
     <PrimaryToggleButton
       v-if="hasSingularity"
       v-model="singularity"
       class="c-laitela-automation-toggle"
       label="Auto-Singularity:"
+      :on="autoSingularityStr"
     />
     <PrimaryToggleButton
       v-if="hasAnnihilated"

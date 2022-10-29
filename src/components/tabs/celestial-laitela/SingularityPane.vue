@@ -36,9 +36,10 @@ export default {
       let singularityTime = this.currentTimeToSingularity;
       if (this.canPerformSingularity) {
         singularityTime += this.extraTimeAfterSingularity;
-        return this.isAutoEnabled
+        if (!this.isAutoEnabled) return "";
+        return singularityTime > 0
           ? `(Auto-condensing in ${TimeSpan.fromSeconds(singularityTime).toStringShort()})`
-          : "";
+          : "(Will immediately auto-condense)";
       }
       return `(Enough Dark Energy in ${TimeSpan.fromSeconds(singularityTime).toStringShort()})`;
     },

@@ -29,35 +29,39 @@ export default {
     timePlayed() {
       return `Time Played: ${TimeSpan.fromMilliseconds(this.saveData.realTimePlayed).toString()}`;
     },
+    // Note that all of the four following entries have Pelle-specific resources at the highest priority, which
+    // will generally lead to most of them being overridden almost immediately after Dooming (or practically close
+    // enough). This makes the general appearance better, at the cost of inaccurate variable names post-Dooming.
     antimatter() {
       return this.compareLayeredValues(
-        ["totalAntimatter"],
-        ["Total Antimatter:"],
-        [format],
+        ["pelleAM", "totalAntimatter"],
+        ["Total Doomed Antimatter:", "Total Antimatter:"],
+        [format, format],
         ""
       );
     },
     prestigeCount() {
       return this.compareLayeredValues(
-        ["realities", "eternities", "infinities"],
-        ["Realities:", "Eternities:", "Infinities:"],
-        [this.formatSmall, this.formatSmall, this.formatSmall],
+        ["remnants", "realities", "eternities", "infinities"],
+        ["Remnants:", "Realities:", "Eternities:", "Infinities:"],
+        [format, this.formatSmall, this.formatSmall, this.formatSmall],
         "(No prestige layers reached yet.)"
       );
     },
     prestigeResource() {
       return this.compareLayeredValues(
-        ["imaginaryMachines", "realityMachines", "eternityPoints", "infinityPoints"],
-        ["Reality Machines:", "Reality Machines:", "Eternity Points:", "Infinity Points:"],
-        [x => formatMachines(this.saveData.realityMachines, x), format, format, format],
+        ["realityShards", "imaginaryMachines", "realityMachines", "eternityPoints", "infinityPoints"],
+        ["Reality Shards:", "Reality Machines:", "Reality Machines:", "Eternity Points:", "Infinity Points:"],
+        [format, x => formatMachines(this.saveData.realityMachines, x), format, format, format],
         ""
       );
     },
+    // This is a slight workaround to hide DT/level once Doomed
     extraProgressIndicator() {
       return this.compareLayeredValues(
-        ["bestLevel", "dilatedTime"],
-        ["Best Glyph Level:", "Dilated Time:"],
-        [formatInt, format],
+        ["pelleLore", "bestLevel", "dilatedTime"],
+        ["Your Reality is Doomed.", "Best Glyph Level:", "Dilated Time:"],
+        [() => "", formatInt, format],
         ""
       );
     },
@@ -82,6 +86,7 @@ export default {
     // If they're both the same number, don't add any styling. If they're both nonzero, then they're on the same
     // layer and we only style the number. If one of them is zero, then they're different layers and we color the
     // whole line instead. If every layer results in zero, we default to a given fallback string.
+    // Properties here are drawn in values returned from getSaveInfo() in modal.js
     // eslint-disable-next-line max-params
     compareLayeredValues(propArray, nameArray, formatArray, fallbackString) {
       // Determine if they're on the same layer and if it's better or worse

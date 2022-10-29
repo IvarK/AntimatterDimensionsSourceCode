@@ -27,13 +27,9 @@ export const Cloud = {
   auth: getAuth(),
   db: getDatabase(),
   user: null,
-  hasSeenSavingConflict: false,
-  shouldOverwriteCloudSave: true,
   lastCloudHash: null,
 
   resetTempState() {
-    this.hasSeenSavingConflict = false;
-    this.shouldOverwriteCloudSave = true;
     this.lastCloudHash = null;
     GameStorage.lastCloudSave = Date.now();
     GameIntervals.checkCloudSave.restart();
@@ -69,7 +65,7 @@ export const Cloud = {
     };
   },
 
-  async saveCheck() {
+  async saveCheck(forceModal = false) {
     const save = await this.load();
     if (save === null) {
       this.save();
@@ -92,12 +88,11 @@ export const Cloud = {
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
       const hasConflict = hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
-        saveComparison.diffSTD > 0 || saveComparison.differentName);
-      if ((hasConflict && !this.hasSeenSavingConflict) ||
-        (saveComparison.hashMismatch && this.shouldOverwriteCloudSave)) {
+        saveComparison.diffSTD > 0 || saveComparison.differentName || saveComparison.hashMismatch);
+      if (forceModal || (hasConflict && player.options.showCloudModal)) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
         Modal.cloudSaveConflict.show();
-      } else if (!hasConflict || (this.hasSeenSavingConflict && this.shouldOverwriteCloudSave)) {
+      } else if (!hasConflict || player.options.forceCloudOverwrite) {
         overwriteAndSendCloudSave();
       }
     }

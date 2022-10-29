@@ -57,19 +57,23 @@ export default {
         suggestions.push(`<br><b ${badStyle}>Are you sure you wish to overwrite the Cloud save?</b>`);
       }
       return suggestions.join("");
+    },
+    noOverwriteInfo() {
+      return `Save conflicts will keep occurring without overwriting.`;
+    },
+    overwriteInfo() {
+      return `If another device is also saving to the cloud on this Google Account at the same time,
+        this modal may appear repeatedly.`;
     }
   },
   methods: {
-    saveClick() {
-      Cloud.hasSeenSavingConflict = true;
-      Cloud.shouldOverwriteCloudSave = false;
+    doNotSave() {
+      player.options.cloudEnabled = false;
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
-    cancel() {
+    overwrite() {
       this.overwriteCounter++;
       if (this.hasLessSTDs && this.clicksLeft > 0) return;
-      Cloud.hasSeenSavingConflict = true;
-      Cloud.shouldOverwriteCloudSave = true;
       this.conflict.onAccept?.();
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     }
@@ -82,8 +86,8 @@ export default {
     class="c-modal-options__large"
     :cancel-class="'c-modal-message__okay-btn'"
     :confirm-class="'c-modal-message__okay-btn c-modal__confirm-btn'"
-    :cancel-fn="cancel"
-    @confirm="saveClick()"
+    :cancel-fn="overwrite"
+    @confirm="doNotSave()"
   >
     <template #header>
       Save Game to Cloud
@@ -127,8 +131,20 @@ export default {
       <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
     </div>
     <br>
-    Choosing to overwrite will force a save to the Cloud every time, while choosing to not
-    overwrite will effectively disable Cloud saving. This lasts until you reload the page.
+    <span>
+      Not overwriting will turn off Cloud saving and you will need to manually turn it back on again
+      if you want to use it.
+      <span :ach-tooltip="noOverwriteInfo">
+        <i class="fas fa-question-circle" />
+      </span>
+    </span>
+    <span>
+      Overwriting will force a save to the Cloud in this particular instance; in most
+      cases this should prevent this modal from reappearing afterwards.
+      <span :ach-tooltip="overwriteInfo">
+        <i class="fas fa-question-circle" />
+      </span>
+    </span>
     <template #cancel-text>
       Overwrite Cloud Save <span v-if="hasLessSTDs">({{ clicksLeft }})</span>
     </template>

@@ -67,10 +67,10 @@ export default {
     },
     formattedSTDText() {
       return this.compareLayeredValues(
-        ["totalSTD"],
-        ["STDs purchased:"],
+        ["spentSTD"],
+        ["STDs spent:"],
         [formatInt, format],
-        "No STDs purchased"
+        "No STDs spent"
       );
     },
     name() {

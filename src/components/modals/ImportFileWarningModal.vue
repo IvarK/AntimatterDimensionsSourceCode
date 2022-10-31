@@ -19,10 +19,6 @@ export default {
       type: Object,
       required: true
     },
-    warningMessage: {
-      type: String,
-      required: true
-    }
   },
   data() {
     return {
@@ -69,9 +65,8 @@ export default {
       save-type="Current Save"
     />
     <span class="c-modal-IAP__warning">
-      {{ warningMessage }}
+      The imported save has used more STDs than you currently have.
     </span>
-    Your purchased STDs will not carry over to the imported save.
     <br>
     Click Import five times if you still wish to import.
     <template #cancel-text>

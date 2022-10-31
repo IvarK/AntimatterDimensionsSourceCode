@@ -59,7 +59,7 @@ export default {
       return isSecretImport(this.input) || Theme.isSecretTheme(this.input);
     },
     hasLessSTDs() {
-      return player.IAP.totalSTD > (this.player?.IAP?.totalSTD ?? 0) && !this.inputIsSecret;
+      return (this.player?.IAP?.spentSTD ?? 0) > Cloud.lastSTDAmount && !this.inputIsSecret;
     },
     clicksLeft() {
       return 5 - this.importCounter;
@@ -186,7 +186,7 @@ export default {
           v-if="hasLessSTDs"
           class="c-modal-IAP__warning"
         >
-          IMPORTED SAVE HAS LESS STDs BOUGHT, YOU WILL LOSE THEM WITH YOUR SAVE.
+          IMPORTED SAVE HAS SPENT MORE STDS THAN YOU HAVE, STDS WILL NEED TO BE DISABLED.
           <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
         </div>
       </template>

@@ -76,7 +76,7 @@ export default {
       reader.onload = function() {
         const contents = reader.result;
         const toImport = GameSaveSerializer.deserialize(contents);
-        const showWarning = (toImport?.IAP?.totalSTD ?? 0) < player.IAP.totalSTD;
+        const showWarning = (toImport?.IAP?.spentSTD ?? 0) > Cloud.lastSTDAmount;
 
         // File importing behavior should use the behavior on the existing and to-be-overwritten save instead of the
         // settings in the to-be-imported save. This is largely because the former is more easily edited by the player,
@@ -91,7 +91,6 @@ export default {
           Modal.importWarning.show({
             rawInput: contents,
             saveToImport: toImport,
-            warningMessage: "The Imported Save has less STDs than your Current Save.",
           });
         } else {
           GameStorage.import(contents);

@@ -8,11 +8,6 @@ export default {
     ModalWrapperChoice,
     SaveInfoEntry,
   },
-  data() {
-    return {
-      overwriteCounter: 0,
-    };
-  },
   computed: {
     conflict() {
       return this.$viewModel.modal.cloudConflict;
@@ -26,12 +21,6 @@ export default {
     hasDifferentName() {
       return this.conflict.cloud.saveName !== this.conflict.local.saveName;
     },
-    hasLessSTDs() {
-      return this.conflict.local.totalSTD > this.conflict.cloud.totalSTD;
-    },
-    clicksLeft() {
-      return 5 - this.overwriteCounter;
-    },
     suggestionText() {
       const goodStyle = `style="color: var(--color-good)"`;
       const badStyle = `style="color: var(--color-bad)"`;
@@ -42,10 +31,6 @@ export default {
       suggestions.push(warnOverwrite
         ? `<b ${badStyle}>would cause your local save to lose significant progress</b>`
         : `<b ${goodStyle}>is probably safe</b>`);
-      suggestions.push(this.hasLessSTDs
-        ? ` ${warnOverwrite ? "and" : "but"} <b ${badStyle}>will cause you to lose STDs on your local save</b>.`
-        : "."
-      );
       if (this.hasDifferentName) {
         suggestions.push(`<br>${warnOverwrite ? "Additionally" : "However"}, the Cloud save
           <b ${badStyle}>may be a save from a different device</b>.`);
@@ -58,8 +43,6 @@ export default {
   },
   methods: {
     confirm() {
-      this.overwriteCounter++;
-      if (this.hasLessSTDs && this.clicksLeft > 0) return;
       this.conflict.onAccept?.();
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     }
@@ -106,18 +89,11 @@ export default {
       save-type="Cloud Save"
     />
     <span v-html="suggestionText" />
-    <div
-      v-if="hasLessSTDs"
-      class="c-modal-IAP__warning"
-    >
-      CLOUD SAVE HAS LESS STDs BOUGHT, YOU WILL LOSE THEM IF YOU OVERWRITE.
-      <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
-    </div>
     <template #cancel-text>
       Keep Local Save
     </template>
     <template #confirm-text>
-      Overwrite Local with Cloud Save <span v-if="hasLessSTDs">({{ clicksLeft }})</span>
+      Overwrite Local with Cloud Save
     </template>
   </ModalWrapperChoice>
 </template>

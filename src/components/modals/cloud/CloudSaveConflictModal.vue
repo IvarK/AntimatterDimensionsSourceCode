@@ -8,11 +8,6 @@ export default {
     ModalWrapperChoice,
     SaveInfoEntry,
   },
-  data() {
-    return {
-      overwriteCounter: 0,
-    };
-  },
   computed: {
     conflict() {
       return this.$viewModel.modal.cloudConflict;
@@ -26,14 +21,8 @@ export default {
     hasDifferentName() {
       return this.conflict.cloud.saveName !== this.conflict.local.saveName;
     },
-    hasLessSTDs() {
-      return this.conflict.cloud.totalSTD > this.conflict.local.totalSTD;
-    },
     wrongHash() {
       return this.conflict.saveComparison.hashMismatch;
-    },
-    clicksLeft() {
-      return 5 - this.overwriteCounter;
     },
     suggestionText() {
       const goodStyle = `style="color: var(--color-good)"`;
@@ -45,10 +34,6 @@ export default {
       suggestions.push(warnOverwrite
         ? `<b ${badStyle}>would overwrite a save with significantly more progress</b>`
         : `<b ${goodStyle}>is probably safe</b>`);
-      suggestions.push(this.hasLessSTDs
-        ? ` ${warnOverwrite ? "and" : "but"} <b ${badStyle}>will cause your Cloud save to lose STDs</b>.`
-        : "."
-      );
       if (this.hasDifferentName || this.wrongHash) {
         suggestions.push(` ${warnOverwrite ? "Additionally" : "However"}, you may be overwriting a 
           <b ${badStyle}>save from a different device</b>.`);
@@ -72,8 +57,6 @@ export default {
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     },
     overwrite() {
-      this.overwriteCounter++;
-      if (this.hasLessSTDs && this.clicksLeft > 0) return;
       this.conflict.onAccept?.();
       EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     }
@@ -123,13 +106,6 @@ export default {
       save-type="Cloud Save"
     />
     <span v-html="suggestionText" />
-    <div
-      v-if="hasLessSTDs"
-      class="c-modal-IAP__warning"
-    >
-      LOCAL SAVE HAS LESS STDs BOUGHT, YOU WILL LOSE THEM IF YOU OVERWRITE.
-      <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
-    </div>
     <br>
     <span>
       Not overwriting will turn off Cloud saving and you will need to manually turn it back on again
@@ -146,7 +122,7 @@ export default {
       </span>
     </span>
     <template #cancel-text>
-      Overwrite Cloud Save <span v-if="hasLessSTDs">({{ clicksLeft }})</span>
+      Overwrite Cloud Save
     </template>
     <template #confirm-text>
       Do not overwrite

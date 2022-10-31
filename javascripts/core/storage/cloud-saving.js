@@ -28,6 +28,7 @@ export const Cloud = {
   db: getDatabase(),
   user: null,
   lastCloudHash: null,
+  lastSTDAmount: 0,
 
   resetTempState() {
     this.lastCloudHash = null;
@@ -65,7 +66,6 @@ export const Cloud = {
     return {
       farther: ProgressChecker.compareSaveProgress(cloud, local),
       older: ProgressChecker.compareSaveTimes(cloud, local),
-      diffSTD: (cloud?.IAP?.totalSTD ?? 0) - (local?.IAP?.totalSTD ?? 0),
       differentName: cloud?.options.saveFileName !== local?.options.saveFileName,
       hashMismatch: this.lastCloudHash && this.lastCloudHash !== hash,
     };
@@ -94,7 +94,7 @@ export const Cloud = {
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
       const hasConflict = hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
-        saveComparison.diffSTD > 0 || saveComparison.differentName || saveComparison.hashMismatch);
+        saveComparison.differentName || saveComparison.hashMismatch);
       if (forceModal || (hasConflict && player.options.showCloudModal)) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
         Modal.cloudSaveConflict.show();
@@ -137,6 +137,7 @@ export const Cloud = {
     let std = snapshot.exists ? Number(snapshot.val()) : 0;
     if (Number.isNaN(oldSTD)) std = 0;
     player.IAP.totalSTD = std;
+    this.lastSTDAmount = std;
   },
 
   resetSTD() {
@@ -165,7 +166,7 @@ export const Cloud = {
       // Bring up the modal if cloud loading will overwrite a local save which is older or possibly farther
       const hasBoth = cloudSave && localSave;
       const hasConflict = hasBoth && (saveComparison.older === 1 || saveComparison.farther !== -1 ||
-        saveComparison.diffSTD < 0 || saveComparison.differentName);
+        saveComparison.differentName);
       if (hasConflict) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteLocalSave);
         Modal.cloudLoadConflict.show();

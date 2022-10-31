@@ -34,9 +34,6 @@ export default {
     purchases() {
       return ShopPurchase.all;
     },
-    buySTDText() {
-      return "Buy More";
-    }
   },
   watch: {
     exportIAP(newValue) {
@@ -53,15 +50,16 @@ export default {
       this.spentSTD = player.IAP.spentSTD;
       this.isLoading = Boolean(player.IAP.checkoutSession.id);
       this.exportIAP = player.IAP.exportSTD;
-      this.IAPsDisabled = player.IAP.disabled;
+      this.IAPsDisabled = player.IAP.disabled || !Cloud.loggedIn;
       this.creditsClosed = GameEnd.creditsEverClosed;
       this.loggedIn = Cloud.loggedIn;
-      this.username = Cloud.user.displayName;
+      this.username = Cloud.user?.displayName;
     },
     showStore() {
       if (this.creditsClosed) return;
       SecretAchievement(33).unlock();
-      Modal.shop.show();
+      if (this.loggedIn) Modal.shop.show();
+      else Modal.message.show("You cannot purchase STD coins without logging in first.");
     },
     onCancel() {
       Payments.cancelPurchase();
@@ -117,7 +115,7 @@ export default {
       v-else
       class="c-login-info"
     >
-      You must be logged in to purchase STD coins.
+      You must be logged in to purchase STD coins or use these upgrades.
       <button
         class="o-shop-button-button"
         onclick="GameOptions.login()"
@@ -136,7 +134,7 @@ export default {
         :class="{ 'o-shop-button-button--disabled': !loggedIn }"
         @click="showStore()"
       >
-        {{ buySTDText }}
+        Buy More
       </button>
     </div>
     <div class="l-shop-buttons-container">
@@ -217,7 +215,6 @@ export default {
 .o-shop-button-button--disabled {
   background: rgb(150, 150, 150);
   cursor: default;
-  pointer-events: none;
 }
 
 .l-shop-buttons-container {

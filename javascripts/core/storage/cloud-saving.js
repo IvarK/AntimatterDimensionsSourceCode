@@ -40,7 +40,13 @@ export const Cloud = {
   },
 
   async login() {
-    await signInWithPopup(this.auth, this.provider);
+    try {
+      await signInWithPopup(this.auth, this.provider);
+      this.syncSTD();
+      GameUI.notify.success(`Logged in as ${this.user.displayName}`);
+    } catch (e) {
+      GameUI.notify.error("Google Account login failed");
+    }
   },
 
   async loadMobile() {
@@ -106,12 +112,37 @@ export const Cloud = {
       current: GameStorage.currentSlot,
       saves: GameStorage.saves,
     };
+    this.syncSTD();
 
     this.lastCloudHash = sha512_256(GameSaveSerializer.serialize(root.saves[slot]));
     GameStorage.lastCloudSave = Date.now();
     GameIntervals.checkCloudSave.restart();
     set(ref(this.db, `users/${this.user.id}/web`), GameSaveSerializer.serialize(root));
     GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
+  },
+
+  async addSTD(toAdd) {
+    if (!this.user) return;
+    const snapshot = await get(ref(this.db, `users/${this.user.id}/std`));
+    let oldSTD = snapshot.exists ? Number(snapshot.val()) : 0;
+    if (Number.isNaN(oldSTD)) oldSTD = 0;
+    const newSTD = oldSTD + toAdd;
+    set(ref(this.db, `users/${this.user.id}/std`), newSTD);
+    GameUI.notify.info(`STD count updated - Total: ${newSTD}`);
+  },
+
+  async syncSTD() {
+    if (!this.user) return;
+    const snapshot = await get(ref(this.db, `users/${this.user.id}/std`));
+    let std = snapshot.exists ? Number(snapshot.val()) : 0;
+    if (Number.isNaN(oldSTD)) std = 0;
+    player.IAP.totalSTD = std;
+  },
+
+  resetSTD() {
+    if (!this.user) return;
+    set(ref(this.db, `users/${this.user.id}/std`), 0);
+    GameUI.notify.info(`STD count reset for user ${this.user.displayName}`);
   },
 
   async loadCheck() {

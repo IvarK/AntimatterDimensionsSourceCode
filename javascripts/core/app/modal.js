@@ -270,7 +270,7 @@ function getSaveInfo(save) {
     realityShards: new Decimal(0),
     // This is a slight workaround to hide DT/level once Doomed
     pelleLore: 0,
-    totalSTD: 0,
+    spentSTD: 0,
     saveName: "",
     compositeProgress: 0,
   };
@@ -289,9 +289,9 @@ function getSaveInfo(save) {
   resources.bestLevel = save.records?.bestReality.glyphLevel ?? 0;
   resources.pelleAM.copyFrom(new Decimal(save.celestials?.pelle.records.totalAntimatter));
   resources.remnants = save.celestials?.pelle.remnants ?? 0;
-  resources.realityShards = save.celestials?.pelle.realityShards ?? 0;
+  resources.realityShards.copyFrom(new Decimal(save.celestials?.pelle.realityShards));
   resources.pelleLore = save.celestials?.pelle.quoteBits ?? 0;
-  resources.totalSTD = save?.IAP?.totalSTD ?? 0;
+  resources.spentSTD = save?.IAP?.spentSTD ?? 0;
   resources.saveName = save.options.saveFileName ?? "";
   resources.compositeProgress = ProgressChecker.getCompositeProgress(save);
 

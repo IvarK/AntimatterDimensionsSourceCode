@@ -44,7 +44,8 @@ const Payments = {
 
       if (completed) {
         Payments.windowReference?.close();
-        player.IAP.totalSTD += amount;
+        Cloud.addSTD(amount);
+        Cloud.syncSTD();
         GameUI.notify.success(`Purchase of ${amount} STDs was successful, thank you for your support! ❤️`, 10000);
         Payments.clearInterval();
         player.IAP.checkoutSession = { id: false };

@@ -49,12 +49,14 @@ class ShopPurchaseState extends RebuyableMechanicState {
 
   get currentMult() {
     if (!this.shouldDisplayMult) return "";
-    return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases);
+    const isDisabled = player.IAP.disabled || !Cloud.loggedIn;
+    return this.config.multiplier(isDisabled ? 0 : this.purchases);
   }
 
   get nextMult() {
     if (!this.shouldDisplayMult) return "";
-    return this.config.multiplier(player.IAP.disabled ? 0 : this.purchases + 1);
+    const isDisabled = player.IAP.disabled || !Cloud.loggedIn;
+    return this.config.multiplier(isDisabled ? 0 : this.purchases + 1);
   }
 
   // We want to still display the correct value in the button, so we need separate getters for it

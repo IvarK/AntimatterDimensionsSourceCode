@@ -476,7 +476,6 @@ GameDatabase.tabs = [
     name: "Shop",
     newUIClass: "shop",
     hideAt: 1.5,
-    condition: () => true || player.IAP.totalSTD > 0,
     id: 10,
     hidable: true,
     subtabs: [

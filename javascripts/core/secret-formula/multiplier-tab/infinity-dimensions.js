@@ -23,7 +23,8 @@ GameDatabase.multiplierTabValues.ID = {
         .filter(id => id.isProducing)
         .map(id => id.multiplier)
         .reduce((x, y) => x.times(y), DC.D1)),
-    isActive: dim => InfinityDimension(dim ?? 1).isProducing && !EternityChallenge(11).isRunning,
+    isActive: dim => (InfinityDimension(dim ?? 1).isProducing || EternityMilestone.autoUnlockID.isReached) &&
+      !EternityChallenge(11).isRunning,
     dilationEffect: () => {
       const baseEff = player.dilation.active
         ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty)

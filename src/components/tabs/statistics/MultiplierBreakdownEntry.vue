@@ -179,7 +179,7 @@ export default {
           }
           return this.getProp(this.currentGroupKeys[index], "isBase")
             ? format(x, 2, 2)
-            : `${formatX(x, 2, 2)}`;
+            : formatX(x, 2, 2);
         };
         if (Decimal.neq(this.baseMultList[index], 1)) values.push(formatFn(this.baseMultList[index]));
         if (this.powList[index] !== 1) values.push(formatPow(this.powList[index], 2, 3));

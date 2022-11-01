@@ -83,6 +83,10 @@ export default {
       Disclaimer: These are not required to progress in the game, they are just for supporting the developer.
       The game is balanced without the use of any microtransactions.
     </div>
+    <div>
+      Note: Shop purchases made on the Android, Steam, and Web versions are
+      separate and non-transferrable for legal reasons.
+    </div>
     <div class="c-subtab-option-container">
       <PrimaryToggleButton
         v-model="exportIAP"

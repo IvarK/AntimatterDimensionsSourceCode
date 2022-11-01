@@ -10,7 +10,7 @@ GameDatabase.multiplierTabValues.AD = {
   total: {
     name: dim => (dim ? `AD ${dim} Multiplier` : "Base AD Production"),
     displayOverride: dim => {
-      if (dim) return formatX(AntimatterDimension(dim).multiplier, 2);
+      if (dim) return formatX(AntimatterDimension(dim).multiplier, 2, 2);
       const highestDim = AntimatterDimension(
         EternityChallenge(7).isRunning ? 7 : MultiplierTabHelper.activeDimCount("AD")).totalAmount;
       return `${format(AntimatterDimensions.all

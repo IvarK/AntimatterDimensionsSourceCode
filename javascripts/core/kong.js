@@ -49,14 +49,12 @@ class ShopPurchaseState extends RebuyableMechanicState {
 
   get currentMult() {
     if (!this.shouldDisplayMult) return "";
-    const isDisabled = player.IAP.disabled || !Cloud.loggedIn;
-    return this.config.multiplier(isDisabled ? 0 : this.purchases);
+    return this.config.multiplier(ShopPurchase.isIAPEnabled() ? this.purchases : 0);
   }
 
   get nextMult() {
     if (!this.shouldDisplayMult) return "";
-    const isDisabled = player.IAP.disabled || !Cloud.loggedIn;
-    return this.config.multiplier(isDisabled ? 0 : this.purchases + 1);
+    return this.config.multiplier(ShopPurchase.isIAPEnabled() ? this.purchases + 1 : 0);
   }
 
   // We want to still display the correct value in the button, so we need separate getters for it
@@ -94,6 +92,10 @@ export const ShopPurchase = mapGameDataToObject(
   GameDatabase.shopPurchases,
   config => new ShopPurchaseState(config)
 );
+
+ShopPurchase.isIAPEnabled = function() {
+  return Cloud.loggedIn && player.IAP.totalSTD >= player.IAP.spentSTD && !player.IAP.disabled;
+};
 
 ShopPurchase.respecAll = function() {
   for (const purchase of ShopPurchase.all) {

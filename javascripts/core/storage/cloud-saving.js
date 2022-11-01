@@ -135,7 +135,7 @@ export const Cloud = {
     if (!this.user) return;
     const snapshot = await get(ref(this.db, `users/${this.user.id}/std`));
     let std = snapshot.exists ? Number(snapshot.val()) : 0;
-    if (Number.isNaN(oldSTD)) std = 0;
+    if (Number.isNaN(std)) std = 0;
     player.IAP.totalSTD = std;
     this.lastSTDAmount = std;
   },

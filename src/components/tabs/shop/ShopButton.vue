@@ -6,17 +6,13 @@ export default {
       type: Object,
       required: true
     },
-    iapDisabled: {
-      type: Boolean,
-      required: false,
-      default: false
-    }
   },
   data() {
     return {
       currentMult: 0,
       nextMult: 0,
       canAfford: false,
+      iapDisabled: false,
     };
   },
   methods: {
@@ -24,6 +20,7 @@ export default {
       this.currentMult = this.purchase.currentMultForDisplay;
       this.nextMult = this.purchase.nextMultForDisplay;
       this.canAfford = this.purchase.canBeBought;
+      this.iapDisabled = !ShopPurchase.isIAPEnabled();
     }
   },
 };

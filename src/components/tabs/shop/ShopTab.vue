@@ -34,15 +34,14 @@ export default {
     purchases() {
       return ShopPurchase.all;
     },
+    enableText() {
+      return `In-app Purchases: ${this.IAPsDisabled ? "Disabled" : "Enabled"}`;
+    },
   },
   watch: {
     exportIAP(newValue) {
       player.IAP.exportSTD = newValue;
     },
-    IAPsDisabled(newValue) {
-      if (!newValue && this.spentSTD > 0) Speedrun.setSTDUse(true);
-      player.IAP.disabled = newValue;
-    }
   },
   methods: {
     update() {
@@ -50,7 +49,7 @@ export default {
       this.spentSTD = player.IAP.spentSTD;
       this.isLoading = Boolean(player.IAP.checkoutSession.id);
       this.exportIAP = player.IAP.exportSTD;
-      this.IAPsDisabled = player.IAP.disabled || !Cloud.loggedIn;
+      this.IAPsDisabled = player.IAP.disabled;
       this.creditsClosed = GameEnd.creditsEverClosed;
       this.loggedIn = Cloud.loggedIn;
       this.username = Cloud.user?.displayName;
@@ -67,6 +66,12 @@ export default {
     respec() {
       if (this.creditsClosed) return;
       ShopPurchase.respecRequest();
+    },
+    toggleEnable() {
+      const canEnable = Cloud.lastSTDAmount >= player.IAP.spentSTD || player.IAP.totalSTD >= player.IAP.spentSTD;
+      if (!canEnable) return;
+      if (player.IAP.disabled && this.spentSTD > 0) Speedrun.setSTDUse(true);
+      player.IAP.disabled = !player.IAP.disabled;
     }
   },
 };
@@ -85,12 +90,14 @@ export default {
         :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         label="Include IAP in export:"
       />
-      <PrimaryToggleButton
-        v-model="IAPsDisabled"
+      <PrimaryButton
         class="o-primary-btn--subtab-option"
         :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         label="Disable in-app-purchases:"
-      />
+        @click="toggleEnable()"
+      >
+        {{ enableText }}
+      </PrimaryButton>
       <PrimaryButton
         class="o-primary-btn--subtab-option"
         :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
@@ -137,12 +144,16 @@ export default {
         Buy More
       </button>
     </div>
+    <div v-if="availableSTD < 0">
+      Your save is using more STDs than you have purchased on your account.
+      <br>
+      All STD purchases have been temporarily disabled, please respec your STD coins or purchase more.
+    </div>
     <div class="l-shop-buttons-container">
       <ShopButton
         v-for="purchase in purchases"
         :key="purchase.key"
         :purchase="purchase"
-        :iap-disabled="IAPsDisabled"
       />
     </div>
     <loading

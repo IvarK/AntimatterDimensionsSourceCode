@@ -186,7 +186,7 @@ export default {
           v-if="hasLessSTDs"
           class="c-modal-IAP__warning"
         >
-          IMPORTED SAVE HAS SPENT MORE STDS THAN YOU HAVE, STDS WILL NEED TO BE DISABLED.
+          IMPORTED SAVE HAS SPENT MORE STDS THAN YOU HAVE, STD UPGRADES WILL AUTOMATICALLY BE DISABLED.
           <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
         </div>
       </template>

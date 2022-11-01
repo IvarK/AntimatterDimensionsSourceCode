@@ -263,6 +263,15 @@ export const GameStorage = {
     ui.view.tutorialState = player.tutorialState;
     ui.view.tutorialActive = player.tutorialActive;
 
+    // Disable IAP if importing a save with more STDs spent than they have in the cloud
+    if (Cloud.lastSTDAmount < player.IAP.spentSTD) {
+      ShopPurchase.respecAll();
+      player.IAP.disabled = true;
+      Modal.message.show(`You have imported a save which has used more STD coins than you have on your Google Account.
+        All STD upgrades have been automatically reset and their coins refunded. Note that this only affects upgrades
+        related to using STD coins - everything else in the game remains unaffected.`);
+    }
+
     ECTimeStudyState.invalidateCachedRequirements();
     recalculateAllGlyphs();
     checkPerkValidity();

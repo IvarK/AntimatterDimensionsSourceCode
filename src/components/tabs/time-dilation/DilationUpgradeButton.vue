@@ -33,6 +33,7 @@ export default {
       boughtAmount: 0,
       currentDT: new Decimal(0),
       currentDTGain: new Decimal(0),
+      timeEstimate: "",
     };
   },
   computed: {
@@ -53,10 +54,6 @@ export default {
         "o-dilation-upgrade--capped": this.isCapped,
       };
     },
-    timeEstimate() {
-      if (this.isAffordable || this.isCapped || this.upgrade.isBought) return null;
-      return getDilationTimeEstimate(this.upgrade.cost);
-    },
     isUseless() {
       return Pelle.isDoomed && this.upgrade.id === 7;
     }
@@ -71,6 +68,9 @@ export default {
       const upgrade = this.upgrade;
       this.currentDT.copyFrom(Currency.dilatedTime.value);
       this.currentDTGain.copyFrom(getDilationGainPerSecond());
+      this.timeEstimate = this.isAffordable ||
+      this.isCapped ||
+      this.upgrade.isBought ? null : getDilationTimeEstimate(this.upgrade.cost);
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;

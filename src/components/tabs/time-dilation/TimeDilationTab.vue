@@ -16,7 +16,8 @@ export default {
       galaxyThreshold: new Decimal(),
       galaxies: 0,
       tachyonGalaxyGain: 1,
-      hasPelleDilationUpgrades: false
+      hasPelleDilationUpgrades: false,
+      galaxyTimeEstimate: "",
     };
   },
   computed: {
@@ -63,15 +64,13 @@ export default {
     ttGenerator() {
       return DilationUpgrade.ttGenerator;
     },
-    timeEstimate() {
-      return getDilationTimeEstimate(this.galaxyThreshold);
-    }
   },
   methods: {
     update() {
       this.tachyons.copyFrom(Currency.tachyonParticles);
       this.dilatedTime.copyFrom(Currency.dilatedTime);
       const rawDTGain = getDilationGainPerSecond().times(getGameSpeedupForDisplay());
+      this.galaxyTimeEstimate = getDilationTimeEstimate(this.galaxyThreshold);
       if (PelleRifts.paradox.isActive) {
         // The number can be small and either positive or negative with the rift active, which means that extra care
         // needs to be taken to get the calculation as close to correct as possible. This relies on some details
@@ -117,7 +116,7 @@ export default {
       {{ pluralize("Tachyon Galaxy", tachyonGalaxyGain) }} at
       <span
         class="c-dilation-tab__galaxy-threshold"
-        :ach-tooltip="timeEstimate"
+        :ach-tooltip="galaxyTimeEstimate"
       >{{ format(galaxyThreshold, 2, 1) }}</span>
       Dilated Time, gained total of
       <span class="c-dilation-tab__galaxies">{{ formatInt(galaxies) }}</span>

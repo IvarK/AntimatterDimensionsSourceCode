@@ -14,6 +14,8 @@ GameDatabase.multiplierTabValues.tickspeed = {
       return `${format(tickRate, 2, 2)}/sec on ${formatInt(activeDims)} ${pluralize("Dimension", activeDims)}
         ➜ ${formatX(tickRate.pow(activeDims), 2, 2)}`;
     },
+    // This is necessary to make multValue entries from the other props scale properly, which are also all pow10
+    // due to the multiplier tab splitting up entries logarithmically
     fakeValue: DC.E100,
     multValue: () => Tickspeed.perSecond.pow(MultiplierTabHelper.activeDimCount("AD")),
     // No point in showing this breakdown at all unless both components are nonzero; however they will always be nonzero
@@ -23,11 +25,24 @@ GameDatabase.multiplierTabValues.tickspeed = {
     overlay: ["<i class='fa-solid fa-clock' />"],
     icon: MultiplierTabIcons.TICKSPEED,
   },
+  base: {
+    name: "Base Tickspeed from Achievements",
+    displayOverride: () => {
+      const val = DC.D1.dividedByEffectsOf(
+        Achievement(36),
+        Achievement(45),
+        Achievement(66),
+        Achievement(83)
+      );
+      return `${format(val, 2, 2)}/sec`;
+    },
+    multValue: () => new Decimal.pow10(100 * MultiplierTabHelper.decomposeTickspeed().base),
+    isActive: () => [36, 45, 66, 83].some(a => Achievement(a).canBeApplied),
+    icon: MultiplierTabIcons.ACHIEVEMENT,
+  },
   upgrades: {
     name: "Tickspeed Upgrades",
     displayOverride: () => `${formatInt(Tickspeed.totalUpgrades)} Total`,
-    // Must be pow10 due to logarithmic scaling
-    fakeValue: () => Decimal.pow10(Tickspeed.totalUpgrades),
     multValue: () => new Decimal.pow10(100 * MultiplierTabHelper.decomposeTickspeed().tickspeed),
     isActive: true,
     icon: MultiplierTabIcons.PURCHASE("AD"),
@@ -40,8 +55,6 @@ GameDatabase.multiplierTabValues.tickspeed = {
       const tg = player.dilation.totalTachyonGalaxies;
       return `${formatInt(ag + rg + tg)} Total`;
     },
-    // Must be pow10 due to logarithmic scaling
-    fakeValue: () => Decimal.pow10(effectiveBaseGalaxies()),
     multValue: () => new Decimal.pow10(100 * MultiplierTabHelper.decomposeTickspeed().galaxies),
     isActive: true,
     icon: MultiplierTabIcons.GALAXY,

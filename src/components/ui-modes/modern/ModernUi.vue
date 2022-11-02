@@ -24,6 +24,7 @@ export default {
     return {
       bigCrunch: false,
       hasReality: false,
+      newGameKey: "",
     };
   },
   computed: {
@@ -39,6 +40,9 @@ export default {
       const crunchButtonVisible = !player.break && Player.canCrunch;
       this.bigCrunch = crunchButtonVisible && Time.bestInfinityRealTime.totalMinutes > 1;
       this.hasReality = PlayerProgress.realityUnlocked();
+      // This only exists to force a key-swap after pressing the button to start a new game; the news ticker can break
+      // if it isn't redrawn
+      this.newGameKey = Pelle.isDoomed;
     },
     handleClick() {
       if (PlayerProgress.infinityUnlocked()) manualBigCrunchResetRequest();
@@ -59,7 +63,10 @@ export default {
       class="game-container"
       :style="topMargin"
     >
-      <NewsTicker v-if="news" />
+      <NewsTicker
+        v-if="news"
+        :key="newGameKey"
+      />
       <BigCrunchButton />
       <div
         v-if="!bigCrunch"

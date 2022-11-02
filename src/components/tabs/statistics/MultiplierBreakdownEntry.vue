@@ -288,7 +288,10 @@ export default {
           @click="changeGroup"
         />
       </div>
-      <div v-if="isEmpty">
+      <div
+        v-if="isEmpty"
+        class="c-no-effect"
+      >
         No Active Multipliers
         <br>
         Total effect disabled or reduced to {{ formatX(1) }}.
@@ -314,7 +317,7 @@ export default {
           />
         </div>
       </div>
-      <div v-if="isDilated">
+      <div v-if="isDilated && !isEmpty">
         <div class="c-single-entry c-dilation-entry">
           <div>
             {{ dilationString() }}
@@ -398,6 +401,11 @@ export default {
   padding-left: 0.5rem;
   margin-bottom: 1rem;
   color: var(--color-text);
+}
+
+.c-no-effect {
+  color: var(--color-text);
+  user-select: none;
 }
 
 .c-single-entry {

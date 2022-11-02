@@ -77,9 +77,25 @@ export const MultiplierTabHelper = {
     // Artificially inflate the galaxy portion in order to make the breakdown closer to 50/50 in common situations
     galFrac *= 3;
 
+    // Calculate what proportion base tickspeed takes out of the entire tickspeed multiplier
+    const base = DC.D1.dividedByEffectsOf(
+      Achievement(36),
+      Achievement(45),
+      Achievement(66),
+      Achievement(83)
+    );
+    let baseFrac = base.log10() / Tickspeed.perSecond.log10();
+
+    // We want to make sure to zero out components in some edge cases (the tab shouldn't show up)
+    if (base.eq(1)) baseFrac = 0;
+    if (Tickspeed.totalUpgrades === 0) tickFrac = baseFrac;
+    if (effectiveCount === 0) galFrac = 0;
+
+    // Normalize the sum (note that baseFrac is a proportion of tickFrac, so don't double-count it)
     const sum = tickFrac + galFrac;
     return {
-      tickspeed: tickFrac / sum,
+      base: baseFrac / sum,
+      tickspeed: (tickFrac - baseFrac) / sum,
       galaxies: galFrac / sum,
     };
   },

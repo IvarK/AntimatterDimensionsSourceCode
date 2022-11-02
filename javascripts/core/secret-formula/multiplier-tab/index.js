@@ -14,7 +14,8 @@ import "./helper-functions";
  *  @property {Decimal} displayOverride If present, displays this string instead of multipliers. This
  *    has higher priority than isBase
  *  @property {Decimal|Number} fakeValue  Value to be used as a stand-in for a total when this entry
- *    is the parent resource of a list of other resources. Mostly used in tickspeed-related entries
+ *    is the parent resource of a list of other resources. Mostly used in entries that contribute to a whole differently
+ *    than how they're further broken down (eg. IP/EP contibuting as multipliers but consisting of currencies)
  *  @property {Decimal|Number} multValue  Value for multipliers given by this effect. Note that some
  *    entries may have a pow10 applied to them in order to "undo" logarithmic scaling in the UI
  *  @property {Number} powValue           Numerical value for powers given by this effect

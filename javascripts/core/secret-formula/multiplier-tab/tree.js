@@ -82,7 +82,7 @@ GameDatabase.multiplierTabTree = {
     getProps("DT")
   ],
   tickspeed_total: [
-    ["tickspeed_upgrades", "tickspeed_galaxies"]
+    ["tickspeed_base", "tickspeed_upgrades", "tickspeed_galaxies"]
   ],
   tickspeed_upgrades: [
     ["tickspeedUpgrades_purchased", "tickspeedUpgrades_free"]

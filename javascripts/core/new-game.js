@@ -4,6 +4,9 @@ export const NG = {
   startNewGame() {
     GameEnd.creditsClosed = false;
     GameEnd.creditsEverClosed = false;
+    // We set this ASAP so that the AD tab is immediately recreated without END formatting, and any lag which could
+    // happen is instead hidden by the overlay from the credits rollback
+    player.celestials.pelle.doomed = false;
     const backUpOptions = JSON.stringify(player.options);
     // This can't be JSONed as it contains sets
     const secretUnlocks = player.secretUnlocks;

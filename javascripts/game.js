@@ -1020,7 +1020,7 @@ window.onload = function() {
   GameUI.initialized = supportedBrowser;
   ui.view.initialized = supportedBrowser;
   setTimeout(() => {
-    if (kong.enabled) {
+    if (shop.enabled) {
       playFabLogin();
     }
     document.getElementById("loading").style.display = "none";
@@ -1057,7 +1057,7 @@ export function init() {
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
-  kong.init();
+  shop.init();
   Payments.init();
 }
 

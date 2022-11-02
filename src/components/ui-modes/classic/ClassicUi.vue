@@ -23,7 +23,8 @@ export default {
   data() {
     return {
       bigCrunch: false,
-      smallCrunch: false
+      smallCrunch: false,
+      newGameKey: "",
     };
   },
   computed: {
@@ -36,6 +37,9 @@ export default {
     update() {
       const crunchButtonVisible = !player.break && Player.canCrunch;
       this.bigCrunch = crunchButtonVisible && Time.bestInfinityRealTime.totalMinutes > 1;
+      // This only exists to force a key-swap after pressing the button to start a new game; the news ticker can break
+      // if it isn't redrawn
+      this.newGameKey = Pelle.isDoomed;
     }
   },
 };
@@ -55,6 +59,7 @@ export default {
     <template v-if="!bigCrunch">
       <NewsTicker
         v-if="news"
+        :key="newGameKey"
         class="l-old-ui__news-bar"
       />
       <GameHeader class="l-old-ui__header" />

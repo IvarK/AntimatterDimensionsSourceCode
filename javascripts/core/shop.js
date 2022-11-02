@@ -1,17 +1,17 @@
 import { RebuyableMechanicState } from "./game-mechanics/index";
 
-export const kong = {};
+export const shop = {};
 
-kong.enabled = false;
+shop.enabled = false;
 
-kong.init = function() {
+shop.init = function() {
   if (document.referrer.indexOf("kongregate") === -1)
     return;
-  kong.enabled = true;
+  shop.enabled = true;
   try {
     kongregateAPI.loadAPI(() => {
       window.kongregate = kongregateAPI.getAPI();
-      kong.updatePurchases();
+      shop.updatePurchases();
     });
     // eslint-disable-next-line no-console
   } catch (err) { console.log("Couldn't load Kongregate API"); }
@@ -113,18 +113,18 @@ ShopPurchase.respecRequest = function() {
   }
 };
 
-kong.purchaseTimeSkip = function() {
+shop.purchaseTimeSkip = function() {
   Speedrun.setSTDUse(true);
   simulateTime(3600 * 6);
 };
 
-kong.purchaseLongerTimeSkip = function() {
+shop.purchaseLongerTimeSkip = function() {
   Speedrun.setSTDUse(true);
   simulateTime(3600 * 24);
 };
 
-kong.updatePurchases = function() {
-  if (!kong.enabled) return;
+shop.updatePurchases = function() {
+  if (!shop.enabled) return;
   try {
     kongregate.mtx.requestUserItemList("", items);
     // eslint-disable-next-line no-console
@@ -181,8 +181,8 @@ kong.updatePurchases = function() {
 
 };
 
-kong.migratePurchases = function() {
-  if (!kong.enabled) return;
+shop.migratePurchases = function() {
+  if (!shop.enabled) return;
   try {
     kongregate.mtx.requestUserItemList("", items);
     // eslint-disable-next-line no-console

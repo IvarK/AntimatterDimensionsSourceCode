@@ -52,7 +52,7 @@ GameDatabase.shopPurchases = {
     description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
     singleUse: true,
     onPurchase: () => {
-      kong.purchaseTimeSkip();
+      shop.purchaseTimeSkip();
     }
   },
   bigTimeSkip: {
@@ -61,7 +61,7 @@ GameDatabase.shopPurchases = {
     description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
     singleUse: true,
     onPurchase: () => {
-      kong.purchaseLongerTimeSkip();
+      shop.purchaseLongerTimeSkip();
     }
   },
 };

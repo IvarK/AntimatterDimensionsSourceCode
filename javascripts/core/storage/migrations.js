@@ -152,7 +152,7 @@ GameStorage.migrations = {
       GameStorage.migrations.moveTS33(player);
       GameStorage.migrations.addBestPrestigeCurrency(player);
 
-      kong.migratePurchases();
+      shop.migratePurchases();
     }
   },
 

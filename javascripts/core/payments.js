@@ -1,21 +1,31 @@
+const backendURL = "http://localhost:3000";
+// Const backendURL = "https://antimatterdimensionspayments.ew.r.appspot.com";
+
 const Payments = {
   interval: null,
   windowReference: null,
+  // This is here to prevent notification spam; purchase canceling can be called multiple times before the first
+  // call's Promise is settled
+  hasCanceled: false,
   init: () => {
-    // We have unfinished checkouts
+    // We have unfinished checkouts from when the page was last closed
     if (player.IAP.checkoutSession.id) {
       Payments.pollForPurchases();
     }
   },
+
+  // Only called from clicking the "Buy More" button in the Shop tab
   buyMoreSTD: async STD => {
     player.IAP.checkoutSession = { id: true };
-    const res = await fetch("https://antimatterdimensionspayments.ew.r.appspot.com/purchase", {
+    const res = await fetch(`${backendURL}/purchase`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ amount: STD })
-    });
+    }).catch(() => undefined);
+    // We don't give a game notification on exception because the modal will eventually cancel the purchase as well
+    if (!res) return;
     const data = await res.json();
     Payments.windowReference = window.open(
       data.url,
@@ -26,6 +36,9 @@ const Payments = {
     GameStorage.save();
     Payments.pollForPurchases();
   },
+
+  // Starts a purchase-checking loop and adds a listener which cancels any ongoing purchases if the page is closed.
+  // Any unresolved purchases will be reopened when the page is opened again in init()
   pollForPurchases: () => {
     console.log("Polling for purchases...");
     const { id, amount } = player.IAP.checkoutSession;
@@ -35,11 +48,16 @@ const Payments = {
       Payments.windowReference?.close();
       await Payments.cancelPurchase();
     };
+
+    // This setInterval checks every 3 seconds for a response from the payment backend
     Payments.interval = setInterval(async() => {
       pollAmount++;
       const statusRes = await fetch(
-        `https://antimatterdimensionspayments.ew.r.appspot.com/validate?sessionId=${id}`
-      );
+        `${backendURL}/validate?sessionId=${id}`
+      ).catch(() => {
+        GameUI.notify.error("Could not contact payment server!", 10000);
+        Payments.clearInterval();
+      });
       const { completed, failure } = await statusRes.json();
 
       if (completed) {
@@ -69,20 +87,27 @@ const Payments = {
       }
     }, 3000);
   },
+
+  // Explicitly cancels purchases if the player chooses to, they take too long to resolve, or the page is closed
   async cancelPurchase() {
+    if (this.hasCanceled) return;
     Payments.windowReference?.close();
     Payments.clearInterval();
-    await fetch("https://antimatterdimensionspayments.ew.r.appspot.com/expire", {
+    const res = await fetch(`${backendURL}/expire`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ sessionId: player.IAP.checkoutSession.id })
-    });
-    GameUI.notify.error(`Purchase failed!`, 10000);
+    }).catch(() => undefined);
+    if (res) GameUI.notify.error(`Purchase failed!`, 10000);
+    else GameUI.notify.error("Could not contact payment server!", 10000);
     player.IAP.checkoutSession = { id: false };
     GameStorage.save();
+    this.hasCanceled = false;
   },
+
+  // Removes the repeating checker and page-close listener for if payments have been resolved
   clearInterval() {
     clearInterval(Payments.interval);
     window.onbeforeunload = null;

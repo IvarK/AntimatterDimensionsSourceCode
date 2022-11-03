@@ -7,6 +7,8 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/
 import { initializeApp } from "firebase/app";
 import { sha512_256 } from "js-sha512";
 
+import Payments from "../payments";
+
 import { decodeBase64Binary } from "./base64-binary";
 import { ProgressChecker } from "./progress-checker";
 
@@ -121,23 +123,9 @@ export const Cloud = {
     GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
   },
 
-  async addSTD(toAdd) {
-    if (!this.user) return;
-    const snapshot = await get(ref(this.db, `users/${this.user.id}/std`));
-    let oldSTD = snapshot.exists ? Number(snapshot.val()) : 0;
-    if (Number.isNaN(oldSTD)) oldSTD = 0;
-    const newSTD = oldSTD + toAdd;
-    set(ref(this.db, `users/${this.user.id}/std`), newSTD);
-    GameUI.notify.info(`STD count updated - Total: ${newSTD}`);
-  },
-
   async syncSTD() {
     if (!this.user) return;
-    const snapshot = await get(ref(this.db, `users/${this.user.id}/std`));
-    let std = snapshot.exists ? Number(snapshot.val()) : 0;
-    if (Number.isNaN(std)) std = 0;
-    player.IAP.totalSTD = std;
-    this.lastSTDAmount = std;
+    await Payments.syncSTD();
   },
 
   resetSTD() {

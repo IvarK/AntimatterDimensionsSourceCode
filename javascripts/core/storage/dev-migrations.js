@@ -1514,8 +1514,7 @@ GameStorage.devMigrations = {
       if (BlackHole(1).isUnlocked) player.records.timePlayedAtBHUnlock = player.records.totalTimePlayed;
     },
     player => {
-      Cloud.addSTD(player.IAP.totalSTD);
-      Cloud.syncSTD();
+      // TODO Possibly update this with a dev STD migration?
     }
   ],
 

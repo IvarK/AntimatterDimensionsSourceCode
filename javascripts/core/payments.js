@@ -22,7 +22,7 @@ const Payments = {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ amount: STD })
+      body: JSON.stringify({ amount: STD, cloudID: Cloud.user.id })
     }).catch(() => undefined);
     // We don't give a game notification on exception because the modal will eventually cancel the purchase as well
     if (!res) return;
@@ -62,15 +62,13 @@ const Payments = {
 
       if (completed) {
         Payments.windowReference?.close();
-        Cloud.addSTD(amount);
-        Cloud.syncSTD();
+        Payments.syncSTD();
         GameUI.notify.success(`Purchase of ${amount} STDs was successful, thank you for your support! ❤️`, 10000);
         Payments.clearInterval();
         player.IAP.checkoutSession = { id: false };
         GameStorage.save();
         Modal.hide();
       }
-
 
       if (failure) {
         Payments.windowReference?.close();
@@ -86,6 +84,24 @@ const Payments = {
         await Payments.cancelPurchase();
       }
     }, 3000);
+  },
+
+  // Reads STD count from the cloud and overwrites local values with the response
+  syncSTD: async() => {
+    if (!Cloud.loggedIn) return;
+    const statusRes = await fetch(
+      `${backendURL}/syncSTD?userId=${Cloud.user.id}`
+    ).catch(() => {
+      GameUI.notify.error("Could not sync STD count!", 10000);
+    });
+    const { totalSTD, spentSTD } = await statusRes.json();
+
+    // TODO Fill this in with further verification and STD-disabling logic if overspent
+    player.IAP.totalSTD = totalSTD;
+    player.IAP.spentSTD = spentSTD;
+    Cloud.lastSTDAmount = totalSTD;
+
+    GameStorage.save();
   },
 
   // Explicitly cancels purchases if the player chooses to, they take too long to resolve, or the page is closed

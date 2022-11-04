@@ -60,12 +60,12 @@ export default {
       href="stylesheets/new-ui-styles.css"
     >
     <div
+      :key="newGameKey"
       class="game-container"
       :style="topMargin"
     >
       <NewsTicker
         v-if="news"
-        :key="newGameKey"
       />
       <BigCrunchButton />
       <div

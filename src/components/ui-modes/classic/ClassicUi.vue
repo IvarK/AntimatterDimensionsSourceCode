@@ -48,6 +48,7 @@ export default {
 <template>
   <div
     id="container"
+    :key="newGameKey"
     class="container c-old-ui l-old-ui"
   >
     <link
@@ -59,7 +60,6 @@ export default {
     <template v-if="!bigCrunch">
       <NewsTicker
         v-if="news"
-        :key="newGameKey"
         class="l-old-ui__news-bar"
       />
       <GameHeader class="l-old-ui__header" />

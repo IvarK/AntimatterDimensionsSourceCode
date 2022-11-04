@@ -86,17 +86,20 @@ export const MultiplierTabHelper = {
     );
     let baseFrac = base.log10() / Tickspeed.perSecond.log10();
 
-    // We want to make sure to zero out components in some edge cases (the tab shouldn't show up)
+    // We want to make sure to zero out components in some edge cases
     if (base.eq(1)) baseFrac = 0;
-    if (Tickspeed.totalUpgrades === 0) tickFrac = baseFrac;
     if (effectiveCount === 0) galFrac = 0;
 
-    // Normalize the sum (note that baseFrac is a proportion of tickFrac, so don't double-count it)
-    const sum = tickFrac + galFrac;
+    // Normalize the sum by splitting tickspeed and galaxies across what's leftover besides the base value. These three
+    // values must be scaled so that they sum to 1 and none are negative
+    let factor = (1 - baseFrac) / (tickFrac + galFrac);
+    // The actual base tickspeed calculation multiplies things in a different order, which can lead to precision issues
+    // when no tickspeed upgrades have been bought if we don't explicitly set this to zero
+    if (Tickspeed.totalUpgrades === 0) factor = 0;
     return {
-      base: baseFrac / sum,
-      tickspeed: (tickFrac - baseFrac) / sum,
-      galaxies: galFrac / sum,
+      base: baseFrac,
+      tickspeed: tickFrac * factor,
+      galaxies: galFrac * factor,
     };
   },
 

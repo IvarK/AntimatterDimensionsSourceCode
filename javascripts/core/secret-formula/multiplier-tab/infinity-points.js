@@ -94,9 +94,9 @@ GameDatabase.multiplierTabValues.IP = {
     icon: MultiplierTabIcons.ALCHEMY,
   },
   pelle: {
-    name: "Pelle Effects",
+    name: "Pelle Rift Effects",
     multValue: () => DC.D1.timesEffectsOf(PelleRifts.vacuum).times(Pelle.specialGlyphEffect.infinity),
-    isActive: () => !Pelle.isDoomed,
+    isActive: () => Pelle.isDoomed,
     icon: MultiplierTabIcons.PELLE,
   },
   iap: {

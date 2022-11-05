@@ -41,7 +41,7 @@ GameDatabase.multiplierTabValues.TP = {
   realityUpgrade: {
     name: "Reality Upgrades",
     multValue: () => DC.D1.timesEffectsOf(RealityUpgrade(4), RealityUpgrade(15)),
-    isActive: () => PlayerProgress.realityUnlocked(),
+    isActive: () => PlayerProgress.realityUnlocked() && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   dilationGlyphSacrifice: {

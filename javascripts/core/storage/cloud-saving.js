@@ -44,7 +44,7 @@ export const Cloud = {
   async login() {
     try {
       await signInWithPopup(this.auth, this.provider);
-      this.syncSTD();
+      Payments.syncSTD();
       GameUI.notify.success(`Logged in as ${this.user.displayName}`);
     } catch (e) {
       GameUI.notify.error("Google Account login failed");
@@ -113,18 +113,12 @@ export const Cloud = {
       current: GameStorage.currentSlot,
       saves: GameStorage.saves,
     };
-    this.syncSTD();
 
     this.lastCloudHash = sha512_256(GameSaveSerializer.serialize(root.saves[slot]));
     GameStorage.lastCloudSave = Date.now();
     GameIntervals.checkCloudSave.restart();
     set(ref(this.db, `users/${this.user.id}/web`), GameSaveSerializer.serialize(root));
     GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
-  },
-
-  async syncSTD() {
-    if (!this.user) return;
-    await Payments.syncSTD();
   },
 
   resetSTD() {
@@ -182,6 +176,7 @@ export const Cloud = {
           displayName: user.displayName,
           email: user.email,
         };
+        Payments.syncSTD();
       } else {
         this.user = null;
       }

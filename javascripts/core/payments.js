@@ -40,7 +40,6 @@ const Payments = {
   // Starts a purchase-checking loop and adds a listener which cancels any ongoing purchases if the page is closed.
   // Any unresolved purchases will be reopened when the page is opened again in init()
   pollForPurchases: () => {
-    console.log("Polling for purchases...");
     const { id, amount } = player.IAP.checkoutSession;
     let pollAmount = 0;
     window.onbeforeunload = async() => {
@@ -86,21 +85,36 @@ const Payments = {
     }, 3000);
   },
 
-  // Reads STD count from the cloud and overwrites local values with the response
-  syncSTD: async() => {
+  // Reads STD props from the cloud and sets local cached values with the result
+  async syncSTD(showNotification = true) {
     if (!Cloud.loggedIn) return;
     const statusRes = await fetch(
-      `${backendURL}/syncSTD?userId=${Cloud.user.id}`
+      `${backendURL}/syncSTD?user=${Cloud.user.id}`
     ).catch(() => {
-      GameUI.notify.error("Could not sync STD count!", 10000);
+      GameUI.notify.error("Could not sync STD purchases!", 10000);
     });
-    const { totalSTD, spentSTD } = await statusRes.json();
+    const newSTDData = await statusRes.json();
+    if (!newSTDData) return;
+    if (showNotification) GameUI.notify.info("STD purchases successfully loaded!", 10000);
 
-    ShopPurchaseData.totalSTD = totalSTD;
-    ShopPurchaseData.spentSTD = spentSTD;
-    // TODO sync the rest of the properties
-
+    // Update the local cache
+    ShopPurchaseData.totalSTD = newSTDData.totalSTD;
+    ShopPurchaseData.spentSTD = newSTDData.spentSTD;
+    for (const key of Object.keys(GameDatabase.shopPurchases)) ShopPurchaseData[key] = newSTDData[key] ?? 0;
     GameStorage.save();
+  },
+
+  // Sends a request to purchase a STD upgrade, returning true if successful (and syncs data), false if not
+  async buyUpgrade(upgradeKey) {
+    if (!Cloud.loggedIn) return false;
+    const statusRes = await fetch(
+      `${backendURL}/purchaseUpgrade?user=${Cloud.user.id}&key=${upgradeKey}`
+    ).catch(() => {
+      GameUI.notify.error("Unable to spend STD coins on upgrade!", 10000);
+    });
+    if (!statusRes) return false;
+    this.syncSTD(false);
+    return true;
   },
 
   // Explicitly cancels purchases if the player chooses to, they take too long to resolve, or the page is closed

@@ -1,5 +1,6 @@
 import { GameDatabase } from "./game-database";
 
+// NOTE: IF ANY COSTS ARE CHANGED HERE, THEY ALSO NEED TO BE CHANGED ON THE BACKEND TOO
 GameDatabase.shopPurchases = {
   dimPurchases: {
     key: "dimPurchases",

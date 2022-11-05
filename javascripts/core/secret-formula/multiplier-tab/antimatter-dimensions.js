@@ -340,7 +340,7 @@ GameDatabase.multiplierTabValues.AD = {
       const mult = ShopPurchase.dimPurchases.currentMult * ShopPurchase.allDimPurchases.currentMult;
       return Decimal.pow(mult, dim ? 1 : MultiplierTabHelper.activeDimCount("AD"));
     },
-    isActive: () => player.IAP.totalSTD > 0 && !EternityChallenge(11).isRunning,
+    isActive: () => ShopPurchaseData.totalSTD > 0 && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.IAP,
   },
 

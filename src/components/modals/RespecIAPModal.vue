@@ -16,7 +16,7 @@ export default {
       return std;
     },
     handleYesClick() {
-      ShopPurchase.respecAll();
+      ShopPurchaseData.respecAll();
       EventHub.ui.offAll(this);
     }
   },

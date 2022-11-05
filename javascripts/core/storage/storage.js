@@ -188,41 +188,19 @@ export const GameStorage = {
 
   // There are a couple props which may need to export with different values, so we handle that here
   exportModifiedSave() {
-    // Speedrun segmented is exported as true and IAP variables may be conditionally ignored
+    // Speedrun segmented is exported as true
     const segmented = player.speedrun.isSegmented;
-    const iap = JSON.stringify(player.IAP);
-
-    // Now we modify all the relevant values before actually exporting
     Speedrun.setSegmented(true);
-    if (!player.IAP.exportSTD) {
-      for (const prop in player.IAP) {
-        if (Object.prototype.hasOwnProperty.call(player.IAP, prop)) {
-          switch (typeof player.IAP[prop]) {
-            case "number":
-              player.IAP[prop] = 0;
-              break;
-            case "boolean":
-              player.IAP[prop] = false;
-              break;
-            case "object":
-              player.IAP[prop] = { id: false };
-              break;
-          }
-        }
-      }
-    }
 
-    // Serialize the altered data, then restore all the old prop values afterwards and return
+    // Serialize the altered data, then restore the old prop values afterwards and return
     const save = GameSaveSerializer.serialize(player);
     Speedrun.setSegmented(segmented);
-    player.IAP = JSON.parse(iap);
     return save;
   },
 
   hardReset() {
-    const IAP = JSON.parse(JSON.stringify(player.IAP));
     this.loadPlayerObject(Player.defaultStart);
-    player.IAP = IAP;
+    Payments.syncSTD();
     this.save(true);
     Tab.dimensions.antimatter.show();
     Cloud.resetTempState();
@@ -262,15 +240,6 @@ export const GameStorage = {
     ui.view.newUI = player.options.newUI;
     ui.view.tutorialState = player.tutorialState;
     ui.view.tutorialActive = player.tutorialActive;
-
-    // Disable IAP if importing a save with more STDs spent than they have in the cloud
-    if (Cloud.lastSTDAmount < player.IAP.spentSTD) {
-      ShopPurchase.respecAll();
-      player.IAP.disabled = true;
-      Modal.message.show(`You have imported a save which has used more STD coins than you have on your Google Account.
-        All STD upgrades have been automatically reset and their coins refunded. Note that this only affects upgrades
-        related to using STD coins - everything else in the game remains unaffected.`);
-    }
 
     ECTimeStudyState.invalidateCachedRequirements();
     recalculateAllGlyphs();

@@ -20,7 +20,7 @@ export default {
       this.currentMult = this.purchase.currentMultForDisplay;
       this.nextMult = this.purchase.nextMultForDisplay;
       this.canAfford = this.purchase.canBeBought;
-      this.iapDisabled = !ShopPurchase.isIAPEnabled();
+      this.iapDisabled = !ShopPurchaseData.isIAPEnabled;
     }
   },
 };

@@ -96,10 +96,9 @@ const Payments = {
     });
     const { totalSTD, spentSTD } = await statusRes.json();
 
-    // TODO Fill this in with further verification and STD-disabling logic if overspent
-    player.IAP.totalSTD = totalSTD;
-    player.IAP.spentSTD = spentSTD;
-    Cloud.lastSTDAmount = totalSTD;
+    ShopPurchaseData.totalSTD = totalSTD;
+    ShopPurchaseData.spentSTD = spentSTD;
+    // TODO sync the rest of the properties
 
     GameStorage.save();
   },

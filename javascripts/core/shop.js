@@ -17,10 +17,42 @@ shop.init = function() {
   } catch (err) { console.log("Couldn't load Kongregate API"); }
 };
 
-class ShopPurchaseState extends RebuyableMechanicState {
+export const ShopPurchaseData = {
+  totalSTD: 0,
+  spentSTD: 0,
 
+  get availableSTD() {
+    return this.totalSTD - this.spentSTD;
+  },
+
+  get isIAPEnabled() {
+    return Cloud.loggedIn && this.availableSTD >= 0 && !player.IAP.disabled;
+  },
+
+  respecRequest() {
+    if (player.options.confirmations.respecIAP) {
+      Modal.respecIAP.show();
+    } else {
+      ShopPurchase.respecAll();
+    }
+  },
+
+  respecAll() {
+    for (const purchase of ShopPurchase.all) {
+      // TODO also firebase stuff
+      if (purchase.config.singleUse) continue;
+      this.spentSTD -= purchase.purchases * purchase.cost;
+      purchase.purchases = 0;
+    }
+  },
+};
+
+// We track the local state of shop purchases here, so dynamically add all the keys which exist in the gameDB
+for (const key of Object.keys(GameDatabase.shopPurchases)) ShopPurchaseData[key] = 0;
+
+class ShopPurchaseState extends RebuyableMechanicState {
   get currency() {
-    return player.IAP.totalSTD - player.IAP.spentSTD;
+    return ShopPurchaseData.availableSTD;
   }
 
   get isAffordable() {
@@ -36,11 +68,11 @@ class ShopPurchaseState extends RebuyableMechanicState {
   }
 
   get purchases() {
-    return player.IAP[this.config.key];
+    return ShopPurchaseData[this.config.key];
   }
 
   set purchases(value) {
-    player.IAP[this.config.key] = value;
+    ShopPurchaseData[this.config.key] = value;
   }
 
   get shouldDisplayMult() {
@@ -49,12 +81,12 @@ class ShopPurchaseState extends RebuyableMechanicState {
 
   get currentMult() {
     if (!this.shouldDisplayMult) return "";
-    return this.config.multiplier(ShopPurchase.isIAPEnabled() ? this.purchases : 0);
+    return this.config.multiplier(ShopPurchaseData.isIAPEnabled ? this.purchases : 0);
   }
 
   get nextMult() {
     if (!this.shouldDisplayMult) return "";
-    return this.config.multiplier(ShopPurchase.isIAPEnabled() ? this.purchases + 1 : 0);
+    return this.config.multiplier(ShopPurchaseData.isIAPEnabled ? this.purchases + 1 : 0);
   }
 
   // We want to still display the correct value in the button, so we need separate getters for it
@@ -76,6 +108,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
     if (!this.canBeBought) return false;
     if (GameEnd.creditsEverClosed) return false;
     if (this.config.singleUse && ui.$viewModel.modal.progressBar) return false;
+    // TODO firebase stuff here
     player.IAP.spentSTD += this.cost;
     if (!player.IAP.disabled) Speedrun.setSTDUse(true);
     if (this.config.singleUse) {
@@ -92,26 +125,6 @@ export const ShopPurchase = mapGameDataToObject(
   GameDatabase.shopPurchases,
   config => new ShopPurchaseState(config)
 );
-
-ShopPurchase.isIAPEnabled = function() {
-  return Cloud.loggedIn && player.IAP.totalSTD >= player.IAP.spentSTD && !player.IAP.disabled;
-};
-
-ShopPurchase.respecAll = function() {
-  for (const purchase of ShopPurchase.all) {
-    if (purchase.config.singleUse) continue;
-    player.IAP.spentSTD -= purchase.purchases * purchase.cost;
-    purchase.purchases = 0;
-  }
-};
-
-ShopPurchase.respecRequest = function() {
-  if (player.options.confirmations.respecIAP) {
-    Modal.respecIAP.show();
-  } else {
-    ShopPurchase.respecAll();
-  }
-};
 
 shop.purchaseTimeSkip = function() {
   Speedrun.setSTDUse(true);

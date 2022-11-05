@@ -102,7 +102,7 @@ GameDatabase.multiplierTabValues.IP = {
   iap: {
     name: "Shop Tab Purchases",
     multValue: () => ShopPurchase.IPPurchases.currentMult,
-    isActive: () => player.IAP.totalSTD > 0,
+    isActive: () => ShopPurchaseData.totalSTD > 0,
     icon: MultiplierTabIcons.IAP,
   },
 

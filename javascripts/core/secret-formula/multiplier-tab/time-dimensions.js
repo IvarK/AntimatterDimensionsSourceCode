@@ -246,7 +246,7 @@ GameDatabase.multiplierTabValues.TD = {
     name: "Shop Tab Purchases",
     multValue: dim => Decimal.pow(ShopPurchase.allDimPurchases.currentMult,
       dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
-    isActive: () => player.IAP.totalSTD > 0,
+    isActive: () => ShopPurchaseData.totalSTD > 0,
     icon: MultiplierTabIcons.IAP,
   },
 

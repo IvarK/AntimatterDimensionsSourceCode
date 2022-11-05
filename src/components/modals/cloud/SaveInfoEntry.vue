@@ -65,14 +65,6 @@ export default {
         ""
       );
     },
-    formattedSTDText() {
-      return this.compareLayeredValues(
-        ["spentSTD"],
-        ["STDs spent:"],
-        [formatInt, format],
-        "No STDs spent"
-      );
-    },
     name() {
       return this.saveData.saveName;
     },
@@ -150,7 +142,6 @@ export default {
       </span>
       <br>
     </span>
-    <span v-html="formattedSTDText" />
     {{ timePlayed }}
     <br>
     <span v-html="antimatter" />

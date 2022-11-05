@@ -56,7 +56,7 @@ export const Speedrun = {
       if (purchase.config.singleUse) continue;
       currentSpent += purchase.purchases * purchase.cost;
     }
-    this.setSTDUse(!player.IAP.disabled && currentSpent > 0);
+    this.setSTDUse(player.IAP.enabled && currentSpent > 0);
   },
   isPausedAtStart() {
     return player.speedrun.isActive && !player.speedrun.hasStarted;
@@ -69,7 +69,7 @@ export const Speedrun = {
     player.speedrun.isSegmented = state;
   },
   setSTDUse(state) {
-    if (this.isPausedAtStart() || player.IAP.spentSTD === 0) return;
+    if (this.isPausedAtStart() || ShopPurchaseData.spentSTD === 0) return;
     player.speedrun.usedSTD = state;
   },
 };

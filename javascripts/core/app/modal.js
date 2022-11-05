@@ -54,7 +54,6 @@ import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal
 import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal";
 import H2PModal from "@/components/modals/H2PModal";
 import ImportAutomatorDataModal from "@/components/modals/ImportAutomatorDataModal";
-import ImportFileWarningModal from "@/components/modals/ImportFileWarningModal";
 import ImportSaveModal from "@/components/modals/ImportSaveModal";
 import InformationModal from "@/components/modals/InformationModal";
 import LoadGameModal from "@/components/modals/LoadGameModal";
@@ -238,7 +237,6 @@ Modal.changelog = new Modal(ChangelogModal, 1);
 Modal.awayProgress = new Modal(AwayProgressModal);
 Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);
-Modal.importWarning = new Modal(ImportFileWarningModal);
 Modal.importScriptData = new Modal(ImportAutomatorDataModal);
 Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
 Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);
@@ -270,7 +268,6 @@ function getSaveInfo(save) {
     realityShards: new Decimal(0),
     // This is a slight workaround to hide DT/level once Doomed
     pelleLore: 0,
-    spentSTD: 0,
     saveName: "",
     compositeProgress: 0,
   };
@@ -291,7 +288,6 @@ function getSaveInfo(save) {
   resources.remnants = save.celestials?.pelle.remnants ?? 0;
   resources.realityShards.copyFrom(new Decimal(save.celestials?.pelle.realityShards));
   resources.pelleLore = save.celestials?.pelle.quoteBits ?? 0;
-  resources.spentSTD = save?.IAP?.spentSTD ?? 0;
   resources.saveName = save.options.saveFileName ?? "";
   resources.compositeProgress = ProgressChecker.getCompositeProgress(save);
 

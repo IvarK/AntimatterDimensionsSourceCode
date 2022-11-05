@@ -81,7 +81,7 @@ GameDatabase.multiplierTabValues.EP = {
   iap: {
     name: "Shop Tab Purchases",
     multValue: () => ShopPurchase.EPPurchases.currentMult,
-    isActive: () => player.IAP.totalSTD > 0,
+    isActive: () => ShopPurchaseData.totalSTD > 0,
     icon: MultiplierTabIcons.IAP,
   },
 

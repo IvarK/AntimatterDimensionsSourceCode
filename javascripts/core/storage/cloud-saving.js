@@ -30,7 +30,6 @@ export const Cloud = {
   db: getDatabase(),
   user: null,
   lastCloudHash: null,
-  lastSTDAmount: 0,
 
   resetTempState() {
     this.lastCloudHash = null;

@@ -74,7 +74,7 @@ GameDatabase.multiplierTabValues.DT = {
   iap: {
     name: "Shop Tab Purchases",
     multValue: () => new Decimal(ShopPurchase.dilatedTimePurchases.currentMult ** (Pelle.isDoomed ? 0.5 : 1)),
-    isActive: () => player.IAP.totalSTD > 0,
+    isActive: () => ShopPurchaseData.totalSTD > 0,
     icon: MultiplierTabIcons.IAP,
   },
 

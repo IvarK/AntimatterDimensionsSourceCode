@@ -74,10 +74,6 @@ export default {
 
       const reader = new FileReader();
       reader.onload = function() {
-        const contents = reader.result;
-        const toImport = GameSaveSerializer.deserialize(contents);
-        const showWarning = (toImport?.IAP?.spentSTD ?? 0) > Cloud.lastSTDAmount;
-
         // File importing behavior should use the behavior on the existing and to-be-overwritten save instead of the
         // settings in the to-be-imported save. This is largely because the former is more easily edited by the player,
         // and in contrast with the import-as-string case which allows the player to choose.
@@ -85,16 +81,7 @@ export default {
         // import modal (the only other place GameStorage.import is called) to always be overridden
         GameStorage.offlineEnabled = player.options.offlineProgress;
         GameStorage.offlineTicks = player.options.offlineTicks;
-
-        if (showWarning) {
-          Modal.addImportConflict(toImport, GameStorage.saves[GameStorage.currentSlot]);
-          Modal.importWarning.show({
-            rawInput: contents,
-            saveToImport: toImport,
-          });
-        } else {
-          GameStorage.import(contents);
-        }
+        GameStorage.import(reader.result);
       };
       reader.readAsText(event.target.files[0]);
     },

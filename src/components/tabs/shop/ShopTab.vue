@@ -6,8 +6,6 @@ import Loading from "vue-loading-overlay";
 import Payments from "../../../../javascripts/core/payments";
 
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-
 import ShopButton from "./ShopButton";
 
 export default {
@@ -16,15 +14,13 @@ export default {
     ShopButton,
     Loading,
     PrimaryButton,
-    PrimaryToggleButton
   },
   data() {
     return {
       availableSTD: 0,
       spentSTD: 0,
       isLoading: false,
-      exportIAP: false,
-      IAPsDisabled: false,
+      IAPsEnabled: false,
       creditsClosed: false,
       loggedIn: false,
       username: "",
@@ -35,21 +31,15 @@ export default {
       return ShopPurchase.all;
     },
     enableText() {
-      return `In-app Purchases: ${this.IAPsDisabled ? "Disabled" : "Enabled"}`;
-    },
-  },
-  watch: {
-    exportIAP(newValue) {
-      player.IAP.exportSTD = newValue;
+      return `In-app Purchases: ${this.IAPsEnabled ? "Enabled" : "Disabled"}`;
     },
   },
   methods: {
     update() {
-      this.availableSTD = player.IAP.totalSTD - player.IAP.spentSTD;
-      this.spentSTD = player.IAP.spentSTD;
+      this.availableSTD = ShopPurchaseData.availableSTD;
+      this.spentSTD = ShopPurchaseData.spentSTD;
       this.isLoading = Boolean(player.IAP.checkoutSession.id);
-      this.exportIAP = player.IAP.exportSTD;
-      this.IAPsDisabled = player.IAP.disabled;
+      this.IAPsEnabled = player.IAP.enabled;
       this.creditsClosed = GameEnd.creditsEverClosed;
       this.loggedIn = Cloud.loggedIn;
       this.username = Cloud.user?.displayName;
@@ -65,13 +55,12 @@ export default {
     },
     respec() {
       if (this.creditsClosed) return;
-      ShopPurchase.respecRequest();
+      ShopPurchaseData.respecRequest();
     },
     toggleEnable() {
-      const canEnable = Cloud.lastSTDAmount >= player.IAP.spentSTD || player.IAP.totalSTD >= player.IAP.spentSTD;
-      if (!canEnable) return;
-      if (player.IAP.disabled && this.spentSTD > 0) Speedrun.setSTDUse(true);
-      player.IAP.disabled = !player.IAP.disabled;
+      if (ShopPurchaseData.availableSTD < 0) return;
+      if (!player.IAP.enabled && this.spentSTD > 0) Speedrun.setSTDUse(true);
+      player.IAP.enabled = !player.IAP.enabled;
     }
   },
 };
@@ -88,12 +77,6 @@ export default {
       separate and non-transferrable for legal reasons.
     </div>
     <div class="c-subtab-option-container">
-      <PrimaryToggleButton
-        v-model="exportIAP"
-        class="o-primary-btn--subtab-option"
-        :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
-        label="Include IAP in export:"
-      />
       <PrimaryButton
         class="o-primary-btn--subtab-option"
         :class="{ 'o-pelle-disabled-pointer': creditsClosed }"

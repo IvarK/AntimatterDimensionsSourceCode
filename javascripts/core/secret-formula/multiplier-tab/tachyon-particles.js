@@ -8,8 +8,14 @@ import { MultiplierTabIcons } from "./icons";
 GameDatabase.multiplierTabValues.TP = {
   total: {
     name: "Total Tachyon Particles",
-    isBase: true,
-    multValue: () => new Decimal(Currency.tachyonParticles.value),
+    displayOverride: () => {
+      const baseTPStr = format(new Decimal(Currency.tachyonParticles.value), 2, 2);
+      return PelleRifts.paradox.milestones[1].canBeApplied
+        ? `${baseTPStr}${formatPow(PelleRifts.paradox.milestones[1].effectValue, 1, 1)}`
+        : baseTPStr;
+    },
+    multValue: () => new Decimal(Currency.tachyonParticles.value)
+      .pow(PelleRifts.paradox.milestones[1].effectOrDefault(1)),
     isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
     icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },

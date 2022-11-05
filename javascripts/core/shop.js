@@ -1,5 +1,7 @@
 import { RebuyableMechanicState } from "./game-mechanics/index";
 
+import Payments from "./payments";
+
 export const shop = {};
 
 shop.enabled = false;
@@ -104,12 +106,15 @@ class ShopPurchaseState extends RebuyableMechanicState {
     return this.config.formatEffect?.(effect) || formatX(effect, 2, 0);
   }
 
-  purchase() {
+  async purchase() {
     if (!this.canBeBought) return false;
     if (GameEnd.creditsEverClosed) return false;
     if (this.config.singleUse && ui.$viewModel.modal.progressBar) return false;
-    // TODO firebase stuff here
-    player.IAP.spentSTD += this.cost;
+
+    // Contact the firebase server to verify the purchase
+    const success = await Payments.buyUpgrade(this.config.key);
+    if (!success) return false;
+
     if (!player.IAP.disabled) Speedrun.setSTDUse(true);
     if (this.config.singleUse) {
       this.config.onPurchase();

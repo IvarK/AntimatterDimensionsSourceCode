@@ -5,6 +5,7 @@ import { deepmergeAll } from "@/utility/deepmerge";
 import { playFabLogin } from "./core/playfab";
 import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
+
 import Payments from "./core/payments";
 
 if (GlobalErrorHandler.handled) {

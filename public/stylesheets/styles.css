@@ -5251,10 +5251,6 @@ properly on certain themes. */
   background-color: #d72621;
 }
 
-.t-dark .o-dilation-upgrade {
-  background-color: black;
-}
-
 .t-dark .o-dilation-upgrade--available:hover,
 .t-s6 .o-dilation-upgrade--available:hover,
 .t-s10 .o-dilation-upgrade--available:hover {

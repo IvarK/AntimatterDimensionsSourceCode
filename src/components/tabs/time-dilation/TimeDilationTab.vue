@@ -14,7 +14,8 @@ export default {
       dilatedTime: new Decimal(),
       dilatedTimeIncome: new Decimal(),
       galaxyThreshold: new Decimal(),
-      galaxies: 0,
+      baseGalaxies: 0,
+      totalGalaxies: 0,
       tachyonGalaxyGain: 1,
       hasPelleDilationUpgrades: false,
       galaxyTimeEstimate: "",
@@ -64,6 +65,9 @@ export default {
     ttGenerator() {
       return DilationUpgrade.ttGenerator;
     },
+    baseGalaxyText() {
+      return `${formatInt(this.baseGalaxies)} Base`;
+    }
   },
   methods: {
     update() {
@@ -83,9 +87,10 @@ export default {
         this.dilatedTimeIncome = rawDTGain;
       }
       this.galaxyThreshold.copyFrom(player.dilation.nextThreshold);
-      this.galaxies = player.dilation.totalTachyonGalaxies;
+      this.baseGalaxies = player.dilation.baseTachyonGalaxies;
+      this.totalGalaxies = player.dilation.totalTachyonGalaxies;
       this.hasPelleDilationUpgrades = PelleRifts.paradox.milestones[0].canBeApplied;
-      if (this.galaxies < 1000 && DilationUpgrade.doubleGalaxies.isBought) {
+      if (this.baseGalaxies < 1000 && DilationUpgrade.doubleGalaxies.isBought) {
         this.tachyonGalaxyGain = DilationUpgrade.doubleGalaxies.effectValue;
       } else {
         this.tachyonGalaxyGain = 1;
@@ -119,8 +124,11 @@ export default {
         :ach-tooltip="galaxyTimeEstimate"
       >{{ format(galaxyThreshold, 2, 1) }}</span>
       Dilated Time, gained total of
-      <span class="c-dilation-tab__galaxies">{{ formatInt(galaxies) }}</span>
-      {{ pluralize("Tachyon Galaxy", galaxies) }}
+      <span
+        class="c-dilation-tab__galaxies"
+        :ach-tooltip="baseGalaxyText"
+      >{{ formatInt(totalGalaxies) }}</span>
+      {{ pluralize("Tachyon Galaxy", totalGalaxies) }}
     </span>
     <div class="l-dilation-upgrades-grid">
       <div class="l-dilation-upgrades-grid__row">

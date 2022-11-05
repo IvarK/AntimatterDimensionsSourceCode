@@ -73,7 +73,7 @@ GameDatabase.multiplierTabValues.EP = {
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   pelle: {
-    name: "Pelle Vacuum Rift",
+    name: "Pelle Rift Effects",
     multValue: () => PelleRifts.vacuum.milestones[2].effectOrDefault(1),
     isActive: () => PelleRifts.vacuum.milestones[2].canBeApplied,
     icon: MultiplierTabIcons.PELLE,

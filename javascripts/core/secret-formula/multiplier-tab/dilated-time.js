@@ -58,7 +58,7 @@ GameDatabase.multiplierTabValues.DT = {
   realityUpgrade: {
     name: "Temporal Amplifier",
     multValue: () => RealityUpgrade(1).effectOrDefault(1),
-    isActive: () => RealityUpgrade(1).canBeApplied,
+    isActive: () => RealityUpgrade(1).canBeApplied && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   glyph: {

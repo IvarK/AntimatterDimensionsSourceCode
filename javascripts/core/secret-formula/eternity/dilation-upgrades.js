@@ -88,7 +88,7 @@ GameDatabase.eternity.dilation = {
   doubleGalaxies: {
     id: 4,
     cost: 5e6,
-    description: () => `Gain twice as many Tachyon Galaxies, up to ${formatInt(1000)} base Galaxies`,
+    description: () => `Gain twice as many Tachyon Galaxies, up to ${formatInt(500)} base Galaxies`,
     effect: 2
   },
   tdMultReplicanti: {

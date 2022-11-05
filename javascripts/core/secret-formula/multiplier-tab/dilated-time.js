@@ -16,19 +16,6 @@ GameDatabase.multiplierTabValues.DT = {
     isDilated: true,
     overlay: ["Ψ"],
   },
-  tachyon: {
-    name: "Tachyon Particles",
-    displayOverride: () => {
-      const baseTPStr = format(new Decimal(Currency.tachyonParticles.value), 2, 2);
-      return PelleRifts.paradox.milestones[1].canBeApplied
-        ? `${baseTPStr}${formatPow(PelleRifts.paradox.milestones[1].effectValue, 1)}`
-        : baseTPStr;
-    },
-    multValue: () => new Decimal(Currency.tachyonParticles.value)
-      .pow(PelleRifts.paradox.milestones[1].effectOrDefault(1)),
-    isActive: () => getDilationGainPerSecond().gt(0),
-    icon: MultiplierTabIcons.TACHYON_PARTICLES,
-  },
   achievement: {
     name: "Achievements",
     multValue: () => Achievement(132).effectOrDefault(1) * Achievement(137).effectOrDefault(1),

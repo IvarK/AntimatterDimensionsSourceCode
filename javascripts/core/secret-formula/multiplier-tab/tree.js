@@ -107,8 +107,8 @@ const allGamespeed = GameDatabase.multiplierTabTree.gamespeed_total[0];
 GameDatabase.multiplierTabTree.gamespeed_total[0] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleAvg");
 GameDatabase.multiplierTabTree.gamespeed_total[1] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleCurr");
 
-// TP has redundant entries, so we link them together by replacing a reference
-GameDatabase.multiplierTabTree.DT_total[0][0] = "TP_total";
+// DT doesn't explicitly have an entry to TP, due to it being its own total entry, so we link them together
+GameDatabase.multiplierTabTree.DT_total[0][0].unshift("TP_total");
 
 // Additional data specification for dynamically-generated props
 const dimTypes = ["AD", "ID", "TD"];

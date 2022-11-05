@@ -73,7 +73,7 @@ export default {
       const upgrade = this.upgrade;
       this.currentDT.copyFrom(Currency.dilatedTime.value);
       this.currentDTGain.copyFrom(getDilationGainPerSecond());
-      this.timeEstimate = (this.isAffordable || this.isCapped || this.upgrade.isBought)
+      this.timeEstimate = (this.isAffordable || this.isCapped || this.upgrade.isBought || this.isUseless)
         ? null : getDilationTimeEstimate(this.upgrade.cost);
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;

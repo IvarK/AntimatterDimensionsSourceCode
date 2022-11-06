@@ -6,19 +6,23 @@ export default {
       type: Object,
       required: true
     },
-    time: {
-      type: Number,
+    display: {
+      type: Boolean,
       required: false,
-      default: 0,
+      default: false,
     },
-    gap: {
+    time: {
       type: Number,
       required: false,
       default: 0,
     }
   },
   computed: {
+    displayName() {
+      return this.display ? this.milestone.name : "???";
+    },
     description() {
+      if (!this.display) return "";
       return typeof this.milestone.description === "function"
         ? this.milestone.description()
         : this.milestone.description;
@@ -27,11 +31,6 @@ export default {
       return this.time
         ? `Completed in ${TimeSpan.fromMilliseconds(this.time).toStringShort(true)}`
         : "Not reached yet";
-    },
-    gapDisplay() {
-      return this.gap && this.gap !== this.time
-        ? `(${TimeSpan.fromMilliseconds(this.gap).toStringShort(true)} after previous)`
-        : "";
     },
     classObject() {
       return {
@@ -45,8 +44,8 @@ export default {
 
 <template>
   <div :class="classObject">
-    <b>{{ milestone.name }}</b>
+    <b>{{ displayName }}</b>
     <i>{{ description }}</i>
-    {{ timeDisplay }} {{ gapDisplay }}
+    {{ timeDisplay }}
   </div>
 </template>

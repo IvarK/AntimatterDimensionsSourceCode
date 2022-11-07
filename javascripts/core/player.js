@@ -338,6 +338,7 @@ window.player = {
     usedSTD: false,
     hasStarted: false,
     hideInfo: false,
+    displayAllMilestones: false,
     startDate: 0,
     name: "",
     offlineTimeUsed: 0,

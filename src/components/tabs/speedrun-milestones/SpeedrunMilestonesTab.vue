@@ -1,9 +1,11 @@
 <script>
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import SpeedrunMilestoneSingle from "./SpeedrunMilestoneSingle";
 
 export default {
   name: "SpeedrunMilestonesTab",
   components: {
+    PrimaryToggleButton,
     SpeedrunMilestoneSingle,
   },
   data() {
@@ -46,14 +48,13 @@ export default {
 
 <template>
   <div>
-    <b>{{ startTimeStr }}</b>
+    <PrimaryToggleButton
+      v-model="displayAll"
+      class="o-primary-btn--subtab-option"
+      label="Describe all milestones:"
+    />
     <br>
-    <b>Show all milestones:
-      <input
-        v-model="displayAll"
-        type="checkbox"
-      >
-    </b>
+    <b>{{ startTimeStr }}</b>
     <br>
     <div class="l-speedrun-milestone-tab">
       <SpeedrunMilestoneSingle

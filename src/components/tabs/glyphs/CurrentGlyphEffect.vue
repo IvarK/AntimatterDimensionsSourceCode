@@ -47,6 +47,11 @@ export default {
     valueClass() {
       return this.effect.value.capped ? "c-current-glyph-effects__effect--capped" : "";
     }
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
+      this.$recompute("effectConfig");
+    });
   }
 };
 </script>

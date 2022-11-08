@@ -299,6 +299,7 @@ export default {
   },
   created() {
     this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
+      this.$recompute("typeConfig");
       this.$recompute("innerStyle");
       this.$recompute("cursedColor");
       this.$recompute("cursedColorInverted");

@@ -28,6 +28,8 @@ export default {
     currentCondenseTime: 0,
     autoCondenseDelay: 0,
     lastCheckedMilestones: 0,
+    autoTimeText: "",
+    autoSingActive: false,
   }),
   computed: {
     // The bar is a mask that inverts colors for any element with a lower z-index (including text).
@@ -69,6 +71,7 @@ export default {
     progressDisplay() {
       const condenseCount = this.remainingSingularities / this.singularitiesPerCondense;
       let thisSingularityTime, extraTime;
+      let timeText;
       switch (this.milestoneMode) {
         case SINGULARITY_MILESTONE_RESOURCE.SINGULARITIES:
           return `In ${quantify("Singularity", this.remainingSingularities, 2)}`;
@@ -81,7 +84,9 @@ export default {
         case SINGULARITY_MILESTONE_RESOURCE.AUTO_TIME:
           thisSingularityTime = Math.clampMin(0, this.currentCondenseTime + this.autoCondenseDelay);
           extraTime = Math.ceil(condenseCount - 1) * (this.baseCondenseTime + this.autoCondenseDelay);
-          return `In ${TimeSpan.fromSeconds(thisSingularityTime + extraTime).toStringShort()} (auto)`;
+          timeText = `In ${TimeSpan.fromSeconds(thisSingularityTime + extraTime).toStringShort()} `;
+          timeText += this.autoSingActive ? "(auto)" : "(auto off)";
+          return `${timeText}`;
         default:
           throw new Error("Unrecognized Singularity Milestone mode");
       }
@@ -90,6 +95,7 @@ export default {
   },
   methods: {
     update() {
+      this.autoSingActive = player.auto.singularity.isActive;
       this.isMaxed = this.milestone.isMaxed;
       this.progressToNext = this.milestone.progressToNext;
       this.remainingSingularities = this.milestone.remainingSingularities;

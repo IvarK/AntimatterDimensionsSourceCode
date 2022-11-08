@@ -14,7 +14,7 @@ export default {
 <template>
   <ModalWrapper class="c-shop-modal">
     <template #header>
-      Support The Developer -coins
+      Support The Developer - coins
     </template>
     <div class="l-modal-store-content">
       <img src="images/std_coin.png">

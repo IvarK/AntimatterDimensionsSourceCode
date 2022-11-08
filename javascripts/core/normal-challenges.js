@@ -61,7 +61,7 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   get isDisabled() {
-    return this.config.isDisabledInDoomed && Pelle.isDoomed;
+    return Pelle.isDoomed;
   }
 
   get lockedAt() {

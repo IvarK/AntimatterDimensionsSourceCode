@@ -384,6 +384,9 @@ export const Glyphs = {
     const index = Glyphs.unseen.indexOf(glyph.id);
     if (index > -1) Glyphs.unseen.splice(index, 1);
   },
+  isMusicGlyph(glyph) {
+    return glyph?.symbol === "♫";
+  },
   removeFromInventory(glyph) {
     // This can get called on a glyph not in inventory, during auto sacrifice.
     if (glyph.idx === null) return;

@@ -124,9 +124,7 @@ export default {
       const symbol = this.glyph.symbol;
       // \uE019 = :blobheart:
       if (this.isBlobHeart) return "\uE019";
-      if (symbol) {
-        return symbol.startsWith("key") ? specialGlyphSymbols[symbol] : symbol;
-      }
+      if (symbol) return symbol;
       return this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
     },
     zIndexStyle() {

@@ -163,7 +163,7 @@ GameDatabase.achievements.secret = [
     id: 43,
     name: "A cacophonous chorus",
     description: "Have all equipped Glyphs be Music Glyphs.",
-    checkRequirement: () => Glyphs.active.length && Glyphs.active.every(x => x?.symbol === "key266b"),
+    checkRequirement: () => Glyphs.active.length && Glyphs.active.every(x => Glyphs.isMusicGlyph(x)),
     checkEvent: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED
   },
   {

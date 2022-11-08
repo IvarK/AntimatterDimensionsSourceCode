@@ -36,6 +36,7 @@ export default {
     canChangeStoreRealTime: false,
     canDischarge: false,
     canAutoRelease: false,
+    hasNoCharge: true,
   }),
   computed: {
     storedRealEfficiencyDesc() {
@@ -95,7 +96,7 @@ export default {
       return {
         "o-enslaved-mechanic-button": true,
         "o-enslaved-mechanic-button--clickable": !this.isDoomed,
-        "l-fixed-setting": !this.canDischarge,
+        "l-fixed-setting": !this.canDischarge || this.hasNoCharge,
         "o-pelle-disabled": this.isDoomed
       };
     },
@@ -139,6 +140,7 @@ export default {
       this.canChangeStoreRealTime = Enslaved.canModifyRealTimeStorage;
       this.canDischarge = Enslaved.canRelease(false);
       this.canAutoRelease = Enslaved.canRelease(true);
+      this.hasNoCharge = player.celestials.enslaved.stored === 0;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -304,7 +306,7 @@ export default {
             <button
               :class="[mechanicButtonClass,
                        {'o-enslaved-mechanic-button--storing-time': autoStoreReal && offlineEnabled,
-                        'l-fixed-setting': !canChangeStoreRealTime},
+                        'l-fixed-setting': !canChangeStoreRealTime || !offlineEnabled},
                        doomedDisabledClass]"
               @click="toggleAutoStoreReal"
             >

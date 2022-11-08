@@ -1518,7 +1518,13 @@ GameStorage.devMigrations = {
       const toDelete = ["totalSTD", "spentSTD", "exportSTD", "IPPurchases", "EPPurchases", "RMPurchases",
         "dimPurchases", "allDimPurchases", "replicantiPurchases", "dilatedTimePurchases", "disabled"];
       for (const key of toDelete) delete player.IAP[key];
-    }
+    },
+    player => {
+      const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
+      for (const glyph of allGlyphs) {
+        if (glyph.symbol === "key266b") glyph.symbol = "♫";
+      }
+    },
   ],
 
   patch(player) {

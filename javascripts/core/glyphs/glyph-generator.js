@@ -189,7 +189,7 @@ export const GlyphGenerator = {
     const glyph =
       this.randomGlyph({ actualLevel: Math.floor(player.records.bestReality.glyphLevel * 0.8), rawLevel: 1 }, rng);
     rng.finalize();
-    glyph.symbol = "key266b";
+    glyph.symbol = "♫";
     glyph.color = "#FF80AB";
     return glyph;
   },

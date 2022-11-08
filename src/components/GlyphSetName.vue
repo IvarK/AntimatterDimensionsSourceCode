@@ -221,8 +221,7 @@ export default {
     },
     calculateGlyphPercent(name) {
       const percentPerGlyph = this.slotCount ? 100 / this.slotCount : 0;
-      // Music Glyphs are tricky to get, have to search .symbol === "key266b"
-      if (name === "music") return this.glyphSet.filter(i => i.symbol === "key266b").length * percentPerGlyph;
+      if (name === "music") return this.glyphSet.filter(i => Glyphs.isMusicGlyph(i)).length * percentPerGlyph;
       // Take the amount of a type of glyph in the set, divide by the maximum number of glyphs, then * 100 to get %
       return this.glyphSet.filter(i => i.type === name).length * percentPerGlyph;
     },

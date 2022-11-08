@@ -143,7 +143,7 @@ export default {
       Modal.glyphDisplayOptions.show();
     },
     clickGlyph(glyph, idx, increaseSound = false) {
-      if (glyph.symbol === "key266b") {
+      if (Glyphs.isMusicGlyph(glyph)) {
         const sound = idx + (increaseSound ? 6 : 1);
         new Audio(`audio/note${sound}.mp3`).play();
       }

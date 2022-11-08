@@ -133,7 +133,12 @@ export default {
           .replace("{value2}", alteredValue),
         isPelleDisabled: dbEntry.isDisabledByDoomed
       };
-    }
+    },
+    clickGlyph(glyph) {
+      if (Glyphs.isMusicGlyph(glyph)) {
+        new Audio(`audio/note${GLYPH_TYPES.indexOf(glyph.type) + 1}.mp3`).play();
+      }
+    },
   },
 };
 </script>
@@ -160,6 +165,7 @@ export default {
         :text-proportion="0.5"
         glow-blur="0.4rem"
         glow-spread="0.1rem"
+        @clicked="clickGlyph(glyph)"
       />
       <div :style="rarityStyle">
         {{ rarityPercent }}

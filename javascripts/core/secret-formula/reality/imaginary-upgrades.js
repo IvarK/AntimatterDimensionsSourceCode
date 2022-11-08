@@ -296,8 +296,8 @@ GameDatabase.reality.imaginaryUpgrades = [
       at least ${formatInt(4)} empty Glyph slots`,
     hasFailed: () => !Laitela.isRunning || Laitela.maxAllowedDimension !== 0 || Glyphs.activeList.length > 1,
     checkRequirement: () => Laitela.isRunning && Laitela.maxAllowedDimension === 0 &&
-      Glyphs.activeList.length <= 1,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+      Glyphs.activeList.length <= 1 && TimeStudy.reality.isBought,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "Unlock Pelle, Celestial of Antimatter",
   },
 ];

@@ -236,11 +236,11 @@ class GlyphType {
     /** @type {string} identifier for this type (time, power, etc)*/
     this.id = setup.id;
     /** @type {string} used to display glyphs of this type and as a UI shorthand */
-    this.symbol = setup.symbol;
+    this.defaultSymbol = setup.symbol;
     /** @type {GlyphEffectConfig[]} list of effects that this glyph can have */
     this.effects = findGlyphTypeEffects(setup.id);
     /** @type {string} used for glyph borders and other places where color coding is needed */
-    this.color = setup.color;
+    this.defaultColor = setup.color;
     /** @type {string?} all glyphs generated will have at least this effect */
     this.primaryEffect = setup.primaryEffect;
     /** @type {undefined | function(): boolean} */
@@ -257,6 +257,14 @@ class GlyphType {
   /** @returns {boolean} */
   get isUnlocked() {
     return this._isUnlocked?.() ?? true;
+  }
+
+  get symbol() {
+    return GlyphCosmeticHandler.getSymbol(this.id) ?? this.defaultSymbol;
+  }
+
+  get color() {
+    return GlyphCosmeticHandler.getColor(this.id) ?? this.defaultColor;
   }
 }
 

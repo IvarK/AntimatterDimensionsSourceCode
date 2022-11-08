@@ -51,6 +51,7 @@ export * from "./achievements/secret-achievement";
 export * from "./achievements/achievement-timer";
 
 export * from "./glyphs/glyph-core";
+export * from "./glyphs/glyph-cosmetics";
 export * from "./glyphs/glyph-effects";
 export * from "./glyphs/glyph-generator";
 export * from "./glyphs/glyph-purge-handler";

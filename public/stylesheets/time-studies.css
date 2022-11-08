@@ -47,6 +47,7 @@
   border: 0.1rem solid;
   border-radius: var(--var-border-radius, 0.4rem);
   transition-duration: 0.2s;
+  text-decoration: line-through;
 }
 
 .c-pelle-useless-available {

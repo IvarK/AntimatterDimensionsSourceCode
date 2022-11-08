@@ -4752,6 +4752,7 @@ properly on certain themes. */
 .o-eternity-upgrade--useless {
   color: black;
   background-color: var(--color-pelle--base);
+  filter: grayscale(50%);
   border-color: black;
 }
 
@@ -5214,6 +5215,7 @@ properly on certain themes. */
 .o-dilation-upgrade--useless {
   color: black;
   background-color: var(--color-pelle--base);
+  filter: grayscale(50%);
 }
 
 .o-dilation-upgrade--unavailable {

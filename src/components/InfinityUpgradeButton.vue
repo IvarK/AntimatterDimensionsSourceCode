@@ -55,6 +55,7 @@ export default {
         "o-infinity-upgrade-btn--available": !this.isUseless && !this.isBought && this.canBeBought,
         "o-infinity-upgrade-btn--unavailable": !this.isUseless && !this.isBought && !this.canBeBought,
         "o-infinity-upgrade-btn--useless": this.isUseless,
+        "o-pelle-disabled": this.isUseless,
         "o-infinity-upgrade-btn--chargeable": !this.isCharged && this.chargePossible &&
           (this.showingCharged || this.shiftDown),
         "o-infinity-upgrade-btn--charged": this.isCharged,

@@ -722,12 +722,19 @@ function laitelaRealityTick(realDiff) {
       }
     }
     if (Laitela.realityReward > oldInfo.realityReward) {
-      completionText += `<br><br>Dark Matter Multiplier: ${formatX(oldInfo.realityReward, 2, 2)}
-        ➜ ${formatX(Laitela.realityReward, 2, 2)}
-        <br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
-        (${formatInt(8 - oldInfo.difficultyTier)}) ➜
-        ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
-        (${formatInt(8 - laitelaInfo.difficultyTier)})`;
+      if (oldInfo.fastestCompletion === 3600) {
+        completionText += `<br><br>Dark Matter Multiplier: ➜ ${formatX(Laitela.realityReward, 2, 2)}
+          <br>Best Completion Time: ➜
+          ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
+          (${formatInt(8 - laitelaInfo.difficultyTier)})`;
+      } else {
+        completionText += `<br><br>Dark Matter Multiplier: ${formatX(oldInfo.realityReward, 2, 2)}
+          ➜ ${formatX(Laitela.realityReward, 2, 2)}
+          <br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
+          (${formatInt(8 - oldInfo.difficultyTier)}) ➜
+          ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
+          (${formatInt(8 - laitelaInfo.difficultyTier)})`;
+      }
       player.records.bestReality.laitelaSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     } else {
       completionText += ` You need to destabilize in faster than

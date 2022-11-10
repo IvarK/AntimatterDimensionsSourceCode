@@ -44,6 +44,7 @@ GameDatabase.reality.glyphTypes = {
     symbol: GLYPH_SYMBOLS.effarig,
     color: "#e21717",
     isUnlocked: () => EffarigUnlock.reality.isUnlocked,
+    canCustomize: () => EffarigUnlock.reality.isUnlocked,
     alchemyResource: ALCHEMY_RESOURCE.EFFARIG,
     hasRarity: true
     // Effarig glyphs have no primary effect; all are equally likely
@@ -53,6 +54,7 @@ GameDatabase.reality.glyphTypes = {
     symbol: GLYPH_SYMBOLS.reality,
     color: "#555555",
     isUnlocked: () => false,
+    canCustomize: () => player.reality.glyphs.createdRealityGlyph,
     // Refining a reality glyph is pretty wasteful anyway, but might as well have this here
     alchemyResource: ALCHEMY_RESOURCE.REALITY
   },
@@ -61,6 +63,7 @@ GameDatabase.reality.glyphTypes = {
     symbol: GLYPH_SYMBOLS.cursed,
     color: "black",
     isUnlocked: () => false,
+    canCustomize: () => V.isFlipped,
   },
   companion: {
     id: "companion",

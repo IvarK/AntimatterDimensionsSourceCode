@@ -27,7 +27,7 @@ import SpeedrunModeModal from "@/components/modals/SpeedrunModeModal";
 import AnimationOptionsModal from "@/components/modals/options/AnimationOptionsModal";
 import AwayProgressOptionsModal from "@/components/modals/options/AwayProgressOptionsModal";
 import ConfirmationOptionsModal from "@/components/modals/options/ConfirmationOptionsModal";
-import GlyphDisplayOptionsModal from "@/components/modals/options/GlyphDisplayOptionsModal";
+import GlyphDisplayOptionsModal from "@/components/modals/options/glyph-appearance/GlyphDisplayOptionsModal";
 import HiddenTabsModal from "@/components/modals/options/hidden-tabs/HiddenTabsModal";
 import HotkeysModal from "@/components/modals/options/HotkeysModal";
 import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal";

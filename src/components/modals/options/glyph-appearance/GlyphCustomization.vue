@@ -1,12 +1,12 @@
 <script>
-import GlyphAppearanceOptionsEntry from "@/components/modals/options/GlyphAppearanceOptionsEntry";
+import GlyphCustomizationSingle from "@/components/modals/options/glyph-appearance/GlyphCustomizationSingle";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
-  name: "GlyphAppearanceOptionsGroup",
+  name: "GlyphCustomization",
   components: {
-    GlyphAppearanceOptionsEntry,
+    GlyphCustomizationSingle,
     PrimaryButton,
     PrimaryToggleButton
   },
@@ -17,8 +17,7 @@ export default {
   },
   computed: {
     typeList() {
-      // Note: This disallows customization of anything that isn't obtainable through realities
-      return GlyphTypes.list.filter(t => t.isUnlocked).map(t => t.id);
+      return GlyphTypes.list.filter(t => t.canCustomize).map(t => t.id);
     }
   },
   watch: {
@@ -42,7 +41,7 @@ export default {
 
 <template>
   <div class="c-glyph-customization-group">
-    <b>Glyph Appearance Customization</b>
+    <b>Custom Glyph Appearance</b>
     <PrimaryToggleButton
       v-model="enabled"
       class="o-primary-btn--subtab-option"
@@ -53,14 +52,17 @@ export default {
       class="o-primary-btn--subtab-option"
       @click="resetSettings"
     >
-      Reset Appearance
+      Reset to Default
     </PrimaryButton>
     <br>
     <div
       v-for="type in typeList"
       :key="type"
     >
-      <GlyphAppearanceOptionsEntry :type="type" />
+      <GlyphCustomizationSingle
+        :key="enabled"
+        :type="type"
+      />
     </div>
   </div>
 </template>

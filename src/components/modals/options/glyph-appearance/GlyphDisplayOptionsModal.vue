@@ -1,11 +1,10 @@
 <script>
-import SelectGlyphInfoDropdown, { GlyphInfo } from "./SelectGlyphInfoDropdown";
+import SelectGlyphInfoDropdown, { GlyphInfo } from ".././SelectGlyphInfoDropdown";
 
 import ExpandingControlBox from "@/components/ExpandingControlBox";
-import GlyphAppearanceOptionsGroup from "@/components/modals/options/GlyphAppearanceOptionsGroup";
+import GlyphCustomization from "@/components/modals/options/glyph-appearance/GlyphCustomization";
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
-
 
 export default {
   name: "GlyphDisplayOptionsModal",
@@ -14,7 +13,7 @@ export default {
     ModalOptionsToggleButton,
     ModalWrapperOptions,
     SelectGlyphInfoDropdown,
-    GlyphAppearanceOptionsGroup,
+    GlyphCustomization,
   },
   data() {
     return {
@@ -23,6 +22,7 @@ export default {
       forceDarkGlyphs: false,
       glyphInfoType: 0,
       showGlyphInfoByDefault: false,
+      hasCustomization: false,
     };
   },
   computed: {
@@ -56,6 +56,7 @@ export default {
       this.forceDarkGlyphs = options.forceDarkGlyphs;
       this.glyphInfoType = options.showHintText.glyphInfoType;
       this.showGlyphInfoByDefault = options.showHintText.showGlyphInfoByDefault;
+      this.hasCustomization = player.reality.glyphs.cosmetics.availableSets.length > 0;
     },
     noEffectStyle() {
       if (this.glyphInfoType !== 0) return null;
@@ -105,7 +106,7 @@ export default {
         text="Always show Glyph Info:"
       />
     </div>
-    <GlyphAppearanceOptionsGroup />
+    <GlyphCustomization v-if="hasCustomization" />
   </ModalWrapperOptions>
 </template>
 

@@ -162,9 +162,10 @@ export default {
       return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
     },
     innerStyle() {
-      const rarityColor = this.isRealityGlyph
-        ? this.realityGlyphColor()
-        : (this.glyph.color || getColor(this.glyph.strength));
+      let rarityColor;
+      if (this.isRealityGlyph) rarityColor = this.realityGlyphColor();
+      else if (this.isCompanionGlyph) rarityColor = GlyphTypes.companion.color;
+      else rarityColor = (this.glyph.color || getColor(this.glyph.strength));
       const textShadow = this.isCursedGlyph
         ? `-0.04em 0.04em 0.08em ${this.cursedColor}`
         : `-0.04em 0.04em 0.08em ${rarityColor}`;
@@ -257,6 +258,9 @@ export default {
     },
     isCursedGlyph() {
       return this.glyph.type === "cursed";
+    },
+    isCompanionGlyph() {
+      return this.glyph.type === "companion";
     },
     showGlyphEffectDots() {
       return player.options.showHintText.glyphEffectDots;

@@ -245,6 +245,8 @@ class GlyphType {
     this.primaryEffect = setup.primaryEffect;
     /** @type {undefined | function(): boolean} */
     this._isUnlocked = setup.isUnlocked;
+    /** @type {undefined | function(): boolean} */
+    this._canCustomize = setup.canCustomize;
     /** @type {number} */
     this.alchemyResource = setup.alchemyResource;
     /** @type {boolean} */
@@ -257,6 +259,10 @@ class GlyphType {
   /** @returns {boolean} */
   get isUnlocked() {
     return this._isUnlocked?.() ?? true;
+  }
+
+  get canCustomize() {
+    return this._canCustomize?.() ?? true;
   }
 
   get symbol() {

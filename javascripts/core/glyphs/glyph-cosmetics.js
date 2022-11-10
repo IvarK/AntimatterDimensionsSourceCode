@@ -1,7 +1,7 @@
 const COSMETIC_SETS = [
   {
     name: "cards",
-    symbol: ["♠", "♣", "♥", "♦"],
+    symbol: ["♤", "♧", "♡", "♢"],
     color: ["#000000", "#FF2222"],
   },
   {
@@ -13,6 +13,16 @@ const COSMETIC_SETS = [
     name: "blob",
     symbol: ["\uE010", "\uE019"],
     color: ["#E4B51A"],
+  },
+  {
+    name: "colors",
+    symbol: [],
+    color: ["#E42222", "#F04418", "#755220", "#123456", "#FACADE", "#BEEF72"],
+  },
+  {
+    name: "grayscale",
+    symbol: [],
+    color: ["#444444", "#888888", "#CCCCCC"],
   },
 ];
 
@@ -31,6 +41,8 @@ export const GlyphCosmeticHandler = {
       .filter(s => player.reality.glyphs.cosmetics.availableSets.includes(s.name))
       .flatMap(s => s.symbol);
   },
+  // Sort the colors by hue, otherwise finding specific colors would be a mess for UX.
+  // However, colors "close enough to grayscale" are sorted separately and first
   get availableColors() {
     return COSMETIC_SETS
       .filter(s => player.reality.glyphs.cosmetics.availableSets.includes(s.name))
@@ -44,11 +56,12 @@ export const GlyphCosmeticHandler = {
             parseInt(str.substring(4), 16) / 255
           ];
           const min = Math.min(...rgb), max = Math.max(...rgb);
+          if (max - min < 0.1) return max;
           let rawHue;
           if (rgb[0] === max) rawHue = (rgb[1] - rgb[2]) / (max - min);
           else if (rgb[1] === max) rawHue = 2 + (rgb[2] - rgb[1]) / (max - min);
           else rawHue = 4 + (rgb[0] - rgb[1]) / (max - min);
-          return (rawHue + 6) % 6;
+          return 1 + ((rawHue + 6) % 6);
         };
         return getHue(a) - getHue(b);
       });

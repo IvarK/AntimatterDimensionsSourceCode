@@ -72,3 +72,18 @@ GameDatabase.reality.glyphTypes = {
     isUnlocked: () => false,
   },
 };
+
+GameDatabase.reality.cosmeticGlyphs = {
+  music: {
+    id: "music",
+    symbol: "♫",
+    color: "#FF80AB",
+    isUnlocked: () => TeresaUnlocks.shop.isUnlocked,
+  },
+  blob: {
+    id: "blob",
+    symbol: "\uE010",
+    color: "#E4B51A",
+    isUnlocked: () => Themes.available().map(t => t.name).includes("S11"),
+  },
+};

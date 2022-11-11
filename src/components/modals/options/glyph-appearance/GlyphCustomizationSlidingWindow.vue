@@ -13,10 +13,15 @@ export default {
     options: {
       type: Array,
       required: true,
+    },
+    isFunctional: {
+      type: Boolean,
+      required: true,
     }
   },
   data() {
     return {
+      isActive: false,
       selectedIndex: -1,
       leftmostIndex: 0,
       realityColor: "",
@@ -27,31 +32,43 @@ export default {
     attrString() {
       return this.isSymbol ? "symbol" : "color";
     },
+    typeObject() {
+      return this.isFunctional ? GlyphTypes : CosmeticGlyphTypes;
+    },
     defaultOption() {
       if (this.realityColor) return this.realityColor;
-      return GlyphTypes[this.type][`default${this.attrString.capitalize()}`];
+      return this.typeObject[this.type][`default${this.attrString.capitalize()}`];
     },
     isCursed() {
       return this.type === "cursed";
     }
   },
   created() {
-    this.selectedIndex = this.options.indexOf(GlyphTypes[this.type][this.attrString]);
+    this.selectedIndex = this.options.indexOf(this.typeObject[this.type][this.attrString]);
   },
   methods: {
     update() {
+      this.isActive = player.reality.glyphs.cosmetics.active;
       if (this.type === "reality" && !this.isSymbol) this.realityColor = getRealityColor();
       this.darkKeySwap = player.options.forceDarkGlyphs;
     },
     select(option) {
+      if (!this.isActive) return;
       player.reality.glyphs.cosmetics[`${this.attrString}Map`][this.type] = option;
-      this.selectedIndex = this.options.indexOf(GlyphTypes[this.type][this.attrString]);
+      this.selectedIndex = this.options.indexOf(this.typeObject[this.type][this.attrString]);
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
+    containerClassObject() {
+      return {
+        "c-all-options": true,
+        "c-disabled-overlay": !this.isActive
+      };
     },
     symbolClassObject(option) {
       return {
         "o-symbol": this.isSymbol,
         "o-color": !this.isSymbol,
+        "o-clickable": this.isActive,
         "o-option--inactive": this.isSymbol && this.options.indexOf(option) !== this.selectedIndex,
       };
     },
@@ -95,10 +112,10 @@ export default {
 </script>
 
 <template>
-  <div class="c-all-options">
+  <div :class="containerClassObject()">
     <div class="o-default-option">
       <div
-        :key="defaultOption + darkKeySwap"
+        :key="'default' + darkKeySwap"
         :class="symbolClassObject(defaultOption)"
         :style="boxStyle(defaultOption)"
         @click="select(undefined)"
@@ -148,6 +165,11 @@ export default {
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);
   overflow: hidden;
+}
+
+.c-disabled-overlay {
+  opacity: 0.5;
+  color: var(--color-disabled);
 }
 
 .c-extra-options {
@@ -215,13 +237,16 @@ export default {
   z-index: 1;
 }
 
+.o-clickable {
+  cursor: pointer;
+}
+
 .o-symbol {
   display: block;
   width: 2.5rem;
   text-align: center;
   font-size: 1.6rem;
   font-weight: bold;
-  cursor: pointer;
   user-select: none;
 }
 
@@ -233,5 +258,6 @@ export default {
   height: 1.5rem;
   margin: 0.25rem 0.5rem;
   font-weight: bold;
+  user-select: none;
 }
 </style>

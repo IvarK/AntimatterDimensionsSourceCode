@@ -13,6 +13,10 @@ export default {
     type: {
       type: String,
       required: true,
+    },
+    isFunctional: {
+      type: Boolean,
+      required: true,
     }
   },
   computed: {
@@ -29,8 +33,11 @@ export default {
     },
     fakeGlyph() {
       return {
-        type: this.type,
+        // This is just a dummy string to make sure that GlyphComponent doesn't throw errors; only the cosmetic aspects
+        // will end up being visible in this case anyway (as they override anything type would otherwise show)
+        type: this.isFunctional ? this.type : "power",
         strength: player.records.bestReality.glyphStrength,
+        cosmetic: this.isFunctional ? undefined : this.type,
       };
     },
     symbols() {
@@ -54,11 +61,13 @@ export default {
       :type="type"
       :is-symbol="true"
       :options="symbols"
+      :is-functional="isFunctional"
     />
     <GlyphCustomizationSlidingWindow
       :type="type"
       :is-symbol="false"
       :options="colors"
+      :is-functional="isFunctional"
     />
   </div>
 </template>

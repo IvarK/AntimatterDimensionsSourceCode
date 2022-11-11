@@ -114,6 +114,9 @@ export default {
     typeConfig() {
       return GlyphTypes[this.glyph.type];
     },
+    cosmeticConfig() {
+      return CosmeticGlyphTypes[this.glyph.cosmetic];
+    },
     isBlobHeart() {
       return this.$viewModel.theme === "S11" && this.glyph.type === "companion";
     },
@@ -122,13 +125,23 @@ export default {
       // \uE019 = :blobheart:
       if (this.isBlobHeart) return "\uE019";
       if (symbol) return symbol;
+      if (this.glyph.cosmetic) return this.cosmeticConfig.symbol;
       return this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
     },
     zIndexStyle() {
       return { "z-index": this.isInModal ? 7 : 6 };
     },
+    glyphColor() {
+      if (this.glyph.color) return this.glyph.color;
+      if (this.glyph.cosmetic) return this.cosmeticConfig.color;
+      if (this.isRealityGlyph) return this.realityColor;
+      if (this.isCursedGlyph) return GlyphTypes.cursed.color;
+      if (this.isCompanionGlyph) return GlyphTypes.companion.color;
+      return getColor(this.glyph.strength);
+    },
     borderColor() {
       if (this.isRealityGlyph) return this.realityColor;
+      if (this.glyph.cosmetic) return this.cosmeticConfig.color;
       return this.glyph.color || this.typeConfig.color;
     },
     overStyle() {
@@ -152,17 +165,13 @@ export default {
       };
     },
     innerStyle() {
-      let rarityColor;
-      if (this.isRealityGlyph) rarityColor = this.realityColor;
-      else if (this.isCompanionGlyph) rarityColor = GlyphTypes.companion.color;
-      else if (this.isCursedGlyph) rarityColor = GlyphTypes.cursed.color;
-      else rarityColor = (this.glyph.color || getColor(this.glyph.strength));
+      const color = this.glyphColor;
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
-        color: this.isCursedGlyph ? GlyphTypes.cursed.color : rarityColor,
-        "text-shadow": this.isBlobHeart ? undefined : `-0.04em 0.04em 0.08em ${rarityColor}`,
+        color,
+        "text-shadow": this.isBlobHeart ? undefined : `-0.04em 0.04em 0.08em ${color}`,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
         background: this.isCursedGlyph ? getBaseColor(true) : getBaseColor(false)
@@ -289,7 +298,9 @@ export default {
   created() {
     this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
       this.$recompute("typeConfig");
+      this.$recompute("cosmeticConfig");
       this.$recompute("innerStyle");
+      this.$recompute("glyphColor");
       this.$recompute("showGlyphEffectDots");
       this.$recompute("displayedInfo");
     });
@@ -470,11 +481,6 @@ export default {
       const dy = scale * (Math.cos(angle) + 0.15);
       return { dx, dy };
     },
-    glyphColor() {
-      if (this.isRealityGlyph) return this.realityColor;
-      if (this.isCursedGlyph) return GlyphTypes.cursed.color;
-      return `${this.glyph.color || getColor(this.glyph.strength)}`;
-    },
     glyphEffectDots(id) {
       if (this.glyph.type === "companion") return {};
       const pos = this.effectIconPos(id);
@@ -484,7 +490,7 @@ export default {
         width: "0.3rem",
         height: "0.3rem",
         "border-radius": "50%",
-        background: this.glyphColor(),
+        background: this.glyphColor,
         transform: `translate(${pos.dx - 0.15 * 0.3}rem, ${pos.dy - 0.15 * 0.3}rem)`,
         opacity: Theme.current().name === "S9" ? 0 : 0.8
       };

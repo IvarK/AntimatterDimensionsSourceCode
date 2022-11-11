@@ -11,7 +11,7 @@ const COSMETIC_SETS = [
   },
   {
     name: "blob",
-    symbol: ["\uE010", "\uE019"],
+    symbol: ["\uE011", "\uE019"],
     color: ["#E4B51A"],
   },
   {

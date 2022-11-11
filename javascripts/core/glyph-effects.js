@@ -220,7 +220,7 @@ export function hasAtLeastGlyphEffects(needleBitmask, haystackBitmask) {
   return haystack.every(x => needle.includes(x));
 }
 
-class GlyphType {
+class FunctionalGlyphType {
   /**
    * @param {Object} setup
    * @param {string} setup.id
@@ -274,13 +274,13 @@ class GlyphType {
   }
 }
 
-const allGlyphTypes = mapGameDataToObject(
+const functionalGlyphTypes = mapGameDataToObject(
   GameDatabase.reality.glyphTypes,
-  config => new GlyphType(config)
+  config => new FunctionalGlyphType(config)
 );
 
 export const GlyphTypes = {
-  ...allGlyphTypes,
+  ...functionalGlyphTypes,
   /**
     * @param {function(): number} rng Random number source (0..1)
     * @param {string} [blacklisted] Do not return the specified type
@@ -297,4 +297,37 @@ export const GlyphTypes = {
   get locked() {
     return this.list.filter(e => !e.isUnlocked);
   }
+};
+
+class CosmeticGlyphType {
+  constructor(setup) {
+    this.id = setup.id;
+    this.defaultSymbol = setup.symbol;
+    this.defaultColor = setup.color;
+    this._isUnlocked = setup.isUnlocked;
+  }
+
+  get isUnlocked() {
+    return this._isUnlocked?.() ?? true;
+  }
+
+  get symbol() {
+    return GlyphCosmeticHandler.getSymbol(this.id) ?? this.defaultSymbol;
+  }
+
+  get color() {
+    return GlyphCosmeticHandler.getColor(this.id) ?? this.defaultColor;
+  }
+}
+
+const cosmeticGlyphTypes = mapGameDataToObject(
+  GameDatabase.reality.cosmeticGlyphs,
+  config => new CosmeticGlyphType(config)
+);
+
+export const CosmeticGlyphTypes = {
+  ...cosmeticGlyphTypes,
+  get list() {
+    return Object.keys(GameDatabase.reality.cosmeticGlyphs).map(e => CosmeticGlyphTypes[e]);
+  },
 };

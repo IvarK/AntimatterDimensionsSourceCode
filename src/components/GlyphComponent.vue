@@ -104,10 +104,7 @@ export default {
       // We use this to not create a ton of tooltip components as soon as the glyph tab loads.
       tooltipLoaded: false,
       logTotalSacrifice: 0,
-      // This exists to dynamically adjust reality glyph colors over time - this used to use a keyframe animation, but
-      // applying that was causing large amounts of lag due to the number of independent and partially overlapping
-      // elements it was applying it to. Of note - null transform hacks did not seem to improve performance either.
-      colorTimer: 0,
+      realityColor: "",
     };
   },
   computed: {
@@ -131,8 +128,7 @@ export default {
       return { "z-index": this.isInModal ? 7 : 6 };
     },
     borderColor() {
-      if (this.isRealityGlyph) return this.realityGlyphColor();
-      if (this.isCursedGlyph) return this.cursedColor;
+      if (this.isRealityGlyph) return this.realityColor;
       return this.glyph.color || this.typeConfig.color;
     },
     overStyle() {
@@ -155,32 +151,21 @@ export default {
         "-webkit-user-drag": this.draggable ? "" : "none"
       };
     },
-    cursedColor() {
-      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "black" : "white";
-    },
-    cursedColorInverted() {
-      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
-    },
     innerStyle() {
       let rarityColor;
-      if (this.isRealityGlyph) rarityColor = this.realityGlyphColor();
+      if (this.isRealityGlyph) rarityColor = this.realityColor;
       else if (this.isCompanionGlyph) rarityColor = GlyphTypes.companion.color;
+      else if (this.isCursedGlyph) rarityColor = GlyphTypes.cursed.color;
       else rarityColor = (this.glyph.color || getColor(this.glyph.strength));
-      const textShadow = this.isCursedGlyph
-        ? `-0.04em 0.04em 0.08em ${this.cursedColor}`
-        : `-0.04em 0.04em 0.08em ${rarityColor}`;
-      const defaultBG = player.options.forceDarkGlyphs || Theme.current().isDark()
-        ? "black"
-        : "white";
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
-        color: this.isCursedGlyph ? this.cursedColor : rarityColor,
-        "text-shadow": this.isBlobHeart ? undefined : textShadow,
+        color: this.isCursedGlyph ? GlyphTypes.cursed.color : rarityColor,
+        "text-shadow": this.isBlobHeart ? undefined : `-0.04em 0.04em 0.08em ${rarityColor}`,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
-        background: this.isCursedGlyph ? this.cursedColorInverted : defaultBG
+        background: this.isCursedGlyph ? getBaseColor(true) : getBaseColor(false)
       };
     },
     mouseEventHandlers() {
@@ -305,8 +290,6 @@ export default {
     this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
       this.$recompute("typeConfig");
       this.$recompute("innerStyle");
-      this.$recompute("cursedColor");
-      this.$recompute("cursedColorInverted");
       this.$recompute("showGlyphEffectDots");
       this.$recompute("displayedInfo");
     });
@@ -327,7 +310,7 @@ export default {
   methods: {
     update() {
       this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value;
-      this.colorTimer = (this.colorTimer + 4) % 1000;
+      this.realityColor = GlyphTypes.reality.color;
       this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
       this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
         ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
@@ -348,23 +331,6 @@ export default {
         : this.glyph.level + levelBoost;
       if (Pelle.isDoomed && this.isInventoryGlyph) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
       this.displayLevel = adjustedLevel;
-    },
-    // This produces a linearly interpolated color between the basic glyph colors, but with RGB channels copied and
-    // hardcoded from the color data because that's probably preferable to a very hacky hex conversion method. The
-    // order used is {infinity, dilation, power, replication, time, infinity, ... }
-    realityGlyphColor() {
-      // RGB values for the colors to interpolate between
-      const r = [182, 100, 34, 3, 178, 182];
-      const g = [127, 221, 170, 169, 65, 127];
-      const b = [51, 23, 72, 244, 227, 51];
-
-      // Integer and fractional parts for interpolation parameter
-      const i = Math.floor(this.colorTimer / 200);
-      const f = this.colorTimer / 200 - i;
-
-      return `rgb(${r[i] * (1 - f) + r[i + 1] * f},
-        ${g[i] * (1 - f) + g[i + 1] * f},
-        ${b[i] * (1 - f) + b[i + 1] * f})`;
     },
     hideTooltip() {
       this.tooltipLoaded = false;
@@ -505,12 +471,11 @@ export default {
       return { dx, dy };
     },
     glyphColor() {
-      if (this.isCursedGlyph) return this.cursedColor;
-      if (this.isRealityGlyph) return this.realityGlyphColor();
+      if (this.isRealityGlyph) return this.realityColor;
+      if (this.isCursedGlyph) return GlyphTypes.cursed.color;
       return `${this.glyph.color || getColor(this.glyph.strength)}`;
     },
-    // Note that the dot bigger for one of the mutually-exclusive effect pair (IDs of the only case are hardcoded)
-    glyphEffectIcon(id) {
+    glyphEffectDots(id) {
       if (this.glyph.type === "companion") return {};
       const pos = this.effectIconPos(id);
 
@@ -549,7 +514,7 @@ export default {
         <div
           v-for="x in glyphEffects"
           :key="x"
-          :style="glyphEffectIcon(x)"
+          :style="glyphEffectDots(x)"
         />
       </template>
     </div>

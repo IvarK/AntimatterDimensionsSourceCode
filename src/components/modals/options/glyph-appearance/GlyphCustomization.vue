@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       enabled: false,
+      defaultKeySwap: false,
     };
   },
   computed: {
@@ -29,10 +30,12 @@ export default {
   methods: {
     update() {
       this.enabled = player.reality.glyphs.cosmetics.active;
+      this.defaultKeySwap = true;
     },
     resetSettings() {
       player.reality.glyphs.cosmetics.symbolMap = {};
       player.reality.glyphs.cosmetics.colorMap = {};
+      this.defaultKeySwap = false;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     }
   }
@@ -60,10 +63,11 @@ export default {
       :key="type"
     >
       <GlyphCustomizationSingle
-        :key="enabled"
+        :key="enabled + defaultKeySwap"
         :type="type"
       />
     </div>
+    Note: Certain color choices may cause very poor color contrast in other visual parts of the game.
   </div>
 </template>
 

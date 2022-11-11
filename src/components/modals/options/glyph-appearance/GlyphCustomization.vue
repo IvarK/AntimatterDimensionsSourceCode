@@ -17,8 +17,11 @@ export default {
     };
   },
   computed: {
-    typeList() {
+    functionalTypes() {
       return GlyphTypes.list.filter(t => t.canCustomize).map(t => t.id);
+    },
+    cosmeticTypes() {
+      return CosmeticGlyphTypes.list.filter(t => t.isUnlocked).map(t => t.id);
     }
   },
   watch: {
@@ -59,12 +62,23 @@ export default {
     </PrimaryButton>
     <br>
     <div
-      v-for="type in typeList"
+      v-for="type in functionalTypes"
       :key="type"
     >
       <GlyphCustomizationSingle
         :key="enabled + defaultKeySwap"
         :type="type"
+        :is-functional="true"
+      />
+    </div>
+    <div
+      v-for="type in cosmeticTypes"
+      :key="type"
+    >
+      <GlyphCustomizationSingle
+        :key="enabled + defaultKeySwap"
+        :type="type"
+        :is-functional="false"
       />
     </div>
     Note: Certain color choices may cause very poor color contrast in other visual parts of the game.

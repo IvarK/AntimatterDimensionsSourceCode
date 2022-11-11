@@ -180,7 +180,6 @@ export const GlyphGenerator = {
       level: 1,
       rawLevel: 1,
       effects: effectBitmask,
-      color: "#feaec9"
     };
   },
 
@@ -189,8 +188,7 @@ export const GlyphGenerator = {
     const glyph =
       this.randomGlyph({ actualLevel: Math.floor(player.records.bestReality.glyphLevel * 0.8), rawLevel: 1 }, rng);
     rng.finalize();
-    glyph.symbol = "♫";
-    glyph.color = "#FF80AB";
+    glyph.cosmetic = "music";
     return glyph;
   },
 

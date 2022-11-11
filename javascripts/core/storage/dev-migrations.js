@@ -1522,7 +1522,10 @@ GameStorage.devMigrations = {
     player => {
       const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
       for (const glyph of allGlyphs) {
-        if (glyph.symbol === "key266b") glyph.symbol = "♫";
+        if (glyph.symbol === "key266b") {
+          glyph.symbol = "♫";
+          glyph.color = undefined;
+        }
       }
     },
   ],

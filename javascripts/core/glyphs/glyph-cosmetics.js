@@ -67,13 +67,16 @@ export const GlyphCosmeticHandler = {
       });
   },
   getSymbol(type) {
-    return (this.isActive && Object.keys(this.symbolMap).includes(type))
+    return (this.isActive && this.symbolMap[type])
       ? this.symbolMap[type]
       : undefined;
   },
   getColor(type) {
-    return (this.isActive && Object.keys(this.colorMap).includes(type))
-      ? this.colorMap[type]
-      : undefined;
+    if (!this.isActive || !this.colorMap[type]) {
+      if (type === "cursed") return getBaseColor(false);
+      if (type === "reality") return getRealityColor();
+      return undefined;
+    }
+    return this.colorMap[type];
   }
 };

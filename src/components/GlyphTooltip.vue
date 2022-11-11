@@ -88,12 +88,10 @@ export default {
       return getRarity(this.strength);
     },
     baseColor() {
-      if (this.type === "cursed") return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
-      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "black" : "white";
+      return getBaseColor(this.type === "cursed");
     },
     textColor() {
-      if (this.type === "cursed") return Theme.current().isDark() || player.options.forceDarkGlyphs ? "black" : "white";
-      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
+      return getBaseColor(this.type !== "cursed");
     },
     mainBorderColor() {
       if (this.type === "cursed") return this.textColor;

@@ -77,7 +77,8 @@ export default {
           if (this.config.scrambleText) {
             this.description = capitalize(value).replace("*", wordShift.wordCycle(this.config.scrambleText, true));
             this.updateFunction = () =>
-              this.description = capitalize(description()).replace("*", wordShift.wordCycle(this.config.scrambleText, true));
+              this.description = capitalize(description())
+                .replace("*", wordShift.wordCycle(this.config.scrambleText, true));
             return;
           }
           this.description = capitalize(value);

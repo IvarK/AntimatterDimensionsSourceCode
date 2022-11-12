@@ -202,7 +202,6 @@ export const GameStorage = {
 
   hardReset() {
     this.loadPlayerObject(Player.defaultStart);
-    Payments.syncSTD();
     this.save(true);
     Tab.dimensions.antimatter.show();
     Cloud.resetTempState();

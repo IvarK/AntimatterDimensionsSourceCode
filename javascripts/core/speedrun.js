@@ -56,7 +56,7 @@ export const Speedrun = {
       if (purchase.config.singleUse) continue;
       currentSpent += purchase.purchases * purchase.cost;
     }
-    this.setSTDUse(player.IAP.enabled && currentSpent > 0);
+    this.setSTDUse(ShopPurchaseData.isIAPEnabled && currentSpent > 0);
   },
   isPausedAtStart() {
     return player.speedrun.isActive && !player.speedrun.hasStarted;

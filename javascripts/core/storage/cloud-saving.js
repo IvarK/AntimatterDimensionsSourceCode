@@ -44,7 +44,7 @@ export const Cloud = {
   async login() {
     try {
       await signInWithPopup(this.auth, this.provider);
-      Payments.syncSTD();
+      ShopPurchaseData.syncSTD();
       GameUI.notify.success(`Logged in as ${this.user.displayName}`);
     } catch (e) {
       GameUI.notify.error("Google Account login failed");
@@ -121,12 +121,6 @@ export const Cloud = {
     GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
   },
 
-  resetSTD() {
-    if (!this.user) return;
-    set(ref(this.db, `users/${this.user.id}/std`), 0);
-    GameUI.notify.info(`STD count reset for user ${this.user.displayName}`);
-  },
-
   async loadCheck() {
     const save = await this.load();
     if (save === null) {
@@ -176,7 +170,7 @@ export const Cloud = {
           displayName: user.displayName,
           email: user.email,
         };
-        Payments.syncSTD();
+        ShopPurchaseData.syncSTD();
       } else {
         this.user = null;
       }

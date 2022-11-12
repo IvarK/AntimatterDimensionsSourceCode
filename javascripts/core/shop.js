@@ -4,16 +4,15 @@ import Payments from "./payments";
 
 export const shop = {};
 
-shop.enabled = false;
+shop.kongEnabled = false;
 
 shop.init = function() {
   if (document.referrer.indexOf("kongregate") === -1)
     return;
-  shop.enabled = true;
+  shop.kongEnabled = true;
   try {
     kongregateAPI.loadAPI(() => {
       window.kongregate = kongregateAPI.getAPI();
-      shop.updatePurchases();
     });
     // eslint-disable-next-line no-console
   } catch (err) { console.log("Couldn't load Kongregate API"); }
@@ -28,7 +27,31 @@ export const ShopPurchaseData = {
   },
 
   get isIAPEnabled() {
-    return Cloud.loggedIn && this.availableSTD >= 0 && !player.IAP.disabled;
+    return Cloud.loggedIn && this.availableSTD >= 0 && player.IAP.enabled;
+  },
+
+  // Reads STD props from the cloud and sets local cached values with the result
+  async syncSTD(showNotification = true, fetchedData = undefined) {
+    if (!Cloud.loggedIn) return;
+    let statusRes, newSTDData;
+    if (fetchedData) {
+      newSTDData = fetchedData;
+    } else {
+      try {
+        statusRes = await fetch(`${STD_BACKEND_URL}/STDData?user=${Cloud.user.id}`);
+        newSTDData = await statusRes.json();
+      } catch (e) {
+        GameUI.notify.error("Could not sync STD purchases!", 10000);
+        return;
+      }
+    }
+    if (showNotification) GameUI.notify.info("STD purchases successfully loaded!", 10000);
+
+    // Update the local cache
+    this.totalSTD = newSTDData.totalSTD;
+    this.spentSTD = newSTDData.spentSTD;
+    for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = newSTDData[key] ?? 0;
+    GameStorage.save();
   },
 
   respecRequest() {
@@ -115,12 +138,8 @@ class ShopPurchaseState extends RebuyableMechanicState {
     const success = await Payments.buyUpgrade(this.config.key);
     if (!success) return false;
 
-    if (!player.IAP.disabled) Speedrun.setSTDUse(true);
-    if (this.config.singleUse) {
-      this.config.onPurchase();
-    } else {
-      this.purchases++;
-    }
+    if (player.IAP.enabled) Speedrun.setSTDUse(true);
+    if (this.config.singleUse) this.config.onPurchase();
     GameUI.update();
     return true;
   }
@@ -141,66 +160,8 @@ shop.purchaseLongerTimeSkip = function() {
   simulateTime(3600 * 24);
 };
 
-shop.updatePurchases = function() {
-  if (!shop.enabled) return;
-  try {
-    kongregate.mtx.requestUserItemList("", items);
-    // eslint-disable-next-line no-console
-  } catch (e) { console.error(e); }
-
-  function items(result) {
-    let totalSTD = player.IAP.totalSTD;
-    for (let i = 0; i < result.data.length; i++) {
-      const item = result.data[i];
-      switch (item.identifier) {
-        case "doublemult":
-          totalSTD += 30;
-          break;
-
-        case "doubleip":
-          totalSTD += 40;
-          break;
-
-        case "tripleep":
-          totalSTD += 50;
-          break;
-
-        case "alldimboost":
-          totalSTD += 60;
-          break;
-
-        case "20worthofstd":
-          totalSTD += 20;
-          break;
-
-        case "50worthofstd":
-          totalSTD += 60;
-          break;
-
-        case "100worthofstd":
-          totalSTD += 140;
-          break;
-
-        case "200worthofstd":
-          totalSTD += 300;
-          break;
-
-        case "500worthofstd":
-          totalSTD += 1000;
-          break;
-
-      }
-    }
-    if (player.IAP.totalSTD !== totalSTD) {
-      // eslint-disable-next-line no-console
-      console.warn(`STD amounts don't match! ${player.IAP.totalSTD} in save, ${totalSTD} in kong`);
-    }
-  }
-
-};
-
 shop.migratePurchases = function() {
-  if (!shop.enabled) return;
+  if (!shop.kongEnabled) return;
   try {
     kongregate.mtx.requestUserItemList("", items);
     // eslint-disable-next-line no-console

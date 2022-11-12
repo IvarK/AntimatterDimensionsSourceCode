@@ -51,7 +51,7 @@ export default {
       else Modal.message.show("You cannot purchase STD coins without logging in first.");
     },
     onCancel() {
-      Payments.cancelPurchase();
+      Payments.cancelPurchase(false);
     },
     respec() {
       if (this.creditsClosed) return;
@@ -74,7 +74,7 @@ export default {
     </div>
     <div>
       Note: Shop purchases made on the Android, Steam, and Web versions are
-      separate and non-transferrable for legal reasons.
+      separate and non-transferrable due to legal reasons.
     </div>
     <div class="c-subtab-option-container">
       <PrimaryButton
@@ -130,11 +130,6 @@ export default {
       >
         Buy More
       </button>
-    </div>
-    <div v-if="availableSTD < 0">
-      Your save is using more STDs than you have purchased on your account.
-      <br>
-      All STD purchases have been temporarily disabled, please respec your STD coins or purchase more.
     </div>
     <div class="l-shop-buttons-container">
       <ShopButton

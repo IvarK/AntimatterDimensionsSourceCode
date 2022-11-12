@@ -1001,7 +1001,7 @@ window.onload = function() {
   GameUI.initialized = supportedBrowser;
   ui.view.initialized = supportedBrowser;
   setTimeout(() => {
-    if (shop.enabled) {
+    if (shop.kongEnabled) {
       playFabLogin();
     }
     document.getElementById("loading").style.display = "none";

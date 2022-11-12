@@ -463,3 +463,5 @@ window.PROGRESS_STAGE = {
   LAITELA: 16,
   PELLE: 17,
 };
+
+window.STD_BACKEND_URL = "https://antimatterdimensionspayments.ew.r.appspot.com";

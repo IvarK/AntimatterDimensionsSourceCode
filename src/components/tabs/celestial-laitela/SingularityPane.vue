@@ -49,14 +49,12 @@ export default {
     additionalSingularityTime() {
       return TimeSpan.fromSeconds(this.extraTimeAfterSingularity).toStringShort();
     },
-    autoOffText() {
-      return this.hasAutoSingularity && !this.isAutoEnabled ? "(auto off)" : "";
-    },
     manualSingularityRate() {
       const totalTime = this.baseTimeToSingularity;
       return this.formatRate(this.singularitiesGained / totalTime);
     },
     autoSingularityRate() {
+      if (this.hasAutoSingularity && !this.isAutoEnabled) return "Auto-Singularity is OFF";
       const totalTime = this.baseTimeToSingularity + this.extraTimeAfterSingularity;
       return this.formatRate(this.singularitiesGained / totalTime);
     },
@@ -178,9 +176,6 @@ export default {
       {{ baseSingularityTime }}
       <span v-if="hasAutoSingularity && autoSingularityFactor !== 1">
         (+{{ additionalSingularityTime }})
-      </span>
-      <span>
-        {{ autoOffText }}
       </span>
       <br>
       <span v-if="hasAutoSingularity && autoSingularityFactor !== 1">Manual </span>

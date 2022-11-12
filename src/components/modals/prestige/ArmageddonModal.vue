@@ -97,7 +97,7 @@ export default {
     >
       Dooming your Reality will reset everything except Challenge records, Celestial progress and anything under
       the General and Reality header on the Statistics tab. You will not gain any rewards from your progress
-      in your current Reality. Dooming your Reality will also purge most of your unprotected glyphs and disable
+      in your current Reality. Dooming your Reality will also purge most of your unprotected Glyphs and disable
       certain game mechanics.
       <br>
       <br>

@@ -28,7 +28,6 @@ export default {
     currentCondenseTime: 0,
     autoCondenseDelay: 0,
     lastCheckedMilestones: 0,
-    autoTimeText: "",
     autoSingActive: false,
   }),
   computed: {
@@ -70,8 +69,7 @@ export default {
     },
     progressDisplay() {
       const condenseCount = this.remainingSingularities / this.singularitiesPerCondense;
-      let thisSingularityTime, extraTime;
-      let timeText;
+      let thisSingularityTime, extraTime, timeText;
       switch (this.milestoneMode) {
         case SINGULARITY_MILESTONE_RESOURCE.SINGULARITIES:
           return `In ${quantify("Singularity", this.remainingSingularities, 2)}`;
@@ -84,9 +82,8 @@ export default {
         case SINGULARITY_MILESTONE_RESOURCE.AUTO_TIME:
           thisSingularityTime = Math.clampMin(0, this.currentCondenseTime + this.autoCondenseDelay);
           extraTime = Math.ceil(condenseCount - 1) * (this.baseCondenseTime + this.autoCondenseDelay);
-          timeText = `In ${TimeSpan.fromSeconds(thisSingularityTime + extraTime).toStringShort()} `;
-          timeText += this.autoSingActive ? "(auto)" : "(auto off)";
-          return `${timeText}`;
+          timeText = `In ${TimeSpan.fromSeconds(thisSingularityTime + extraTime).toStringShort()}`;
+          return this.autoSingActive ? timeText : `Auto-Singularity is OFF`;
         default:
           throw new Error("Unrecognized Singularity Milestone mode");
       }

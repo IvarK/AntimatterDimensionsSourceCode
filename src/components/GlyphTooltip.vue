@@ -88,18 +88,16 @@ export default {
       return getRarity(this.strength);
     },
     baseColor() {
-      return getBaseColor(this.type === "cursed");
+      return GlyphAppearanceHandler.getBaseColor(this.type === "cursed");
     },
     textColor() {
-      return getBaseColor(this.type !== "cursed");
+      return GlyphAppearanceHandler.getBaseColor(this.type !== "cursed");
     },
     mainBorderColor() {
-      if (this.type === "cursed") return this.textColor;
-      if (this.type === "companion") return GlyphTypes[this.type].color;
-      return getColor(this.strength);
+      return GlyphAppearanceHandler.getBorderColor(this.type);
     },
     descriptionStyle() {
-      const color = this.mainBorderColor;
+      const color = GlyphAppearanceHandler.getRarityColor(this.strength);
       return {
         color,
         animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
@@ -154,7 +152,7 @@ export default {
     glyphTooltipStyle() {
       // With computer mice, it's nice to just totally disable mouse events on the tooltip,
       // which reduces the chances for stupidity
-      const borderColor = this.type === "cursed" ? this.textColor : GlyphTypes[this.type].color;
+      const borderColor = this.type === "cursed" ? this.textColor : GlyphAppearanceHandler.getBorderColor(this.type);
       return {
         "pointer-events": this.onTouchDevice ? undefined : "none",
         "border-color": borderColor,
@@ -170,7 +168,7 @@ export default {
 
       let color = Theme.current().isDark() ? this.rarityInfo.darkColor : this.rarityInfo.lightColor;
       if (isCursed) color = this.textColor;
-      if (this.type === "companion") color = GlyphTypes[this.type].color;
+      if (this.type === "companion") color = GlyphAppearanceHandler.getBorderColor(this.type);
       return {
         "border-color": color,
         "box-shadow": `0 0 0.5rem 0.1rem ${color}, 0 0 0.8rem ${color} inset`,

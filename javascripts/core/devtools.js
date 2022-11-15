@@ -525,3 +525,8 @@ dev.forceCloudSave = async function() {
   root.saves[saveId] = GameStorage.saves[saveId];
   Cloud.save(saveId);
 };
+
+// TODO Figure out if we want to remove this before release
+dev.unlockAllCosmeticSets = function() {
+  player.reality.glyphs.cosmetics.availableSets = Object.keys(GameDatabase.reality.glyphCosmeticSets);
+};

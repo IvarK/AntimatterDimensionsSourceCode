@@ -224,8 +224,6 @@ class FunctionalGlyphType {
   /**
    * @param {Object} setup
    * @param {string} setup.id
-   * @param {string} setup.symbol
-   * @param {string} setup.color
    * @param {function(): string} [setup.primaryEffect] All glyphs generated will have this effect, if specified
    * @param {function(): boolean} [setup.isUnlocked] If this glyph type is not available initially, this specifies
    * how to check to see if it is available
@@ -235,18 +233,12 @@ class FunctionalGlyphType {
   constructor(setup) {
     /** @type {string} identifier for this type (time, power, etc)*/
     this.id = setup.id;
-    /** @type {string} used to display glyphs of this type and as a UI shorthand */
-    this.defaultSymbol = setup.symbol;
     /** @type {GlyphEffectConfig[]} list of effects that this glyph can have */
     this.effects = findGlyphTypeEffects(setup.id);
-    /** @type {string} used for glyph borders and other places where color coding is needed */
-    this.defaultColor = setup.color;
     /** @type {string?} all glyphs generated will have at least this effect */
     this.primaryEffect = setup.primaryEffect;
     /** @type {undefined | function(): boolean} */
     this._isUnlocked = setup.isUnlocked;
-    /** @type {undefined | function(): boolean} */
-    this._canCustomize = setup.canCustomize;
     /** @type {number} */
     this.alchemyResource = setup.alchemyResource;
     /** @type {boolean} */
@@ -259,18 +251,6 @@ class FunctionalGlyphType {
   /** @returns {boolean} */
   get isUnlocked() {
     return this._isUnlocked?.() ?? true;
-  }
-
-  get canCustomize() {
-    return this._canCustomize?.() ?? true;
-  }
-
-  get symbol() {
-    return GlyphCosmeticHandler.getSymbol(this.id) ?? this.defaultSymbol;
-  }
-
-  get color() {
-    return GlyphCosmeticHandler.getColor(this.id) ?? this.defaultColor;
   }
 }
 
@@ -297,37 +277,4 @@ export const GlyphTypes = {
   get locked() {
     return this.list.filter(e => !e.isUnlocked);
   }
-};
-
-class CosmeticGlyphType {
-  constructor(setup) {
-    this.id = setup.id;
-    this.defaultSymbol = setup.symbol;
-    this.defaultColor = setup.color;
-    this._isUnlocked = setup.isUnlocked;
-  }
-
-  get isUnlocked() {
-    return this._isUnlocked?.() ?? true;
-  }
-
-  get symbol() {
-    return GlyphCosmeticHandler.getSymbol(this.id) ?? this.defaultSymbol;
-  }
-
-  get color() {
-    return GlyphCosmeticHandler.getColor(this.id) ?? this.defaultColor;
-  }
-}
-
-const cosmeticGlyphTypes = mapGameDataToObject(
-  GameDatabase.reality.cosmeticGlyphs,
-  config => new CosmeticGlyphType(config)
-);
-
-export const CosmeticGlyphTypes = {
-  ...cosmeticGlyphTypes,
-  get list() {
-    return Object.keys(GameDatabase.reality.cosmeticGlyphs).map(e => CosmeticGlyphTypes[e]);
-  },
 };

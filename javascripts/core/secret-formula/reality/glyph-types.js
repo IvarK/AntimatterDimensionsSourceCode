@@ -52,7 +52,7 @@ GameDatabase.reality.glyphTypes = {
   reality: {
     id: "reality",
     symbol: GLYPH_SYMBOLS.reality,
-    color: "#555555",
+    fixedSymbolColor: true,
     isUnlocked: () => false,
     canCustomize: () => player.reality.glyphs.createdRealityGlyph,
     // Refining a reality glyph is pretty wasteful anyway, but might as well have this here
@@ -62,6 +62,7 @@ GameDatabase.reality.glyphTypes = {
     id: "cursed",
     symbol: GLYPH_SYMBOLS.cursed,
     color: "black",
+    fixedSymbolColor: true,
     isUnlocked: () => false,
     canCustomize: () => V.isFlipped,
   },
@@ -69,6 +70,7 @@ GameDatabase.reality.glyphTypes = {
     id: "companion",
     symbol: GLYPH_SYMBOLS.companion,
     color: "#feaec9",
+    fixedSymbolColor: true,
     isUnlocked: () => false,
   },
 };
@@ -84,6 +86,7 @@ GameDatabase.reality.cosmeticGlyphs = {
     id: "blob",
     symbol: "\uE010",
     color: "#E4B51A",
+    preventBlur: true,
     isUnlocked: () => Themes.available().map(t => t.name).includes("S11"),
   },
 };

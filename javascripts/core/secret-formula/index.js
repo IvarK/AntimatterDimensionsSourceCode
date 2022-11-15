@@ -29,6 +29,7 @@ import "./reality/automator";
 import "./reality/glyph-types";
 export * from "./reality/glyph-effects";
 import "./reality/glyph-sacrifices";
+import "./reality/glyph-cosmetics";
 import "./celestials/perk-shop";
 import "./celestials/teresa";
 import "./celestials/effarig";

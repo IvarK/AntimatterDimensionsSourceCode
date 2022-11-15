@@ -67,7 +67,7 @@ export default {
       };
     },
     textShadowColor() {
-      return getBaseColor(true);
+      return GlyphAppearanceHandler.getBaseColor(true);
     },
   },
   methods: {

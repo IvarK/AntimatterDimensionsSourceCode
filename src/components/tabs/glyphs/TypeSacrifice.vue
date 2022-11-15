@@ -28,16 +28,18 @@ export default {
     },
     style() {
       if (!this.isColored) return { };
+      const color = GlyphAppearanceHandler.getBorderColor(this.type);
+      const animateReality = this.typeConfig.id === "reality" && !player.reality.glyphs.cosmetics.colorMap.reality;
       return {
-        color: this.typeConfig.color,
+        color,
         "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
                             -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
-                            0 0 3px ${this.typeConfig.color}`,
-        animation: this.typeConfig.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+                            0 0 3px ${color}`,
+        animation: animateReality ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
       };
     },
     symbol() {
-      return this.typeConfig.symbol;
+      return CosmeticGlyphTypes[this.type].currentSymbol.symbol;
     },
     formatAmount() {
       return format(this.amount, 2, 2);
@@ -66,6 +68,11 @@ export default {
     formatTotalAmount() {
       return format(this.amount + this.currentSacrifice.sacrificeValue, 2, 2);
     },
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
+      this.$recompute("style");
+    });
   },
   methods: {
     update() {

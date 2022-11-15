@@ -14,10 +14,6 @@ export default {
       type: Array,
       required: true,
     },
-    isFunctional: {
-      type: Boolean,
-      required: true,
-    }
   },
   data() {
     return {
@@ -25,6 +21,7 @@ export default {
       selectedIndex: -1,
       leftmostIndex: 0,
       realityColor: "",
+      // Required in order to refresh all the options if the option to force dark backgrounds is clicked
       darkKeySwap: false,
     };
   },
@@ -33,30 +30,38 @@ export default {
       return this.isSymbol ? "symbol" : "color";
     },
     typeObject() {
-      return this.isFunctional ? GlyphTypes : CosmeticGlyphTypes;
+      return CosmeticGlyphTypes;
     },
     defaultOption() {
       if (this.realityColor) return this.realityColor;
-      return this.typeObject[this.type][`default${this.attrString.capitalize()}`];
+      return this.isSymbol
+        ? this.typeObject[this.type].defaultSymbol.symbol
+        : this.typeObject[this.type].defaultColor.border;
     },
     isCursed() {
       return this.type === "cursed";
     }
   },
   created() {
-    this.selectedIndex = this.options.indexOf(this.typeObject[this.type][this.attrString]);
+    this.updateSelected();
   },
   methods: {
     update() {
       this.isActive = player.reality.glyphs.cosmetics.active;
-      if (this.type === "reality" && !this.isSymbol) this.realityColor = getRealityColor();
+      if (this.type === "reality" && !this.isSymbol) this.realityColor = GlyphAppearanceHandler.realityColor;
       this.darkKeySwap = player.options.forceDarkGlyphs;
     },
     select(option) {
       if (!this.isActive) return;
       player.reality.glyphs.cosmetics[`${this.attrString}Map`][this.type] = option;
-      this.selectedIndex = this.options.indexOf(this.typeObject[this.type][this.attrString]);
+      this.updateSelected();
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
+    updateSelected() {
+      const selected = this.isSymbol
+        ? this.typeObject[this.type].currentSymbol.symbol
+        : this.typeObject[this.type].currentColor.border;
+      this.selectedIndex = this.options.indexOf(selected);
     },
     containerClassObject() {
       return {
@@ -75,8 +80,8 @@ export default {
     boxStyle(color) {
       if (this.isSymbol) return {};
       return {
-        background: getBaseColor(this.isCursed),
-        color: getBaseColor(!this.isCursed),
+        background: GlyphAppearanceHandler.getBaseColor(this.isCursed),
+        color: GlyphAppearanceHandler.getBaseColor(!this.isCursed),
         "box-shadow": `0 0 0.4rem 0.1rem ${color}`,
       };
     },

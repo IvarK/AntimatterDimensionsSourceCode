@@ -725,36 +725,6 @@ export function getRarity(x) {
   return GlyphRarities.find(e => x >= e.minStrength);
 }
 
-export function getColor(strength) {
-  return getRarity(strength)[(player.options.forceDarkGlyphs || Theme.current().isDark()) ? "darkColor" : "lightColor"];
-}
-
-export function getBaseColor(isInverted) {
-  const isNormallyDark = player.options.forceDarkGlyphs || Theme.current().isDark();
-  if (isInverted) return isNormallyDark ? "white" : "black";
-  return isNormallyDark ? "black" : "white";
-}
-
-// This produces a linearly interpolated color between the basic glyph colors, but with RGB channels copied and
-// hardcoded from the color data because that's probably preferable to a very hacky hex conversion method. The
-// order used is {infinity, dilation, power, replication, time, infinity, ... }. This is used in multiple places
-// and this approach is much lighter on performance due to colored keyframe animations causing significant lag.
-export function getRealityColor() {
-  // RGB values for the colors to interpolate between
-  const r = [182, 100, 34, 3, 178, 182];
-  const g = [127, 221, 170, 169, 65, 127];
-  const b = [51, 23, 72, 244, 227, 51];
-
-  // Integer and fractional parts for interpolation parameter (10s period, equal 2s per step)
-  const timer = Date.now() % 10000;
-  const i = Math.floor(timer / 2000);
-  const f = timer / 2000 - i;
-
-  return `rgb(${r[i] * (1 - f) + r[i + 1] * f},
-    ${g[i] * (1 - f) + g[i + 1] * f},
-    ${b[i] * (1 - f) + b[i + 1] * f})`;
-}
-
 export function getAdjustedGlyphLevel(glyph, realityGlyphBoost = Glyphs.levelBoost, ignoreCelestialEffects = false) {
   const level = glyph.level;
   if (!ignoreCelestialEffects) {

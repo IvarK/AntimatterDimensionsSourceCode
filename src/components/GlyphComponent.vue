@@ -115,7 +115,7 @@ export default {
       return GlyphTypes[this.glyph.type];
     },
     cosmeticConfig() {
-      return CosmeticGlyphTypes[this.glyph.cosmetic];
+      return CosmeticGlyphTypes[this.glyph.cosmetic ?? this.glyph.type];
     },
     isBlobHeart() {
       return this.$viewModel.theme === "S11" && this.glyph.type === "companion";
@@ -125,24 +125,24 @@ export default {
       // \uE019 = :blobheart:
       if (this.isBlobHeart) return "\uE019";
       if (symbol) return symbol;
-      if (this.glyph.cosmetic) return this.cosmeticConfig.symbol;
-      return this.$viewModel.theme === "S4" ? CANCER_GLYPH_SYMBOLS[this.glyph.type] : this.typeConfig.symbol;
+      return (this.$viewModel.theme === "S4" && !this.glyph.cosmetic)
+        ? CANCER_GLYPH_SYMBOLS[this.glyph.type]
+        : this.cosmeticConfig.currentSymbol.symbol;
     },
     zIndexStyle() {
       return { "z-index": this.isInModal ? 7 : 6 };
     },
-    glyphColor() {
+    overrideColor() {
       if (this.glyph.color) return this.glyph.color;
-      if (this.glyph.cosmetic) return this.cosmeticConfig.color;
+      if (this.glyph.cosmetic) return this.cosmeticConfig.currentColor.border;
       if (this.isRealityGlyph) return this.realityColor;
-      if (this.isCursedGlyph) return GlyphTypes.cursed.color;
-      if (this.isCompanionGlyph) return GlyphTypes.companion.color;
-      return getColor(this.glyph.strength);
+      return null;
+    },
+    symbolColor() {
+      return this.overrideColor ?? GlyphAppearanceHandler.getRarityColor(this.glyph.strength);
     },
     borderColor() {
-      if (this.isRealityGlyph) return this.realityColor;
-      if (this.glyph.cosmetic) return this.cosmeticConfig.color;
-      return this.glyph.color || this.typeConfig.color;
+      return this.overrideColor ?? GlyphAppearanceHandler.getBorderColor(this.glyph.type);
     },
     overStyle() {
       return {
@@ -165,16 +165,17 @@ export default {
       };
     },
     innerStyle() {
-      const color = this.glyphColor;
+      const color = this.symbolColor;
+      const preventBlur = !this.cosmeticConfig.currentSymbol.blur || this.isBlobHeart;
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
         color,
-        "text-shadow": this.isBlobHeart ? undefined : `-0.04em 0.04em 0.08em ${color}`,
+        "text-shadow": preventBlur ? undefined : `-0.04em 0.04em 0.08em ${color}`,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
-        background: this.isCursedGlyph ? getBaseColor(true) : getBaseColor(false)
+        background: GlyphAppearanceHandler.getBaseColor(this.isCursedGlyph)
       };
     },
     mouseEventHandlers() {
@@ -300,7 +301,7 @@ export default {
       this.$recompute("typeConfig");
       this.$recompute("cosmeticConfig");
       this.$recompute("innerStyle");
-      this.$recompute("glyphColor");
+      this.$recompute("overrideColor");
       this.$recompute("showGlyphEffectDots");
       this.$recompute("displayedInfo");
     });
@@ -321,7 +322,11 @@ export default {
   methods: {
     update() {
       this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value;
-      this.realityColor = GlyphTypes.reality.color;
+      // This needs to be reactive in order to animate while using our low-lag workaround, but we also need to make
+      // sure it only animates when that color is actually active
+      this.realityColor = player.reality.glyphs.cosmetics.colorMap.reality
+        ? null
+        : GlyphAppearanceHandler.realityColor;
       this.sacrificeReward = GlyphSacrificeHandler.glyphSacrificeGain(this.glyph);
       this.uncappedRefineReward = ALCHEMY_BASIC_GLYPH_TYPES.includes(this.glyph.type)
         ? GlyphSacrificeHandler.glyphRawRefinementGain(this.glyph)
@@ -490,7 +495,7 @@ export default {
         width: "0.3rem",
         height: "0.3rem",
         "border-radius": "50%",
-        background: this.glyphColor,
+        background: this.symbolColor,
         transform: `translate(${pos.dx - 0.15 * 0.3}rem, ${pos.dy - 0.15 * 0.3}rem)`,
         opacity: Theme.current().name === "S9" ? 0 : 0.8
       };

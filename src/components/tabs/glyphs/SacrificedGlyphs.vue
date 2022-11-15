@@ -84,7 +84,7 @@ export default {
       player.options.hideAlterationEffects = !player.options.hideAlterationEffects;
     },
     glyphSymbol(type) {
-      return GlyphTypes[type].symbol;
+      return CosmeticGlyphTypes[type].currentSymbol.symbol;
     }
   }
 };

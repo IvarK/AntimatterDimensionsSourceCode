@@ -38,7 +38,9 @@ export default {
         src="images/std_coin.png"
         class="o-shop-button-button__img"
       > you spent on all non-offline progress purchases.
-      <!-- TODO: Should it cost any coins? -->
+      <br>
+      <br>
+      <b class="o-warning">You will not be able to respec again unless you purchase more STD coins.</b>
     </div>
   </ModalWrapperChoice>
 </template>
@@ -51,5 +53,9 @@ export default {
 .o-shop-button-button__img {
   height: 2.5rem;
   vertical-align: middle;
+}
+
+.o-warning {
+  color: var(--color-infinity);
 }
 </style>

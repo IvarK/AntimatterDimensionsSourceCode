@@ -7,8 +7,6 @@ import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/
 import { initializeApp } from "firebase/app";
 import { sha512_256 } from "js-sha512";
 
-import Payments from "../payments";
-
 import { decodeBase64Binary } from "./base64-binary";
 import { ProgressChecker } from "./progress-checker";
 

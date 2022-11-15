@@ -21,6 +21,7 @@ shop.init = function() {
 export const ShopPurchaseData = {
   totalSTD: 0,
   spentSTD: 0,
+  respecAvailable: false,
 
   get availableSTD() {
     return this.totalSTD - this.spentSTD;
@@ -30,15 +31,23 @@ export const ShopPurchaseData = {
     return Cloud.loggedIn && this.availableSTD >= 0 && player.IAP.enabled;
   },
 
+  updateLocalSTD(newData) {
+    this.totalSTD = newData.totalSTD;
+    this.spentSTD = newData.spentSTD;
+    this.respecAvailable = newData.respecAvailable;
+    for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = newData[key] ?? 0;
+    GameStorage.save();
+  },
+
   // Reads STD props from the cloud and sets local cached values with the result
   async syncSTD(showNotification = true, fetchedData = undefined) {
     if (!Cloud.loggedIn) return;
-    let statusRes, newSTDData;
+    let newSTDData;
     if (fetchedData) {
       newSTDData = fetchedData;
     } else {
       try {
-        statusRes = await fetch(`${STD_BACKEND_URL}/STDData?user=${Cloud.user.id}`);
+        const statusRes = await fetch(`${STD_BACKEND_URL}/STDData?user=${Cloud.user.id}`);
         newSTDData = await statusRes.json();
       } catch (e) {
         GameUI.notify.error("Could not sync STD purchases!", 10000);
@@ -46,29 +55,42 @@ export const ShopPurchaseData = {
       }
     }
     if (showNotification) GameUI.notify.info("STD purchases successfully loaded!", 10000);
-
-    // Update the local cache
-    this.totalSTD = newSTDData.totalSTD;
-    this.spentSTD = newSTDData.spentSTD;
-    for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = newSTDData[key] ?? 0;
-    GameStorage.save();
+    this.updateLocalSTD(newSTDData);
   },
 
   respecRequest() {
-    if (player.options.confirmations.respecIAP) {
+    if (!Cloud.loggedIn) {
+      Modal.message.show(`You are not logged in to Google, anything on this tab cannot be used unless you log in.`);
+    } else if (player.options.confirmations.respecIAP) {
       Modal.respecIAP.show();
     } else {
-      ShopPurchase.respecAll();
+      this.respecAll();
     }
   },
 
-  respecAll() {
-    for (const purchase of ShopPurchase.all) {
-      // TODO also firebase stuff
-      if (purchase.config.singleUse) continue;
-      this.spentSTD -= purchase.purchases * purchase.cost;
-      purchase.purchases = 0;
+  async respecAll() {
+    if (!this.respecAvailable) {
+      Modal.message.show(`You do not have a respec available. Making an STD purchase allows you to respec your upgrades
+        once. You can only have at most one of these respecs, and they do not refund offline production purchases.`);
+      return;
     }
+    let res;
+    try {
+      res = await fetch(`${STD_BACKEND_URL}/respec`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ user: Cloud.user.id })
+      });
+    } catch (e) {
+      GameUI.notify.error("Unable to respec STD purchases!", 10000);
+      return;
+    }
+    const stdData = await res.json();
+    if (stdData.success) GameUI.notify.info("STD respec successful!", 10000);
+    else GameUI.notify.error("No purchases to respec!", 10000);
+    this.updateLocalSTD(stdData.data);
   },
 };
 

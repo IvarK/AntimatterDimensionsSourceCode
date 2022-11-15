@@ -54,7 +54,7 @@ export const ShopPurchaseData = {
         return;
       }
     }
-    if (showNotification) GameUI.notify.info("STD purchases successfully loaded!", 10000);
+    if (showNotification && newSTDData.totalSTD > 0) GameUI.notify.info("STD purchases successfully loaded!", 10000);
     this.updateLocalSTD(newSTDData);
   },
 

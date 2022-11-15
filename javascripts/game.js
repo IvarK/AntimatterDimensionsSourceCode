@@ -723,11 +723,31 @@ function laitelaRealityTick(realDiff) {
     }
     if (Laitela.realityReward > oldInfo.realityReward) {
       completionText += `<br><br>Dark Matter Multiplier: ${formatX(oldInfo.realityReward, 2, 2)}
-        ➜ ${formatX(Laitela.realityReward, 2, 2)}
-        <br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
-        (${formatInt(8 - oldInfo.difficultyTier)}) ➜
-        ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
-        (${formatInt(8 - laitelaInfo.difficultyTier)})`;
+      ➜ ${formatX(Laitela.realityReward, 2, 2)}`;
+      if (oldInfo.fastestCompletion === 3600 || oldInfo.fastestCompletion === 300 && oldInfo.difficultyTier > 0) {
+        if (Time.thisRealityRealTime.totalSeconds < 30) {
+          // First attempt - destabilising
+          completionText += `<br>Best Completion Time: None ➜ Destabilized
+          <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)} ➜
+          ${formatInt(8 - laitelaInfo.difficultyTier)}`;
+        } else {
+          // First attempt - not destabilising
+          completionText += `<br>Best Completion Time: None ➜
+            ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
+            <br>Highest Active Dimension: ${formatInt(8 - laitelaInfo.difficultyTier)}`;
+        }
+      } else if (Time.thisRealityRealTime.totalSeconds < 30) {
+        // Second+ attempt - destabilising
+        completionText += `<br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
+          ➜ Destablized
+          <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)} ➜
+          ${formatInt(8 - laitelaInfo.difficultyTier)}`;
+      } else {
+        // Second+ attempt - not destabilising
+        completionText += `<br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
+        ➜ ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
+        <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)}`;
+      }
       player.records.bestReality.laitelaSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     } else {
       completionText += ` You need to destabilize in faster than

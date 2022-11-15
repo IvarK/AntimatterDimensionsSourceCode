@@ -1813,8 +1813,8 @@ GameDatabase.celestials.navigation = {
     complete: () => {
       if (Pelle.isUnlocked) return 1;
       const imCost = Math.clampMax(emphasizeEnd(Math.log10(Currency.imaginaryMachines.value) / Math.log10(1.6e15)), 1);
-      let laitelaProgress = Laitela.isRunning ? Currency.eternityPoints.value.log10() / 4000 : 0;
-      if (Laitela.difficultyTier !== 8) laitelaProgress = 0;
+      let laitelaProgress = Laitela.isRunning ? Math.min(Currency.eternityPoints.value.log10() / 4000, 0.99) : 0;
+      if (Laitela.difficultyTier !== 8 || Glyphs.activeList.length > 1) laitelaProgress = 0;
       else if (ImaginaryUpgrade(25).isAvailableForPurchase) laitelaProgress = 1;
       return (imCost + laitelaProgress) / 2;
     },
@@ -1835,7 +1835,7 @@ GameDatabase.celestials.navigation = {
             ];
           }
           let laitelaString = `${format(Currency.eternityPoints.value)} / ${format("1e4000")} EP`;
-          if (!Laitela.isRunning || Laitela.difficultyTier !== 8) {
+          if (!Laitela.isRunning || Laitela.difficultyTier !== 8 || Glyphs.activeList.length > 1) {
             laitelaString = "Lai'tela's Reality is still intact";
           } else if (ImaginaryUpgrade(25).isAvailableForPurchase) {
             laitelaString = "Lai'tela's Reality has been destroyed";
@@ -1888,8 +1888,8 @@ GameDatabase.celestials.navigation = {
             Achievements.prePelleRows.length];
           const alchemy = [AlchemyResources.all.countWhere(r => r.capped), AlchemyResources.all.length];
           return [
-            `Complete ${formatInt(achievements[0])} / ${formatInt(achievements[1])} rows of achievements`,
-            `Fill ${formatInt(alchemy[0])} / ${formatInt(alchemy[1])} alchemy resources`,
+            `Complete ${formatInt(achievements[0])} / ${formatInt(achievements[1])} rows of Achievements`,
+            `Fill ${formatInt(alchemy[0])} / ${formatInt(alchemy[1])} Alchemy Resources`,
           ];
         },
         angle: 290,

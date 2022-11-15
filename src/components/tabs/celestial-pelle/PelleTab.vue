@@ -93,13 +93,13 @@ export default {
       v-else
       class="pelle-unlock-requirements"
     >
-      You must have {{ formatInt(totalRows) }} rows of achievements
-      and all of your Glyph Alchemy resources capped to unlock Pelle.
+      You must have {{ formatInt(totalRows) }} rows of Achievements
+      and all of your Glyph Alchemy Resources capped to unlock Pelle, Celestial of Antimatter.
       <br>
       <br>
-      {{ formatInt(completedRows) }} / {{ formatInt(totalRows) }} Achievement rows
+      {{ formatInt(completedRows) }} / {{ formatInt(totalRows) }} Achievement rows completed
       <br>
-      {{ formatInt(cappedResources) }} / {{ formatInt(totalAlchemyResources) }} Capped resources
+      {{ formatInt(cappedResources) }} / {{ formatInt(totalAlchemyResources) }} capped Alchemy Resources
     </div>
   </div>
 </template>
@@ -148,7 +148,7 @@ export default {
 .pelle-unlock-requirements {
   width: 50rem;
   padding: 0.5rem;
-  font-size: 3rem;
+  font-size: 2.4rem;
   color: var(--color-pelle--base);
   background: black;
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);

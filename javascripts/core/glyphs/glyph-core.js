@@ -232,13 +232,10 @@ export const Glyphs = {
     return this.active[activeIndex];
   },
   equip(glyph, targetSlot) {
-    const pelleMaxGlyphs = 1;
-    const glyphsEquipped = Glyphs.active.filter(Boolean).length;
     if (
       Pelle.isDoomed &&
       (
         Pelle.isDisabled("glyphs") ||
-        glyphsEquipped >= pelleMaxGlyphs ||
         ["effarig", "reality", "cursed"].includes(glyph.type)
       )
     ) return;

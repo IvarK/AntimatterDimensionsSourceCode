@@ -14,11 +14,13 @@ export default {
       realityReward: 1,
       singularitiesUnlocked: false,
       bestSet: [],
+      tierNotCompleted: true,
     };
   },
   computed: {
     completionTime() {
-      return TimeSpan.fromSeconds(this.realityTime).toStringShort();
+      if (this.tierNotCompleted) return "Not completed at this tier";
+      return `Fastest Completion: ${TimeSpan.fromSeconds(this.realityTime).toStringShort()}`;
     },
     runEffects() {
       return GameDatabase.celestials.descriptions[5].effects().split("\n");
@@ -36,6 +38,7 @@ export default {
       this.isRunning = Laitela.isRunning;
       this.singularitiesUnlocked = Currency.singularities.gt(0);
       this.bestSet = Glyphs.copyForRecords(player.records.bestReality.laitelaSet);
+      this.tierNotCompleted = this.realityTime === 3600 || (this.realityTime === 300 && this.maxDimTier < 8);
     },
     startRun() {
       if (this.isDoomed) return;
@@ -74,7 +77,7 @@ export default {
       </b>
       <span v-if="maxDimTier > 0">
         <br><br>
-        Fastest Completion: {{ completionTime }}
+        {{ completionTime }}
         <br><br>
         <span v-if="maxDimTier <= 7">
           Highest active dimension: {{ formatInt(maxDimTier) }}

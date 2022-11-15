@@ -53,6 +53,7 @@ export default {
       Glyphs.harshAutoClean();
       for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
       Glyphs.refreshActive();
+      player.options.confirmations.glyphReplace = true;
       player.celestials.pelle.doomed = true;
       Pelle.armageddon(false);
       respecTimeStudies(true);
@@ -96,7 +97,8 @@ export default {
     >
       Dooming your Reality will reset everything except Challenge records, Celestial progress and anything under
       the General and Reality header on the Statistics tab. You will not gain any rewards from your progress
-      in your current Reality. Dooming your Reality will also disable certain game mechanics.
+      in your current Reality. Dooming your Reality will also purge most of your unprotected Glyphs and disable
+      certain game mechanics.
       <br>
       <br>
       Are you sure you want to do this?

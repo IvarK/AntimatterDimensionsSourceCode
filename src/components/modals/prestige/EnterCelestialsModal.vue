@@ -20,6 +20,7 @@ export default {
   },
   data() {
     return {
+      laitelaFastest: 3600,
       teresaBestAM: new Decimal(),
       teresaRunMult: 0,
       effarigDone: false,
@@ -75,8 +76,8 @@ export default {
       this.effarigDone = effarigStage === EFFARIG_STAGES.COMPLETED;
       this.effarigLayer = [null, "Infinity", "Eternity", "Reality"][effarigStage];
       this.enslavedDone = Enslaved.isCompleted;
-      const laitelaFastest = player.celestials.laitela.fastestCompletion;
-      this.laitelaTime = TimeSpan.fromSeconds(laitelaFastest).toStringShort();
+      this.laitelaFastest = player.celestials.laitela.fastestCompletion;
+      this.laitelaTime = TimeSpan.fromSeconds(this.laitelaFastest).toStringShort();
     },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));

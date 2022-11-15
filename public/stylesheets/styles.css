@@ -4194,7 +4194,6 @@ br {
 
 .t-s6 .o-autobuyer-toggle-checkbox__label,
 .t-s10 .o-autobuyer-toggle-checkbox__label {
-  border-color: #cccccc;
   border-color: var(--color-text);
 }
 

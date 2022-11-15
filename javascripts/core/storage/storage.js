@@ -1,7 +1,5 @@
 import * as ADNotations from "@antimatter-dimensions/notations";
 
-import Payments from "../payments";
-
 import { deepmergeAll } from "@/utility/deepmerge";
 
 export const GameStorage = {

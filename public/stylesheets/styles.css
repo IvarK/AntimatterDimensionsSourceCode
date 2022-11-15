@@ -330,7 +330,6 @@ button:focus {
 }
 
 .c-tooltip-content {
-  content: attr(ach-tooltip);
   width: 16rem;
   position: absolute;
   z-index: 4;
@@ -1602,16 +1601,16 @@ br {
 }
 
 .o-primary-btn--dimboost {
-  position: relative;
   width: 21rem;
   height: 4.5rem;
+  position: relative;
   font-size: 0.9rem;
 }
 
 .o-primary-btn--galaxy {
-  position: relative;
   width: 21rem;
   height: 4.5rem;
+  position: relative;
   font-size: 0.9rem;
 }
 
@@ -2306,8 +2305,8 @@ br {
   align-items: center;
   font-size: 1.2rem;
   font-weight: bold;
-  margin: 0.5rem;
   color: var(--color-text);
+  margin: 0.5rem;
 }
 
 .l-game-header__buttons-line {
@@ -4191,11 +4190,6 @@ br {
 
 .t-s1 .o-autobuyer-toggle-checkbox__label-modal {
   border-color: var(--color-text);
-}
-
-.t-s6 .o-autobuyer-toggle-checkbox__label,
-.t-s10 .o-autobuyer-toggle-checkbox__label {
-  border-color: #cccccc;
 }
 
 .t-s6 .o-autobuyer-toggle-checkbox__label,
@@ -7638,8 +7632,8 @@ kbd {
   left: 50%;
   z-index: 0;
   border-top: 0 solid black;
-  border-right: var(--var-border-width, 0.7rem) solid transparent;
-  border-left: var(--var-border-width, 0.7rem) solid transparent;
+  border-right: 0.7rem solid transparent;
+  border-left: 0.7rem solid transparent;
   margin-bottom: 0;
   margin-left: -0.7rem;
   transition-duration: 0.3s;

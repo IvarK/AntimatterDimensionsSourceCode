@@ -60,7 +60,7 @@ export default {
     updateSelected() {
       const selected = this.isSymbol
         ? this.typeObject[this.type].currentSymbol.symbol
-        : this.typeObject[this.type].currentColor.border;
+        : this.typeObject[this.type].currentColor.str;
       this.selectedIndex = this.options.indexOf(selected);
     },
     containerClassObject() {
@@ -79,10 +79,11 @@ export default {
     },
     boxStyle(color) {
       if (this.isSymbol) return {};
+      const colorProps = GlyphAppearanceHandler.getColorProps(color);
       return {
-        background: GlyphAppearanceHandler.getBaseColor(this.isCursed),
-        color: GlyphAppearanceHandler.getBaseColor(!this.isCursed),
-        "box-shadow": `0 0 0.4rem 0.1rem ${color}`,
+        background: colorProps.bg,
+        color: this.invertBW(colorProps.bg),
+        "box-shadow": `0 0 0.4rem 0.1rem ${colorProps.border}`,
       };
     },
     windowStyle() {
@@ -111,6 +112,9 @@ export default {
     optionChar(option) {
       if (this.isSymbol) return option;
       return this.options.indexOf(option) === this.selectedIndex ? "✓" : "";
+    },
+    invertBW(color) {
+      return color === "black" ? "white" : "black";
     }
   }
 };

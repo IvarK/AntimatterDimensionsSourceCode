@@ -4,20 +4,6 @@ import Payments from "./payments";
 
 export const shop = {};
 
-shop.kongEnabled = false;
-
-shop.init = function() {
-  if (document.referrer.indexOf("kongregate") === -1)
-    return;
-  shop.kongEnabled = true;
-  try {
-    kongregateAPI.loadAPI(() => {
-      window.kongregate = kongregateAPI.getAPI();
-    });
-    // eslint-disable-next-line no-console
-  } catch (err) { console.log("Couldn't load Kongregate API"); }
-};
-
 export const ShopPurchaseData = {
   totalSTD: 0,
   spentSTD: 0,
@@ -180,46 +166,4 @@ shop.purchaseTimeSkip = function() {
 shop.purchaseLongerTimeSkip = function() {
   Speedrun.setSTDUse(true);
   simulateTime(3600 * 24);
-};
-
-shop.migratePurchases = function() {
-  if (!shop.kongEnabled) return;
-  try {
-    kongregate.mtx.requestUserItemList("", items);
-    // eslint-disable-next-line no-console
-  } catch (e) { console.log(e); }
-
-  function items(result) {
-    let ipPurchases = 0;
-    let dimPurchases = 0;
-    let epPurchases = 0;
-    let alldimPurchases = 0;
-    for (const item of result.data) {
-      if (item.identifier === "doublemult") {
-        player.IAP.totalSTD += 30;
-        player.IAP.spentSTD += 30;
-        dimPurchases++;
-      }
-      if (item.identifier === "doubleip") {
-        player.IAP.totalSTD += 40;
-        player.IAP.spentSTD += 40;
-        ipPurchases++;
-      }
-      if (item.identifier === "tripleep") {
-        player.IAP.totalSTD += 50;
-        player.IAP.spentSTD += 50;
-        epPurchases++;
-      }
-      if (item.identifier === "alldimboost") {
-        player.IAP.totalSTD += 60;
-        player.IAP.spentSTD += 60;
-        alldimPurchases++;
-      }
-
-    }
-    player.IAP.dimPurchases = dimPurchases;
-    player.IAP.allDimPurchases = alldimPurchases;
-    player.IAP.IPPurchases = ipPurchases;
-    player.IAP.EPPurchases = epPurchases;
-  }
 };

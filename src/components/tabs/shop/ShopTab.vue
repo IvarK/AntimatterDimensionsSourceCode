@@ -24,6 +24,7 @@ export default {
       creditsClosed: false,
       loggedIn: false,
       username: "",
+      respecAvailable: false,
     };
   },
   computed: {
@@ -33,6 +34,11 @@ export default {
     enableText() {
       return `In-app Purchases: ${this.IAPsEnabled ? "Enabled" : "Disabled"}`;
     },
+    respecText() {
+      if (!this.loggedIn) return "Not logged in!";
+      if (!this.respecAvailable) return "No respec available! (Purchase STDs to gain a respec)";
+      return null;
+    }
   },
   methods: {
     update() {
@@ -43,6 +49,7 @@ export default {
       this.creditsClosed = GameEnd.creditsEverClosed;
       this.loggedIn = Cloud.loggedIn;
       this.username = Cloud.user?.displayName;
+      this.respecAvailable = ShopPurchaseData.respecAvailable;
     },
     showStore() {
       if (this.creditsClosed) return;
@@ -54,13 +61,20 @@ export default {
       Payments.cancelPurchase(false);
     },
     respec() {
-      if (this.creditsClosed) return;
+      if (this.creditsClosed || !this.loggedIn || !this.respecAvailable) return;
       ShopPurchaseData.respecRequest();
     },
     toggleEnable() {
       if (ShopPurchaseData.availableSTD < 0) return;
       if (!player.IAP.enabled && this.spentSTD > 0) Speedrun.setSTDUse(true);
       player.IAP.enabled = !player.IAP.enabled;
+    },
+    respecClass() {
+      return {
+        "o-primary-btn--subtab-option": true,
+        "o-pelle-disabled-pointer": this.creditsClosed,
+        "o-primary-btn--disabled": !this.loggedIn || !this.respecAvailable
+      };
     }
   },
 };
@@ -86,8 +100,8 @@ export default {
         {{ enableText }}
       </PrimaryButton>
       <PrimaryButton
-        class="o-primary-btn--subtab-option"
-        :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+        v-tooltip="respecText"
+        :class="respecClass()"
         @click="respec()"
       >
         Respec Shop

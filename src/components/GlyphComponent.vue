@@ -175,7 +175,7 @@ export default {
         "text-shadow": preventBlur ? undefined : `-0.04em 0.04em 0.08em ${color}`,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
-        background: GlyphAppearanceHandler.getBaseColor(this.isCursedGlyph)
+        background: this.cosmeticConfig.currentColor.bg
       };
     },
     mouseEventHandlers() {

@@ -32,7 +32,6 @@ export default {
         // This is just a dummy string to make sure that GlyphComponent doesn't throw errors; only the cosmetic aspects
         // will end up being visible in this case anyway (as they override anything type would otherwise show)
         type: "power",
-        strength: player.records.bestReality.glyphStrength,
         cosmetic: this.type,
       };
     },

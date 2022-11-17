@@ -17,6 +17,8 @@ export const NG = {
     const automatorConstants = JSON.stringify(player.reality.automator.constants);
     const automatorScripts = JSON.stringify(player.reality.automator.scripts);
     const fullCompletions = player.records.fullGameCompletions;
+    GlyphAppearanceHandler.unlockSet();
+    const cosmeticSets = JSON.stringify(player.reality.glyphs.cosmetics.availableSets);
     Modal.hideAll();
     Quote.clearAll();
     GameStorage.hardReset();
@@ -28,6 +30,7 @@ export const NG = {
     player.records.fullGameCompletions = fullCompletions + 1;
     ui.view.newUI = player.options.newUI;
     ui.view.news = player.options.news.enabled;
+    player.reality.glyphs.cosmetics.availableSets = JSON.parse(cosmeticSets);
     Themes.find(Theme.currentName()).set();
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
     ADNotations.Settings.exponentCommas.show = player.options.commas;

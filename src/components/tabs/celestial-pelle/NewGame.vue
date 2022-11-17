@@ -11,7 +11,8 @@ export default {
     style() {
       return {
         opacity: this.opacity,
-        visibility: this.visible ? "visible" : "hidden"
+        visibility: this.visible ? "visible" : "hidden",
+        hasMoreCosmetics: false,
       };
     }
   },
@@ -19,6 +20,7 @@ export default {
     update() {
       this.visible = GameEnd.endState > END_STATE_MARKERS.SHOW_NEW_GAME && !GameEnd.removeAdditionalEnd;
       this.opacity = (GameEnd.endState - END_STATE_MARKERS.SHOW_NEW_GAME) * 2;
+      this.hasMoreCosmetics = GlyphAppearanceHandler.lockedSets.length > 0;
     },
     startNewGame() {
       NG.startNewGame();
@@ -33,7 +35,7 @@ export default {
     :style="style"
   >
     <h2>
-      Reset the entire game, but keep Automator Scripts, Secret Themes, Secret Achievements, and Options
+      Reset the entire game, but keep Automator Scripts, Secret Themes, Secret Achievements, and Options.
     </h2>
     <h3>You can use the button in the top-right to view the game as it is right now.</h3>
     <div class="c-new-game-button-container">
@@ -44,6 +46,18 @@ export default {
         Start over?
       </button>
     </div>
+    <br>
+    <h3 v-if="hasMoreCosmetics">
+      Upon restarting the game, you will also unlock a random new cosmetic set for your Glyphs. These are freely
+      modifiable once you reach Reality again, but are purely visual and offer no gameplay bonuses.
+    </h3>
+    <h3 v-else>
+      You have unlocked all Glyph cosmetic sets!
+    </h3>
+    <br>
+    <h3>
+      You can also import "speedrun" to start the game again with additional tracking for speedrunning purposes.
+    </h3>
   </div>
 </template>
 

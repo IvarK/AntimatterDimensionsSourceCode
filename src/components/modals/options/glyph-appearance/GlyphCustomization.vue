@@ -1,4 +1,5 @@
 <script>
+import GlyphComponent from "@/components/GlyphComponent";
 import GlyphCustomizationSingle from "@/components/modals/options/glyph-appearance/GlyphCustomizationSingle";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
@@ -8,18 +9,29 @@ export default {
   components: {
     GlyphCustomizationSingle,
     PrimaryButton,
-    PrimaryToggleButton
+    PrimaryToggleButton,
+    GlyphComponent
   },
   data() {
     return {
       enabled: false,
+      // This is here to force a re-render if the appearance is set to the default values
       defaultKeySwap: false,
+      selectedIndex: 0,
     };
   },
   computed: {
     cosmeticTypes() {
       return CosmeticGlyphTypes.list.filter(t => t._canCustomize).map(t => t.id);
-    }
+    },
+    glyphIconProps() {
+      return {
+        size: "2.5rem",
+        "glow-blur": "0.3rem",
+        "glow-spread": "0.1rem",
+        "text-proportion": 0.7
+      };
+    },
   },
   watch: {
     enabled(newValue) {
@@ -32,11 +44,37 @@ export default {
       this.enabled = player.reality.glyphs.cosmetics.active;
       this.defaultKeySwap = true;
     },
-    resetSettings() {
-      player.reality.glyphs.cosmetics.symbolMap = {};
-      player.reality.glyphs.cosmetics.colorMap = {};
+    resetAll() {
+      const cosmetics = player.reality.glyphs.cosmetics;
+      cosmetics.symbolMap = {};
+      cosmetics.colorMap = {};
       this.defaultKeySwap = false;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
+    resetSingle() {
+      const cosmetics = player.reality.glyphs.cosmetics;
+      const currType = this.cosmeticTypes[this.selectedIndex];
+      cosmetics.symbolMap[currType] = undefined;
+      cosmetics.colorMap[currType] = undefined;
+      this.defaultKeySwap = false;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
+    fakeGlyph(type) {
+      return {
+        // This are just dummy values to make sure that GlyphComponent doesn't throw errors; only the cosmetic aspects
+        // will end up being visible in this case anyway (as they override anything type would otherwise show)
+        type: "power",
+        strength: 1,
+        cosmetic: type,
+      };
+    },
+    typeClass(index) {
+      return {
+        "c-single-type": true,
+        "o-disabled-cosmetics": !this.enabled,
+        "c-type-current": this.selectedIndex === index,
+        "c-type-other": this.selectedIndex !== index,
+      };
     }
   }
 };
@@ -45,12 +83,6 @@ export default {
 <template>
   <div class="c-glyph-customization-group">
     <b>Custom Glyph Appearance</b>
-    <PrimaryButton
-      class="o-primary-btn--subtab-option"
-      @click="resetSettings"
-    >
-      Reset to Default
-    </PrimaryButton>
     <PrimaryToggleButton
       v-model="enabled"
       class="o-primary-btn--subtab-option"
@@ -58,16 +90,42 @@ export default {
       off="Disabled"
     />
     <br>
-    <div
-      v-for="type in cosmeticTypes"
-      :key="type"
+    <PrimaryButton
+      class="o-primary-btn--subtab-option"
+      :class="{ 'o-primary-btn--disabled' : !enabled }"
+      @click="resetAll"
     >
-      <GlyphCustomizationSingle
-        :key="enabled + defaultKeySwap"
-        :type="type"
-      />
+      Reset All to Default
+    </PrimaryButton>
+    <PrimaryButton
+      class="o-primary-btn--subtab-option"
+      :class="{ 'o-primary-btn--disabled' : !enabled }"
+      @click="resetSingle"
+    >
+      Reset this type to Default
+    </PrimaryButton>
+    <br>
+    Glyph Type:
+    <br>
+    <div class="c-type-selection">
+      <div
+        v-for="(type, index) in cosmeticTypes"
+        :key="type"
+        :class="typeClass(index)"
+        @click="selectedIndex = index"
+      >
+        <GlyphComponent
+          v-tooltip="type.capitalize()"
+          v-bind="glyphIconProps"
+          :glyph="fakeGlyph(type)"
+        />
+      </div>
     </div>
-    Note: Certain color choices may cause very poor color contrast in other visual parts of the game.
+    <GlyphCustomizationSingle
+      :key="selectedIndex + enabled + defaultKeySwap"
+      :type="cosmeticTypes[selectedIndex]"
+    />
+    Note: Some options may cause very poor color contrast or readability on certain themes.
   </div>
 </template>
 
@@ -76,5 +134,29 @@ export default {
   width: 100%;
   margin-top: 0.5rem;
   text-align: left;
+}
+
+.c-type-selection {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.o-disabled-cosmetics {
+  opacity: 0.5;
+}
+
+.c-single-type {
+  padding: 0.5rem;
+}
+
+.c-type-current {
+  border: 0.1rem solid var(--color-text);
+}
+
+.c-type-other {
+  padding: 0.6rem;
 }
 </style>

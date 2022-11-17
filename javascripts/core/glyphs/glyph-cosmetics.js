@@ -86,32 +86,38 @@ export const GlyphAppearanceHandler = {
   get availableSymbols() {
     return Object.values(GameDatabase.reality.glyphCosmeticSets)
       .filter(s => player.reality.glyphs.cosmetics.availableSets.includes(s.id))
-      .flatMap(s => s.symbol);
+      .map(s => s.symbol)
+      .filter(s => s);
   },
   // Sort the colors by hue, otherwise finding specific colors would be a mess for UX.
-  // However, colors "close enough to grayscale" are sorted separately and first
+  // However, colors "close enough to grayscale" are sorted separately and first and all black BGs are placed
+  // before all white BGs
   get availableColors() {
     return Object.values(GameDatabase.reality.glyphCosmeticSets)
       .filter(s => player.reality.glyphs.cosmetics.availableSets.includes(s.id))
       .flatMap(s => s.color)
       .sort((a, b) => {
         const getHue = hex => {
-          const str = hex.split("#")[1];
+          const parts = hex.split("#");
+          const bg = parts[0] === "B" ? 0 : 10;
+          const color = parts[1];
           const rgb = [
-            parseInt(str.substring(0, 2), 16) / 255,
-            parseInt(str.substring(2, 4), 16) / 255,
-            parseInt(str.substring(4), 16) / 255
+            parseInt(color.substring(0, 2), 16) / 255,
+            parseInt(color.substring(2, 4), 16) / 255,
+            parseInt(color.substring(4), 16) / 255
           ];
           const min = Math.min(...rgb), max = Math.max(...rgb);
-          if (max - min < 0.1) return max;
+          if (max - min < 0.1) return max + bg;
           let rawHue;
           if (rgb[0] === max) rawHue = (rgb[1] - rgb[2]) / (max - min);
           else if (rgb[1] === max) rawHue = 2 + (rgb[2] - rgb[1]) / (max - min);
           else rawHue = 4 + (rgb[0] - rgb[1]) / (max - min);
-          return 1 + ((rawHue + 6) % 6);
+          return 1 + ((rawHue + 6) % 6) + bg;
         };
         return getHue(a) - getHue(b);
-      });
+      })
+      .filter(c => c)
+      .map(c => [c]);
   },
 
   getBorderColor(type) {

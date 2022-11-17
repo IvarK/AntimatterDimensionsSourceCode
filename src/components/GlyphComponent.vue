@@ -139,7 +139,10 @@ export default {
       return null;
     },
     symbolColor() {
-      return this.overrideColor ?? GlyphAppearanceHandler.getRarityColor(this.glyph.strength);
+      const defaultColor = this.cosmeticConfig.ignoreRarityColor
+        ? GlyphAppearanceHandler.getBorderColor(this.glyph.type)
+        : GlyphAppearanceHandler.getRarityColor(this.glyph.strength);
+      return this.overrideColor ?? defaultColor;
     },
     borderColor() {
       return this.overrideColor ?? GlyphAppearanceHandler.getBorderColor(this.glyph.type);

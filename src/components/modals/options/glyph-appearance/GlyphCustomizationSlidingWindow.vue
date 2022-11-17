@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       isActive: false,
-      selectedIndex: -1,
+      selected: "",
       leftmostIndex: 0,
       realityColor: "",
       // Required in order to refresh all the options if the option to force dark backgrounds is clicked
@@ -38,8 +38,12 @@ export default {
         ? this.typeObject[this.type].defaultSymbol.symbol
         : this.typeObject[this.type].defaultColor.border;
     },
-    isCursed() {
-      return this.type === "cursed";
+    canScroll() {
+      return this.options.length > this.windowSize;
+    },
+    // Maximum number of options visible at one time, used to determine scrolling bounds
+    windowSize() {
+      return 17;
     }
   },
   created() {
@@ -58,10 +62,10 @@ export default {
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
     updateSelected() {
-      const selected = this.isSymbol
+      const option = this.isSymbol
         ? this.typeObject[this.type].currentSymbol.symbol
         : this.typeObject[this.type].currentColor.str;
-      this.selectedIndex = this.options.indexOf(selected);
+      this.selected = option;
     },
     containerClassObject() {
       return {
@@ -74,11 +78,11 @@ export default {
         "o-symbol": this.isSymbol,
         "o-color": !this.isSymbol,
         "o-clickable": this.isActive,
-        "o-option--inactive": this.isSymbol && this.options.indexOf(option) !== this.selectedIndex,
+        "o-option--inactive": this.isSymbol && option !== this.selected,
       };
     },
     boxStyle(color) {
-      if (this.isSymbol) return {};
+      if (this.isSymbol || !color) return {};
       const colorProps = GlyphAppearanceHandler.getColorProps(color);
       return {
         background: colorProps.bg,
@@ -95,23 +99,22 @@ export default {
     leftClass() {
       return {
         "o-arrow o-arrow--left": true,
-        "o-arrow--disabled": this.leftmostIndex === 0,
-        "o-arrow--highlight": this.selectedIndex < this.leftmostIndex && this.selectedIndex !== -1,
+        "o-arrow--disabled": this.leftmostIndex === 0 || !this.canScroll,
       };
     },
     rightClass() {
       return {
         "o-arrow o-arrow--right": true,
-        "o-arrow--disabled": this.leftmostIndex === this.options.length - 4,
-        "o-arrow--highlight": this.selectedIndex >= this.leftmostIndex + 4,
+        "o-arrow--disabled": this.leftmostIndex === this.options.length - this.windowSize || !this.canScroll,
       };
     },
     slideWindow(dir) {
-      this.leftmostIndex = Math.clamp(this.leftmostIndex + dir, 0, this.options.length - 4);
+      if (!this.canScroll) return;
+      this.leftmostIndex = Math.clamp(this.leftmostIndex + dir, 0, this.options.length - this.windowSize);
     },
     optionChar(option) {
       if (this.isSymbol) return option;
-      return this.options.indexOf(option) === this.selectedIndex ? "✓" : "";
+      return (option === this.selected || (!this.selected && option === this.defaultOption)) ? "✓" : "";
     },
     invertBW(color) {
       return color === "black" ? "white" : "black";
@@ -135,13 +138,13 @@ export default {
     <div class="c-extra-options">
       <div
         :class="leftClass()"
-        @click="slideWindow(-2)"
+        @click="slideWindow(-5)"
       >
         ⇐
       </div>
       <div
         :class="rightClass()"
-        @click="slideWindow(2)"
+        @click="slideWindow(5)"
       >
         ⇒
       </div>
@@ -150,13 +153,20 @@ export default {
         :style="windowStyle()"
       >
         <div
-          v-for="option in options"
-          :key="option + darkKeySwap"
-          :class="symbolClassObject(option)"
-          :style="boxStyle(option)"
-          @click="select(option)"
+          v-for="set in options"
+          :key="set[0] + set[1]"
         >
-          {{ optionChar(option) }}
+          <div class="c-single-set">
+            <div
+              v-for="singleOption in set"
+              :key="singleOption"
+              :class="symbolClassObject(singleOption)"
+              :style="boxStyle(singleOption)"
+              @click="select(singleOption)"
+            >
+              {{ optionChar(singleOption) }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -165,36 +175,28 @@ export default {
 
 <style scoped>
 .c-all-options {
-  position: relative;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  margin: 0 0.5rem;
-  width: 38%;
+  margin: 0.5rem;
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);
-  overflow: hidden;
-}
-
-.c-disabled-overlay {
-  opacity: 0.5;
-  color: var(--color-disabled);
 }
 
 .c-extra-options {
   position: relative;
   display: flex;
   flex-direction: row;
-  align-items: center;
   width: 100%;
   height: 100%;
   overflow: hidden;
+  border-width: 0.1rem;
+  border-left-style: dashed;
+  border-color: var(--color-text);
 }
 
 .c-sliding-window {
   display: flex;
   flex-direction: row;
-  align-items: center;
 }
 
 .o-option--inactive {
@@ -204,8 +206,8 @@ export default {
 .o-arrow {
   position: absolute;
   display: flex;
-  flex-direction: row;
   align-items: center;
+  height: 100%;
   padding: 0.3rem;
   z-index: 1;
   background: var(--color-good);
@@ -221,10 +223,7 @@ export default {
 
 .o-arrow--right {
   right: 0;
-}
-
-.o-arrow--highlight {
-  text-shadow: 0 0 0.4rem var(--color-text);
+  border-radius: 0 var(--var-border-radius, 0.5rem) var(--var-border-radius, 0.5rem) 0;
 }
 
 .o-arrow--disabled {
@@ -233,29 +232,24 @@ export default {
 }
 
 .o-default-option {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 100%;
+  align-self: normal;
   font-size: 1.5rem;
-  border-width: 0.1rem;
-  border-right-style: dashed;
-  border-color: var(--color-text);
   color: var(--color-text);
-  background: var(--color-base);
-  z-index: 1;
 }
 
 .o-clickable {
   cursor: pointer;
 }
 
+.c-single-set {
+  display: flex;
+  flex-direction: column;
+}
+
 .o-symbol {
-  display: block;
   width: 2.5rem;
   text-align: center;
   font-size: 1.6rem;
-  font-weight: bold;
   user-select: none;
 }
 
@@ -263,9 +257,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 1.5rem;
+  width: 1.5rem;
   height: 1.5rem;
-  margin: 0.25rem 0.5rem;
+  margin: 0.5rem;
   font-weight: bold;
   user-select: none;
 }

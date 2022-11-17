@@ -166,5 +166,32 @@ export const GlyphAppearanceHandler = {
     return `rgb(${r[i] * (1 - f) + r[i + 1] * f},
       ${g[i] * (1 - f) + g[i + 1] * f},
       ${b[i] * (1 - f) + b[i + 1] * f})`;
+  },
+
+  get unlockedSets() {
+    return player.reality.glyphs.cosmetics.availableSets;
+  },
+  get lockedSets() {
+    return Object.keys(GameDatabase.reality.glyphCosmeticSets)
+      .filter(set => !player.reality.glyphs.cosmetics.availableSets.includes(set));
+  },
+  // Attempts to unlock a specific given set, or a random one if none is given
+  unlockSet(name) {
+    const lockedSets = this.lockedSets;
+    let unlocked;
+    if (name && lockedSets.includes(name)) {
+      unlocked = name;
+    } else if (!name && lockedSets.length > 0) {
+      // If the player wants to refresh-scum this then we let them (there's probably already going to be an infinite
+      // lootbox cycle mechanic anyway)
+      unlocked = lockedSets[Math.floor(Math.random() * lockedSets.length)];
+    } else {
+      return false;
+    }
+
+    player.reality.glyphs.cosmetics.availableSets.push(unlocked);
+    const entry = GameDatabase.reality.glyphCosmeticSets[unlocked];
+    GameUI.notify.info(`You have unlocked the "${entry.name}" Set for Glyph cosmetics!`, 10000);
+    return true;
   }
 };

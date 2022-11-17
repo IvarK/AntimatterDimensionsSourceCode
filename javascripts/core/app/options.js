@@ -54,6 +54,10 @@ const secretImports = [
   "857876556a230da15fe1bb6f410ca8dbc9274de47c1a847c2281a7103dd2c274",
   "be88e62eb68758cd7381104977c0d3d5d81e19c72a848f0d79d1963c1e39221f",
   "c784c9c0a82b5f3c13884842fa6e6a8f5aed994ef401e6476c30b1adfe439b22",
+  "f3a71114261b4af6517a53f89bf0c6b56bb81b6f0e931d0e0d71249eb196628c",
+  "ea8003b832d73a30ebbe9e889c583989e1e6985c74ccbc149f5b7c183975ea97",
+  "8c8f5a86418e6c166d595f487e6a3ebd372dc5686960a2b5a4ab85aa7bd8a3cf",
+  "5869b9b82c6f076495facc820bdb27335d6b48272e9f5044844bba6bce6870fb",
 ];
 
 function secretImportIndex(data) {
@@ -67,23 +71,39 @@ export function isSecretImport(data) {
 
 export function tryImportSecret(data) {
   const index = secretImportIndex(data);
-  if (index === 0) {
-    FullScreenAnimationHandler.display("a-barrel-roll", 5);
-    SecretAchievement(15).unlock();
-    return true;
+
+  switch (index) {
+    case 0:
+      FullScreenAnimationHandler.display("a-barrel-roll", 5);
+      SecretAchievement(15).unlock();
+      return true;
+    case 1:
+      SecretAchievement(14).unlock();
+      return true;
+    case 2:
+      SecretAchievement(37).unlock();
+      return true;
+    case 3:
+      if (player.records.fullGameCompletions > 0 || DEV) Speedrun.unlock();
+      else GameUI.notify.error("Complete the game at least once first!", 15000);
+      return true;
+    case 4:
+      if (!Themes.available().map(t => t.name).includes("S11")) return true;
+      if (GlyphAppearanceHandler.unlockSet("blob")) return true;
+      if (GlyphAppearanceHandler.unlockSet("blob2")) return true;
+      // This is a :blobsad:
+      GameUI.notify.error(`No more blobs \uE015`, 5000);
+      return true;
+    case 5:
+      GlyphAppearanceHandler.unlockSet("currency");
+      return true;
+    case 6:
+      GlyphAppearanceHandler.unlockSet("chess");
+      return true;
+    case 7:
+      GlyphAppearanceHandler.unlockSet("planet");
+      return true;
+    default:
+      return false;
   }
-  if (index === 1) {
-    SecretAchievement(14).unlock();
-    return true;
-  }
-  if (index === 2) {
-    SecretAchievement(37).unlock();
-    return true;
-  }
-  if (index === 3) {
-    if (player.records.fullGameCompletions > 0 || DEV) Speedrun.unlock();
-    else GameUI.notify.error("Complete the game at least once first!", 15000);
-    return true;
-  }
-  return false;
 }

@@ -132,20 +132,31 @@ export default {
     zIndexStyle() {
       return { "z-index": this.isInModal ? 7 : 6 };
     },
-    overrideColor() {
-      if (this.glyph.color) return this.glyph.color;
-      if (this.glyph.cosmetic) return this.cosmeticConfig.currentColor.border;
-      if (this.isRealityGlyph) return this.realityColor;
-      return null;
-    },
-    symbolColor() {
-      const defaultColor = this.cosmeticConfig.ignoreRarityColor
+    colorObj() {
+      let overrideColor;
+      if (this.glyph.color) overrideColor = GlyphAppearanceHandler.getColorProps(this.glyph.color);
+      if (this.glyph.cosmetic) overrideColor = this.cosmeticConfig.currentColor;
+
+      let symbolColor;
+      if (this.isRealityGlyph) symbolColor = this.realityColor;
+      else symbolColor = this.cosmeticConfig.ignoreRarityColor
         ? GlyphAppearanceHandler.getBorderColor(this.glyph.type)
         : GlyphAppearanceHandler.getRarityColor(this.glyph.strength);
-      return this.overrideColor ?? defaultColor;
+
+      return {
+        border: overrideColor?.border ?? GlyphAppearanceHandler.getBorderColor(this.glyph.type),
+        symbol: overrideColor?.border ?? symbolColor,
+        bg: overrideColor?.bg ?? this.cosmeticConfig.currentColor.bg
+      };
+    },
+    symbolColor() {
+      return this.colorObj.symbol;
     },
     borderColor() {
-      return this.overrideColor ?? GlyphAppearanceHandler.getBorderColor(this.glyph.type);
+      return this.colorObj.border;
+    },
+    bgColor() {
+      return this.colorObj.bg;
     },
     overStyle() {
       return {
@@ -178,7 +189,7 @@ export default {
         "text-shadow": preventBlur ? undefined : `-0.04em 0.04em 0.08em ${color}`,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
-        background: this.cosmeticConfig.currentColor.bg
+        background: this.bgColor
       };
     },
     mouseEventHandlers() {

@@ -12,6 +12,11 @@ export default {
       type: String,
       required: true,
     },
+    glyphId: {
+      type: Number,
+      required: false,
+      default: -1,
+    }
   },
   computed: {
     name() {
@@ -29,16 +34,23 @@ export default {
 
 <template>
   <div class="c-glyph-customization-entry">
-    <span class="c-name">Appearance Options for {{ name }} Glyphs</span>
+    <span
+      v-if="glyphId === -1"
+      class="c-name"
+    >
+      Appearance Options for {{ name }} Glyphs
+    </span>
     <GlyphCustomizationSlidingWindow
       :type="type"
       :is-symbol="true"
       :options="symbols"
+      :glyph-id="glyphId"
     />
     <GlyphCustomizationSlidingWindow
       :type="type"
       :is-symbol="false"
       :options="colors"
+      :glyph-id="glyphId"
     />
   </div>
 </template>

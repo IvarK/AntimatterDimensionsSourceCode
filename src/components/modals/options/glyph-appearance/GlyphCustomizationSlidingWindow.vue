@@ -14,6 +14,11 @@ export default {
       type: Array,
       required: true,
     },
+    glyphId: {
+      type: Number,
+      required: false,
+      default: -1,
+    }
   },
   data() {
     return {
@@ -26,6 +31,9 @@ export default {
     };
   },
   computed: {
+    isSingleGlyph() {
+      return this.glyphId !== -1;
+    },
     attrString() {
       return this.isSymbol ? "symbol" : "color";
     },
@@ -34,9 +42,11 @@ export default {
     },
     defaultOption() {
       if (this.realityColor) return this.realityColor;
+      const config = this.typeObject[this.type];
+      const prop = `${this.isSingleGlyph ? "current" : "default"}${this.attrString.capitalize()}`;
       return this.isSymbol
-        ? this.typeObject[this.type].defaultSymbol.symbol
-        : this.typeObject[this.type].defaultColor.border;
+        ? config[prop].symbol
+        : config[prop].border;
     },
     canScroll() {
       return this.options.length > this.windowSize;
@@ -57,15 +67,24 @@ export default {
     },
     select(option) {
       if (!this.isActive) return;
-      player.reality.glyphs.cosmetics[`${this.attrString}Map`][this.type] = option;
+      if (this.isSingleGlyph) {
+        const glyph = Glyphs.findById(this.glyphId);
+        glyph[this.attrString] = option;
+      } else {
+        player.reality.glyphs.cosmetics[`${this.attrString}Map`][this.type] = option;
+      }
       this.updateSelected();
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
     updateSelected() {
-      const option = this.isSymbol
-        ? this.typeObject[this.type].currentSymbol.symbol
-        : this.typeObject[this.type].currentColor.str;
-      this.selected = option;
+      if (this.isSingleGlyph) {
+        const glyph = Glyphs.findById(this.glyphId);
+        this.selected = glyph[this.attrString];
+      } else {
+        this.selected = this.isSymbol
+          ? this.typeObject[this.type].currentSymbol.symbol
+          : this.typeObject[this.type].currentColor.str;
+      }
     },
     containerClassObject() {
       return {
@@ -73,7 +92,16 @@ export default {
         "c-disabled-overlay": !this.isActive
       };
     },
-    symbolClassObject(option) {
+    defaultOptionClassObject() {
+      const checkOption = this.isSingleGlyph ? undefined : this.defaultOption;
+      return {
+        "o-symbol": this.isSymbol,
+        "o-color": !this.isSymbol,
+        "o-clickable": this.isActive,
+        "o-option--inactive": this.isSymbol && checkOption !== this.selected,
+      };
+    },
+    optionClassObject(option) {
       return {
         "o-symbol": this.isSymbol,
         "o-color": !this.isSymbol,
@@ -128,7 +156,7 @@ export default {
     <div class="o-default-option">
       <div
         :key="'default' + darkKeySwap"
-        :class="symbolClassObject(defaultOption)"
+        :class="defaultOptionClassObject()"
         :style="boxStyle(defaultOption)"
         @click="select(undefined)"
       >
@@ -160,7 +188,7 @@ export default {
             <div
               v-for="singleOption in set"
               :key="singleOption"
-              :class="symbolClassObject(singleOption)"
+              :class="optionClassObject(singleOption)"
               :style="boxStyle(singleOption)"
               @click="select(singleOption)"
             >
@@ -177,6 +205,7 @@ export default {
 .c-all-options {
   display: flex;
   flex-direction: row;
+  width: 49rem;
   margin: 0.5rem;
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);

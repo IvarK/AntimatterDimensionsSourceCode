@@ -33,6 +33,7 @@ import HotkeysModal from "@/components/modals/options/HotkeysModal";
 import InfoDisplayOptionsModal from "@/components/modals/options/InfoDisplayOptionsModal";
 import NewsOptionsModal from "@/components/modals/options/NewsOptionsModal";
 import PreferredTreeModal from "@/components/modals/options/PreferredTreeModal";
+import SingleGlyphAppearanceModal from "@/components/modals/options/glyph-appearance/SingleGlyphAppearanceModal";
 
 import DeleteCompanionGlyphModal from "@/components/modals/glyph-management/DeleteCompanionGlyphModal";
 import DeleteGlyphModal from "@/components/modals/glyph-management/DeleteGlyphModal";
@@ -210,6 +211,7 @@ Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);
 Modal.awayProgressOptions = new Modal(AwayProgressOptionsModal);
 Modal.glyphDisplayOptions = new Modal(GlyphDisplayOptionsModal);
+Modal.singleGlyphAppearance = new Modal(SingleGlyphAppearanceModal);
 Modal.hotkeys = new Modal(HotkeysModal);
 Modal.newsOptions = new Modal(NewsOptionsModal);
 Modal.animationOptions = new Modal(AnimationOptionsModal);

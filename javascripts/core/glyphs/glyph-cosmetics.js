@@ -119,6 +119,12 @@ export const GlyphAppearanceHandler = {
       .filter(c => c)
       .map(c => [c]);
   },
+  get availableTypes() {
+    return Object.values(GameDatabase.reality.cosmeticGlyphs)
+      .map(type => CosmeticGlyphTypes[type.id])
+      .filter(type => type.isUnlocked)
+      .map(type => type.id);
+  },
 
   getBorderColor(type) {
     return CosmeticGlyphTypes[type].currentColor.border;

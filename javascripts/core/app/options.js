@@ -88,7 +88,7 @@ export function tryImportSecret(data) {
       else GameUI.notify.error("Complete the game at least once first!", 15000);
       return true;
     case 4:
-      if (!Themes.available().map(t => t.name).includes("S11")) return true;
+      if (!Themes.available().map(t => t.name).includes("S11")) return false;
       if (GlyphAppearanceHandler.unlockSet("blob")) return true;
       if (GlyphAppearanceHandler.unlockSet("blob2")) return true;
       // This is a :blobsad:

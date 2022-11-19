@@ -848,6 +848,7 @@ export function getTTPerSecond() {
   return finalTT;
 }
 
+// eslint-disable-next-line no-unused-vars
 function recursiveTimeOut(fn, iterations, endFn) {
   fn(iterations);
   if (iterations === 0) endFn();
@@ -898,7 +899,7 @@ export function simulateTime(seconds, real, fast) {
   } else if (infinitiedMilestone.gt(0)) {
     Currency.infinities.add(infinitiedMilestone);
   } else {
-    Currency.eternityPoints.add(getOfflineEPGain(totalGameTime * 1000));
+    Currency.eternityPoints.add(getOfflineEPGain(seconds * 1000));
   }
 
   if (InfinityUpgrade.ipOffline.isBought && player.options.offlineProgress) {

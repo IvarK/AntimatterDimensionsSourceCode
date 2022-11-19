@@ -54,14 +54,12 @@ export const ShopPurchaseData = {
         return;
       }
     }
-    if (showNotification) GameUI.notify.info("STD purchases successfully loaded!", 10000);
+    if (showNotification && newSTDData.totalSTD > 0) GameUI.notify.info("STD purchases successfully loaded!", 10000);
     this.updateLocalSTD(newSTDData);
   },
 
   respecRequest() {
-    if (!Cloud.loggedIn) {
-      Modal.message.show(`You are not logged in to Google, anything on this tab cannot be used unless you log in.`);
-    } else if (player.options.confirmations.respecIAP) {
+    if (player.options.confirmations.respecIAP) {
       Modal.respecIAP.show();
     } else {
       this.respecAll();

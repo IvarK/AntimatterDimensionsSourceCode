@@ -2,7 +2,6 @@ import TWEEN from "tween.js";
 
 import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
-import { playFabLogin } from "./core/playfab";
 import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
 
@@ -1021,9 +1020,6 @@ window.onload = function() {
   GameUI.initialized = supportedBrowser;
   ui.view.initialized = supportedBrowser;
   setTimeout(() => {
-    if (shop.kongEnabled) {
-      playFabLogin();
-    }
     document.getElementById("loading").style.display = "none";
   }, 500);
   if (!supportedBrowser) {
@@ -1058,7 +1054,6 @@ export function init() {
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
-  shop.init();
   Payments.init();
 }
 

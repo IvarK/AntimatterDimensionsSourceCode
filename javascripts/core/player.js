@@ -370,6 +370,7 @@ window.player = {
       completeFullGame: 0,
     },
     milestones: [],
+    achievementTimes: {},
   },
   IPMultPurchases: 0,
   version: 13,

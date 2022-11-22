@@ -74,7 +74,6 @@ export default {
     },
     handleYesClick() {
       requestGalaxyReset(this.bulk);
-      Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
       EventHub.ui.offAll(this);
     }
   },

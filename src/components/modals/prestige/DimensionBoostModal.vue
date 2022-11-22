@@ -29,7 +29,6 @@ export default {
   methods: {
     handleYesClick() {
       requestDimensionBoost(this.bulk);
-      Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
       EventHub.ui.offAll(this);
     }
   },

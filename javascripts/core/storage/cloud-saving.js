@@ -62,12 +62,23 @@ export const Cloud = {
   },
 
   compareSaves(cloud, local, hash) {
-    return {
-      farther: ProgressChecker.compareSaveProgress(cloud, local),
-      older: ProgressChecker.compareSaveTimes(cloud, local),
-      differentName: cloud?.options.saveFileName !== local?.options.saveFileName,
-      hashMismatch: this.lastCloudHash && this.lastCloudHash !== hash,
-    };
+    // This try/except will generally only throw an exception if the cloud save is somehow malformed.
+    // In practice this should only happen for saves which are really old, or from very early development.
+    // This will be handled upstream by showing a modal notifying the player of the invalid data and giving them
+    // options to resolve it without needing to open up the console.
+    // Note: This could also technically happen if the local save is malformed instead - this shouldn't
+    // happen unless the player is overtly cheating through the console, and in that case it seems unreasonable
+    // to attempt to handle such open-ended behavior gracefully
+    try {
+      return {
+        farther: ProgressChecker.compareSaveProgress(cloud, local),
+        older: ProgressChecker.compareSaveTimes(cloud, local),
+        differentName: cloud?.options.saveFileName !== local?.options.saveFileName,
+        hashMismatch: this.lastCloudHash && this.lastCloudHash !== hash,
+      };
+    } catch (e) {
+      return null;
+    }
   },
 
   async saveCheck(forceModal = false) {
@@ -89,10 +100,17 @@ export const Cloud = {
         this.save(saveId);
       };
 
+      // If the comparison fails, we assume the cloud data is corrupted and show the relevant modal
+      if (!saveComparison && player.options.showCloudModal) {
+        Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
+        Modal.cloudInvalidData.show({ isSaving: true });
+        return;
+      }
+
       // Bring up the modal if cloud saving will overwrite a cloud save which is older or possibly farther
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
-      const hasConflict = hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
+      const hasConflict = hasBoth && saveComparison && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
         saveComparison.differentName || saveComparison.hashMismatch);
       if (forceModal || (hasConflict && player.options.showCloudModal)) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
@@ -135,6 +153,13 @@ export const Cloud = {
         GameStorage.overwriteSlot(saveId, cloudSave);
         GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded for user ${this.user.displayName}`);
       };
+
+      // If the comparison fails, we assume the cloud data is corrupted and show the relevant modal
+      if (!saveComparison) {
+        Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteLocalSave);
+        Modal.cloudInvalidData.show({ isSaving: false });
+        return;
+      }
 
       // Bring up the modal if cloud loading will overwrite a local save which is older or possibly farther
       const hasBoth = cloudSave && localSave;

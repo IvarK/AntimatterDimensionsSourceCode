@@ -65,7 +65,7 @@ export const ProgressChecker = {
   // Returns -1 or 1 based on which save is older. Returns 0 if one is undefined, will be handled upstream
   compareSaveTimes(first, second) {
     if (!first || !second) return 0;
-    const timeDifference = first.records.realTimePlayed - second.records.realTimePlayed;
+    const timeDifference = first.records?.realTimePlayed - second.records?.realTimePlayed;
     if (timeDifference >= 0) return -1;
     return 1;
   }

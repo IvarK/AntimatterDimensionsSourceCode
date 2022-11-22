@@ -1,5 +1,6 @@
 import { ProgressChecker } from "../storage/progress-checker";
 
+import CloudInvalidDataModal from "@/components/modals/cloud/CloudInvalidDataModal";
 import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
 import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
 import EternityChallengeStartModal from "@/components/modals/challenges/EternityChallengeStartModal";
@@ -296,6 +297,7 @@ function getSaveInfo(save) {
 
 Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
+Modal.cloudInvalidData = new Modal(CloudInvalidDataModal);
 // eslint-disable-next-line max-params
 Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, onAccept) {
   Modal.hide();

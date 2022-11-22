@@ -74,6 +74,7 @@ export default {
     </span>
     Please select the save you want to load.
     <br>
+    <br>
     <SaveInfoEntry
       :save-data="conflict.local"
       :other-data="conflict.cloud"

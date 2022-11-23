@@ -51,12 +51,17 @@ export default {
     <br>
     <br>
     <span v-if="isSaving">
-      It is probably safe to overwrite your Cloud save. Otherwise, this modal will keep reappearing
-      every 5 minutes unless you change your Cloud saving settings.
+      It is probably safe to overwrite your Cloud save. You can click "Cloud load" and force the save
+      to be loaded if you would like to attempt to convert it to a valid save format that you can use.
     </span>
     <span v-else>
-      You can try to load your invalid data from the Cloud if desired, but it may not load properly.
+      You can try to load your data from the Cloud if desired. The game will attempt to load in your
+      Cloud data by converting its format, but this may not work and in the worst case may require you
+      to reset this save slot in order for the game to work again.
     </span>
+    <br>
+    Note: This modal will show up regardless of your settings, because this issue will continue to prevent
+    the 5-minute autosave until it is resolved.
     <template #cancel-text>
       {{ overwriteText }}
     </template>

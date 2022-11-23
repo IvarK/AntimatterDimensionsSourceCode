@@ -101,7 +101,7 @@ export const Cloud = {
       };
 
       // If the comparison fails, we assume the cloud data is corrupted and show the relevant modal
-      if (!saveComparison && player.options.showCloudModal) {
+      if (!saveComparison) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
         Modal.cloudInvalidData.show({ isSaving: true });
         return;

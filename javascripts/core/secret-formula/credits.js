@@ -351,6 +351,9 @@ GameDatabase.credits = {
       name: "Sweets the Alien",
       roles: 13
     }, {
+      name: "Tables",
+      roles: 13,
+    }, {
       name: "Taylor Reeves",
       roles: 13
     }, {

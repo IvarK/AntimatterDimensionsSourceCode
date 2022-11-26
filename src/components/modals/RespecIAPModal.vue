@@ -10,7 +10,7 @@ export default {
     returnedSTDCount() {
       let std = 0;
       for (const purchase of ShopPurchase.all) {
-        if (purchase.config.singleUse) continue;
+        if (purchase.config.instantPurchase) continue;
         std += purchase.purchases * purchase.cost;
       }
       return std;

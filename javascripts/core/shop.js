@@ -107,7 +107,8 @@ class ShopPurchaseState extends RebuyableMechanicState {
   }
 
   get cost() {
-    return this.config.cost;
+    const cost = this.config.cost;
+    return typeof cost === "function" ? cost() : cost;
   }
 
   get purchases() {
@@ -150,14 +151,14 @@ class ShopPurchaseState extends RebuyableMechanicState {
   async purchase() {
     if (!this.canBeBought) return false;
     if (GameEnd.creditsEverClosed) return false;
-    if (this.config.singleUse && ui.$viewModel.modal.progressBar) return false;
+    if (this.config.instantPurchase && ui.$viewModel.modal.progressBar) return false;
 
     // Contact the firebase server to verify the purchase
     const success = await Payments.buyUpgrade(this.config.key);
     if (!success) return false;
 
     if (player.IAP.enabled) Speedrun.setSTDUse(true);
-    if (this.config.singleUse) this.config.onPurchase();
+    if (this.config.instantPurchase) this.config.onPurchase();
     GameUI.update();
     return true;
   }

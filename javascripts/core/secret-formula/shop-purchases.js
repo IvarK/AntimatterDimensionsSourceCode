@@ -51,7 +51,7 @@ GameDatabase.shopPurchases = {
     key: "smallTimeSkip",
     cost: 10,
     description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
-    singleUse: true,
+    instantPurchase: true,
     onPurchase: () => {
       shop.purchaseTimeSkip();
     }
@@ -60,9 +60,22 @@ GameDatabase.shopPurchases = {
     key: "bigTimeSkip",
     cost: 20,
     description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
-    singleUse: true,
+    instantPurchase: true,
     onPurchase: () => {
       shop.purchaseLongerTimeSkip();
     }
+  },
+  singleCosmetic: {
+    key: "singleCosmetic",
+    cost: 20,
+    description: "Unlock a Glyph cosmetic set of your choice",
+    instantPurchase: true,
+  },
+  allCosmetic: {
+    key: "allCosmetic",
+    cost: () => Math.floor(600 *
+      (GlyphAppearanceHandler.lockedSets.length / Object.keys(GameDatabase.reality.glyphCosmeticSets).length)),
+    description: "Unlock all remaining Glyph cosmetic sets at once",
+    instantPurchase: true,
   },
 };

@@ -10,7 +10,7 @@ import RealityAmplifyButton from "./RealityAmplifyButton";
 import RealityReminder from "./RealityReminder";
 import ResetRealityButton from "./ResetRealityButton";
 import SacrificedGlyphs from "./SacrificedGlyphs";
-import SingleGlyphCustomzation from "./SingleGlyphCustomzation";
+import SingleGlyphCustomzationPanel from "./SingleGlyphCustomzationPanel";
 
 export default {
   name: "GlyphsTab",
@@ -26,7 +26,7 @@ export default {
     GlyphLevelsAndWeights,
     ResetRealityButton,
     RealityReminder,
-    SingleGlyphCustomzation
+    SingleGlyphCustomzationPanel
   },
   data() {
     return {
@@ -157,7 +157,7 @@ export default {
           <br>
           This effect is even stronger above level {{ formatInt(hyperInstabilityThreshold) }}.
         </div>
-        <SingleGlyphCustomzation />
+        <SingleGlyphCustomzationPanel />
         <ExpandingControlBox
           width-source="content"
           label="Glyph Level Factors"

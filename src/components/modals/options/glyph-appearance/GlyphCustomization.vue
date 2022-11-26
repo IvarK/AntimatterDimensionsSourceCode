@@ -1,13 +1,13 @@
 <script>
 import GlyphComponent from "@/components/GlyphComponent";
-import GlyphCustomizationSingle from "@/components/modals/options/glyph-appearance/GlyphCustomizationSingle";
+import GlyphCustomizationSingleType from "@/components/modals/options/glyph-appearance/GlyphCustomizationSingleType";
 import PrimaryButton from "@/components/PrimaryButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "GlyphCustomization",
   components: {
-    GlyphCustomizationSingle,
+    GlyphCustomizationSingleType,
     PrimaryButton,
     PrimaryToggleButton,
     GlyphComponent
@@ -90,19 +90,20 @@ export default {
       off="Disabled"
     />
     <br>
+    Reset Appearances to Default:
     <PrimaryButton
       class="o-primary-btn--subtab-option"
       :class="{ 'o-primary-btn--disabled' : !enabled }"
       @click="resetAll"
     >
-      Reset All to Default
+      All Types
     </PrimaryButton>
     <PrimaryButton
       class="o-primary-btn--subtab-option"
       :class="{ 'o-primary-btn--disabled' : !enabled }"
       @click="resetSingle"
     >
-      Reset this type to Default
+      This Type
     </PrimaryButton>
     <br>
     Glyph Type:
@@ -121,7 +122,7 @@ export default {
         />
       </div>
     </div>
-    <GlyphCustomizationSingle
+    <GlyphCustomizationSingleType
       :key="selectedIndex + enabled + defaultKeySwap"
       :type="cosmeticTypes[selectedIndex]"
     />

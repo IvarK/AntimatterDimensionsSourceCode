@@ -7,7 +7,7 @@ class CosmeticGlyphType {
     this.isUnlocked = setup.isUnlocked;
     this._canCustomize = setup.canCustomize;
     this.fixedSymbolColor = setup.fixedSymbolColor ?? false;
-    this._isCosmetic = isCosmetic;
+    this.isCosmetic = isCosmetic;
   }
 
   get canCustomize() {
@@ -50,7 +50,7 @@ class CosmeticGlyphType {
   }
 
   get ignoreRarityColor() {
-    return this._isCosmetic || this.fixedSymbolColor;
+    return this.isCosmetic || this.fixedSymbolColor;
   }
 }
 

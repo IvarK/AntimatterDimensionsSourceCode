@@ -3,7 +3,7 @@ import GlyphComponent from "@/components/GlyphComponent";
 import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
-  name: "SingleGlyphCustomzation",
+  name: "SingleGlyphCustomzationPanel",
   components: {
     GlyphComponent,
     PrimaryButton
@@ -97,9 +97,9 @@ export default {
         <u>Cosmetic Attributes</u>
         Type: {{ glyph.type.capitalize() }}
         <br>
-        Modified: {{ typeCosmetic }}
+        All: {{ typeCosmetic }}
         <br>
-        Special: {{ specialCosmetic }}
+        Single: {{ specialCosmetic }}
       </div>
       <div class="c-glyph-info-section">
         <PrimaryButton
@@ -112,7 +112,7 @@ export default {
           class="o-primary-btn--subtab-option"
           @click="glyphID = -1"
         >
-          Clear Glyph
+          Clear Box
         </PrimaryButton>
       </div>
     </div>

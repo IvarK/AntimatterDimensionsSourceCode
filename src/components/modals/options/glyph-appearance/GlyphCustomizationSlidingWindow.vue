@@ -61,15 +61,21 @@ export default {
   },
   methods: {
     update() {
-      this.isActive = player.reality.glyphs.cosmetics.active;
+      if (this.isSingleGlyph) {
+        const glyph = Glyphs.findById(this.glyphId);
+        this.isActive = !glyph.cosmetic;
+      } else {
+        this.isActive = player.reality.glyphs.cosmetics.active;
+      }
       if (this.type === "reality" && !this.isSymbol) this.realityColor = GlyphAppearanceHandler.realityColor;
       this.darkKeySwap = player.options.forceDarkGlyphs;
     },
     select(option) {
-      if (!this.isActive) return;
+      if (!this.isSingleGlyph && !this.isActive) return;
       if (this.isSingleGlyph) {
         const glyph = Glyphs.findById(this.glyphId);
         glyph[this.attrString] = option;
+        if (!this.active) glyph.cosmetic = undefined;
       } else {
         player.reality.glyphs.cosmetics[`${this.attrString}Map`][this.type] = option;
       }
@@ -89,7 +95,7 @@ export default {
     containerClassObject() {
       return {
         "c-all-options": true,
-        "c-disabled-overlay": !this.isActive
+        "o-option--inactive": !this.isActive
       };
     },
     defaultOptionClassObject() {

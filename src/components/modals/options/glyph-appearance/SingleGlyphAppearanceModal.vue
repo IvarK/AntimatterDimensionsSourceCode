@@ -1,5 +1,5 @@
 <script>
-import GlyphCustomizationSingle from "@/components/modals/options/glyph-appearance/GlyphCustomizationSingle";
+import GlyphCustomizationSingleType from "@/components/modals/options/glyph-appearance/GlyphCustomizationSingleType";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 import PrimaryButton from "@/components/PrimaryButton";
 
@@ -7,7 +7,7 @@ export default {
   name: "SingleGlyphAppearanceModal",
   components: {
     ModalWrapperOptions,
-    GlyphCustomizationSingle,
+    GlyphCustomizationSingleType,
     PrimaryButton
   },
   props: {
@@ -25,18 +25,33 @@ export default {
   computed: {
     glyphType() {
       return Glyphs.findById(this.glyphId).type;
+    },
+    cosmeticTypes() {
+      return CosmeticGlyphTypes.list.filter(t => t.isCosmetic && t.isUnlocked).map(t => t.id);
     }
+  },
+  created() {
+    EventHub.logic.on(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
+      this.defaultKeySwap = false;
+    });
   },
   methods: {
     update() {
       this.defaultKeySwap = true;
     },
-    reset() {
+    setType(type) {
       const glyph = Glyphs.findById(this.glyphId);
       glyph.color = undefined;
       glyph.symbol = undefined;
-      this.defaultKeySwap = false;
+      glyph.cosmetic = type;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
+    cosmeticTypeClass(type) {
+      const glyph = Glyphs.findById(this.glyphId);
+      return {
+        "o-primary-btn--subtab-option": true,
+        "o-active-type": type === glyph.cosmetic
+      };
     }
   }
 };
@@ -47,20 +62,43 @@ export default {
     <template #header>
       Modifying Single Glyph Appearance
     </template>
-    <GlyphCustomizationSingle
+    <PrimaryButton
+      class="o-primary-btn--subtab-option"
+      @click="setType(undefined)"
+    >
+      Reset this Glyph's appearance
+    </PrimaryButton>
+    <GlyphCustomizationSingleType
       :key="defaultKeySwap"
       :type="glyphType"
       :glyph-id="glyphId"
     />
-    <PrimaryButton
-      class="o-primary-btn--subtab-option"
-      @click="reset"
+    <div
+      v-if="cosmeticTypes"
+      class="c-special-type"
     >
-      Reset this Glyph's appearance
-    </PrimaryButton>
+      Apply Special Cosmetic Type:
+      <PrimaryButton
+        v-for="type in cosmeticTypes"
+        :key="type"
+        :class="cosmeticTypeClass(type)"
+        @click="setType(type)"
+      >
+        {{ type.capitalize() }}
+      </PrimaryButton>
+    </div>
   </ModalWrapperOptions>
 </template>
 
 <style scoped>
+.c-special-type {
+  display: flex;
+  flex-direction: row;
+  left: 0;
+  align-items: center;
+}
 
+.o-active-type {
+  background-color: var(--color-good);
+}
 </style>

@@ -22,6 +22,7 @@ export default {
   },
   created() {
     this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, this.glyphsChanged);
     this.glyphsChanged();
   },
   methods: {

@@ -22,7 +22,7 @@ export default {
   },
   computed: {
     cosmeticTypes() {
-      return CosmeticGlyphTypes.list.filter(t => t._canCustomize).map(t => t.id);
+      return CosmeticGlyphTypes.list.filter(t => t.canCustomize).map(t => t.id);
     },
     glyphIconProps() {
       return {

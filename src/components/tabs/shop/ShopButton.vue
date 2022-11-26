@@ -13,7 +13,19 @@ export default {
       nextMult: 0,
       canAfford: false,
       iapDisabled: false,
+      cost: 0,
+      hasChosen: false,
+      chosenSet: "",
+      lockedCount: 0,
     };
+  },
+  computed: {
+    isSingleCosmetic() {
+      return this.purchase.config.key === "singleCosmetic";
+    },
+    isAllCosmetic() {
+      return this.purchase.config.key === "allCosmetic";
+    },
   },
   methods: {
     update() {
@@ -21,6 +33,13 @@ export default {
       this.nextMult = this.purchase.nextMultForDisplay;
       this.canAfford = this.purchase.canBeBought;
       this.iapDisabled = !ShopPurchaseData.isIAPEnabled;
+      this.cost = this.purchase.cost;
+      this.hasChosen = GlyphAppearanceHandler.chosenFromModal !== null;
+      this.chosenSet = GlyphAppearanceHandler.chosenFromModal?.name ?? "Not Selected";
+      this.lockedCount = GlyphAppearanceHandler.lockedSets.length;
+    },
+    openSelectionModal() {
+      Modal.cosmeticSetChoice.show();
     }
   },
 };
@@ -39,12 +58,25 @@ export default {
         Currently {{ purchase.formatEffect(currentMult) }}, next: {{ purchase.formatEffect(nextMult) }}
       </span>
     </div>
+    <div v-if="isSingleCosmetic">
+      <br>
+      <button
+        class="o-shop-button-button"
+        @click="openSelectionModal"
+      >
+        Choose Set
+      </button>
+      Chosen Set: {{ chosenSet }}
+    </div>
+    <div v-if="isAllCosmetic">
+      Will unlock {{ quantify("set", lockedCount) }}
+    </div>
     <button
       class="o-shop-button-button"
-      :class="{ 'o-shop-button-button--disabled': !canAfford }"
+      :class="{ 'o-shop-button-button--disabled': !canAfford || (isCosmetic && !hasChosen) }"
       @click="purchase.purchase()"
     >
-      Cost: {{ purchase.cost }}
+      Cost: {{ cost }}
       <img
         src="images/std_coin.png"
         class="o-shop-button-button__img"

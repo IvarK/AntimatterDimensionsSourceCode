@@ -58,7 +58,7 @@ export const Speedrun = {
     // This needs to be calculated "live" because using spentSTD includes any offline progress purchases too
     let currentSpent = 0;
     for (const purchase of ShopPurchase.all) {
-      if (purchase.config.singleUse) continue;
+      if (purchase.config.instantPurchase) continue;
       currentSpent += purchase.purchases * purchase.cost;
     }
     this.setSTDUse(ShopPurchaseData.isIAPEnabled && currentSpent > 0);

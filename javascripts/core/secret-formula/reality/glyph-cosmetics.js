@@ -5,13 +5,13 @@ GameDatabase.reality.glyphCosmeticSets = {
   cards: {
     id: "cards",
     name: "Playing Card Suits",
-    symbol: ["♤", "♧", "♡", "♢"],
+    symbol: ["♠", "♥", "♦", "♣", "♤", "♧", "♡", "♢"],
     color: ["W#000000", "B#FF2222"],
   },
   lower: {
     id: "lower",
     name: "Lowercase Glyphs",
-    symbol: ["ω", "ξ", "δ"],
+    symbol: ["ω", "ξ", "δ", "ψ"],
   },
   sus: {
     id: "sus",

@@ -74,6 +74,8 @@ export const CosmeticGlyphTypes = {
 };
 
 export const GlyphAppearanceHandler = {
+  setInModal: null,
+  chosenFromModal: null,
   get cosmeticsEnabled() {
     return player.reality.glyphs.cosmetics.active;
   },

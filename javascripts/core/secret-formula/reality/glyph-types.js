@@ -72,6 +72,7 @@ GameDatabase.reality.glyphTypes = {
     color: "#feaec9",
     fixedSymbolColor: true,
     isUnlocked: () => false,
+    canCustomize: () => false,
   },
 };
 
@@ -88,5 +89,6 @@ GameDatabase.reality.cosmeticGlyphs = {
     color: "#E4B51A",
     preventBlur: true,
     isUnlocked: () => Themes.available().map(t => t.name).includes("S11"),
+    canCustomize: () => false,
   },
 };

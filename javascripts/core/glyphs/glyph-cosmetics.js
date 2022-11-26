@@ -5,13 +5,13 @@ class CosmeticGlyphType {
     this._defaultColor = setup.color;
     this.preventBlur = setup.preventBlur ?? false;
     this.isUnlocked = setup.isUnlocked;
-    this._canCustomize = setup.canCustomize ?? true;
+    this._canCustomize = setup.canCustomize;
     this.fixedSymbolColor = setup.fixedSymbolColor ?? false;
     this._isCosmetic = isCosmetic;
   }
 
   get canCustomize() {
-    return (this.isUnlocked?.() ?? true) && (this._canCustomize?.() ?? true);
+    return this._canCustomize?.() ?? true;
   }
 
   get defaultSymbol() {

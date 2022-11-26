@@ -9,7 +9,7 @@ export default {
   },
   data() {
     return {
-      forceDontShowModal: false
+      showModal: false
     };
   },
   created() {
@@ -20,8 +20,10 @@ export default {
   },
   methods: {
     update() {
-      // 2.5 is the cutoff point where the screen starts fading (interactivity disabled)
-      this.forceDontShowModal = GameEnd.endState > END_STATE_MARKERS.INTERACTIVITY_DISABLED;
+      // 2.5 is the cutoff point where the screen starts fading (interactivity disabled). However, we specifically
+      // want to allow glyph customization to appear at the very end (and nothing else)
+      this.showModal = GameEnd.endState <= END_STATE_MARKERS.INTERACTIVITY_DISABLED ||
+        this.modal.component.name === "CosmeticSetChoiceModal";
     },
     hide() {
       if (!this.modal.isOpen) return;
@@ -34,7 +36,7 @@ export default {
 
 <template>
   <div
-    v-if="!forceDontShowModal"
+    v-if="showModal"
     class="c-modal l-modal"
   >
     <component

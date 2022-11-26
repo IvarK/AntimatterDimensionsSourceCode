@@ -5,6 +5,8 @@ export default {
     return {
       opacity: 0,
       visible: false,
+      hasMoreCosmetics: false,
+      selectedSetName: "",
     };
   },
   computed: {
@@ -12,7 +14,6 @@ export default {
       return {
         opacity: this.opacity,
         visibility: this.visible ? "visible" : "hidden",
-        hasMoreCosmetics: false,
       };
     }
   },
@@ -21,9 +22,13 @@ export default {
       this.visible = GameEnd.endState > END_STATE_MARKERS.SHOW_NEW_GAME && !GameEnd.removeAdditionalEnd;
       this.opacity = (GameEnd.endState - END_STATE_MARKERS.SHOW_NEW_GAME) * 2;
       this.hasMoreCosmetics = GlyphAppearanceHandler.lockedSets.length > 0;
+      this.selectedSetName = GlyphAppearanceHandler.chosenFromModal?.name ?? "None (will choose randomly)";
     },
     startNewGame() {
       NG.startNewGame();
+    },
+    openSelectionModal() {
+      Modal.cosmeticSetChoice.show();
     }
   }
 };
@@ -48,8 +53,18 @@ export default {
     </div>
     <br>
     <h3 v-if="hasMoreCosmetics">
-      Upon restarting the game, you will also unlock a random new cosmetic set for your Glyphs. These are freely
+      For completing the game, you also unlock a new cosmetic set of your choice for Glyphs. These are freely
       modifiable once you reach Reality again, but are purely visual and offer no gameplay bonuses.
+      <br>
+      <button
+        class="c-new-game-button"
+        @click="openSelectionModal"
+      >
+        Choose Cosmetic Set
+      </button>
+      <br>
+      <br>
+      Selected Set: {{ selectedSetName }}
     </h3>
     <h3 v-else>
       You have unlocked all Glyph cosmetic sets!

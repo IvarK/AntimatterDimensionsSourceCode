@@ -183,23 +183,23 @@ export const GlyphAppearanceHandler = {
     return Object.keys(GameDatabase.reality.glyphCosmeticSets)
       .filter(set => !player.reality.glyphs.cosmetics.availableSets.includes(set));
   },
-  // Attempts to unlock a specific given set, or a random one if none is given
-  unlockSet(name) {
+  // Unlocks the set chosen in the modal, choosing a random available one as a fallback
+  unlockSet() {
     const lockedSets = this.lockedSets;
+    const toUnlock = GlyphAppearanceHandler.chosenFromModal?.id;
+
     let unlocked;
-    if (name && lockedSets.includes(name)) {
-      unlocked = name;
-    } else if (!name && lockedSets.length > 0) {
-      // If the player wants to refresh-scum this then we let them (there's probably already going to be an infinite
-      // lootbox cycle mechanic anyway)
+    if (toUnlock && lockedSets.includes(toUnlock)) {
+      unlocked = toUnlock;
+    } else if (!toUnlock && lockedSets.length > 0) {
+      // Randomness doesn't need to be seeded since we normally let the player choose and randomness is just a fallback
       unlocked = lockedSets[Math.floor(Math.random() * lockedSets.length)];
     } else {
-      return false;
+      return;
     }
 
     player.reality.glyphs.cosmetics.availableSets.push(unlocked);
     const entry = GameDatabase.reality.glyphCosmeticSets[unlocked];
     GameUI.notify.info(`You have unlocked the "${entry.name}" Set for Glyph cosmetics!`, 10000);
-    return true;
   }
 };

@@ -611,14 +611,17 @@ export function gameLoop(passDiff, options = {}) {
     Enslaved.boostReality = false;
   }
 
-  if (Tabs.current.isPermanentlyHidden) {
-    const tab = Tabs.all.reverse().find(t => !t.isPermanentlyHidden && t.id !== 10);
-    if (tab) tab.show(true);
-    else [...Tab.dimensions.subtabs].reverse().find(t => !t.isPermanentlyHidden).show(true);
-  }
+  // Stopping these checks after CREDITS_START reduces lag and allows for the glyph customization modal to appear
+  if (GameEnd.endState < END_STATE_MARKERS.CREDITS_START) {
+    if (Tabs.current.isPermanentlyHidden) {
+      const tab = Tabs.all.reverse().find(t => !t.isPermanentlyHidden && t.id !== 10);
+      if (tab) tab.show(true);
+      else [...Tab.dimensions.subtabs].reverse().find(t => !t.isPermanentlyHidden).show(true);
+    }
 
-  if (Tabs.current.subtabs.find(t => t.isOpen).isPermanentlyHidden) {
-    [...Tab.dimensions.subtabs].reverse().find(t => !t.isPermanentlyHidden).show(true);
+    if (Tabs.current.subtabs.find(t => t.isOpen).isPermanentlyHidden) {
+      [...Tab.dimensions.subtabs].reverse().find(t => !t.isPermanentlyHidden).show(true);
+    }
   }
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_AFTER);

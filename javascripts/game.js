@@ -388,7 +388,6 @@ export function getGameSpeedupForDisplay() {
 // "diff" is in ms.  It is only unspecified when it's being called normally and not due to simulating time, in which
 // case it uses the gap between now and the last time the function was called.  This is on average equal to the update
 // rate.
-// TODO: Clean this up, remove the disable line
 // eslint-disable-next-line complexity
 export function gameLoop(passDiff, options = {}) {
   PerformanceStats.start("Frame Time");

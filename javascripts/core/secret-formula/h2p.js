@@ -1289,9 +1289,9 @@ ${Enslaved.isCompleted
 The Nameless Ones won't directly unlock the next Celestial.
 `,
       isUnlocked: () => EffarigUnlock.eternity.isUnlocked,
-      // TODO Add the rest of the testers here too before release; this is all only pre wave 1
       tags: ["reality", "time", "blackhole", "lategame", "endgame", "testers", "celestial",
-        "ikerstream", "realrapidjazz", "saturnus", "earth", "garnet", "pichusuperlover"],
+        ...GameDatabase.credits.people.map(p => p.name)
+      ],
       tab: "celestials/enslaved"
     }, {
       name: "Tesseracts",

@@ -79,7 +79,8 @@ export function tryImportSecret(data) {
     return true;
   }
   if (index === 3) {
-    Speedrun.unlock();
+    if (player.records.fullGameCompletions > 0) Speedrun.unlock();
+    else GameUI.notify.error("Complete the game at least once first!", 15000);
     return true;
   }
   return false;

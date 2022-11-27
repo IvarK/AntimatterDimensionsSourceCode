@@ -17,15 +17,19 @@ export default {
       hasChosen: false,
       chosenSet: "",
       lockedCount: 0,
+      canCustomizeSingle: false,
     };
   },
   computed: {
-    isSingleCosmetic() {
-      return this.purchase.config.key === "singleCosmetic";
+    isSingleCosmeticSet() {
+      return this.purchase.config.key === "singleCosmeticSet";
     },
-    isAllCosmetic() {
-      return this.purchase.config.key === "allCosmetic";
+    isAllCosmeticSets() {
+      return this.purchase.config.key === "allCosmeticSets";
     },
+    isSingleGlyphCosmetic() {
+      return this.purchase.config.key === "singleGlyphCosmetic";
+    }
   },
   methods: {
     update() {
@@ -37,9 +41,18 @@ export default {
       this.hasChosen = GlyphAppearanceHandler.chosenFromModal !== null;
       this.chosenSet = GlyphAppearanceHandler.chosenFromModal?.name ?? "Not Selected";
       this.lockedCount = GlyphAppearanceHandler.lockedSets.length;
+      this.canCustomizeSingle = GlyphAppearanceHandler.canCustomizeSingle;
     },
     openSelectionModal() {
       Modal.cosmeticSetChoice.show();
+    },
+    purchaseButtonObject() {
+      return {
+        "o-shop-button-button": true,
+        "o-shop-button-button--disabled": !this.canAfford ||
+          (this.isSingleCosmeticSet && !this.hasChosen) ||
+          (this.isSingleGlyphCosmetic && this.canCustomizeSingle)
+      };
     }
   },
 };
@@ -58,7 +71,7 @@ export default {
         Currently {{ purchase.formatEffect(currentMult) }}, next: {{ purchase.formatEffect(nextMult) }}
       </span>
     </div>
-    <div v-if="isSingleCosmetic">
+    <div v-if="isSingleCosmeticSet">
       <br>
       <button
         class="o-shop-button-button"
@@ -68,12 +81,14 @@ export default {
       </button>
       Chosen Set: {{ chosenSet }}
     </div>
-    <div v-if="isAllCosmetic">
+    <div v-if="isAllCosmeticSets">
       Will unlock {{ quantify("set", lockedCount) }}
     </div>
+    <div v-if="isSingleGlyphCosmetic && canCustomizeSingle">
+      Already Unlocked!
+    </div>
     <button
-      class="o-shop-button-button"
-      :class="{ 'o-shop-button-button--disabled': !canAfford || (isCosmetic && !hasChosen) }"
+      :class="purchaseButtonObject()"
       @click="purchase.purchase()"
     >
       Cost: {{ cost }}

@@ -56,7 +56,7 @@ export default {
       this.forceDarkGlyphs = options.forceDarkGlyphs;
       this.glyphInfoType = options.showHintText.glyphInfoType;
       this.showGlyphInfoByDefault = options.showHintText.showGlyphInfoByDefault;
-      this.hasCustomization = player.reality.glyphs.cosmetics.availableSets.length > 0;
+      this.hasCustomization = GlyphAppearanceHandler.canSeeCustomization;
     },
     noEffectStyle() {
       if (this.glyphInfoType !== 0) return null;

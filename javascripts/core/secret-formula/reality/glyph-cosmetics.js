@@ -90,7 +90,7 @@ GameDatabase.reality.glyphCosmeticSets = {
   shapes: {
     id: "shapes",
     name: "Miscellaneous Shapes",
-    symbol: ["▰", "▲", "◆", "★", "◎", "◍"],
+    symbol: ["▰", "▲", "◆", "◎", "◍"],
     preventBlur: true,
   },
   chess: {
@@ -155,5 +155,22 @@ GameDatabase.reality.glyphCosmeticSets = {
     name: "More Blobs",
     symbol: ["\uE01D", "\uE01E", "\uE021", "\uE024", "\uE025", "\uE026", "\uE027"],
     preventBlur: true,
+  },
+  star: {
+    id: "star",
+    name: "Geometric Stars",
+    symbol: ["★", "☆", "✪", "✯", "✭", "✫", "🜞"],
+  },
+  star2: {
+    id: "star2",
+    name: "Realistic Stars",
+    symbol: ["✶", "✦", "✧", "✺", "✹", "✷"],
+    color: ["W#D4FFFF", "W#FDFFCC"],
+  },
+  gem: {
+    id: "gem",
+    name: "Gemstones",
+    symbol: ["💎"],
+    color: ["B#035E3B", "B#943B47", "B#032C54"],
   },
 };

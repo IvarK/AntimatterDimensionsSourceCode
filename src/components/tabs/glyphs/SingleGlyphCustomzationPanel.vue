@@ -56,8 +56,8 @@ export default {
   },
   methods: {
     update() {
-      this.isVisible = player.reality.glyphs.cosmetics.active &&
-        (GlyphAppearanceHandler.unlockedSets.length > 0 || GlyphAppearanceHandler.availableTypes.length > 0);
+      this.isVisible = player.reality.glyphs.cosmetics.active && GlyphAppearanceHandler.canCustomizeSingle &&
+        GlyphAppearanceHandler.canSeeCustomization;
     },
     dragover(event) {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;

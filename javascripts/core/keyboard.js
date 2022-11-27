@@ -35,7 +35,7 @@ class KeySpin {
 
 export class GameKeyboard {
   static stopSpins() {
-    for (const spin of GameKeyboard.spins) {
+    for (const spin of spins) {
       spin.stop();
     }
   }
@@ -57,10 +57,10 @@ export class GameKeyboard {
   }
 
   static _bindSpin(key, spin) {
-    if (GameKeyboard.spins.find(s => s.key === key)) {
+    if (spins.find(s => s.key === key)) {
       throw `Duplicate spin binding for ${key}`;
     }
-    GameKeyboard.spins.push(spin);
+    spins.push(spin);
     Mousetrap.bind(key, () => spin.start(), "keydown");
     Mousetrap.bind(key, () => spin.stop(), "keyup");
   }
@@ -71,7 +71,7 @@ export class GameKeyboard {
   }
 }
 
-GameKeyboard.spins = [];
+const spins = [];
 
 function executeKey(action) {
   if (ui.$viewModel.modal.progressBar !== undefined || GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED) {

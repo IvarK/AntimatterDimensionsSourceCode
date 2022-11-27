@@ -267,13 +267,7 @@ export const shortcuts = [
 ];
 
 for (const hotkey of shortcuts) {
-  let keys = "";
-  for (const key of hotkey.keys) {
-    // There may be multiple keys required, and the syntax is key1+key2+key3
-    if (keys === "") keys += key;
-    else keys += `+${key}`;
-  }
-  GameKeyboard[hotkey.type](keys, hotkey.function);
+  GameKeyboard[hotkey.type](hotkey.keys.join("+"), hotkey.function);
 }
 
 // We need to know whether the player is holding R or not for the replicanti galaxy

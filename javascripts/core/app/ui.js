@@ -1,5 +1,6 @@
 import VTooltip from "v-tooltip";
 import VueGtag from "vue-gtag";
+import { DEV } from "../devtools";
 
 import { useLongPress, useRepeatingClick } from "./longpress";
 import { notify } from "./notify";
@@ -129,22 +130,26 @@ export const GameUI = {
   },
   flushEvents() {
     this.flushPromise = undefined;
-    if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
-      Vue.nextTick(() => PerformanceStats.start("Vue Render"));
-      PerformanceStats.start("Vue Update");
+    if (DEV) {
+      if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
+        Vue.nextTick(() => PerformanceStats.start("Vue Render"));
+        PerformanceStats.start("Vue Update");
+      }
     }
     for (const event of this.events) {
       EventHub.ui.dispatch(event[0], event[1]);
     }
     EventHub.ui.dispatch(GAME_EVENT.UPDATE);
-    // ReactivityComplainer.complain();
-    if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
-      PerformanceStats.end();
-      Vue.nextTick(() => {
-        PerformanceStats.end("Vue Render");
-        PerformanceStats.end("Frame Time");
-        PerformanceStats.render();
-      });
+    if (DEV) {
+      ReactivityComplainer.complain();
+      if (PerformanceStats.isOn && PerformanceStats.currentBlocks.length > 0) {
+        PerformanceStats.end();
+        Vue.nextTick(() => {
+          PerformanceStats.end("Vue Render");
+          PerformanceStats.end("Frame Time");
+          PerformanceStats.render();
+        });
+      }
     }
     this.events = [];
   },

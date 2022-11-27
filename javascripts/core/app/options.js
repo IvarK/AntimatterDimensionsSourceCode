@@ -1,4 +1,5 @@
 import { sha512_256 } from "js-sha512";
+import { DEV } from "../devtools";
 
 import FullScreenAnimationHandler from "../full-screen-animation-handler";
 
@@ -79,7 +80,7 @@ export function tryImportSecret(data) {
     return true;
   }
   if (index === 3) {
-    if (player.records.fullGameCompletions > 0) Speedrun.unlock();
+    if (player.records.fullGameCompletions > 0 || DEV) Speedrun.unlock();
     else GameUI.notify.error("Complete the game at least once first!", 15000);
     return true;
   }

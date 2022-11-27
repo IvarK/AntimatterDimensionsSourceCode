@@ -1,11 +1,9 @@
 import "drag-drop-touch";
 import "./shims";
 import "./merge-globals";
+import { DEV } from "../javascripts/core/devtools";
 import { browserCheck, init } from "../javascripts/game";
-
-// eslint-disable-next-line capitalized-comments
-// import { watchLatestCommit } from "@/commit-watcher";
+import { watchLatestCommit } from "@/commit-watcher";
 
 if (browserCheck()) init();
-// eslint-disable-next-line capitalized-comments
-// watchLatestCommit();
+if (DEV) watchLatestCommit();

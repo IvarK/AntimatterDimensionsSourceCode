@@ -331,10 +331,6 @@ Modal.message = new class extends Modal {
     this.closeButton = props.closeButton ?? false;
     EventHub.ui.offAll(this._component);
     if (props.closeEvent) this.applyCloseListeners(props.closeEvent);
-
-    // TODO: remove this console.log
-    // eslint-disable-next-line no-console
-    console.log(`Modal message: ${text}`);
   }
 
   hide() {

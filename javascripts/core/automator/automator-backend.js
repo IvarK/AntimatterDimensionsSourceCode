@@ -516,18 +516,6 @@ export const AutomatorBackend = {
       decoded = GameSaveSerializer.decodeText(rawInput, "automator script");
       parts = this.deserializeAutomatorData(decoded);
     } catch (e) {
-      // TODO Remove everything but "return null" in this catch block before release; this is only here to maintain
-      // compatability with scripts from older test versions and will never be called on scripts exported post-release
-      if (decoded) {
-        parts = decoded.split("||");
-        if (parts.length === 3 && parts[1].length === parseInt(parts[0], 10)) {
-          return {
-            name: parts[1],
-            content: parts[2],
-          };
-        }
-      }
-
       return null;
     }
 

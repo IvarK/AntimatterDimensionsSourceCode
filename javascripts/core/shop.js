@@ -37,6 +37,13 @@ export const ShopPurchaseData = {
     GameStorage.save();
   },
 
+  clearLocalSTD() {
+    this.totalSTD = 0;
+    this.spentSTD = 0;
+    this.respecAvailable = false;
+    for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = 0;
+  },
+
   // Reads STD props from the cloud and sets local cached values with the result
   async syncSTD(showNotification = true, fetchedData = undefined) {
     if (!Cloud.loggedIn) return;
@@ -66,8 +73,9 @@ export const ShopPurchaseData = {
 
   async respecAll() {
     if (!this.canRespec) {
-      Modal.message.show(`You do not have a respec available. Making an STD purchase allows you to respec your upgrades
-        once. You can only have at most one of these respecs, and they do not refund offline production purchases.`);
+      // This case only happens if the player is cheating and using the console to make the game think it has a respec
+      // when on the backend they don't. Nevertheless, responsive UI rarely hurts
+      GameUI.notify.error("You do not have a respec available", 10000);
       return;
     }
     let res;

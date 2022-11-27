@@ -181,6 +181,7 @@ export const Cloud = {
 
   logout() {
     signOut(this.auth);
+    ShopPurchaseData.clearLocalSTD();
   },
 
   init() {

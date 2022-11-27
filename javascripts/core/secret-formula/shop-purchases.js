@@ -65,17 +65,23 @@ GameDatabase.shopPurchases = {
       shop.purchaseLongerTimeSkip();
     }
   },
-  singleCosmetic: {
-    key: "singleCosmetic",
+  singleCosmeticSet: {
+    key: "singleCosmeticSet",
     cost: 20,
     description: "Unlock a Glyph cosmetic set of your choice",
     instantPurchase: true,
   },
-  allCosmetic: {
-    key: "allCosmetic",
-    cost: () => Math.floor(600 *
+  allCosmeticSets: {
+    key: "allCosmeticSets",
+    cost: () => Math.floor(420 *
       (GlyphAppearanceHandler.lockedSets.length / Object.keys(GameDatabase.reality.glyphCosmeticSets).length)),
     description: "Unlock all remaining Glyph cosmetic sets at once",
+    instantPurchase: true,
+  },
+  singleGlyphCosmetic: {
+    key: "singleGlyphCosmetic",
+    cost: 30,
+    description: "Unlock the ability to apply Glyph cosmetics to individual glyphs",
     instantPurchase: true,
   },
 };

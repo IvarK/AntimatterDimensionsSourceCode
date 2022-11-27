@@ -202,5 +202,12 @@ export const GlyphAppearanceHandler = {
     const entry = GameDatabase.reality.glyphCosmeticSets[unlocked];
     GameUI.notify.info(`You have unlocked the "${entry.name}" Set for Glyph cosmetics!`, 10000);
     GlyphAppearanceHandler.chosenFromModal = null;
-  }
+  },
+
+  get canSeeCustomization() {
+    return this.unlockedSets.length > 0 || this.availableTypes.length > 0;
+  },
+  get canCustomizeSingle() {
+    return ShopPurchaseData.singleGlyphCosmetic > 0;
+  },
 };

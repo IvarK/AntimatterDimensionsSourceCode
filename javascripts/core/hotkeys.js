@@ -14,6 +14,11 @@ import { GameKeyboard } from "./keyboard";
 // Note: mod is a function key helper by Mousetap for both ctrl and command,
 // and should be used to provide support for both Windows and Max
 
+// Note: DON'T add repeatables with modifier keys other than shift
+// because Mousetrap is crap, and we needed to plug it up to work
+// properly with shift, so you will need to plug it up additionally
+// for the other modifier keys (#3093).
+
 // Free keys:
 // i, j, k, l, n, o, p, q, v, w, x
 

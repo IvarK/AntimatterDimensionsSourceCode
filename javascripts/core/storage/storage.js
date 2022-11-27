@@ -210,11 +210,6 @@ export const GameStorage = {
 
     const checkString = this.checkPlayerObject(playerObject);
     if (playerObject === Player.defaultStart || checkString !== "") {
-      if (checkString !== "") {
-        // TODO Probably remove this before release, it's mostly only helpful for debugging in development
-        // eslint-disable-next-line no-console
-        console.log(`Savefile was invalid and has been reset - ${checkString}`);
-      }
       player = deepmergeAll([{}, Player.defaultStart]);
       player.records.gameCreatedTime = Date.now();
       player.lastUpdate = Date.now();

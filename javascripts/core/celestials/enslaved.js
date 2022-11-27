@@ -171,8 +171,7 @@ export const Enslaved = {
     return EffarigUnlock.eternity.isUnlocked;
   },
   get realityBoostRatio() {
-    const baseRealityBoostRatio = tempAmplifyToggle ? tempAmplifyFactor : 1;
-    return Math.max(baseRealityBoostRatio, Math.floor(player.celestials.enslaved.storedReal /
+    return Math.max(1, Math.floor(player.celestials.enslaved.storedReal /
       Math.max(1000, Time.thisRealityRealTime.totalMilliseconds)));
   },
   get canAmplify() {

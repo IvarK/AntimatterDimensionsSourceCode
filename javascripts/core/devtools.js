@@ -251,32 +251,6 @@ export function isLocalEnvironment() {
   return href.includes("file") || href.includes("127.0.0.1") || href.includes("localhost");
 }
 
-window.tempSpeedupToggle = false;
-window.tempSpeedupFactor = 500;
-// Speeds up game, intentionally doesn't persist between refreshes
-// With no arguments, toggles on/off
-dev.goFast = function(speed) {
-  if (speed !== undefined && speed > 0) {
-    tempSpeedupToggle = true;
-    tempSpeedupFactor = speed;
-  } else {
-    tempSpeedupToggle = !tempSpeedupToggle;
-  }
-};
-
-window.tempAmplifyToggle = false;
-window.tempAmplifyFactor = 100;
-// Amplifies every reality you do, intentionally doesn't persist between refreshes
-// With no arguments, toggles on/off
-dev.amplify = function(amplification) {
-  if (amplification !== undefined && amplification > 0) {
-    tempAmplifyToggle = true;
-    tempAmplifyFactor = amplification;
-  } else {
-    tempAmplifyToggle = !tempAmplifyToggle;
-  }
-};
-
 dev.togglePerformanceStats = function() {
   PerformanceStats.toggle();
 };
@@ -293,21 +267,6 @@ dev.buyAllPerks = function() {
     perk.purchase();
   }
 };
-
-(function() {
-  let kongTest;
-  const setKongTest = value => {
-    kongTest = value;
-    localStorage.setItem("kongTest", kongTest);
-    if (kongTest) {
-      document.documentElement.classList.add("_kong-test");
-    } else {
-      document.documentElement.classList.remove("_kong-test");
-    }
-  };
-  setKongTest(localStorage.getItem("kongTest") === "true");
-  dev.kongTest = () => setKongTest(!kongTest);
-}());
 
 // This should help for balancing different glyph types, strong rounding of values is intentional
 dev.printResourceTotals = function() {

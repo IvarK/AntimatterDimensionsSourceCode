@@ -369,10 +369,6 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   // an effarig glyph.
   factor = Math.clamp(factor, 1e-300, 1e300);
 
-  // Dev speedup should always be active
-  if (tempSpeedupToggle) {
-    factor *= tempSpeedupFactor;
-  }
   return factor;
 }
 

@@ -246,7 +246,6 @@ export const AlchemyReactions = (function() {
       }));
   }
   return {
-    // TODO: `all` sould be the one that is `compact()`ed
     all: AlchemyResources.all
       .map(r => (r.isBaseResource ? null : new AlchemyReaction(r, mapReagents(r))))
   };

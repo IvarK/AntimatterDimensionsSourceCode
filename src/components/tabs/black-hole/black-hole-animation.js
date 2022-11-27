@@ -117,10 +117,6 @@ export const BlackHoleAnimation = (function() {
     update(delta, dilationFactor) {
       const baseSpeed = 1.5;
       const speedFactor = Math.min(Math.pow(Math.max(dilationFactor, 2) / 2, 3), 5);
-      // TODO: Figure out how to correctly handle delta in two cases:
-      //  1. 30FPS browsers
-      //  2. Big deltas (for ex. after tab switching)
-      //  Righ now, Math.min(delta, 16) is here to fix (2)
       const particleSpeed = baseSpeed * speedFactor * Math.min(delta, 16) / 1000;
 
       if (!this.isInside) {

@@ -56,8 +56,6 @@ export const Cloud = {
       const encoded = snapshot.val();
       const uintArray = decodeBase64Binary(encoded.replace(/-/gu, "+").replace(/_/gu, "/"));
       const save = pako.ungzip(uintArray, { to: "string" });
-      // TODO: do something with this.
-      JSON.parse(save);
     }
   },
 

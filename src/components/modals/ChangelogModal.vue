@@ -1,7 +1,6 @@
 <script>
 import ModalCloseButton from "@/components/modals/ModalCloseButton";
 
-// TODO add searching
 export default {
   name: "ChangelogModal",
   components: {

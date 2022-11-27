@@ -431,7 +431,6 @@ GameDatabase.news = [
           link: "https://www.kongregate.com/games/Oninou/wami"
         },
         {
-          // TODO: update this link because of the removal of flash from browsers
           name: "Anti-Idle",
           link: "https://www.kongregate.com/games/Tukkun/anti-idle-the-game"
         },

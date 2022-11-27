@@ -16,6 +16,7 @@ export const NG = {
     // It's easier to do something like this to avoid it entirely.
     const automatorConstants = JSON.stringify(player.reality.automator.constants);
     const automatorScripts = JSON.stringify(player.reality.automator.scripts);
+    const fullCompletions = player.records.fullGameCompletions;
     Modal.hideAll();
     Quote.clearAll();
     GameStorage.hardReset();
@@ -24,6 +25,7 @@ export const NG = {
     player.secretAchievementBits = JSON.parse(secretAchievements);
     player.reality.automator.constants = JSON.parse(automatorConstants);
     player.reality.automator.scripts = JSON.parse(automatorScripts);
+    player.records.fullGameCompletions = fullCompletions + 1;
     ui.view.newUI = player.options.newUI;
     ui.view.news = player.options.news.enabled;
     Themes.find(Theme.currentName()).set();

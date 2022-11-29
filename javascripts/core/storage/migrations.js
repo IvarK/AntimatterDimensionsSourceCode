@@ -1,5 +1,6 @@
-import { deepmergeAll } from "@/utility/deepmerge";
 import { DEV } from "../devtools";
+
+import { deepmergeAll } from "@/utility/deepmerge";
 import { GameStorage } from "./storage";
 
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term

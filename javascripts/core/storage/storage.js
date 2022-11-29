@@ -1,7 +1,8 @@
 import * as ADNotations from "@antimatter-dimensions/notations";
 
-import { deepmergeAll } from "@/utility/deepmerge";
 import { DEV } from "../devtools";
+
+import { deepmergeAll } from "@/utility/deepmerge";
 
 export const GameStorage = {
   currentSlot: 0,

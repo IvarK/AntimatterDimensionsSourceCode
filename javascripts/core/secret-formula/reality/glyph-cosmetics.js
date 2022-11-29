@@ -17,6 +17,7 @@ GameDatabase.reality.glyphCosmeticSets = {
     id: "sus",
     name: "Suspicious",
     symbol: ["ඔ", "ඕ", "ඞ", "ඩ"],
+    color: ["B#FCA40A"]
   },
   currency: {
     id: "currency",
@@ -75,12 +76,14 @@ GameDatabase.reality.glyphCosmeticSets = {
     name: "Integration",
     symbol: ["∬", "∭", "∮", "∯", "∰", "∱", "∲", "∳"],
     preventBlur: true,
+    color: ["B#123456"]
   },
   numbers: {
     id: "numbers",
     name: "Circled Numbers",
     symbol: ["①", "②", "③", "④", "⑤", "⑥", "⑦", "⑧"],
     preventBlur: true,
+    color: ["B#607D8B"]
   },
   blocks: {
     id: "blocks",
@@ -112,6 +115,7 @@ GameDatabase.reality.glyphCosmeticSets = {
     name: "Musical Symbols",
     symbol: ["♩", "♪", "♬", "♭", "♮", "♯"],
     preventBlur: true,
+    color: ["W#E621E6"]
   },
   recycle: {
     id: "recycle",
@@ -130,6 +134,7 @@ GameDatabase.reality.glyphCosmeticSets = {
     name: "Hazard Symbols",
     symbol: ["☠", "☢", "☣", "⚠"],
     preventBlur: true,
+    color: ["W#FCA40A"]
   },
   celestial: {
     id: "celestial",
@@ -172,5 +177,45 @@ GameDatabase.reality.glyphCosmeticSets = {
     name: "Gemstones",
     symbol: ["💎"],
     color: ["B#035E3B", "B#943B47", "B#032C54"],
+  },
+  heiroglyph: {
+    id: "heiroglyph",
+    name: "Common Heiroglyphs",
+    symbol: ["𓂀", "𓀶", "𓅊", "𓇌", "𓊝", "☥"],
+  },
+  paperclip: {
+    id: "paperclip",
+    name: "Useless Paperclips",
+    symbol: ["𓄲", "𓄳", "𓄴", "𓄵", "𓄶", "𓄷", "𓄸"],
+    color: ["B#222222"],
+  },
+  snake: {
+    id: "snake",
+    name: "Various Snakes",
+    symbol: ["𓆓", "𓆔", "𓆕", "𓆖", "𓆗", "𓆘"],
+  },
+  egyptNumber: {
+    id: "egyptNumber",
+    name: "Egyptian Numbers",
+    symbol: ["𓆄", "𓅔", "𓆾", "𓂰", "𓍦", "𓎋", "𓐀", "𓃐"],
+    color: ["W#123456"]
+  },
+  egyptWeather: {
+    id: "egyptWeather",
+    name: "Egyptian Weathervanes",
+    symbol: ["𓈹", "𓈧", "𓈷", "𓉈", "𓈩", "𓈻", "𓈽"],
+    color: ["W#607D8B"]
+  },
+  limbs: {
+    id: "limbs",
+    name: "Awkward Limbs",
+    symbol: ["𓈝", "𓄒", "𓃂", "𓃁", "𓂩", "𓂙", "𓂓", "𓂼"],
+    color: ["B#E621E6"]
+  },
+  animal: {
+    id: "animal",
+    name: "Moses' Ark",
+    symbol: ["𓆏", "𓆉", "𓅬", "𓅃", "𓃲", "𓆣", "𓆊", "𓃰"],
+    color: ["W#0000AA"],
   },
 };

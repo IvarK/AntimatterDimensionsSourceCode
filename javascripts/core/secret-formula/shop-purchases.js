@@ -70,18 +70,26 @@ GameDatabase.shopPurchases = {
     cost: 20,
     description: "Unlock a Glyph cosmetic set of your choice",
     instantPurchase: true,
+    onPurchase: () => {
+      GlyphAppearanceHandler.unlockSet();
+    }
   },
   allCosmeticSets: {
     key: "allCosmeticSets",
-    cost: () => Math.floor(420 *
-      (GlyphAppearanceHandler.lockedSets.length / Object.keys(GameDatabase.reality.glyphCosmeticSets).length)),
+    cost: () => {
+      // Both of these are also on the payment backend, which would need to be changed as well
+      const baseCost = 420;
+      const setsUntilFree = Object.keys(GameDatabase.reality.glyphCosmeticSets).length;
+
+      const currentSetCount = ShopPurchaseData.singleCosmeticSet;
+      return Math.floor(baseCost * (setsUntilFree - currentSetCount) / setsUntilFree);
+    },
     description: "Unlock all remaining Glyph cosmetic sets at once",
     instantPurchase: true,
-  },
-  singleGlyphCosmetic: {
-    key: "singleGlyphCosmetic",
-    cost: 30,
-    description: "Unlock the ability to apply Glyph cosmetics to individual glyphs",
-    instantPurchase: true,
+    onPurchase: () => {
+      player.reality.glyphs.cosmetics.availableSets = Object.keys(GameDatabase.reality.glyphCosmeticSets);
+      GameUI.notify.info(`You have unlocked all sets for Glyph cosmetics!`, 15000);
+      GlyphAppearanceHandler.applyNotification();
+    }
   },
 };

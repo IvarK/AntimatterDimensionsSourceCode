@@ -126,7 +126,7 @@ export default {
       :key="selectedIndex + enabled + defaultKeySwap"
       :type="cosmeticTypes[selectedIndex]"
     />
-    Note: Some options may cause very poor color contrast or readability on certain themes.
+    Note: Some options may cause very poor color contrast or readability on certain themes with certain Glyph types.
   </div>
 </template>
 

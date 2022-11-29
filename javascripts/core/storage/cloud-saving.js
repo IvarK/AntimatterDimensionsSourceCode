@@ -110,7 +110,7 @@ export const Cloud = {
       // Bring up the modal if cloud saving will overwrite a cloud save which is older or possibly farther
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
-      const hasConflict = hasBoth && saveComparison && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
+      const hasConflict = hasBoth && saveComparison && (saveComparison.older === -1 || saveComparison.farther === -1 ||
         saveComparison.differentName || saveComparison.hashMismatch);
       if (forceModal || (hasConflict && player.options.showCloudModal)) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);

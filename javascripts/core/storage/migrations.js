@@ -1,4 +1,5 @@
 import { deepmergeAll } from "@/utility/deepmerge";
+import { DEV } from "../devtools";
 import { GameStorage } from "./storage";
 
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
@@ -79,6 +80,8 @@ GameStorage.migrations = {
     },
     13: player => {
       // 12.3 is currently on live, will be updated to 13 after release
+
+      if (DEV) GameStorage.devMigrations.setLatestTestVersion(player);
 
       // Last update version check, fix emoji/cancer issue,
       // change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player

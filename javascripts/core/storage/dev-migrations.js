@@ -1522,7 +1522,6 @@ GameStorage.devMigrations = {
   ],
 
   patch(player) {
-    if (!isDevEnvironment()) return;
     player.options.testVersion = player.options.testVersion || 0;
     for (let version = player.options.testVersion; version < this.patches.length; version++) {
       const patch = this.patches[version];

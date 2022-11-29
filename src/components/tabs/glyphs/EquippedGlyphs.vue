@@ -15,6 +15,7 @@ export default {
       undoSlotsAvailable: 0,
       undoAvailable: false,
       undoVisible: false,
+      cosmeticGlow: false,
     };
   },
   computed: {
@@ -82,6 +83,7 @@ export default {
         : GameCache.glyphInventorySpace.value > 0;
       this.undoVisible = TeresaUnlocks.undo.canBeApplied;
       this.undoAvailable = this.undoVisible && this.undoSlotsAvailable && player.reality.glyphs.undo.length > 0;
+      this.cosmeticGlow = player.reality.glyphs.cosmetics.glowNotification;
     },
     glyphPositionStyle(idx) {
       const angle = 2 * Math.PI * idx / this.slotCount;
@@ -140,6 +142,7 @@ export default {
       });
     },
     showOptionModal() {
+      player.reality.glyphs.cosmetics.glowNotification = false;
       Modal.glyphDisplayOptions.show();
     },
     clickGlyph(glyph, idx, increaseSound = false) {
@@ -213,6 +216,7 @@ export default {
       </button>
       <button
         class="l-glyph-equip-button-short c-reality-upgrade-btn"
+        :class="{'tutorial--glow': cosmeticGlow}"
         @click="showOptionModal"
       >
         Open Glyph Visual Options

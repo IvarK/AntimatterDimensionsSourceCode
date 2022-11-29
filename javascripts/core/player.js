@@ -459,6 +459,7 @@ window.player = {
       createdRealityGlyph: false,
       cosmetics: {
         active: false,
+        glowNotification: false,
         availableSets: [],
         symbolMap: {},
         colorMap: {},

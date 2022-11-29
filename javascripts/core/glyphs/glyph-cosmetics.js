@@ -92,16 +92,14 @@ export const GlyphAppearanceHandler = {
       .filter(s => s);
   },
   // Sort the colors by hue, otherwise finding specific colors would be a mess for UX.
-  // However, colors "close enough to grayscale" are sorted separately and first and all black BGs are placed
-  // before all white BGs
+  // However, colors "close enough to grayscale" are sorted separately and first
   get availableColors() {
-    return Object.values(GameDatabase.reality.glyphCosmeticSets)
+    const sortedArray = Object.values(GameDatabase.reality.glyphCosmeticSets)
       .filter(s => player.reality.glyphs.cosmetics.availableSets.includes(s.id))
       .flatMap(s => s.color)
       .sort((a, b) => {
         const getHue = hex => {
           const parts = hex.split("#");
-          const bg = parts[0] === "B" ? 0 : 10;
           const color = parts[1];
           const rgb = [
             parseInt(color.substring(0, 2), 16) / 255,
@@ -109,17 +107,31 @@ export const GlyphAppearanceHandler = {
             parseInt(color.substring(4), 16) / 255
           ];
           const min = Math.min(...rgb), max = Math.max(...rgb);
-          if (max - min < 0.1) return max + bg;
+          if (max - min < 0.3) return max;
           let rawHue;
           if (rgb[0] === max) rawHue = (rgb[1] - rgb[2]) / (max - min);
           else if (rgb[1] === max) rawHue = 2 + (rgb[2] - rgb[1]) / (max - min);
           else rawHue = 4 + (rgb[0] - rgb[1]) / (max - min);
-          return 1 + ((rawHue + 6) % 6) + bg;
+          return 6 + ((rawHue + 6) % 6);
         };
         return getHue(a) - getHue(b);
       })
-      .filter(c => c)
-      .map(c => [c]);
+      .filter(c => c);
+
+    // We want two rows in the color selection Vue component, but that displays options in columns (one column
+    // per set of symbol options). Here we do a bit of array manipulation to lay out colors as two rows, separated
+    // by BG color and with the longer row on top (UI doesn't handle empty top-row spots well)
+    const blackArr = sortedArray.filter(c => c.charAt(0) === "B");
+    const whiteArr = sortedArray.filter(c => c.charAt(0) === "W");
+    const longer = blackArr.length > whiteArr.length ? blackArr : whiteArr;
+    const shorter = blackArr.length > whiteArr.length ? whiteArr : blackArr;
+    const combined = [];
+    for (let index = 0; index < longer.length; index++) {
+      if (index < shorter.length) combined.push([longer[index], shorter[index]]);
+      else combined.push([longer[index]]);
+    }
+
+    return combined;
   },
   get availableTypes() {
     return Object.values(GameDatabase.reality.cosmeticGlyphs)
@@ -202,12 +214,15 @@ export const GlyphAppearanceHandler = {
     const entry = GameDatabase.reality.glyphCosmeticSets[unlocked];
     GameUI.notify.info(`You have unlocked the "${entry.name}" Set for Glyph cosmetics!`, 10000);
     GlyphAppearanceHandler.chosenFromModal = null;
+    this.applyNotification();
+  },
+  applyNotification() {
+    TabNotification.newGlyphCosmetic.clearTrigger();
+    TabNotification.newGlyphCosmetic.tryTrigger();
+    player.reality.glyphs.cosmetics.glowNotification = true;
   },
 
   get canSeeCustomization() {
     return this.unlockedSets.length > 0 || this.availableTypes.length > 0;
-  },
-  get canCustomizeSingle() {
-    return ShopPurchaseData.singleGlyphCosmetic > 0;
   },
 };

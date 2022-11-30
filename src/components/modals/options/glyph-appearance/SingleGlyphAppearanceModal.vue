@@ -30,11 +30,6 @@ export default {
       return CosmeticGlyphTypes.list.filter(t => t.isCosmetic && t.isUnlocked).map(t => t.id);
     }
   },
-  created() {
-    EventHub.logic.on(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
-      this.defaultKeySwap = false;
-    });
-  },
   methods: {
     update() {
       this.defaultKeySwap = true;
@@ -44,6 +39,7 @@ export default {
       glyph.color = undefined;
       glyph.symbol = undefined;
       glyph.cosmetic = type;
+      this.defaultKeySwap = false;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
     cosmeticTypeClass(type) {

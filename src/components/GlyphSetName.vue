@@ -163,14 +163,14 @@ export default {
       // This returns the type of Glyph that we want for color determinations.
       // The priority is Empty > Cursed > Companion > Reality > 50% or more normal Glyphs > Effarig > any normal Glyph
       if (this.sortedGlyphs.length === 0) return { id: "none", color: "#888888" };
-      if (this.calculateGlyphPercent("cursed")) return GlyphTypes.cursed;
-      if (this.calculateGlyphPercent("companion")) return GlyphTypes.companion;
-      if (this.calculateGlyphPercent("reality")) return GlyphTypes.reality;
+      if (this.calculateGlyphPercent("cursed")) return CosmeticGlyphTypes.cursed;
+      if (this.calculateGlyphPercent("companion")) return CosmeticGlyphTypes.companion;
+      if (this.calculateGlyphPercent("reality")) return CosmeticGlyphTypes.reality;
       if (this.calculateGlyphPercent("music") >= 50) return { id: "music", color: "#FF80AB" };
       const primaryType = this.sortedGlyphs.filter(t => t.adjOrder === 1)[0];
-      if (primaryType?.perc >= 50) return GlyphTypes[primaryType.type];
-      if (this.calculateGlyphPercent("effarig")) return GlyphTypes.effarig;
-      return GlyphTypes[primaryType.type];
+      if (primaryType?.perc >= 50) return CosmeticGlyphTypes[primaryType.type];
+      if (this.calculateGlyphPercent("effarig")) return CosmeticGlyphTypes.effarig;
+      return CosmeticGlyphTypes[primaryType.type];
     },
     textColor() {
       // If it's the singular equipped glyph in Doomed, we color it crimson
@@ -181,7 +181,7 @@ export default {
       if (this.mainGlyphName.id === "cursed") return "#5151EC";
       if (this.mainGlyphName.id === "music") return "#FF80AB";
       if (this.sortedGlyphs.length >= 3 && this.sortedGlyphs[0].perc <= 30) return "#C46200";
-      return this.mainGlyphName.color;
+      return this.mainGlyphName.currentColor.border;
     },
     textStyle() {
       this.$recompute("mainGlyphName");

@@ -129,6 +129,11 @@ export default {
         ? CANCER_GLYPH_SYMBOLS[this.glyph.type]
         : this.cosmeticConfig.currentSymbol.symbol;
     },
+    symbolBlur() {
+      if (this.isBlobHeart) return false;
+      if (!this.glyph.symbol) return this.cosmeticConfig.currentSymbol.blur;
+      return !GlyphAppearanceHandler.unblurredSymbols.includes(this.symbol);
+    },
     zIndexStyle() {
       return { "z-index": this.isInModal ? 7 : 6 };
     },
@@ -180,13 +185,12 @@ export default {
     },
     innerStyle() {
       const color = this.symbolColor;
-      const preventBlur = !this.cosmeticConfig.currentSymbol.blur || this.isBlobHeart;
       return {
         width: `calc(${this.size} - 0.2rem)`,
         height: `calc(${this.size} - 0.2rem)`,
         "font-size": `calc( ${this.size} * ${this.textProportion} )`,
         color,
-        "text-shadow": preventBlur ? undefined : `-0.04em 0.04em 0.08em ${color}`,
+        "text-shadow": this.symbolBlur ? `-0.04em 0.04em 0.08em ${color}` : undefined,
         "border-radius": this.circular ? "50%" : "0",
         "padding-bottom": this.bottomPadding,
         background: this.bgColor

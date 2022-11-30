@@ -182,40 +182,47 @@ GameDatabase.reality.glyphCosmeticSets = {
     id: "heiroglyph",
     name: "Common Heiroglyphs",
     symbol: ["𓂀", "𓀶", "𓅊", "𓇌", "𓊝", "☥"],
+    preventBlur: true,
   },
   paperclip: {
     id: "paperclip",
     name: "Useless Paperclips",
     symbol: ["𓄲", "𓄳", "𓄴", "𓄵", "𓄶", "𓄷", "𓄸"],
+    preventBlur: true,
     color: ["B#222222"],
   },
   snake: {
     id: "snake",
     name: "Various Snakes",
     symbol: ["𓆓", "𓆔", "𓆕", "𓆖", "𓆗", "𓆘"],
+    preventBlur: true,
   },
   egyptNumber: {
     id: "egyptNumber",
     name: "Egyptian Numbers",
     symbol: ["𓆄", "𓅔", "𓆾", "𓂰", "𓍦", "𓎋", "𓐀", "𓃐"],
+    preventBlur: true,
     color: ["W#123456"]
   },
   egyptWeather: {
     id: "egyptWeather",
     name: "Egyptian Weathervanes",
     symbol: ["𓈹", "𓈧", "𓈷", "𓉈", "𓈩", "𓈻", "𓈽"],
+    preventBlur: true,
     color: ["W#607D8B"]
   },
   limbs: {
     id: "limbs",
     name: "Awkward Limbs",
     symbol: ["𓈝", "𓄒", "𓃂", "𓃁", "𓂩", "𓂙", "𓂓", "𓂼"],
+    preventBlur: true,
     color: ["B#E621E6"]
   },
   animal: {
     id: "animal",
     name: "Moses' Ark",
     symbol: ["𓆏", "𓆉", "𓅬", "𓅃", "𓃲", "𓆣", "𓆊", "𓃰"],
+    preventBlur: true,
     color: ["W#0000AA"],
   },
 };

@@ -1,5 +1,10 @@
 import { GameDatabase } from "../game-database";
 
+// The glyphTypes entry is used for both gameplay and cosmetics purposes, so we cannot modify isUnlocked for cosmetics.
+// For the purposes of cosmetics, the difference between isUnlocked and canCustomize is as follows:
+// - isUnlocked: Whether or not this type appears as a choice in glyph-specific customization for overriding their
+//    normal display type; this is ignored for functional type entries
+// - canCustomize: Whether or not this type can have its color/symbol changed in the type-specific customization
 GameDatabase.reality.glyphTypes = {
   time: {
     id: "time",

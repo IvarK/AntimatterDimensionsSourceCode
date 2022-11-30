@@ -10,8 +10,11 @@ class CosmeticGlyphType {
     this.isCosmetic = isCosmetic;
   }
 
+  // This looks hacky because isUnlocked is also used for game mechanic purposes with non-cosmetic
+  // types and must be false for cursed, reality, and companion glyphs. However, we use it to determine
+  // if a type should be displayed at all in the case of cosmetic types
   get canCustomize() {
-    return this._canCustomize?.() ?? true;
+    return (!this.isCosmetic || (this.isUnlocked?.() ?? true)) && (this._canCustomize?.() ?? true);
   }
 
   get defaultSymbol() {
@@ -35,7 +38,7 @@ class CosmeticGlyphType {
     if (!player.reality.glyphs.cosmetics.active || !custom) return this.defaultSymbol;
     return {
       symbol: custom,
-      blur: !this.preventBlur,
+      blur: !(this.preventBlur || GlyphAppearanceHandler.unblurredSymbols.includes(custom)),
     };
   }
 
@@ -136,8 +139,18 @@ export const GlyphAppearanceHandler = {
   get availableTypes() {
     return Object.values(GameDatabase.reality.cosmeticGlyphs)
       .map(type => CosmeticGlyphTypes[type.id])
-      .filter(type => type.isUnlocked)
+      .filter(type => type.isUnlocked())
       .map(type => type.id);
+  },
+  get unblurredSymbols() {
+    return Object.values(GameDatabase.reality.glyphCosmeticSets)
+      .filter(s => s.preventBlur)
+      .map(s => s.symbol)
+      .flat();
+  },
+  // Note: This can *technically* be inconsistent with the actual number of sets, but only y a cheated save.
+  get expectedSetCount() {
+    return ShopPurchaseData.singleCosmeticSet + player.records.fullGameCompletions;
   },
 
   getBorderColor(type) {

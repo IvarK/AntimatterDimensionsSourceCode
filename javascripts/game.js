@@ -6,6 +6,7 @@ import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
 
 import Payments from "./core/payments";
+import { DEV } from "./core/devtools";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -1048,6 +1049,10 @@ export function browserCheck() {
 export function init() {
   // eslint-disable-next-line no-console
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
+  if (DEV) {
+    // eslint-disable-next-line no-console
+    console.log("👨‍💻 Development Mode 👩‍💻");
+  }
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   Payments.init();

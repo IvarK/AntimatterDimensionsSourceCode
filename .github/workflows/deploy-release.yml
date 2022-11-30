@@ -1,0 +1,31 @@
+name: Deploy 🚀
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Deploy 🚀
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - uses: JamesIves/github-pages-deploy-action@4.4.1
+        with:
+          token: ${{ secrets.GH_PUBLISH_TOKEN }}
+          repository-name: IvarK/AyyLmao5Hours
+          branch: master
+          folder: dist
+          single-commit: true

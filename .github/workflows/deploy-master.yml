@@ -21,7 +21,7 @@ jobs:
           node-version: '14'
           cache: 'npm'
       - run: npm ci
-      - run: npm run build
+      - run: npm run build:master
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages

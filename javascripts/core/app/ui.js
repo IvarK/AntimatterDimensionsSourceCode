@@ -240,5 +240,5 @@ export const ui = new Vue({
       }
     }
   },
-  template: "<GameUIComponent />"
+  render: h => h(GameUIComponent)
 });

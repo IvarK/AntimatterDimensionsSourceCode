@@ -48,6 +48,10 @@ export const Tutorial = {
     if (fromState !== player.tutorialState) return;
     player.tutorialActive = false;
     ui.view.tutorialActive = false;
+    // Check if we can immediately enter next tutorial state. This is needed
+    // to correctly handle buying dimension 2 + tickspeed in the same tick,
+    // for example.
+    this.tutorialLoop();
   },
 
   // Moves on to the next tutorialState, but only if parameter is current state.

@@ -57,8 +57,6 @@ export default {
       :glyph-id="glyphId"
     />
   </div>
-  </div>
-  </div>
 </template>
 
 <style scoped>

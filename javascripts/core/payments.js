@@ -99,7 +99,11 @@ const Payments = {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ user: Cloud.user.id, upgrade: upgradeKey })
+        body: JSON.stringify({
+          user: Cloud.user.id,
+          upgrade: upgradeKey,
+          beaten: player.records.fullGameCompletions
+        })
       });
     } catch (e) {
       GameUI.notify.error("Unable to spend STD coins on upgrade!", 10000);

@@ -79,10 +79,12 @@ GameDatabase.shopPurchases = {
     cost: () => {
       // Both of these are also on the payment backend, which would need to be changed as well
       const baseCost = 420;
-      const setsUntilFree = Object.keys(GameDatabase.reality.glyphCosmeticSets).length;
+      const totalSets = Object.keys(GameDatabase.reality.glyphCosmeticSets).length;
 
-      const currentSetCount = ShopPurchaseData.singleCosmeticSet;
-      return Math.floor(baseCost * (setsUntilFree - currentSetCount) / setsUntilFree);
+      // Using this instead of the actual set count maintains consistency with the backend price,
+      // at the cost of the frontend UI being wrong for cheated saves
+      const currentSetCount = GlyphAppearanceHandler.expectedSetCount;
+      return Math.floor(baseCost * (totalSets - currentSetCount) / totalSets);
     },
     description: "Unlock all remaining Glyph cosmetic sets at once",
     instantPurchase: true,

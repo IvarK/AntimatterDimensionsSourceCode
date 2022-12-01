@@ -460,7 +460,7 @@ window.player = {
       cosmetics: {
         active: false,
         glowNotification: false,
-        availableSets: [],
+        unlockedFromNG: [],
         symbolMap: {},
         colorMap: {},
       }

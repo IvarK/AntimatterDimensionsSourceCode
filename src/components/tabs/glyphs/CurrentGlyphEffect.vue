@@ -34,7 +34,7 @@ export default {
         : CosmeticGlyphTypes[this.effectConfig.glyphTypes];
 
       let glyphColor = typeObject.currentColor.border;
-      if (typeObject.id === "cursed") glyphColor = "#5151ec";
+      if (typeObject.id === "cursed") glyphColor = "var(--color-celestials)";
 
       return {
         color: glyphColor,

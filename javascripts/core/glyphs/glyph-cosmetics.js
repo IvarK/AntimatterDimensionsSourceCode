@@ -90,7 +90,7 @@ export const GlyphAppearanceHandler = {
   },
   get availableSymbols() {
     return Object.values(GameDatabase.reality.glyphCosmeticSets)
-      .filter(s => player.reality.glyphs.cosmetics.availableSets.includes(s.id))
+      .filter(s => this.unlockedSets.includes(s.id))
       .map(s => s.symbol)
       .filter(s => s);
   },
@@ -98,7 +98,7 @@ export const GlyphAppearanceHandler = {
   // However, colors "close enough to grayscale" are sorted separately and first
   get availableColors() {
     const sortedArray = Object.values(GameDatabase.reality.glyphCosmeticSets)
-      .filter(s => player.reality.glyphs.cosmetics.availableSets.includes(s.id))
+      .filter(s => this.unlockedSets.includes(s.id))
       .flatMap(s => s.color)
       .sort((a, b) => {
         const getHue = hex => {
@@ -202,13 +202,14 @@ export const GlyphAppearanceHandler = {
   },
 
   get unlockedSets() {
-    return player.reality.glyphs.cosmetics.availableSets;
+    if (ShopPurchase.allCosmeticSets > 0) return Object.keys(GameDatabase.reality.glyphCosmeticSets);
+    return [...new Set(player.reality.glyphs.cosmetics.unlockedFromNG.concat(ShopPurchaseData.unlockedCosmetics))];
   },
   get lockedSets() {
-    return Object.keys(GameDatabase.reality.glyphCosmeticSets)
-      .filter(set => !player.reality.glyphs.cosmetics.availableSets.includes(set));
+    return Object.keys(GameDatabase.reality.glyphCosmeticSets).filter(set => !this.unlockedSets.includes(set));
   },
-  // Unlocks the set chosen in the modal, choosing a random available one as a fallback
+  // Unlocks the set chosen in the modal, choosing a random available one as a fallback. This is only called for
+  // sets unlocked through game completions; STD purchases are handled with ShopPurchaseData
   unlockSet() {
     const lockedSets = this.lockedSets;
     const toUnlock = GlyphAppearanceHandler.chosenFromModal?.id;
@@ -223,7 +224,7 @@ export const GlyphAppearanceHandler = {
       return;
     }
 
-    player.reality.glyphs.cosmetics.availableSets.push(unlocked);
+    player.reality.glyphs.cosmetics.unlockedFromNG.push(unlocked);
     const entry = GameDatabase.reality.glyphCosmeticSets[unlocked];
     GameUI.notify.info(`You have unlocked the "${entry.name}" Set for Glyph cosmetics!`, 10000);
     GlyphAppearanceHandler.chosenFromModal = null;

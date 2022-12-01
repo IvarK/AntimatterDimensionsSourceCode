@@ -3,10 +3,21 @@ import { DC } from "../../../../javascripts/core/constants";
 
 import { BreakdownEntryInfo } from "./breakdown-entry-info";
 import { getResourceEntryInfoGroups } from "./breakdown-entry-info-group";
+import { PercentageRollingAverage } from "./percentage-rolling-average";
 
 // A few props are special-cased because they're base values which can be less than 1, but we don't want to
 // show them as nerfs
 const nerfBlacklist = ["IP_base", "EP_base", "TP_base"];
+
+function isRecent(date) {
+  return (Date.now() - date) < 100;
+}
+
+function padPercents(percents) {
+  // Add some padding to percents to prevent text flicker
+  // Max length is for "-100.0%"
+  return percents.padStart(7, "\xa0");
+}
 
 export default {
   name: "MultiplierBreakdownEntry",
@@ -25,9 +36,11 @@ export default {
     return {
       selected: 0,
       percentList: [],
+      averagedPercentList: [],
       showGroup: [],
       mouseoverIndex: -1,
       isEmpty: false,
+      lastNotEmptyAt: 0,
       dilationExponent: 1,
       isDilated: false,
       // This is used to temporarily remove the transition function from the bar styling when changing the way
@@ -39,14 +52,14 @@ export default {
     groups() {
       return getResourceEntryInfoGroups(this.resource.key);
     },
-    allEntries() {
-      return this.groups[this.selected].entries;
-    },
     /**
      * @returns {BreakdownEntryInfo[]}
      */
-    activeEntries() {
-      return this.allEntries.filter(entry => entry.isActive);
+    entries() {
+      return this.groups[this.selected].entries;
+    },
+    rollingAverage() {
+      return new PercentageRollingAverage();
     },
     containerClass() {
       return {
@@ -57,26 +70,32 @@ export default {
   },
   methods: {
     update() {
-      for (const entry of this.activeEntries) {
+      for (const entry of this.entries) {
         entry.update();
       }
       this.dilationExponent = this.resource.dilationEffect;
       this.isDilated = this.dilationExponent !== 1;
       this.calculatePercents();
+      this.isEmpty = !isRecent(this.lastNotEmptyAt);
     },
     changeGroup() {
       this.selected = (this.selected + 1) % this.groups.length;
-      this.showGroup = Array.repeat(false, this.activeEntries.length);
+      this.showGroup = Array.repeat(false, this.entries.length);
       this.lastLayoutChange = Date.now();
+      this.rollingAverage.clear();
+      this.update();
     },
     calculatePercents() {
-      const powList = this.activeEntries.map(e => e.data.pow);
+      const powList = this.entries.map(e => e.data.pow);
       const totalPosPow = powList.filter(p => p > 1).reduce((x, y) => x * y, 1);
       const totalNegPow = powList.filter(p => p < 1).reduce((x, y) => x * y, 1);
       const log10Mult = (this.resource.fakeValue ?? this.resource.mult).log10() / totalPosPow;
-      this.isEmpty = log10Mult === 0;
-      const percentList = [];
-      for (const entry of this.activeEntries) {
+      const isEmpty = log10Mult === 0;
+      if (!isEmpty) {
+        this.lastNotEmptyAt = Date.now();
+      }
+      let percentList = [];
+      for (const entry of this.entries) {
         const multFrac = log10Mult === 0
           ? 0
           : Decimal.log10(entry.data.mult) / log10Mult;
@@ -98,20 +117,24 @@ export default {
       // is also necessary to suppress some visual weirdness for certain categories which have lots of exponents but
       // actually apply only to specific dimensions (eg. charged infinity upgrades)
       const totalPerc = percentList.filter(p => p > 0).sum();
-      this.percentList = percentList.map(p => (p > 0 ? p / totalPerc : Math.clampMin(p, -1)));
+      percentList = percentList.map(p => (p > 0 ? p / totalPerc : Math.clampMin(p, -1)));
+      this.percentList = percentList;
+      this.rollingAverage.add(isEmpty ? undefined : percentList);
+      this.averagedPercentList = this.rollingAverage.average;
     },
     styleObject(index) {
-      const netPerc = this.percentList.sum();
-      const isNerf = this.percentList[index] < 0;
-      const iconObj = this.activeEntries[index].icon;
+      const netPerc = this.averagedPercentList.sum();
+      const isNerf = this.averagedPercentList[index] < 0;
+      const iconObj = this.entries[index].icon;
+      const percents = this.averagedPercentList[index];
       const barSize = perc => (perc > 0 ? perc * netPerc : -perc);
       return {
         position: "absolute",
-        top: `${100 * this.percentList.slice(0, index).map(p => barSize(p)).sum()}%`,
-        height: `${100 * barSize(this.percentList[index])}%`,
+        top: `${100 * this.averagedPercentList.slice(0, index).map(p => barSize(p)).sum()}%`,
+        height: `${100 * barSize(percents)}%`,
         width: "100%",
-        "transition-duration": (Date.now() - this.lastLayoutChange < 100) ? undefined : "0.2s",
-        border: this.isEmpty ? "" : "0.1rem solid var(--color-text)",
+        "transition-duration": isRecent(this.lastLayoutChange) ? undefined : "0.2s",
+        border: percents === 0 ? "" : "0.1rem solid var(--color-text)",
         color: iconObj?.textColor ?? "black",
         background: isNerf
           ? `repeating-linear-gradient(-45deg, var(--color-bad), ${iconObj?.color} 0.8rem)`
@@ -124,31 +147,41 @@ export default {
         "c-single-entry-highlight": this.mouseoverIndex === index,
       };
     },
+    shouldShowEntry(entry) {
+      return entry.data.isVisible || isRecent(entry.data.lastVisibleAt);
+    },
     barSymbol(index) {
-      return this.activeEntries[index].icon?.symbol ?? null;
+      return this.entries[index].icon?.symbol ?? null;
     },
     hasChildComp(entry) {
       return getResourceEntryInfoGroups(entry.key).some(group => group.hasVisibleEntries);
     },
-    hideIcon(index) {
-      if (!this.hasChildComp(this.activeEntries[index])) return "c-no-icon";
+    expandIcon(index) {
       return this.showGroup[index] ? "far fa-minus-square" : "far fa-plus-square";
     },
+    expandIconStyle(index) {
+      return {
+        opacity: this.hasChildComp(this.entries[index]) ? 1 : 0
+      };
+    },
     entryString(index) {
-      if (this.percentList[index] < 0 && !nerfBlacklist.includes(this.activeEntries[index].key)) {
+      const percents = this.percentList[index];
+      if (percents < 0 && !nerfBlacklist.includes(this.entries[index].key)) {
         return this.nerfString(index);
       }
 
       // We want to handle very small numbers carefully to distinguish between "disabled/inactive" and
       // "too small to be relevant"
       let percString;
-      if (this.percentList[index] === 0) percString = formatPercents(0);
-      else if (this.percentList[index] < 0.001) percString = `<${formatPercents(0.001, 1)}`;
-      else if (this.percentList[index] > 0.9995) percString = `~${formatPercents(1)}`;
-      else percString = formatPercents(this.percentList[index], 1);
+      if (percents === 0) percString = formatPercents(0);
+      else if (percents === 1) percString = formatPercents(1);
+      else if (percents < 0.001) percString = `<${formatPercents(0.001, 1)}`;
+      else if (percents > 0.9995) percString = `~${formatPercents(1)}`;
+      else percString = formatPercents(percents, 1);
+      percString = padPercents(percString);
 
       // Display both multiplier and powers, but make sure to give an empty string if there's neither
-      const entry = this.activeEntries[index];
+      const entry = this.entries[index];
       const overrideStr = entry.displayOverride;
       let valueStr;
       if (overrideStr) valueStr = `(${overrideStr})`;
@@ -172,8 +205,8 @@ export default {
       return `${percString}: ${entry.name} ${valueStr}`;
     },
     nerfString(index) {
-      const entry = this.activeEntries[index];
-      const percString = `${formatPercents(this.percentList[index], 1)}`;
+      const entry = this.entries[index];
+      const percString = padPercents(formatPercents(this.percentList[index], 1));
 
       // Display both multiplier and powers, but make sure to give an empty string if there's neither
       const overrideStr = entry.displayOverride;
@@ -218,7 +251,7 @@ export default {
       // In that case we check for isDilated one level down and combine the actual multipliers together instead.
       let beforeMult, afterMult;
       if (this.isDilated && resource.isDilated) {
-        const dilProd = this.activeEntries
+        const dilProd = this.entries
           .filter(entry => entry.isVisible && entry.isDilated)
           .map(entry => entry.mult)
           .map(val => this.applyDilationExp(val, 1 / this.dilationExponent))
@@ -235,7 +268,7 @@ export default {
         : x => formatX(x, 2, 2);
       return `Dilation Effect: Exponent${formatPow(this.dilationExponent, 2, 3)}
         (${formatFn(beforeMult, 2, 2)} ➜ ${formatFn(afterMult, 2, 2)})`;
-    }
+    },
   },
 };
 </script>
@@ -247,7 +280,7 @@ export default {
       class="c-stacked-bars"
     >
       <div
-        v-for="(perc, index) in percentList"
+        v-for="(perc, index) in averagedPercentList"
         :key="100 + index"
         :style="styleObject(index)"
         :class="{ 'c-bar-highlight' : mouseoverIndex === index }"
@@ -283,18 +316,21 @@ export default {
         Total effect disabled or reduced to {{ formatX(1) }}.
       </div>
       <div
-        v-for="(entry, index) in activeEntries"
+        v-for="(entry, index) in entries"
         v-else
         :key="entry.key"
         @mouseover="mouseoverIndex = index"
         @mouseleave="mouseoverIndex = -1"
       >
         <div
-          v-if="entry.isVisible"
+          v-if="shouldShowEntry(entry)"
           :class="singleEntryClass(index)"
         >
           <div @click="showGroup[index] = !showGroup[index]">
-            <span :class="hideIcon(index)" />
+            <span
+              :class="expandIcon(index)"
+              :style="expandIconStyle(index)"
+            />
             {{ entryString(index) }}
           </div>
           <MultiplierBreakdownEntry
@@ -422,9 +458,5 @@ export default {
 
 @keyframes a-glow-dilation-nerf {
   50% { background-color: var(--color-bad); }
-}
-
-.c-no-icon {
-  padding: 0.9rem;
 }
 </style>

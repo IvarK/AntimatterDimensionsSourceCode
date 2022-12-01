@@ -528,5 +528,5 @@ dev.forceCloudSave = async function() {
 
 // TODO Figure out if we want to remove this before release
 dev.unlockAllCosmeticSets = function() {
-  player.reality.glyphs.cosmetics.availableSets = Object.keys(GameDatabase.reality.glyphCosmeticSets);
+  player.reality.glyphs.cosmetics.unlockedFromNG = Object.keys(GameDatabase.reality.glyphCosmeticSets);
 };

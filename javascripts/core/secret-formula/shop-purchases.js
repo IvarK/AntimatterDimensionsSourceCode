@@ -71,7 +71,12 @@ GameDatabase.shopPurchases = {
     description: "Unlock a Glyph cosmetic set of your choice",
     instantPurchase: true,
     onPurchase: () => {
-      GlyphAppearanceHandler.unlockSet();
+      // The actual unlocks are handled in the ShopPurchaseData object, so we just show notifications here
+      GameUI.notify.info(
+        `You have purchased the "${GlyphAppearanceHandler.chosenFromModal.name}" Set for Glyph cosmetics!`,
+        10000);
+      GlyphAppearanceHandler.chosenFromModal = null;
+      GlyphAppearanceHandler.applyNotification();
     }
   },
   allCosmeticSets: {
@@ -89,7 +94,7 @@ GameDatabase.shopPurchases = {
     description: "Unlock all remaining Glyph cosmetic sets at once",
     instantPurchase: true,
     onPurchase: () => {
-      player.reality.glyphs.cosmetics.availableSets = Object.keys(GameDatabase.reality.glyphCosmeticSets);
+      // The actual unlocks are handled in the ShopPurchaseData object, so we just show notifications here
       GameUI.notify.info(`You have unlocked all sets for Glyph cosmetics!`, 15000);
       GlyphAppearanceHandler.applyNotification();
     }

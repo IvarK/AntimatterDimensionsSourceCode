@@ -23,10 +23,10 @@ export const Speedrun = {
   prepareSave(name) {
     // Carry full completion count and cosmetic saves into speedrun mode as well
     const fullCompletions = player.records.fullGameCompletions;
-    const cosmeticSets = JSON.stringify(player.reality.glyphs.cosmetics.availableSets);
+    const cosmeticSets = JSON.stringify(player.reality.glyphs.cosmetics.unlockedFromNG);
     GameStorage.hardReset();
     player.records.fullGameCompletions = fullCompletions;
-    player.reality.glyphs.cosmetics.availableSets = JSON.parse(cosmeticSets);
+    player.reality.glyphs.cosmetics.unlockedFromNG = JSON.parse(cosmeticSets);
 
     player.speedrun.isUnlocked = true;
     player.speedrun.isActive = true;

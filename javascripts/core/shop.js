@@ -9,6 +9,7 @@ export const ShopPurchaseData = {
   spentSTD: 0,
   respecAvailable: false,
   lastRespec: "",
+  unlockedCosmetics: [],
 
   get availableSTD() {
     return this.totalSTD - this.spentSTD;
@@ -33,7 +34,9 @@ export const ShopPurchaseData = {
     this.spentSTD = newData.spentSTD;
     this.respecAvailable = newData.respecAvailable;
     this.lastRespec = newData.lastRespec ?? 0;
+    this.unlockedCosmetics = [...newData.unlockedCosmetics];
     for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = newData[key] ?? 0;
+    if (this.allCosmeticSets > 0) this.unlockedCosmetics = Object.keys(GameDatabase.reality.glyphCosmeticSets);
     GameStorage.save();
   },
 
@@ -41,6 +44,7 @@ export const ShopPurchaseData = {
     this.totalSTD = 0;
     this.spentSTD = 0;
     this.respecAvailable = false;
+    this.unlockedCosmetics = [];
     for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = 0;
   },
 

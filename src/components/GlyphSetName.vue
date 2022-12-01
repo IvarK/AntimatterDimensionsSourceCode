@@ -162,11 +162,11 @@ export default {
     mainGlyphName() {
       // This returns the type of Glyph that we want for color determinations.
       // The priority is Empty > Cursed > Companion > Reality > 50% or more normal Glyphs > Effarig > any normal Glyph
-      if (this.sortedGlyphs.length === 0) return { id: "none", color: "#888888" };
+      if (this.sortedGlyphs.length === 0) return { id: "none", currentColor: { border: "#888888" } };
       if (this.calculateGlyphPercent("cursed")) return CosmeticGlyphTypes.cursed;
       if (this.calculateGlyphPercent("companion")) return CosmeticGlyphTypes.companion;
       if (this.calculateGlyphPercent("reality")) return CosmeticGlyphTypes.reality;
-      if (this.calculateGlyphPercent("music") >= 50) return { id: "music", color: "#FF80AB" };
+      if (this.calculateGlyphPercent("music") >= 50) return CosmeticGlyphTypes.music;
       const primaryType = this.sortedGlyphs.filter(t => t.adjOrder === 1)[0];
       if (primaryType?.perc >= 50) return CosmeticGlyphTypes[primaryType.type];
       if (this.calculateGlyphPercent("effarig")) return CosmeticGlyphTypes.effarig;
@@ -174,12 +174,12 @@ export default {
     },
     textColor() {
       // If it's the singular equipped glyph in Doomed, we color it crimson
-      // If its cursed, we want its color to be #5151EC, because by default its black, which can be unreadable.
+      // If its cursed, we give it the celestial color because the default (without cosmetics) black is often unreadable
       // If we have 3 types of Glyphs, and none of them have more than 30% total, lets get a copper color.
       // And if we have none of the above (which is most common), lets get the color of the main Glyph.
       if (this.isDoomed && this.glyphSet.length === 1) return "var(--color-pelle--base)";
-      if (this.mainGlyphName.id === "cursed") return "#5151EC";
-      if (this.mainGlyphName.id === "music") return "#FF80AB";
+      if (this.mainGlyphName.id === "cursed") return "var(--color-celestials)";
+      if (this.mainGlyphName.id === "music") return CosmeticGlyphTypes.music.currentColor.border;
       if (this.sortedGlyphs.length >= 3 && this.sortedGlyphs[0].perc <= 30) return "#C46200";
       return this.mainGlyphName.currentColor.border;
     },

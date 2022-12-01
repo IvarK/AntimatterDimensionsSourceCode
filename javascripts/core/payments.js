@@ -102,7 +102,10 @@ const Payments = {
         body: JSON.stringify({
           user: Cloud.user.id,
           upgrade: upgradeKey,
-          beaten: player.records.fullGameCompletions
+          extraData: {
+            requestedSet: GlyphAppearanceHandler.chosenFromModal?.id,
+            fullCompletions: player.records.fullGameCompletions
+          }
         })
       });
     } catch (e) {

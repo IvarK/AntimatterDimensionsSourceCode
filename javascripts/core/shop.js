@@ -8,6 +8,7 @@ export const ShopPurchaseData = {
   totalSTD: 0,
   spentSTD: 0,
   respecAvailable: false,
+  lastRespec: "",
 
   get availableSTD() {
     return this.totalSTD - this.spentSTD;
@@ -17,10 +18,21 @@ export const ShopPurchaseData = {
     return Cloud.loggedIn && this.availableSTD >= 0 && player.IAP.enabled;
   },
 
+  // We also allow for respecs if it's been at least 3 days since the last one
+  get timeUntilRespec() {
+    const msSinceLast = Date.now() - new Date(ShopPurchaseData.lastRespec).getTime();
+    return TimeSpan.fromMilliseconds(3 * 86400 * 1000 - msSinceLast);
+  },
+
+  get canRespec() {
+    return this.respecAvailable || this.timeUntilRespec.totalDays <= 0;
+  },
+
   updateLocalSTD(newData) {
     this.totalSTD = newData.totalSTD;
     this.spentSTD = newData.spentSTD;
     this.respecAvailable = newData.respecAvailable;
+    this.lastRespec = newData.lastRespec ?? 0;
     for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = newData[key] ?? 0;
     GameStorage.save();
   },
@@ -53,7 +65,7 @@ export const ShopPurchaseData = {
   },
 
   async respecAll() {
-    if (!this.respecAvailable) {
+    if (!this.canRespec) {
       Modal.message.show(`You do not have a respec available. Making an STD purchase allows you to respec your upgrades
         once. You can only have at most one of these respecs, and they do not refund offline production purchases.`);
       return;

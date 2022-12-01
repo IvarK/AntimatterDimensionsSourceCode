@@ -1,5 +1,7 @@
 import Vue from "vue";
 
+import { DC } from "../../../../javascripts/core/constants";
+
 export class BreakdownEntryInfo {
   constructor(key) {
     this.key = key;
@@ -21,14 +23,19 @@ export class BreakdownEntryInfo {
     this.data = Vue.observable({
       mult: new Decimal(0),
       pow: 0,
-      isActive: false
+      isVisible: false,
+      lastVisibleAt: 0
     });
   }
 
   update() {
-    this.data.mult = this.mult;
-    this.data.pow = this.pow;
-    this.data.isActive = this.isActive;
+    const isVisible = this.isVisible;
+    this.data.mult.fromDecimal(isVisible ? this.mult : DC.D1);
+    this.data.pow = isVisible ? this.pow : 1;
+    this.data.isVisible = isVisible;
+    if (isVisible) {
+      this.data.lastVisibleAt = Date.now();
+    }
   }
 
   get name() {
@@ -72,8 +79,7 @@ export class BreakdownEntryInfo {
   }
 
   get isVisible() {
-    const noEffect = this.mult.eq(1) && this.pow === 1;
-    return this.isActive && !noEffect;
+    return this.isActive && (this.pow !== 1 || this.mult.neq(1));
   }
 }
 

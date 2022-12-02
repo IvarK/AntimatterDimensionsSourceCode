@@ -280,7 +280,7 @@ export default {
         (${formatFn(beforeMult, 2, 2)} ➜ ${formatFn(afterMult, 2, 2)})`;
     },
     isRecent(date) {
-      return (this.now - date) < 100;
+      return (this.now - date) < 200;
     }
   },
 };

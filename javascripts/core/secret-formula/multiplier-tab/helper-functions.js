@@ -197,6 +197,10 @@ export const MultiplierTabHelper = {
       current: currBH,
       average: avgBH
     };
+  },
+
+  pluralizeDimensions(dims) {
+    return dims === 1 ? "Dimension\xa0" : "Dimensions";
   }
 };
 

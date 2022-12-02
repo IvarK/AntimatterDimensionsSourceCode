@@ -189,6 +189,9 @@ export default {
 
       // Display both multiplier and powers, but make sure to give an empty string if there's neither
       const entry = this.entries[index];
+      if (!entry.data.isVisible) {
+        return `${percString}: ${entry.name}`;
+      }
       const overrideStr = entry.displayOverride;
       let valueStr;
       if (overrideStr) valueStr = `(${overrideStr})`;

@@ -9,10 +9,6 @@ import { PercentageRollingAverage } from "./percentage-rolling-average";
 // show them as nerfs
 const nerfBlacklist = ["IP_base", "EP_base", "TP_base"];
 
-function isRecent(date) {
-  return (Date.now() - date) < 100;
-}
-
 function padPercents(percents) {
   // Add some padding to percents to prevent text flicker
   // Max length is for "-100.0%"
@@ -38,14 +34,15 @@ export default {
       percentList: [],
       averagedPercentList: [],
       showGroup: [],
+      hadChildEntriesAt: [],
       mouseoverIndex: -1,
-      isEmpty: false,
       lastNotEmptyAt: 0,
       dilationExponent: 1,
       isDilated: false,
       // This is used to temporarily remove the transition function from the bar styling when changing the way
       // multipliers are split up; the animation which results from not doing this looks very awkward
-      lastLayoutChange: Date.now()
+      lastLayoutChange: Date.now(),
+      now: Date.now()
     };
   },
   computed: {
@@ -66,21 +63,31 @@ export default {
         "c-multiplier-entry-container": true,
         "c-multiplier-entry-root-container": this.isRoot,
       };
+    },
+    isEmpty() {
+      return !this.isRecent(this.lastNotEmptyAt);
     }
   },
   methods: {
     update() {
-      for (const entry of this.entries) {
+      for (let i = 0; i < this.entries.length; i++) {
+        const entry = this.entries[i];
         entry.update();
+        const hasChildEntries = getResourceEntryInfoGroups(entry.key)
+          .some(group => group.hasVisibleEntries);
+        if (hasChildEntries) {
+          this.hadChildEntriesAt[i] = Date.now();
+        }
       }
       this.dilationExponent = this.resource.dilationEffect;
       this.isDilated = this.dilationExponent !== 1;
       this.calculatePercents();
-      this.isEmpty = !isRecent(this.lastNotEmptyAt);
+      this.now = Date.now();
     },
     changeGroup() {
       this.selected = (this.selected + 1) % this.groups.length;
       this.showGroup = Array.repeat(false, this.entries.length);
+      this.hadChildEntriesAt = Array.repeat(0, this.entries.length);
       this.lastLayoutChange = Date.now();
       this.rollingAverage.clear();
       this.update();
@@ -133,7 +140,7 @@ export default {
         top: `${100 * this.averagedPercentList.slice(0, index).map(p => barSize(p)).sum()}%`,
         height: `${100 * barSize(percents)}%`,
         width: "100%",
-        "transition-duration": isRecent(this.lastLayoutChange) ? undefined : "0.2s",
+        "transition-duration": this.isRecent(this.lastLayoutChange) ? undefined : "0.2s",
         border: percents === 0 ? "" : "0.1rem solid var(--color-text)",
         color: iconObj?.textColor ?? "black",
         background: isNerf
@@ -148,20 +155,20 @@ export default {
       };
     },
     shouldShowEntry(entry) {
-      return entry.data.isVisible || isRecent(entry.data.lastVisibleAt);
+      return entry.data.isVisible || this.isRecent(entry.data.lastVisibleAt);
     },
     barSymbol(index) {
       return this.entries[index].icon?.symbol ?? null;
     },
-    hasChildComp(entry) {
-      return getResourceEntryInfoGroups(entry.key).some(group => group.hasVisibleEntries);
+    hasChildEntries(index) {
+      return this.isRecent(this.hadChildEntriesAt[index]);
     },
     expandIcon(index) {
       return this.showGroup[index] ? "far fa-minus-square" : "far fa-plus-square";
     },
     expandIconStyle(index) {
       return {
-        opacity: this.hasChildComp(this.entries[index]) ? 1 : 0
+        opacity: this.hasChildEntries(index) ? 1 : 0
       };
     },
     entryString(index) {
@@ -269,6 +276,9 @@ export default {
       return `Dilation Effect: Exponent${formatPow(this.dilationExponent, 2, 3)}
         (${formatFn(beforeMult, 2, 2)} ➜ ${formatFn(afterMult, 2, 2)})`;
     },
+    isRecent(date) {
+      return (this.now - date) < 100;
+    }
   },
 };
 </script>
@@ -334,7 +344,7 @@ export default {
             {{ entryString(index) }}
           </div>
           <MultiplierBreakdownEntry
-            v-if="showGroup[index] && hasChildComp(entry)"
+            v-if="showGroup[index] && hasChildEntries(index)"
             :resource="entry"
           />
         </div>

@@ -24,7 +24,8 @@ export default {
       creditsClosed: false,
       loggedIn: false,
       username: "",
-      respecAvailable: false,
+      canRespec: false,
+      respecTimeStr: "",
     };
   },
   computed: {
@@ -36,7 +37,7 @@ export default {
     },
     respecText() {
       if (!this.loggedIn) return "Not logged in!";
-      if (!this.respecAvailable) return "No respec available! (Purchase STDs to gain a respec)";
+      if (!this.canRespec) return "No respec available! (Purchase STDs or wait 3 days since your last one)";
       return null;
     }
   },
@@ -49,7 +50,10 @@ export default {
       this.creditsClosed = GameEnd.creditsEverClosed;
       this.loggedIn = Cloud.loggedIn;
       this.username = Cloud.user?.displayName;
-      this.respecAvailable = ShopPurchaseData.respecAvailable;
+      this.canRespec = ShopPurchaseData.canRespec;
+      if (!ShopPurchaseData.respecAvailable && !this.canRespec) {
+        this.respecTimeStr = ShopPurchaseData.timeUntilRespec.toStringShort();
+      }
     },
     showStore() {
       if (this.creditsClosed) return;
@@ -61,7 +65,7 @@ export default {
       Payments.cancelPurchase(false);
     },
     respec() {
-      if (this.creditsClosed || !this.loggedIn || !this.respecAvailable) return;
+      if (this.creditsClosed || !this.loggedIn || !this.canRespec) return;
       ShopPurchaseData.respecRequest();
     },
     toggleEnable() {
@@ -73,7 +77,7 @@ export default {
       return {
         "o-primary-btn--subtab-option": true,
         "o-pelle-disabled-pointer": this.creditsClosed,
-        "o-primary-btn--disabled": !this.loggedIn || !this.respecAvailable
+        "o-primary-btn--disabled": !this.loggedIn || !this.canRespec
       };
     }
   },
@@ -106,6 +110,9 @@ export default {
       >
         Respec Shop
       </PrimaryButton>
+    </div>
+    <div v-if="!canRespec">
+      Time until respec available: {{ respecTimeStr }}
     </div>
     <div
       v-if="loggedIn"

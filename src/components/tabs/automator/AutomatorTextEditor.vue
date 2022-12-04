@@ -58,7 +58,7 @@ export default {
   },
   beforeDestroy() {
     // This will stick around, otherwise
-    this.unmarkActiveLine();
+    AutomatorHighlighter.clearAllHighlightedLines();
     AutomatorTextUI.savedVertPos = AutomatorTextUI.editor.doc.scrollTop;
     this.$refs.container.removeChild(this.UI.container);
   },

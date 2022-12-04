@@ -5,6 +5,7 @@ import { deepmergeAll } from "@/utility/deepmerge";
 import { playFabLogin } from "./core/playfab";
 import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
+
 import Payments from "./core/payments";
 
 if (GlobalErrorHandler.handled) {
@@ -321,9 +322,9 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
 
   let factor = 1;
   if (effects.includes(GAME_SPEED_EFFECT.BLACK_HOLE)) {
-    if (BlackHoles.arePaused) {
+    if (BlackHoles.areNegative) {
       factor *= player.blackHoleNegative;
-    } else {
+    } else if (!BlackHoles.arePaused) {
       for (const blackHole of BlackHoles.list) {
         if (!blackHole.isUnlocked) break;
         const isActive = blackHolesActiveOverride === undefined
@@ -634,7 +635,8 @@ export function gameLoop(passDiff, options = {}) {
 function passivePrestigeGen() {
   let eternitiedGain = 0;
   if (RealityUpgrade(14).isBought) {
-    eternitiedGain = Effects.product(
+    eternitiedGain = DC.D1.timesEffectsOf(
+      Achievement(113),
       RealityUpgrade(3),
       RealityUpgrade(14)
     );
@@ -722,11 +724,31 @@ function laitelaRealityTick(realDiff) {
     }
     if (Laitela.realityReward > oldInfo.realityReward) {
       completionText += `<br><br>Dark Matter Multiplier: ${formatX(oldInfo.realityReward, 2, 2)}
-        ➜ ${formatX(Laitela.realityReward, 2, 2)}
-        <br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
-        (${formatInt(8 - oldInfo.difficultyTier)}) ➜
-        ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
-        (${formatInt(8 - laitelaInfo.difficultyTier)})`;
+      ➜ ${formatX(Laitela.realityReward, 2, 2)}`;
+      if (oldInfo.fastestCompletion === 3600 || oldInfo.fastestCompletion === 300 && oldInfo.difficultyTier > 0) {
+        if (Time.thisRealityRealTime.totalSeconds < 30) {
+          // First attempt - destabilising
+          completionText += `<br>Best Completion Time: None ➜ Destabilized
+          <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)} ➜
+          ${formatInt(8 - laitelaInfo.difficultyTier)}`;
+        } else {
+          // First attempt - not destabilising
+          completionText += `<br>Best Completion Time: None ➜
+            ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
+            <br>Highest Active Dimension: ${formatInt(8 - laitelaInfo.difficultyTier)}`;
+        }
+      } else if (Time.thisRealityRealTime.totalSeconds < 30) {
+        // Second+ attempt - destabilising
+        completionText += `<br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
+          ➜ Destablized
+          <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)} ➜
+          ${formatInt(8 - laitelaInfo.difficultyTier)}`;
+      } else {
+        // Second+ attempt - not destabilising
+        completionText += `<br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
+        ➜ ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
+        <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)}`;
+      }
       player.records.bestReality.laitelaSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     } else {
       completionText += ` You need to destabilize in faster than
@@ -1040,6 +1062,8 @@ export function init() {
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   kong.init();
   if(steamOn){SteamFunctions.UIZoom()}
+  shop.init();
+  Payments.init();
 }
 
 window.tweenTime = 0;

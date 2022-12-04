@@ -48,6 +48,8 @@ export * from "./celestials/singularity-milestones";
 import "./script-templates";
 import "./speedrun-milestones";
 
+import "./multiplier-tab/index";
+
 import "./celestials/quotes/index";
 
 import "./h2p";

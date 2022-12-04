@@ -72,7 +72,7 @@ export default {
       this.tachyonsUnlocked = progress.isRealityUnlocked || Currency.tachyonParticles.gt(0);
       this.realityUnlocked = progress.isRealityUnlocked;
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
-      this.isS11Active = player.options.theme === "S11";
+      this.isS11Active = Theme.currentName() === "S11";
 
       const options = player.options.animations;
       this.bigCrunch = options.bigCrunch;
@@ -100,7 +100,7 @@ export default {
       <ModalOptionsToggleButton
         v-if="infinityUnlocked"
         v-model="bigCrunch"
-        text="Big crunch:"
+        text="Big Crunch:"
       />
       <ModalOptionsToggleButton
         v-if="eternityUnlocked"
@@ -126,7 +126,7 @@ export default {
         <ModalOptionsToggleButton
           v-if="animatedThemeUnlocked"
           v-model="background"
-          onclick="Themes.find(player.options.theme).set();"
+          onclick="Themes.find(Theme.currentName()).set();"
           text="Background:"
         />
       </div>
@@ -134,13 +134,13 @@ export default {
         <ModalOptionsToggleButton
           v-if="animatedThemeUnlocked"
           v-model="background"
-          onclick="Themes.find(player.options.theme).set();"
+          onclick="Themes.find(Theme.currentName()).set();"
           text="Blobsnow:"
         />
       </div>
       <div
         v-if="isS11Active"
-        class="o-primary-btn o-primary-btn--option-wide o-primary-btn--slider"
+        class="c-blobflake-slider o-primary-btn o-primary-btn--modal-option o-primary-btn--slider"
       >
         <b>{{ quantifyInt("Blobflake", parseInt(blobSnowflakes)) }}</b>
         <SliderComponent
@@ -153,3 +153,9 @@ export default {
     </div>
   </ModalWrapperOptions>
 </template>
+
+<style scoped>
+.c-blobflake-slider {
+  padding: 1.2rem;
+}
+</style>

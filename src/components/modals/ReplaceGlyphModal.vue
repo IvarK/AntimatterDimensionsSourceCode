@@ -20,13 +20,18 @@ export default {
     return {
       target: 0,
       idx: 0,
+      isDoomed: false,
     };
+  },
+  computed: {
+    resetTerm() { return this.isDoomed ? "Armageddon" : "Reality"; },
   },
   methods: {
     update() {
       this.target = this.targetSlot;
       this.idx = this.inventoryIndex;
       this.glyph = Glyphs.findByInventoryIndex(this.idx);
+      this.isDoomed = Pelle.isDoomed;
     },
     handleYesClick() {
       Glyphs.swapIntoActive(this.glyph, this.targetSlot);
@@ -43,6 +48,6 @@ export default {
     <template #header>
       You are about to replace a Glyph
     </template>
-    Replacing a Glyph will restart this Reality.
+    Replacing a Glyph will restart this {{ resetTerm }}.
   </ModalWrapperChoice>
 </template>

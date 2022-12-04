@@ -277,6 +277,7 @@ body.t-s9 {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  color: var(--color-text);
 }
 
 .l-antimatter-dim-tab {
@@ -635,7 +636,7 @@ body.t-s9 {
 }
 
 .t-inverted .c-autobuyer-box-row__modal,
-.t-inverted-metro .c-autobuyer-box-row__modal  {
+.t-inverted-metro .c-autobuyer-box-row__modal {
   background-color: var(--color-base);
   border-color: var(--color-text);
 }

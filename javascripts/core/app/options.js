@@ -15,15 +15,13 @@ export class GameOptions {
     ui.view.newUI = player.options.newUI;
     // This is needed because .s-base--dark is on newUI/normal but not on oldUI/normal
     // So the classes on body need to be updated
-    Themes.find(player.options.theme).set();
+    Themes.find(Theme.currentName()).set();
     SteamFunctions.UIZoom()
     GameStorage.save(true);
   }
 
   static cloudSave() {
-    // This flag suppresses the modal on autosave, but this function is only called with manual saves
-    Cloud.hasSeenSavingConflict = false;
-    Cloud.saveCheck();
+    Cloud.saveCheck(true);
   }
 
   static cloudLoad() {

@@ -111,12 +111,21 @@ GameDatabase.tabs = [
         hidable: true,
       },
       {
+        key: "multipliers",
+        name: "Multiplier Breakdown",
+        symbol: "<i class='fas fa-calculator'></i>",
+        component: "MultiplierBreakdownTab",
+        condition: () => PlayerProgress.infinityUnlocked(),
+        id: 3,
+        hidable: true,
+      },
+      {
         key: "glyph sets",
         name: "Glyph Set Records",
         symbol: "<i class='fas fa-ellipsis-h'></i>",
         component: "GlyphSetRecordsTab",
         condition: () => PlayerProgress.realityUnlocked(),
-        id: 3,
+        id: 4,
         hidable: true,
       },
       {
@@ -125,7 +134,7 @@ GameDatabase.tabs = [
         symbol: "<i class='fas fa-flag-checkered'></i>",
         component: "SpeedrunMilestonesTab",
         condition: () => player.speedrun.isActive,
-        id: 4,
+        id: 5,
         hidable: true,
       },
     ]
@@ -206,7 +215,7 @@ GameDatabase.tabs = [
         name: "Infinity Challenges",
         symbol: "∞",
         component: "infinity-challenges-tab",
-        condition: () => PlayerProgress.hasBroken() || Pelle.isDoomed,
+        condition: () => PlayerProgress.realityUnlocked() || PlayerProgress.hasBroken() || Pelle.isDoomed,
         id: 1,
         hidable: true
       },
@@ -467,7 +476,6 @@ GameDatabase.tabs = [
     name: "Shop",
     newUIClass: "shop",
     hideAt: 1.5,
-    condition: () => 1===1 /*kong.enabled || player.IAP.totalSTD > 0, ||*/,
     id: 10,
     hidable: true,
     subtabs: [

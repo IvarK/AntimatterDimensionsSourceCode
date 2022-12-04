@@ -29,13 +29,9 @@ export const Cloud = {
   auth: getAuth(),
   db: getDatabase(),
   user: null,
-  hasSeenSavingConflict: false,
-  shouldOverwriteCloudSave: true,
   lastCloudHash: null,
 
   resetTempState() {
-    this.hasSeenSavingConflict = false;
-    this.shouldOverwriteCloudSave = true;
     this.lastCloudHash = null;
     GameStorage.lastCloudSave = Date.now();
     GameIntervals.checkCloudSave.restart();
@@ -46,7 +42,13 @@ export const Cloud = {
   },
 
   async login() {
-    await signInWithPopup(this.auth, this.provider);
+    try {
+      await signInWithPopup(this.auth, this.provider);
+      ShopPurchaseData.syncSTD();
+      GameUI.notify.success(`Logged in as ${this.user.displayName}`);
+    } catch (e) {
+      GameUI.notify.error("Google Account login failed");
+    }
   },
 
 
@@ -84,13 +86,12 @@ export const Cloud = {
     return {
       farther: ProgressChecker.compareSaveProgress(cloud, local),
       older: ProgressChecker.compareSaveTimes(cloud, local),
-      diffSTD: (cloud?.IAP?.totalSTD ?? 0) - (local?.IAP?.totalSTD ?? 0),
       differentName: cloud?.options.saveFileName !== local?.options.saveFileName,
       hashMismatch: this.lastCloudHash && this.lastCloudHash !== hash,
     };
   },
 
-  async saveCheck() {
+  async saveCheck(forceModal = false) {
     const save = await this.load();
     if (save === null) {
       this.save();
@@ -99,6 +100,7 @@ export const Cloud = {
       const saveId = GameStorage.currentSlot;
       const cloudSave = root.saves[saveId];
       const thisCloudHash = sha512_256(GameSaveSerializer.serialize(cloudSave));
+      if (!this.lastCloudHash) this.lastCloudHash = thisCloudHash;
       const localSave = GameStorage.saves[saveId];
       const saveComparison = this.compareSaves(cloudSave, localSave, thisCloudHash);
 
@@ -112,11 +114,11 @@ export const Cloud = {
       const hasBoth = cloudSave && localSave;
       // NOTE THIS CHECK IS INTENTIONALLY DIFFERENT FROM THE LOAD CHECK
       const hasConflict = hasBoth && (saveComparison.older === -1 || saveComparison.farther !== 1 ||
-        saveComparison.diffSTD > 0 || saveComparison.differentName || saveComparison.hashMismatch);
-      if (hasConflict && !this.hasSeenSavingConflict) {
+        saveComparison.differentName || saveComparison.hashMismatch);
+      if (forceModal || (hasConflict && player.options.showCloudModal)) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteAndSendCloudSave);
         Modal.cloudSaveConflict.show();
-      } else if (!hasConflict || (this.hasSeenSavingConflict && this.shouldOverwriteCloudSave)) {
+      } else if (!hasConflict || player.options.forceCloudOverwrite) {
         overwriteAndSendCloudSave();
       }
     }
@@ -158,7 +160,7 @@ export const Cloud = {
       // Bring up the modal if cloud loading will overwrite a local save which is older or possibly farther
       const hasBoth = cloudSave && localSave;
       const hasConflict = hasBoth && (saveComparison.older === 1 || saveComparison.farther !== -1 ||
-        saveComparison.diffSTD < 0 || saveComparison.differentName);
+        saveComparison.differentName);
       if (hasConflict) {
         Modal.addCloudConflict(saveId, saveComparison, cloudSave, localSave, overwriteLocalSave);
         Modal.cloudLoadConflict.show();
@@ -187,6 +189,7 @@ export const Cloud = {
           displayName: user.displayName,
           email: user.email,
         };
+        ShopPurchaseData.syncSTD();
       } else {
         this.user = null;
       }

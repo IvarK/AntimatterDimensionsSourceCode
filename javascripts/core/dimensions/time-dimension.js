@@ -233,6 +233,16 @@ class TimeDimensionState extends DimensionState {
     return toGain.times(10).dividedBy(current).times(getGameSpeedupForDisplay());
   }
 
+  get isProducing() {
+    const tier = this.tier;
+    if (EternityChallenge(1).isRunning ||
+      EternityChallenge(10).isRunning ||
+      (Laitela.isRunning && tier > Laitela.maxAllowedDimension)) {
+      return false;
+    }
+    return this.amount.gt(0);
+  }
+
   get baseCost() {
     return this._baseCost;
   }

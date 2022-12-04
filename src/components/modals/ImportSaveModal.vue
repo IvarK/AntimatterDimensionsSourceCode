@@ -17,7 +17,6 @@ export default {
   data() {
     return {
       input: "",
-      importCounter: 0,
       offlineImport: OFFLINE_PROGRESS_TYPE.IMPORTED,
     };
   },
@@ -57,12 +56,6 @@ export default {
     },
     inputIsSecret() {
       return isSecretImport(this.input) || Theme.isSecretTheme(this.input);
-    },
-    hasLessSTDs() {
-      return player.IAP.totalSTD > (this.player?.IAP?.totalSTD ?? 0) && !this.inputIsSecret;
-    },
-    clicksLeft() {
-      return 5 - this.importCounter;
     },
     timeSinceSave() {
       return TimeSpan.fromMilliseconds(Date.now() - this.player.lastUpdate).toString();
@@ -124,8 +117,6 @@ export default {
       }
     },
     importSave() {
-      this.importCounter++;
-      if (this.hasLessSTDs && this.clicksLeft > 0) return;
       if (!this.inputIsValid) return;
       this.emitClose();
       GameStorage.import(this.input);
@@ -182,13 +173,6 @@ export default {
           </div>
           <span v-html="offlineDetails" />
         </div>
-        <div
-          v-if="hasLessSTDs"
-          class="c-modal-IAP__warning"
-        >
-          IMPORTED SAVE HAS LESS STDs BOUGHT, YOU WILL LOSE THEM WITH YOUR SAVE.
-          <br>CLICK THE BUTTON 5 TIMES TO CONFIRM.
-        </div>
       </template>
       <div v-else-if="hasInput">
         Not a valid save:
@@ -202,7 +186,7 @@ export default {
       class="o-primary-btn--width-medium c-modal-message__okay-btn c-modal__confirm-btn"
       @click="importSave"
     >
-      Import <span v-if="hasLessSTDs">({{ clicksLeft }})</span>
+      Import
     </PrimaryButton>
   </ModalWrapperChoice>
 </template>

@@ -14,7 +14,7 @@ export default {
         ? "ModernAntimatterDimensionsTab"
         : "ClassicAntimatterDimensionsTab";
     }
-  }
+  },
 };
 </script>
 

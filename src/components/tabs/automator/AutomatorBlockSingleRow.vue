@@ -99,7 +99,7 @@ export default {
     // The target value is either a String or some kind of a number - we need to force it to be a String for the
     // component type-checking (Numbers are implicitly cast, but Decimals are not)
     nextSelection() {
-      const val = this.b.targets ? this.b[this.b.targets[0]].toString() : "";
+      const val = this.b.targets ? this.b[this.b.targets[0]] : "";
       return val;
     }
   }

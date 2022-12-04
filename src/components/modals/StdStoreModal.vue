@@ -27,7 +27,7 @@ export default {
 <template>
   <ModalWrapper class="c-shop-modal">
     <template #header>
-      Support The Developer -coins
+      Support The Developer - coins
     </template>
     <span id='MacConfirm' v-if="macPurchaser">
       <button class='o-shop-button-button' @click="macConfirm()">Confirm Purchase to Receive STDs</button>

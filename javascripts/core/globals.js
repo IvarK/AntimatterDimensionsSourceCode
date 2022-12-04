@@ -85,7 +85,7 @@ export * from "./black_hole";
 export * from "./machines";
 export * from "./devtools";
 export * from "./news-ticker";
-export * from "./kong";
+export * from "./shop";
 export * from "./ui/tabs";
 export * from "./ui/tab-notifications";
 export * from "./speedrun";

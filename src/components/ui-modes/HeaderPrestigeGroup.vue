@@ -27,6 +27,7 @@ export default {
   flex-direction: row;
   height: 14rem;
   width: 100%;
+  color: var(--color-text);
 }
 
 .l-game-header__eternity {

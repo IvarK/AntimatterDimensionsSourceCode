@@ -19,10 +19,6 @@ export default {
       type: Array,
       required: true
     },
-    closeOn: {
-      type: String,
-      required: true
-    },
     isGlyphSelection: {
       type: Boolean,
       default: false
@@ -52,9 +48,12 @@ export default {
       }
       return maxEffects;
     },
-  },
-  created() {
-    this.on$(this.closeOn, this.emitClose);
+    containerClass() {
+      return {
+        "c-glyph-choice-container": true,
+        "c-glyph-choice-container-single": this.glyphs.length === 1,
+      };
+    }
   },
   methods: {
     update() {
@@ -85,7 +84,7 @@ export default {
       :glyph-set="glyphs"
       :force-color="true"
     />
-    <div class="c-glyph-choice-container">
+    <div :class="containerClass">
       <GlyphShowcasePanelEntry
         v-for="(glyph, idx) in glyphs"
         :key="idx"
@@ -100,3 +99,26 @@ export default {
     </div>
   </ModalWrapper>
 </template>
+
+<style scoped>
+.c-glyph-choice-container {
+  display: flex;
+  flex-flow: row wrap;
+  width: 74rem;
+}
+
+.c-glyph-choice-container-single {
+  width: 37rem;
+}
+
+.c-glyph-choice-single-glyph {
+  display: flex;
+  flex-direction: row;
+  width: 36rem;
+  height: 12rem;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: var(--var-border-radius, 0.5rem);
+  margin: 0.5rem;
+}
+</style>

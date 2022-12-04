@@ -61,7 +61,7 @@ class NormalChallengeState extends GameMechanicState {
   }
 
   get isDisabled() {
-    return this.config.isDisabledInDoomed && Pelle.isDoomed;
+    return Pelle.isDoomed;
   }
 
   get lockedAt() {
@@ -81,9 +81,10 @@ class NormalChallengeState extends GameMechanicState {
   start() {
     if (this.id === 1 || this.isOnlyActiveChallenge) return;
     if (!Tab.challenges.isUnlocked) return;
+    // Forces big crunch reset but ensures IP gain, if any.
+    bigCrunchReset(true, true);
     player.challenge.normal.current = this.id;
     player.challenge.infinity.current = 0;
-    bigCrunchResetValues();
     if (Enslaved.isRunning && EternityChallenge(6).isRunning && this.id === 10) {
       EnslavedProgress.challengeCombo.giveProgress();
       Enslaved.quotes.ec6C10.show();
@@ -102,6 +103,12 @@ class NormalChallengeState extends GameMechanicState {
     // and thus unlocking an autobuyer.
     Achievement(52).tryUnlock();
     Achievement(53).tryUnlock();
+
+    // Completing a challenge unlocks an autobuyer even if not purchased with antimatter, but we still
+    // need to clear the notification because otherwise it sticks there forever. Any other methods of
+    // unlocking autobuyers (such as Existentially Prolong) should also go through this code path
+    TabNotification.newAutobuyer.clearTrigger();
+    GameCache.cheapestAntimatterAutobuyer.invalidate();
   }
 
   get goal() {
@@ -116,15 +123,14 @@ class NormalChallengeState extends GameMechanicState {
     if (bestTimes[this.id - 2] <= player.records.thisInfinity.time) {
       return;
     }
-    // TODO: remove splice once player.challenge.infinity.bestTimes is not reactive
-    bestTimes.splice(this.id - 2, 1, player.records.thisInfinity.time);
+    player.challenge.normal.bestTimes[this.id - 2] = player.records.thisInfinity.time;
     GameCache.challengeTimeSum.invalidate();
     GameCache.worstChallengeTime.invalidate();
   }
 
   exit() {
     player.challenge.normal.current = 0;
-    bigCrunchResetValues();
+    bigCrunchReset(true, false);
     if (!Enslaved.isRunning) Tab.dimensions.antimatter.show();
   }
 }

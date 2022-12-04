@@ -48,6 +48,8 @@ export default {
       const challengeNotEnterable = !this.isUnlocked || this.isRunning || this.name === "C1";
       return {
         "o-challenge-btn": true,
+        "o-challenge-btn--broken": this.overrideLabel.length > 0 && this.name !== "C10",
+        "o-challenge-btn--broken-alt": this.overrideLabel.length > 0 && this.name === "C10",
         "o-challenge-btn--running": this.isRunning || this.inC1,
         "o-challenge-btn--completed": this.isCompleted && this.isUnlocked,
         "o-challenge-btn--unlocked": !this.isCompleted && this.isUnlocked,
@@ -96,5 +98,15 @@ export default {
 </template>
 
 <style scoped>
+.o-challenge-btn--broken {
+  background: var(--color-enslaved--base);
+  clip-path: polygon(0% 0%, 25% 20%, 95% 0%, 100% 25%, 80% 70%, 95% 50%, 100% 100%, 45% 95%,
+    65% 70%, 15% 95%, 0% 45%, 10% 50%);
+}
 
+.o-challenge-btn--broken-alt {
+  background: var(--color-enslaved--base);
+  clip-path: polygon(0% 0%, 15% 0%, 25% 40%, 30% 0%, 55% 0%, 85% 30%, 75% 0%, 100% 0%,
+    90% 40%, 100% 65%, 90% 95%, 45% 45%, 70% 100%, 25% 100%, 5% 90%, 10% 60%);
+}
 </style>

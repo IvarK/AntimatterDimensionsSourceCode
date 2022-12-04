@@ -6,8 +6,6 @@ import Loading from "vue-loading-overlay";
 import Payments from "../../../../javascripts/core/payments";
 
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-
 import ShopButton from "./ShopButton";
 
 export default {
@@ -16,14 +14,16 @@ export default {
     ShopButton,
     Loading,
     PrimaryButton,
-    PrimaryToggleButton
   },
   data() {
     return {
-      STD: 0,
+      availableSTD: 0,
+      spentSTD: 0,
       isLoading: false,
-      IAPsDisabled: false,
+      IAPsEnabled: false,
       creditsClosed: false,
+      loggedIn: false,
+      username: "",
     };
   },
   computed: {
@@ -38,26 +38,38 @@ export default {
     IAPsDisabled(newValue) {
       player.IAP.disabled = newValue;
     }
+    enableText() {
+      return `In-app Purchases: ${this.IAPsEnabled ? "Enabled" : "Disabled"}`;
+    },
   },
   methods: {
     update() {
-      this.STD = player.IAP.totalSTD - player.IAP.spentSTD;
+      this.availableSTD = ShopPurchaseData.availableSTD;
+      this.spentSTD = ShopPurchaseData.spentSTD;
       this.isLoading = Boolean(player.IAP.checkoutSession.id);
-      this.IAPsDisabled = player.IAP.disabled;
+      this.IAPsEnabled = player.IAP.enabled;
       this.creditsClosed = GameEnd.creditsEverClosed;
+      this.loggedIn = Cloud.loggedIn;
+      this.username = Cloud.user?.displayName;
     },
     showStore() {
       if (!steamOn) return;
       if (this.creditsClosed) return;
       SecretAchievement(33).unlock();
-      Modal.shop.show();
+      if (this.loggedIn) Modal.shop.show();
+      else Modal.message.show("You cannot purchase STD coins without logging in first.");
     },
     onCancel() {
-      Payments.cancelPurchase();
+      Payments.cancelPurchase(false);
     },
     respec() {
       if (this.creditsClosed) return;
-      ShopPurchase.respecRequest();
+      ShopPurchaseData.respecRequest();
+    },
+    toggleEnable() {
+      if (ShopPurchaseData.availableSTD < 0) return;
+      if (!player.IAP.enabled && this.spentSTD > 0) Speedrun.setSTDUse(true);
+      player.IAP.enabled = !player.IAP.enabled;
     }
   },
 };
@@ -69,13 +81,19 @@ export default {
       Disclaimer: These are not required to progress in the game, they are just for supporting the developer.
       The game is balanced without the use of any microtransactions.
     </div>
+    <div>
+      Note: Shop purchases made on the Android, Steam, and Web versions are
+      separate and non-transferrable due to legal reasons.
+    </div>
     <div class="c-subtab-option-container">
-      <PrimaryToggleButton
-        v-model="IAPsDisabled"
+      <PrimaryButton
         class="o-primary-btn--subtab-option"
         :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
         label="Disable in-app-purchases:"
-      />
+        @click="toggleEnable()"
+      >
+        {{ enableText }}
+      </PrimaryButton>
       <PrimaryButton
         class="o-primary-btn--subtab-option"
         :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
@@ -84,17 +102,42 @@ export default {
         Respec Shop
       </PrimaryButton>
     </div>
+    <div
+      v-if="loggedIn"
+      class="c-login-info"
+    >
+      You are logged in as {{ username }}.
+      <button
+        class="o-shop-button-button"
+        onclick="GameOptions.logout()"
+      >
+        Disconnect Google Account
+      </button>
+    </div>
+    <div
+      v-else
+      class="c-login-info"
+    >
+      You must be logged in to purchase STD coins or use these upgrades.
+      <button
+        class="o-shop-button-button"
+        onclick="GameOptions.login()"
+      >
+        Login with Google
+      </button>
+    </div>
     <div class="c-shop-header">
-      <span>You have {{ STD }}</span>
+      <span>You have {{ availableSTD }}</span>
       <img
         src="images/std_coin.png"
         class="c-shop-header__img"
       >
       <button
         class="o-shop-button-button"
+        :class="{ 'o-shop-button-button--disabled': !loggedIn }"
         @click="showStore()"
       >
-        {{ buySTDText }}
+        Buy More
       </button>
     </div>
     <div class="l-shop-buttons-container">
@@ -102,7 +145,6 @@ export default {
         v-for="purchase in purchases"
         :key="purchase.key"
         :purchase="purchase"
-        :iap-disabled="IAPsDisabled"
       />
     </div>
     <loading
@@ -142,6 +184,10 @@ export default {
   border-color: var(--color-bad);
 }
 
+.c-login-info {
+  font-size: 1.5rem;
+}
+
 .c-shop-header {
   display: flex;
   justify-content: center;
@@ -166,6 +212,11 @@ export default {
   margin-top: 1rem;
   padding: 0.5rem 2rem;
   cursor: pointer;
+}
+
+.o-shop-button-button--disabled {
+  background: rgb(150, 150, 150);
+  cursor: default;
 }
 
 .l-shop-buttons-container {

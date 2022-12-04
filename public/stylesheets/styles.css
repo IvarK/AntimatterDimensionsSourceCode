@@ -61,7 +61,7 @@ html {
   --color-bad: #b84b5f;
   --color-gh-purple: #8957e5;
   --color-notification: red;
-  --color-overlay: rgba(30, 30, 50, 90%);
+  --color-overlay: rgba(30, 30, 50, 70%);
 
   --color-antimatter: #2196f3;
   --color-infinity: #b67f33;
@@ -330,7 +330,6 @@ button:focus {
 }
 
 .c-tooltip-content {
-  content: attr(ach-tooltip);
   width: 16rem;
   position: absolute;
   z-index: 4;
@@ -1464,6 +1463,7 @@ br {
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
   transition: opacity 0.3s, visibility 0.3s;
+  pointer-events: none;
 }
 
 .s-base--dark .infotooltip .infotooltiptext {
@@ -1601,16 +1601,16 @@ br {
 }
 
 .o-primary-btn--dimboost {
-  position: relative;
   width: 21rem;
   height: 4.5rem;
+  position: relative;
   font-size: 0.9rem;
 }
 
 .o-primary-btn--galaxy {
-  position: relative;
   width: 21rem;
   height: 4.5rem;
+  position: relative;
   font-size: 0.9rem;
 }
 
@@ -2304,6 +2304,9 @@ br {
   justify-content: center;
   align-items: center;
   font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-text);
+  margin: 0.5rem;
 }
 
 .l-game-header__buttons-line {
@@ -2501,6 +2504,7 @@ br {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: var(--color-text);
 }
 
 .l-infinity-dim-tab__ec8-purchases {
@@ -2615,6 +2619,7 @@ br {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: var(--color-text);
 }
 
 /* #endregion l-time-dim-tab */
@@ -4189,11 +4194,6 @@ br {
 
 .t-s6 .o-autobuyer-toggle-checkbox__label,
 .t-s10 .o-autobuyer-toggle-checkbox__label {
-  border-color: #cccccc;
-}
-
-.t-s6 .o-autobuyer-toggle-checkbox__label,
-.t-s10 .o-autobuyer-toggle-checkbox__label {
   border-color: var(--color-text);
 }
 
@@ -4391,7 +4391,7 @@ br {
 
 .c-autobuyer-box-row {
   display: flex;
-  width: 90rem;
+  width: 96rem;
   position: relative;
   justify-content: center;
   align-items: center;
@@ -4467,7 +4467,7 @@ properly on certain themes. */
   display: flex;
   flex-grow: 1;
   flex-wrap: wrap;
-  width: 91rem;
+  width: 97rem;
 }
 
 .c-small-autobuyer-input {
@@ -4746,6 +4746,7 @@ properly on certain themes. */
 .o-eternity-upgrade--useless {
   color: black;
   background-color: var(--color-pelle--base);
+  filter: grayscale(50%);
   border-color: black;
 }
 
@@ -5208,6 +5209,7 @@ properly on certain themes. */
 .o-dilation-upgrade--useless {
   color: black;
   background-color: var(--color-pelle--base);
+  filter: grayscale(50%);
 }
 
 .o-dilation-upgrade--unavailable {
@@ -5243,10 +5245,6 @@ properly on certain themes. */
 
 .t-s1 .o-dilation-upgrade--unavailable:hover {
   background-color: #d72621;
-}
-
-.t-dark .o-dilation-upgrade {
-  background-color: black;
 }
 
 .t-dark .o-dilation-upgrade--available:hover,
@@ -5783,7 +5781,7 @@ properly on certain themes. */
 .c-modal-IAP__warning {
   font-size: 1.6rem;
   font-weight: bold;
-  color: #ff6666;
+  color: var(--color-notification);
 }
 
 /* #endregion c-modal-import */
@@ -7383,8 +7381,8 @@ kbd {
 .c-ra-run-button {
   display: flex;
   flex-direction: column;
-  width: 31rem;
-  height: 33rem;
+  width: 33rem;
+  height: 36rem;
   justify-content: center;
   align-items: center;
   font-family: Typewriter;
@@ -7461,8 +7459,8 @@ kbd {
 .c-ra-remembrance-unlock {
   display: flex;
   flex-direction: column;
-  width: 31rem;
-  height: 33rem;
+  width: 33rem;
+  height: 36rem;
   justify-content: center;
   align-items: center;
   color: white;
@@ -7636,8 +7634,8 @@ kbd {
   left: 50%;
   z-index: 0;
   border-top: 0 solid black;
-  border-right: var(--var-border-width, 0.7rem) solid transparent;
-  border-left: var(--var-border-width, 0.7rem) solid transparent;
+  border-right: 0.7rem solid transparent;
+  border-left: 0.7rem solid transparent;
   margin-bottom: 0;
   margin-left: -0.7rem;
   transition-duration: 0.3s;
@@ -8087,7 +8085,7 @@ kbd {
 }
 
 .o-laitela-run-button--large {
-  width: 45rem;
+  width: 44rem;
 }
 
 .o-laitela-matter-amount {
@@ -8098,7 +8096,7 @@ kbd {
 .c-dark-matter-dimension-container {
   display: flex;
   flex-direction: column;
-  width: 50rem;
+  width: 51rem;
   height: 15rem;
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
@@ -8124,6 +8122,7 @@ kbd {
   width: 15rem;
   height: 5rem;
   font-family: Typewriter;
+  font-size: 1.2rem;
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
   border: var(--var-border-width, 0.2rem) solid var(--color-laitela--accent);
@@ -8210,7 +8209,7 @@ kbd {
 .c-laitela-milestone {
   display: flex;
   flex-direction: column;
-  width: 22rem;
+  width: 21rem;
   height: 16%;
   position: relative;
   z-index: 0;
@@ -8261,9 +8260,9 @@ kbd {
 
 .c-laitela-milestone--completed {
   width: 18.8rem;
-  height: 21.8rem;
+  height: 20.8rem;
   top: -1.5rem;
-  left: 1.5rem;
+  left: 1rem;
   background-color: transparent;
   background-image: url("../images/laitela-icon.svg");
   background-position: center;
@@ -8281,8 +8280,6 @@ kbd {
   background: var(--color-laitela--base);
   border: var(--var-border-width, 0.2rem) solid var(--color-laitela--accent);
   border-radius: var(--var-border-radius, 0.5rem);
-  margin: auto;
-  margin-top: 1rem;
   margin-bottom: 1rem;
   padding: 1rem;
 }
@@ -8362,7 +8359,7 @@ kbd {
 .l-singularity-milestone-modal-container-inner {
   display: flex;
   flex-wrap: wrap;
-  width: 93rem;
+  width: 111rem;
   height: 120rem;
   justify-content: space-evenly;
   padding-bottom: 2rem;
@@ -8379,12 +8376,12 @@ kbd {
   left: -0.5rem;
   border: 0.1rem solid var(--color-laitela--accent);
   border-radius: var(--var-border-radius, 0.6rem);
-  margin-top: 0.5rem;
+  margin: 1rem 0 0 1rem;
   padding: 1rem 0.5rem;
 }
 
 .c-singularity-milestone-modal-sort-button {
-  width: 22rem;
+  width: 26.5rem;
   height: 6rem;
   font-family: Typewriter, serif;
   font-size: 1.3rem;
@@ -8404,7 +8401,7 @@ kbd {
 }
 
 .o-laitela-singularity-modal-button {
-  width: 22rem;
+  width: 21rem;
   height: 4%;
   font-weight: bold;
   color: var(--color-laitela--accent);
@@ -8480,7 +8477,7 @@ kbd {
 }
 
 .l-laitela-annihilation-container {
-  width: 50rem;
+  width: 51rem;
   height: 20rem;
   font-family: Typewriter, serif;
   font-size: 1.2rem;
@@ -8525,7 +8522,7 @@ kbd {
 }
 
 .c-laitela-automation-toggle {
-  width: 20rem;
+  width: 22rem;
   height: 3rem;
   font-family: Typewriter;
   font-size: 1.1rem;
@@ -9551,7 +9548,7 @@ input.o-automator-block-input {
 
 .c-autobuyer-buy-box {
   display: flex;
-  width: 90rem;
+  width: 96rem;
   height: 6.4rem;
   justify-content: center;
   align-items: center;

@@ -44,7 +44,11 @@ export const Theme = function Theme(name, config) {
     } else {
       document.getElementById("background-animations").style.display = "none";
     }
-    player.options.theme = name;
+    if (player.options.newUI) {
+      player.options.themeModern = name;
+    } else {
+      player.options.themeClassic = name;
+    }
     ui.view.theme = name;
     window.getSelection().removeAllRanges();
     PerkNetwork.forceNetworkRemake();
@@ -55,8 +59,14 @@ export const Theme = function Theme(name, config) {
   };
 };
 
+Theme.currentName = function() {
+  return player.options.newUI
+    ? player.options.themeModern
+    : player.options.themeClassic;
+};
+
 Theme.current = function() {
-  return Themes.find(player.options.theme);
+  return Themes.find(Theme.currentName());
 };
 
 Theme.set = function(name) {

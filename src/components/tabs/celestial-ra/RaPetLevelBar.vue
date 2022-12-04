@@ -105,25 +105,10 @@ export default {
       this.memories = pet.memories;
       this.level = pet.level;
       this.requiredMemories = pet.requiredMemories;
-      this.nextLevelEstimate = this.timeToGoalString((this.requiredMemories - this.memories));
+      this.nextLevelEstimate = Ra.timeToGoalString(this.pet, this.requiredMemories - this.memories);
     },
     isImportant(level) {
       return this.importantLevels.includes(level);
-    },
-    // TODO: this exact segment is used in another place, we should really make this a function somewhere in Ra
-    timeToGoalString(expToGain) {
-      const pet = this.pet;
-      // Quadratic formula for growth (uses constant growth for a = 0)
-      const a = Ra.productionPerMemoryChunk * pet.memoryUpgradeCurrentMult * pet.memoryChunksPerSecond / 2;
-      const b = Ra.productionPerMemoryChunk * pet.memoryUpgradeCurrentMult * pet.memoryChunks;
-      const c = -expToGain;
-      const estimate = a === 0
-        ? -c / b
-        : (Math.sqrt(Math.pow(b, 2) - 4 * a * c) - b) / (2 * a);
-      if (Number.isFinite(estimate)) {
-        return `in ${TimeSpan.fromSeconds(estimate).toStringShort()}`;
-      }
-      return "";
     },
   },
 };

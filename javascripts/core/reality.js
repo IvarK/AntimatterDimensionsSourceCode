@@ -75,10 +75,13 @@ export const GlyphSelection = {
   },
 
   select(glyphID, sacrifice) {
+    const chosenGlyph = this.glyphs[glyphID];
     if (sacrifice) {
-      GlyphSacrificeHandler.removeGlyph(this.glyphs[glyphID], true);
+      GlyphSacrificeHandler.removeGlyph(chosenGlyph, true);
+    } else if (GameCache.glyphInventorySpace.value > 0) {
+      Glyphs.addToInventory(chosenGlyph);
     } else {
-      Glyphs.addToInventory(this.glyphs[glyphID]);
+      AutoGlyphProcessor.getRidOfGlyph(chosenGlyph);
     }
     this.glyphs = [];
     this.realityProps = undefined;
@@ -113,11 +116,20 @@ export function requestManualReality() {
     return;
   }
   if (GameCache.glyphInventorySpace.value === 0) {
-    Modal.message.show("Inventory cannot hold new Glyphs. Delete/sacrifice (shift-click) some Glyphs.",
+    Modal.message.show("No available inventory space; free up space by shift-clicking Glyphs to get rid of them.",
       { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
     return;
   }
-  processManualReality(false);
+  startManualReality(false);
+}
+
+export function startManualReality(sacrifice, glyphID) {
+  if (player.options.animations.reality) {
+    runRealityAnimation();
+    setTimeout(processManualReality, 3000, sacrifice, glyphID);
+  } else {
+    processManualReality(sacrifice, glyphID);
+  }
 }
 
 export function processManualReality(sacrifice, glyphID) {
@@ -167,16 +179,8 @@ export function processManualReality(sacrifice, glyphID) {
 
   // We've already gotten a glyph at this point, so the second value has to be true.
   // If we haven't sacrificed, we need to sort and purge glyphs, as applicable.
-  triggerManualReality(getRealityProps(false, true));
-}
+  beginProcessReality(getRealityProps(false, true));
 
-function triggerManualReality(realityProps) {
-  if (player.options.animations.reality) {
-    runRealityAnimation();
-    setTimeout(beginProcessReality, 3000, realityProps);
-  } else {
-    beginProcessReality(realityProps);
-  }
   // Should be here so that the perk graphics update even when we're on the perk subtab, while also keeping its
   // relatively expensive operations off of the reality reset hot path for when realities are significantly faster
   PerkNetwork.updatePerkColor();
@@ -207,19 +211,20 @@ function processAutoGlyph(gainedLevel, rng) {
   // Always generate a list of glyphs to avoid RNG diverging based on whether
   // a reality is done automatically.
   const glyphs = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedLevel, { rng });
+  let keepGlyph;
   if (EffarigUnlock.glyphFilter.isUnlocked) {
     newGlyph = AutoGlyphProcessor.pick(glyphs);
-    if (!AutoGlyphProcessor.wouldKeep(newGlyph) || GameCache.glyphInventorySpace.value === 0) {
-      AutoGlyphProcessor.getRidOfGlyph(newGlyph);
-      newGlyph = null;
-    }
+    keepGlyph = AutoGlyphProcessor.wouldKeep(newGlyph);
   } else {
     // It really doesn't matter which we pick since they're random,
     // so we might as well take the first one.
     newGlyph = glyphs[0];
+    keepGlyph = true;
   }
-  if (newGlyph && GameCache.glyphInventorySpace.value > 0) {
+  if (keepGlyph && GameCache.glyphInventorySpace.value > 0) {
     Glyphs.addToInventory(newGlyph);
+  } else {
+    AutoGlyphProcessor.getRidOfGlyph(newGlyph);
   }
 }
 
@@ -541,7 +546,9 @@ export function finishProcessReality(realityProps) {
       disChargeAll();
     }
   }
-  if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
+  if (Player.automatorUnlocked && AutomatorBackend.state.forceRestart) {
+    AutomatorBackend.start(player.reality.automator.state.editorScript);
+  }
   if (player.options.automatorEvents.clearOnReality) AutomatorData.clearEventLog();
 
   const celestialRunState = clearCelestialRuns();
@@ -627,6 +634,7 @@ export function finishProcessReality(realityProps) {
   player.dilation.lastEP = DC.DM1;
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
+  player.celestials.enslaved.hasSecretStudy = false;
   player.celestials.laitela.entropy = 0;
 
   playerInfinityUpgradesOnReset();
@@ -636,7 +644,7 @@ export function finishProcessReality(realityProps) {
   fullResetTimeDimensions();
   resetChallengeStuff();
   AntimatterDimensions.reset();
-  secondSoftReset();
+  secondSoftReset(false);
   player.celestials.ra.peakGamespeed = 1;
 
   InfinityDimensions.resetAmount();

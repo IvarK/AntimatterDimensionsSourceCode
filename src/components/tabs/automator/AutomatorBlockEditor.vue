@@ -115,7 +115,9 @@ export const BlockAutomator = {
   },
 
   generateText(block, indentation = 0) {
-    let parsed = "\t".repeat(indentation) + block.cmd;
+    // We add an extra trailing space here and remove double-spaces at the end because this makes some conversion
+    // errors slightly less harsh; some errors which wiped entire lines now just fail to parse arguments instead
+    let parsed = `${"\t".repeat(indentation)}${block.cmd} `;
 
     parsed = parsed
       .replace("COMMENT", "//")
@@ -133,7 +135,7 @@ export const BlockAutomator = {
 
     if (block.cmd === "IF" || block.cmd === "WHILE" || block.cmd === "UNTIL") parsed += " {";
 
-    return parsed;
+    return parsed.replace("  ", " ");
   },
 
   parseLines(l, indentation = 0) {

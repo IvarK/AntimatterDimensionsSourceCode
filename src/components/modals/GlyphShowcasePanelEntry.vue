@@ -72,13 +72,10 @@ export default {
     },
     typeStyle() {
       // Special case for cursed glyphs because its black default has poor contrast on some themes
-      // TODO Update this when we "fix" Modern UI Normal because #5151EC looks kinda weird
-      const color = this.glyph.type === "cursed"
-        ? "#5151EC"
-        : GlyphTypes[this.type].color;
       return {
-        color: `${color}`,
+        color: GlyphTypes[this.type].color,
         "font-weight": "bold",
+        "text-shadow": this.type === "cursed" ? "0.05rem 0.05rem var(--color-text)" : undefined,
         animation: this.type === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
       };
     },

@@ -171,6 +171,39 @@ GameDatabase.tabNotifications = {
         tab: "autobuyers"
       },
     ],
+    // Always externally triggered, but needs to be ignored in cel7 because they're unlocked differently
+    condition: () => !Pelle.isDoomed,
+  },
+  imaginaryMachineUnlock: {
+    id: 13,
+    tabsToHighLight: [
+      {
+        parent: "reality",
+        tab: "imag_upgrades"
+      }
+    ],
+    condition: () => MachineHandler.isIMUnlocked,
+    events: [GAME_EVENT.GAME_TICK_AFTER]
+  },
+  laitelaUnlock: {
+    id: 14,
+    tabsToHighLight: [
+      {
+        parent: "celestials",
+        tab: "laitela"
+      },
+    ],
+    // Always externally triggered
+    condition: () => true,
+  },
+  pelleUnlock: {
+    id: 15,
+    tabsToHighLight: [
+      {
+        parent: "celestials",
+        tab: "pelle"
+      },
+    ],
     // Always externally triggered
     condition: () => true,
   },

@@ -11,15 +11,12 @@ export default {
     };
   },
   computed: {
-    localString() {
-      const desc = this.cloudSaveEnabled
-        ? "Time since last local save:"
-        : "Time since last save:";
-      return `${desc} ${timeDisplayShort(this.currentTime - this.lastLocalSave)}`;
-    },
-    cloudString() {
-      if (!this.cloudSaveEnabled) return null;
-      return `Time since last cloud save: ${timeDisplayShort(this.currentTime - this.lastCloudSave)}`;
+    timeString() {
+      const localStr = timeDisplayShort(this.currentTime - this.lastLocalSave);
+      const cloudStr = timeDisplayShort(this.currentTime - this.lastCloudSave);
+      return this.cloudSaveEnabled
+        ? `${localStr} (local) | ${cloudStr} (cloud)`
+        : localStr;
     },
   },
   methods: {
@@ -43,9 +40,7 @@ export default {
     class="o-save-timer"
     @click="save"
   >
-    {{ localString }}
-    <br>
-    {{ cloudString }}
+    Time since last save: {{ timeString }}
   </div>
 </template>
 

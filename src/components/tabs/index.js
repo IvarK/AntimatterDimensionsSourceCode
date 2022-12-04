@@ -19,6 +19,7 @@ import InfinityChallengesTab from "./infinity-challenges/InfinityChallengesTab";
 import InfinityDimensionsTab from "./infinity-dimensions/InfinityDimensionsTab";
 import InfinityUpgradesTab from "./infinity-upgrades/InfinityUpgradesTab";
 import LaitelaTab from "./celestial-laitela/LaitelaTab";
+import MultiplierBreakdownTab from "./statistics/MultiplierBreakdownTab";
 import NormalAchievementsTab from "./normal-achievements/NormalAchievementsTab";
 import NormalChallengesTab from "./normal-challenges/NormalChallengesTab";
 import OptionsGameplayTab from "./options-gameplay/OptionsGameplayTab";
@@ -81,6 +82,7 @@ const TabComponents = {
   AlchemyTab,
   CelestialNavigationTab,
   ShopTab,
+  MultiplierBreakdownTab
 };
 
 export default TabComponents;

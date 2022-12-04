@@ -232,13 +232,10 @@ export const Glyphs = {
     return this.active[activeIndex];
   },
   equip(glyph, targetSlot) {
-    const pelleMaxGlyphs = 1;
-    const glyphsEquipped = Glyphs.active.filter(Boolean).length;
     if (
       Pelle.isDoomed &&
       (
         Pelle.isDisabled("glyphs") ||
-        glyphsEquipped >= pelleMaxGlyphs ||
         ["effarig", "reality", "cursed"].includes(glyph.type)
       )
     ) return;
@@ -619,7 +616,9 @@ export const Glyphs = {
       Currency.tachyonParticles.value = new Decimal(undoData.tp);
       Currency.dilatedTime.value = new Decimal(undoData.dt);
     }
-    if (AutomatorBackend.state.forceRestart) AutomatorBackend.restart();
+    if (Player.automatorUnlocked && AutomatorBackend.state.forceRestart) {
+      AutomatorBackend.start(player.reality.automator.state.editorScript);
+    }
   },
   copyForRecords(glyphList) {
     // Sorting by effect ensures consistent ordering by type, based on how the effect bitmasks are structured

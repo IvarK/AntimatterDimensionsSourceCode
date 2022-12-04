@@ -173,7 +173,8 @@ export class DimBoost {
   }
 }
 
-export function softReset(tempBulk, forcedNDReset = false, forcedAMReset = false) {
+// eslint-disable-next-line max-params
+export function softReset(tempBulk, forcedADReset = false, forcedAMReset = false, enteringAntimatterChallenge = false) {
   if (Currency.antimatter.gt(Player.infinityLimit)) return;
   const bulk = Math.min(tempBulk, DimBoost.maxBoosts - player.dimensionBoosts);
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
@@ -182,12 +183,12 @@ export function softReset(tempBulk, forcedNDReset = false, forcedAMReset = false
   const canKeepDimensions = Pelle.isDoomed
     ? PelleUpgrade.dimBoostResetsNothing.canBeApplied
     : Perk.antimatterNoReset.canBeApplied;
-  if (forcedNDReset || !canKeepDimensions) {
+  if (forcedADReset || !canKeepDimensions) {
     AntimatterDimensions.reset();
     player.sacrificed = DC.D0;
     resetTickspeed();
   }
-  skipResetsIfPossible();
+  skipResetsIfPossible(enteringAntimatterChallenge);
   const canKeepAntimatter = Pelle.isDoomed
     ? PelleUpgrade.dimBoostResetsNothing.canBeApplied
     : (Achievement(111).isUnlocked || Perk.antimatterNoReset.canBeApplied);
@@ -199,8 +200,8 @@ export function softReset(tempBulk, forcedNDReset = false, forcedAMReset = false
   EventHub.dispatch(GAME_EVENT.DIMBOOST_AFTER, bulk);
 }
 
-export function skipResetsIfPossible() {
-  if (Player.isInAntimatterChallenge) return;
+export function skipResetsIfPossible(enteringAntimatterChallenge) {
+  if (enteringAntimatterChallenge || Player.isInAntimatterChallenge) return;
   if (InfinityUpgrade.skipResetGalaxy.isBought && player.dimensionBoosts < 4) {
     player.dimensionBoosts = 4;
     if (player.galaxies === 0) player.galaxies = 1;

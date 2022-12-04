@@ -57,6 +57,7 @@ export default {
       return `${AntimatterDimension(this.tier - 2).shortDisplayName} AD`;
     },
     buttonPrefix() {
+      if (!this.isUnlocked) return "Locked";
       if (this.isCapped) return "Shattered by Nameless";
       if (this.isContinuumActive) return "Continuum: ";
       return `Buy ${this.howManyCanBuy}`;

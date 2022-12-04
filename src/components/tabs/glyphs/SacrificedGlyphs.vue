@@ -60,6 +60,7 @@ export default {
     dragleave(event) {
       if (
         this.isDoomed ||
+        !event.relatedTarget ||
         !event.relatedTarget.classList ||
         event.relatedTarget.classList.contains("c-current-glyph-effects") ||
         event.relatedTarget.classList.contains("c-sacrificed-glyphs__header") ||

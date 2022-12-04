@@ -7,8 +7,16 @@ export default {
     ModalWrapperChoice
   },
   methods: {
+    returnedSTDCount() {
+      let std = 0;
+      for (const purchase of ShopPurchase.all) {
+        if (purchase.config.singleUse) continue;
+        std += purchase.purchases * purchase.cost;
+      }
+      return std;
+    },
     handleYesClick() {
-      ShopPurchase.respecAll();
+      ShopPurchaseData.respecAll();
       EventHub.ui.offAll(this);
     }
   },
@@ -24,12 +32,15 @@ export default {
       You are about to respec your Shop Purchases
     </template>
     <div class="c-modal-message__text">
-      Are you sure you want to respec your Shop Purchases? This will not cost any
+      Are you sure you want to respec your Shop Purchases? This will not cost anything and
+      return the {{ returnedSTDCount() }}
       <img
         src="images/std_coin.png"
         class="o-shop-button-button__img"
-      >.
-      <!-- TODO: Should it cost any coins? -->
+      > you spent on all non-offline progress purchases.
+      <br>
+      <br>
+      <b class="o-warning">You will not be able to respec again unless you purchase more STD coins.</b>
     </div>
   </ModalWrapperChoice>
 </template>
@@ -42,5 +53,9 @@ export default {
 .o-shop-button-button__img {
   height: 2.5rem;
   vertical-align: middle;
+}
+
+.o-warning {
+  color: var(--color-infinity);
 }
 </style>

@@ -96,6 +96,7 @@ export default {
       // This flag is used to prevent the tooltip from being shown in some touch event sequences
       suppressTooltip: false,
       isTouched: false,
+      tooltipEnabled: false,
       sacrificeReward: 0,
       uncappedRefineReward: 0,
       refineReward: 0,
@@ -307,6 +308,14 @@ export default {
       this.$recompute("displayedInfo");
     });
     this.on$("tooltip-touched", () => this.hideTooltip());
+    this.on$(GAME_EVENT.TAB_CHANGED, () => this.hideTooltip());
+
+    // There are a few situations where a tooltip could attempt to render immediately upon component creation,
+    // which causes it to be placed in an odd "default" corner spot due to mouse position not being set properly.
+    // This is essentially a hack that force-suppresses tooltips from being shown in strange spots due to on-load
+    // events firing, but has the side effect that the mouse must leave and enter an element which was created
+    // underneath it in order to make the tooltip appear
+    setTimeout(() => this.tooltipEnabled = true, 10);
   },
   beforeDestroy() {
     if (this.isCurrentTooltip) this.hideTooltip();
@@ -361,6 +370,7 @@ export default {
       this.$viewModel.tabs.reality.currentGlyphTooltip = -1;
     },
     showTooltip() {
+      if (!this.tooltipEnabled) return;
       Glyphs.removeNewFlag(this.glyph);
       this.tooltipLoaded = true;
       this.$viewModel.tabs.reality.mouseoverGlyphInfo.inInventory = !this.circular;

@@ -76,6 +76,10 @@ export default {
     runDescription() {
       return GameDatabase.celestials.descriptions[4].effects().replace(/^\w/u, c => c.toUpperCase()).split("\n");
     },
+    memoryDescription() {
+      return `Within Ra's Reality, Memory Chunks for Celestial Memories
+        will be generated based on certain resource amounts.`;
+    },
     isDoomed: () => Pelle.isDoomed,
   },
   methods: {
@@ -150,6 +154,10 @@ export default {
           :key="lineId + '-ra-run-desc'"
         >
           {{ line }}
+        </span>
+        <br>
+        <span>
+          {{ memoryDescription }}
         </span>
       </button>
       <div

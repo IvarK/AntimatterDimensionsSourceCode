@@ -20,6 +20,7 @@ export default {
   },
   data() {
     return {
+      laitelaFastest: 3600,
       teresaBestAM: new Decimal(),
       teresaRunMult: 0,
       effarigDone: false,
@@ -40,12 +41,16 @@ export default {
       return `${this.name} Reality`;
     },
     message() {
-      return `Perform a Reality reset, and enter ${this.name} Reality, in which:`;
+      return `Perform a Reality reset and enter ${this.name} Reality, in which:`;
     },
     extraLine() {
       switch (this.number) {
-        case 0: return `Your highest Teresa completion was for ${format(this.teresaBestAM, 2, 2)}
-          antimatter, gaining you a ${formatX(this.teresaRunMult, 2)} multiplier to Glyph Sacrifice power.`;
+        case 0:
+          return this.teresaBestAM.eq(1)
+            ? `You have not unlocked the reward for Teresa's Reality yet. Unlocking the reward requires
+              purchasing the Reality study and completing the Reality for the first time.`
+            : `Your highest Teresa completion was for ${format(this.teresaBestAM, 2, 2)} antimatter,
+              gaining you a ${formatX(this.teresaRunMult, 2)} multiplier to Glyph Sacrifice power.`;
         case 1: return this.effarigDone
           ? "Effarig is completed!"
           : `You are currently on the ${this.effarigLayer} Layer.`;
@@ -53,13 +58,12 @@ export default {
           ? "Have... we... not helped enough..."
           : "We... can help... Let us... help...";
         case 3: return "";
-        case 4: return `Inside of Ra's Reality, some resources will generate Memory Chunks
-          for a specific Celestial Memory based on their amount.`;
+        case 4: return `Within Ra's Reality, some resources will generate Memory Chunks
+          for Celestial Memories based on their amounts:`;
         case 5: return this.laitelaFastest >= 300
           ? "You have not completed Lai'tela at this tier."
           : `Your fastest completion on this tier is ${this.laitelaTime}.`;
-        // TODO: Address pelle being its own modal instead of here
-        case 6: return `Pe-lle is Dea-th. You is Doo-med.`;
+        case 6: return "";
         default: throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
       }
     }
@@ -72,8 +76,8 @@ export default {
       this.effarigDone = effarigStage === EFFARIG_STAGES.COMPLETED;
       this.effarigLayer = [null, "Infinity", "Eternity", "Reality"][effarigStage];
       this.enslavedDone = Enslaved.isCompleted;
-      const laitelaFastest = player.celestials.laitela.fastestCompletion;
-      this.laitelaTime = TimeSpan.fromSeconds(laitelaFastest).toStringShort();
+      this.laitelaFastest = player.celestials.laitela.fastestCompletion;
+      this.laitelaTime = TimeSpan.fromSeconds(this.laitelaFastest).toStringShort();
     },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));

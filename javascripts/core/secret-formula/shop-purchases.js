@@ -1,5 +1,6 @@
 import { GameDatabase } from "./game-database";
 
+// NOTE: IF ANY COSTS ARE CHANGED HERE, THEY ALSO NEED TO BE CHANGED ON THE BACKEND TOO
 GameDatabase.shopPurchases = {
   dimPurchases: {
     key: "dimPurchases",
@@ -52,7 +53,7 @@ GameDatabase.shopPurchases = {
     description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
     singleUse: true,
     onPurchase: () => {
-      kong.purchaseTimeSkip();
+      shop.purchaseTimeSkip();
     }
   },
   bigTimeSkip: {
@@ -61,7 +62,7 @@ GameDatabase.shopPurchases = {
     description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
     singleUse: true,
     onPurchase: () => {
-      kong.purchaseLongerTimeSkip();
+      shop.purchaseLongerTimeSkip();
     }
   },
 };

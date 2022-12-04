@@ -38,10 +38,9 @@ export default {
     update() {
       this.baseSpeed = getGameSpeedupFactor();
       this.pulsedSpeed = getGameSpeedupForDisplay();
-      const ec12 = EternityChallenge(12);
-      this.hasSeenAlteredSpeed = PlayerProgress.realityUnlocked() || ec12.completions > 0 || ec12.isRunning;
+      this.hasSeenAlteredSpeed = PlayerProgress.seenAlteredSpeed();
       this.isStopped = Enslaved.isStoringRealTime;
-      this.isEC12 = ec12.isRunning;
+      this.isEC12 = EternityChallenge(12).isRunning;
       this.isPulsing = (this.baseSpeed !== this.pulsedSpeed) && Enslaved.canRelease(true);
     },
     formatNumber(num) {
@@ -58,14 +57,17 @@ export default {
 </script>
 
 <template>
-  <b>
+  <span class="c-gamespeed">
     <span>
       {{ baseText }}
     </span>
     <span v-if="isPulsing">(<i class="fas fa-expand-arrows-alt u-fa-padding" /> {{ pulseSpeedText }})</span>
-  </b>
+  </span>
 </template>
 
 <style scoped>
-
+.c-gamespeed {
+  font-weight: bold;
+  color: var(--color-text);
+}
 </style>

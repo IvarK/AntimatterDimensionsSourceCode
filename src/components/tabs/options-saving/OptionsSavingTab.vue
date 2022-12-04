@@ -17,18 +17,37 @@ export default {
   data() {
     return {
       cloudEnabled: false,
+      forceCloudOverwrite: false,
+      showCloudModal: false,
       syncSaveIntervals: false,
       showTimeSinceSave: false,
       loggedIn: false,
       userName: "",
       canSpeedrun: false,
       creditsClosed: false,
-      isCloudSaving: false,
     };
+  },
+  computed: {
+    modalTooltip() {
+      return `The game will detect certain situations where you might not want to overwrite your cloud save, and show
+        you a modal with more information if this is ON.`;
+    },
+    overwriteTooltip() {
+      if (this.showCloudModal) return "This setting does nothing since the modal is being shown.";
+      return this.forceCloudOverwrite
+        ? `Your local save will always overwrite your cloud save no matter what.`
+        : `Save conflicts will prevent your local save from being saved to the cloud.`;
+    }
   },
   watch: {
     cloudEnabled(newValue) {
       player.options.cloudEnabled = newValue;
+    },
+    forceCloudOverwrite(newValue) {
+      player.options.forceCloudOverwrite = newValue;
+    },
+    showCloudModal(newValue) {
+      player.options.showCloudModal = newValue;
     },
     syncSaveIntervals(newValue) {
       player.options.syncSaveIntervals = newValue;
@@ -48,7 +67,6 @@ export default {
       this.creditsClosed = GameEnd.creditsEverClosed;
       if (!this.loggedIn) return;
       this.userName = Cloud.user.displayName;
-      this.isCloudSaving = Cloud.shouldOverwriteCloudSave;
     },
     importAsFile(event) {
       // This happens if the file dialog is canceled instead of a file being selected
@@ -56,10 +74,6 @@ export default {
 
       const reader = new FileReader();
       reader.onload = function() {
-        const contents = reader.result;
-        const toImport = GameSaveSerializer.deserialize(contents);
-        const showWarning = (toImport?.IAP?.totalSTD ?? 0) < player.IAP.totalSTD;
-
         // File importing behavior should use the behavior on the existing and to-be-overwritten save instead of the
         // settings in the to-be-imported save. This is largely because the former is more easily edited by the player,
         // and in contrast with the import-as-string case which allows the player to choose.
@@ -67,17 +81,7 @@ export default {
         // import modal (the only other place GameStorage.import is called) to always be overridden
         GameStorage.offlineEnabled = player.options.offlineProgress;
         GameStorage.offlineTicks = player.options.offlineTicks;
-
-        if (showWarning) {
-          Modal.addImportConflict(toImport, GameStorage.saves[GameStorage.currentSlot]);
-          Modal.importWarning.show({
-            rawInput: contents,
-            saveToImport: toImport,
-            warningMessage: "The Imported Save has less STDs than your Current Save.",
-          });
-        } else {
-          GameStorage.import(contents);
-        }
+        GameStorage.import(reader.result);
       };
       reader.readAsText(event.target.files[0]);
     },
@@ -176,27 +180,13 @@ export default {
       <span v-else>Not logged in</span>
     </h2>
     <div v-if="loggedIn">
-      <span v-if="isCloudSaving">Cloud Saving will occur automatically every 5 minutes.</span>
-      <span v-else>Cloud Saving has been disabled until you refresh the page or switch saves.</span>
+      <span v-if="cloudEnabled">Cloud Saving will occur automatically every 5 minutes.</span>
+      <span v-else>Cloud Saving has been disabled on this save.</span>
     </div>
     <div class="l-options-grid">
       <div
         class="l-options-grid__row"
       >
-        <OptionsButton
-          v-if="loggedIn"
-          onclick="GameOptions.cloudSave()"
-          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
-        >
-          Cloud save
-        </OptionsButton>
-        <OptionsButton
-          v-if="loggedIn"
-          onclick="GameOptions.cloudLoad()"
-          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
-        >
-          Cloud load
-        </OptionsButton>
         <OptionsButton
           v-if="loggedIn"
           onclick="GameOptions.logout()"
@@ -215,6 +205,29 @@ export default {
         v-if="loggedIn"
         class="l-options-grid__row"
       >
+        <OptionsButton
+          onclick="GameOptions.cloudSave()"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+        >
+          Cloud save
+        </OptionsButton>
+        <OptionsButton
+          onclick="GameOptions.cloudLoad()"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+        >
+          Cloud load
+        </OptionsButton>
+        <PrimaryToggleButton
+          v-model="syncSaveIntervals"
+          class="o-primary-btn--option l-options-grid__button"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          label="Force local save before cloud saving:"
+        />
+      </div>
+      <div
+        v-if="loggedIn"
+        class="l-options-grid__row"
+      >
         <PrimaryToggleButton
           v-model="cloudEnabled"
           class="o-primary-btn--option l-options-grid__button"
@@ -222,10 +235,18 @@ export default {
           label="Automatic cloud saving/loading:"
         />
         <PrimaryToggleButton
-          v-model="syncSaveIntervals"
+          v-model="showCloudModal"
+          v-tooltip="modalTooltip"
           class="o-primary-btn--option l-options-grid__button"
           :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
-          label="Force local save before cloud saving:"
+          label="Show modal if possible saving conflict:"
+        />
+        <PrimaryToggleButton
+          v-model="forceCloudOverwrite"
+          v-tooltip="overwriteTooltip"
+          class="o-primary-btn--option l-options-grid__button"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          label="Force cloud saving despite conflicts:"
         />
       </div>
     </div>

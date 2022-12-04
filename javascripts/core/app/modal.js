@@ -55,7 +55,6 @@ import GlyphSetSaveDeleteModal from "@/components/modals/GlyphSetSaveDeleteModal
 import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal";
 import H2PModal from "@/components/modals/H2PModal";
 import ImportAutomatorDataModal from "@/components/modals/ImportAutomatorDataModal";
-import ImportFileWarningModal from "@/components/modals/ImportFileWarningModal";
 import ImportSaveModal from "@/components/modals/ImportSaveModal";
 import InformationModal from "@/components/modals/InformationModal";
 import LoadGameModal from "@/components/modals/LoadGameModal";
@@ -104,6 +103,7 @@ export class Modal {
     this._uniqueID = nextModalID++;
     this._props = Object.assign({}, modalConfig || {});
     if (this._closeEvent) this.applyCloseListeners(this._closeEvent);
+    if (modalConfig?.closeEvent) this.applyCloseListeners(modalConfig.closeEvent);
 
     const modalQueue = ui.view.modal.queue;
     // Add this modal to the front of the queue and sort based on priority to ensure priority is maintained.
@@ -238,7 +238,6 @@ Modal.changelog = new Modal(ChangelogModal, 1);
 Modal.awayProgress = new Modal(AwayProgressModal);
 Modal.loadGame = new Modal(LoadGameModal);
 Modal.import = new Modal(ImportSaveModal);
-Modal.importWarning = new Modal(ImportFileWarningModal);
 Modal.importScriptData = new Modal(ImportAutomatorDataModal);
 Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
 Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);
@@ -265,7 +264,11 @@ function getSaveInfo(save) {
     imaginaryMachines: 0,
     dilatedTime: new Decimal(0),
     bestLevel: 0,
-    totalSTD: 0,
+    pelleAM: new Decimal(0),
+    remnants: 0,
+    realityShards: new Decimal(0),
+    // This is a slight workaround to hide DT/level once Doomed
+    pelleLore: 0,
     saveName: "",
     compositeProgress: 0,
   };
@@ -282,7 +285,10 @@ function getSaveInfo(save) {
   resources.imaginaryMachines = save.reality?.iMCap ?? 0;
   resources.dilatedTime.copyFrom(new Decimal(save.dilation.dilatedTime));
   resources.bestLevel = save.records?.bestReality.glyphLevel ?? 0;
-  resources.totalSTD = save?.IAP?.totalSTD ?? 0;
+  resources.pelleAM.copyFrom(new Decimal(save.celestials?.pelle.records.totalAntimatter));
+  resources.remnants = save.celestials?.pelle.remnants ?? 0;
+  resources.realityShards.copyFrom(new Decimal(save.celestials?.pelle.realityShards));
+  resources.pelleLore = save.celestials?.pelle.quoteBits ?? 0;
   resources.saveName = save.options.saveFileName ?? "";
   resources.compositeProgress = ProgressChecker.getCompositeProgress(save);
 

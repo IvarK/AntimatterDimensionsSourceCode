@@ -137,7 +137,7 @@ export function getDilationGainPerSecond() {
   return dtRate;
 }
 
-function tachyonGainMultiplier() {
+export function tachyonGainMultiplier() {
   if (Pelle.isDisabled("tpMults")) return new Decimal(1);
   const pow = Enslaved.isRunning ? Enslaved.tachyonNerf : 1;
   return DC.D1.timesEffectsOf(
@@ -151,7 +151,7 @@ function tachyonGainMultiplier() {
 }
 
 export function rewardTP() {
-  Currency.tachyonParticles.bumpTo(getTP(Currency.antimatter.value, true));
+  Currency.tachyonParticles.bumpTo(getTP(player.records.thisEternity.maxAM, true));
   player.dilation.lastEP = Currency.eternityPoints.value;
 }
 
@@ -182,15 +182,30 @@ export function getTachyonGain(requireEternity) {
 
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 export function getTachyonReq() {
-  let effectiveTP = Currency.tachyonParticles.value;
+  let effectiveTP = Currency.tachyonParticles.value.dividedBy(tachyonGainMultiplier());
   if (Enslaved.isRunning) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);
   return Decimal.pow10(
     effectiveTP
       .times(Math.pow(400, 1.5))
-      .dividedBy(tachyonGainMultiplier())
       .pow(2 / 3)
       .toNumber()
   );
+}
+
+export function getDilationTimeEstimate(goal) {
+  const currentDTGain = getDilationGainPerSecond();
+  const rawDTGain = currentDTGain.times(getGameSpeedupForDisplay());
+  const currentDT = Currency.dilatedTime.value;
+  if (currentDTGain.eq(0)) return null;
+  if (PelleRifts.paradox.isActive) {
+    const drain = Pelle.riftDrainPercent;
+    const goalNetRate = rawDTGain.minus(Decimal.multiply(goal, drain));
+    const currNetRate = rawDTGain.minus(currentDT.times(drain));
+    if (goalNetRate.lt(0)) return "Never affordable due to Rift drain";
+    return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln() / drain).toTimeEstimate();
+  }
+  return TimeSpan.fromSeconds(Decimal.sub(goal, currentDT)
+    .div(rawDTGain).toNumber()).toTimeEstimate();
 }
 
 export function dilatedValueOf(value) {

@@ -32,7 +32,6 @@ export const state = {
         automator: {
           fullScreen: false,
           editorScriptID: "",
-          // TODO: enum
           lines: []
         }
       },

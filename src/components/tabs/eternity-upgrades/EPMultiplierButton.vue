@@ -29,7 +29,8 @@ export default {
         return {
           "o-eternity-upgrade": true,
           "o-eternity-upgrade--useless": !this.isAffordable,
-          "o-pelle-disabled-pointer": true
+          "o-pelle-disabled-pointer": true,
+          "o-pelle-disabled": true,
         };
       }
       return {

@@ -33,15 +33,19 @@ export default {
       boughtAmount: 0,
       currentDT: new Decimal(0),
       currentDTGain: new Decimal(0),
+      timeEstimate: "",
+      rebuyableBoost: false,
     };
   },
   computed: {
     classObject() {
       if (this.isUseless) {
+        // Note: TP mult (3) is conditionally useless and IP mult (7) is always useless; we style them similarly to
+        // the rest of the game - TP appears as "currently available" while IP appears as "strictly disabled"
         return {
-          "o-dilation-upgrade": true,
-          "o-dilation-upgrade--useless": true,
-          "o-pelle-disabled-pointer": true
+          "o-dilation-upgrade o-pelle-disabled-pointer": true,
+          "o-dilation-upgrade--unavailable": this.upgrade.id === 3,
+          "o-pelle-disabled o-dilation-upgrade--useless": this.upgrade.id === 7,
         };
       }
       return {
@@ -53,21 +57,10 @@ export default {
         "o-dilation-upgrade--capped": this.isCapped,
       };
     },
-    timeEstimate() {
-      if (this.isAffordable || this.isCapped || this.upgrade.isBought || this.currentDTGain.eq(0)) return null;
-      if (PelleRifts.paradox.isActive) {
-        const drain = Pelle.riftDrainPercent;
-        const rawDTGain = this.currentDTGain.times(getGameSpeedupForDisplay());
-        const goalNetRate = rawDTGain.minus(Decimal.multiply(this.upgrade.cost, drain));
-        const currNetRate = rawDTGain.minus(this.currentDT.multiply(drain));
-        if (goalNetRate.lt(0)) return "Never affordable due to Rift drain";
-        return TimeSpan.fromSeconds(currNetRate.div(goalNetRate).ln() / drain).toTimeEstimate();
-      }
-      return TimeSpan.fromSeconds(Decimal.sub(this.upgrade.cost, this.currentDT)
-        .div(this.currentDTGain.times(getGameSpeedupForDisplay())).toNumber()).toTimeEstimate();
-    },
     isUseless() {
-      return Pelle.isDoomed && this.upgrade.id === 7;
+      const tp = this.upgrade.id === 3 && !this.rebuyableBoost;
+      const ip = this.upgrade.id === 7;
+      return Pelle.isDoomed && (tp || ip);
     }
   },
   watch: {
@@ -80,11 +73,14 @@ export default {
       const upgrade = this.upgrade;
       this.currentDT.copyFrom(Currency.dilatedTime.value);
       this.currentDTGain.copyFrom(getDilationGainPerSecond());
+      this.timeEstimate = (this.isAffordable || this.isCapped || this.upgrade.isBought || this.isUseless)
+        ? null : getDilationTimeEstimate(this.upgrade.cost);
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;
         const autobuyer = Autobuyer.dilationUpgrade(upgrade.id);
         this.boughtAmount = upgrade.boughtAmount;
+        this.rebuyableBoost = PelleRifts.paradox.milestones[2].canBeApplied;
         if (!autobuyer) return;
         this.isAutoUnlocked = autobuyer.isUnlocked;
         this.isAutobuyerOn = autobuyer.isActive;
@@ -106,7 +102,7 @@ export default {
       :class="classObject"
       @click="upgrade.purchase()"
     >
-      <span :class="{ 'o-pelle-disabled': isUseless }">
+      <span>
         <DescriptionDisplay
           :config="upgrade.config"
           :length="70"

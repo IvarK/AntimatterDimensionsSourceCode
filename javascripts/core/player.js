@@ -192,7 +192,7 @@ window.player = {
     },
     annihilation: {
       isActive: false,
-      multiplier: 5
+      multiplier: 1.05,
     },
     singularity: { isActive: false },
     ipMultBuyer: { isActive: false, },
@@ -267,6 +267,7 @@ window.player = {
   records: {
     gameCreatedTime: Date.now(),
     totalTimePlayed: 0,
+    timePlayedAtBHUnlock: Number.MAX_VALUE,
     realTimePlayed: 0,
     realTimeDoomed: 0,
     totalAntimatter: DC.E1,
@@ -334,8 +335,10 @@ window.player = {
     isUnlocked: false,
     isActive: false,
     isSegmented: false,
+    usedSTD: false,
     hasStarted: false,
     hideInfo: false,
+    displayAllMilestones: false,
     startDate: 0,
     name: "",
     offlineTimeUsed: 0,
@@ -767,9 +770,12 @@ window.player = {
     retryCelestial: false,
     showAllChallenges: false,
     cloudEnabled: true,
+    showCloudModal: true,
+    forceCloudOverwrite: false,
     syncSaveIntervals: true,
     hotkeys: true,
-    theme: "Normal",
+    themeClassic: "Normal",
+    themeModern: "Normal",
     commas: true,
     updateRate: 33,
     newUI: true,
@@ -863,6 +869,7 @@ window.player = {
     hiddenSubtabBits: Array.repeat(0, 11),
     lastOpenTab: 0,
     lastOpenSubtab: Array.repeat(0, 11),
+    currentMultiplierSubtab: 0,
     fixedPerkStartingPos: false,
     perkPhysicsEnabled: true,
     automatorEvents: {
@@ -874,16 +881,7 @@ window.player = {
     }
   },
   IAP: {
-    totalSTD: 0,
-    spentSTD: 0,
-    IPPurchases: 0,
-    EPPurchases: 0,
-    RMPurchases: 0,
-    dimPurchases: 0,
-    allDimPurchases: 0,
-    replicantiPurchases: 0,
-    dilatedTimePurchases: 0,
-    disabled: false,
+    enabled: false,
     checkoutSession: {
       id: false,
     }
@@ -1012,7 +1010,6 @@ export function guardFromNaNValues(obj) {
   for (const key in obj) {
     if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
 
-    // TODO: rework autobuyer saving
     if (key === "automator") continue;
 
     let value = obj[key];

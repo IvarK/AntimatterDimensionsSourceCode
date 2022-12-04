@@ -1,8 +1,6 @@
 import { DC } from "./constants";
 
-export function getTickSpeedMultiplier() {
-  if (InfinityChallenge(3).isRunning) return DC.D1;
-  if (Ra.isRunning) return DC.C1D1_1245;
+export function effectiveBaseGalaxies() {
   // Note that this already includes the "50% more" active path effect
   let replicantiGalaxies = Replicanti.galaxies.bought;
   replicantiGalaxies *= (1 + Effects.sum(
@@ -18,39 +16,14 @@ export function getTickSpeedMultiplier() {
   replicantiGalaxies += nonActivePathReplicantiGalaxies * Effects.sum(EternityChallenge(8).reward);
   let freeGalaxies = player.dilation.totalTachyonGalaxies;
   freeGalaxies *= 1 + Math.max(0, Replicanti.amount.log10() / 1e6) * AlchemyResource.alternation.effectValue;
-  let galaxies = Math.max(player.galaxies + replicantiGalaxies + freeGalaxies + GalaxyGenerator.galaxies, 0);
-  if (galaxies < 3) {
-    // Magic numbers are to retain balancing from before while displaying
-    // them now as positive multipliers rather than negative percentages
-    let baseMultiplier = 1 / 1.1245;
-    if (player.galaxies === 1) baseMultiplier = 1 / 1.11888888;
-    if (player.galaxies === 2) baseMultiplier = 1 / 1.11267177;
-    if (NormalChallenge(5).isRunning) {
-      baseMultiplier = 1 / 1.08;
-      if (player.galaxies === 1) baseMultiplier = 1 / 1.07632;
-      if (player.galaxies === 2) baseMultiplier = 1 / 1.072;
-    }
-    const perGalaxy = 0.02 * Effects.product(
-      InfinityUpgrade.galaxyBoost,
-      InfinityUpgrade.galaxyBoost.chargedEffect,
-      BreakInfinityUpgrade.galaxyBoost,
-      TimeStudy(212),
-      TimeStudy(232),
-      Achievement(86),
-      Achievement(178),
-      InfinityChallenge(5).reward,
-      PelleUpgrade.galaxyPower,
-      PelleRifts.decay.milestones[1]
-    );
-    if (Pelle.isDoomed) galaxies *= 0.5;
+  return Math.max(player.galaxies + GalaxyGenerator.galaxies + replicantiGalaxies + freeGalaxies, 0);
+}
 
-    galaxies *= Pelle.specialGlyphEffect.power;
-    return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
-  }
-  let baseMultiplier = 0.8;
-  if (NormalChallenge(5).isRunning) baseMultiplier = 0.83;
-  galaxies -= 2;
-  galaxies *= Effects.product(
+export function getTickSpeedMultiplier() {
+  if (InfinityChallenge(3).isRunning) return DC.D1;
+  if (Ra.isRunning) return DC.C1D1_1245;
+  let galaxies = effectiveBaseGalaxies();
+  const effects = Effects.product(
     InfinityUpgrade.galaxyBoost,
     InfinityUpgrade.galaxyBoost.chargedEffect,
     BreakInfinityUpgrade.galaxyBoost,
@@ -62,6 +35,27 @@ export function getTickSpeedMultiplier() {
     PelleUpgrade.galaxyPower,
     PelleRifts.decay.milestones[1]
   );
+  if (galaxies < 3) {
+    // Magic numbers are to retain balancing from before while displaying
+    // them now as positive multipliers rather than negative percentages
+    let baseMultiplier = 1 / 1.1245;
+    if (player.galaxies === 1) baseMultiplier = 1 / 1.11888888;
+    if (player.galaxies === 2) baseMultiplier = 1 / 1.11267177;
+    if (NormalChallenge(5).isRunning) {
+      baseMultiplier = 1 / 1.08;
+      if (player.galaxies === 1) baseMultiplier = 1 / 1.07632;
+      if (player.galaxies === 2) baseMultiplier = 1 / 1.072;
+    }
+    const perGalaxy = 0.02 * effects;
+    if (Pelle.isDoomed) galaxies *= 0.5;
+
+    galaxies *= Pelle.specialGlyphEffect.power;
+    return DC.D0_01.clampMin(baseMultiplier - (galaxies * perGalaxy));
+  }
+  let baseMultiplier = 0.8;
+  if (NormalChallenge(5).isRunning) baseMultiplier = 0.83;
+  galaxies -= 2;
+  galaxies *= effects;
   galaxies *= getAdjustedGlyphEffect("cursedgalaxies");
   galaxies *= getAdjustedGlyphEffect("realitygalaxies");
   galaxies *= 1 + ImaginaryUpgrade(9).effectOrDefault(0);
@@ -78,6 +72,7 @@ export function buyTickSpeed() {
   if (NormalChallenge(9).isRunning) {
     Tickspeed.multiplySameCosts();
   }
+  Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
   Currency.antimatter.subtract(Tickspeed.cost);
   player.totalTickBought++;
   player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
@@ -91,6 +86,7 @@ export function buyMaxTickSpeed() {
   if (!Tickspeed.isAvailableForPurchase || !Tickspeed.isAffordable) return;
   let boughtTickspeed = false;
 
+  Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     const goal = Player.infinityGoal;
     let cost = Tickspeed.cost;
@@ -171,16 +167,20 @@ export const Tickspeed = {
   },
 
   get baseValue() {
-    let boughtTickspeed;
-    if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
-    else boughtTickspeed = player.totalTickBought;
     return DC.E3.timesEffectsOf(
       Achievement(36),
       Achievement(45),
       Achievement(66),
       Achievement(83)
     )
-      .times(getTickSpeedMultiplier().pow(boughtTickspeed + player.totalTickGained));
+      .times(getTickSpeedMultiplier().pow(this.totalUpgrades));
+  },
+
+  get totalUpgrades() {
+    let boughtTickspeed;
+    if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
+    else boughtTickspeed = player.totalTickBought;
+    return boughtTickspeed + player.totalTickGained;
   },
 
   get perSecond() {

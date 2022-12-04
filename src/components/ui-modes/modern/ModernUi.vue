@@ -6,6 +6,8 @@ import HeaderChallengeEffects from "../HeaderChallengeEffects";
 import HeaderPrestigeGroup from "../HeaderPrestigeGroup";
 import NewsTicker from "../NewsTicker";
 
+import GameSpeedDisplay from "@/components/GameSpeedDisplay";
+
 
 export default {
   name: "ModernUi",
@@ -15,11 +17,14 @@ export default {
     HeaderChallengeEffects,
     NewsTicker,
     HeaderBlackHole,
-    HeaderPrestigeGroup
+    HeaderPrestigeGroup,
+    GameSpeedDisplay,
   },
   data() {
     return {
-      bigCrunch: false
+      bigCrunch: false,
+      hasReality: false,
+      newGameKey: "",
     };
   },
   computed: {
@@ -34,6 +39,10 @@ export default {
     update() {
       const crunchButtonVisible = !player.break && Player.canCrunch;
       this.bigCrunch = crunchButtonVisible && Time.bestInfinityRealTime.totalMinutes > 1;
+      this.hasReality = PlayerProgress.realityUnlocked();
+      // This only exists to force a key-swap after pressing the button to start a new game; the news ticker can break
+      // if it isn't redrawn
+      this.newGameKey = Pelle.isDoomed;
     },
     handleClick() {
       if (PlayerProgress.infinityUnlocked()) manualBigCrunchResetRequest();
@@ -51,10 +60,13 @@ export default {
       href="stylesheets/new-ui-styles.css"
     >
     <div
+      :key="newGameKey"
       class="game-container"
       :style="topMargin"
     >
-      <NewsTicker v-if="news" />
+      <NewsTicker
+        v-if="news"
+      />
       <BigCrunchButton />
       <div
         v-if="!bigCrunch"
@@ -64,6 +76,8 @@ export default {
         <div class="information-header">
           <HeaderChallengeDisplay />
           <HeaderChallengeEffects />
+          <GameSpeedDisplay v-if="hasReality" />
+          <br v-if="hasReality">
           <HeaderBlackHole />
         </div>
         <slot />

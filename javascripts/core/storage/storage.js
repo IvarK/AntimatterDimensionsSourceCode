@@ -169,11 +169,7 @@ export const GameStorage = {
   },
 
   export() {
-    const segmented = player.speedrun.isSegmented;
-    Speedrun.setSegmented(true);
-    const save = GameSaveSerializer.serialize(player);
-    Speedrun.setSegmented(segmented);
-    copyToClipboard(save);
+    copyToClipboard(this.exportModifiedSave());
     GameUI.notify.info("Exported current savefile to your clipboard");
   },
 
@@ -185,19 +181,27 @@ export const GameStorage = {
     const y = dateObj.getFullYear();
     const m = dateObj.getMonth() + 1;
     const d = dateObj.getDate();
-    const segmented = player.speedrun.isSegmented;
-    Speedrun.setSegmented(true);
+    const save = this.exportModifiedSave();
     download(
       `AD Save, Slot ${GameStorage.currentSlot + 1}${saveFileName} #${player.options.exportedFileCount} \
-(${y}-${m}-${d}).txt`, GameSaveSerializer.serialize(player));
-    Speedrun.setSegmented(segmented);
+(${y}-${m}-${d}).txt`, save);
     GameUI.notify.info("Successfully downloaded current save file to your computer");
   },
 
+  // There are a couple props which may need to export with different values, so we handle that here
+  exportModifiedSave() {
+    // Speedrun segmented is exported as true
+    const segmented = player.speedrun.isSegmented;
+    Speedrun.setSegmented(true);
+
+    // Serialize the altered data, then restore the old prop values afterwards and return
+    const save = GameSaveSerializer.serialize(player);
+    Speedrun.setSegmented(segmented);
+    return save;
+  },
+
   hardReset() {
-    const IAP = JSON.parse(JSON.stringify(player.IAP));
     this.loadPlayerObject(Player.defaultStart);
-    player.IAP = IAP;
     this.save(true);
     Tab.dimensions.antimatter.show();
     Cloud.resetTempState();
@@ -244,7 +248,7 @@ export const GameStorage = {
     V.updateTotalRunUnlocks();
     Enslaved.boostReality = false;
     GameEnd.additionalEnd = 0;
-    Theme.set(player.options.theme);
+    Theme.set(Theme.currentName());
     Notations.find(player.options.notation).setAsCurrent(true);
     ADNotations.Settings.exponentCommas.show = player.options.commas;
 

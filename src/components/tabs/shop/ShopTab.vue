@@ -37,7 +37,7 @@ export default {
   watch: {
     IAPsDisabled(newValue) {
       player.IAP.disabled = newValue;
-    }
+    },
     enableText() {
       return `In-app Purchases: ${this.IAPsEnabled ? "Enabled" : "Disabled"}`;
     },
@@ -107,12 +107,12 @@ export default {
       class="c-login-info"
     >
       You are logged in as {{ username }}.
-      <button
+      <!--button
         class="o-shop-button-button"
         onclick="GameOptions.logout()"
       >
         Disconnect Google Account
-      </button>
+      </button-->
     </div>
     <div
       v-else

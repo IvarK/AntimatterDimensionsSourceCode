@@ -157,7 +157,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
     if (this.config.singleUse && ui.$viewModel.modal.progressBar) return false;
 
     // Contact the firebase server to verify the purchase
-    const success = await Payments.buyUpgrade(this.config.key);
+    const success = true//await Payments.buyUpgrade(this.config.key);
     if (!success) return false;
 
     if (player.IAP.enabled) Speedrun.setSTDUse(true);

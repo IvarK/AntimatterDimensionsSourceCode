@@ -184,14 +184,14 @@ export default {
       <span v-else>Cloud Saving has been disabled on this save.</span>
     </div>
     <div class="l-options-grid">
-      <div
+      <!--div
         class="l-options-grid__row"
       >
         <OptionsButton
           v-if="loggedIn"
           onclick="GameOptions.logout()"
         >
-          Disconnect Google Account and disable Cloud Saving
+          Disconnect Steam Account and disable Cloud Saving
         </OptionsButton>
         <OptionsButton
           v-else
@@ -200,7 +200,7 @@ export default {
         >
           Login with Google to enable Cloud Saving
         </OptionsButton>
-      </div>
+      </div-->
       <div
         v-if="loggedIn"
         class="l-options-grid__row"

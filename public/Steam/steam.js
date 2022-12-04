@@ -123,7 +123,8 @@ const SteamFunctions = {
                         if (consumeResult !== null) {
                             console.log(consumeResult);
                             const stdsBought = Number(PurchaseName.replace("STD", ""));
-                            player.IAP.totalSTD += stdsBought;
+                            ShopPurchaseData.totalSTD += stdsBought;
+                            //player.IAP.totalSTD += stdsBought;
                             GameUI.notify.info(`${stdsBought} STDs Obtained!`);
                             SteamFunctions.purchaseChecker = SteamFunctions.purchaseChecker.filter(item => item !== OrderIdentifier);
                         } else if (consumeError !== null) {

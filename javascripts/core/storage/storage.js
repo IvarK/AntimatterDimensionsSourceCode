@@ -24,6 +24,8 @@ export const GameStorage = {
     const root = GameSaveSerializer.deserialize(save);
 
     this.loadRoot(root);
+    SteamFunctions.BackfillAchievements()
+    Cloud.user.displayName = Steam.getSteamId().screenName
   },
 
   loadRoot(root) {
@@ -60,6 +62,7 @@ export const GameStorage = {
     Cloud.resetTempState();
     GameUI.notify.info("Game loaded");
     SteamFunctions.BackfillAchievements()
+    Cloud.user.displayName = Steam.getSteamId().screenName
   },
 
   import(saveData) {

@@ -62,6 +62,23 @@ const SteamFunctions = {
             }
         }
     },
+    async autoLogin(){
+        const AutoEmail = `${Steam.getSteamId().accountId}@ad.com`
+        const AutoPass = Steam.getSteamId().staticAccountId
+        try{
+          await Cloud.manualCloudCreate(AutoEmail,AutoPass);
+        }catch(e){
+          console.log(e);
+          try{
+            await Cloud.manualCloudLogin(AutoEmail,AutoPass)
+          }catch(LoginError){
+            this.error = true;
+            this.errorMessage = "Unable to login, please recheck email/password";
+            return;
+          }
+        }
+        Cloud.user.displayName = Steam.getSteamId().screenName
+    },
     PurchaseIAP(STD, kreds) {
         if (!steamOn) return;
         const TheItem = { ItemId: `${STD}STD`, Quantity: 1, Annotation: "Purchased via in-game store" };

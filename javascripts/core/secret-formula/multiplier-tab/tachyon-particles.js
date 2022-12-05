@@ -16,7 +16,7 @@ GameDatabase.multiplierTabValues.TP = {
     },
     multValue: () => new Decimal(Currency.tachyonParticles.value)
       .pow(PelleRifts.paradox.milestones[1].effectOrDefault(1)),
-    isActive: () => new Decimal(Currency.tachyonParticles.value).gt(0),
+    isActive: () => PlayerProgress.realityUnlocked() || PlayerProgress.dilationUnlocked(),
     icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },
   base: {

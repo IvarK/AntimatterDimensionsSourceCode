@@ -34,7 +34,7 @@ export const ShopPurchaseData = {
     this.spentSTD = newData.spentSTD;
     this.respecAvailable = newData.respecAvailable;
     this.lastRespec = newData.lastRespec ?? 0;
-    this.unlockedCosmetics = [...newData.unlockedCosmetics];
+    this.unlockedCosmetics = [...(newData.unlockedCosmetics ?? [])];
     for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = newData[key] ?? 0;
     if (this.allCosmeticSets > 0) this.unlockedCosmetics = Object.keys(GameDatabase.reality.glyphCosmeticSets);
     GameStorage.save();

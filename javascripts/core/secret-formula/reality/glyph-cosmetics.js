@@ -180,7 +180,7 @@ GameDatabase.reality.glyphCosmeticSets = {
   },
   heiroglyph: {
     id: "heiroglyph",
-    name: "Common Heiroglyphs",
+    name: "Common Hieroglyphs",
     symbol: ["𓂀", "𓀶", "𓅊", "𓇌", "𓊝", "☥"],
     preventBlur: true,
   },

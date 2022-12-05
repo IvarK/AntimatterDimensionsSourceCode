@@ -235,8 +235,4 @@ export const GlyphAppearanceHandler = {
     TabNotification.newGlyphCosmetic.tryTrigger();
     player.reality.glyphs.cosmetics.glowNotification = true;
   },
-
-  get canSeeCustomization() {
-    return this.unlockedSets.length > 0 || this.availableTypes.length > 0;
-  },
 };

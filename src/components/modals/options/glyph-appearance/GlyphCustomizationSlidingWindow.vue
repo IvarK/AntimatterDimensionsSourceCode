@@ -158,51 +158,62 @@ export default {
 </script>
 
 <template>
-  <div :class="containerClassObject()">
-    <div class="o-default-option">
-      <div
-        :key="'default' + darkKeySwap"
-        :class="defaultOptionClassObject()"
-        :style="boxStyle(defaultOption)"
-        @click="select(undefined)"
-      >
-        {{ optionChar(defaultOption) }}
-      </div>
-    </div>
-    <div class="c-extra-options">
-      <div
-        :class="leftClass()"
-        @click="slideWindow(-5)"
-      >
-        ⇐
-      </div>
-      <div
-        :class="rightClass()"
-        @click="slideWindow(5)"
-      >
-        ⇒
-      </div>
-      <div
-        class="c-sliding-window"
-        :style="windowStyle()"
-      >
+  <div>
+    <div
+      v-if="options.length > 0"
+      :class="containerClassObject()"
+    >
+      <div class="o-default-option">
         <div
-          v-for="set in options"
-          :key="set[0] + set[1]"
+          :key="'default' + darkKeySwap"
+          :class="defaultOptionClassObject()"
+          :style="boxStyle(defaultOption)"
+          @click="select(undefined)"
         >
-          <div class="c-single-set">
-            <div
-              v-for="singleOption in set"
-              :key="singleOption"
-              :class="optionClassObject(singleOption)"
-              :style="boxStyle(singleOption)"
-              @click="select(singleOption)"
-            >
-              {{ optionChar(singleOption) }}
+          {{ optionChar(defaultOption) }}
+        </div>
+      </div>
+      <div class="c-extra-options">
+        <div
+          :class="leftClass()"
+          @click="slideWindow(-5)"
+        >
+          ⇐
+        </div>
+        <div
+          :class="rightClass()"
+          @click="slideWindow(5)"
+        >
+          ⇒
+        </div>
+        <div
+          class="c-sliding-window"
+          :style="windowStyle()"
+        >
+          <div
+            v-for="set in options"
+            :key="set[0] + set[1]"
+          >
+            <div class="c-single-set">
+              <div
+                v-for="singleOption in set"
+                :key="singleOption"
+                :class="optionClassObject(singleOption)"
+                :style="boxStyle(singleOption)"
+                @click="select(singleOption)"
+              >
+                {{ optionChar(singleOption) }}
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div
+      v-else
+      class="c-no-options"
+    >
+      You have no custom options for changing Glyph {{ attrString }}s.
     </div>
   </div>
 </template>
@@ -211,6 +222,13 @@ export default {
 .c-all-options {
   display: flex;
   flex-direction: row;
+  width: 49rem;
+  margin: 0.5rem;
+  border: 0.1rem solid var(--color-text);
+  border-radius: var(--var-border-radius, 0.5rem);
+}
+
+.c-no-options {
   width: 49rem;
   margin: 0.5rem;
   border: 0.1rem solid var(--color-text);

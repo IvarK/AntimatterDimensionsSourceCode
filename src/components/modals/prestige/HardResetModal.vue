@@ -15,6 +15,12 @@ export default {
     willHardReset() {
       return this.input === "Shrek is love, Shrek is life";
     },
+    hasExtraNG() {
+      return player.records.fullGameCompletions > 0;
+    },
+    hasSpeedrun() {
+      return player.speedrun.isUnlocked;
+    }
   },
   destroyed() {
     if (this.willHardReset) SecretAchievement(38).unlock();
@@ -44,6 +50,14 @@ export default {
       Type in "Shrek is love, Shrek is life" to confirm.
       <div class="c-modal-hard-reset-danger">
         THIS WILL WIPE YOUR SAVE.
+        <span v-if="hasExtraNG">
+          <br>
+          This will also remove any Glyph cosmetics you have unlocked from completing the game!
+        </span>
+        <span v-if="hasSpeedrun">
+          <br>
+          You will lose the ability to do a Speedrun. To restart your run, use the "Start Speedrun" button instead.
+        </span>
       </div>
     </div>
     <input

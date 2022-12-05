@@ -22,7 +22,6 @@ export default {
       forceDarkGlyphs: false,
       glyphInfoType: 0,
       showGlyphInfoByDefault: false,
-      hasCustomization: false,
     };
   },
   computed: {
@@ -56,7 +55,6 @@ export default {
       this.forceDarkGlyphs = options.forceDarkGlyphs;
       this.glyphInfoType = options.showHintText.glyphInfoType;
       this.showGlyphInfoByDefault = options.showHintText.showGlyphInfoByDefault;
-      this.hasCustomization = GlyphAppearanceHandler.canSeeCustomization;
     },
     noEffectStyle() {
       if (this.glyphInfoType !== 0) return null;
@@ -106,7 +104,7 @@ export default {
         text="Always show Glyph Info:"
       />
     </div>
-    <GlyphCustomization v-if="hasCustomization" />
+    <GlyphCustomization />
   </ModalWrapperOptions>
 </template>
 

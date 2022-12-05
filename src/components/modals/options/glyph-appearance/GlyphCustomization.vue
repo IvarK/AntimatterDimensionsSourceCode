@@ -22,7 +22,11 @@ export default {
   },
   computed: {
     cosmeticTypes() {
-      return CosmeticGlyphTypes.list.filter(t => t.canCustomize).map(t => t.id);
+      // We want to sort the base types in a way consistent with type orders within most of the rest of the game. We
+      // can safely slice the first 5 and insert them back in the correct order because they'll always be unlocked.
+      const nonBaseTypes = CosmeticGlyphTypes.list.filter(t => t.canCustomize).map(t => t.id).slice(5);
+      const sortedBase = ["power", "infinity", "replication", "time", "dilation"];
+      return sortedBase.concat(nonBaseTypes);
     },
     glyphIconProps() {
       return {
@@ -32,6 +36,12 @@ export default {
         "text-proportion": 0.7
       };
     },
+    hasCustomSets() {
+      return GlyphAppearanceHandler.unlockedSets.length > 0;
+    },
+    hasSpecialTypes() {
+      return GlyphAppearanceHandler.availableTypes.length > 0;
+    }
   },
   watch: {
     enabled(newValue) {
@@ -62,8 +72,10 @@ export default {
     fakeGlyph(type) {
       return {
         // This are just dummy values to make sure that GlyphComponent doesn't throw errors; only the cosmetic aspects
-        // will end up being visible in this case anyway (as they override anything type would otherwise show)
-        type: "power",
+        // will end up being visible in this case anyway (as they override anything type would otherwise show). Type
+        // looks particularly odd because reality glyphs need that passed in for the color animation, and power is an
+        // okay placeholder for anything else. We can't pass in type or else it will error out with cosmetic types.
+        type: type === "reality" ? "reality" : "power",
         strength: 1,
         cosmetic: type,
       };
@@ -90,43 +102,60 @@ export default {
       off="Disabled"
     />
     <br>
-    Reset Appearances to Default:
-    <PrimaryButton
-      class="o-primary-btn--subtab-option"
-      :class="{ 'o-primary-btn--disabled' : !enabled }"
-      @click="resetAll"
-    >
-      All Types
-    </PrimaryButton>
-    <PrimaryButton
-      class="o-primary-btn--subtab-option"
-      :class="{ 'o-primary-btn--disabled' : !enabled }"
-      @click="resetSingle"
-    >
-      This Type
-    </PrimaryButton>
-    <br>
-    Glyph Type:
-    <br>
-    <div class="c-type-selection">
-      <div
-        v-for="(type, index) in cosmeticTypes"
-        :key="type"
-        :class="typeClass(index)"
-        @click="selectedIndex = index"
+    <div v-if="hasCustomSets">
+      Reset Appearances to Default:
+      <PrimaryButton
+        class="o-primary-btn--subtab-option"
+        :class="{ 'o-primary-btn--disabled' : !enabled }"
+        @click="resetAll"
       >
-        <GlyphComponent
-          v-tooltip="type.capitalize()"
-          v-bind="glyphIconProps"
-          :glyph="fakeGlyph(type)"
-        />
+        All Types
+      </PrimaryButton>
+      <PrimaryButton
+        class="o-primary-btn--subtab-option"
+        :class="{ 'o-primary-btn--disabled' : !enabled }"
+        @click="resetSingle"
+      >
+        This Type
+      </PrimaryButton>
+      <br>
+      <i>This will not reset any individually-modified Glyphs.</i>
+      <br>
+      <br>
+      Glyph Type:
+      <br>
+      <div class="c-type-selection">
+        <div
+          v-for="(type, index) in cosmeticTypes"
+          :key="type"
+          :class="typeClass(index)"
+          @click="selectedIndex = index"
+        >
+          <GlyphComponent
+            v-tooltip="type.capitalize()"
+            v-bind="glyphIconProps"
+            :glyph="fakeGlyph(type)"
+          />
+        </div>
       </div>
+      <GlyphCustomizationSingleType
+        :key="selectedIndex + enabled + defaultKeySwap"
+        :type="cosmeticTypes[selectedIndex]"
+      />
+      Note: Some options may cause very poor color contrast or readability on certain themes with certain Glyph types.
     </div>
-    <GlyphCustomizationSingleType
-      :key="selectedIndex + enabled + defaultKeySwap"
-      :type="cosmeticTypes[selectedIndex]"
-    />
-    Note: Some options may cause very poor color contrast or readability on certain themes with certain Glyph types.
+    <div v-else>
+      You currently have no available options for changing the default appearance of your Glyphs. To unlock some, visit
+      the Shop Tab or beat the game.
+      <br>
+      <br>
+      <span v-if="hasSpecialTypes">
+        Enabling this setting will allow you to change individual Glyphs to special cosmetic types you have unlocked.
+      </span>
+      <span v-else>
+        Enabling or disabling this option will currently do nothing.
+      </span>
+    </div>
   </div>
 </template>
 

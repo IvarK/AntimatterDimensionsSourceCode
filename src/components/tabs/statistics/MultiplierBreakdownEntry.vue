@@ -359,6 +359,13 @@ export default {
           </div>
         </div>
       </div>
+      <div v-if="resource === 'AD_total'">
+        <br>
+        "Base AD Production" is the amount of Antimatter that you would be producing with your current AD upgrades,
+        as if you had waited 10 seconds after a Sacrifice. This is likely to underestimate your actual production
+        depending on how long you have been producing, but the relative mismatch will become smaller as you progress
+        further in the game.
+      </div>
     </div>
   </div>
 </template>

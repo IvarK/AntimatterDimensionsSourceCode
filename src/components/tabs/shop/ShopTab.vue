@@ -92,7 +92,7 @@ export default {
     </div>
     <div>
       Note: Shop purchases made on the Android, Steam, and Web versions are
-      separate and non-transferrable due to legal reasons.
+      separate and non-transferable due to legal reasons.
     </div>
     <div class="c-subtab-option-container">
       <PrimaryButton

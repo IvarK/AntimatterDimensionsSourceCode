@@ -27,26 +27,34 @@ export default {
       return Glyphs.findById(this.glyphId).type;
     },
     cosmeticTypes() {
-      return CosmeticGlyphTypes.list.filter(t => t.isCosmetic && t.isUnlocked).map(t => t.id);
+      return CosmeticGlyphTypes.list.filter(t => t.isCosmetic && t.isUnlocked()).map(t => t.id);
+    },
+    glyph() {
+      return Glyphs.findById(this.glyphId);
     }
+  },
+  created() {
+    // This force-closes the modal only if another glyph is dragged into the panel
+    EventHub.logic.on(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
+      this.$recompute("glyph");
+      if (!this.defaultKeySwap) this.emitClose();
+    });
   },
   methods: {
     update() {
       this.defaultKeySwap = true;
     },
     setType(type) {
-      const glyph = Glyphs.findById(this.glyphId);
-      glyph.color = undefined;
-      glyph.symbol = undefined;
-      glyph.cosmetic = type;
+      this.glyph.color = undefined;
+      this.glyph.symbol = undefined;
+      this.glyph.cosmetic = type;
       this.defaultKeySwap = false;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
     cosmeticTypeClass(type) {
-      const glyph = Glyphs.findById(this.glyphId);
       return {
         "o-primary-btn--subtab-option": true,
-        "o-active-type": type === glyph.cosmetic
+        "o-active-type": type === this.glyph.cosmetic
       };
     }
   }

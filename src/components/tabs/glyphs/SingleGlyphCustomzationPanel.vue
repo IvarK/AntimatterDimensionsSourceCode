@@ -56,7 +56,8 @@ export default {
   },
   methods: {
     update() {
-      this.isVisible = player.reality.glyphs.cosmetics.active && GlyphAppearanceHandler.canSeeCustomization;
+      this.isVisible = player.reality.glyphs.cosmetics.active && (GlyphAppearanceHandler.availableTypes.length > 0 ||
+        CosmeticGlyphTypes.list.some(t => t.isCosmetic && t.isUnlocked()));
     },
     dragover(event) {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
@@ -66,6 +67,7 @@ export default {
       if (!event.dataTransfer.types.includes(GLYPH_MIME_TYPE)) return;
       const id = parseInt(event.dataTransfer.getData(GLYPH_MIME_TYPE), 10);
       if (isNaN(id)) return;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
       this.glyphID = id;
       this.$recompute("glyph");
     },
@@ -135,6 +137,19 @@ export default {
   padding: 0.5rem;
   margin-top: 1rem;
   user-select: none;
+  animation-name: insert;
+  animation-duration: 0.6s;
+  overflow: hidden;
+}
+
+@keyframes insert {
+  0% {
+    height: 0rem;
+  }
+
+  100% {
+    height: 8rem;
+  }
 }
 
 .c-glyph-info {

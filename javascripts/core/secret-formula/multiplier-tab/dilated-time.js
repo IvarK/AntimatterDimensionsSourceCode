@@ -11,7 +11,7 @@ GameDatabase.multiplierTabValues.DT = {
     isBase: true,
     displayOverride: () => `${format(getDilationGainPerSecond().times(getGameSpeedupForDisplay()), 2, 2)}/sec`,
     multValue: () => getDilationGainPerSecond().times(getGameSpeedupForDisplay()),
-    isActive: () => getDilationGainPerSecond().gt(0),
+    isActive: () => PlayerProgress.realityUnlocked() || PlayerProgress.dilationUnlocked(),
     dilationEffect: () => (Enslaved.isRunning ? 0.85 : 1),
     isDilated: true,
     overlay: ["Ψ"],

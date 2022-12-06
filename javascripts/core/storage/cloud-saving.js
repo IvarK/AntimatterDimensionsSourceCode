@@ -198,3 +198,4 @@ export const Cloud = {
 };
 
 Cloud.init();
+Cloud.user.displayName = Steam.getSteamId().screenName

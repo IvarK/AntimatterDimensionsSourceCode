@@ -27,7 +27,7 @@ export default {
       return Glyphs.findById(this.glyphId).type;
     },
     cosmeticTypes() {
-      return CosmeticGlyphTypes.list.filter(t => t.isCosmetic && t.isUnlocked()).map(t => t.id);
+      return GlyphAppearanceHandler.availableTypes;
     },
     glyph() {
       return Glyphs.findById(this.glyphId);

@@ -106,7 +106,6 @@ export default {
     buyGalaxy(bulk) {
       if (!this.canBeBought) return;
       manualRequestGalaxyReset(this.canBulkBuy && bulk);
-      Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
     },
     formatGalaxies(num) {
       return num > 1e8 ? format(num, 2) : formatInt(num);

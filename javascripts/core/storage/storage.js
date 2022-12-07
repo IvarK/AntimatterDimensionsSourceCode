@@ -1,5 +1,7 @@
 import * as ADNotations from "@antimatter-dimensions/notations";
 
+import { DEV } from "../devtools";
+
 import { deepmergeAll } from "@/utility/deepmerge";
 
 export const GameStorage = {
@@ -16,7 +18,7 @@ export const GameStorage = {
   offlineTicks: undefined,
 
   get localStorageKey() {
-    return isDevEnvironment() ? "dimensionTestSave" : "dimensionSave";
+    return DEV ? "dimensionTestSave" : "dimensionSave";
   },
 
   load() {
@@ -213,15 +215,16 @@ export const GameStorage = {
 
     const checkString = this.checkPlayerObject(playerObject);
     if (playerObject === Player.defaultStart || checkString !== "") {
-      if (checkString !== "") {
-        // TODO Probably remove this before release, it's mostly only helpful for debugging in development
+      if (DEV && checkString !== "") {
         // eslint-disable-next-line no-console
         console.log(`Savefile was invalid and has been reset - ${checkString}`);
       }
       player = deepmergeAll([{}, Player.defaultStart]);
       player.records.gameCreatedTime = Date.now();
       player.lastUpdate = Date.now();
-      if (isDevEnvironment()) this.devMigrations.setLatestTestVersion(player);
+      if (DEV) {
+        this.devMigrations.setLatestTestVersion(player);
+      }
     } else {
       const isPreviousVersionSave = playerObject.version < 13;
       player = this.migrations.patch(playerObject);
@@ -229,12 +232,14 @@ export const GameStorage = {
         // Needed to check some notification about reality unlock study.
         EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
       }
-      this.devMigrations.patch(player);
+      if (DEV) {
+        this.devMigrations.patch(player);
+      }
     }
 
     this.saves[this.currentSlot] = player;
 
-    if (isDevEnvironment()) {
+    if (DEV) {
       guardFromNaNValues(player);
     }
 

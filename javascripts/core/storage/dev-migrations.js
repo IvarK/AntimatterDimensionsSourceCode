@@ -1518,13 +1518,10 @@ GameStorage.devMigrations = {
       const toDelete = ["totalSTD", "spentSTD", "exportSTD", "IPPurchases", "EPPurchases", "RMPurchases",
         "dimPurchases", "allDimPurchases", "replicantiPurchases", "dilatedTimePurchases", "disabled"];
       for (const key of toDelete) delete player.IAP[key];
-
-      // TODO Possibly update this with a dev STD migration?
     }
   ],
 
   patch(player) {
-    if (!isDevEnvironment()) return;
     player.options.testVersion = player.options.testVersion || 0;
     for (let version = player.options.testVersion; version < this.patches.length; version++) {
       const patch = this.patches[version];

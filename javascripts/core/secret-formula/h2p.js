@@ -35,9 +35,9 @@ cut off part of the text if you are using one to transfer the save between devic
 A properly-formatted save string from the Reality update will start with
 <b>${GameSaveSerializer.startingString.savefile}</b> and end with <b>${GameSaveSerializer.endingString.savefile}</b>.
 If you are importing from a version of the game from before Reality was released, it will instead start with <b>eyJ</b>
-and end with <b>==</b>. If neither of these are the case, then part of your save is missing and it will fail to import.
-In addition to importing and exporting to your clipboard, you can also import and export from text files as well.
-<br>
+and end with <b>In19</b>, <b>fX0=</b>, or <b>fQ==</b>. If neither of these are the case, then part of your save is
+missing and it will fail to import. In addition to importing and exporting to your clipboard, you can also import
+and export from text files as well.
 <br>
 You can use the "Choose save" button to pick between three separate saves on your browser. These saves are, for most
 intents and purposes, completely separate from each other. Importing and exporting will only affect the current save
@@ -1289,9 +1289,9 @@ ${Enslaved.isCompleted
 The Nameless Ones won't directly unlock the next Celestial.
 `,
       isUnlocked: () => EffarigUnlock.eternity.isUnlocked,
-      // TODO Add the rest of the testers here too before release; this is all only pre wave 1
       tags: ["reality", "time", "blackhole", "lategame", "endgame", "testers", "celestial",
-        "ikerstream", "realrapidjazz", "saturnus", "earth", "garnet", "pichusuperlover"],
+        ...GameDatabase.credits.people.map(p => p.name)
+      ],
       tab: "celestials/enslaved"
     }, {
       name: "Tesseracts",

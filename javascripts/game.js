@@ -2,11 +2,11 @@ import TWEEN from "tween.js";
 
 import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
-import { playFabLogin } from "./core/playfab";
 import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
 
 import Payments from "./core/payments";
+import { DEV } from "./core/devtools";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -370,10 +370,6 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   // an effarig glyph.
   factor = Math.clamp(factor, 1e-300, 1e300);
 
-  // Dev speedup should always be active
-  if (tempSpeedupToggle) {
-    factor *= tempSpeedupFactor;
-  }
   return factor;
 }
 
@@ -393,7 +389,6 @@ export function getGameSpeedupForDisplay() {
 // "diff" is in ms.  It is only unspecified when it's being called normally and not due to simulating time, in which
 // case it uses the gap between now and the last time the function was called.  This is on average equal to the update
 // rate.
-// TODO: Clean this up, remove the disable line
 // eslint-disable-next-line complexity
 export function gameLoop(passDiff, options = {}) {
   PerformanceStats.start("Frame Time");
@@ -848,6 +843,7 @@ export function getTTPerSecond() {
   return finalTT;
 }
 
+// eslint-disable-next-line no-unused-vars
 function recursiveTimeOut(fn, iterations, endFn) {
   fn(iterations);
   if (iterations === 0) endFn();
@@ -898,7 +894,7 @@ export function simulateTime(seconds, real, fast) {
   } else if (infinitiedMilestone.gt(0)) {
     Currency.infinities.add(infinitiedMilestone);
   } else {
-    Currency.eternityPoints.add(getOfflineEPGain(totalGameTime * 1000));
+    Currency.eternityPoints.add(getOfflineEPGain(seconds * 1000));
   }
 
   if (InfinityUpgrade.ipOffline.isBought && player.options.offlineProgress) {
@@ -1058,6 +1054,10 @@ export function browserCheck() {
 export function init() {
   // eslint-disable-next-line no-console
   console.log("🌌 Antimatter Dimensions: Reality Update 🌌");
+  if (DEV) {
+    // eslint-disable-next-line no-console
+    console.log("👨‍💻 Development Mode 👩‍💻");
+  }
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   if(steamOn){SteamFunctions.UIZoom()}

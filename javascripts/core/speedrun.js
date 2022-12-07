@@ -4,7 +4,6 @@ import { GameMechanicState } from "./game-mechanics/index";
 export const Speedrun = {
   unlock() {
     if (player.speedrun.isUnlocked) return;
-    // TODO Actually change this when the time comes
     Modal.message.show(`You have unlocked Speedrun Mode! This allows you to start a new save file with some slight
       changes which can be helpful if you're trying to complete the game as quickly as possible. The option to
       start a Speedrun Save is now available in the Options tab, under Saving. Choosing to start a Speedrun Save
@@ -22,7 +21,10 @@ export const Speedrun = {
   },
   // Hard-resets the current save and puts it in a state ready to be "unpaused" once resources start being generated
   prepareSave(name) {
+    const fullCompletions = player.records.fullGameCompletions;
     GameStorage.hardReset();
+    player.records.fullGameCompletions = fullCompletions;
+
     player.speedrun.isUnlocked = true;
     player.speedrun.isActive = true;
     player.reality.seed = Date.now();

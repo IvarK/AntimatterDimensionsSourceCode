@@ -52,8 +52,8 @@ import "./multiplier-tab/index";
 
 import "./celestials/quotes/index";
 
-import "./h2p";
-
 import "./credits";
+
+import "./h2p";
 
 import "./changelog";

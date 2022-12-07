@@ -1,3 +1,5 @@
+import { DEV } from "../devtools";
+
 import { deepmergeAll } from "@/utility/deepmerge";
 import { GameStorage } from "./storage";
 
@@ -80,8 +82,7 @@ GameStorage.migrations = {
     13: player => {
       // 12.3 is currently on live, will be updated to 13 after release
 
-      // TODO: REMOVE THE FOLLOWING LINE BEFORE RELEASE/MERGE FROM TEST
-      if (isDevEnvironment()) GameStorage.devMigrations.setLatestTestVersion(player);
+      if (DEV) GameStorage.devMigrations.setLatestTestVersion(player);
 
       // Last update version check, fix emoji/cancer issue,
       // change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
@@ -151,8 +152,6 @@ GameStorage.migrations = {
       GameStorage.migrations.etercreqConversion(player);
       GameStorage.migrations.moveTS33(player);
       GameStorage.migrations.addBestPrestigeCurrency(player);
-
-      shop.migratePurchases();
     }
   },
 

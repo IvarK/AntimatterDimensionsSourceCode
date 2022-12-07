@@ -1,5 +1,6 @@
 import { ProgressChecker } from "../storage/progress-checker";
 
+import CloudInvalidDataModal from "@/components/modals/cloud/CloudInvalidDataModal";
 import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";
 import CloudManualLoginModal from "@/components/modals/cloud/CloudManualLoginModal";
 import CloudSaveConflictModal from "@/components/modals/cloud/CloudSaveConflictModal";
@@ -298,6 +299,7 @@ function getSaveInfo(save) {
 Modal.cloudSaveConflict = new Modal(CloudSaveConflictModal);
 Modal.cloudLoadConflict = new Modal(CloudLoadConflictModal);
 Modal.manualCloud = new Modal(CloudManualLoginModal);
+Modal.cloudInvalidData = new Modal(CloudInvalidDataModal);
 // eslint-disable-next-line max-params
 Modal.addCloudConflict = function(saveId, saveComparison, cloudSave, localSave, onAccept) {
   Modal.hide();
@@ -331,10 +333,6 @@ Modal.message = new class extends Modal {
     this.closeButton = props.closeButton ?? false;
     EventHub.ui.offAll(this._component);
     if (props.closeEvent) this.applyCloseListeners(props.closeEvent);
-
-    // TODO: remove this console.log
-    // eslint-disable-next-line no-console
-    console.log(`Modal message: ${text}`);
   }
 
   hide() {

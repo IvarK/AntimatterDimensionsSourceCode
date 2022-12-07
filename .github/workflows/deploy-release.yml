@@ -1,12 +1,12 @@
-name: Deploy 🚀
+name: Deploy release
 
 on:
   push:
     branches:
-      - master
+      - release
   workflow_dispatch:
     branches:
-      - master
+      - release
 
 jobs:
   build:
@@ -21,9 +21,11 @@ jobs:
           node-version: '14'
           cache: 'npm'
       - run: npm ci
-      - run: npm run build
-      - uses: JamesIves/github-pages-deploy-action@4.1.3
+      - run: npm run build:release
+      - uses: JamesIves/github-pages-deploy-action@v4
         with:
-          branch: gh-pages
+          token: ${{ secrets.GH_PUBLISH_TOKEN }}
+          repository-name: IvarK/AyyLmao5Hours
+          branch: master
           folder: dist
           single-commit: true

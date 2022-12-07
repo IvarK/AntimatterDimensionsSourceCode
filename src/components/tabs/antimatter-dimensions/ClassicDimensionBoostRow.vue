@@ -64,7 +64,6 @@ export default {
     dimensionBoost(bulk) {
       if (!DimBoost.requirement.isSatisfied || !DimBoost.canBeBought) return;
       manualRequestDimensionBoost(bulk);
-      Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
     }
   }
 };

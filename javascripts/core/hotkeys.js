@@ -14,6 +14,11 @@ import { GameKeyboard } from "./keyboard";
 // Note: mod is a function key helper by Mousetap for both ctrl and command,
 // and should be used to provide support for both Windows and Max
 
+// Note: DON'T add repeatables with modifier keys other than shift
+// because Mousetrap is crap, and we needed to plug it up to work
+// properly with shift, so you will need to plug it up additionally
+// for the other modifier keys (#3093).
+
 // Free keys:
 // i, j, k, l, n, o, p, q, v, w, x
 
@@ -267,13 +272,7 @@ export const shortcuts = [
 ];
 
 for (const hotkey of shortcuts) {
-  let keys = "";
-  for (const key of hotkey.keys) {
-    // There may be multiple keys required, and the syntax is key1+key2+key3
-    if (keys === "") keys += key;
-    else keys += `+${key}`;
-  }
-  GameKeyboard[hotkey.type](keys, hotkey.function);
+  GameKeyboard[hotkey.type](hotkey.keys.join("+"), hotkey.function);
 }
 
 // We need to know whether the player is holding R or not for the replicanti galaxy
@@ -305,6 +304,7 @@ GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer(Autobuyer.reality));
     GameKeyboard.bindRepeatableHotkey(`${tier}`, () => buyManyDimension(tier));
     GameKeyboard.bindRepeatableHotkey(`num${tier}`, () => buyManyDimension(tier));
     GameKeyboard.bindRepeatableHotkey(`shift+${tier}`, () => buyOneDimension(tier));
+    GameKeyboard.bindRepeatableHotkey(`shift+num${tier}`, () => buyOneDimension(tier));
     GameKeyboard.bindHotkey(`alt+${tier}`, () => toggleAutobuyer(Autobuyer.antimatterDimension(tier)));
     GameKeyboard.bindHotkey(`alt+num${tier}`, () => toggleAutobuyer(Autobuyer.antimatterDimension(tier)));
     GameKeyboard.bindHotkey(`shift+alt+${tier}`, () => toggleBuySingles(Autobuyer.antimatterDimension(tier)));

@@ -65,6 +65,9 @@ export default {
       return num.gt(0)
         ? `${this.formatDecimalAmount(num)} ${pluralize("Eternity", num)}`
         : "no Eternities";
+    },
+    fullGameCompletions() {
+      return player.records.fullGameCompletions;
     }
   },
   methods: {
@@ -163,6 +166,9 @@ export default {
       </div>
       <div>
         You have unlocked {{ quantifyInt("Secret Achievement", secretAchievementCount) }}.
+      </div>
+      <div v-if="fullGameCompletions">
+        <b>You have completed the entire game {{ quantifyInt("time", fullGameCompletions) }}.</b>
       </div>
       <div>
         <br>

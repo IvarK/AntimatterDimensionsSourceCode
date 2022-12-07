@@ -29,7 +29,6 @@ export default {
       this.enableAnimation = player.options.news.includeAnimated;
     },
     restart() {
-      // TODO: Proper delay before ui is initialized
       if (!GameUI.initialized) {
         setTimeout(this.restart.bind(this), 100);
         return;

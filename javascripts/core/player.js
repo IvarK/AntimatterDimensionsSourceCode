@@ -270,6 +270,7 @@ window.player = {
     timePlayedAtBHUnlock: Number.MAX_VALUE,
     realTimePlayed: 0,
     realTimeDoomed: 0,
+    fullGameCompletions: 0,
     totalAntimatter: DC.E1,
     lastTenInfinities: Array.range(0, 10).map(() =>
       [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
@@ -370,6 +371,7 @@ window.player = {
       completeFullGame: 0,
     },
     milestones: [],
+    achievementTimes: {},
   },
   IPMultPurchases: 0,
   version: 13,

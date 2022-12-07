@@ -30,6 +30,7 @@ export default {
       realityUnlocked: false,
       garbleTimer: 0,
       garbleKey: 0,
+      achievementTime: 0,
     };
   },
   computed: {
@@ -86,6 +87,13 @@ export default {
     garbledDescriptionTemplate() {
       return this.makeGarbledTemplate(this.config.description);
     },
+    achievedTime() {
+      if (!player.speedrun.isActive) return null;
+      if (this.achievementTime === undefined) return "Not Achieved yet";
+      return this.achievementTime === 0
+        ? "Given at Speedrun start"
+        : `Achieved after ${TimeSpan.fromMilliseconds(this.achievementTime).toStringShort()}`;
+    }
   },
   beforeDestroy() {
     clearTimeout(this.mouseOverInterval);
@@ -110,6 +118,7 @@ export default {
       } else {
         this.garbleKey = this.id;
       }
+      if (player.speedrun.isActive) this.achievementTime = player.speedrun.achievementTimes[this.id];
     },
     onMouseEnter() {
       clearTimeout(this.mouseOverInterval);
@@ -191,6 +200,12 @@ export default {
             />
           </span>
         </div>
+        <div
+          v-if="achievedTime"
+          class="o-achievement-time"
+        >
+          {{ achievedTime }}
+        </div>
       </template>
     </div>
     <div
@@ -203,5 +218,8 @@ export default {
 </template>
 
 <style scoped>
-
+.o-achievement-time {
+  font-weight: bold;
+  color: var(--color-accent);
+}
 </style>

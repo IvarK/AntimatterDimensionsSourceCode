@@ -2162,9 +2162,13 @@ br {
 
 .o-hint-text--alchemy-node {
   font-size: 1.2rem;
-  color: #4f5957;
+  color: var(--color-text);
   text-shadow: none;
   transition: opacity 0.2s;
+}
+
+.s-base--dark .o-hint-text--alchemy-node {
+  text-shadow: 0.1rem 0.1rem black, 0.1rem -0.1rem black, -0.1rem -0.1rem black, -0.1rem 0.1rem black;
 }
 
 .o-hint-text--alchemy-node--unfocused {
@@ -4746,8 +4750,8 @@ properly on certain themes. */
 .o-eternity-upgrade--useless {
   color: black;
   background-color: var(--color-pelle--base);
-  filter: grayscale(50%);
   border-color: black;
+  filter: grayscale(50%);
 }
 
 .o-eternity-upgrade--available {

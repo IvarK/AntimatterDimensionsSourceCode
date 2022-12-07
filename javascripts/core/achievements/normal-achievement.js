@@ -72,6 +72,11 @@ class AchievementState extends GameMechanicState {
       GameUI.notify.success(`Achievement: ${this.name}`);
       SteamFunctions.GiveAchievement(this.id);
     }
+    if (player.speedrun.isActive && !player.speedrun.achievementTimes[this.id]) {
+      // This stores a lot of data in the savefile and seems particularly suceptible to floating-point rounding issues
+      // for some reason, so we floor to get rid of fractions of milliseconds and reduce what filesize impact we can
+      player.speedrun.achievementTimes[this.id] = Math.floor(player.records.realTimePlayed);
+    }
     Achievements._power.invalidate();
     EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
   }

@@ -24,6 +24,8 @@ export default {
       creditsClosed: false,
       loggedIn: false,
       username: "",
+      canRespec: false,
+      respecTimeStr: "",
     };
   },
   computed: {
@@ -41,6 +43,11 @@ export default {
     enableText() {
       return `In-app Purchases: ${this.IAPsEnabled ? "Enabled" : "Disabled"}`;
     },
+    respecText() {
+      if (!this.loggedIn) return "Not logged in!";
+      if (!this.canRespec) return "No respec available! (Purchase STDs or wait 3 days since your last one)";
+      return null;
+    }
   },
   methods: {
     update() {
@@ -51,6 +58,10 @@ export default {
       this.creditsClosed = GameEnd.creditsEverClosed;
       this.loggedIn = Cloud.loggedIn;
       this.username = Cloud.user?.displayName;
+      this.canRespec = ShopPurchaseData.canRespec;
+      if (!ShopPurchaseData.respecAvailable && !this.canRespec) {
+        this.respecTimeStr = ShopPurchaseData.timeUntilRespec.toStringShort();
+      }
     },
     showStore() {
       if (!steamOn) return;
@@ -63,13 +74,20 @@ export default {
       Payments.cancelPurchase(false);
     },
     respec() {
-      if (this.creditsClosed) return;
+      if (this.creditsClosed || !this.loggedIn || !this.canRespec) return;
       ShopPurchaseData.respecRequest();
     },
     toggleEnable() {
       if (ShopPurchaseData.availableSTD < 0) return;
       if (!player.IAP.enabled && this.spentSTD > 0) Speedrun.setSTDUse(true);
       player.IAP.enabled = !player.IAP.enabled;
+    },
+    respecClass() {
+      return {
+        "o-primary-btn--subtab-option": true,
+        "o-pelle-disabled-pointer": this.creditsClosed,
+        "o-primary-btn--disabled": !this.loggedIn || !this.canRespec
+      };
     }
   },
 };
@@ -95,12 +113,15 @@ export default {
         {{ enableText }}
       </PrimaryButton>
       <PrimaryButton
-        class="o-primary-btn--subtab-option"
-        :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+        v-tooltip="respecText"
+        :class="respecClass()"
         @click="respec()"
       >
         Respec Shop
       </PrimaryButton>
+    </div>
+    <div v-if="!canRespec">
+      Time until respec available: {{ respecTimeStr }}
     </div>
     <div
       v-if="loggedIn"

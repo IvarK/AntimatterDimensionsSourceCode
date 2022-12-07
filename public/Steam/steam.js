@@ -84,7 +84,7 @@ const SteamFunctions = {
         Cloud.user.displayName = Steam.getSteamId().screenName
     },
     PurchaseIAP(STD, kreds) {
-        if (!steamOn) return;
+        /*if (!steamOn) return;
         const TheItem = { ItemId: `${STD}STD`, Quantity: 1, Annotation: "Purchased via in-game store" };
         PlayFab.settings.titleId = "59813";
         const loginRequest = {
@@ -113,10 +113,10 @@ const SteamFunctions = {
             } else if (error !== null) {
                 console.log(error);
             }
-        });
+        });*/
     },
     ConfirmSteamPurchase(OrderIdentifier) {
-        console.log(OrderIdentifier);
+        /*console.log(OrderIdentifier);
         PlayFab.ClientApi.ConfirmPurchase({ OrderId: OrderIdentifier }, (result, error) => {
             if (result !== null && result.data.Items != null) {
                 console.log(result);
@@ -138,7 +138,7 @@ const SteamFunctions = {
             } else if (error !== null) {
                 console.log(error);
             }
-        });
+        });*/
     },
     PurchaseValidation() {
         if (SteamFunctions.purchaseChecker.length > 0) {

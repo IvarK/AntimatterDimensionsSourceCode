@@ -1056,7 +1056,7 @@ export function init() {
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   if(steamOn){SteamFunctions.UIZoom()}
-  shop.init();
+  //shop.init();
   Payments.init();
 }
 

@@ -209,7 +209,7 @@ export const Cloud = {
       if (user) {
         this.user = {
           id: user.uid,
-          displayName: user.displayName,
+          displayName: steamOn ? Steam.getSteamId().screenName : "",//user.displayName,
           email: user.email,
         };
         //ShopPurchaseData.syncSTD();
@@ -221,4 +221,4 @@ export const Cloud = {
 };
 
 Cloud.init();
-Cloud.user.displayName = Steam.getSteamId().screenName
+//this.user.displayName = Steam.getSteamId().screenName

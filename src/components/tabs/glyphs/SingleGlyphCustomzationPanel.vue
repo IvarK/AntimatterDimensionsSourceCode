@@ -92,6 +92,7 @@ export default {
       <div class="c-glyph-info-section">
         <GlyphComponent
           :glyph="glyph"
+          :flip-tooltip="true"
         />
       </div>
       <div class="c-glyph-info-section c-cosmetic-text">
@@ -137,19 +138,6 @@ export default {
   padding: 0.5rem;
   margin-top: 1rem;
   user-select: none;
-  animation-name: insert;
-  animation-duration: 0.6s;
-  overflow: hidden;
-}
-
-@keyframes insert {
-  0% {
-    height: 0rem;
-  }
-
-  100% {
-    height: 8rem;
-  }
 }
 
 .c-glyph-info {

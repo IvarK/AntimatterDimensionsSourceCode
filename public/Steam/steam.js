@@ -51,14 +51,18 @@ const SteamFunctions = {
     BackfillAchievements() {
         if (Steam && steamOn) {
             if (Steam.activateAchievement) {
+                const achAchieved = []
+                const achErrored = []
                 for (const ach in Achievements.all) { 
                     if (Achievements.all[ach].isUnlocked) {
                         Steam.activateAchievement(`Achievement${Achievements.all[ach].id}`,
-                            () => console.log(`Successfully Achieved Achievement${Achievements.all[ach].id}`),
-                            err => console.log(`Achievement Error: ${err}`) 
+                            () => achAchieved.push(Achievements.all[ach].id),
+                            err => achErrored.push(Achievements.all[ach].id) 
                         );
                     }
                 }
+                console.log(achAchieved)
+                console.log(achErrored)
             }
         }
     },

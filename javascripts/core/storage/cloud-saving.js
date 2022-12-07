@@ -212,7 +212,7 @@ export const Cloud = {
           displayName: user.displayName,
           email: user.email,
         };
-        ShopPurchaseData.syncSTD();
+        //ShopPurchaseData.syncSTD();
       } else {
         this.user = null;
       }

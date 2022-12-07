@@ -21,9 +21,8 @@ export const ENSLAVED_UNLOCKS = {
     description() {
       const hasLevelRequirement = player.records.bestReality.glyphLevel >= 5000;
       const hasRarityRequirement = strengthToRarity(player.records.bestReality.glyphStrength) >= 100;
-      return `Unlock The Nameless Ones' Reality (requires a level
-      ${formatInt(5000)} Glyph${hasLevelRequirement ? " (✓)" : ""} and a ${formatRarity(100)} rarity
-      Glyph${hasRarityRequirement ? " (✓)" : ""})`;
+      return `Unlock The Nameless Ones' Reality (requires ${hasLevelRequirement ? "[✓]" : "[✗]"} a level
+      ${formatInt(5000)} Glyph and ${hasRarityRequirement ? "[✓]" : "[✗]"} a ${formatRarity(100)} rarity Glyph)`;
     }
   }
 };

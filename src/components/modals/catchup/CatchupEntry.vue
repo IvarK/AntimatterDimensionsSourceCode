@@ -45,7 +45,9 @@ export default {
       :info="info"
       :is-focused="isFocusedResource(info)"
       @click="showHowTo"
-    >{{ info.name }}</span>: {{ info.description }}
+    >
+      <span class="c-underline">{{ info.name }}</span>: <i class="fas fa-question-circle" />
+    </span> {{ info.description }}
   </div>
 </template>
 
@@ -54,6 +56,10 @@ export default {
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
+}
+
+.c-underline {
+  text-decoration: underline;
 }
 
 .c-modal-catchup-entry {

@@ -9,8 +9,8 @@ GameDatabase.multiplierTabValues.EP = {
   total: {
     name: "Total EP Gained on Eternity",
     isBase: true,
-    multValue: () => (Player.canEternity ? gainedEternityPoints() : 0),
-    isActive: () => PlayerProgress.eternityUnlocked() || gainedEternityPoints().gt(0),
+    multValue: () => gainedEternityPoints(),
+    isActive: () => PlayerProgress.eternityUnlocked() || Player.canEternity,
     dilationEffect: () => (Laitela.isRunning ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty) : 1),
     isDilated: true,
     overlay: ["Δ", "<i class='fa-solid fa-layer-group' />"],

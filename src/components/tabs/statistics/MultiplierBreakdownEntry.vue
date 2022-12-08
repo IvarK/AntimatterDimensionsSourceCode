@@ -361,10 +361,11 @@ export default {
       </div>
       <div v-if="resource === 'AD_total'">
         <br>
-        "Base AD Production" is the amount of Antimatter that you would be producing with your current AD upgrades,
-        as if you had waited 10 seconds after a Sacrifice. This is likely to underestimate your actual production
-        depending on how long you have been producing, but the relative mismatch will become smaller as you progress
-        further in the game.
+        "Base AD Production" is the amount of Antimatter that you would be producing with your current AD upgrades
+        as if you had waited a fixed amount of time ({{ formatInt(10) }}-{{ formatInt(40) }} seconds depending on
+        your AD count) after a Sacrifice. This is may misrepresent your actual production if your ADs have been
+        producing for a while, but the relative mismatch will become smaller as you progress further in the game
+        and numbers become larger.
       </div>
     </div>
   </div>

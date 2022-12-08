@@ -43,10 +43,13 @@ export default {
     <div class="c-modal-away-progress__header">
       {{ titleText }}
     </div>
-    {{ timeString }}
-    If you need a refresher, here is a quick summary of all the content you have unlocked so far from the beginning of
-    the game, separated into different stages of progression. These are only very brief descriptions; you may want to
-    check the related How To Play entries if you want more detailed information.
+    <div>
+      {{ timeString }}
+      If you need a refresher, here is a quick summary of all the content you have unlocked so far from the beginning of
+      the game, separated into different stages of progression. These are only very brief descriptions; you can check
+      the related How To Play entries by clicking the contents title or <i class="fas fa-question-circle" /> icons
+      to view more detailed information.
+    </div>
     <div
       class="l-catchup-group-container"
       :style="{ 'height' : `${Math.clamp(3 * progressStage + 5, 15, 35)}rem` }"

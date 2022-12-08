@@ -9,7 +9,8 @@ GameDatabase.multiplierTabValues.infinities = {
     name: "Infinities gained per Crunch",
     isBase: true,
     multValue: () => gainedInfinities(),
-    isActive: () => (Achievement(87).isUnlocked || PlayerProgress.realityUnlocked()) &&
+    // The earliest sources of infinity multipliers are ach87 and TS32, which may happen in either order
+    isActive: () => (Achievement(87).isUnlocked || PlayerProgress.eternityUnlocked()) &&
       !EternityChallenge(4).isRunning && !Pelle.isDoomed,
     overlay: ["∞", "<i class='fa-solid fa-arrows-rotate' />"],
   },

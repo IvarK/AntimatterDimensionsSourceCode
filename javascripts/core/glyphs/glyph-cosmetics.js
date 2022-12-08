@@ -235,4 +235,27 @@ export const GlyphAppearanceHandler = {
     TabNotification.newGlyphCosmetic.tryTrigger();
     player.reality.glyphs.cosmetics.glowNotification = true;
   },
+
+  // Deletes invalid glyph cosmetics for individual symbols or colors which aren't unlocked. Note that this should only
+  // be called on import and not on page load, as there is a minor async delay on-load which will cause STD purchases
+  // to not be accounted for when loading an already-existing local save
+  clearInvalidCosmetics() {
+    const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
+    const allSymbols = GlyphAppearanceHandler.availableSymbols.flat();
+    const allColors = GlyphAppearanceHandler.availableSymbols.flat();
+    for (const glyph of allGlyphs) {
+      if (!allSymbols.includes(glyph.symbol)) glyph.symbol = undefined;
+      if (!allColors.includes(glyph.color)) glyph.color = undefined;
+      if (!GlyphAppearanceHandler.availableTypes.includes(glyph.cosmetic)) glyph.cosmetic = undefined;
+    }
+    const cosmetics = player.reality.glyphs.cosmetics;
+    for (const key of Object.keys(cosmetics.symbolMap)) {
+      const selectedSymbol = cosmetics.symbolMap[key];
+      if (!allSymbols.includes(selectedSymbol)) cosmetics.symbolMap[key] = undefined;
+    }
+    for (const key of Object.keys(cosmetics.colorMap)) {
+      const selectedColor = cosmetics.symbolMap[key];
+      if (!allColors.includes(selectedColor)) cosmetics.colorMap[key] = undefined;
+    }
+  }
 };

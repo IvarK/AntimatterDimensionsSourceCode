@@ -66,6 +66,12 @@ export default {
     },
     isEmpty() {
       return !this.isRecent(this.lastNotEmptyAt);
+    },
+    disabledText() {
+      if (!this.resource.isBase) return `Total effect inactive, disabled, or reduced to ${formatX(1)}`;
+      return Decimal.eq(this.resource.mult, 0)
+        ? `You cannot gain this resource (prestige requirement not reached)`
+        : `You have no multipliers for this resource (will gain ${format(1)} on prestige)`;
     }
   },
   methods: {
@@ -324,9 +330,10 @@ export default {
         v-if="isEmpty"
         class="c-no-effect"
       >
-        No Active Multipliers
+        No Active Effects
         <br>
-        Total effect disabled or reduced to {{ formatX(1) }}.
+        <br>
+        {{ disabledText }}
       </div>
       <div
         v-for="(entry, index) in entries"
@@ -363,7 +370,7 @@ export default {
         <br>
         "Base AD Production" is the amount of Antimatter that you would be producing with your current AD upgrades
         as if you had waited a fixed amount of time ({{ formatInt(10) }}-{{ formatInt(40) }} seconds depending on
-        your AD count) after a Sacrifice. This is may misrepresent your actual production if your ADs have been
+        your AD count) after a Sacrifice. This may misrepresent your actual production if your ADs have been
         producing for a while, but the relative mismatch will become smaller as you progress further in the game
         and numbers become larger.
       </div>

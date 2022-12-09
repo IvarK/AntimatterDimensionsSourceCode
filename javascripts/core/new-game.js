@@ -4,6 +4,7 @@ export const NG = {
   startNewGame() {
     GameEnd.creditsClosed = false;
     GameEnd.creditsEverClosed = false;
+    player.isGameEnd = false;
     // We set this ASAP so that the AD tab is immediately recreated without END formatting, and any lag which could
     // happen is instead hidden by the overlay from the credits rollback
     player.celestials.pelle.doomed = false;
@@ -41,9 +42,5 @@ export const NG = {
     GameEnd.additionalEnd = 15;
     // Without the delay, this causes the saving (and its notification) to occur during the credits rollback
     setTimeout(() => GameStorage.save(), 10000);
-    // The credits rollback animation state is controlled by additionalEnd, which causes isGameEnd to be immediately set
-    // to true again as long as the animation hasn't completed. Thus, we need to set it back to false again, but we only
-    // do so after a long enough delay that we can be sure it's zero and won't get toggled again
-    setTimeout(() => player.isGameEnd = false, 10000);
   }
 };

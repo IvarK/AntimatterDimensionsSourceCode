@@ -40,7 +40,8 @@ export const GameEnd = {
         this.removeAdditionalEnd = false;
       }
     }
-    if (this.endState >= END_STATE_MARKERS.GAME_END && ui.$viewModel.modal.progressBar === undefined) {
+    if (!this.removeAdditionalEnd && this.endState >= END_STATE_MARKERS.GAME_END &&
+        ui.$viewModel.modal.progressBar === undefined) {
       player.isGameEnd = true;
       this.additionalEnd += Math.min(diff / 1000 / 20, 0.1);
     }

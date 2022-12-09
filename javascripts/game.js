@@ -1018,6 +1018,11 @@ window.onload = function() {
   GameUI.initialized = supportedBrowser;
   ui.view.initialized = supportedBrowser;
   setTimeout(() => {
+    if(Steam){
+			if(Steam.initAPI()){
+        playFabLogin();
+      }
+    }
     document.getElementById("loading").style.display = "none";
   }, 500);
   if (!supportedBrowser) {

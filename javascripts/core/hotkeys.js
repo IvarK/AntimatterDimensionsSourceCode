@@ -405,7 +405,7 @@ function keyboardPressQuestionMark() {
     EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
-  if (Modal.isOpen) return;
+  if (Modal.isOpen) Modal.hideAll();
   Modal.hotkeys.show();
 }
 
@@ -423,8 +423,8 @@ function keyboardEditAutobuyers() {
     EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
-  if (Modal.isOpen) Modal.hideAll();
   if (!Autobuyers.hasAutobuyersForEditModal) return;
+  if (Modal.isOpen) Modal.hideAll();
   Modal.autobuyerEditModal.show();
 }
 

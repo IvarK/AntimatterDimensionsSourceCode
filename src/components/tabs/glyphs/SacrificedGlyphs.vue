@@ -40,7 +40,13 @@ export default {
     },
     boostThreshold() {
       return GlyphAlteration.boostingThreshold;
-    }
+    },
+    cosmeticTypes: () => CosmeticGlyphTypes,
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
+      this.$recompute("cosmeticTypes");
+    });
   },
   methods: {
     update() {
@@ -84,7 +90,7 @@ export default {
       player.options.hideAlterationEffects = !player.options.hideAlterationEffects;
     },
     glyphSymbol(type) {
-      return CosmeticGlyphTypes[type].currentSymbol.symbol;
+      return this.cosmeticTypes[type].currentSymbol.symbol;
     }
   }
 };
@@ -144,7 +150,7 @@ export default {
       </div>
       <template v-for="type in types">
         <TypeSacrifice
-          :key="type"
+          :key="type + glyphSymbol(type)"
           :type="type"
           :has-dragover="hasDragover"
         />

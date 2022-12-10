@@ -181,7 +181,7 @@ const SteamFunctions = {
         })
     },
     PurchaseShopItem(itemCost,itemKey,itemConfig){
-        console.log(itemCost,itemKey,itemConfig)
+        //console.log(itemCost,itemKey,itemConfig)
         const itemPurchaseRequest = {
             ItemId: itemKey,
             Price: itemCost,
@@ -190,11 +190,12 @@ const SteamFunctions = {
         PlayFab.ClientApi.PurchaseItem(itemPurchaseRequest, (result, error) => {
             if (result !== null) {
                 console.log(result);
+                if (itemConfig.singleUse) itemConfig.onPurchase();
+                SteamFunctions.SyncPlayFabSTD();
             } else if (error !== null) {
                 console.log(error);
+                GameUI.notify.error(error.errorMessage)
             }
         })
-        if (itemConfig.singleUse) itemConfig.onPurchase();
-        SteamFunctions.SyncPlayFabSTD();
     }
 };

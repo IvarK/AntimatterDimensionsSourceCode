@@ -41,7 +41,7 @@ export default {
       player.IAP.disabled = newValue;
     },
     enableText() {
-      return `In-app Purchases: ${this.IAPsEnabled ? "Enabled" : "Disabled"}`;
+      return `In-app Purchases: ${player.IAP.enabled ? "Enabled" : "Disabled"}`;
     },
     respecText() {
       if (!this.loggedIn) return "Not logged in!";
@@ -111,7 +111,6 @@ export default {
         @click="toggleEnable()"
       >
         {{ enableText }}
-        Disable in-app-purchases
       </PrimaryButton>
       <!--PrimaryButton
         v-tooltip="respecText"

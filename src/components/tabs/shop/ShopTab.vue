@@ -111,18 +111,19 @@ export default {
         @click="toggleEnable()"
       >
         {{ enableText }}
+        Disable in-app-purchases
       </PrimaryButton>
-      <PrimaryButton
+      <!--PrimaryButton
         v-tooltip="respecText"
         :class="respecClass()"
         @click="respec()"
       >
         Respec Shop
-      </PrimaryButton>
+      </PrimaryButton-->
     </div>
-    <div v-if="!canRespec">
+    <!--div v-if="!canRespec">
       Time until respec available: {{ respecTimeStr }}
-    </div>
+    </div-->
     <div
       v-if="loggedIn"
       class="c-login-info"

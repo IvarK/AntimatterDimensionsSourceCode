@@ -5,6 +5,8 @@ const SteamFunctions = {
     purchaseChecker: [],
     purchasesInitiated: true,
     macUser: false,
+    macInterval: 0,
+    macIntervalOn: false,
     SteamInitialize() {
         this.forceRefresh();
         //this.BackfillAchievements();
@@ -105,6 +107,11 @@ const SteamFunctions = {
                         SteamFunctions.purchaseChecker.push(purchaseResult.data.OrderId);
                         if (window.navigator.platform === "MacIntel") {
                             shell.openExternal("https://store.steampowered.com/checkout/approvetxn/" + txnID + "/?returnurl=steam");
+                            SteamFunctions.macInterval = setInterval(async()=>{
+                                SteamFunctions.PurchaseValidation()
+                            },2000)
+                            SteamFunctions.macIntervalOn = true
+                            setTimeout(()=>{clearInterval(SteamFunctions.macInterval);SteamFunctions.macIntervalOn = false},300000)
                         }
                     } else if (purchaseError !== null) {
                         console.log(purchaseError);
@@ -127,10 +134,18 @@ const SteamFunctions = {
                         if (consumeResult !== null) {
                             console.log(consumeResult);
                             const stdsBought = Number(PurchaseName.replace("STD", ""));
-                            ShopPurchaseData.totalSTD += stdsBought;
-                            //player.IAP.totalSTD += stdsBought;
-                            GameUI.notify.info(`${stdsBought} STDs Obtained!`);
+                            const currencyAddRequest = {Amount: stdsBought,VirtualCurrency: "ST"}
+                            PlayFab.ClientApi.AddUserVirtualCurrency(currencyAddRequest, (result, error) => {
+                                if (result !== null) {
+                                    console.log(result);
+                                    ShopPurchaseData.totalSTD += stdsBought;
+                                } else if (error !== null) {
+                                    console.log(error);
+                                }
+                            })
                             SteamFunctions.purchaseChecker = SteamFunctions.purchaseChecker.filter(item => item !== OrderIdentifier);
+                            GameUI.notify.info(`${stdsBought} STDs Obtained!`);
+                            SteamFunctions.SyncPlayFabSTD()
                         } else if (consumeError !== null) {
                             console.log(consumeError);
                         }
@@ -146,7 +161,40 @@ const SteamFunctions = {
                 anOrder => SteamFunctions.ConfirmSteamPurchase(anOrder)
             );
         }
+    },
+    SyncPlayFabSTD(){
+        PlayFab.ClientApi.GetUserInventory({PlayFabId: PlayFab.PlayFabId}, (result, error) => {
+            if (result !== null) {
+                console.log(result);
+                const CurrentSTD = result.data.VirtualCurrency.ST
+                const Inventory = result.data.Inventory
+                ShopPurchaseData.totalSTD = CurrentSTD
+                const inventoryData = {}
+                Inventory.forEach(
+                    ShopItem => inventoryData[ShopItem.ItemId] = ShopItem.RemainingUses
+                );
+                for (const key of Object.keys(GameDatabase.shopPurchases)) ShopPurchaseData[key] = inventoryData[key] ?? 0;
+                GameUI.update();
+            } else if (error !== null) {
+                console.log(error);
+            }
+        })
+    },
+    PurchaseShopItem(itemCost,itemKey,itemConfig){
+        console.log(itemCost,itemKey,itemConfig)
+        const itemPurchaseRequest = {
+            ItemId: itemKey,
+            Price: itemCost,
+            VirtualCurrency: "ST"
+        }
+        PlayFab.ClientApi.PurchaseItem(itemPurchaseRequest, (result, error) => {
+            if (result !== null) {
+                console.log(result);
+            } else if (error !== null) {
+                console.log(error);
+            }
+        })
+        if (itemConfig.singleUse) itemConfig.onPurchase();
+        SteamFunctions.SyncPlayFabSTD();
     }
-
-    
 };

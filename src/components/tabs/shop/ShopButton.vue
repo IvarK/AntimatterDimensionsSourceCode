@@ -1,4 +1,5 @@
 <script>
+import { purchase } from 'vue-gtag';
 export default {
   name: "ShopButton",
   props: {
@@ -21,6 +22,9 @@ export default {
       this.nextMult = this.purchase.nextMultForDisplay;
       this.canAfford = this.purchase.canBeBought;
       this.iapDisabled = !ShopPurchaseData.isIAPEnabled;
+    },
+    TestPurchase(){
+      SteamFunctions.PurchaseShopItem(this.purchase.cost,this.purchase.config.key,this.purchase.config)
     }
   },
 };
@@ -42,7 +46,7 @@ export default {
     <button
       class="o-shop-button-button"
       :class="{ 'o-shop-button-button--disabled': !canAfford }"
-      @click="purchase.purchase()"
+      @click="TestPurchase()"
     >
       Cost: {{ purchase.cost }}
       <img

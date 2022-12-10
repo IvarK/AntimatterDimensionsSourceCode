@@ -212,7 +212,7 @@ export const Cloud = {
           displayName: steamOn ? Steam.getSteamId().screenName : "",//user.displayName,
           email: user.email,
         };
-        //ShopPurchaseData.syncSTD();
+        SteamFunctions.SyncPlayFabSTD()
       } else {
         this.user = null;
       }

@@ -65,7 +65,7 @@ GameDatabase.shopPurchases = {
       shop.purchaseLongerTimeSkip();
     }
   },
-  singleCosmeticSet: {
+  /*singleCosmeticSet: {
     key: "singleCosmeticSet",
     cost: 20,
     description: "Unlock a Glyph cosmetic set of your choice",
@@ -98,5 +98,5 @@ GameDatabase.shopPurchases = {
       GameUI.notify.info(`You have unlocked all sets for Glyph cosmetics!`, 15000);
       GlyphAppearanceHandler.applyNotification();
     }
-  },
+  },*/
 };

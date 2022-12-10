@@ -138,14 +138,13 @@ const SteamFunctions = {
                             PlayFab.ClientApi.AddUserVirtualCurrency(currencyAddRequest, (result, error) => {
                                 if (result !== null) {
                                     console.log(result);
-                                    ShopPurchaseData.totalSTD += stdsBought;
+                                    SteamFunctions.SyncPlayFabSTD()
                                 } else if (error !== null) {
                                     console.log(error);
                                 }
                             })
                             SteamFunctions.purchaseChecker = SteamFunctions.purchaseChecker.filter(item => item !== OrderIdentifier);
                             GameUI.notify.info(`${stdsBought} STDs Obtained!`);
-                            SteamFunctions.SyncPlayFabSTD()
                         } else if (consumeError !== null) {
                             console.log(consumeError);
                         }
@@ -180,17 +179,18 @@ const SteamFunctions = {
             }
         })
     },
-    PurchaseShopItem(itemCost,itemKey,itemConfig){
-        //console.log(itemCost,itemKey,itemConfig)
+    PurchaseShopItem(itemCost,itemKey,itemConfig,chosenSet){
+        console.log(itemCost,itemKey,itemConfig,chosenSet)
         const itemPurchaseRequest = {
             ItemId: itemKey,
-            Price: itemCost,
+            Price: typeof itemCost === "function" ? itemCost() : itemCost,
             VirtualCurrency: "ST"
         }
+        console.log(itemPurchaseRequest)
         PlayFab.ClientApi.PurchaseItem(itemPurchaseRequest, (result, error) => {
             if (result !== null) {
                 console.log(result);
-                if (itemConfig.singleUse) itemConfig.onPurchase();
+                if (itemConfig.instantPurchase) itemConfig.onPurchase();
                 SteamFunctions.SyncPlayFabSTD();
             } else if (error !== null) {
                 console.log(error);

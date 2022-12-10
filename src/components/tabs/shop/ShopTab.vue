@@ -110,7 +110,7 @@ export default {
         label="Disable in-app-purchases:"
         @click="toggleEnable()"
       >
-        {{ enableText }}
+        {{ `In-app Purchases: ${IAPsEnabled ? "Enabled" : "Disabled"}` }}
       </PrimaryButton>
       <!--PrimaryButton
         v-tooltip="respecText"

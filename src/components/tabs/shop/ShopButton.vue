@@ -46,7 +46,7 @@ export default {
       Modal.cosmeticSetChoice.show();
     },
     TestPurchase(){
-      SteamFunctions.PurchaseShopItem(this.purchase.cost,this.purchase.config.key,this.purchase.config)
+      SteamFunctions.PurchaseShopItem(this.purchase.cost,this.purchase.config.key,this.purchase.config,this.chosenSet)
     },
     purchaseButtonObject() {
       return {

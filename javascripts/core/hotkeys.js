@@ -405,7 +405,7 @@ function keyboardPressQuestionMark() {
     EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
-  if (Modal.isOpen) return;
+  if (Modal.isOpen) Modal.hideAll();
   Modal.hotkeys.show();
 }
 
@@ -414,7 +414,7 @@ function keyboardH2PToggle() {
     EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
-  if (Modal.isOpen) return;
+  if (Modal.isOpen) Modal.hideAll();
   Modal.h2p.show();
 }
 
@@ -423,8 +423,8 @@ function keyboardEditAutobuyers() {
     EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
-  if (Modal.isOpen) return;
   if (!Autobuyers.hasAutobuyersForEditModal) return;
+  if (Modal.isOpen) Modal.hideAll();
   Modal.autobuyerEditModal.show();
 }
 
@@ -433,7 +433,7 @@ function keyboardVisibleTabsToggle() {
     EventHub.dispatch(GAME_EVENT.CLOSE_MODAL);
     return;
   }
-  if (Modal.isOpen) return;
+  if (Modal.isOpen) Modal.hideAll();
   Modal.hiddenTabs.show();
 }
 

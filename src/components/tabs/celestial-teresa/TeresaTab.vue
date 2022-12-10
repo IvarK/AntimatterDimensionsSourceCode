@@ -266,6 +266,7 @@ export default {
           :key="upgrade.id"
           :upgrade="upgrade"
         />
+        You can now modify the appearance of your Glyphs to look like Music Glyphs.
       </div>
     </div>
   </div>

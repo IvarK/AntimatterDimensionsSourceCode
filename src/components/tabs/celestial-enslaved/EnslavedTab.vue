@@ -37,6 +37,7 @@ export default {
     canDischarge: false,
     canAutoRelease: false,
     hasNoCharge: true,
+    hasReachedCurrentCap: false,
   }),
   computed: {
     storedRealEfficiencyDesc() {
@@ -141,6 +142,7 @@ export default {
       this.canDischarge = Enslaved.canRelease(false);
       this.canAutoRelease = Enslaved.canRelease(true);
       this.hasNoCharge = player.celestials.enslaved.stored === 0;
+      this.hasReachedCurrentCap = this.storedReal === this.storedRealCap;
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
@@ -293,7 +295,8 @@ export default {
             You can use stored real time to "amplify" a Reality, simulating repeated runs of it.
             Amplified Realities give all the rewards that normal Realities do.
             <button
-              :class="storeRealTimeClass"
+              :class="[storeRealTimeClass,
+                       {'l-fixed-setting': hasReachedCurrentCap}]"
               @click="toggleStoreReal"
             >
               <div class="o-enslaved-stored-time">

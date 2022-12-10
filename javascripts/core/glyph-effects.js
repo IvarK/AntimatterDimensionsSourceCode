@@ -220,12 +220,10 @@ export function hasAtLeastGlyphEffects(needleBitmask, haystackBitmask) {
   return haystack.every(x => needle.includes(x));
 }
 
-class GlyphType {
+class FunctionalGlyphType {
   /**
    * @param {Object} setup
    * @param {string} setup.id
-   * @param {string} setup.symbol
-   * @param {string} setup.color
    * @param {function(): string} [setup.primaryEffect] All glyphs generated will have this effect, if specified
    * @param {function(): boolean} [setup.isUnlocked] If this glyph type is not available initially, this specifies
    * how to check to see if it is available
@@ -235,12 +233,8 @@ class GlyphType {
   constructor(setup) {
     /** @type {string} identifier for this type (time, power, etc)*/
     this.id = setup.id;
-    /** @type {string} used to display glyphs of this type and as a UI shorthand */
-    this.symbol = setup.symbol;
     /** @type {GlyphEffectConfig[]} list of effects that this glyph can have */
     this.effects = findGlyphTypeEffects(setup.id);
-    /** @type {string} used for glyph borders and other places where color coding is needed */
-    this.color = setup.color;
     /** @type {string?} all glyphs generated will have at least this effect */
     this.primaryEffect = setup.primaryEffect;
     /** @type {undefined | function(): boolean} */
@@ -260,13 +254,13 @@ class GlyphType {
   }
 }
 
-const allGlyphTypes = mapGameDataToObject(
+const functionalGlyphTypes = mapGameDataToObject(
   GameDatabase.reality.glyphTypes,
-  config => new GlyphType(config)
+  config => new FunctionalGlyphType(config)
 );
 
 export const GlyphTypes = {
-  ...allGlyphTypes,
+  ...functionalGlyphTypes,
   /**
     * @param {function(): number} rng Random number source (0..1)
     * @param {string} [blacklisted] Do not return the specified type

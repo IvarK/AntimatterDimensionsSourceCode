@@ -21,9 +21,12 @@ export const Speedrun = {
   },
   // Hard-resets the current save and puts it in a state ready to be "unpaused" once resources start being generated
   prepareSave(name) {
+    // Carry full completion count and cosmetic settings into speedrun mode as well
     const fullCompletions = player.records.fullGameCompletions;
+    const glyphCosmetics = JSON.stringify(player.reality.glyphs.cosmetics);
     GameStorage.hardReset();
     player.records.fullGameCompletions = fullCompletions;
+    player.reality.glyphs.cosmetics = JSON.parse(glyphCosmetics);
 
     player.speedrun.isUnlocked = true;
     player.speedrun.isActive = true;
@@ -55,7 +58,7 @@ export const Speedrun = {
     // This needs to be calculated "live" because using spentSTD includes any offline progress purchases too
     let currentSpent = 0;
     for (const purchase of ShopPurchase.all) {
-      if (purchase.config.singleUse) continue;
+      if (purchase.config.instantPurchase) continue;
       currentSpent += purchase.purchases * purchase.cost;
     }
     this.setSTDUse(ShopPurchaseData.isIAPEnabled && currentSpent > 0);

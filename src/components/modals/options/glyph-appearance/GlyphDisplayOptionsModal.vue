@@ -1,10 +1,10 @@
 <script>
-import SelectGlyphInfoDropdown, { GlyphInfo } from "./SelectGlyphInfoDropdown";
+import SelectGlyphInfoDropdown, { GlyphInfo } from ".././SelectGlyphInfoDropdown";
 
 import ExpandingControlBox from "@/components/ExpandingControlBox";
+import GlyphCustomization from "@/components/modals/options/glyph-appearance/GlyphCustomization";
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
-
 
 export default {
   name: "GlyphDisplayOptionsModal",
@@ -13,6 +13,7 @@ export default {
     ModalOptionsToggleButton,
     ModalWrapperOptions,
     SelectGlyphInfoDropdown,
+    GlyphCustomization,
   },
   data() {
     return {
@@ -103,6 +104,7 @@ export default {
         text="Always show Glyph Info:"
       />
     </div>
+    <GlyphCustomization />
   </ModalWrapperOptions>
 </template>
 

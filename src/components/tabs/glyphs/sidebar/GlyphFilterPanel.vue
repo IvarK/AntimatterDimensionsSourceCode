@@ -108,7 +108,7 @@ export default {
       return rarityToStrength(this.rarityThresholds[type]);
     },
     advancedTypeSelectStyle(type) {
-      const color = type.color;
+      const color = GlyphAppearanceHandler.getBorderColor(type.id);
       return type.id === this.advancedType ? {
         color,
         "text-shadow": `0 0 0.25rem ${color}, 0 0 0.5rem ${color}, 0 0 0.75rem ${color}, 0 0 1rem ${color}`,
@@ -174,6 +174,9 @@ export default {
       ui.view.h2pForcedTab = GameDatabase.h2p.tabs.filter(tab => tab.name === "Advanced Glyph Mechanics")[0];
       Modal.h2p.show();
     },
+    getSymbol(type) {
+      return CosmeticGlyphTypes[type].currentSymbol.symbol;
+    }
   }
 };
 </script>
@@ -271,11 +274,12 @@ export default {
         <span
           v-for="type in glyphTypes"
           :key="type.id"
+          v-tooltip="type.id.capitalize()"
           class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
           :style="advancedTypeSelectStyle(type)"
           @click="advancedType=type.id"
         >
-          {{ type.symbol }}
+          {{ getSymbol(type.id) }}
         </span>
       </div>
       <br>
@@ -311,11 +315,12 @@ export default {
         <span
           v-for="type in glyphTypes"
           :key="type.id"
+          v-tooltip="type.id.capitalize()"
           class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
           :style="advancedTypeSelectStyle(type)"
           @click="advancedType=type.id"
         >
-          {{ type.symbol }}
+          {{ getSymbol(type.id) }}
         </span>
       </div>
       <br>

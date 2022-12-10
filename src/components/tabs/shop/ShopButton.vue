@@ -14,7 +14,22 @@ export default {
       nextMult: 0,
       canAfford: false,
       iapDisabled: false,
+      cost: 0,
+      hasChosen: false,
+      chosenSet: "",
+      lockedCount: 0,
     };
+  },
+  computed: {
+    isSingleCosmeticSet() {
+      return this.purchase.config.key === "singleCosmeticSet";
+    },
+    isAllCosmeticSets() {
+      return this.purchase.config.key === "allCosmeticSets";
+    },
+    allSetsUnlocked() {
+      return (this.isSingleCosmeticSet || this.isAllCosmeticSets) && !this.lockedCount;
+    }
   },
   methods: {
     update() {
@@ -22,9 +37,23 @@ export default {
       this.nextMult = this.purchase.nextMultForDisplay;
       this.canAfford = this.purchase.canBeBought;
       this.iapDisabled = !ShopPurchaseData.isIAPEnabled;
+      this.cost = Math.clampMin(this.purchase.cost, 0);
+      this.hasChosen = GlyphAppearanceHandler.chosenFromModal !== null;
+      this.chosenSet = GlyphAppearanceHandler.chosenFromModal?.name ?? "Not Selected";
+      this.lockedCount = GlyphAppearanceHandler.lockedSets.length;
+    },
+    openSelectionModal() {
+      Modal.cosmeticSetChoice.show();
     },
     TestPurchase(){
       SteamFunctions.PurchaseShopItem(this.purchase.cost,this.purchase.config.key,this.purchase.config)
+    },
+    purchaseButtonObject() {
+      return {
+        "o-shop-button-button": true,
+        "o-shop-button-button--disabled": !this.canAfford ||
+          (this.isSingleCosmeticSet && !this.hasChosen)
+      };
     }
   },
 };
@@ -43,12 +72,31 @@ export default {
         Currently {{ purchase.formatEffect(currentMult) }}, next: {{ purchase.formatEffect(nextMult) }}
       </span>
     </div>
+    <div v-if="isSingleCosmeticSet && lockedCount">
+      <br>
+      <button
+        class="o-shop-button-button"
+        @click="openSelectionModal"
+      >
+        Choose Set
+      </button>
+      Chosen Set: {{ chosenSet }}
+    </div>
+    <div v-if="isAllCosmeticSets && lockedCount">
+      Will unlock {{ quantify("set", lockedCount) }}
+    </div>
+    <div
+      v-if="allSetsUnlocked"
+      class="o-shop-button-multiplier"
+    >
+      All Sets unlocked!
+    </div>
     <button
-      class="o-shop-button-button"
-      :class="{ 'o-shop-button-button--disabled': !canAfford }"
+      v-else
+      :class="purchaseButtonObject()"
       @click="TestPurchase()"
     >
-      Cost: {{ purchase.cost }}
+      Cost: {{ cost }}
       <img
         src="images/std_coin.png"
         class="o-shop-button-button__img"

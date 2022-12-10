@@ -189,7 +189,8 @@ GameDatabase.multiplierTabValues.TD = {
     displayOverride: () => {
       const tickRate = Tickspeed.perSecond;
       const activeDims = MultiplierTabHelper.activeDimCount("TD");
-      return `${format(tickRate, 2, 2)}/sec on ${formatInt(activeDims)} ${pluralize("Dimension", activeDims)}
+      const dimString = MultiplierTabHelper.pluralizeDimensions(activeDims);
+      return `${format(tickRate, 2, 2)}/sec on ${formatInt(activeDims)} ${dimString}
         ➜ ${formatX(tickRate.pow(activeDims), 2, 2)}`;
     },
     multValue: () => Tickspeed.perSecond.pow(MultiplierTabHelper.activeDimCount("TD")),

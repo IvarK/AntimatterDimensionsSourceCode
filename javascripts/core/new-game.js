@@ -4,6 +4,7 @@ export const NG = {
   startNewGame() {
     GameEnd.creditsClosed = false;
     GameEnd.creditsEverClosed = false;
+    player.isGameEnd = false;
     // We set this ASAP so that the AD tab is immediately recreated without END formatting, and any lag which could
     // happen is instead hidden by the overlay from the credits rollback
     player.celestials.pelle.doomed = false;
@@ -17,6 +18,8 @@ export const NG = {
     const automatorConstants = JSON.stringify(player.reality.automator.constants);
     const automatorScripts = JSON.stringify(player.reality.automator.scripts);
     const fullCompletions = player.records.fullGameCompletions;
+    GlyphAppearanceHandler.unlockSet();
+    const glyphCosmetics = JSON.stringify(player.reality.glyphs.cosmetics);
     Modal.hideAll();
     Quote.clearAll();
     GameStorage.hardReset();
@@ -28,6 +31,7 @@ export const NG = {
     player.records.fullGameCompletions = fullCompletions + 1;
     ui.view.newUI = player.options.newUI;
     ui.view.news = player.options.news.enabled;
+    player.reality.glyphs.cosmetics = JSON.parse(glyphCosmetics);
     Themes.find(Theme.currentName()).set();
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
     ADNotations.Settings.exponentCommas.show = player.options.commas;

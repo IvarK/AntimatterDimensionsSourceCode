@@ -22,6 +22,7 @@ export default {
   },
   created() {
     this.on$(GAME_EVENT.GLYPHS_CHANGED, this.glyphsChanged);
+    this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, this.glyphsChanged);
     this.glyphsChanged();
   },
   methods: {
@@ -56,7 +57,7 @@ export default {
         }, 200);
         this.clickedGlyphId = id;
         if (!glyph) return;
-        if (glyph.symbol === "key266b") {
+        if (Glyphs.isMusicGlyph(glyph)) {
           new Audio(`audio/note${col}.mp3`).play();
         }
         // Else it's double click, so equip a glyph

@@ -1,4 +1,5 @@
 <script>
+import { createEntryInfo } from "./breakdown-entry-info";
 import MultiplierBreakdownEntry from "./MultiplierBreakdownEntry";
 
 const MULT_TAB_OPTIONS = [
@@ -30,8 +31,8 @@ export default {
     currentKey() {
       return MULT_TAB_OPTIONS.find(opt => opt.id === this.currentID).key;
     },
-    resourceKey() {
-      return `${this.currentKey}_total`;
+    resource() {
+      return createEntryInfo(`${this.currentKey}_total`);
     },
     resourceSymbols() {
       return GameDatabase.multiplierTabValues[this.currentKey].total.overlay;
@@ -88,8 +89,8 @@ export default {
         />
       </span>
       <MultiplierBreakdownEntry
-        :key="resourceKey"
-        :resource="resourceKey"
+        :key="resource.key"
+        :resource="resource"
         :is-root="true"
       />
       <div class="c-multiplier-tab-text-line">

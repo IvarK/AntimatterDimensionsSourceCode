@@ -10,7 +10,7 @@ export default {
     returnedSTDCount() {
       let std = 0;
       for (const purchase of ShopPurchase.all) {
-        if (purchase.config.singleUse) continue;
+        if (purchase.config.instantPurchase) continue;
         std += purchase.purchases * purchase.cost;
       }
       return std;
@@ -37,7 +37,11 @@ export default {
       <img
         src="images/std_coin.png"
         class="o-shop-button-button__img"
-      > you spent on all non-offline progress purchases.
+      > you spent on all purchases which give permanent multipliers.
+      <br>
+      <br>
+      Anything spent on offline progress and Glyph cosmetics will not be refunded. Glyph cosmetic sets are
+      permanent and will not be lost or respeced once purchased.
       <br>
       <br>
       <b class="o-warning">You will not be able to respec again unless you purchase more STD coins.</b>

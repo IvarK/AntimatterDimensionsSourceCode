@@ -68,23 +68,23 @@ export function isSecretImport(data) {
 
 export function tryImportSecret(data) {
   const index = secretImportIndex(data);
-  if (index === 0) {
-    FullScreenAnimationHandler.display("a-barrel-roll", 5);
-    SecretAchievement(15).unlock();
-    return true;
+
+  switch (index) {
+    case 0:
+      FullScreenAnimationHandler.display("a-barrel-roll", 5);
+      SecretAchievement(15).unlock();
+      return true;
+    case 1:
+      SecretAchievement(14).unlock();
+      return true;
+    case 2:
+      SecretAchievement(37).unlock();
+      return true;
+    case 3:
+      if (player.records.fullGameCompletions > 0 || DEV) Speedrun.unlock();
+      else GameUI.notify.error("Complete the game at least once first!", 15000);
+      return true;
+    default:
+      return false;
   }
-  if (index === 1) {
-    SecretAchievement(14).unlock();
-    return true;
-  }
-  if (index === 2) {
-    SecretAchievement(37).unlock();
-    return true;
-  }
-  if (index === 3) {
-    if (player.records.fullGameCompletions > 0 || DEV) Speedrun.unlock();
-    else GameUI.notify.error("Complete the game at least once first!", 15000);
-    return true;
-  }
-  return false;
 }

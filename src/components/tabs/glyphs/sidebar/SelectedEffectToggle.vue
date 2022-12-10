@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     color() {
-      return GlyphTypes[this.glyphType].color;
+      return GlyphAppearanceHandler.getBorderColor(this.glyphType);
     },
     description() {
       return this.effect.genericDesc;

@@ -207,4 +207,15 @@ GameDatabase.tabNotifications = {
     // Always externally triggered
     condition: () => true,
   },
+  newGlyphCosmetic: {
+    id: 16,
+    tabsToHighLight: [
+      {
+        parent: "reality",
+        tab: "glyphs",
+      },
+    ],
+    // Always externally triggered
+    condition: () => true,
+  },
 };

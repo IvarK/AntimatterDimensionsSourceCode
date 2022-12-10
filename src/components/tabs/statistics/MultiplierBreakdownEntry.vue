@@ -1,11 +1,25 @@
 <script>
 import { DC } from "../../../../javascripts/core/constants";
 
+import { BreakdownEntryInfo } from "./breakdown-entry-info";
+import { getResourceEntryInfoGroups } from "./breakdown-entry-info-group";
+import { PercentageRollingAverage } from "./percentage-rolling-average";
+
+// A few props are special-cased because they're base values which can be less than 1, but we don't want to
+// show them as nerfs
+const nerfBlacklist = ["IP_base", "EP_base", "TP_base"];
+
+function padPercents(percents) {
+  // Add some padding to percents to prevent text flicker
+  // Max length is for "-100.0%"
+  return percents.padStart(7, "\xa0");
+}
+
 export default {
   name: "MultiplierBreakdownEntry",
   props: {
     resource: {
-      type: String,
+      type: BreakdownEntryInfo,
       required: true,
     },
     isRoot: {
@@ -17,25 +31,32 @@ export default {
   data() {
     return {
       selected: 0,
-      baseMultList: new Decimal(0),
-      powList: 0,
       percentList: [],
+      averagedPercentList: [],
       showGroup: [],
+      hadChildEntriesAt: [],
       mouseoverIndex: -1,
-      currentGroupKeys: [],
-      isEmpty: false,
+      lastNotEmptyAt: 0,
       dilationExponent: 1,
       isDilated: false,
       // This is used to temporarily remove the transition function from the bar styling when changing the way
       // multipliers are split up; the animation which results from not doing this looks very awkward
       lastLayoutChange: Date.now(),
+      now: Date.now()
     };
   },
   computed: {
-    valueDB: () => GameDatabase.multiplierTabValues,
-    treeDB: () => GameDatabase.multiplierTabTree,
     groups() {
-      return this.treeDB[this.resource];
+      return getResourceEntryInfoGroups(this.resource.key);
+    },
+    /**
+     * @returns {BreakdownEntryInfo[]}
+     */
+    entries() {
+      return this.groups[this.selected].entries;
+    },
+    rollingAverage() {
+      return new PercentageRollingAverage();
     },
     containerClass() {
       return {
@@ -43,88 +64,84 @@ export default {
         "c-multiplier-entry-root-container": this.isRoot,
       };
     },
-    // A few props are special-cased because they're base values which can be less than 1, but we don't want to
-    // show them as nerfs
-    nerfBlacklist() {
-      return ["IP_base", "EP_base", "TP_base"];
+    isEmpty() {
+      return !this.isRecent(this.lastNotEmptyAt);
     }
   },
   methods: {
     update() {
-      this.currentGroupKeys = this.groups[this.selected].filter(key => this.getProp(key, "isActive"));
-      this.baseMultList = this.currentGroupKeys.map(key => this.getMult(key));
-      this.powList = this.currentGroupKeys.map(key => this.getPow(key));
-      this.dilationExponent = this.getProp(this.resource, "dilationEffect") ?? 1;
+      for (let i = 0; i < this.entries.length; i++) {
+        const entry = this.entries[i];
+        entry.update();
+        const hasChildEntries = getResourceEntryInfoGroups(entry.key)
+          .some(group => group.hasVisibleEntries);
+        if (hasChildEntries) {
+          this.hadChildEntriesAt[i] = Date.now();
+        }
+      }
+      this.dilationExponent = this.resource.dilationEffect;
       this.isDilated = this.dilationExponent !== 1;
       this.calculatePercents();
+      this.now = Date.now();
     },
     changeGroup() {
       this.selected = (this.selected + 1) % this.groups.length;
-      this.showGroup = Array.repeat(false, this.currentGroupKeys.length);
+      this.showGroup = Array.repeat(false, this.entries.length);
+      this.hadChildEntriesAt = Array.repeat(0, this.entries.length);
       this.lastLayoutChange = Date.now();
+      this.rollingAverage.clear();
+      this.update();
     },
     calculatePercents() {
-      const totalPosPow = this.powList.filter(p => p > 1).reduce((x, y) => x * y, 1);
-      const totalNegPow = this.powList.filter(p => p < 1).reduce((x, y) => x * y, 1);
-      const log10Mult = (this.getProp(this.resource, "fakeValue") ?? this.getMult(this.resource)).log10() / totalPosPow;
-      this.isEmpty = log10Mult === 0;
-      this.percentList = [];
-      for (let index = 0; index < this.baseMultList.length; index++) {
+      const powList = this.entries.map(e => e.data.pow);
+      const totalPosPow = powList.filter(p => p > 1).reduce((x, y) => x * y, 1);
+      const totalNegPow = powList.filter(p => p < 1).reduce((x, y) => x * y, 1);
+      const log10Mult = (this.resource.fakeValue ?? this.resource.mult).log10() / totalPosPow;
+      const isEmpty = log10Mult === 0;
+      if (!isEmpty) {
+        this.lastNotEmptyAt = Date.now();
+      }
+      let percentList = [];
+      for (const entry of this.entries) {
         const multFrac = log10Mult === 0
           ? 0
-          : Decimal.log10(this.baseMultList[index]) / log10Mult;
-        const powFrac = totalPosPow === 1 ? 0 : Math.log(this.powList[index]) / Math.log(totalPosPow);
+          : Decimal.log10(entry.data.mult) / log10Mult;
+        const powFrac = totalPosPow === 1 ? 0 : Math.log(entry.data.pow) / Math.log(totalPosPow);
 
         // Handle nerf powers differently from everything else in order to render them with the correct bar percentage
-        const perc = this.powList[index] >= 1
+        const perc = entry.data.pow >= 1
           ? multFrac / totalPosPow + powFrac * (1 - 1 / totalPosPow)
-          : Math.log(this.powList[index]) / Math.log(totalNegPow) * (totalNegPow - 1);
+          : Math.log(entry.data.pow) / Math.log(totalNegPow) * (totalNegPow - 1);
 
         // This is clamped to a minimum of something that's still nonzero in order to show it at <0.1% instead of 0%
-        this.percentList.push(
-          this.nerfBlacklist.includes(this.currentGroupKeys[index]) ? Math.clampMin(perc, 0.0001) : perc
+        percentList.push(
+          nerfBlacklist.includes(entry.key) ? Math.clampMin(perc, 0.0001) : perc
         );
+
       }
 
       // Shortly after a prestige, these may add up to a lot more than the base amount as production catches up. This
       // is also necessary to suppress some visual weirdness for certain categories which have lots of exponents but
       // actually apply only to specific dimensions (eg. charged infinity upgrades)
-      const totalPerc = this.percentList.filter(p => p > 0).sum();
-      this.percentList = this.percentList.map(p => (p > 0 ? p / totalPerc : Math.clampMin(p, -1)));
+      const totalPerc = percentList.filter(p => p > 0).sum();
+      percentList = percentList.map(p => (p > 0 ? p / totalPerc : Math.clampMin(p, -1)));
+      this.percentList = percentList;
+      this.rollingAverage.add(isEmpty ? undefined : percentList);
+      this.averagedPercentList = this.rollingAverage.average;
     },
-    getProp(key, attr) {
-      const args = key.split("_");
-      const dbAttr = this.valueDB[args[0]][args[1]][attr];
-      if (!dbAttr) return null;
-      if (typeof dbAttr !== "function") return dbAttr;
-      return args.length < 3
-        ? dbAttr()
-        // Arguments can potentially be Numbers or Strings, so we cast the ones which are Numbers
-        : dbAttr(...args.slice(2).map(a => (a.match("^\\d+$") ? Number(a) : a)));
-    },
-    getMult(key) {
-      return new Decimal(this.getProp(key, "multValue") ?? 1);
-    },
-    getPow(key) {
-      return this.getProp(key, "powValue") ?? 1;
-    },
-    isVisible(key) {
-      const noEffect = this.getMult(key).eq(1) && this.getPow(key) === 1;
-      return this.getProp(key, "isActive") && !noEffect;
-    },
-
     styleObject(index) {
-      const netPerc = this.percentList.sum();
-      const isNerf = this.percentList[index] < 0;
-      const iconObj = this.getProp(this.currentGroupKeys[index], "icon");
+      const netPerc = this.averagedPercentList.sum();
+      const isNerf = this.averagedPercentList[index] < 0;
+      const iconObj = this.entries[index].icon;
+      const percents = this.averagedPercentList[index];
       const barSize = perc => (perc > 0 ? perc * netPerc : -perc);
       return {
         position: "absolute",
-        top: `${100 * this.percentList.slice(0, index).map(p => barSize(p)).sum()}%`,
-        height: `${100 * barSize(this.percentList[index])}%`,
+        top: `${100 * this.averagedPercentList.slice(0, index).map(p => barSize(p)).sum()}%`,
+        height: `${100 * barSize(percents)}%`,
         width: "100%",
-        "transition-duration": (Date.now() - this.lastLayoutChange < 100) ? undefined : "0.2s",
-        border: this.isEmpty ? "" : "0.1rem solid var(--color-text)",
+        "transition-duration": this.isRecent(this.lastLayoutChange) ? undefined : "0.2s",
+        border: percents === 0 ? "" : "0.1rem solid var(--color-text)",
         color: iconObj?.textColor ?? "black",
         background: isNerf
           ? `repeating-linear-gradient(-45deg, var(--color-bad), ${iconObj?.color} 0.8rem)`
@@ -137,93 +154,105 @@ export default {
         "c-single-entry-highlight": this.mouseoverIndex === index,
       };
     },
+    shouldShowEntry(entry) {
+      return entry.data.isVisible || this.isRecent(entry.data.lastVisibleAt);
+    },
     barSymbol(index) {
-      return this.getProp(this.currentGroupKeys[index], "icon")?.symbol ?? null;
+      return this.entries[index].icon?.symbol ?? null;
     },
-
-    hasChildComp(key) {
-      const dbEntry = this.treeDB[key];
-      return dbEntry && dbEntry
-        .some(group => group
-          .filter(k => this.getProp(k, "isActive") && (this.getMult(k).neq(1) || this.getPow(k) !== 1)).length > 1
-        );
+    hasChildEntries(index) {
+      return this.isRecent(this.hadChildEntriesAt[index]);
     },
-    hideIcon(index) {
-      if (!this.hasChildComp(this.currentGroupKeys[index])) return "c-no-icon";
+    expandIcon(index) {
       return this.showGroup[index] ? "far fa-minus-square" : "far fa-plus-square";
     },
+    expandIconStyle(index) {
+      return {
+        opacity: this.hasChildEntries(index) ? 1 : 0
+      };
+    },
     entryString(index) {
-      if (this.percentList[index] < 0 && !this.nerfBlacklist.includes(this.currentGroupKeys[index])) {
+      const percents = this.percentList[index];
+      if (percents < 0 && !nerfBlacklist.includes(this.entries[index].key)) {
         return this.nerfString(index);
       }
 
       // We want to handle very small numbers carefully to distinguish between "disabled/inactive" and
       // "too small to be relevant"
       let percString;
-      if (this.percentList[index] === 0) percString = formatPercents(0);
-      else if (this.percentList[index] < 0.001) percString = `<${formatPercents(0.001, 1)}`;
-      else if (this.percentList[index] > 0.9995) percString = `~${formatPercents(1)}`;
-      else percString = formatPercents(this.percentList[index], 1);
+      if (percents === 0) percString = formatPercents(0);
+      else if (percents === 1) percString = formatPercents(1);
+      else if (percents < 0.001) percString = `<${formatPercents(0.001, 1)}`;
+      else if (percents > 0.9995) percString = `~${formatPercents(1)}`;
+      else percString = formatPercents(percents, 1);
+      percString = padPercents(percString);
 
       // Display both multiplier and powers, but make sure to give an empty string if there's neither
-      const overrideStr = this.getProp(this.currentGroupKeys[index], "displayOverride");
+      const entry = this.entries[index];
+      if (!entry.data.isVisible) {
+        return `${percString}: ${entry.name}`;
+      }
+      const overrideStr = entry.displayOverride;
       let valueStr;
       if (overrideStr) valueStr = `(${overrideStr})`;
       else {
         const values = [];
         const formatFn = x => {
-          const isDilated = this.getProp(this.currentGroupKeys[index], "isDilated");
+          const isDilated = entry.isDilated;
           if (isDilated && this.dilationExponent !== 1) {
             const undilated = this.applyDilationExp(x, 1 / this.dilationExponent);
             return `${formatX(undilated, 2, 2)} ➜ ${formatX(x, 2, 2)}`;
           }
-          return this.getProp(this.currentGroupKeys[index], "isBase")
+          return entry.isBase
             ? format(x, 2, 2)
             : formatX(x, 2, 2);
         };
-        if (Decimal.neq(this.baseMultList[index], 1)) values.push(formatFn(this.baseMultList[index]));
-        if (this.powList[index] !== 1) values.push(formatPow(this.powList[index], 2, 3));
+        if (Decimal.neq(entry.data.mult, 1)) values.push(formatFn(entry.data.mult));
+        if (entry.data.pow !== 1) values.push(formatPow(entry.data.pow, 2, 3));
         valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
       }
 
-      return `${percString}: ${this.getProp(this.currentGroupKeys[index], "name")} ${valueStr}`;
+      return `${percString}: ${entry.name} ${valueStr}`;
     },
     nerfString(index) {
-      const percString = `${formatPercents(this.percentList[index], 1)}`;
+      const entry = this.entries[index];
+      const percString = padPercents(formatPercents(this.percentList[index], 1));
 
       // Display both multiplier and powers, but make sure to give an empty string if there's neither
-      const overrideStr = this.getProp(this.currentGroupKeys[index], "displayOverride");
+      const overrideStr = entry.displayOverride;
       let valueStr;
       if (overrideStr) valueStr = `(${overrideStr})`;
       else {
         const values = [];
-        if (Decimal.neq(this.baseMultList[index], 1)) {
-          const formatFn = this.getProp(this.currentGroupKeys[index], "isBase")
+        if (Decimal.neq(entry.data.mult, 1)) {
+          const formatFn = entry.isBase
             ? x => format(x, 2, 2)
             : x => `/${format(x.reciprocal(), 2, 2)}`;
-          values.push(formatFn(this.baseMultList[index]));
+          values.push(formatFn(entry.data.mult));
         }
-        if (this.powList[index] !== 1) values.push(formatPow(this.powList[index], 2, 3));
+        if (entry.data.pow !== 1) values.push(formatPow(entry.data.pow, 2, 3));
         valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
       }
 
-      return `${percString}: ${this.getProp(this.currentGroupKeys[index], "name")} ${valueStr}`;
+      return `${percString}: ${entry.name} ${valueStr}`;
     },
     totalString() {
-      const name = this.getProp(this.resource, "name");
-      const overrideStr = this.getProp(this.resource, "displayOverride");
+      const resource = this.resource;
+      const name = resource.name;
+      const overrideStr = resource.displayOverride;
       if (overrideStr) return `${name}: ${overrideStr}`;
 
-      const val = this.getMult(this.resource);
-      const baseProp = this.getProp(this.resource, "isBase");
-      if (baseProp) return `${name}: ${format(val, 2, 2)}`;
-      return `${name}: ${formatX(val, 2, 2)}`;
+      const val = resource.mult;
+      return resource.isBase
+        ? `${name}: ${format(val, 2, 2)}`
+        : `${name}: ${formatX(val, 2, 2)}`;
     },
     applyDilationExp(value, exp) {
       return Decimal.pow10(value.log10() ** exp);
     },
     dilationString() {
-      const baseMult = this.getMult(this.resource);
+      const resource = this.resource;
+      const baseMult = resource.mult;
 
       // This is tricky to handle properly; if we're not careful, sometimes the dilation gets applied twice since
       // it's already applied in the multiplier itself. In that case we need to apply an appropriate "anti-dilation"
@@ -231,24 +260,27 @@ export default {
       // the dilation function not being linear (ie. multiply=>dilate gives a different result than dilate=>multiply).
       // In that case we check for isDilated one level down and combine the actual multipliers together instead.
       let beforeMult, afterMult;
-      if (this.isDilated && this.getProp(this.resource, "isDilated")) {
-        const dilProd = this.currentGroupKeys
-          .filter(key => this.isVisible(key) && this.getProp(key, "isDilated"))
-          .map(key => this.getMult(key))
+      if (this.isDilated && resource.isDilated) {
+        const dilProd = this.entries
+          .filter(entry => entry.isVisible && entry.isDilated)
+          .map(entry => entry.mult)
           .map(val => this.applyDilationExp(val, 1 / this.dilationExponent))
           .reduce((x, y) => x.times(y), DC.D1);
         beforeMult = dilProd.neq(1) ? dilProd : this.applyDilationExp(baseMult, 1 / this.dilationExponent);
-        afterMult = this.getMult(this.resource);
+        afterMult = resource.mult;
       } else {
         beforeMult = baseMult;
         afterMult = this.applyDilationExp(beforeMult, this.dilationExponent);
       }
 
-      const formatFn = this.getProp(this.resource, "isBase")
+      const formatFn = resource.isBase
         ? x => format(x, 2, 2)
         : x => formatX(x, 2, 2);
       return `Dilation Effect: Exponent${formatPow(this.dilationExponent, 2, 3)}
         (${formatFn(beforeMult, 2, 2)} ➜ ${formatFn(afterMult, 2, 2)})`;
+    },
+    isRecent(date) {
+      return (this.now - date) < 200;
     }
   },
 };
@@ -261,7 +293,7 @@ export default {
       class="c-stacked-bars"
     >
       <div
-        v-for="(perc, index) in percentList"
+        v-for="(perc, index) in averagedPercentList"
         :key="100 + index"
         :style="styleObject(index)"
         :class="{ 'c-bar-highlight' : mouseoverIndex === index }"
@@ -297,23 +329,26 @@ export default {
         Total effect disabled or reduced to {{ formatX(1) }}.
       </div>
       <div
-        v-for="(key, index) in currentGroupKeys"
+        v-for="(entry, index) in entries"
         v-else
-        :key="key"
+        :key="entry.key"
         @mouseover="mouseoverIndex = index"
         @mouseleave="mouseoverIndex = -1"
       >
         <div
-          v-if="isVisible(key)"
+          v-if="shouldShowEntry(entry)"
           :class="singleEntryClass(index)"
         >
           <div @click="showGroup[index] = !showGroup[index]">
-            <span :class="hideIcon(index)" />
+            <span
+              :class="expandIcon(index)"
+              :style="expandIconStyle(index)"
+            />
             {{ entryString(index) }}
           </div>
           <MultiplierBreakdownEntry
-            v-if="showGroup[index] && hasChildComp(key)"
-            :resource="key"
+            v-if="showGroup[index] && hasChildEntries(index)"
+            :resource="entry"
           />
         </div>
       </div>
@@ -436,9 +471,5 @@ export default {
 
 @keyframes a-glow-dilation-nerf {
   50% { background-color: var(--color-bad); }
-}
-
-.c-no-icon {
-  padding: 0.9rem;
 }
 </style>

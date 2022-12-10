@@ -73,15 +73,18 @@ export default {
     typeStyle() {
       // Special case for cursed glyphs because its black default has poor contrast on some themes
       return {
-        color: GlyphTypes[this.type].color,
+        color: GlyphAppearanceHandler.getBorderColor(this.type),
         "font-weight": "bold",
         "text-shadow": this.type === "cursed" ? "0.05rem 0.05rem var(--color-text)" : undefined,
         animation: this.type === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
       };
     },
     rarityStyle() {
+      const color = CosmeticGlyphTypes[this.glyph.type].ignoreRarityColor
+        ? GlyphAppearanceHandler.getBorderColor(this.type)
+        : GlyphAppearanceHandler.getRarityColor(this.glyph.strength);
       return {
-        "color": this.glyph.type === "companion" ? GlyphTypes[this.type].color : getColor(this.glyph.strength),
+        color,
         "font-weight": "bold"
       };
     },
@@ -133,7 +136,12 @@ export default {
           .replace("{value2}", alteredValue),
         isPelleDisabled: dbEntry.isDisabledByDoomed
       };
-    }
+    },
+    clickGlyph(glyph) {
+      if (Glyphs.isMusicGlyph(glyph)) {
+        new Audio(`audio/note${GLYPH_TYPES.indexOf(glyph.type) + 1}.mp3`).play();
+      }
+    },
   },
 };
 </script>
@@ -160,6 +168,7 @@ export default {
         :text-proportion="0.5"
         glow-blur="0.4rem"
         glow-spread="0.1rem"
+        @clicked="clickGlyph(glyph)"
       />
       <div :style="rarityStyle">
         {{ rarityPercent }}

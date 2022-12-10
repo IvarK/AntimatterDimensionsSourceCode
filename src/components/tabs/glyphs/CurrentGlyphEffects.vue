@@ -37,7 +37,8 @@ export default {
     uniqueGlyphText() {
       if (!this.hasEffarig && !this.hasReality) return "";
       const uniqueGlyphs = [];
-      if (this.hasEffarig) uniqueGlyphs.push(`<span style="color: ${GlyphTypes.effarig.color};">Effarig</span>`);
+      if (this.hasEffarig) uniqueGlyphs.push(
+        `<span style="color: ${GlyphAppearanceHandler.getBorderColor("effarig")};">Effarig</span>`);
       if (this.hasReality) uniqueGlyphs.push(
         `<span style="animation: a-reality-glyph-description-cycle 10s infinite;">Reality</span>`);
       return `You cannot have more than one ${uniqueGlyphs.join(" or ")}

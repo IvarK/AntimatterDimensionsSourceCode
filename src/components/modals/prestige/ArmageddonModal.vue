@@ -54,6 +54,8 @@ export default {
       for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
       Glyphs.refreshActive();
       player.options.confirmations.glyphReplace = true;
+      player.reality.automator.state.repeat = false;
+      player.reality.automator.state.forceRestart = false;
       player.celestials.pelle.doomed = true;
       Pelle.armageddon(false);
       respecTimeStudies(true);

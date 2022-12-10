@@ -51,7 +51,7 @@ GameDatabase.shopPurchases = {
     key: "smallTimeSkip",
     cost: 10,
     description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
-    singleUse: true,
+    instantPurchase: true,
     onPurchase: () => {
       shop.purchaseTimeSkip();
     }
@@ -60,9 +60,43 @@ GameDatabase.shopPurchases = {
     key: "bigTimeSkip",
     cost: 20,
     description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
-    singleUse: true,
+    instantPurchase: true,
     onPurchase: () => {
       shop.purchaseLongerTimeSkip();
+    }
+  },
+  singleCosmeticSet: {
+    key: "singleCosmeticSet",
+    cost: 20,
+    description: "Unlock a Glyph cosmetic set of your choice",
+    instantPurchase: true,
+    onPurchase: () => {
+      // The actual unlocks are handled in the ShopPurchaseData object, so we just show notifications here
+      GameUI.notify.info(
+        `You have purchased the "${GlyphAppearanceHandler.chosenFromModal.name}" Set for Glyph cosmetics!`,
+        10000);
+      GlyphAppearanceHandler.chosenFromModal = null;
+      GlyphAppearanceHandler.applyNotification();
+    }
+  },
+  allCosmeticSets: {
+    key: "allCosmeticSets",
+    cost: () => {
+      // Both of these are also on the payment backend, which would need to be changed as well
+      const baseCost = 420;
+      const totalSets = Object.keys(GameDatabase.reality.glyphCosmeticSets).length;
+
+      // Using this instead of the actual set count maintains consistency with the backend price,
+      // at the cost of the frontend UI being wrong for cheated saves
+      const currentSetCount = GlyphAppearanceHandler.expectedSetCount;
+      return Math.floor(baseCost * (totalSets - currentSetCount) / totalSets);
+    },
+    description: "Unlock all remaining Glyph cosmetic sets at once",
+    instantPurchase: true,
+    onPurchase: () => {
+      // The actual unlocks are handled in the ShopPurchaseData object, so we just show notifications here
+      GameUI.notify.info(`You have unlocked all sets for Glyph cosmetics!`, 15000);
+      GlyphAppearanceHandler.applyNotification();
     }
   },
 };

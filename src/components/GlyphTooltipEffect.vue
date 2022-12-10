@@ -67,7 +67,7 @@ export default {
       };
     },
     textShadowColor() {
-      return Theme.current().isDark() || player.options.forceDarkGlyphs ? "white" : "black";
+      return GlyphAppearanceHandler.getBaseColor(true);
     },
   },
   methods: {

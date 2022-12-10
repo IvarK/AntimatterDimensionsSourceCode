@@ -25,7 +25,7 @@ export default {
     },
     descStyle() {
       return {
-        "color": this.typeConfig.color,
+        "color": GlyphAppearanceHandler.getBorderColor(this.glyphType),
         "border-color": this.typeConfig.color
       };
     },

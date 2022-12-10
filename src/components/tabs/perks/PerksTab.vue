@@ -121,6 +121,12 @@ export const PerkNetwork = {
     });
   },
   makeNetwork() {
+    // Need to do some html to be able to apply some css for when in doomed
+    function htmlTitle(html) {
+      const container = document.createElement("div");
+      container.innerHTML = html;
+      return container;
+    }
     // Just for a bit of fun, tangle it up a bit unless the player specifically chooses not to
     const defaultPos = player.options.fixedPerkStartingPos;
     const isDisabled = perk => Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id);
@@ -130,13 +136,14 @@ export const PerkNetwork = {
       shape: perk.config.automatorPoints ? "diamond" : "dot",
       // As far as I am aware, vis.js doesn't support arbitrary CSS styling; nevertheless, we still want the original
       // description to be visible instead of being hidden by disable/lock text
-      title: `${perk.config.description}
-        ${isDisabled(perk)
-        ? "(Disabled while Doomed)"
-        : ""}
-        ${perk.config.automatorPoints && !isDisabled(perk)
-        ? `(+${formatInt(perk.config.automatorPoints)} AP)`
-        : ""}`,
+      title: (isDisabled(perk)
+        ? htmlTitle(
+          `<span style='text-decoration: line-through;'>${perk.config.description}</span>`
+        )
+        : `${perk.config.description} ${perk.config.automatorPoints && !isDisabled(perk)
+          ? `(+${formatInt(perk.config.automatorPoints)} AP)`
+          : ""}`
+      ),
       x: defaultPos ? perk.config.defaultPosition.x : (100 * Math.random()),
       y: defaultPos ? perk.config.defaultPosition.y : (100 * Math.random()),
     })));

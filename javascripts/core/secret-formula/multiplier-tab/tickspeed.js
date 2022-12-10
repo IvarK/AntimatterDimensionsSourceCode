@@ -11,7 +11,8 @@ GameDatabase.multiplierTabValues.tickspeed = {
     displayOverride: () => {
       const tickRate = Tickspeed.perSecond;
       const activeDims = MultiplierTabHelper.activeDimCount("AD");
-      return `${format(tickRate, 2, 2)}/sec on ${formatInt(activeDims)} ${pluralize("Dimension", activeDims)}
+      const dimString = MultiplierTabHelper.pluralizeDimensions(activeDims);
+      return `${format(tickRate, 2, 2)}/sec on ${formatInt(activeDims)} ${dimString}
         ➜ ${formatX(tickRate.pow(activeDims), 2, 2)}`;
     },
     // This is necessary to make multValue entries from the other props scale properly, which are also all pow10

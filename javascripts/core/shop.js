@@ -9,6 +9,7 @@ export const ShopPurchaseData = {
   spentSTD: 0,
   respecAvailable: false,
   lastRespec: "",
+  unlockedCosmetics: [],
 
   get availableSTD() {
     return this.totalSTD - this.spentSTD;
@@ -33,8 +34,18 @@ export const ShopPurchaseData = {
     this.spentSTD = newData.spentSTD;
     this.respecAvailable = newData.respecAvailable;
     this.lastRespec = newData.lastRespec ?? 0;
+    this.unlockedCosmetics = [...(newData.unlockedCosmetics ?? [])];
     for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = newData[key] ?? 0;
+    if (this.allCosmeticSets > 0) this.unlockedCosmetics = Object.keys(GameDatabase.reality.glyphCosmeticSets);
     GameStorage.save();
+  },
+
+  clearLocalSTD() {
+    this.totalSTD = 0;
+    this.spentSTD = 0;
+    this.respecAvailable = false;
+    this.unlockedCosmetics = [];
+    for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = 0;
   },
 
   // Reads STD props from the cloud and sets local cached values with the result
@@ -66,8 +77,9 @@ export const ShopPurchaseData = {
 
   async respecAll() {
     if (!this.canRespec) {
-      Modal.message.show(`You do not have a respec available. Making an STD purchase allows you to respec your upgrades
-        once. You can only have at most one of these respecs, and they do not refund offline production purchases.`);
+      // This case only happens if the player is cheating and using the console to make the game think it has a respec
+      // when on the backend they don't. Nevertheless, responsive UI rarely hurts
+      GameUI.notify.error("You do not have a respec available", 10000);
       return;
     }
     let res;
@@ -107,7 +119,8 @@ class ShopPurchaseState extends RebuyableMechanicState {
   }
 
   get cost() {
-    return this.config.cost;
+    const cost = this.config.cost;
+    return typeof cost === "function" ? cost() : cost;
   }
 
   get purchases() {
@@ -150,14 +163,14 @@ class ShopPurchaseState extends RebuyableMechanicState {
   async purchase() {
     if (!this.canBeBought) return false;
     if (GameEnd.creditsEverClosed) return false;
-    if (this.config.singleUse && ui.$viewModel.modal.progressBar) return false;
+    if (this.config.instantPurchase && ui.$viewModel.modal.progressBar) return false;
 
     // Contact the firebase server to verify the purchase
     const success = true//await Payments.buyUpgrade(this.config.key);
     if (!success) return false;
 
     if (player.IAP.enabled) Speedrun.setSTDUse(true);
-    if (this.config.singleUse) this.config.onPurchase();
+    if (this.config.instantPurchase) this.config.onPurchase();
     GameUI.update();
     return true;
   }

@@ -29,24 +29,29 @@ export default {
     },
     textColor() {
       if (!this.isColored) return { };
-      const glyphName = this.effectConfig.id === "timeshardpow"
-        ? GlyphTypes.time
-        : GlyphTypes[this.effectConfig.glyphTypes];
+      const typeObject = this.effectConfig.id === "timeshardpow"
+        ? CosmeticGlyphTypes.time
+        : CosmeticGlyphTypes[this.effectConfig.glyphTypes];
 
-      let glyphColor = glyphName.color;
-      if (glyphName.id === "cursed") glyphColor = "#5151ec";
+      let glyphColor = typeObject.currentColor.border;
+      if (typeObject.id === "cursed") glyphColor = "var(--color-celestials)";
 
       return {
         color: glyphColor,
         "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
                             -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
-                            0 0 3px ${glyphName.color}`,
-        animation: glyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+                            0 0 3px ${typeObject.currentColor.border}`,
+        animation: typeObject.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
       };
     },
     valueClass() {
       return this.effect.value.capped ? "c-current-glyph-effects__effect--capped" : "";
     }
+  },
+  created() {
+    this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
+      this.$recompute("effectConfig");
+    });
   }
 };
 </script>

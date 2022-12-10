@@ -1,5 +1,10 @@
 import { GameDatabase } from "../game-database";
 
+// The glyphTypes entry is used for both gameplay and cosmetics purposes, so we cannot modify isUnlocked for cosmetics.
+// For the purposes of cosmetics, the difference between isUnlocked and canCustomize is as follows:
+// - isUnlocked: Whether or not this type appears as a choice in glyph-specific customization for overriding their
+//    normal display type; this is ignored for functional type entries
+// - canCustomize: Whether or not this type can have its color/symbol changed in the type-specific customization
 GameDatabase.reality.glyphTypes = {
   time: {
     id: "time",
@@ -44,6 +49,7 @@ GameDatabase.reality.glyphTypes = {
     symbol: GLYPH_SYMBOLS.effarig,
     color: "#e21717",
     isUnlocked: () => EffarigUnlock.reality.isUnlocked,
+    canCustomize: () => EffarigUnlock.reality.isUnlocked,
     alchemyResource: ALCHEMY_RESOURCE.EFFARIG,
     hasRarity: true
     // Effarig glyphs have no primary effect; all are equally likely
@@ -51,8 +57,9 @@ GameDatabase.reality.glyphTypes = {
   reality: {
     id: "reality",
     symbol: GLYPH_SYMBOLS.reality,
-    color: "#555555",
+    fixedSymbolColor: true,
     isUnlocked: () => false,
+    canCustomize: () => player.reality.glyphs.createdRealityGlyph,
     // Refining a reality glyph is pretty wasteful anyway, but might as well have this here
     alchemyResource: ALCHEMY_RESOURCE.REALITY
   },
@@ -60,12 +67,33 @@ GameDatabase.reality.glyphTypes = {
     id: "cursed",
     symbol: GLYPH_SYMBOLS.cursed,
     color: "black",
+    fixedSymbolColor: true,
     isUnlocked: () => false,
+    canCustomize: () => V.isFlipped,
   },
   companion: {
     id: "companion",
     symbol: GLYPH_SYMBOLS.companion,
     color: "#feaec9",
+    fixedSymbolColor: true,
     isUnlocked: () => false,
+    canCustomize: () => false,
+  },
+};
+
+GameDatabase.reality.cosmeticGlyphs = {
+  music: {
+    id: "music",
+    symbol: "♫",
+    color: "#FF80AB",
+    isUnlocked: () => TeresaUnlocks.shop.isUnlocked,
+  },
+  blob: {
+    id: "blob",
+    symbol: "\uE010",
+    color: "#E4B51A",
+    preventBlur: true,
+    isUnlocked: () => Themes.available().map(t => t.name).includes("S11"),
+    canCustomize: () => false,
   },
 };

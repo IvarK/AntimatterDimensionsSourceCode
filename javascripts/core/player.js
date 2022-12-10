@@ -457,6 +457,13 @@ window.player = {
       }),
       protectedRows: 2,
       createdRealityGlyph: false,
+      cosmetics: {
+        active: false,
+        glowNotification: false,
+        unlockedFromNG: [],
+        symbolMap: {},
+        colorMap: {},
+      }
     },
     seed: Math.floor(Date.now() * Math.random() + 1),
     secondGaussian: 1e6,

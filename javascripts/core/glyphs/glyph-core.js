@@ -384,6 +384,9 @@ export const Glyphs = {
     const index = Glyphs.unseen.indexOf(glyph.id);
     if (index > -1) Glyphs.unseen.splice(index, 1);
   },
+  isMusicGlyph(glyph) {
+    return glyph?.cosmetic === "music";
+  },
   removeFromInventory(glyph) {
     // This can get called on a glyph not in inventory, during auto sacrifice.
     if (glyph.idx === null) return;
@@ -720,10 +723,6 @@ export function calculateGlyph(glyph) {
 
 export function getRarity(x) {
   return GlyphRarities.find(e => x >= e.minStrength);
-}
-
-export function getColor(strength) {
-  return getRarity(strength)[(player.options.forceDarkGlyphs || Theme.current().isDark()) ? "darkColor" : "lightColor"];
 }
 
 export function getAdjustedGlyphLevel(glyph, realityGlyphBoost = Glyphs.levelBoost, ignoreCelestialEffects = false) {

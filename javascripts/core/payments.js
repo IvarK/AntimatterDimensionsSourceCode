@@ -99,7 +99,14 @@ const Payments = {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ user: Cloud.user.id, upgrade: upgradeKey })
+        body: JSON.stringify({
+          user: Cloud.user.id,
+          upgrade: upgradeKey,
+          extraData: {
+            requestedSet: GlyphAppearanceHandler.chosenFromModal?.id,
+            fullCompletions: player.records.fullGameCompletions
+          }
+        })
       });
     } catch (e) {
       GameUI.notify.error("Unable to spend STD coins on upgrade!", 10000);
@@ -109,7 +116,7 @@ const Payments = {
     // The "not enough STDs" message should only show up if the player modifies costs on the frontend and forces the
     // game to send a request despite not actually having enough STDs. The cost check is done again on the backend
     if (stdData.success) GameUI.notify.info(`Successfully spent ${stdData.amountSpent} STD coins`, 10000);
-    else GameUI.notify.error("Not enough STDs to purchase upgrade!", 10000);
+    else GameUI.notify.error(stdData.error ?? "Unable to purchase upgrade", 10000);
     ShopPurchaseData.syncSTD(false, stdData.data);
     return stdData.success;
   },

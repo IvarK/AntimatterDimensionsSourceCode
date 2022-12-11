@@ -45,8 +45,10 @@ export default {
     openSelectionModal() {
       Modal.cosmeticSetChoice.show();
     },
-    TestPurchase(){
-      SteamFunctions.PurchaseShopItem(this.purchase.cost,this.purchase.config.key,this.purchase.config,this.chosenSet)
+    SteamPurchase(){
+      if(!this.isSingleCosmeticSet || this.hasChosen){
+        SteamFunctions.PurchaseShopItem(this.purchase.cost,this.purchase.config.key,this.purchase.config,this.chosenSet)
+      }
     },
     purchaseButtonObject() {
       return {
@@ -94,7 +96,7 @@ export default {
     <button
       v-else
       :class="purchaseButtonObject()"
-      @click="TestPurchase()"
+      @click="SteamPurchase()"
     >
       Cost: {{ cost }}
       <img

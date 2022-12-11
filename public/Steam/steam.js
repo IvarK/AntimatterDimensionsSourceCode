@@ -123,21 +123,21 @@ const SteamFunctions = {
         });
     },
     ConfirmSteamPurchase(OrderIdentifier) {
-        console.log(OrderIdentifier);
+        //console.log(OrderIdentifier);
         PlayFab.ClientApi.ConfirmPurchase({ OrderId: OrderIdentifier }, (result, error) => {
             if (result !== null && result.data.Items != null) {
-                console.log(result);
+                //console.log(result);
                 const PurchaseName = result.data.Items[0].ItemId;
                 const PurchaseInstance = result.data.Items[0].ItemInstanceId;
                 PlayFab.ClientApi.ConsumeItem({ ItemInstanceId: PurchaseInstance, ConsumeCount: 1 }, 
                     (consumeResult, consumeError) => {
                         if (consumeResult !== null) {
-                            console.log(consumeResult);
+                            //console.log(consumeResult);
                             const stdsBought = Number(PurchaseName.replace("STD", ""));
                             const currencyAddRequest = {Amount: stdsBought,VirtualCurrency: "ST"}
                             PlayFab.ClientApi.AddUserVirtualCurrency(currencyAddRequest, (result, error) => {
                                 if (result !== null) {
-                                    console.log(result);
+                                    //console.log(result);
                                     SteamFunctions.SyncPlayFabSTD()
                                 } else if (error !== null) {
                                     console.log(error);
@@ -150,7 +150,7 @@ const SteamFunctions = {
                         }
                     });
             } else if (error !== null) {
-                console.log(error);
+                console.log("Awaiting Payment Confirmation");
             }
         });
     },
@@ -164,7 +164,7 @@ const SteamFunctions = {
     SyncPlayFabSTD(){
         PlayFab.ClientApi.GetUserInventory({PlayFabId: PlayFab.PlayFabId}, (result, error) => {
             if (result !== null) {
-                console.log(result);
+                //console.log(result);
                 const CurrentSTD = result.data.VirtualCurrency.ST
                 const Inventory = result.data.Inventory
                 ShopPurchaseData.totalSTD = CurrentSTD
@@ -174,27 +174,69 @@ const SteamFunctions = {
                 );
                 for (const key of Object.keys(GameDatabase.shopPurchases)) ShopPurchaseData[key] = inventoryData[key] ?? 0;
                 GameUI.update();
+                SteamFunctions.GetCosmetics()
             } else if (error !== null) {
                 console.log(error);
             }
         })
     },
     PurchaseShopItem(itemCost,itemKey,itemConfig,chosenSet){
-        console.log(itemCost,itemKey,itemConfig,chosenSet)
+        //console.log(itemCost,itemKey,itemConfig,chosenSet)
         const itemPurchaseRequest = {
             ItemId: itemKey,
             Price: typeof itemCost === "function" ? itemCost() : itemCost,
             VirtualCurrency: "ST"
         }
-        console.log(itemPurchaseRequest)
+        //console.log(itemPurchaseRequest)
         PlayFab.ClientApi.PurchaseItem(itemPurchaseRequest, (result, error) => {
             if (result !== null) {
-                console.log(result);
+                //console.log(result);
                 if (itemConfig.instantPurchase) itemConfig.onPurchase();
+                if (itemKey === "singleCosmeticSet") this.StoreCosmetics(chosenSet)
                 SteamFunctions.SyncPlayFabSTD();
             } else if (error !== null) {
                 console.log(error);
                 GameUI.notify.error(error.errorMessage)
+            }
+        })
+    },
+    StoreCosmetics(Cosmetic){
+        const CosmeticID = Object.entries(GameDatabase.reality.glyphCosmeticSets).filter(item => item[1]["name"]===Cosmetic)[0][0]
+        var CosmeticList = [CosmeticID]
+        PlayFab.ClientApi.GetUserData({PlayFabId: PlayFab.PlayFabId}, (result, error) => {
+            if (result !== null) {
+                if(result.data.Data["Cosmetics"]){
+                    CosmeticList = CosmeticList.concat(result.data.Data["Cosmetics"].Value.split(","))
+                }
+                const updatedCosmetics = [...new Set(CosmeticList)]
+                const UpdateRequest = {
+                    Data: {
+                        Cosmetics: updatedCosmetics.join(",")
+                    }
+                }
+                //console.log(UpdateRequest)
+                PlayFab.ClientApi.UpdateUserData(UpdateRequest, (result, error) => {
+                    if (result !== null) {
+                        console.log("Cosmetics Updated on Server");
+                        ShopPurchaseData.unlockedCosmetics = updatedCosmetics
+                        GameUI.update();
+                    } else if (error !== null) {
+                        console.log(error);
+                    }
+                })
+            } else if (error !== null) {
+                console.log("Error Getting User Data");
+            }
+        })
+    },
+    GetCosmetics(){
+        PlayFab.ClientApi.GetUserData({PlayFabId: PlayFab.PlayFabId}, (result, error) => {
+            if (result !== null) {
+                const currentCosmetics = result.data.Data["Cosmetics"] ? result.data.Data["Cosmetics"].Value.split(",") : []
+                ShopPurchaseData.unlockedCosmetics = currentCosmetics
+                GameUI.update();
+            } else if (error !== null) {
+                console.log(error);
             }
         })
     }

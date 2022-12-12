@@ -9206,6 +9206,7 @@ input.o-automator-block-input {
   /* stylelint-disable-next-line unit-allowed-list */
   height: calc(100vh - 20vh);
   margin: 0.5rem;
+  overflow: hidden;
 }
 
 .l-h2p-container {

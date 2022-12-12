@@ -1453,21 +1453,26 @@ br {
   visibility: hidden;
   white-space: nowrap;
   position: absolute;
-  left: 105%;
+  left: 100%;
   z-index: 2;
   text-align: left;
   opacity: 0;
   color: var(--color-text);
   background-color: var(--color-background);
-  border: 0.3rem solid var(--color-text);
+  border: var(--var-border-width, 0.2rem) solid var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
-  transition: opacity 0.3s, visibility 0.3s;
+  margin-top: -0.4rem;
+  transition-duration: 0.3s;
   pointer-events: none;
 }
 
+.infotooltip:hover .infotooltiptext {
+  left: calc(100% + 0.7rem);
+}
+
 .s-base--dark .infotooltip .infotooltiptext {
-  border: 0.1rem solid #dddddd;
+  border-color: #dddddd;
 }
 
 .infotooltip:hover .infotooltiptext {
@@ -1478,11 +1483,18 @@ br {
 .infotooltip .infotooltiptext::after {
   content: "";
   position: absolute;
-  top: 50%;
+  top: 2.8rem;
   right: 100%;
-  border: 0.5rem solid transparent;
-  border-right-color: #0d0d0d;
+  border-right: 0 solid black;
+  border-top: 0.6rem solid transparent;
+  border-bottom: 0.6rem solid transparent;
   transform: translateY(-50%);
+  margin-right: 0.1rem;
+  transition-duration: 0.3s;
+}
+
+.infotooltip:hover .infotooltiptext::after {
+  border-right-width: 0.6rem;
 }
 
 .s-base--dark .infotooltip .infotooltiptext::after {

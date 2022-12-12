@@ -748,7 +748,7 @@ button:focus {
   height: 6rem;
 }
 
-.s-base--metro .l-reality-button {
+.t-metro .l-reality-button {
   box-shadow: 0.1rem 0.1rem 0.1rem 0 #9e9e9e;
 }
 
@@ -2015,11 +2015,7 @@ br {
   color: black;
 }
 
-.s-base--metro .o-infinity-button {
-  box-shadow: 0.1rem 0.1rem 0.1rem 0 #9e9e9e;
-}
-
-.t-dark-metro .o-infinity-button {
+.t-metro .o-infinity-button {
   box-shadow: 0.1rem 0.1rem 0.1rem 0 #9e9e9e;
 }
 
@@ -2060,7 +2056,7 @@ br {
   border-color: black;
 }
 
-.s-base--metro .o-eternity-button {
+.t-metro .o-eternity-button {
   box-shadow: 0.1rem 0.1rem 0.1rem 0 #9e9e9e;
 }
 

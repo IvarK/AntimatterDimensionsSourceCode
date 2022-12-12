@@ -68,7 +68,7 @@ GameDatabase.celestials.ra = {
       effect: () => 1 + Math.pow(Currency.realityMachines.value.pLog10() / 100, 0.5),
       pet: "teresa",
       level: 5,
-      displayIcon: `Δ`
+      displayIcon: `Ϟ`
     },
     alteredGlyphs: {
       id: 3,

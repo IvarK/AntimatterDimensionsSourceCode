@@ -109,7 +109,7 @@ export default {
   width: 2.7rem;
   height: 1.5rem;
   font-family: Typewriter, serif;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: black;
   border: 0.15rem solid;
   border-radius: var(--var-border-radius, 0.2rem);

@@ -31,19 +31,19 @@ class TimeStudyRowLayout {
 }
 
 export class TimeStudyTreeLayout {
-  constructor(type) {
-    this.spacing = 4;
+  constructor(type, scaling = 1) {
+    this.spacing = 4 * scaling;
 
     const normalRowLayout = new TimeStudyRowLayout({
-      itemWidth: 18,
-      itemHeight: 10,
-      spacing: 3
+      itemWidth: 18 * scaling,
+      itemHeight: 10 * scaling,
+      spacing: 3 * scaling
     });
 
     const wideRowLayout = new TimeStudyRowLayout({
-      itemWidth: 12,
-      itemHeight: 10,
-      spacing: 0.6
+      itemWidth: 12 * scaling,
+      itemHeight: 10 * scaling,
+      spacing: 0.6 * scaling
     });
     const normalRow = (...items) => new TimeStudyRow(normalRowLayout, items);
     const wideRow = (...items) => new TimeStudyRow(wideRowLayout, items, true);
@@ -195,12 +195,12 @@ export class TimeStudyTreeLayout {
     return heightNoSpacing + rows.length * this.spacing;
   }
 
-  static create(type) {
+  static create(type, scaling = 1) {
     if (this._instances === undefined) {
       this._instances = [];
     }
-    const layout = new TimeStudyTreeLayout(type);
-    this._instances[type] = layout;
+    const layout = new TimeStudyTreeLayout(type, scaling);
+    this._instances[`${type}__${scaling}`] = layout;
     return layout;
   }
 }

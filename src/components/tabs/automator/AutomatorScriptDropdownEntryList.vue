@@ -33,6 +33,10 @@ export default {
   },
   created() {
     this.currentScriptID = player.reality.automator.state.editorScript;
+    // Deleted script names potentially persist within the vue component unless we clear them
+    this.on$(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => {
+      this.$recompute("scripts");
+    });
   },
   methods: {
     update() {

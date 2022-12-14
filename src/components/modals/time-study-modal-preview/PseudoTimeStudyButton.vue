@@ -38,7 +38,7 @@ export default {
         "o-pseudo-time-study--small": this.setup.isSmall,
         "o-time-study--unavailable": !this.isBought && !this.isUseless,
         "o-time-study--bought": this.isBought && !this.isUseless,
-        "o-time-study--new-import": this.isNewFromImport
+        "o-time-study--new-import": this.isNewFromImport && !this.isBought
       };
     },
     pathClass() {
@@ -67,14 +67,7 @@ export default {
     },
     studyClass() {
       if (this.isUseless) return "";
-      let pathClasses = "";
-      if (!this.isBought) {
-        pathClasses += `${this.pathClass}--unavailable`;
-      }
-      if (this.isBought) {
-        pathClasses += `${this.pathClass}--bought`;
-      }
-      return pathClasses;
+      return `${this.pathClass}--${this.isBought ? "bought" : "unavailable"}`;
     },
     studyString() {
       switch (this.study.type) {

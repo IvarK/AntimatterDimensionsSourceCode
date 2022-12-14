@@ -33,11 +33,12 @@ export default {
     layout() {
       return TimeStudyTreeLayout.create(this.layoutType, 0.15);
     },
-    allStudies() {
+    studies() {
       return this.layout.studies;
     },
-    studies() {
-      return this.allStudies;
+    newStudies() {
+      // NewStudies is formatted using makeEnumeration so we need to convert it back to an array
+      return this.treeStatus.newStudies.replace(", and ", ", ").replace(" and ", ", ").split(", ");
     },
     connections() {
       return this.layout.connections;
@@ -95,10 +96,10 @@ export default {
       :style="treeStyleObject"
     >
       <PseudoTimeStudyButton
-        v-for="(setup) in studies"
+        v-for="setup in studies"
         :key="setup.study.type.toString() + setup.study.id.toString()"
         :setup="setup"
-        :is-new-from-import="treeStatus.newStudies.includes(studyString(setup.study))"
+        :is-new-from-import="newStudies.includes(studyString(setup.study))"
       />
       <svg
         :style="treeStyleObject"

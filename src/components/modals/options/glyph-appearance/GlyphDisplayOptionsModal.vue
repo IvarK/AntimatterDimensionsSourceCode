@@ -19,7 +19,7 @@ export default {
     return {
       newGlyphs: false,
       glyphEffectDots: false,
-      forceDarkGlyphs: false,
+      lightGlyphs: false,
       glyphInfoType: 0,
       showGlyphInfoByDefault: false,
     };
@@ -38,8 +38,8 @@ export default {
       player.options.showHintText.glyphEffectDots = newValue;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
-    forceDarkGlyphs(newValue) {
-      player.options.forceDarkGlyphs = newValue;
+    lightGlyphs(newValue) {
+      player.options.lightGlyphs = newValue;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
     showGlyphInfoByDefault(newValue) {
@@ -52,7 +52,7 @@ export default {
       const options = player.options;
       this.newGlyphs = options.showNewGlyphIcon;
       this.glyphEffectDots = options.showHintText.glyphEffectDots;
-      this.forceDarkGlyphs = options.forceDarkGlyphs;
+      this.lightGlyphs = options.lightGlyphs;
       this.glyphInfoType = options.showHintText.glyphInfoType;
       this.showGlyphInfoByDefault = options.showHintText.showGlyphInfoByDefault;
     },
@@ -81,8 +81,8 @@ export default {
         text="Always show Glyph effect dots:"
       />
       <ModalOptionsToggleButton
-        v-model="forceDarkGlyphs"
-        text="Force dark Glyph background:"
+        v-model="lightGlyphs"
+        text="Light Glyph backgrounds:"
       />
       <ExpandingControlBox
         class="o-primary-btn c-dropdown-btn"

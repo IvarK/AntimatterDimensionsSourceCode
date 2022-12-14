@@ -26,7 +26,7 @@ class CosmeticGlyphType {
 
   get defaultColor() {
     const color = this.id === "reality" ? GlyphAppearanceHandler.realityColor : this._defaultColor;
-    const isNormallyDark = player.options.forceDarkGlyphs || Theme.current().isDark();
+    const isNormallyDark = !player.options.lightGlyphs;
     return {
       border: color,
       bg: (isNormallyDark === (this.id === "cursed")) ? "white" : "black",
@@ -154,19 +154,21 @@ export const GlyphAppearanceHandler = {
   },
 
   getBorderColor(type) {
+    if (type === "cursed" && !CosmeticGlyphTypes.cursed.currentColor.str)
+      return player.options.lightGlyphs ? "white" : "black";
     return CosmeticGlyphTypes[type].currentColor.border;
   },
   getRarityColor(strength) {
-    const isDarkBG = player.options.forceDarkGlyphs || Theme.current().isDark();
+    const isDarkBG = !player.options.lightGlyphs;
     return getRarity(strength)[isDarkBG ? "darkColor" : "lightColor"];
   },
   getColorProps(colorStr) {
     // This condition is a bit odd - this specifically selects out the hybrid custom colors which have both a BG color
     // and a hex code. Reality color looks like "rgb(..." and also goes in this conditional
-    if (colorStr.charAt(1) !== "#") {
+    if (colorStr?.charAt(1) !== "#") {
       return {
         border: colorStr,
-        bg: (player.options.forceDarkGlyphs || Theme.current().isDark()) ? "black" : "white",
+        bg: player.options.lightGlyphs ? "white" : "black",
       };
     }
     return {
@@ -176,7 +178,7 @@ export const GlyphAppearanceHandler = {
   },
   // Only used to ensure readable glyph tooltips
   getBaseColor(isInverted) {
-    const isNormallyDark = player.options.forceDarkGlyphs || Theme.current().isDark();
+    const isNormallyDark = !player.options.lightGlyphs;
     if (isInverted) return isNormallyDark ? "white" : "black";
     return isNormallyDark ? "black" : "white";
   },

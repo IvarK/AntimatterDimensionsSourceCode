@@ -70,12 +70,16 @@ export default {
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
     fakeGlyph(type) {
+      let typeName = "power";
+      if (type === "reality") typeName = "reality";
+      if (type === "cursed") typeName = "cursed";
       return {
         // This are just dummy values to make sure that GlyphComponent doesn't throw errors; only the cosmetic aspects
         // will end up being visible in this case anyway (as they override anything type would otherwise show). Type
-        // looks particularly odd because reality glyphs need that passed in for the color animation, and power is an
-        // okay placeholder for anything else. We can't pass in type or else it will error out with cosmetic types.
-        type: type === "reality" ? "reality" : "power",
+        // looks particularly odd because reality glyphs need that passed in for the color animation, and cursed ones
+        // are inverted, but power is an okay placeholder for anything else. We can't pass in type or else it will error
+        // out with cosmetic types.
+        type: typeName,
         strength: 1,
         cosmetic: type,
       };

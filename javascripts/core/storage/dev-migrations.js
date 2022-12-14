@@ -1530,6 +1530,10 @@ GameStorage.devMigrations = {
         if (glyph.type === "companion") glyph.color = undefined;
       }
     },
+    player => {
+      player.options.lightGlyphs = !player.options.forceDarkGlyphs;
+      delete player.options.forceDarkGlyphs;
+    }
   ],
 
   patch(player) {

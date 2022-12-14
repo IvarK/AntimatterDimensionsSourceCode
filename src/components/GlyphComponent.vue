@@ -141,26 +141,17 @@ export default {
       let overrideColor;
       if (this.glyph.color) overrideColor = GlyphAppearanceHandler.getColorProps(this.glyph.color);
       if (this.glyph.cosmetic) overrideColor = this.cosmeticConfig.currentColor;
-      const cursedColor = player.options.forceDarkGlyphs || Theme.current().isDark()
-        ? "black"
-        : "white";
-
-      let borderColor;
-      if (this.isCursedGlyph) borderColor = cursedColor;
-      else {
-        borderColor = GlyphAppearanceHandler.getBorderColor(this.glyph.type);
-      }
 
       let symbolColor;
       if (this.isRealityGlyph) symbolColor = this.realityColor;
-      if (this.isCursedGlyph) symbolColor = cursedColor;
       else {
         symbolColor = this.cosmeticConfig.ignoreRarityColor
           ? GlyphAppearanceHandler.getBorderColor(this.glyph.type)
           : GlyphAppearanceHandler.getRarityColor(this.glyph.strength);
       }
+
       return {
-        border: overrideColor?.border ?? borderColor,
+        border: overrideColor?.border ?? GlyphAppearanceHandler.getBorderColor(this.glyph.type),
         symbol: overrideColor?.border ?? symbolColor,
         bg: overrideColor?.bg ?? this.cosmeticConfig.currentColor.bg
       };

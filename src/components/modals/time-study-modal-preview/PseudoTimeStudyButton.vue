@@ -122,6 +122,10 @@ export default {
   width: 1.8rem;
 }
 
+.o-time-study-dark--bought {
+  color: white;
+}
+
 
 .o-time-study--new-import::before {
   content: "";

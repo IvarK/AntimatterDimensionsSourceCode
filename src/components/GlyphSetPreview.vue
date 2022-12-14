@@ -101,6 +101,10 @@ export default {
         closeEvent: GAME_EVENT.GLYPH_SET_SAVE_CHANGE,
         displaySacrifice: this.showSacrifice,
       });
+    },
+    // Necessary to force a re-render for the set name if the set itself changes
+    glyphHash() {
+      return Glyphs.hash(this.glyphs);
     }
   }
 };
@@ -119,6 +123,7 @@ export default {
     >
       <GlyphSetName
         v-if="showName"
+        :key="glyphHash()"
         :glyph-set="glyphs"
         :force-color="forceNameColor"
       />

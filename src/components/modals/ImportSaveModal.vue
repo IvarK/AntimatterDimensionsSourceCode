@@ -85,6 +85,14 @@ export default {
         ? `After importing, will simulate ${formatInt(ticks)} ticks of duration
           ${TimeSpan.fromMilliseconds((Date.now() - this.player.lastUpdate) / ticks).toStringShort()} each.`
         : "This setting will not apply any offline progress after importing.";
+    },
+    willLoseCosmetics() {
+      const currSets = player.reality.glyphs.cosmetics.unlockedFromNG;
+      const importedSets = this.player.reality?.glyphs.cosmetics.unlockedFromNG ?? [];
+      return currSets.filter(set => !importedSets.includes(set)).length > 0;
+    },
+    willLoseSpeedrun() {
+      return player.speedrun.isUnlocked && !this.player.speedrun?.isUnlocked;
     }
   },
   mounted() {
@@ -159,6 +167,9 @@ export default {
         <div v-if="progress.isRealityUnlocked">
           Realities: {{ formatPostBreak(player.realities, 2) }}
         </div>
+        <div v-if="progress.hasFullCompletion">
+          Full game completions: {{ formatInt(player.records.fullGameCompletions) }}
+        </div>
         <div class="c-modal-import__warning">
           (Your current save file will be overwritten!)
         </div>
@@ -178,6 +189,21 @@ export default {
         Not a valid save:
         <br>
         {{ saveCheckString }}
+      </div>
+      <div
+        v-if="player"
+        class="c-modal-hard-reset-danger"
+      >
+        <div v-if="willLoseCosmetics">
+          <br>
+          Glyph cosmetic sets from completing the game are tied to your save.
+          <br>
+          Importing this save will cause you to lose some sets.
+        </div>
+        <div v-if="willLoseSpeedrun">
+          <br>
+          You will lose the ability to do a Speedrun, as this save does not have it unlocked.
+        </div>
       </div>
     </div>
 

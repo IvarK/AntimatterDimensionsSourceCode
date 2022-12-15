@@ -30,8 +30,10 @@ export default {
     },
     setContents() {
       const contents = [];
-      if (this.symbols) contents.push(quantifyInt("symbol", this.symbols.length));
-      if (this.colors) contents.push(quantifyInt("color scheme", this.colors.length));
+      // We explicitly pass in x => x as the formatting function in order to override END formatting; if we don't,
+      // this modal will show END symbols/colors when opened at game completion
+      if (this.symbols) contents.push(quantify("symbol", this.symbols.length, 0, 0, x => x));
+      if (this.colors) contents.push(quantify("color scheme", this.colors.length, 0, 0, x => x));
       return contents.join(" and ");
     },
     symbols() {

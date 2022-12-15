@@ -57,7 +57,7 @@
   color: white;
   background-color: gray;
   border-radius: var(--var-border-radius, 0.2rem);
-  padding: 0.2rem;
+  padding: 0.1rem;
 }
 
 .c-glyph-component--dragging {

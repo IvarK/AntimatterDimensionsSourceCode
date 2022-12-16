@@ -5,6 +5,10 @@ import { PlayerProgress } from "../../app/player-progress";
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
+// Note most of the isActive entries in here have redundant-looking DT/s != 0 checks because DT is treated as a
+// special case due to not being a prestige currency but still needing to be treated like one in the UI. This
+// is because it requires dilation to be unlocked, which isn't a given, and we want the tab continuously visible
+// after the first ever dilation unlock on the 0th reality
 GameDatabase.multiplierTabValues.DT = {
   total: {
     name: "Dilated Time gain",
@@ -67,13 +71,13 @@ GameDatabase.multiplierTabValues.DT = {
       Ra.unlocks.continuousTTBoost.effects.dilatedTime,
       Ra.unlocks.peakGamespeedDT
     ),
-    isActive: () => Ra.unlocks.autoTP.canBeApplied,
+    isActive: () => Ra.unlocks.autoTP.canBeApplied && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.GENERIC_RA,
   },
   alchemy: {
     name: "Glyph Alchemy",
     multValue: () => AlchemyResource.dilation.effectOrDefault(1),
-    isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
+    isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.ALCHEMY,
   },
   iap: {
@@ -86,13 +90,13 @@ GameDatabase.multiplierTabValues.DT = {
   nerfV: {
     name: "V's Reality",
     powValue: () => 0.5,
-    isActive: () => V.isRunning,
+    isActive: () => V.isRunning && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.GENERIC_V,
   },
   nerfPelle: {
     name: "Doomed Nerfs",
     multValue: 1e-5,
-    isActive: () => Pelle.isDoomed,
+    isActive: () => Pelle.isDoomed && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.PELLE,
   }
 };

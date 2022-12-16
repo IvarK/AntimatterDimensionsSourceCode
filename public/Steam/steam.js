@@ -63,8 +63,8 @@ const SteamFunctions = {
                         );
                     }
                 }
-                console.log(achAchieved)
-                console.log(achErrored)
+                //console.log(achAchieved)
+                //console.log(achErrored)
             }
         }
     },
@@ -74,7 +74,7 @@ const SteamFunctions = {
         try{
           await Cloud.manualCloudCreate(AutoEmail,AutoPass);
         }catch(e){
-          console.log(e);
+          //console.log(e);
           try{
             await Cloud.manualCloudLogin(AutoEmail,AutoPass)
           }catch(LoginError){

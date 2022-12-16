@@ -1064,7 +1064,12 @@ export function init() {
   }
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
-  if(steamOn){SteamFunctions.UIZoom()}
+  if(steamOn){
+    SteamFunctions.UIZoom();
+    if(!Cloud.loggedIn){
+      SteamFunctions.autoLogin()
+    }
+  }
   //shop.init();
   Payments.init();
 }

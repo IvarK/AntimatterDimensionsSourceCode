@@ -153,7 +153,7 @@ export const Cloud = {
     GameStorage.lastCloudSave = Date.now();
     GameIntervals.checkCloudSave.restart();
     set(ref(this.db, `users/${this.user.id}/web`), GameSaveSerializer.serialize(root));
-    GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud`);/* with user ${this.user.displayName}`);*/
+    GameUI.notify.info(`Game saved to cloud`);/* with user ${this.user.displayName}`);*/
   },
 
   async loadCheck() {
@@ -170,7 +170,7 @@ export const Cloud = {
       // eslint-disable-next-line no-loop-func
       const overwriteLocalSave = () => {
         GameStorage.overwriteSlot(saveId, cloudSave);
-        GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded`);/* for user ${this.user.displayName}`);*/
+        GameUI.notify.info(`Cloud save loaded`);/* for user ${this.user.displayName}`);*/
       };
 
       // If the comparison fails, we assume the cloud data is corrupted and show the relevant modal

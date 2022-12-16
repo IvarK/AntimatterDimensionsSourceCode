@@ -5637,6 +5637,7 @@ properly on certain themes. */
   border-bottom: 0.1rem solid var(--color-text);
   margin-bottom: 0.2rem;
   padding-bottom: 0.2rem;
+  min-width: 55rem;
   cursor: pointer;
 }
 

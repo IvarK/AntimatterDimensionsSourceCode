@@ -105,7 +105,6 @@ export default {
   <div
     v-if="show"
     :class="classObject"
-    class="c-modal-away-progress__resources"
     @click="hideEntry"
   >
     <span v-if="isBlackHole">

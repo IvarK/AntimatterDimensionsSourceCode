@@ -11,8 +11,7 @@ GameDatabase.changelog = [
    * }
    */
   {
-    // TODO This is just a placeholder date (today), change this to the actual release date
-    date: [2022, 11, 21],
+    date: [2022, 12, 17],
     name: "The Reality Update",
     info: `
 <b>MAJOR STUFF:</b><br>

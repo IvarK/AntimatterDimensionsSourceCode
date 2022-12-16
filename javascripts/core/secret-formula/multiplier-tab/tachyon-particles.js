@@ -14,8 +14,13 @@ GameDatabase.multiplierTabValues.TP = {
         ? `${baseTPStr}${formatPow(PelleRifts.paradox.milestones[1].effectValue, 1, 1)}`
         : baseTPStr;
     },
-    multValue: () => new Decimal(Currency.tachyonParticles.value)
-      .pow(PelleRifts.paradox.milestones[1].effectOrDefault(1)),
+    // This is treated as a multiplier and not a prestige currency, with an overridden display;
+    // therefore we need to return 1 "by default"
+    multValue: () => {
+      const baseTP = new Decimal(Currency.tachyonParticles.value)
+        .pow(PelleRifts.paradox.milestones[1].effectOrDefault(1));
+      return TimeStudy.dilation.isBought ? baseTP : 1;
+    },
     isActive: () => PlayerProgress.realityUnlocked() || PlayerProgress.dilationUnlocked(),
     icon: MultiplierTabIcons.TACHYON_PARTICLES,
   },

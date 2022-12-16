@@ -311,7 +311,9 @@ GameDatabase.multiplierTabValues.AD = {
     powValue: dim => {
       const basePow = AlchemyResource.power.effectOrDefault(1) * Ra.momentumValue;
       // Not entirely accurate, but returns the geometric mean of all producing dimensions (which should be close)
-      let inflationPow;
+      // Set to default value of 1 in non-unlocked case (arguably some sort of effect-or-default would be better,
+      // but I don't want to risk breaking things).
+      let inflationPow = 1;
       if (AlchemyResource.inflation.isUnlocked) {
         if (dim) {
           inflationPow = AntimatterDimension(dim).multiplier.gte(AlchemyResource.inflation.effectValue) ? 1.05 : 1;

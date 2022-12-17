@@ -26,7 +26,6 @@ export default {
   data() {
     return {
       isSmall: 0,
-      showPercentage: true,
     };
   },
   computed: {
@@ -35,13 +34,16 @@ export default {
         ? ` (+${format(this.rate, 2, 2)}%/s)`
         : "";
     },
+    showPercentage() {
+      return player.options.showHintText.showPercentage;
+    },
+
   },
   methods: {
     update() {
       // Needs to be reactive or else rows that don't have changing values (eg. the highest dimension and any higher
       // locked ones) won't change layout when the window size changes
       this.isSmall = window.innerWidth < 1573;
-      this.showPercentage = player.options.showHintText.showPercentage === true;
     },
     adjustableTextClass() {
       return {

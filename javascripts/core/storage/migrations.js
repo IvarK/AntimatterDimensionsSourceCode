@@ -642,6 +642,11 @@ GameStorage.migrations = {
   },
 
   convertNews(player) {
+    if (player.newsArray === undefined) {
+      player.newsArray = [];
+    } else {
+      player.newsArray = player.newsArray.map(x => (typeof(x) === "number" ? `a${x}` : x));
+    }
     const oldNewsArray = new Set(player.newsArray);
     player.news = {};
     player.news.seen = {};

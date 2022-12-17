@@ -98,7 +98,12 @@ GameStorage.migrations = {
         player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
       }
       player.options.newUI = false;
-      Modal.uiChoice.show();
+      window.uiChoiceModalInterval = setInterval(() => {
+        if (GameUI.initialized) {
+          Modal.uiChoice.show();
+          clearInterval(window.uiChoiceModalInterval);
+        }
+      }, 1000);
 
       GameStorage.migrations.normalizeTimespans(player);
       GameStorage.migrations.convertAutobuyerMode(player);
@@ -152,7 +157,6 @@ GameStorage.migrations = {
       GameStorage.migrations.etercreqConversion(player);
       GameStorage.migrations.moveTS33(player);
       GameStorage.migrations.addBestPrestigeCurrency(player);
-      GameStorage.migrations.migrateTheme(player);
     }
   },
 

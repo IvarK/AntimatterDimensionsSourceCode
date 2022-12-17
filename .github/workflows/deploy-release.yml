@@ -25,7 +25,7 @@ jobs:
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           token: ${{ secrets.GH_PUBLISH_TOKEN }}
-          repository-name: IvarK/AyyLmao5Hours
+          repository-name: IvarK/AntimatterDimensions
           branch: master
           folder: dist
           single-commit: true

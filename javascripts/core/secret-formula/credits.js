@@ -231,7 +231,7 @@ GameDatabase.credits = {
       roles: 13
     }, {
       name: "Auti",
-      name2: "Alice Tolle",
+      name2: "Lucia Tolle",
       roles: 13
     }, {
       name: "Buck",

@@ -15,6 +15,7 @@ export default {
       realityUnlocked: false,
       alchemyUnlocked: false,
 
+      showPercentage: false,
       achievements: false,
       achievementUnlockStates: false,
       challenges: false,
@@ -27,6 +28,10 @@ export default {
     };
   },
   watch: {
+    showPercentage(newValue) {
+      player.options.showHintText.showPercentage = newValue;
+    },
+
     achievements(newValue) {
       player.options.showHintText.achievements = newValue;
     },
@@ -64,6 +69,7 @@ export default {
       this.alchemyUnlocked = Ra.unlocks.effarigUnlock.canBeApplied;
 
       const options = player.options.showHintText;
+      this.showPercentage = options.showPercentage;
       this.achievements = options.achievements;
       this.achievementUnlockStates = options.achievementUnlockStates;
       this.challenges = options.challenges;
@@ -84,6 +90,10 @@ export default {
       Info Display Options
     </template>
     <div class="c-modal-options__button-container">
+      <ModalOptionsToggleButton
+        v-model="showPercentage"
+        text="Show % gain:"
+      />
       <ModalOptionsToggleButton
         v-model="achievements"
         text="Achievement IDs:"

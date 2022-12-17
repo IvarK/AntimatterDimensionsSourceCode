@@ -152,6 +152,7 @@ GameStorage.migrations = {
       GameStorage.migrations.etercreqConversion(player);
       GameStorage.migrations.moveTS33(player);
       GameStorage.migrations.addBestPrestigeCurrency(player);
+      GameStorage.migrations.migrateTheme(player);
     }
   },
 
@@ -927,6 +928,10 @@ GameStorage.migrations = {
     player.records.bestReality.bestEP = player.eternityPoints;
     player.records.thisEternity.maxIP = player.infinityPoints;
     player.records.thisReality.maxIP = player.infinityPoints;
+  },
+
+  migrateTheme(player) {
+    player.options.themeClassic = player.options.theme;
   },
 
   prePatch(saveData) {

@@ -98,7 +98,12 @@ GameStorage.migrations = {
         player.lastTenRuns[i][2] = player.lastTenRuns[i][0];
       }
       player.options.newUI = false;
-      Modal.uiChoice.show();
+      window.uiChoiceModalInterval = setInterval(() => {
+        if (GameUI.initialized) {
+          Modal.uiChoice.show();
+          clearInterval(window.uiChoiceModalInterval);
+        }
+      }, 1000);
 
       GameStorage.migrations.normalizeTimespans(player);
       GameStorage.migrations.convertAutobuyerMode(player);
@@ -111,7 +116,6 @@ GameStorage.migrations = {
       GameStorage.migrations.moveChallengeInfo(player);
       GameStorage.migrations.infinitiedConversion(player);
       GameStorage.migrations.adjustWhy(player);
-      GameStorage.migrations.adjustThemes(player);
       GameStorage.migrations.removeAchPow(player);
       GameStorage.migrations.adjustSacrificeConfirmation(player);
       GameStorage.migrations.migrateNotation(player);
@@ -152,6 +156,7 @@ GameStorage.migrations = {
       GameStorage.migrations.etercreqConversion(player);
       GameStorage.migrations.moveTS33(player);
       GameStorage.migrations.addBestPrestigeCurrency(player);
+      GameStorage.migrations.migrateTheme(player);
     }
   },
 
@@ -369,12 +374,6 @@ GameStorage.migrations = {
     if (player.sacrificed.gt(0)) player.requirementChecks.infinity.noSacrifice = false;
     player.requirementChecks.permanent.emojiGalaxies = player.spreadingCancer;
     delete player.spreadingCancer;
-  },
-
-  adjustThemes(player) {
-    delete player.options.themes;
-    if (player.options.theme === undefined) player.options.themeClassic = "Normal";
-    delete player.options.secretThemeKey;
   },
 
   removeAchPow(player) {
@@ -927,6 +926,14 @@ GameStorage.migrations = {
     player.records.bestReality.bestEP = player.eternityPoints;
     player.records.thisEternity.maxIP = player.infinityPoints;
     player.records.thisReality.maxIP = player.infinityPoints;
+  },
+
+  migrateTheme(player) {
+    player.options.themeClassic = player.options.theme === undefined
+      ? "Normal"
+      : player.options.theme;
+    delete player.options.themes;
+    delete player.options.secretThemeKey;
   },
 
   prePatch(saveData) {

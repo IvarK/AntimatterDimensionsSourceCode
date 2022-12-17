@@ -34,6 +34,10 @@ export default {
         ? ` (+${format(this.rate, 2, 2)}%/s)`
         : "";
     },
+    showPercentage() {
+      return player.options.showHintText.showPercentage;
+    },
+
   },
   methods: {
     update() {
@@ -66,7 +70,7 @@ export default {
         {{ amountText }}
       </span>
       <span
-        v-if="rate.neq(0)"
+        v-if="rate.neq(0) && showPercentage"
         class="c-dim-row__small"
       >
         {{ rateText }}

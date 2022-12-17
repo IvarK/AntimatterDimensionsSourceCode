@@ -9103,7 +9103,7 @@ kbd {
 }
 
 input.o-automator-block-input {
-  width: 10rem;
+  width: fit-content;
   color: var(--color-blockmator-block-command);
 }
 

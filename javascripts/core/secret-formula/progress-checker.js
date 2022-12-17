@@ -94,7 +94,7 @@ GameDatabase.progressStages = [
     name: "Reality",
     hasReached: save => save.realities > 0,
     suggestedResource: "Reality Machines",
-    subProgressValue: save => Math.sqrt(new Decimal(save.reality.realityMachines).pLog10() / 6),
+    subProgressValue: save => Math.clampMax(save.realities / 100, 1),
   },
   {
     id: PROGRESS_STAGE.TERESA,

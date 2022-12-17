@@ -116,7 +116,6 @@ GameStorage.migrations = {
       GameStorage.migrations.moveChallengeInfo(player);
       GameStorage.migrations.infinitiedConversion(player);
       GameStorage.migrations.adjustWhy(player);
-      GameStorage.migrations.adjustThemes(player);
       GameStorage.migrations.removeAchPow(player);
       GameStorage.migrations.adjustSacrificeConfirmation(player);
       GameStorage.migrations.migrateNotation(player);
@@ -375,12 +374,6 @@ GameStorage.migrations = {
     if (player.sacrificed.gt(0)) player.requirementChecks.infinity.noSacrifice = false;
     player.requirementChecks.permanent.emojiGalaxies = player.spreadingCancer;
     delete player.spreadingCancer;
-  },
-
-  adjustThemes(player) {
-    delete player.options.themes;
-    if (player.options.theme === undefined) player.options.themeClassic = "Normal";
-    delete player.options.secretThemeKey;
   },
 
   removeAchPow(player) {
@@ -936,7 +929,11 @@ GameStorage.migrations = {
   },
 
   migrateTheme(player) {
-    player.options.themeClassic = player.options.theme;
+    player.options.themeClassic = player.options.theme === undefined
+      ? "Normal"
+      : player.options.theme;
+    delete player.options.themes;
+    delete player.options.secretThemeKey;
   },
 
   prePatch(saveData) {

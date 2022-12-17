@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       isSmall: 0,
+      showPercentage: true,
     };
   },
   computed: {
@@ -40,6 +41,7 @@ export default {
       // Needs to be reactive or else rows that don't have changing values (eg. the highest dimension and any higher
       // locked ones) won't change layout when the window size changes
       this.isSmall = window.innerWidth < 1573;
+      this.showPercentage = player.options.showHintText.showPercentage === true;
     },
     adjustableTextClass() {
       return {
@@ -66,7 +68,7 @@ export default {
         {{ amountText }}
       </span>
       <span
-        v-if="rate.neq(0)"
+        v-if="rate.neq(0) && showPercentage"
         class="c-dim-row__small"
       >
         {{ rateText }}

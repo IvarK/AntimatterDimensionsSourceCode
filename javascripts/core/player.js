@@ -807,6 +807,7 @@ window.player = {
     ignoreGlyphRarity: false,
     lightGlyphs: false,
     showHintText: {
+      showPercentage: true,
       achievements: true,
       achievementUnlockStates: true,
       challenges: true,

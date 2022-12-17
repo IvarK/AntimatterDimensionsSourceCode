@@ -157,6 +157,7 @@ GameStorage.migrations = {
       GameStorage.migrations.etercreqConversion(player);
       GameStorage.migrations.moveTS33(player);
       GameStorage.migrations.addBestPrestigeCurrency(player);
+      GameStorage.migrations.migrateTheme(player);
     }
   },
 

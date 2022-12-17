@@ -69,21 +69,27 @@ const SteamFunctions = {
         }
     },
     async autoLogin(){
-        const AutoEmail = `${Steam.getSteamId().accountId}@ad.com`
-        const AutoPass = Steam.getSteamId().staticAccountId
-        try{
-          await Cloud.manualCloudCreate(AutoEmail,AutoPass);
-        }catch(e){
-          //console.log(e);
-          try{
-            await Cloud.manualCloudLogin(AutoEmail,AutoPass)
-          }catch(LoginError){
-            this.error = true;
-            this.errorMessage = "Unable to login, please recheck email/password";
-            return;
-          }
+        if(!Cloud.loggedIn){
+            //console.log(Cloud.loggedIn)
+            const AutoEmail = `${Steam.getSteamId().accountId}@ad.com`
+            const AutoPass = Steam.getSteamId().staticAccountId
+            //console.log(AutoEmail,AutoPass)
+            try{
+            await Cloud.manualCloudCreate(AutoEmail,AutoPass);
+            }catch(e){
+            //console.log(e);
+            try{
+                await Cloud.manualCloudLogin(AutoEmail,AutoPass)
+            }catch(LoginError){
+                this.error = true;
+                this.errorMessage = "Unable to login, please recheck email/password";
+                console.log(`Login Error, Retrying (${LoginError})`)
+                return;
+            }
+            }
+            Cloud.user.displayName = Steam.getSteamId().screenName
         }
-        Cloud.user.displayName = Steam.getSteamId().screenName
+        SteamFunctions.SyncPlayFabSTD()
     },
     PurchaseIAP(STD, kreds) {
         if (!steamOn) return;
@@ -162,23 +168,25 @@ const SteamFunctions = {
         }
     },
     SyncPlayFabSTD(){
-        PlayFab.ClientApi.GetUserInventory({PlayFabId: PlayFab.PlayFabId}, (result, error) => {
-            if (result !== null) {
-                //console.log(result);
-                const CurrentSTD = result.data.VirtualCurrency.ST
-                const Inventory = result.data.Inventory
-                ShopPurchaseData.totalSTD = CurrentSTD
-                const inventoryData = {}
-                Inventory.forEach(
-                    ShopItem => inventoryData[ShopItem.ItemId] = ShopItem.RemainingUses
-                );
-                for (const key of Object.keys(GameDatabase.shopPurchases)) ShopPurchaseData[key] = inventoryData[key] ?? 0;
-                GameUI.update();
-                SteamFunctions.GetCosmetics()
-            } else if (error !== null) {
-                console.log(error);
-            }
-        })
+        if(PlayFab.ClientApi.IsClientLoggedIn()){
+            PlayFab.ClientApi.GetUserInventory({PlayFabId: PlayFab.PlayFabId}, (result, error) => {
+                if (result !== null) {
+                    //console.log(result);
+                    const CurrentSTD = result.data.VirtualCurrency.ST
+                    const Inventory = result.data.Inventory
+                    ShopPurchaseData.totalSTD = CurrentSTD
+                    const inventoryData = {}
+                    Inventory.forEach(
+                        ShopItem => inventoryData[ShopItem.ItemId] = ShopItem.RemainingUses
+                    );
+                    for (const key of Object.keys(GameDatabase.shopPurchases)) ShopPurchaseData[key] = inventoryData[key] ?? 0;
+                    GameUI.update();
+                    SteamFunctions.GetCosmetics()
+                } else if (error !== null) {
+                    console.log(error);
+                }
+            })
+        }
     },
     PurchaseShopItem(itemCost,itemKey,itemConfig,chosenSet){
         //console.log(itemCost,itemKey,itemConfig,chosenSet)

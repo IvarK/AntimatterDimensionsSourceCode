@@ -56,6 +56,7 @@ function playFabLoginCallback(data, error) {
 
     if (player.options.cloud) playFabLoadCheck()
     console.log("Logged in to playFab")
+    SteamFunctions.autoLogin()
   }
 }
 

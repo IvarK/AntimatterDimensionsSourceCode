@@ -140,13 +140,23 @@ export default {
     colorObj() {
       let overrideColor;
       if (this.glyph.color) overrideColor = GlyphAppearanceHandler.getColorProps(this.glyph.color);
-      if (this.glyph.cosmetic) overrideColor = this.cosmeticConfig.currentColor;
+      if (this.glyph.cosmetic) {
+        if (this.glyph.cosmetic === this.glyph.type) {
+          overrideColor = this.glyph.type === "cursed"
+            ? GlyphAppearanceHandler.getBaseColor(true)
+            : this.cosmeticConfig.currentColor;
+        } else {
+          overrideColor = this.cosmeticConfig.currentColor;
+        }
+      }
 
       let symbolColor;
       if (this.isRealityGlyph) symbolColor = this.realityColor;
-      else symbolColor = this.cosmeticConfig.ignoreRarityColor
-        ? GlyphAppearanceHandler.getBorderColor(this.glyph.type)
-        : GlyphAppearanceHandler.getRarityColor(this.glyph.strength);
+      else {
+        symbolColor = this.cosmeticConfig.ignoreRarityColor
+          ? GlyphAppearanceHandler.getBorderColor(this.glyph.type)
+          : GlyphAppearanceHandler.getRarityColor(this.glyph.strength);
+      }
 
       return {
         border: overrideColor?.border ?? GlyphAppearanceHandler.getBorderColor(this.glyph.type),

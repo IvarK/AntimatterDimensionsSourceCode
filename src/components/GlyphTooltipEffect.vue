@@ -76,9 +76,9 @@ export default {
         .replace("\n", "<br>")
         .replace("]", "</span>")
         .replace(
-          "[", `<span style="${Theme.current().isDark() || player.options.forceDarkGlyphs
-            ? "text-shadow: white 0 0 0.6rem;"
-            : ""}
+          "[", `<span style="${player.options.lightGlyphs
+            ? ""
+            : "text-shadow: white 0 0 0.6rem;"}
             font-weight: bold;">`
         );
     }

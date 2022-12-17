@@ -98,8 +98,9 @@ export default {
     },
     descriptionStyle() {
       const color = GlyphAppearanceHandler.getRarityColor(this.strength);
+      const cursedColor = player.options.lightGlyphs ? "white" : "black";
       return {
-        color,
+        color: this.type === "cursed" ? cursedColor : color,
         animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
       };
     },

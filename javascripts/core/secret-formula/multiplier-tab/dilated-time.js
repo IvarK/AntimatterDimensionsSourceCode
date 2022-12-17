@@ -5,13 +5,17 @@ import { PlayerProgress } from "../../app/player-progress";
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
+// Note most of the isActive entries in here have redundant-looking DT/s != 0 checks because DT is treated as a
+// special case due to not being a prestige currency but still needing to be treated like one in the UI. This
+// is because it requires dilation to be unlocked, which isn't a given, and we want the tab continuously visible
+// after the first ever dilation unlock on the 0th reality
 GameDatabase.multiplierTabValues.DT = {
   total: {
     name: "Dilated Time gain",
-    isBase: true,
     displayOverride: () => `${format(getDilationGainPerSecond().times(getGameSpeedupForDisplay()), 2, 2)}/sec`,
     multValue: () => getDilationGainPerSecond().times(getGameSpeedupForDisplay()),
-    isActive: () => getDilationGainPerSecond().gt(0),
+    isActive: () => PlayerProgress.realityUnlocked() ||
+      (PlayerProgress.dilationUnlocked() && getDilationGainPerSecond().gt(0)),
     dilationEffect: () => (Enslaved.isRunning ? 0.85 : 1),
     isDilated: true,
     overlay: ["Ψ"],
@@ -19,7 +23,8 @@ GameDatabase.multiplierTabValues.DT = {
   achievement: {
     name: "Achievements",
     multValue: () => Achievement(132).effectOrDefault(1) * Achievement(137).effectOrDefault(1),
-    isActive: () => Achievement(132).canBeApplied || Achievement(137).canBeApplied,
+    isActive: () => (Achievement(132).canBeApplied || Achievement(137).canBeApplied) &&
+      getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   dilation: {
@@ -39,21 +44,25 @@ GameDatabase.multiplierTabValues.DT = {
   gamespeed: {
     name: "Current Game speed",
     multValue: () => getGameSpeedupForDisplay(),
-    isActive: () => getGameSpeedupForDisplay() > 1,
+    isActive: () => getGameSpeedupForDisplay() > 1 && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.GAMESPEED,
   },
   realityUpgrade: {
     name: "Temporal Amplifier",
     multValue: () => RealityUpgrade(1).effectOrDefault(1),
-    isActive: () => RealityUpgrade(1).canBeApplied && !Pelle.isDoomed,
+    isActive: () => RealityUpgrade(1).canBeApplied && getDilationGainPerSecond().neq(0) && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   glyph: {
     name: "Glyph Effects",
-    multValue: () => Decimal.times(getAdjustedGlyphEffect("dilationDT"),
-      Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1))
-      .times(Pelle.specialGlyphEffect.dilation),
-    isActive: () => PlayerProgress.realityUnlocked(),
+    multValue: () => {
+      const dtMult = getAdjustedGlyphEffect("dilationDT").times(Pelle.specialGlyphEffect.dilation);
+      const repliDT = Replicanti.areUnlocked
+        ? Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1)
+        : DC.D1;
+      return dtMult.times(repliDT);
+    },
+    isActive: () => PlayerProgress.realityUnlocked() && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.GENERIC_GLYPH
   },
   ra: {
@@ -62,32 +71,32 @@ GameDatabase.multiplierTabValues.DT = {
       Ra.unlocks.continuousTTBoost.effects.dilatedTime,
       Ra.unlocks.peakGamespeedDT
     ),
-    isActive: () => Ra.unlocks.autoTP.canBeApplied,
+    isActive: () => Ra.unlocks.autoTP.canBeApplied && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.GENERIC_RA,
   },
   alchemy: {
     name: "Glyph Alchemy",
     multValue: () => AlchemyResource.dilation.effectOrDefault(1),
-    isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
+    isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.ALCHEMY,
   },
   iap: {
     name: "Shop Tab Purchases",
     multValue: () => new Decimal(ShopPurchase.dilatedTimePurchases.currentMult ** (Pelle.isDoomed ? 0.5 : 1)),
-    isActive: () => ShopPurchaseData.totalSTD > 0,
+    isActive: () => ShopPurchaseData.totalSTD > 0 && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.IAP,
   },
 
   nerfV: {
     name: "V's Reality",
     powValue: () => 0.5,
-    isActive: () => V.isRunning,
+    isActive: () => V.isRunning && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.GENERIC_V,
   },
   nerfPelle: {
     name: "Doomed Nerfs",
     multValue: 1e-5,
-    isActive: () => Pelle.isDoomed,
+    isActive: () => Pelle.isDoomed && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.PELLE,
   }
 };

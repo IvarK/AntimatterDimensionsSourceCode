@@ -7,7 +7,6 @@ import { MultiplierTabIcons } from "./icons";
 GameDatabase.multiplierTabValues.gamespeed = {
   total: {
     name: "Game speed",
-    isBase: true,
     displayOverride: () => {
       if (Enslaved.isStoringRealTime) return `Set to ${format(0)} (storing real time)`;
       if (EternityChallenge(12).isRunning) return `${formatX(1)}/${formatInt(1000)} (fixed)`;

@@ -805,7 +805,7 @@ window.player = {
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,
-    forceDarkGlyphs: true,
+    lightGlyphs: false,
     showHintText: {
       achievements: true,
       achievementUnlockStates: true,

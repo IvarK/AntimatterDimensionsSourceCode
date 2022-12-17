@@ -57,7 +57,7 @@
   color: white;
   background-color: gray;
   border-radius: var(--var-border-radius, 0.2rem);
-  padding: 0.2rem;
+  padding: 0.1rem;
 }
 
 .c-glyph-component--dragging {
@@ -1378,62 +1378,32 @@
 @keyframes a-reality-glyph-name-cycle {
   0% {
     color: #b67f33;
-    text-shadow:
-      var(--color-text-inverted) -1px 1px 1px,
-      var(--color-text-inverted) 1px 1px 1px,
-      var(--color-text-inverted) -1px -1px 1px,
-      var(--color-text-inverted) 1px -1px 1px,
-      #b67f33 0 0 3px;
+    text-shadow: #b67f33 0 0 3px;
   }
 
   20% {
     color: #64dd17;
-    text-shadow:
-      var(--color-text-inverted) -1px 1px 1px,
-      var(--color-text-inverted) 1px 1px 1px,
-      var(--color-text-inverted) -1px -1px 1px,
-      var(--color-text-inverted) 1px -1px 1px,
-      #64dd17 0 0 3px;
+    text-shadow: #64dd17 0 0 3px;
   }
 
   40% {
     color: #22aa48;
-    text-shadow:
-      var(--color-text-inverted) -1px 1px 1px,
-      var(--color-text-inverted) 1px 1px 1px,
-      var(--color-text-inverted) -1px -1px 1px,
-      var(--color-text-inverted) 1px -1px 1px,
-      #22aa48 0 0 3px;
+    text-shadow: #22aa48 0 0 3px;
   }
 
   60% {
     color: #03a9f4;
-    text-shadow:
-      var(--color-text-inverted) -1px 1px 1px,
-      var(--color-text-inverted) 1px 1px 1px,
-      var(--color-text-inverted) -1px -1px 1px,
-      var(--color-text-inverted) 1px -1px 1px,
-      #03a9f4 0 0 3px;
+    text-shadow: #03a9f4 0 0 3px;
   }
 
   80% {
     color: #b241e3;
-    text-shadow:
-      var(--color-text-inverted) -1px 1px 1px,
-      var(--color-text-inverted) 1px 1px 1px,
-      var(--color-text-inverted) -1px -1px 1px,
-      var(--color-text-inverted) 1px -1px 1px,
-      #b241e3 0 0 3px;
+    text-shadow: #b241e3 0 0 3px;
   }
 
   100% {
     color: #b67f33;
-    text-shadow:
-      var(--color-text-inverted) -1px 1px 1px,
-      var(--color-text-inverted) 1px 1px 1px,
-      var(--color-text-inverted) -1px -1px 1px,
-      var(--color-text-inverted) 1px -1px 1px,
-      #b67f33 0 0 3px;
+    text-shadow: #b67f33 0 0 3px;
   }
 }
 

@@ -5,6 +5,7 @@ import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import PrimaryButton from "@/components/PrimaryButton";
 import StudyStringLine from "@/components/modals/StudyStringLine";
 
+import StudyStringPreview from "./time-study-modal-preview/StudyStringPreview";
 import StudyTreeInfo from "./StudyTreeInfo";
 
 export default {
@@ -13,6 +14,7 @@ export default {
     ModalWrapperChoice,
     StudyStringLine,
     PrimaryButton,
+    StudyStringPreview,
     StudyTreeInfo
   },
   props: {
@@ -232,6 +234,11 @@ export default {
           :tree-status="combinedTree"
         />
       </template>
+      <StudyStringPreview
+        v-if="!deleting"
+        :show-preview="inputIsValidTree"
+        :tree-status="combinedTree"
+      />
       <div v-else-if="hasInput">
         Not a valid tree
       </div>

@@ -70,7 +70,7 @@ export default {
         this.currentNews.reset();
       }
 
-      line.innerHTML = this.currentNews.text;
+      line.innerHTML = this.currentNews.text.replace(/href='/g, `onClick='shell.openExternal("`).replace(/' target='_blank'/g, `")'`);
 
       line.style["transition-duration"] = "0ms";
       if (this.currentNews?.id === "a244" || this.currentNews?.id === "ai63") {

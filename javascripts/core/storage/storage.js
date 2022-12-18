@@ -150,13 +150,9 @@ export const GameStorage = {
       ${invalidProps.join(", ")}`;
   },
 
-  save(silent = false, manual = false) {
+  save(silent = true, manual = false) {
     if (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED && !GameEnd.removeAdditionalEnd) return;
-    if (GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED) {
-      // Fade-out starts at 2.5
-      GameUI.notify.error("There is nothing left to save");
-      return;
-    }
+    if (GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();

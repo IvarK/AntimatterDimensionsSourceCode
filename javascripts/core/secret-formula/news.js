@@ -436,7 +436,7 @@ GameDatabase.news = [
         },
         {
           name: "Synergism",
-          link: "https://pseudonian.github.io/SynergismOfficial/"
+          link: "https://pseudo-corp.github.io/SynergismOfficial/"
         },
         {
           name: "Universal Paperclips",

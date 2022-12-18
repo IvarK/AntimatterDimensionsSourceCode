@@ -153,24 +153,11 @@ export default {
       </button>
     </div>
     <div class="l-shop-buttons-container">
-      <div
+      <ShopButton
         v-for="purchase in purchases"
         :key="purchase.key"
-      >
-        <ShopButton
-          v-if="purchase.isUnlocked()"
-          :purchase="purchase"
-        />
-        <div
-          v-else
-          class="c-shop-button--locked"
-        >
-          This purchase affects a feature you have not unlocked yet.
-          <br>
-          <br>
-          ({{ purchase.lockText }})
-        </div>
-      </div>
+        :purchase="purchase"
+      />
     </div>
     <loading
       :active="isLoading"
@@ -247,6 +234,7 @@ export default {
 
 .l-shop-buttons-container {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   width: 93rem;
   margin: auto;
@@ -254,19 +242,5 @@ export default {
 
 .c-shop-header .o-shop-button-button {
   margin: 0;
-}
-
-.c-shop-button--locked {
-  display: flex;
-  flex-direction: column;
-  width: 30rem;
-  height: 16rem;
-  justify-content: space-around;
-  color: white;
-  background: #3c3c3c;
-  border: var(--var-border-width, 0.2rem) solid #1f7d1f;
-  border-radius: var(--var-border-radius, 0.5rem);
-  margin: 0.5rem;
-  padding: 4rem;
 }
 </style>

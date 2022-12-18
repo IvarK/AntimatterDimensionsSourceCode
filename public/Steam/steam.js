@@ -28,7 +28,7 @@ const SteamFunctions = {
             const SizeDiff = window.outerHeight / setSize;
             require("electron").webFrame.setZoomFactor(SizeDiff);
         } else if (nodeOn && !ui.view.newUI) {
-            const setSize = 825;
+            const setSize = 1020;
             const SizeDiff = window.outerHeight / setSize;
             require("electron").webFrame.setZoomFactor(SizeDiff);
         }

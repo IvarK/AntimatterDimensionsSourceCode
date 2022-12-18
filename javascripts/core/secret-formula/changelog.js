@@ -102,6 +102,8 @@ Wording and Layout Changes:
 <li>Added colors to the Crunch/Eternity buttons when you have more than e50 of IP/EP; the color shows if you gain less
   (red), around same (white), or more (green) IP/EP than you currently have.</li>
 <li>Moved study 33 to right side.</li>
+<li>Changed "Normal Dimensions" to "Antimatter Dimensions".</li>
+<li>Changed "Challenges" to "Normal Challenges".</li>
 <li>Fixed some tpyos.</li>
 </ul>
 <br>

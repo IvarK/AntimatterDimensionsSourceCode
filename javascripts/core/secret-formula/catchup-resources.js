@@ -56,7 +56,7 @@ GameDatabase.catchupResources = [
       features which persist through Infinity resets.`
   },
   {
-    name: "Challenges",
+    name: "Normal Challenges",
     id: 7,
     openH2pEntry: "Normal Challenges",
     requiredStage: PROGRESS_STAGE.EARLY_INFINITY,

@@ -138,7 +138,8 @@ GameDatabase.news = [
   },
   {
     id: "a29",
-    text: "If you are not playing on Kongregate or ivark.github.io, the site is bootleg."
+    text: `If you are not playing on Kongregate, Steam, or https://ivark.github.io/AntimatterDimensions/,
+      the site is bootleg.`
   },
   {
     id: "a30",

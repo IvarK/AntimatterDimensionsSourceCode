@@ -19,10 +19,13 @@ GameDatabase.h2p = {
     {
       name: "Your savefile",
       info: () => `
-Your game's save data is stored on your computer's browser data, which means that clearing your browser's cache and
-cookies will also delete your save file. Similarly, if you are playing in a private or incognito window, your save
+Your game's save data is stored on your computer's browser data if you are playing on a web browser, or in your Steam
+installation folder if you are playing on Steam. This means that clearing your browser's cache or cookies, or fully
+uninstalling the game from Steam will also delete your save file.
+Similarly, if you are playing in a private or incognito window, your save
 won't be there the next time you open up your browser. The saves are browser-specific as well, so for example
-if you play the game on Chrome, you won't find your save on Firefox.
+if you play the game on Chrome, you won't find your save on Firefox. Lastly, any saves you have on the web version and
+the Steam version will also be completely independent from each other.
 <br>
 <br>
 You can transfer your save between places by using the export function, which will copy a <i>very</i> long string of
@@ -41,7 +44,7 @@ and export from text files as well.
 <br>
 You can use the "Choose save" button to pick between three separate saves on your browser. These saves are, for most
 intents and purposes, completely separate from each other. Importing and exporting will only affect the current save
-slot. <b>The only exception is clearing your broswer data, in which case all three saves will be reset.</b>
+slot. <b>The only exception is clearing your browser or Steam data, in which case all three saves will be reset.</b>
 <br>
 <br>
 The game automatically saves periodically, by default once every ${formatInt(30)} seconds, and it will notify you in
@@ -52,7 +55,7 @@ length of the autosave interval is adjustable.
 <br>
 You can also connect a Google Account to the game, allowing you to save your progress online. This allows you to play
 with the same save on any device which is also logged into the same account. Cloud saving is only compatable with other
-saves on the web version of the game; saves from the Android app of the game won't be automatically linked via
+saves on the web or Steam versions of the game; saves from the Android app of the game won't be automatically linked via
 Cloud saving. Saving and loading from the Cloud will
 automatically overwrite the other save unless the other save is either older or has noticeably more progression, in
 which case a modal will appear which asks you which save you want to keep.
@@ -421,7 +424,9 @@ Antimatter Dimension Autobuyers and the Tickspeed Upgrade Autobuyer can be unloc
 but most other autobuyers require upgrades to be purchased or challenges to be beaten.
 <br>
 <br>
-Most Autobuyers have similar stats:
+Most Autobuyers have similar attributes:
+<br>
+<br>
 <b>Autobuyer Interval:</b> The cooldown period before the autobuyer attempts to make another purchase.
 Antimatter Dimension Autobuyers and the Tickspeed Upgrade Autobuyer require their respective challenges to be beaten
 before their interval can be upgraded.
@@ -453,6 +458,11 @@ If you reach your specified Galaxy threshold, the autobuyer will ignore your max
 <br>
 <br>
 <b>Sacrifice Autobuyer:</b> This autobuyer starts with a maxed interval, potentially triggering every tick.
+<br>
+<br>
+<b>Dynamic Amount:</b> Upgraded prestige autobuyers have a mode that triggers a prestige when a specified threshold
+is passed. Turning on "Dynamic Amount" will allow this threshold value to be automatically increased when unlocking
+certain upgrades or achievements which apply a multiplier to this value.
 <br>
 <br>
 <b>Pause/Resume Autobuyers:</b> This button will pause or resume autobuyers which are turned on.

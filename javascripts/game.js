@@ -286,7 +286,7 @@ export function gainedInfinities() {
 }
 
 export function updateRefresh() {
-  GameStorage.save(true);
+  GameStorage.save();
   location.reload(true);
 }
 

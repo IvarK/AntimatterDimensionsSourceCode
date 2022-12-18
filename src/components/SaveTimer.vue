@@ -7,7 +7,8 @@ export default {
       cloudSaveEnabled: false,
       lastLocalSave: 0,
       lastCloudSave: 0,
-      showTimeSinceSave: false
+      showTimeSinceSave: false,
+      saveDisabled: false,
     };
   },
   computed: {
@@ -26,9 +27,10 @@ export default {
       this.lastLocalSave = GameStorage.lastSaveTime;
       this.lastCloudSave = GameStorage.lastCloudSave;
       this.showTimeSinceSave = player.options.showTimeSinceSave;
+      this.saveDisabled = GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
     },
     save() {
-      GameStorage.save();
+      GameStorage.save(false);
     }
   }
 };
@@ -40,7 +42,8 @@ export default {
     class="o-save-timer"
     @click="save"
   >
-    Time since last save: {{ timeString }}
+    <b v-if="saveDisabled">There is nothing left to save.</b>
+    <span v-else>Time since last save: {{ timeString }}</span>
   </div>
 </template>
 

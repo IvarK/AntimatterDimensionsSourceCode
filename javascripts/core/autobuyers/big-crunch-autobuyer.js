@@ -47,6 +47,11 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
     return this.data.amount;
   }
 
+  // This is unused mechanically, but should be zero to suppress the "Current bulk:" text
+  get bulk() {
+    return 0;
+  }
+
   set amount(value) {
     this.data.amount = value;
   }

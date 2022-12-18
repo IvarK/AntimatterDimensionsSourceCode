@@ -47,7 +47,7 @@ export default {
     purchaseButtonObject() {
       return {
         "o-shop-button-button": true,
-        "o-shop-button-button--disabled": !this.canAfford ||
+        "o-shop-button-button--disabled": (!this.canAfford || !this.purchase.isUnlocked()) ||
           (this.isSingleCosmeticSet && !this.hasChosen)
       };
     }
@@ -61,24 +61,30 @@ export default {
       {{ purchase.description }}
       <br>
       <span
-        v-if="purchase.shouldDisplayMult"
+        v-if="!purchase.isUnlocked()"
+        class="o-shop-button-locked-text"
+      >
+        This affects a feature you have not unlocked yet ({{ purchase.lockText }})
+      </span>
+      <span
+        v-else-if="purchase.shouldDisplayMult"
         class="o-shop-button-multiplier"
         :class="{ 'o-shop-button-multiplier--disabled': iapDisabled }"
       >
         Currently {{ purchase.formatEffect(currentMult) }}, next: {{ purchase.formatEffect(nextMult) }}
       </span>
     </div>
-    <div v-if="isSingleCosmeticSet && lockedCount">
-      <br>
+    <div v-if="isSingleCosmeticSet && lockedCount && purchase.isUnlocked()">
       <button
         class="o-shop-button-button"
         @click="openSelectionModal"
       >
         Choose Set
+        <br>
       </button>
       Chosen Set: {{ chosenSet }}
     </div>
-    <div v-if="isAllCosmeticSets && lockedCount">
+    <div v-if="isAllCosmeticSets && lockedCount && purchase.isUnlocked()">
       Will unlock {{ quantify("set", lockedCount) }}
     </div>
     <div
@@ -148,5 +154,13 @@ export default {
 .o-shop-button-multiplier--disabled {
   color: red;
   text-decoration: line-through;
+}
+
+.o-shop-button-locked-text {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0.5rem;
+  color: var(--color-accent);
 }
 </style>

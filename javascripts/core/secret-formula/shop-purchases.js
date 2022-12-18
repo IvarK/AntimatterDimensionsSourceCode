@@ -11,7 +11,12 @@ GameDatabase.shopPurchases = {
   allDimPurchases: {
     key: "allDimPurchases",
     cost: 60,
-    description: "Double ALL Dimension multipliers (Antimatter, Infinity, Time) (multiplicative until 32x). Forever.",
+    description: () => {
+      const dims = ["Antimatter"];
+      if (InfinityDimension(1).isUnlocked || PlayerProgress.eternityUnlocked()) dims.push("Infinity");
+      if (PlayerProgress.eternityUnlocked()) dims.push("Time");
+      return `Double ALL Dimension multipliers (${makeEnumeration(dims)}; multiplicative until 32x). Forever.`;
+    },
     multiplier: purchases => (purchases > 4 ? 32 + (purchases - 5) * 2 : Math.pow(2, purchases)),
   },
   IPPurchases: {
@@ -20,7 +25,7 @@ GameDatabase.shopPurchases = {
     description: "Double your Infinity Point gain from all sources. (additive)",
     multiplier: purchases => (purchases === 0 ? 1 : 2 * purchases),
     isUnlocked: () => PlayerProgress.infinityUnlocked(),
-    lockText: "Requires Infinity",
+    lockText: "Infinity",
   },
   replicantiPurchases: {
     key: "replicantiPurchases",
@@ -29,7 +34,7 @@ GameDatabase.shopPurchases = {
     multiplier: purchases => (purchases === 0 ? 1 : 1 + 0.5 * purchases),
     formatEffect: x => formatX(x, 2, 1),
     isUnlocked: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked(),
-    lockText: "Requires Replicanti",
+    lockText: "Replicanti",
   },
   EPPurchases: {
     key: "EPPurchases",
@@ -37,7 +42,7 @@ GameDatabase.shopPurchases = {
     description: "Triple your Eternity Point gain from all sources. (additive)",
     multiplier: purchases => (purchases === 0 ? 1 : 3 * purchases),
     isUnlocked: () => PlayerProgress.eternityUnlocked(),
-    lockText: "Requires Eternity",
+    lockText: "Eternity",
   },
   dilatedTimePurchases: {
     key: "dilatedTimePurchases",
@@ -46,7 +51,7 @@ GameDatabase.shopPurchases = {
     multiplier: purchases => (purchases === 0 ? 1 : 1 + 0.5 * purchases),
     formatEffect: x => formatX(x, 2, 1),
     isUnlocked: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked(),
-    lockText: "Requires Dilation",
+    lockText: "Dilation",
   },
   RMPurchases: {
     key: "RMPurchases",
@@ -55,7 +60,7 @@ GameDatabase.shopPurchases = {
     multiplier: purchases => purchases + 1,
     formatEffect: x => formatX(x, 2),
     isUnlocked: () => PlayerProgress.realityUnlocked(),
-    lockText: "Requires Reality",
+    lockText: "Reality",
   },
   singleCosmeticSet: {
     key: "singleCosmeticSet",
@@ -71,7 +76,7 @@ GameDatabase.shopPurchases = {
       GlyphAppearanceHandler.applyNotification();
     },
     isUnlocked: () => PlayerProgress.realityUnlocked(),
-    lockText: "Requires Reality",
+    lockText: "Reality",
   },
   allCosmeticSets: {
     key: "allCosmeticSets",
@@ -93,7 +98,7 @@ GameDatabase.shopPurchases = {
       GlyphAppearanceHandler.applyNotification();
     },
     isUnlocked: () => PlayerProgress.realityUnlocked(),
-    lockText: "Requires Reality",
+    lockText: "Reality",
   },
   smallTimeSkip: {
     key: "smallTimeSkip",

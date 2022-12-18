@@ -131,6 +131,14 @@ class ShopPurchaseState extends RebuyableMechanicState {
     ShopPurchaseData[this.config.key] = value;
   }
 
+  isUnlocked() {
+    return this.config.isUnlocked?.() ?? true;
+  }
+
+  get lockText() {
+    return this.config.lockText;
+  }
+
   get shouldDisplayMult() {
     return Boolean(this.config.multiplier);
   }

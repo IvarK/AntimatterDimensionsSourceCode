@@ -125,7 +125,7 @@ export default {
 <template>
   <div
     v-show="showRow"
-    class="c-dimension-row l-dimension-single-row"
+    class="c-dimension-row l-dimension-row-time-dim l-dimension-single-row"
     :class="{ 'c-dim-row--not-reached': !isUnlocked && !requirementReached }"
   >
     <GenericDimensionRowText

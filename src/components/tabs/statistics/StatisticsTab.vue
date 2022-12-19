@@ -49,6 +49,7 @@ export default {
         bestRarity: 0,
       },
       matterScale: [],
+      lastMatterTime: 0,
     };
   },
   computed: {
@@ -129,13 +130,20 @@ export default {
         reality.bestRate.copyFrom(bestReality.RMmin);
         reality.bestRarity = Math.max(strengthToRarity(bestReality.glyphStrength), 0);
       }
-      this.matterScale = MatterScale.estimate(Currency.antimatter.value);
+      this.updateMatterScale();
 
       this.isDoomed = Pelle.isDoomed;
       this.realTimeDoomed.setFrom(player.records.realTimeDoomed);
     },
     formatDecimalAmount(value) {
       return value.gt(1e9) ? format(value, 3, 0) : formatInt(value.toNumber());
+    },
+    // Only updates once per second to reduce jitter
+    updateMatterScale() {
+      if (Date.now() - this.lastMatterTime > 1000) {
+        this.matterScale = MatterScale.estimate(Currency.antimatter.value);
+        this.lastMatterTime = Date.now();
+      }
     }
   },
 };

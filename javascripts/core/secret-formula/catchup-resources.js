@@ -104,7 +104,7 @@ GameDatabase.catchupResources = [
     id: 13,
     openH2pEntry: "Eternity",
     requiredStage: PROGRESS_STAGE.EARLY_ETERNITY,
-    description: `Infinity Points are the primary resource after completing your first Eternity, and scale based on your
+    description: `Eternity Points are the primary resource after completing your first Eternity, and scale based on your
       Infinity Points at the time you complete the Eternity.`
   },
   {

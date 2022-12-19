@@ -476,7 +476,7 @@ It does not change individual autobuyer settings. Think of it like a master swit
 Additionally, holding <b>Alt</b> when pressing a hotkey associated with an upgrade, dimension, or prestige will
 toggle the associated autobuyer.
 `,
-      isUnlocked: () => PlayerProgress.infinityUnlocked(),
+      isUnlocked: () => true,
       tags: ["infinity", "automation", "challenges", "rewards", "interval", "earlygame"],
       tab: "automation/autobuyers"
     }, {

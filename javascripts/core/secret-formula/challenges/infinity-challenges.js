@@ -38,8 +38,7 @@ GameDatabase.challenges.infinity = [
     effect: () => Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought),
     formatEffect: value => formatX(value, 2, 2),
     reward: {
-      description: `Antimatter Dimension multiplier based on Antimatter Galaxies and Tickspeed purchases
-        (same as challenge multiplier)`,
+      description: `Antimatter Dimension multiplier based on Antimatter Galaxies and Tickspeed purchases`,
       effect: () => (Laitela.continuumActive
         ? Decimal.pow(1.05 + (player.galaxies * 0.005), Tickspeed.continuumValue)
         : Decimal.pow(1.05 + (player.galaxies * 0.005), player.totalTickBought)),

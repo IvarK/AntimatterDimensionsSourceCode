@@ -111,7 +111,7 @@ export default {
           // If popular music is unlocked add the divide amount
           if (Achievement(126).isUnlocked) {
             const leftPercentAfterGalaxy = replicantiAmount.log10() / LOG10_MAX_VALUE - pending;
-            pendingTime += leftPercentAfterGalaxy / log10GainFactorPerTickUncapped.toNumber();
+            pendingTime += leftPercentAfterGalaxy * secondsPerGalaxy.toNumber();
           }
           const thisGalaxyTime = pending > 0 ? pendingTime : secondsPerGalaxy.toNumber() - remainingTime;
           this.galaxyText += ` (all Replicanti Galaxies within

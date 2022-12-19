@@ -111,7 +111,7 @@ export default {
       You still need to unlock Reality in the Time Study Tree.
     </span>
     <span v-else-if="suggestions.length === 0">
-      You are ready to complete this Reality!
+      Ready to Reality! You have unlocked every available upgrade within this Reality.
     </span>
     <span v-else>
       <i :class="dropDownIconClass" />

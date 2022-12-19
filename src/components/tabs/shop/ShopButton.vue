@@ -67,16 +67,23 @@ export default {
         Currently {{ purchase.formatEffect(currentMult) }}, next: {{ purchase.formatEffect(nextMult) }}
       </span>
     </div>
-    <div v-if="lockedCount && purchase.isUnlocked()">
+    <div>
       <div v-if="isSingleCosmeticSet">
-        <button
-          class="o-shop-button-button"
-          @click="openSelectionModal"
+        <div
+          v-if="allSetsUnlocked"
+          class="o-shop-button-multiplier"
         >
-          Choose Set
-        </button>
-        <br>
-        Chosen Set: {{ chosenSet }}
+          All Sets unlocked!
+        </div>
+        <div v-else>
+          <button
+            class="o-shop-button-button"
+            @click="openSelectionModal"
+          >
+            Choose Set
+          </button>
+          Chosen Set: {{ chosenSet }}
+        </div>
       </div>
       <div
         v-if="isAllCosmeticSets"

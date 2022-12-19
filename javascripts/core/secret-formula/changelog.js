@@ -136,6 +136,7 @@ Balance Changes:
 <li>The 20-eternities milestone was moved to 8-eternities.</li>
 <li>Increased cost scaling for Time Dimensions after 1e6000.</li>
 <li>TS 83 has been hard capped.</li>
+<li>EC10 reward for less than 5 completions has been nerfed (reward at 5 completions is the same).</li>
 <li>Lowered the Dilation unlock requirement from 13000 to 12900 total TT.</li>
 <li>TP gain amount in Dilation is now calculated based on the highest AM reached.</li>
 <li>Purchasing the study to unlock Dilation now requires a 23rd row study purchase.</li>
@@ -194,6 +195,7 @@ Removed features:
 Bugfixes:
 <ul>
 <li>ID and replicanti autobuyer buttons are now hidden in EC8.</li>
+<li>Fixed next Sacrifice multiplier not properly displaying NC8's effect.</li>
 <li>Fixed a bug where IC5's cost increment was applied 2 times.</li>
 <li>Fixed a bug where inverted themes were broken.</li>
 <li>Fixed a bug where resetting the game unlocks a secret achievement.</li>

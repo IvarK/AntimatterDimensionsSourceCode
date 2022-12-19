@@ -62,6 +62,24 @@ GameDatabase.shopPurchases = {
     isUnlocked: () => PlayerProgress.realityUnlocked(),
     lockText: "Reality",
   },
+  smallTimeSkip: {
+    key: "smallTimeSkip",
+    cost: 10,
+    description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
+    instantPurchase: true,
+    onPurchase: () => {
+      shop.purchaseTimeSkip();
+    }
+  },
+  bigTimeSkip: {
+    key: "bigTimeSkip",
+    cost: 20,
+    description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
+    instantPurchase: true,
+    onPurchase: () => {
+      shop.purchaseLongerTimeSkip();
+    }
+  },
   singleCosmeticSet: {
     key: "singleCosmeticSet",
     cost: 20,
@@ -99,23 +117,5 @@ GameDatabase.shopPurchases = {
     },
     isUnlocked: () => PlayerProgress.realityUnlocked(),
     lockText: "Reality",
-  },
-  smallTimeSkip: {
-    key: "smallTimeSkip",
-    cost: 10,
-    description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
-    instantPurchase: true,
-    onPurchase: () => {
-      shop.purchaseTimeSkip();
-    }
-  },
-  bigTimeSkip: {
-    key: "bigTimeSkip",
-    cost: 20,
-    description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
-    instantPurchase: true,
-    onPurchase: () => {
-      shop.purchaseLongerTimeSkip();
-    }
   },*/
 };

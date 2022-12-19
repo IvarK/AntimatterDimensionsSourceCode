@@ -66,7 +66,7 @@ export default {
         effectiveMaxRG = Replicanti.galaxies.max;
         effectiveCurrentRG = Replicanti.galaxies.bought;
       }
-      const secondsPerGalaxy = baseGalaxiesPerSecond.reciprocal();
+      const secondsPerGalaxy = galaxiesPerSecond.reciprocal();
 
       if (this.remainingTimeText === "") {
         if (remainingTime === 0) {
@@ -104,6 +104,8 @@ export default {
           // To solve this problem, after 1e308, it uses the pending value as the basis of
           // how ""close"" you are to the next galaxy instead of replicanti amount,
           // which is a good enough best case approximation in my opinion.
+          // Note: This pending case ignores Reality Upgrade 6 but it's not really accurate anyway
+          // (basically assumes you'll get all your possible RGs now) so that's probably fine.
           const pending = Replicanti.galaxies.gain;
           let pendingTime = pending * secondsPerGalaxy.toNumber();
           // If popular music is unlocked add the divide amount

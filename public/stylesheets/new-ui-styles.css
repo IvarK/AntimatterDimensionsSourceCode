@@ -676,6 +676,15 @@ body.t-s9 {
   border: 0.1rem solid black;
 }
 
+.t-amoled .o-autobuyer-input,
+.t-amoled-metro .o-autobuyer-input,
+.t-amoled .c-autobuyer-box__mode-select,
+.t-amoled-metro .c-autobuyer-box__mode-select {
+  color: white;
+  background-color: black;
+  border: 0.1rem solid var(--color-accent);
+}
+
 .t-s1 .o-autobuyer-input,
 .t-s1 .c-autobuyer-box__mode-select {
   background-color: var(--color-base);

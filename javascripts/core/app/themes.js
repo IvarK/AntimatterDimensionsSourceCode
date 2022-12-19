@@ -138,6 +138,8 @@ export const Themes = {
     Theme.create("Dark Metro",      { dark: true,  metro: true,                               }),
     Theme.create("Inverted",        {                                                         }),
     Theme.create("Inverted Metro",  {              metro: true,                               }),
+    Theme.create("AMOLED",          { dark: true,                                             }),
+    Theme.create("AMOLED Metro",    { dark: true,  metro: true,                               }),
     Theme.create("S1",              {                           animated: true, secret: true, }),
     Theme.create("S2",              {                                           secret: true, }),
     Theme.create("S3",              {                                           secret: true, }),

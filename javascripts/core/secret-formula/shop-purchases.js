@@ -8,30 +8,24 @@ GameDatabase.shopPurchases = {
     description: "Double all your Antimatter Dimension multipliers. Forever.",
     multiplier: purchases => Math.pow(2, purchases)
   },
+  allDimPurchases: {
+    key: "allDimPurchases",
+    cost: 60,
+    description: () => {
+      const dims = ["Antimatter"];
+      if (InfinityDimension(1).isUnlocked || PlayerProgress.eternityUnlocked()) dims.push("Infinity");
+      if (PlayerProgress.eternityUnlocked()) dims.push("Time");
+      return `Double ALL Dimension multipliers (${makeEnumeration(dims)}; multiplicative until 32x). Forever.`;
+    },
+    multiplier: purchases => (purchases > 4 ? 32 + (purchases - 5) * 2 : Math.pow(2, purchases)),
+  },
   IPPurchases: {
     key: "IPPurchases",
     cost: 40,
     description: "Double your Infinity Point gain from all sources. (additive)",
     multiplier: purchases => (purchases === 0 ? 1 : 2 * purchases),
-  },
-  EPPurchases: {
-    key: "EPPurchases",
-    cost: 50,
-    description: "Triple your Eternity Point gain from all sources. (additive)",
-    multiplier: purchases => (purchases === 0 ? 1 : 3 * purchases),
-  },
-  RMPurchases: {
-    key: "RMPurchases",
-    cost: 60,
-    description: "Increase your Reality Machine gain by 100%. (additive)",
-    multiplier: purchases => purchases + 1,
-    formatEffect: x => formatX(x, 2),
-  },
-  allDimPurchases: {
-    key: "allDimPurchases",
-    cost: 60,
-    description: "Double ALL Dimension multipliers (Antimatter, Infinity, Time) (multiplicative until 32x). Forever.",
-    multiplier: purchases => (purchases > 4 ? 32 + (purchases - 5) * 2 : Math.pow(2, purchases)),
+    isUnlocked: () => PlayerProgress.infinityUnlocked(),
+    lockText: "Infinity",
   },
   replicantiPurchases: {
     key: "replicantiPurchases",
@@ -39,6 +33,16 @@ GameDatabase.shopPurchases = {
     description: "Increase your Replicanti gain by 50%. (additive)",
     multiplier: purchases => (purchases === 0 ? 1 : 1 + 0.5 * purchases),
     formatEffect: x => formatX(x, 2, 1),
+    isUnlocked: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked(),
+    lockText: "Replicanti",
+  },
+  EPPurchases: {
+    key: "EPPurchases",
+    cost: 50,
+    description: "Triple your Eternity Point gain from all sources. (additive)",
+    multiplier: purchases => (purchases === 0 ? 1 : 3 * purchases),
+    isUnlocked: () => PlayerProgress.eternityUnlocked(),
+    lockText: "Eternity",
   },
   dilatedTimePurchases: {
     key: "dilatedTimePurchases",
@@ -46,24 +50,17 @@ GameDatabase.shopPurchases = {
     description: "Increase your Dilated Time gain by 50%. (additive)",
     multiplier: purchases => (purchases === 0 ? 1 : 1 + 0.5 * purchases),
     formatEffect: x => formatX(x, 2, 1),
+    isUnlocked: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked(),
+    lockText: "Dilation",
   },
-  smallTimeSkip: {
-    key: "smallTimeSkip",
-    cost: 10,
-    description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
-    instantPurchase: true,
-    onPurchase: () => {
-      shop.purchaseTimeSkip();
-    }
-  },
-  bigTimeSkip: {
-    key: "bigTimeSkip",
-    cost: 20,
-    description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
-    instantPurchase: true,
-    onPurchase: () => {
-      shop.purchaseLongerTimeSkip();
-    }
+  RMPurchases: {
+    key: "RMPurchases",
+    cost: 60,
+    description: "Increase your Reality Machine gain by 100%. (additive)",
+    multiplier: purchases => purchases + 1,
+    formatEffect: x => formatX(x, 2),
+    isUnlocked: () => PlayerProgress.realityUnlocked(),
+    lockText: "Reality",
   },
   singleCosmeticSet: {
     key: "singleCosmeticSet",
@@ -77,7 +74,9 @@ GameDatabase.shopPurchases = {
         10000);
       GlyphAppearanceHandler.chosenFromModal = null;
       GlyphAppearanceHandler.applyNotification();
-    }
+    },
+    isUnlocked: () => PlayerProgress.realityUnlocked(),
+    lockText: "Reality",
   },/*
   allCosmeticSets: {
     key: "allCosmeticSets",
@@ -97,6 +96,26 @@ GameDatabase.shopPurchases = {
       // The actual unlocks are handled in the ShopPurchaseData object, so we just show notifications here
       GameUI.notify.info(`You have unlocked all sets for Glyph cosmetics!`, 15000);
       GlyphAppearanceHandler.applyNotification();
+    },
+    isUnlocked: () => PlayerProgress.realityUnlocked(),
+    lockText: "Reality",
+  },
+  smallTimeSkip: {
+    key: "smallTimeSkip",
+    cost: 10,
+    description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
+    instantPurchase: true,
+    onPurchase: () => {
+      shop.purchaseTimeSkip();
+    }
+  },
+  bigTimeSkip: {
+    key: "bigTimeSkip",
+    cost: 20,
+    description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
+    instantPurchase: true,
+    onPurchase: () => {
+      shop.purchaseLongerTimeSkip();
     }
   },*/
 };

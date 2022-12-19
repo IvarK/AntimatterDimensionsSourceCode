@@ -53,8 +53,7 @@ export default {
     purchaseButtonObject() {
       return {
         "o-shop-button-button": true,
-        "o-shop-button-button--disabled": !this.canAfford ||
-          (this.isSingleCosmeticSet && !this.hasChosen)
+        "o-shop-button-button--disabled": !this.canAfford || (this.isSingleCosmeticSet && !this.hasChosen)
       };
     }
   },
@@ -74,27 +73,37 @@ export default {
         Currently {{ purchase.formatEffect(currentMult) }}, next: {{ purchase.formatEffect(nextMult) }}
       </span>
     </div>
-    <div v-if="isSingleCosmeticSet && lockedCount">
-      <br>
-      <button
-        class="o-shop-button-button"
-        @click="openSelectionModal"
+    <div>
+      <div v-if="isSingleCosmeticSet">
+        <div
+          v-if="allSetsUnlocked"
+          class="o-shop-button-multiplier"
+        >
+          All Sets unlocked!
+        </div>
+        <div v-else>
+          <button
+            class="o-shop-button-button"
+            @click="openSelectionModal"
+          >
+            Choose Set
+          </button>
+          Chosen Set: {{ chosenSet }}
+        </div>
+      </div>
+      <div
+        v-if="isAllCosmeticSets"
+        class="o-shop-button-multiplier"
       >
-        Choose Set
-      </button>
-      Chosen Set: {{ chosenSet }}
-    </div>
-    <div v-if="isAllCosmeticSets && lockedCount">
-      Will unlock {{ quantify("set", lockedCount) }}
-    </div>
-    <div
-      v-if="allSetsUnlocked"
-      class="o-shop-button-multiplier"
-    >
-      All Sets unlocked!
+        <div v-if="allSetsUnlocked">
+          All Sets unlocked!
+        </div>
+        <div v-else>
+          Will unlock {{ quantify("set", lockedCount) }}
+        </div>
+      </div>
     </div>
     <button
-      v-else
       :class="purchaseButtonObject()"
       @click="SteamPurchase()"
     >
@@ -104,6 +113,12 @@ export default {
         class="o-shop-button-button__img"
       >
     </button>
+    <div
+      v-if="!purchase.isUnlocked()"
+      class="o-shop-button-locked-text"
+    >
+      This affects a feature you have not unlocked yet ({{ purchase.lockText }})
+    </div>
   </div>
 </template>
 
@@ -112,7 +127,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 30rem;
-  height: 16rem;
+  height: 18rem;
   justify-content: space-between;
   color: white;
   background: #3c3c3c;
@@ -154,5 +169,12 @@ export default {
 .o-shop-button-multiplier--disabled {
   color: red;
   text-decoration: line-through;
+}
+
+.o-shop-button-locked-text {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-bad);
 }
 </style>

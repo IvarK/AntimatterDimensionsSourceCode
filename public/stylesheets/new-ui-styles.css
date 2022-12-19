@@ -9,6 +9,9 @@
 
 :root {
   --sidebar-width: 12.8rem;
+  --color-antimatter--bg: #df50504d;
+  --color-infinity--bg: #b67f334d;
+  --color-eternity--bg: #b341e04d;
 }
 
 :root .t-normal,
@@ -721,14 +724,16 @@ body.t-s9 {
   align-content: center;
 }
 
-.c-dimension-row:nth-child(even) {
-  background-color: rgba(223, 80, 80, 30%);
+.l-dimension-row-antimatter-dim:nth-child(even) {
+  background-color: var(--color-antimatter--bg);
 }
 
-.t-metro .c-dimension-row:nth-child(even),
-.t-inverted-metro .c-dimension-row:nth-child(even),
-.t-s8 .c-dimension-row:nth-child(even) {
-  background-color: rgba(33, 150, 243, 30%);
+.l-dimension-row-infinity-dim:nth-child(even) {
+  background-color: var(--color-infinity--bg);
+}
+
+.l-dimension-row-time-dim:nth-child(even) {
+  background-color: var(--color-eternity--bg);
 }
 
 .c-infinity-dim-description__accent {

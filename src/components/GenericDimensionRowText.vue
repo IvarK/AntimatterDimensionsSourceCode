@@ -35,7 +35,7 @@ export default {
         : "";
     },
     showPercentage() {
-      return player.options.showHintText.showPercentage;
+      return player.options.showHintText.showPercentage || ui.view.shiftDown;
     },
 
   },

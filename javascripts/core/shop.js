@@ -115,7 +115,8 @@ class ShopPurchaseState extends RebuyableMechanicState {
   }
 
   get description() {
-    return this.config.description;
+    const desc = this.config.description;
+    return typeof desc === "function" ? desc() : desc;
   }
 
   get cost() {
@@ -129,6 +130,14 @@ class ShopPurchaseState extends RebuyableMechanicState {
 
   set purchases(value) {
     ShopPurchaseData[this.config.key] = value;
+  }
+
+  isUnlocked() {
+    return player.records.fullGameCompletions > 0 || (this.config.isUnlocked?.() ?? true);
+  }
+
+  get lockText() {
+    return this.config.lockText;
   }
 
   get shouldDisplayMult() {

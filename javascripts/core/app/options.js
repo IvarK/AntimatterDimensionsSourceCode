@@ -9,7 +9,7 @@ export class GameOptions {
   static toggleNews() {
     player.options.news.enabled = !player.options.news.enabled;
     ui.view.news = player.options.news.enabled;
-    GameStorage.save(true);
+    GameStorage.save();
   }
 
   static toggleUI() {
@@ -19,7 +19,7 @@ export class GameOptions {
     // So the classes on body need to be updated
     Themes.find(Theme.currentName()).set();
     SteamFunctions.UIZoom()
-    GameStorage.save(true);
+    GameStorage.save();
   }
 
   static cloudSave() {

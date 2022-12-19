@@ -1805,7 +1805,7 @@ br {
 }
 
 .t-dark .o-primary-btn--disabled {
-  background-color: #37474f;
+  background-color: #752626;
 }
 
 .t-dark .o-primary-btn--disabled:hover {
@@ -1829,7 +1829,7 @@ br {
 }
 
 .t-dark-metro .o-primary-btn--disabled {
-  background-color: #37474f;
+  background-color: #752626;
 }
 
 .t-dark-metro .o-primary-btn--disabled:hover {
@@ -8888,7 +8888,12 @@ kbd {
 
 .c-reality-upgrade-btn--possible {
   color: black;
-  background-color: #8b8529;
+  background: repeating-linear-gradient(
+    -45deg,
+    #979729,
+    #979729 3rem,
+    #777722 3rem,
+    #777722 6rem);
   cursor: default;
 }
 
@@ -8898,7 +8903,15 @@ kbd {
 }
 
 .c-reality-upgrade-btn--locked {
-  background-color: #a53939;
+  color: black;
+  background: #954040;
+  background-image:
+      linear-gradient(45deg, #a55252 25%, transparent 25%), 
+      linear-gradient(135deg, #a55252 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #a55252 75%),
+      linear-gradient(135deg, transparent 75%, #a55252 75%);
+  background-size: 4rem 4rem;
+  background-position: 0 0, 2rem 0, 2rem -2rem, 0 2rem;
   cursor: default;
 }
 

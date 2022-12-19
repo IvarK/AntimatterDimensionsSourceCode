@@ -120,7 +120,7 @@ export default {
         Respec Shop
       </PrimaryButton-->
     </div>
-    <!--div v-if="!canRespec">
+    <!--div v-if="loggedIn && !canRespec">
       Time until respec available: {{ respecTimeStr }}
     </div-->
     <div
@@ -243,6 +243,7 @@ export default {
 
 .l-shop-buttons-container {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   width: 93rem;
   margin: auto;

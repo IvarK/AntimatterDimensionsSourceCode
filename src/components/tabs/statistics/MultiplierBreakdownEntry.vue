@@ -366,7 +366,7 @@ export default {
           </div>
         </div>
       </div>
-      <div v-if="resource === 'AD_total'">
+      <div v-if="resource.key === 'AD_total'">
         <br>
         "Base AD Production" is the amount of Antimatter that you would be producing with your current AD upgrades
         as if you had waited a fixed amount of time ({{ formatInt(10) }}-{{ formatInt(40) }} seconds depending on

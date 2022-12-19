@@ -138,7 +138,8 @@ GameDatabase.news = [
   },
   {
     id: "a29",
-    text: "If you are not playing on Kongregate or ivark.github.io, the site is bootleg."
+    text: `If you are not playing on Kongregate, Steam, or https://ivark.github.io/AntimatterDimensions/,
+      the site is bootleg.`
   },
   {
     id: "a30",
@@ -436,7 +437,7 @@ GameDatabase.news = [
         },
         {
           name: "Synergism",
-          link: "https://pseudonian.github.io/SynergismOfficial/"
+          link: "https://pseudo-corp.github.io/SynergismOfficial/"
         },
         {
           name: "Universal Paperclips",

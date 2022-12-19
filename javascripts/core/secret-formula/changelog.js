@@ -28,7 +28,7 @@ GameDatabase.changelog = [
 <li>Added a How to Play modal with much more detail compared to the old How to Play.</li>
 <li>Added 5 new rows of achievements.</li>
 <li>Added a Multiplier Breakdown subtab.</li>
-<li>Added more Nicholas Cage.</li>
+<li>Added more Nicolas Cage.</li>
 <li>Cloud saving is now available to everyone. This needs your Google account.</li>
 <li>Shop tab is now available to everyone.</li>
 <li>Redesigned overall UI styling.</li>
@@ -102,6 +102,8 @@ Wording and Layout Changes:
 <li>Added colors to the Crunch/Eternity buttons when you have more than e50 of IP/EP; the color shows if you gain less
   (red), around same (white), or more (green) IP/EP than you currently have.</li>
 <li>Moved study 33 to right side.</li>
+<li>Changed "Normal Dimensions" to "Antimatter Dimensions".</li>
+<li>Changed "Challenges" to "Normal Challenges".</li>
 <li>Fixed some tpyos.</li>
 </ul>
 <br>
@@ -134,6 +136,7 @@ Balance Changes:
 <li>The 20-eternities milestone was moved to 8-eternities.</li>
 <li>Increased cost scaling for Time Dimensions after 1e6000.</li>
 <li>TS 83 has been hard capped.</li>
+<li>EC10 reward for less than 5 completions has been nerfed (reward at 5 completions is the same).</li>
 <li>Lowered the Dilation unlock requirement from 13000 to 12900 total TT.</li>
 <li>TP gain amount in Dilation is now calculated based on the highest AM reached.</li>
 <li>Purchasing the study to unlock Dilation now requires a 23rd row study purchase.</li>
@@ -192,6 +195,7 @@ Removed features:
 Bugfixes:
 <ul>
 <li>ID and replicanti autobuyer buttons are now hidden in EC8.</li>
+<li>Fixed next Sacrifice multiplier not properly displaying NC8's effect.</li>
 <li>Fixed a bug where IC5's cost increment was applied 2 times.</li>
 <li>Fixed a bug where inverted themes were broken.</li>
 <li>Fixed a bug where resetting the game unlocks a secret achievement.</li>

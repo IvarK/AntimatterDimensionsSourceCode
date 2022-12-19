@@ -28,7 +28,7 @@ GameDatabase.changelog = [
 <li>Added a How to Play modal with much more detail compared to the old How to Play.</li>
 <li>Added 5 new rows of achievements.</li>
 <li>Added a Multiplier Breakdown subtab.</li>
-<li>Added more Nicholas Cage.</li>
+<li>Added more Nicolas Cage.</li>
 <li>Cloud saving is now available to everyone. This needs your Google account.</li>
 <li>Shop tab is now available to everyone.</li>
 <li>Redesigned overall UI styling.</li>

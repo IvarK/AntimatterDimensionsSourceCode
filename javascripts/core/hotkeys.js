@@ -269,6 +269,41 @@ export const shortcuts = [
     function: () => keyboardEditAutobuyers(),
     visible: () => Autobuyers.hasAutobuyersForEditModal
   },
+  {
+    name: "Fullscreen",
+    keys: ["F10"],
+    type: "bind",
+    function: () => {},
+    visible: () => false
+  },
+  {
+    name: "Zoom In",
+    keys: ["ctrl", "="],
+    type: "bind",
+    function: () => {SteamFunctions.SetZoomLevel("Increase")},
+    visible: () => false
+  },
+  {
+    name: "Zoom In",
+    keys: ["ctrl", "+"],
+    type: "bind",
+    function: () => {SteamFunctions.SetZoomLevel("Increase")},
+    visible: () => false
+  },
+  {
+    name: "Zoom Out",
+    keys: ["ctrl", "-"],
+    type: "bind",
+    function: () => {SteamFunctions.SetZoomLevel("Decrease")},
+    visible: () => false
+  },
+  {
+    name: "Reset Zoom",
+    keys: ["ctrl", "0"],
+    type: "bind",
+    function: () => {SteamFunctions.ResetZoom()},
+    visible: () => false
+  },
 ];
 
 for (const hotkey of shortcuts) {

@@ -7,6 +7,7 @@ const SteamFunctions = {
     macUser: false,
     macInterval: 0,
     macIntervalOn: false,
+    zoomLevel: 1,
     SteamInitialize() {
         this.forceRefresh();
         //this.BackfillAchievements();
@@ -14,6 +15,7 @@ const SteamFunctions = {
         if (window.navigator.platform === "MacIntel") {
           SteamFunctions.macUser = true;
         }
+        this.GetZoom()
     },
     // Canvas workaround to enable overlay
     forceRefresh() { 
@@ -23,15 +25,42 @@ const SteamFunctions = {
         window.requestAnimationFrame(SteamFunctions.forceRefresh);
     },
     UIZoom() {
-        if (nodeOn && ui.view.newUI) {
+        if (nodeOn) {
             const setSize = 1020;
             const SizeDiff = window.outerHeight / setSize;
-            require("electron").webFrame.setZoomFactor(SizeDiff);
-        } else if (nodeOn && !ui.view.newUI) {
-            const setSize = 1020;
-            const SizeDiff = window.outerHeight / setSize;
-            require("electron").webFrame.setZoomFactor(SizeDiff);
+            require("electron").webFrame.setZoomFactor(SizeDiff*SteamFunctions.zoomLevel);
         }
+    },
+    SetZoomLevel(ZoomType){
+        const zoomMAXed = SteamFunctions.zoomLevel >= 1.5 && ZoomType==="Increase"
+        const zoomMINed = SteamFunctions.zoomLevel <= 0.5 && ZoomType==="Decrease"
+        const zoomPossible = !(zoomMAXed || zoomMINed)
+        if(zoomPossible){
+            ZoomType==="Increase" && !zoomMAXed ? SteamFunctions.zoomLevel += .1 : SteamFunctions.zoomLevel = SteamFunctions.zoomLevel
+            ZoomType==="Decrease" && !zoomMINed ? SteamFunctions.zoomLevel -= .1 : SteamFunctions.zoomLevel = SteamFunctions.zoomLevel
+            SteamFunctions.zoomLevel = Math.round(SteamFunctions.zoomLevel * 10) / 10
+            localStorage.setItem("Zoom",SteamFunctions.zoomLevel)
+            SteamFunctions.UIZoom()
+            GameUI.notify.info(`Size changed to ${Math.round(SteamFunctions.zoomLevel*100)}%`)
+        }else{
+            zoomMAXed ? GameUI.notify.info(`Zoom Level is at Maximum`) : GameUI.notify.info(`Zoom Level is at Minimum`)
+        }
+    },
+    GetZoom(){
+        let zoomGet;
+        if(localStorage.getItem("Zoom")){
+            zoomGet = Number(localStorage.getItem("Zoom"))
+        }else{
+            localStorage.setItem("Zoom",1)
+            zoomGet = 1
+        } 
+        SteamFunctions.zoomLevel = zoomGet
+    },
+    ResetZoom(){
+        localStorage.setItem("Zoom",1)
+        SteamFunctions.zoomLevel = 1
+        SteamFunctions.UIZoom()
+        GameUI.notify.info(`Size reverted to 100%`)
     },
     EventHandlers() {
         Steam.on("micro-txn-authorization-response", (data, ordered, orderstate) => {

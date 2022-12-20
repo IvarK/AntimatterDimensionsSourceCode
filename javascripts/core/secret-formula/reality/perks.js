@@ -128,8 +128,7 @@ GameDatabase.reality.perks = {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
-    description: `After the first Eternity of a Reality,
-      automatically unlock the first row of Eternity Upgrades for free.`,
+    description: `Automatically unlock the first row of Eternity Upgrades for free once you have Eternities.`,
     defaultPosition: new Vector(50, 150)
   },
   autounlockEU2: {

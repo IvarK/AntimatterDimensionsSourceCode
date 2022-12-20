@@ -25,9 +25,9 @@ input.t-amoled-metro {
 }
 
 .t-amoled-metro .c-tt-buy-button--locked {
-  color: white;
+  color: var(--color-bad);
   background: black;
-  border: 0.1rem solid #3aacd6;
+  border: 0.1rem solid var(--color-bad);
 }
 
 .t-amoled-metro .c-tt-buy-button--locked:hover {

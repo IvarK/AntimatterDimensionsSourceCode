@@ -669,6 +669,10 @@ export function finishProcessReality(realityProps) {
 
   if (TeresaUnlocks.startEU.canBeApplied) {
     for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
+  } else if (RealityUpgrade(14).isBought) {
+    // Eternal flow will always give eternities after the first tick,
+    // better to try apply EU1 immediately once at the start rather than on every tick
+    applyRealityUpgradesAfterEternity();
   }
 
   if (!isReset) Ra.applyAlchemyReactions(realityRealTime);
@@ -729,6 +733,8 @@ export function applyRUPG10() {
   Currency.eternities.bumpTo(100);
   Replicanti.amount = Replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
+
+  applyRealityUpgradesAfterEternity();
 }
 
 export function clearCelestialRuns() {

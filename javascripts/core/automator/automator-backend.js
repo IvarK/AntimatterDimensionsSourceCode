@@ -859,6 +859,7 @@ export const AutomatorBackend = {
     this.hasJustCompleted = false;
     this.state.topLevelScript = scriptID;
     const scriptObject = this.findScript(scriptID);
+    if (!scriptObject) return;
     if (compile) scriptObject.compile();
     if (scriptObject.commands) {
       this.reset(scriptObject.commands);

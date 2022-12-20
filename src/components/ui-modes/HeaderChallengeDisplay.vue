@@ -136,7 +136,7 @@ export default {
         const part = this.parts[i];
         if (!part.isActive(token)) continue;
         fullName = part.name(token);
-        celestial = part.tabName();
+        celestial = part.tabName?.();
         break;
       }
 
@@ -193,6 +193,7 @@ export default {
 
 .l-challenge-display--clickable {
   cursor: pointer;
+  user-select: none;
 }
 
 .l-challenge-display--clickable:hover {

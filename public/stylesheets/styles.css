@@ -1805,7 +1805,7 @@ br {
 }
 
 .t-dark .o-primary-btn--disabled {
-  background-color: #752626;
+  background-color: #37474f;
 }
 
 .t-dark .o-primary-btn--disabled:hover {
@@ -1829,7 +1829,7 @@ br {
 }
 
 .t-dark-metro .o-primary-btn--disabled {
-  background-color: #752626;
+  background-color: #37474f;
 }
 
 .t-dark-metro .o-primary-btn--disabled:hover {
@@ -2114,7 +2114,7 @@ br {
 }
 
 .l--spoon-btn-group__little-spoon-reality-btn {
-  width: 21.5rem;
+  width: 20rem;
   align-self: center;
   margin-top: -0.9rem;
   margin-bottom: 1.2rem;
@@ -8816,12 +8816,12 @@ kbd {
 .l-reality-upgrade-btn {
   display: flex;
   flex-direction: column;
-  width: 21.5rem;
+  width: 20.5rem;
   height: 10rem;
   position: relative;
   justify-content: center;
   align-items: center;
-  margin: 1.2rem 0.7rem;
+  margin: 1.2rem;
   padding: 0 0.5rem;
 }
 

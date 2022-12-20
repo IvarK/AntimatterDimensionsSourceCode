@@ -270,7 +270,7 @@ function buyUntilTen(tier) {
 }
 
 export function maxAll() {
-  if (Laitela.continuumActive || Currency.antimatter.gt(Player.infinityLimit)) return;
+  if (Laitela.continuumActive) return;
 
   player.requirementChecks.infinity.maxAll = true;
 
@@ -475,8 +475,9 @@ class AntimatterDimensionState extends DimensionState {
     // Nameless limits dim 8 purchases to 1 only
     // Continuum should be no different
     if (this.tier === 8 && Enslaved.isRunning) return 1;
-    // It's safe to use dimension.currencyAmount because this is a dimension-only method (so don't just copy it over to tickspeed).
-    // It's required because of different costs in NC6.
+    // It's safe to use dimension.currencyAmount because this is
+    // a dimension-only method (so don't just copy it over to tickspeed).
+    // We need to use dimension.currencyAmount here because of different costs in NC6.
     return this.costScale.getContinuumValue(this.currencyAmount, 10) * Laitela.matterExtraPurchaseFactor;
   }
 
@@ -524,7 +525,6 @@ class AntimatterDimensionState extends DimensionState {
   }
 
   get isAvailableForPurchase() {
-    if (Currency.antimatter.gt(Player.infinityLimit)) return false;
     if (!EternityMilestone.unlockAllND.isReached && this.tier > DimBoost.totalBoosts + 4) return false;
     const hasPrevTier = this.tier === 1 || AntimatterDimension(this.tier - 1).totalAmount.gt(0);
     if (!EternityMilestone.unlockAllND.isReached && !hasPrevTier) return false;

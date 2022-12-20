@@ -2114,7 +2114,7 @@ br {
 }
 
 .l--spoon-btn-group__little-spoon-reality-btn {
-  width: 20rem;
+  width: 21.5rem;
   align-self: center;
   margin-top: -0.9rem;
   margin-bottom: 1.2rem;
@@ -8816,12 +8816,12 @@ kbd {
 .l-reality-upgrade-btn {
   display: flex;
   flex-direction: column;
-  width: 20.5rem;
+  width: 21.5rem;
   height: 10rem;
   position: relative;
   justify-content: center;
   align-items: center;
-  margin: 1.2rem;
+  margin: 1.2rem 0.7rem;
   padding: 0 0.5rem;
 }
 

@@ -32,6 +32,8 @@ export default {
     return {
       input: "",
       name: "",
+      eternityAndLoad: false,
+      canEternity: false
     };
   },
   computed: {
@@ -141,10 +143,24 @@ export default {
     this.$refs.input.select();
   },
   methods: {
+    update() {
+      this.canEternity = Player.canEternity;
+    },
     confirm() {
-      if (this.deleting) this.deletePreset();
-      else if (this.isImporting) this.importTree();
-      else this.savePreset();
+      if (this.deleting) {
+        this.deletePreset();
+      } else if (this.isImporting) {
+        if (this.eternityAndLoad && Player.canEternity) {
+          player.respec = true;
+          const shouldDelayImport = animateAndEternity();
+          const studies = new TimeStudyTree(this.truncatedInput).purchasedStudies;
+          setTimeout(() => TimeStudyTree.commitToGameState(studies, false), shouldDelayImport ? 2500 : 0);
+          return;
+        }
+        this.importTree();
+      } else {
+        this.savePreset();
+      }
     },
     convertInputShorthands() {
       this.input = TimeStudyTree.formatStudyList(this.input);
@@ -253,6 +269,30 @@ export default {
         Format Preset Text
       </PrimaryButton>
     </div>
+    <div
+      v-if="isImporting"
+      :class="{
+        'c-modal__confirmation-toggle': true,
+        'c-modal__confirmation-toggle--disabled': !canEternity
+      }"
+      :disabled="!canEternity"
+      @click="eternityAndLoad = !eternityAndLoad"
+    >
+      <div
+        :class="{
+          'c-modal__confirmation-toggle__checkbox': true,
+          'c-modal__confirmation-toggle__checkbox--active': eternityAndLoad
+        }"
+      >
+        <span
+          v-if="eternityAndLoad"
+          class="fas fa-check"
+        />
+      </div>
+      <span class="c-modal__confirmation-toggle__text">
+        Also respec tree and eternity
+      </span>
+    </div>
     <template #confirm-text>
       {{ confirmText }}
     </template>
@@ -265,5 +305,9 @@ export default {
   background-color: var(--color-disabled);
   pointer-events: none;
   user-select: none;
+}
+
+.c-modal__confirmation-toggle--disabled {
+  opacity: 0.7;
 }
 </style>

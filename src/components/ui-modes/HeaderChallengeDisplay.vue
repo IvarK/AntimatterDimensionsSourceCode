@@ -141,11 +141,11 @@ export default {
       }
 
       // Normal challenges are matched with an end-of-string metacharacter
-      if (fullName.match(" Challenge$")) Tab.challenges.normal.show();
-      else if (fullName.match("Infinity Challenge")) Tab.challenges.infinity.show();
-      else if (fullName.match("Eternity Challenge")) Tab.challenges.eternity.show();
-      else if (player.dilation.active) Tab.eternity.dilation.show();
-      else Tab.celestials[celestial].show();
+      if (fullName.match(" Challenge$")) Tab.challenges.normal.show(true);
+      else if (fullName.match("Infinity Challenge")) Tab.challenges.infinity.show(true);
+      else if (fullName.match("Eternity Challenge")) Tab.challenges.eternity.show(true);
+      else if (player.dilation.active) Tab.eternity.dilation.show(true);
+      else Tab.celestials[celestial].show(true);
     },
     exitDisplay() {
       if (Player.isInAnyChallenge) return "Exit Challenge";

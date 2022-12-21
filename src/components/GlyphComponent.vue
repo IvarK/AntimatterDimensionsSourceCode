@@ -402,25 +402,14 @@ export default {
       }
       this.scoreMode = AutoGlyphProcessor.scoreMode;
     },
-    moveTooltipTo(x, y, ev) {
+    moveTooltipTo(x, y) {
       // If we are just creating the tooltip now, we can't move it yet.
       if (!this.$refs.tooltip) return;
       const tooltipEl = this.$refs.tooltip.$el;
       if (tooltipEl) {
         const rect = document.body.getBoundingClientRect();
-
-        // On S7, we want tooltips to be static
-        let dx, dy;
-        if (Theme.current().name === "S7") {
-          dx = rect.left + ev.offsetX;
-          dy = rect.top + ev.offsetY;
-        } else {
-          dx = rect.left;
-          dy = rect.top;
-        }
-
-        tooltipEl.style.left = `${x - dx}px`;
-        tooltipEl.style.top = `${y - dy}px`;
+        tooltipEl.style.left = `${x - rect.left}px`;
+        tooltipEl.style.top = `${y - rect.top}px`;
         if (this.$viewModel.tabs.reality.glyphTooltipDirection === 1) {
           // In case of a really short screen, don't flicker back and forth
           if (y - tooltipEl.offsetHeight <= 0 && y + tooltipEl.offsetHeight < rect.height) {
@@ -447,7 +436,7 @@ export default {
     },
     mouseMove(ev) {
       if (this.isTouched) return;
-      this.moveTooltipTo(ev.clientX, ev.clientY, ev);
+      this.moveTooltipTo(ev.clientX, ev.clientY);
     },
     dragStart(ev) {
       this.hideTooltip();

@@ -80,8 +80,8 @@ export default {
       for (let tabIndex = 0; tabIndex < GameDatabase.tabs.length; tabIndex++) {
         player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.includes(tabIndex) ? -1 : 0;
       }
-      GameStorage.save(true);
       Pelle.quotes.initial.show();
+      GameStorage.save(true);
     },
   },
 };

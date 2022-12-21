@@ -56,6 +56,7 @@ export default {
       player.options.confirmations.glyphReplace = true;
       player.reality.automator.state.repeat = false;
       player.reality.automator.state.forceRestart = false;
+      if (BlackHoles.arePaused) BlackHoles.togglePause();
       player.celestials.pelle.doomed = true;
       Pelle.armageddon(false);
       respecTimeStudies(true);
@@ -79,6 +80,7 @@ export default {
       for (let tabIndex = 0; tabIndex < GameDatabase.tabs.length; tabIndex++) {
         player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.includes(tabIndex) ? -1 : 0;
       }
+      GameStorage.save(true);
       Pelle.quotes.initial.show();
     },
   },

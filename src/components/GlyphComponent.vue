@@ -435,7 +435,7 @@ export default {
       this.hideTooltip();
     },
     mouseMove(ev) {
-      if (this.isTouched || Theme.current().name === "S7") return;
+      if (this.isTouched) return;
       this.moveTooltipTo(ev.clientX, ev.clientY);
     },
     dragStart(ev) {

@@ -356,9 +356,11 @@ GameKeyboard.bind(
 
 // Toggle autobuyers
 function toggleAutobuyer(buyer) {
+  // Autobuyer.tickspeed.isUnlocked is false without NC9, but we still want the simpler one to be togglable via hotkey
+  const isSimpleTickspeed = buyer === Autobuyer.tickspeed && buyer.isBought;
   if (buyer.disabledByContinuum) {
     GameUI.notify.info("Continuum is enabled, you cannot alter this autobuyer");
-  } else if (buyer.isUnlocked) {
+  } else if (buyer.isUnlocked || isSimpleTickspeed) {
     buyer.toggle();
     GameUI.notify.info(`${buyer.name} Autobuyer toggled ${(buyer.isActive) ? "on" : "off"}`);
   }

@@ -270,7 +270,7 @@ function buyUntilTen(tier) {
 }
 
 export function maxAll() {
-  if (Laitela.continuumActive || Currency.antimatter.gt(Player.infinityLimit)) return;
+  if (Laitela.continuumActive) return;
 
   player.requirementChecks.infinity.maxAll = true;
 
@@ -297,7 +297,8 @@ export function buyMaxDimension(tier, bulk = Infinity) {
   }
 
   // Buy any remaining until 10 before attempting to bulk-buy
-  if (Currency.antimatter.purchase(cost)) {
+  if (dimension.currencyAmount.gte(cost)) {
+    dimension.currencyAmount = dimension.currencyAmount.minus(cost);
     buyUntilTen(tier);
     bulkLeft--;
   }
@@ -307,7 +308,9 @@ export function buyMaxDimension(tier, bulk = Infinity) {
   // Buy in a while loop in order to properly trigger abnormal price increases
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
     while (dimension.isAffordableUntil10 && dimension.cost.lt(goal) && bulkLeft > 0) {
-      Currency.antimatter.subtract(dimension.costUntil10);
+      // We can use dimension.currencyAmount or Currency.antimatter here, they're the same,
+      // but it seems safest to use dimension.currencyAmount for consistency.
+      dimension.currencyAmount = dimension.currencyAmount.minus(dimension.costUntil10);
       buyUntilTen(tier);
       bulkLeft--;
     }
@@ -326,11 +329,6 @@ export function buyMaxDimension(tier, bulk = Infinity) {
   dimension.amount = dimension.amount.plus(10 * buying).round();
   dimension.bought += 10 * buying;
   dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
-}
-
-
-export function canAfford(cost) {
-  return (player.break || cost.lt(Decimal.NUMBER_MAX_VALUE)) && Currency.antimatter.gte(cost);
 }
 
 class AntimatterDimensionState extends DimensionState {
@@ -477,7 +475,10 @@ class AntimatterDimensionState extends DimensionState {
     // Nameless limits dim 8 purchases to 1 only
     // Continuum should be no different
     if (this.tier === 8 && Enslaved.isRunning) return 1;
-    return this.costScale.getContinuumValue(Currency.antimatter.value, 10) * Laitela.matterExtraPurchaseFactor;
+    // It's safe to use dimension.currencyAmount because this is
+    // a dimension-only method (so don't just copy it over to tickspeed).
+    // We need to use dimension.currencyAmount here because of different costs in NC6.
+    return this.costScale.getContinuumValue(this.currencyAmount, 10) * Laitela.matterExtraPurchaseFactor;
   }
 
   /**
@@ -524,7 +525,6 @@ class AntimatterDimensionState extends DimensionState {
   }
 
   get isAvailableForPurchase() {
-    if (Currency.antimatter.gt(Player.infinityLimit)) return false;
     if (!EternityMilestone.unlockAllND.isReached && this.tier > DimBoost.totalBoosts + 4) return false;
     const hasPrevTier = this.tier === 1 || AntimatterDimension(this.tier - 1).totalAmount.gt(0);
     if (!EternityMilestone.unlockAllND.isReached && !hasPrevTier) return false;

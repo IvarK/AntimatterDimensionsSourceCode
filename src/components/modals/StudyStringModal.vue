@@ -269,30 +269,35 @@ export default {
         Format Preset Text
       </PrimaryButton>
     </div>
-    <div
-      v-if="isImporting"
-      :class="{
-        'c-modal__confirmation-toggle': true,
-        'c-modal__confirmation-toggle--disabled': !canEternity
-      }"
-      :disabled="!canEternity"
-      @click="eternityAndLoad = !eternityAndLoad"
-    >
+    <span v-if="isImporting">
+      <br>
       <div
-        :class="{
-          'c-modal__confirmation-toggle__checkbox': true,
-          'c-modal__confirmation-toggle__checkbox--active': eternityAndLoad
-        }"
+        v-tooltip="canEternity ? '' : 'You are currently unable to eternity, so this will only do a normal load.'"
+        class="c-modal__confirmation-toggle"
+        @click="eternityAndLoad = !eternityAndLoad"
       >
-        <span
-          v-if="eternityAndLoad"
-          class="fas fa-check"
-        />
+        <div
+          :class="{
+            'c-modal__confirmation-toggle__checkbox': true,
+            'c-modal__confirmation-toggle__checkbox--active': eternityAndLoad,
+          }"
+        >
+          <span
+            v-if="eternityAndLoad"
+            class="fas fa-check"
+          />
+        </div>
+        <span class="c-modal__confirmation-toggle__text">
+          Also respec tree and eternity
+          <span
+            v-if="!canEternity"
+            class="c-modal__confirmation-toggle__warning"
+          >
+            !
+          </span>
+        </span>
       </div>
-      <span class="c-modal__confirmation-toggle__text">
-        Also respec tree and eternity
-      </span>
-    </div>
+    </span>
     <template #confirm-text>
       {{ confirmText }}
     </template>
@@ -307,7 +312,21 @@ export default {
   user-select: none;
 }
 
-.c-modal__confirmation-toggle--disabled {
-  opacity: 0.7;
+.c-modal__confirmation-toggle__text {
+  opacity: 1;
+}
+
+.c-modal__confirmation-toggle__warning {
+  display: inline-flex;
+  /* stylelint-disable-next-line unit-allowed-list */
+  width: 1em;
+  /* stylelint-disable-next-line unit-allowed-list */
+  height: 1em;
+  justify-content: center;
+  align-items: center;
+  color: #332222;
+  background: var(--color-bad);
+  border-radius: 100%;
+  margin-left: 0.3rem;
 }
 </style>

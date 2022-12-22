@@ -6,6 +6,10 @@ export default {
       type: Object,
       required: true
     },
+    forceIsBought: {
+      type: [Boolean, undefined],
+      default: undefined
+    },
     isNewFromImport: {
       type: Boolean,
       default: false
@@ -81,7 +85,7 @@ export default {
     update() {
       const study = this.study;
       this.isUseless = Pelle.uselessTimeStudies.includes(this.study.id) && Pelle.isDoomed;
-      this.isBought = study.isBought;
+      this.isBought = this.forceIsBought ?? study.isBought;
       this.doomedRealityStudy = study.type === TIME_STUDY_TYPE.DILATION && study.id === 6 && Pelle.isDoomed;
     },
   }

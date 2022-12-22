@@ -11,8 +11,12 @@ export default {
     PseudoTimeStudyConnection,
   },
   props: {
-    treeStatus: {
-      type: [Object, Boolean],
+    disregardCurrentStudies: {
+      type: Boolean,
+      default: false
+    },
+    newStudies: {
+      type: [Object, undefined],
       required: true
     },
     showPreview: {
@@ -35,10 +39,6 @@ export default {
     },
     studies() {
       return this.layout.studies;
-    },
-    newStudies() {
-      // NewStudies is formatted using makeEnumeration so we need to convert it back to an array
-      return this.treeStatus.newStudies.replace(", and ", ", ").replace(" and ", ", ").split(", ");
     },
     connections() {
       return this.layout.connections;
@@ -99,7 +99,8 @@ export default {
         v-for="setup in studies"
         :key="setup.study.type.toString() + setup.study.id.toString()"
         :setup="setup"
-        :is-new-from-import="newStudies.includes(studyString(setup.study))"
+        :force-is-bought="disregardCurrentStudies ? newStudies.includes(studyString(setup.study)) : undefined"
+        :is-new-from-import="!disregardCurrentStudies && newStudies.includes(studyString(setup.study))"
       />
       <svg
         :style="treeStyleObject"
@@ -108,6 +109,10 @@ export default {
         <PseudoTimeStudyConnection
           v-for="(setup, index) in connections"
           :key="'connection' + index"
+          :force-is-bought="disregardCurrentStudies ?
+            newStudies.includes(studyString(setup.connection.to)) &&
+            newStudies.includes(studyString(setup.connection.from))
+            : undefined"
           :setup="setup"
         />
       </svg>

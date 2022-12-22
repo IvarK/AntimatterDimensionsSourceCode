@@ -43,12 +43,14 @@ export default {
     },
     // This represents the state reached from importing into an empty tree
     importedTree() {
-      if (!this.inputIsValidTree) return false;
+      if (!this.inputIsValidTree) return {};
       const importedTree = new TimeStudyTree(this.truncatedInput);
+      const newStudiesArray = importedTree.purchasedStudies.map(s => this.studyString(s));
       return {
         timeTheorems: importedTree.spentTheorems[0],
         spaceTheorems: importedTree.spentTheorems[1],
-        newStudies: makeEnumeration(importedTree.purchasedStudies.map(s => this.studyString(s))),
+        newStudies: makeEnumeration(newStudiesArray),
+        newStudiesArray,
         invalidStudies: importedTree.invalidStudies,
         firstPaths: makeEnumeration(importedTree.dimensionPaths),
         secondPaths: makeEnumeration(importedTree.pacePaths),
@@ -59,14 +61,16 @@ export default {
     // This is only shown when importing; when modifying a preset we assume that generally the current state of the
     // tree is irrelevant because if it mattered then the player would simply import instead
     combinedTree() {
-      if (!this.inputIsValidTree) return false;
+      if (!this.inputIsValidTree) return {};
       const currentStudyTree = GameCache.currentStudyTree.value;
       const combinedTree = this.combinedTreeObject;
+      const newStudiesArray = combinedTree.purchasedStudies
+        .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => this.studyString(s));
       return {
         timeTheorems: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
         spaceTheorems: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
-        newStudies: makeEnumeration(combinedTree.purchasedStudies
-          .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => this.studyString(s))),
+        newStudies: makeEnumeration(newStudiesArray),
+        newStudiesArray,
         firstPaths: makeEnumeration(combinedTree.dimensionPaths),
         secondPaths: makeEnumeration(combinedTree.pacePaths),
         ec: combinedTree.ec,
@@ -253,7 +257,9 @@ export default {
       <StudyStringPreview
         v-if="!deleting"
         :show-preview="inputIsValidTree"
-        :tree-status="combinedTree"
+        :new-studies="!isImporting || (canEternity && eternityAndLoad) ? importedTree.newStudiesArray
+          : combinedTree.newStudiesArray"
+        :disregard-current-studies="!isImporting || (canEternity && eternityAndLoad)"
       />
       <div v-else-if="hasInput">
         Not a valid tree

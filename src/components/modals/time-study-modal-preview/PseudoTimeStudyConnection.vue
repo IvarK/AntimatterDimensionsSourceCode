@@ -5,7 +5,11 @@ export default {
     setup: {
       type: Object,
       required: true
-    }
+    },
+    forceIsBought: {
+      type: [Boolean, undefined],
+      default: undefined
+    },
   },
   data() {
     return {
@@ -55,7 +59,7 @@ export default {
   methods: {
     update() {
       this.isOverridden = this.setup.connection.isOverridden;
-      this.isBought = this.setup.isBought;
+      this.isBought = this.forceIsBought ?? this.setup.isBought;
     },
     percents(value) {
       return `${value * 100}%`;

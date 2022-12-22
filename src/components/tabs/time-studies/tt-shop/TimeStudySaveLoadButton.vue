@@ -16,6 +16,7 @@ export default {
     return {
       name: "",
       displayName: "",
+      canEternity: false
     };
   },
   computed: {
@@ -27,6 +28,7 @@ export default {
     update() {
       this.name = player.timestudy.presets[this.saveslot - 1].name;
       this.displayName = this.name === "" ? this.saveslot : this.name;
+      this.canEternity = Player.canEternity;
     },
     nicknameBlur(event) {
       const newName = event.target.value.slice(0, 4).trim();
@@ -63,6 +65,15 @@ export default {
         GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
       } else {
         Modal.message.show("This Time Study list currently contains no Time Studies.");
+      }
+    },
+    eternityAndLoad() {
+      if (Player.canEternity) {
+        player.respec = true;
+        const shouldDelayImport = animateAndEternity();
+        const newTree = new TimeStudyTree();
+        newTree.attemptBuyArray(newTree.parseStudyImport(this.preset.studies));
+        setTimeout(() => TimeStudyTree.commitToGameState(studies, false), shouldDelayImport ? 2500 : 0);
       }
     },
     deletePreset() {
@@ -125,11 +136,24 @@ export default {
         >
           Save
         </div>
-        <div
-          class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item"
-          @click="load"
-        >
-          Load
+        <div class="l-tt-save-load-btn__menu-item">
+          <div
+            class="c-tt-save-load-btn__menu-item"
+            @click="load"
+          >
+            Load
+          </div>
+          <div class="c-tt-save-load-btn__menu-item__hover-options">
+            <div
+              :class="{
+                'c-tt-save-load-btn__menu-item__hover-option': true,
+                'c-tt-save-load-btn__menu-item__hover-option--disabled': !canEternity,
+              }"
+              @click="eternityAndLoad"
+            >
+              Eternity and Load
+            </div>
+          </div>
         </div>
         <div
           class="l-tt-save-load-btn__menu-item c-tt-save-load-btn__menu-item"
@@ -196,12 +220,72 @@ export default {
 }
 
 .l-tt-save-load-btn__menu-item {
-  padding: 0.25rem 1rem;
+  position: relative;
   cursor: pointer;
+}
+
+.c-tt-save-load-btn__menu-item {
+  text-align: left;
+  padding: 0.25rem 1rem;
 }
 
 .c-tt-save-load-btn__menu-item:hover {
   color: black;
   background: white;
+}
+
+.c-tt-save-load-btn__menu-item__hover-options {
+  visibility: hidden;
+  width: fit-content;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  opacity: 0;
+  color: white;
+  background: black;
+  border: 0.1rem solid black;
+  border-radius: var(--var-border-width, 0.5rem);
+  transform: translateX(0.5rem);
+  transition: visibility 0.2s, opacity 0.2s;
+  transition-delay: 0.5s;
+  cursor: pointer;
+}
+
+.c-tt-save-load-btn__menu-item__hover-option {
+  white-space: nowrap;
+  padding: 0.25rem 1rem;
+}
+
+.c-tt-save-load-btn__menu-item__hover-options::after {
+  content: "";
+  position: absolute;
+  /* A single menu item is 26px tall, minus 5px from the border */
+  top: 0.8rem;
+  right: 100%;
+  border-top: 0.5rem solid transparent;
+  border-right: 0.5rem solid black;
+  border-bottom: 0.5rem solid transparent;
+}
+
+.c-tt-save-load-btn__menu-item:hover,
+.c-tt-save-load-btn__menu-item__hover-option:hover {
+  color: black;
+  background: white;
+}
+
+.l-tt-save-load-btn__menu-item:hover .c-tt-save-load-btn__menu-item__hover-options {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+.c-tt-save-load-btn__menu-item__hover-option--disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.c-tt-save-load-btn__menu-item__hover-option--disabled:hover {
+  color: white;
+  background: transparent;
 }
 </style>

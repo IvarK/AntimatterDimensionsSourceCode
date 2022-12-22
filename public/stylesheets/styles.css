@@ -551,16 +551,6 @@ button:focus {
   padding: 0.2rem;
 }
 
-.l-tt-save-load-btn__menu-item {
-  padding: 0.25rem 1rem;
-  cursor: pointer;
-}
-
-.c-tt-save-load-btn__menu-item:hover {
-  color: black;
-  background: white;
-}
-
 .c-tt-autobuyer-toggle {
   color: initial;
 }
@@ -1461,8 +1451,8 @@ br {
   background-color: var(--color-background);
   border: var(--var-border-width, 0.2rem) solid var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);
-  padding: 0.5rem;
   margin-top: -0.4rem;
+  padding: 0.5rem;
   transition-duration: 0.3s;
   pointer-events: none;
 }
@@ -1485,11 +1475,11 @@ br {
   position: absolute;
   top: 2.8rem;
   right: 100%;
-  border-right: 0 solid black;
   border-top: 0.6rem solid transparent;
+  border-right: 0 solid black;
   border-bottom: 0.6rem solid transparent;
-  transform: translateY(-50%);
   margin-right: 0.1rem;
+  transform: translateY(-50%);
   transition-duration: 0.3s;
 }
 
@@ -5634,10 +5624,10 @@ properly on certain themes. */
 }
 
 .c-modal-away-progress__resources div {
+  min-width: 55rem;
   border-bottom: 0.1rem solid var(--color-text);
   margin-bottom: 0.2rem;
   padding-bottom: 0.2rem;
-  min-width: 55rem;
   cursor: pointer;
 }
 
@@ -8888,12 +8878,14 @@ kbd {
 
 .c-reality-upgrade-btn--possible {
   color: black;
-  background: repeating-linear-gradient(
-    -45deg,
-    #979729,
-    #979729 3rem,
-    #777722 3rem,
-    #777722 6rem);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      #979729,
+      #979729 3rem,
+      #777722 3rem,
+      #777722 6rem
+    );
   cursor: default;
 }
 
@@ -8906,12 +8898,12 @@ kbd {
   color: black;
   background: #954040;
   background-image:
-      linear-gradient(45deg, #a55252 25%, transparent 25%), 
-      linear-gradient(135deg, #a55252 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, #a55252 75%),
-      linear-gradient(135deg, transparent 75%, #a55252 75%);
-  background-size: 4rem 4rem;
+    linear-gradient(45deg, #a55252 25%, transparent 25%),
+    linear-gradient(135deg, #a55252 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #a55252 75%),
+    linear-gradient(135deg, transparent 75%, #a55252 75%);
   background-position: 0 0, 2rem 0, 2rem -2rem, 0 2rem;
+  background-size: 4rem 4rem;
   cursor: default;
 }
 
@@ -9214,13 +9206,13 @@ input.o-automator-block-input {
 
 .l-h2p-modal {
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   /* stylelint-disable-next-line unit-allowed-list */
   width: calc(100vw - 20vh);
   /* stylelint-disable-next-line unit-allowed-list */
   height: calc(100vh - 20vh);
   margin: 0.5rem;
-  overflow: hidden;
 }
 
 .l-h2p-container {

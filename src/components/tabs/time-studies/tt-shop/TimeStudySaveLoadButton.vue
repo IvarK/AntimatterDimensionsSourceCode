@@ -67,7 +67,7 @@ export default {
         Modal.message.show("This Time Study list currently contains no Time Studies.");
       }
     },
-    eternityAndLoad() {
+    respecAndLoad() {
       if (Player.canEternity) {
         player.respec = true;
         const delayImport = animateAndEternity();
@@ -149,9 +149,9 @@ export default {
                 'c-tt-save-load-btn__menu-item__hover-option': true,
                 'c-tt-save-load-btn__menu-item__hover-option--disabled': !canEternity,
               }"
-              @click="eternityAndLoad"
+              @click="respecAndLoad"
             >
-              Eternity and Load
+              Respec and Load
             </div>
           </div>
         </div>

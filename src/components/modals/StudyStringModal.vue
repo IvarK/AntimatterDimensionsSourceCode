@@ -32,7 +32,7 @@ export default {
     return {
       input: "",
       name: "",
-      eternityAndLoad: false,
+      respecAndLoad: false,
       canEternity: false
     };
   },
@@ -154,7 +154,7 @@ export default {
       if (this.deleting) {
         this.deletePreset();
       } else if (this.isImporting) {
-        if (this.eternityAndLoad && Player.canEternity) {
+        if (this.respecAndLoad && Player.canEternity) {
           player.respec = true;
           const shouldDelayImport = animateAndEternity();
           const studies = new TimeStudyTree(this.truncatedInput).purchasedStudies;
@@ -257,9 +257,9 @@ export default {
       <StudyStringPreview
         v-if="!deleting"
         :show-preview="inputIsValidTree"
-        :new-studies="!isImporting || (canEternity && eternityAndLoad) ? importedTree.newStudiesArray
+        :new-studies="!isImporting || (canEternity && respecAndLoad) ? importedTree.newStudiesArray
           : combinedTree.newStudiesArray"
-        :disregard-current-studies="!isImporting || (canEternity && eternityAndLoad)"
+        :disregard-current-studies="!isImporting || (canEternity && respecAndLoad)"
       />
       <div v-else-if="hasInput">
         Not a valid tree
@@ -280,16 +280,16 @@ export default {
       <div
         v-tooltip="canEternity ? '' : 'You are currently unable to eternity, so this will only do a normal load.'"
         class="c-modal__confirmation-toggle"
-        @click="eternityAndLoad = !eternityAndLoad"
+        @click="respecAndLoad = !respecAndLoad"
       >
         <div
           :class="{
             'c-modal__confirmation-toggle__checkbox': true,
-            'c-modal__confirmation-toggle__checkbox--active': eternityAndLoad,
+            'c-modal__confirmation-toggle__checkbox--active': respecAndLoad,
           }"
         >
           <span
-            v-if="eternityAndLoad"
+            v-if="respecAndLoad"
             class="fas fa-check"
           />
         </div>

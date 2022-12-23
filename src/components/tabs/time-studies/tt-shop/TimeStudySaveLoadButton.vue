@@ -70,10 +70,10 @@ export default {
     eternityAndLoad() {
       if (Player.canEternity) {
         player.respec = true;
-        const shouldDelayImport = animateAndEternity();
+        const delayImport = animateAndEternity();
         const newTree = new TimeStudyTree();
         newTree.attemptBuyArray(newTree.parseStudyImport(this.preset.studies));
-        setTimeout(() => TimeStudyTree.commitToGameState(studies, false), shouldDelayImport ? 2500 : 0);
+        setTimeout(() => TimeStudyTree.commitToGameState(newTree.purchasedStudies, false), delayImport ? 2500 : 0);
       }
     },
     deletePreset() {

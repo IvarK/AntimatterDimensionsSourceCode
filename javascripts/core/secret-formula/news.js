@@ -138,8 +138,7 @@ GameDatabase.news = [
   },
   {
     id: "a29",
-    text: `If you are not playing on Kongregate, Steam, or https://ivark.github.io/AntimatterDimensions/,
-      the site is bootleg.`
+    text: "If you are not playing on Kongregate or ivark.github.io, the site is bootleg."
   },
   {
     id: "a30",
@@ -437,7 +436,7 @@ GameDatabase.news = [
         },
         {
           name: "Synergism",
-          link: "https://pseudo-corp.github.io/SynergismOfficial/"
+          link: "https://pseudonian.github.io/SynergismOfficial/"
         },
         {
           name: "Universal Paperclips",
@@ -2438,6 +2437,149 @@ GameDatabase.news = [
       nominations and 2 wins during that process due to EBIF (Efficient Bureaucracy In (the) Field).`
   },
   {
+    id: "a370",
+    text:
+      "Man tries installing cookies to store computer data, accidentally cleans them due to being too delicious."
+  },
+  {
+    id: "a371",
+    text:
+      `Pop quiz: there are 3 doors, you pick a door at random, and get to keep what's behind the door. The doors
+      have 2 golden goats, 2 silver goats, and a gold and a silver goat. After you pick a door, the door with the
+      lowest $ worth of goats will be opened and shown to you. After this, you are given the choice to swap.
+      What is the probability that you will swap doors?`
+  },
+  {
+    id: "a372",
+    text:
+      `Pop quiz: there are 3 doors, you pick a door at random, and get to keep what's behind the door. The doors
+      have 2 golden goats, 2 silver goats, and a gold and a silver goat. After you pick a door, the door with the
+      lowest $ worth of goats will be opened and shown to you. After this, you are given the choice to swap.
+      What is the probability that you will swap doors?`
+  },
+  {
+    id: "a373",
+    text:
+      `As a symbol of friendship between the Matter and Antimatter Periodic Tables, they have done an exchange of
+      elements. The element of Mony is now part of the Antimatter Periodic Table, while Antimony has been added
+      to the regular Periodic Table.`
+  },
+  {
+    id: "a374",
+    text: "This newsticker was specifically designed for promotional purposes only."
+  },
+  {
+    id: "a375",
+    text:
+      `As you probably know, it is traditional to give gifts made of certain materials to celebrate anniversaries
+      The classic ones are silver at 25 and gold at 50. Here are some little known anniversary gifts:
+      Pineapple - 37 years Hellstone - 66 years Lizardite- 82 years Nitrowhisperin- 86 years Taconite - 95 years
+      Hatchettite - 100 years Electrum - 110 Yakitoda - 111 years years Fordite - 119 years Bloodstone - 120 years
+      Celestite - 125 years Jet - 140 years Petroleum - 145 years Steel - 150 years Cummingtonite - 198 years
+      Concrete - 200 years Laserblue- 210 years Painite - 250 years Parisite - 255 years Parasite - 260 years
+      Carbon Nanotubes - 300 years Mercury - 310 years Martian Soil - 340 years Neptunium - 370 years
+      Uranium - 380 years Plutonium - 390 years Xium - 400 years Blaze rods - 420 years Asbestos - 430 years
+      Gabite - 444 years Crimtane - 666 years Lagga - 777 years`
+  },
+  {
+    id: "a376",
+    text:
+      `Big tech companies have collaborated to create a new neural network that's trained in the generation of rap
+      lyrics, called RAP-3. First lyrical generations include "Call me prometheus 'cuz I bring the fire" and
+      "Call me Sonic the way I'm gettin' these rings". Critics say it still has a way to go before it replaces
+      traditional music.`
+  },
+  {
+    id: "a377",
+    text:
+      `With the new android OS, android 20, being predicted in the near future, the new system for internal codenames
+      has been revealed. The first codename, as it currently stands, is “antimatter”. This conveniently works well
+      with the predicted generation of phones that will use Android 20 - these phones will be the most explosive
+      ever due to their annihilation-based power source. Sources tell us that a billion dollar research unit is
+      working on a name for android 21, by tradition to start with B, “that doesn’t sound too bad when you think
+      about it”. `
+  },
+  {
+    id: "a378",
+    text: "If every antimatter were an apple, you would have enough to keep all the doctors away for 3000 years"
+  },
+  {
+    id: "a379",
+    get text() {
+      return `THE ${format(Number.MAX_VALUE, 2)} PIECE! THE ${format(Number.MAX_VALUE, 2)} PIECE IS REAL!`;
+    }
+  },
+  {
+    id: "a380",
+    text:
+      `The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult
+      as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed
+      starts slowly, but gets faster each minute after you hear this signal. [beep] A single lap should be
+      completed each time you hear this sound. [ding] Remember to run in a straight line, and run as long as
+      possible. The second time you fail to complete a lap before the sound, your test is over. The test will
+      begin on the word start. On your mark, get ready, start.`
+  },
+  {
+    id: "a381",
+    text: "Why do they call it second dimension when you of in the first dimension of out second eat the dimension?"
+  },
+  {
+    id: "a382",
+    text:
+      "Any AD player born after 1993 can't joke... All they know is 5 hours, paperclips, 1.79e308 & Ninth Dimension."
+  },
+  {
+    id: "a383",
+    text:
+      "The only thing better than an anti-joke is two. Like the number. Not two anti-jokes. I just like the number two."
+  },
+  {
+    id: "a384",
+    text: "Click here to make nothing happen."
+  },
+  {
+    id: "a385",
+    text:
+      `I wonder... Why did Apple skip iPhone 9 and Microsoft skip Windows 9...
+      Was it because they were bribed by a game developer?`
+  },
+  {
+    id: "a386",
+    text: "9 out of 10 doctors recommended against trying to touch antimatter. We haven't heard back from the 10th one."
+  },
+  {
+    id: "a387",
+    text:
+      `In spring, Man built a pillar. In summer, another. Throughout autumn they held. But in winter, one experienced
+      an unexpected (See definition in: Abstract Multidimensional Retrocausal Physics) ZW-Class "Ascension" event,
+      and is hypothesised to have fallen into a dimensional loophole, where it, by definition, has to take up more
+      dimensions than itself. Current efforts at retrieving the pillar and returning it to baseline reality have been
+      unsuccessful (See test log 2453-3e9a-50d1-84fc for more details)`
+  },
+  {
+    id: "a388",
+    text:
+      `In light of recent events, we'd like to issue an official statement. Antimatter Dimensions™ is in no way
+      affiliated with Jimmy's Causality Violating Brainworms™. We do not endorse, no were we involved in their creation
+      of the product which was involved in several catastrophic dimension-destabilising and reality-toppling incidents.
+      We almost certainly did not sign a contract at 5:30:26 UTC on 08/12/1994 after discussing how we could benefit
+      from destabilising and warping dimensions. There was no industrial zone constructed in the 5th Orion Arm of the
+      వ' galaxy, and even if they were we did not install localised anomalies following the Scranton Reality Anti-anchor
+      mechanism. Additionally, no time loop is occurring at Acroamatic Abatement Facility AAF-D in site 43. We apologise
+      if things seemed this way, and we will be more thorough in cracking down misinformation in the future.`
+  },
+  {
+    id: "a389",
+    text: "If only we could condense the antimatter in the universe into cookies..."
+  },
+  {
+    id: "a390",
+    text:
+      `Can you believe it guys? Update, just 5 hours away. Update is in a 5 hours. Wahoo. I'm so happy about this
+      information. Update just 5 hours away. Oh wow. Can you believe it? Update just in a 5 hours. It got here so
+      fast. Update, just 5 hours.`
+  },
+  {
     id: "l1",
     text: "You just made your 1,000,000,000,000,000th antimatter. This one tastes like chicken.",
     get unlocked() { return Currency.antimatter.exponent === 15; }
@@ -3066,6 +3208,62 @@ GameDatabase.news = [
     },
     // 3 years of time to write
     get unlocked() { return Currency.antimatter.value.gte("1e777600"); }
+  },
+  {
+    id: "l83",
+    text:
+      `AD Patch Notes: Cleaned up the celestial problem Made Antimatter care about annihilation more Added mouths
+      Removed mouths Stopped unwanted interlopers from corporate takeovers of shops Fixed problem with newstickers
+      hanging in the air Dead replicanti remain in their galaxies Redefined interlopers to not include [REDACTED]
+      Tachyon Particles get stuck in the top left corner of the screen, obliterate time Added Coriolis effect to
+      Galaxy Spin Direction`,
+    get unlocked() { return Teresa.isUnlocked; }
+  },
+  {
+    id: "l84",
+    get text() {
+      return `For the record, you currently have ${player.news.specialTickerData.paperclips}
+      Useless Paperclips. You may want to spend them on something.`;
+    },
+    get unlocked() { return player.news.specialTickerData.paperclips > 0; }
+  },
+  {
+    id: "l85",
+    text:
+      `On opposite day, the new update is just -5 hours away. You begin increasing your Matter. Once you acquire a
+      huge abundance of Matter, you must become Infinitesimal. After increasing your wealth in Infinitesimal Points,
+      you can eventually Jiffy, the shortest unit of time. After enough time, your Jiffies will accumulate, and you
+      will Contract Time. Contracting Time will grant you enough of a boost to eventually Fantasy, the final layer
+      of maintenance. However, you find out that it was all a dream. Your Antimatter is safe and well, and the new
+      update is still just 5 hours away.`,
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
+  },
+  {
+    id: "l86",
+    text:
+      `Hello, player. I'd like to play a game. In front of you is a pile of replicanti. They are currently frozen in
+      time, and cannot replicate. To your right is a computer playing Antimatter Dimensions on an empty save. You
+      must reach infinity. However, once you buy a 1st dimension, the replicanti will start replicating. As you know,
+      they replicate fast, and if they fill up the room you will suffocate. If you reach infinity before that, they
+      will be frozen again. The clock is ticking. Start now.`,
+    get unlocked() { return PlayerProgress.replicantiUnlocked(); }
+  },
+  {
+    id: "l87",
+    text:
+      `"To see a World in a Grain of Sand. And a Heaven in a Wild Flower. Hold Infinity in the palm of your hand.
+      And Eternity in an hour. And Reality in about 5 hours™️" ~Anti-William Blake `,
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
+  },
+  {
+    id: "l88",
+    text:
+      `Our deepest apologies for the new glyph mechanic. The intent is to provide players with a sense of pride and
+      accomplishment for unlocking rare glyphs. We selected initial values based upon data from the final wave of
+      testing and other adjustments made to milestone rewards before launch. Among other things, we're looking at
+      average per-player credit earn rates on a daily basis, and we'll be making constant adjustments to ensure that
+      players have challenges that are compelling, rewarding, and of course attainable via gameplay.`,
+    get unlocked() { return PlayerProgress.realityUnlocked(); }
   },
   {
     id: "r1",

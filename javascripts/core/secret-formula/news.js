@@ -138,7 +138,8 @@ GameDatabase.news = [
   },
   {
     id: "a29",
-    text: "If you are not playing on Kongregate or ivark.github.io, the site is bootleg."
+    text: `If you are not playing on Kongregate, Steam, or https://ivark.github.io/AntimatterDimensions/,
+      the site is bootleg.`
   },
   {
     id: "a30",
@@ -423,7 +424,7 @@ GameDatabase.news = [
           link: "https://trimps.github.io/"
         },
         {
-          name: "Mine Defense",
+          name: "Mine Defense (the game's ui is broken on https so make sure you're on http!)",
           link: "http://scholtek.com/minedefense"
         },
         {
@@ -436,7 +437,7 @@ GameDatabase.news = [
         },
         {
           name: "Synergism",
-          link: "https://pseudonian.github.io/SynergismOfficial/"
+          link: "https://pseudo-corp.github.io/SynergismOfficial/"
         },
         {
           name: "Universal Paperclips",
@@ -449,6 +450,10 @@ GameDatabase.news = [
         {
           name: "The First Alkahistorian stages 1, 2, and 3",
           link: "https://nagshell.github.io/elemental-inception-incremental/"
+        },
+        {
+          name: "Melvor Idle",
+          link: "https://melvoridle.com/"
         }
       ];
       const game = games.randomElement();

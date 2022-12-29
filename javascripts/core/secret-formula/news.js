@@ -454,7 +454,7 @@ GameDatabase.news = [
       ];
       const game = games.randomElement();
       return `An unidentified developer of Antimatter Dimensions would like to
-        recommend that you play <a href="${game.link}" target="_blank">${game.name}</a>`;
+        recommend that you play <a href='${game.link}' target='_blank'>${game.name}</a>`;
     },
   },
   {
@@ -2184,7 +2184,7 @@ GameDatabase.news = [
     id: "a346",
     text:
       `Did you know Antimatter Dimensions is also available on Android? <a
-      href="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions">
+      href='https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions' target='_blank'>
       Click here to check it out!<a>`
   },
   {

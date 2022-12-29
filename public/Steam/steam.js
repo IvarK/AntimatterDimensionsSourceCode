@@ -6,6 +6,8 @@ const SteamFunctions = {
     purchasesInitiated: true,
     macUser: false,
     macInterval: 0,
+    discordInterval: 0,
+    discordOn: false,
     macIntervalOn: false,
     zoomLevel: 1,
     SteamInitialize() {
@@ -14,6 +16,11 @@ const SteamFunctions = {
         this.EventHandlers();
         if (window.navigator.platform === "MacIntel") {
           SteamFunctions.macUser = true;
+        }else{
+            Steam.initDiscordAPI("1057439416819396689",1399720)
+            SteamFunctions.discordInterval = setInterval(Steam.runDiscordCallbacks, 4000);
+            SteamFunctions.discordOn = true
+            //setInterval(()=>{SteamFunctions.SetRichPresence(`${format(player.antimatter,2)} Antimatter)`},4000)
         }
         this.GetZoom()
     },
@@ -23,6 +30,16 @@ const SteamFunctions = {
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         window.requestAnimationFrame(SteamFunctions.forceRefresh);
+    },
+    SetRichPresence(status){
+        if(SteamFunctions.discordOn){
+            Steam.setDiscordActivity({
+                smallImage: "icon",
+                largeImage: "icon",
+                state: status,
+                details: "Playing Antimatter Dimensions"
+            })
+        }
     },
     UIZoom() {
         if (nodeOn) {

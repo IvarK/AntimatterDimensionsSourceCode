@@ -4434,6 +4434,11 @@ br {
   border: 0.1rem solid black;
 }
 
+.t-amoled .c-autobuyer-box__mode-select,
+.t-amoled-metro .c-autobuyer-box__mode-select {
+  color: white;
+}
+
 .t-s1 .c-autobuyer-box__mode-select {
   background-color: var(--color-base);
   border: 0.1rem solid black;

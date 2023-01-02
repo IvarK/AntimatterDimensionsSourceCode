@@ -2648,6 +2648,8 @@ br {
 }
 
 .t-dark .c-infinity-dim-description__accent,
+.t-amoled .c-infinity-dim-description__accent,
+.t-amoled-metro .c-infinity-dim-description__accent,
 .t-s6 .c-infinity-dim-description__accent,
 .t-s10 .c-infinity-dim-description__accent,
 .t-s11 .c-infinity-dim-description__accent {
@@ -2691,6 +2693,8 @@ br {
 }
 
 .t-dark .c-time-dim-description__accent,
+.t-amoled .c-time-dim-description__accent,
+.t-amoled-metro .c-time-dim-description__accent,
 .t-s6 .c-time-dim-description__accent,
 .t-s10 .c-time-dim-description__accent,
 .t-s11 .c-time-dim-description__accent {

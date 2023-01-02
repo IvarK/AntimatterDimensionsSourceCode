@@ -110,7 +110,7 @@ GameDatabase.reality.upgrades = [
     id: 9,
     cost: 15,
     requirement: () => `Eternity for ${format("1e4000")} Eternity Points using
-      only a single level ${formatInt(3)}+ Glyph.`,
+      only a single Glyph which must be level ${formatInt(3)}+.`,
     hasFailed: () => {
       const invalidEquippedGlyphs = Glyphs.activeList.length > 1 ||
         (Glyphs.activeList.length === 1 && Glyphs.activeList[0].level < 3);
@@ -314,7 +314,7 @@ GameDatabase.reality.upgrades = [
     hasFailed: () => Time.thisReality.totalMinutes >= 15,
     checkRequirement: () => Time.thisReality.totalMinutes < 15,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    description: "Replicanti speed is boosted based on your fastest Reality",
+    description: "Replicanti speed is boosted based on your fastest game-time Reality",
     effect: () => 15 / Math.clamp(Time.bestReality.totalMinutes, 1 / 12, 15),
     cap: 180,
     formatEffect: value => formatX(value, 2, 2)

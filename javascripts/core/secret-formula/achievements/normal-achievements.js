@@ -713,7 +713,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Currency.infinityPoints.exponent >= 1000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
-      return `Make the Infinity Point formula better. log(x/${formatInt(308)}) ➜ log(x/${formatFloat(307.8, 1)})`;
+      return `Make the Infinity Point formula better. log(x)/${formatInt(308)} ➜ log(x)/${formatFloat(307.8, 1)}`;
     },
     effect: 307.8
   },

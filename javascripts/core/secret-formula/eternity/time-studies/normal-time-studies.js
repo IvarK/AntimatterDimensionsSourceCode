@@ -254,8 +254,8 @@ GameDatabase.eternity.timeStudies.normal = [
     requirement: [101, 102, 103],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => (Achievement(103).canBeApplied
-      ? `Make the Infinity Point formula better log(x/${formatFloat(307.8, 1)}) ➜ log(x/${formatInt(285)})`
-      : `Make the Infinity Point formula better log(x/${formatInt(308)}) ➜ log(x/${formatInt(285)})`),
+      ? `Make the Infinity Point formula better log(x)/${formatFloat(307.8, 1)} ➜ log(x)/${formatInt(285)}`
+      : `Make the Infinity Point formula better log(x)/${formatInt(308)} ➜ log(x)/${formatInt(285)}`),
     effect: 285
   },
   {

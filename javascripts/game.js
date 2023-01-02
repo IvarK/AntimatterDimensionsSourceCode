@@ -2,11 +2,11 @@ import TWEEN from "tween.js";
 
 import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
+import { DEV } from "./core/devtools";
 import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
 
 import Payments from "./core/payments";
-import { DEV } from "./core/devtools";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -685,12 +685,7 @@ function applyAutoUnlockPerks() {
   }
   if (Perk.autounlockDilation3.canBeApplied) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
   if (Perk.autounlockReality.canBeApplied) TimeStudy.reality.purchase(true);
-  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.canBeApplied) {
-    const secondRow = EternityUpgrade.all.filter(u => u.id > 3);
-    for (const upgrade of secondRow) {
-      if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);
-    }
-  }
+  applyEU2();
 }
 
 function laitelaRealityTick(realDiff) {

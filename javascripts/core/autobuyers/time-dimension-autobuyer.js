@@ -34,6 +34,7 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   tick() {
+    applyEU2();
     const tier = this.tier;
     if (!TimeDimension(tier).isAvailableForPurchase) return;
     super.tick();

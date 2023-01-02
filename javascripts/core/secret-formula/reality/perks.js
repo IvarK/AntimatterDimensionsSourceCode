@@ -256,7 +256,8 @@ GameDatabase.reality.perks = {
     label: "PEC2",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(40)} minutes (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(40)} minutes (real-time).
+        (${formatInt(20)} minute decrease)`;
     },
     effect: 40,
     defaultPosition: new Vector(425, 235)
@@ -266,7 +267,8 @@ GameDatabase.reality.perks = {
     label: "PEC3",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Auto-complete one Eternity Challenge every ${formatInt(20)} minutes (real-time).`;
+      return `Auto-complete one Eternity Challenge every ${formatInt(20)} minutes (real-time).
+        (${formatInt(20)} minute decrease)`;
     },
     effect: 20,
     automatorPoints: 10,
@@ -294,7 +296,7 @@ GameDatabase.reality.perks = {
     id: 72,
     label: "ECR",
     family: PERK_FAMILY.ETERNITY,
-    description: "Remove non–Time Theorem requirements for unlocking Eternity Challenges.",
+    description: "Remove non-Time Theorem requirements for unlocking Eternity Challenges.",
     automatorPoints: 10,
     shortDescription: () => "Remove EC secondary requirements",
     defaultPosition: new Vector(605, -160)
@@ -315,7 +317,7 @@ GameDatabase.reality.perks = {
     label: "TP1",
     family: PERK_FAMILY.DILATION,
     get description() {
-      return `When buying the "You gain ${formatInt(3)} times more Tachyon Particles" Dilation Upgrade,
+      return `When buying the 3rd rebuyable Dilation Upgrade,
         multiply your current Tachyon Particle amount by ${formatFloat(1.5, 1)}.`;
     },
     effect: 1.5,
@@ -326,7 +328,7 @@ GameDatabase.reality.perks = {
     label: "TP2",
     family: PERK_FAMILY.DILATION,
     get description() {
-      return `When buying the "You gain ${formatInt(3)} times more Tachyon Particles" Dilation Upgrade,
+      return `When buying the 3rd rebuyable Dilation Upgrade,
         multiply your current Tachyon Particle amount by ${formatInt(2)}.`;
     },
     effect: 2,
@@ -337,7 +339,7 @@ GameDatabase.reality.perks = {
     label: "TP3",
     family: PERK_FAMILY.DILATION,
     get description() {
-      return `When buying the "You gain ${formatInt(3)} times more Tachyon Particles" Dilation Upgrade,
+      return `When buying the 3rd rebuyable Dilation Upgrade,
         multiply your current Tachyon Particle amount by ${formatFloat(2.5, 1)}.`;
     },
     effect: 2.5,
@@ -348,7 +350,7 @@ GameDatabase.reality.perks = {
     label: "TP4",
     family: PERK_FAMILY.DILATION,
     get description() {
-      return `When buying the "You gain ${formatInt(3)} times more Tachyon Particles" Dilation Upgrade,
+      return `When buying the 3rd rebuyable Dilation Upgrade,
         multiply your current Tachyon Particle amount by ${formatInt(3)}.`;
     },
     effect: 3,

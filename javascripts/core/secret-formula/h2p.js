@@ -328,7 +328,7 @@ increases by another ${formatPercents(0.002, 1)} per Galaxy, on top of Distant s
     }, {
       name: "Dimensional Sacrifice",
       info: () => `
-<b>You unlock Dimensional Sacrifice after your first Dimension Boost.</b>
+<b>You unlock Dimensional Sacrifice after your fifth Dimension Boost.</b>
 <br>
 <br>
 Sacrificing will immediately reset the owned quantity of all non-Eighth Dimensions to zero, without reducing the
@@ -769,9 +769,10 @@ goal to the next completion also increases. Additionally, the secondary requirem
 also increase. The Time Theorem cost does not increase.
 <br>
 <br>
-After you have unlocked an Eternity Challenge, you can unlock it without meeting its secondary requirements until you
-unlock another Eternity Challenge or beat that Eternity Challenge, allowing you to unlock an Eternity Challenge
-with one set of studies, and then respec into a different set of studies to beat the challenge.
+Completing an Eternity Challenge's secondary requirements will remove them from the study requirement until you complete
+that particular Eternity Challenge, meaning you only need to complete the secondary requirement <i>once</i>.
+As a result, you can unlock an Eternity Challenge with one set of studies, and then respec into a different set of
+studies to beat the challenge.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["ec", "study", "time", "rewards", "completions", "midgame"],
@@ -1233,6 +1234,12 @@ being selected; this can be useful for effect testing and other more limited sit
 will let you forbid entire types like Specified Effect Mode as well
 <br>
 <br>
+The Glyph Filter mode is a global setting which applies to all Glyph types at once; for example, you cannot filter
+power Glyphs with "Rarity Threshold" and time Glyphs with "Specified Effect". Selecting one mode will require
+you to configure every Glyph type within its settings for proper filtering. Each filter mode has its own settings
+which will be kept if you switch to another mode.
+<br>
+<br>
 Glyph Presets are purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic
 Shards. This unlocks ${formatInt(5)} slots that allow you to save your currently equipped Glyphs into sets.
 You can't overwrite a set, you must delete it first. When you load a set, each Glyph in it is found and equipped.
@@ -1463,7 +1470,8 @@ with a higher refinement value.
 Alchemy Resources can be combined together in certain combinations in order to create new compound resources, which
 are unlocked at certain Effarig levels. Resources are combined once per Reality, unaffected by real time
 amplification. Reactions have a higher yield and thus happen faster when your reagent amounts are higher. The cap for
-compound resources is equal to the lowest cap amongst all of its reagents.
+compound resources is equal to the lowest cap amongst all of its reagents. In order for a reaction to occur, the
+current amount of all reagents must be greater than the current amount of the produced resource.
 <br>
 <br>
 To activate or deactivate a reaction, click the circle corresponding to the reaction's product. When the reaction can

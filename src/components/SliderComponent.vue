@@ -997,6 +997,7 @@ export default {
       }
     },
     dotContents() {
+      if (Notations.current.name === "Blind" || Theme.current().name === "S9" ) return "";
       // Doesn't work if the slider needs to show more precision than integers,
       // but I don't think we have any such sliders.
       return this.valueInDot ? Math.round(this.getValue()) : '';

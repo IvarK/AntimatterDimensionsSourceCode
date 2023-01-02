@@ -60,7 +60,7 @@ export default {
       if (!this.isUnlocked) return "Locked";
       if (this.isCapped) return "Shattered by Nameless";
       if (this.isContinuumActive) return "Continuum: ";
-      return `Buy ${this.howManyCanBuy}`;
+      return `Buy ${formatInt(this.howManyCanBuy)}`;
     },
     buttonValue() {
       if (this.isCapped) return "";

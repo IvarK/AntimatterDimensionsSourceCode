@@ -139,7 +139,7 @@ export class EternityChallengeState extends GameMechanicState {
   }
 
   get isGoalReached() {
-    return Currency.infinityPoints.gte(this.currentGoal);
+    return player.records.thisEternity.maxIP.gte(this.currentGoal);
   }
 
   get canBeCompleted() {

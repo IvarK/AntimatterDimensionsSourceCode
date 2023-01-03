@@ -869,7 +869,7 @@ export function simulateTime(seconds, real, fast) {
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
-  const maxTicks = GameStorage.offlineTicks ?? player.options.offlineTicks;
+  const maxTicks = GameStorage.maxOfflineTicks(1000 * seconds, GameStorage.offlineTicks ?? player.options.offlineTicks);
   if (ticks > maxTicks && !real && !fast) {
     ticks = maxTicks;
   } else if (ticks > 50 && !real && fast) {

@@ -225,14 +225,14 @@ GameDatabase.reality.glyphEffects = {
       ? `Multiply Dilated Time \n[and Replicanti speed] by \n+{value} per ${format(DC.E10000)} replicanti`
       : `Multiply Dilated Time gain by \n+{value} per ${format(DC.E10000)} replicanti`),
     totalDesc: () => (GlyphAlteration.isAdded("replication")
-      ? `Dilated Time gain and Replication speed +{value} per ${format(DC.E10000)} replicanti`
-      : `Dilated Time gain +{value} per ${format(DC.E10000)} replicanti`),
+      ? `Multiply Dilated Time and Replication speed by +{value} per ${format(DC.E10000)} replicanti`
+      : `Multiply Dilated Time gain by +{value} per ${format(DC.E10000)} replicanti`),
     genericDesc: () => (GlyphAlteration.isAdded("replication")
       ? "Dilated Time+Replicanti mult from replicanti"
       : "Dilated Time gain multiplier from replicanti"),
     shortDesc: () => (GlyphAlteration.isAdded("replication")
-      ? `DT and repl. +{value} per ${format(DC.E10000)} replicanti`
-      : `DT +{value} per ${format(DC.E10000)} replicanti`),
+      ? `×DT and repl. by +{value} per ${format(DC.E10000)} replicanti`
+      : `×DT by +{value} per ${format(DC.E10000)} replicanti`),
     effect: (level, strength) => 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65),
     formatEffect: x => format(10000 * x, 2, 2),
     formatSingleEffect: x => format(10000 * x, 2, 2),

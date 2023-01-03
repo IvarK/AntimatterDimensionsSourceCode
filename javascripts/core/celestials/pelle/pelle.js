@@ -58,6 +58,61 @@ export const Pelle = {
   // Suppress the randomness for this form
   possessiveName: "Pelle's",
 
+  // This is called upon initial Dooming and after every Armageddon when using the modal
+  initializeRun() {
+    if (this.isDoomed) {
+      Pelle.armageddon(true);
+      return;
+    }
+
+    Glyphs.harshAutoClean();
+    if (!Glyphs.unequipAll()) {
+      Modal.message.show(`Dooming your Reality will unequip your Glyphs. Some of your
+        Glyphs could not be unequipped due to lack of inventory space.`, 1);
+      return;
+    }
+    Glyphs.harshAutoClean();
+    for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
+    Glyphs.refreshActive();
+    player.options.confirmations.glyphReplace = true;
+    player.reality.automator.state.repeat = false;
+    player.reality.automator.state.forceRestart = false;
+    if (BlackHoles.arePaused) BlackHoles.togglePause();
+    player.celestials.pelle.doomed = true;
+    Pelle.armageddon(false);
+    respecTimeStudies(true);
+    Currency.infinityPoints.reset();
+    player.IPMultPurchases = 0;
+    Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
+    disChargeAll();
+    clearCelestialRuns();
+
+    // Force-enable the group toggle for AD autobuyers to be active; whether or not they can actually tick
+    // is still handled through if the autobuyers are unlocked at all. This fixes an odd edge case where the player
+    // enters cel7 with AD autobuyers disabled - AD autobuyers need to be reupgraded, but the UI component
+    // for the group toggle is hidden until they're all re-upgraded to the max again.
+    player.auto.antimatterDims.isActive = true;
+
+    player.buyUntil10 = true;
+    player.records.realTimeDoomed = 0;
+    for (const res of AlchemyResources.all) res.amount = 0;
+    AutomatorBackend.stop();
+
+    // Force-unhide all tabs except for the shop tab, for which we retain the hide state instead
+    const shopTab = ~1 & (1 << GameDatabase.tabs.find(t => t.key === "shop").id);
+    player.options.hiddenTabBits &= shopTab;
+
+    // Force unhide MOST subtabs, although some of the tabs get ignored since they don't contain any
+    // meaningful interactable gameplay elements in Doomed
+    const tabsToIgnore = ["statistics", "achievements", "reality", "celestials"];
+    const ignoredIDs = GameDatabase.tabs.filter(t => tabsToIgnore.includes(t.key)).map(t => t.id);
+    for (let tabIndex = 0; tabIndex < GameDatabase.tabs.length; tabIndex++) {
+      player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.includes(tabIndex) ? -1 : 0;
+    }
+    Pelle.quotes.initial.show();
+    GameStorage.save(true);
+  },
+
   get displayName() {
     return Date.now() % 4000 > 500 ? "Pelle" : wordShift.randomCrossWords("Pelle");
   },

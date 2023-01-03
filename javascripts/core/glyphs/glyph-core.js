@@ -40,6 +40,9 @@ export const Glyphs = {
   get activeList() {
     return player.reality.glyphs.active;
   },
+  get activeWithoutCompanion() {
+    return this.activeList.filter(g => g.type !== "companion");
+  },
   get allGlyphs() {
     return this.inventoryList.concat(this.activeList);
   },
@@ -637,7 +640,7 @@ export const Glyphs = {
   // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs
   // still contribute to the length of the active list. Note that it only ever decreases if startingReality is true.
   updateMaxGlyphCount(startingReality = false) {
-    const activeGlyphList = this.activeList;
+    const activeGlyphList = this.activeWithoutCompanion;
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
     if (startingReality) player.requirementChecks.reality.maxGlyphs = currCount;
     player.requirementChecks.reality.maxGlyphs = Math.max(player.requirementChecks.reality.maxGlyphs, currCount);

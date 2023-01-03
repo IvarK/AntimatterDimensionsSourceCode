@@ -294,9 +294,10 @@ GameDatabase.reality.imaginaryUpgrades = [
     formatCost: x => format(x, 1),
     requirement: () => `Reach Reality in Lai'tela's Reality with all Dimensions disabled and
       at least ${formatInt(4)} empty Glyph slots`,
-    hasFailed: () => !Laitela.isRunning || Laitela.maxAllowedDimension !== 0 || Glyphs.activeList.length > 1,
+    hasFailed: () => !Laitela.isRunning || Laitela.maxAllowedDimension !== 0 ||
+      Glyphs.activeWithoutCompanion.length > 1,
     checkRequirement: () => Laitela.isRunning && Laitela.maxAllowedDimension === 0 &&
-      Glyphs.activeList.length <= 1 && TimeStudy.reality.isBought,
+      Glyphs.activeWithoutCompanion.length <= 1 && TimeStudy.reality.isBought,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "Unlock Pelle, Celestial of Antimatter",
   },

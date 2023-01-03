@@ -112,10 +112,10 @@ GameDatabase.reality.upgrades = [
     requirement: () => `Eternity for ${format("1e4000")} Eternity Points using
       only a single Glyph which must be level ${formatInt(3)}+.`,
     hasFailed: () => {
-      const invalidEquippedGlyphs = Glyphs.activeList.length > 1 ||
-        (Glyphs.activeList.length === 1 && Glyphs.activeList[0].level < 3);
+      const invalidEquippedGlyphs = Glyphs.activeWithoutCompanion.length > 1 ||
+        (Glyphs.activeWithoutCompanion.length === 1 && Glyphs.activeWithoutCompanion[0].level < 3);
       const hasValidGlyphInInventory = Glyphs.inventory.countWhere(g => g && g.level >= 3) > 0;
-      return invalidEquippedGlyphs || (Glyphs.activeList.length === 0 && !hasValidGlyphInInventory);
+      return invalidEquippedGlyphs || (Glyphs.activeWithoutCompanion.length === 0 && !hasValidGlyphInInventory);
     },
     checkRequirement: () => Currency.eternityPoints.exponent >= 4000 &&
       Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
@@ -208,14 +208,14 @@ GameDatabase.reality.upgrades = [
     id: 16,
     cost: 1500,
     requirement: () => `Reality with ${formatInt(4)} Glyphs equipped of uncommon or better rarity
-      (${formatInt(Glyphs.activeList.countWhere(g => g && g.strength >= 1.5))} equipped)`,
+      (${formatInt(Glyphs.activeWithoutCompanion.countWhere(g => g && g.strength >= 1.5))} equipped)`,
     hasFailed: () => {
       const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.strength >= 1.5);
-      const equipped = Glyphs.activeList.countWhere(g => g.strength >= 1.5);
+      const equipped = Glyphs.activeWithoutCompanion.countWhere(g => g.strength >= 1.5);
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
       return equipped + Math.min(availableGlyphs, availableSlots) < 4;
     },
-    checkRequirement: () => Glyphs.activeList.countWhere(g => g.strength >= 1.5) === 4,
+    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.strength >= 1.5) === 4,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Improve the Glyph rarity formula",
     effect: 1.3,
@@ -226,14 +226,15 @@ GameDatabase.reality.upgrades = [
     id: 17,
     cost: 1500,
     requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each having at least ${formatInt(2)} effects
-      (${formatInt(Glyphs.activeList.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2))} equipped)`,
+      (${formatInt(Glyphs.activeWithoutCompanion.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2))}
+      equipped)`,
     hasFailed: () => {
       const availableGlyphs = Glyphs.inventory.countWhere(g => g && countValuesFromBitmask(g.effects) >= 2);
-      const equipped = Glyphs.activeList.countWhere(g => countValuesFromBitmask(g.effects) >= 2);
+      const equipped = Glyphs.activeWithoutCompanion.countWhere(g => countValuesFromBitmask(g.effects) >= 2);
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
       return equipped + Math.min(availableGlyphs, availableSlots) < 4;
     },
-    checkRequirement: () => Glyphs.activeList.countWhere(g => countValuesFromBitmask(g.effects) >= 2) === 4,
+    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => countValuesFromBitmask(g.effects) >= 2) === 4,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: () => `${formatPercents(0.5)} chance to get an additional effect on Glyphs`,
     effect: 0.5,
@@ -244,14 +245,14 @@ GameDatabase.reality.upgrades = [
     id: 18,
     cost: 1500,
     requirement: () => `Reality with ${formatInt(4)} Glyphs equipped, each at level ${formatInt(10)} or higher
-      (${formatInt(Glyphs.activeList.countWhere(g => g && g.level >= 10))} equipped)`,
+      (${formatInt(Glyphs.activeWithoutCompanion.countWhere(g => g && g.level >= 10))} equipped)`,
     hasFailed: () => {
       const availableGlyphs = Glyphs.inventory.countWhere(g => g && g.level >= 10);
-      const equipped = Glyphs.activeList.countWhere(g => g.level >= 10);
+      const equipped = Glyphs.activeWithoutCompanion.countWhere(g => g.level >= 10);
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
       return equipped + Math.min(availableGlyphs, availableSlots) < 4;
     },
-    checkRequirement: () => Glyphs.activeList.countWhere(g => g.level >= 10) === 4,
+    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.level >= 10) === 4,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Eternity count boosts Glyph level",
     effect: () => Math.max(Math.sqrt(Currency.eternities.value.plus(1).log10()) * 0.45, 1),
@@ -262,9 +263,9 @@ GameDatabase.reality.upgrades = [
     id: 19,
     cost: 1500,
     requirement: () => `Have a total of ${formatInt(30)} or more Glyphs at once
-      (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g))})`,
-    hasFailed: () => Glyphs.allGlyphs.countWhere(g => g) < 30,
-    checkRequirement: () => Glyphs.allGlyphs.countWhere(g => g) >= 30,
+      (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g.type !== "companion"))})`,
+    hasFailed: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") < 30,
+    checkRequirement: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") >= 30,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "You can sacrifice Glyphs for permanent bonuses (Shift + click)",
     formatCost: value => format(value, 1, 0)
@@ -323,9 +324,10 @@ GameDatabase.reality.upgrades = [
     name: "Synthetic Symbolism",
     id: 24,
     cost: 100000,
-    requirement: () => `Reality for ${formatInt(5000)} Reality Machines without Glyphs`,
-    hasFailed: () => Glyphs.activeList.length > 0,
-    checkRequirement: () => MachineHandler.gainedRealityMachines.gte(5000) && Glyphs.activeList.length === 0,
+    requirement: () => `Reality for ${formatInt(5000)} Reality Machines without equipped Glyphs`,
+    hasFailed: () => Glyphs.activeWithoutCompanion.length > 0,
+    checkRequirement: () => MachineHandler.gainedRealityMachines.gte(5000) &&
+      Glyphs.activeWithoutCompanion.length === 0,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Gain another Glyph slot",
     effect: () => 1

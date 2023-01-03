@@ -172,9 +172,6 @@ export default {
       Cost: {{ format(unlockCost) }} IP
     </PrimaryButton>
     <template v-else>
-      <div v-if="isInEC8">
-        You have {{ quantifyInt("purchase", ec8Purchases) }} left.
-      </div>
       <div v-if="isDoomed">
         Your Replicanti cap has been removed due to the second {{ scrambledText }} milestone.
       </div>
@@ -192,6 +189,9 @@ export default {
         <span v-html="boostText" />
       </p>
       <br>
+      <div v-if="isInEC8">
+        You have {{ quantifyInt("purchase", ec8Purchases) }} left within Eternity Challenge 8.
+      </div>
       <div class="l-replicanti-upgrade-row">
         <ReplicantiUpgradeButton :setup="replicantiChanceSetup" />
         <ReplicantiUpgradeButton :setup="replicantiIntervalSetup" />

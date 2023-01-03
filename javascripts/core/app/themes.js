@@ -114,6 +114,10 @@ Theme.tryUnlock = function(name) {
   SecretAchievement(25).unlock();
   if (!isAlreadyUnlocked) {
     GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`, 5000);
+    if (Theme.current().isAnimated) {
+      setTimeout(Modal.message.show(`This secret theme has animations. If they are giving you performance issues,
+        you can turn them off in the Options/Visual tab to reduce lag.`), 100);
+    }
   }
   return true;
 };
@@ -148,7 +152,7 @@ export const Themes = {
     Theme.create("S8",              {              metro: true,                 secret: true, }),
     Theme.create("S9",              {                                           secret: true, }),
     Theme.create("S10",             { dark: true,  metro: true, animated: true, secret: true, }),
-    Theme.create("S11",             { dark: true,                               secret: true, }),
+    Theme.create("S11",             { dark: true,               animated: true, secret: true, }),
     /* eslint-enable no-multi-spaces */
   ],
 

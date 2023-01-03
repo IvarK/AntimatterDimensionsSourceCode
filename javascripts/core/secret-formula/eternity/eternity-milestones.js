@@ -148,8 +148,8 @@ GameDatabase.eternity.milestones = {
         (eternities.gt(0) ? `(Currently ${format(eternities, 2, 2)}/hour)` : "(Inactive)");
     },
     activeCondition: () => (player.options.offlineProgress
-      ? `Must be outside of all Challenges and Dilation, and the Eternity Autobuyer must be turned on
-        and set to zero EP. This milestone's effect is capped at ${formatInt(33)}ms.`
+      ? `Must be outside of all Challenges and Dilation, and the Eternity Autobuyer must be set to Eternity at zero EP.
+        This milestone's effect is capped at ${formatInt(33)}ms.`
       : ""),
   },
   autoInfinities: {

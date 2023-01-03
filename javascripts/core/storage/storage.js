@@ -17,6 +17,10 @@ export const GameStorage = {
   offlineEnabled: undefined,
   offlineTicks: undefined,
 
+  maxOfflineTicks(simulatedMs, defaultTicks = this.offlineTicks) {
+    return Math.clampMax(defaultTicks, Math.floor(simulatedMs / 50));
+  },
+
   get localStorageKey() {
     return DEV ? "dimensionTestSave" : "dimensionSave";
   },

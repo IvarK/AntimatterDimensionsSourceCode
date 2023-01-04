@@ -2457,10 +2457,9 @@ GameDatabase.news = [
   {
     id: "a372",
     text:
-      `Pop quiz: there are 3 doors, you pick a door at random, and get to keep what's behind the door. The doors
-      have 2 golden goats, 2 silver goats, and a gold and a silver goat. After you pick a door, the door with the
-      lowest $ worth of goats will be opened and shown to you. After this, you are given the choice to swap.
-      What is the probability that you will swap doors?`
+      `If you’re ever lost in a forest, look at the trees around you. It’s said that moss grows north, so by the
+      time you’ve finished looking at a tree, a roaming guitarist will run up to you and ask if you want to hear
+      wonderwall`
   },
   {
     id: "a373",

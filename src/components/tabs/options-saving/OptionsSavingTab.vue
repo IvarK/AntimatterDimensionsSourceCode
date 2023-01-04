@@ -21,6 +21,7 @@ export default {
       showCloudModal: false,
       syncSaveIntervals: false,
       showTimeSinceSave: false,
+      hideGoogleName: false,
       loggedIn: false,
       userName: "",
       canSpeedrun: false,
@@ -54,6 +55,9 @@ export default {
     },
     showTimeSinceSave(newValue) {
       player.options.showTimeSinceSave = newValue;
+    },
+    hideGoogleName(newValue) {
+      player.options.hideGoogleName = newValue;
     }
   },
   methods: {
@@ -64,6 +68,7 @@ export default {
       this.showCloudModal = options.showCloudModal;
       this.syncSaveIntervals = options.syncSaveIntervals;
       this.showTimeSinceSave = options.showTimeSinceSave;
+      this.hideGoogleName = options.hideGoogleName;
       this.loggedIn = Cloud.loggedIn;
       this.canSpeedrun = player.speedrun.isUnlocked;
       this.creditsClosed = GameEnd.creditsEverClosed;
@@ -178,7 +183,8 @@ export default {
       <OpenModalHotkeysButton />
     </div>
     <h2 class="c-cloud-options-header">
-      <span v-if="loggedIn">Logged in as {{ userName }}</span>
+      <span v-if="hideGoogleName">Logged in to Google <i>(name hidden)</i></span>
+      <span v-else-if="loggedIn">Logged in as {{ userName }}</span>
       <span v-else>Not logged in</span>
     </h2>
     <div v-if="loggedIn">
@@ -203,6 +209,14 @@ export default {
         >
           Login with Google to enable Cloud Saving
         </OptionsButton>
+        <PrimaryToggleButton
+          v-if="loggedIn"
+          v-model="hideGoogleName"
+          v-tooltip="'This will hide your Google Account name from the UI for privacy. Saving/loading is unaffected.'"
+          class="o-primary-btn--option l-options-grid__button"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          label="Hide Google Account name:"
+        />
       </div>
       <div
         v-if="loggedIn"

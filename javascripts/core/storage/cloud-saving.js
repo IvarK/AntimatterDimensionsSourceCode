@@ -43,7 +43,8 @@ export const Cloud = {
     try {
       await signInWithPopup(this.auth, this.provider);
       ShopPurchaseData.syncSTD();
-      GameUI.notify.success(`Logged in as ${this.user.displayName}`);
+      if (player.options.hideGoogleName) GameUI.notify.success(`Successfully logged in to Google Account`);
+      else GameUI.notify.success(`Successfully logged in as ${this.user.displayName}`);
     } catch (e) {
       GameUI.notify.error("Google Account login failed");
     }
@@ -132,13 +133,15 @@ export const Cloud = {
     GameStorage.lastCloudSave = Date.now();
     GameIntervals.checkCloudSave.restart();
     set(ref(this.db, `users/${this.user.id}/web`), GameSaveSerializer.serialize(root));
-    GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud with user ${this.user.displayName}`);
+    if (player.options.hideGoogleName) GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud`);
+    else GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud as user ${this.user.displayName}`);
   },
 
   async loadCheck() {
     const save = await this.load();
     if (save === null) {
-      GameUI.notify.info(`No cloud save for user ${this.user.displayName}`);
+      if (player.options.hideGoogleName) GameUI.notify.info(`No cloud save for current Google Account`);
+      else GameUI.notify.info(`No cloud save for user ${this.user.displayName}`);
     } else {
       const root = GameSaveSerializer.deserialize(save);
       const saveId = GameStorage.currentSlot;
@@ -149,7 +152,8 @@ export const Cloud = {
       // eslint-disable-next-line no-loop-func
       const overwriteLocalSave = () => {
         GameStorage.overwriteSlot(saveId, cloudSave);
-        GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded for user ${this.user.displayName}`);
+        if (player.options.hideGoogleName) GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded`);
+        else GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded for user ${this.user.displayName}`);
       };
 
       // If the comparison fails, we assume the cloud data is corrupted and show the relevant modal

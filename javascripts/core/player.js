@@ -779,6 +779,7 @@ window.player = {
     retryCelestial: false,
     showAllChallenges: false,
     cloudEnabled: true,
+    hideGoogleName: false,
     showCloudModal: true,
     forceCloudOverwrite: false,
     syncSaveIntervals: true,

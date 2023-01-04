@@ -105,6 +105,9 @@ export default {
       <span :style="styleObject">{{ format(maxDarkMatter, 2) }}</span><span v-if="!isDoomed">,
         giving {{ formatPercents(matterExtraPurchasePercentage, 2) }} more purchases from Continuum</span>.
     </div>
+    <div class="o-laitela-matter-amount">
+      Dark Matter Dimensions are unaffected by storing real time.
+    </div>
     <h2
       v-if="!singularitiesUnlocked"
       class="c-laitela-singularity-container"

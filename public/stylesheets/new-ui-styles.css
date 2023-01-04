@@ -34,6 +34,12 @@
   --color-laitela--accent: white;
 }
 
+:root .t-metro,
+:root .t-inverted-metro,
+:root .t-s8 {
+  --color-antimatter--bg: rgba(33, 150, 243, 30%);
+}
+
 body.t-normal,
 body.t-s9 {
   color: white;

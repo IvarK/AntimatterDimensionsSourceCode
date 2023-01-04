@@ -60,6 +60,8 @@ export default {
     update() {
       const options = player.options;
       this.cloudEnabled = options.cloudEnabled;
+      this.forceCloudOverwrite = options.forceCloudOverwrite;
+      this.showCloudModal = options.showCloudModal;
       this.syncSaveIntervals = options.syncSaveIntervals;
       this.showTimeSinceSave = options.showTimeSinceSave;
       this.loggedIn = Cloud.loggedIn;

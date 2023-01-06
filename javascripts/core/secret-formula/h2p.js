@@ -189,6 +189,38 @@ ${PlayerProgress.realityUnlocked()
       tags: ["effect", "stack", "combine", "add", "reduce", "multiply", "divide", "power", "dilation", "glyph"],
       tab: "options/gameplay"
     }, {
+      name: "Common Abbreviations",
+      info: () => `
+Many resources within the game may appear in an abbreviated format as text in order to save space. This How to
+Play entry will update itself with additional entries for new resources as you encounter them for the first time
+<br>
+- <b>AM</b>: Antimatter<br>
+- <b>AD</b>: Antimatter Dimension<br>
+- <b>AG</b>: Antimatter Galaxy<br>
+${PlayerProgress.infinityUnlocked() ? "- <b>IP</b>: Infinity Point<br>" : ""}
+${PlayerProgress.infinityUnlocked() ? "- <b>NC</b>: Normal Challenge<br>" : ""}
+${PlayerProgress.infinityUnlocked() ? "- <b>IC</b>: Infinity Challenge<br>" : ""}
+${InfinityDimension(1).isUnlocked || PlayerProgress.eternityUnlocked() ? "- <b>ID</b>: Infinity Dimension<br>" : ""}
+${PlayerProgress.replicantiUnlocked() ? "- <b>RG</b>: Replicanti Galaxy<br>" : ""}
+${PlayerProgress.eternityUnlocked() ? "- <b>EP</b>: Eternity Point<br>" : ""}
+${PlayerProgress.eternityUnlocked() ? "- <b>TT</b>: Time Theorem<br>" : ""}
+${PlayerProgress.eternityUnlocked() ? "- <b>TD</b>: Time Dimension<br>" : ""}
+${PlayerProgress.eternityUnlocked() ? "- <b>EC</b>: Eternity Challenge<br>" : ""}
+${PlayerProgress.dilationUnlocked() ? "- <b>TP</b>: Tachyon Particle<br>" : ""}
+${PlayerProgress.dilationUnlocked() ? "- <b>DT</b>: Dilated Time<br>" : ""}
+${PlayerProgress.dilationUnlocked() ? "- <b>TG</b>: Tachyon Galaxy<br>" : ""}
+${PlayerProgress.realityUnlocked() ? "- <b>RM</b>: Reality Machine<br>" : ""}
+${PlayerProgress.realityUnlocked() ? "- <b>AP</b>: Automator Point<br>" : ""}
+${PlayerProgress.realityUnlocked() ? "- <b>BH</b>: Black Hole<br>" : ""}
+${MachineHandler.isIMUnlocked ? "- <b>iM</b>: Imaginary Machine<br>" : ""}
+${Laitela.isUnlocked ? "- <b>DM</b>: Dark Matter<br>" : ""}
+${Laitela.isUnlocked ? "- <b>DE</b>: Dark Energy<br>" : ""}
+`,
+      isUnlocked: () => true,
+      tags: ["abbreviation", "shorten", "am", "ad", "ag", "ip", "nc", "ic", "id", "rg", "ep", "tt", "td", "ec", "tp",
+        "dt", "tg", "rm", "ap", "bh", "im", "dm", "de"],
+      tab: ""
+    }, {
       name: "Antimatter Dimensions",
       info: () => `
 Antimatter is a resource that is throughout the entire game for purchasing various things as you progress. You start
@@ -732,7 +764,7 @@ to buy your preferred path and continue on instead of stopping completely at the
 for the Dimension split in this dialog if you have purchased the relevant Time Study.
 <br>
 <br>
-<b>Respecs:</b> A respec allows you to reset the upgrades you have in the tree to retreive all of the Time Theorems
+<b>Respecs:</b> A respec allows you to reset the upgrades you have in the tree to retrieve all of the Time Theorems
 spent on them. It can be done for free, but only triggers on finishing an Eternity; you can't respec Time Studies in
 the middle of an Eternity.
 <br>

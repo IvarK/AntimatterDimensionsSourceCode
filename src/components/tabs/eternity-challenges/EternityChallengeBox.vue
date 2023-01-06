@@ -132,6 +132,7 @@ export default {
           v-if="completions < 5"
           :config="nextRewardConfig"
           label="Next"
+          :ignore-capped="true"
         />
       </span>
     </template>

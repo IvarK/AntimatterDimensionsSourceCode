@@ -139,7 +139,7 @@ GameDatabase.reality.glyphCosmeticSets = {
   celestial: {
     id: "celestial",
     name: "Celestial Icons",
-    symbol: ["⌬", "ᛝ", "♅"],
+    symbol: ["\uF0C1", "⌬", "ᛝ", "♅"],
     color: ["B#00BCD4"],
   },
   alchemy: {

@@ -536,7 +536,7 @@ export function gameLoop(passDiff, options = {}) {
   Currency.realities.add(uncountabilityGain);
   Currency.perkPoints.add(uncountabilityGain);
 
-  if (Perk.autocompleteEC1.canBeApplied && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
+  if (Perk.autocompleteEC1.canBeApplied) player.reality.lastAutoEC += realDiff;
 
   EternityChallenge(12).tryFail();
   Achievements._power.invalidate();

@@ -310,7 +310,10 @@ export const EternityChallenges = {
 
   autoComplete: {
     tick() {
-      if (!player.reality.autoEC || Pelle.isDisabled("autoec")) return;
+      if (!player.reality.autoEC || Pelle.isDisabled("autoec")) {
+        player.reality.lastAutoEC = Math.clampMax(player.reality.lastAutoEC, this.interval);
+        return;
+      }
       if (Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied) {
         let next = this.nextChallenge;
         while (next !== undefined) {

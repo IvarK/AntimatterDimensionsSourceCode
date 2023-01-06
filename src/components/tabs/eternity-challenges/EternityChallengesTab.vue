@@ -25,6 +25,16 @@ export default {
   computed: {
     challenges() {
       return EternityChallenges.all;
+    },
+    nextECText() {
+      return this.untilNextEC.totalMilliseconds === 0 && !this.autoEC
+        ? "Immediately upon unpausing"
+        : `${this.untilNextEC} (real time)`;
+    },
+    allECText() {
+      return this.untilAllEC.totalMilliseconds === 0 && !this.autoEC
+        ? "Immediately upon unpausing"
+        : `After ${this.untilAllEC} (real time)`;
     }
   },
   methods: {
@@ -57,21 +67,22 @@ export default {
 <template>
   <div class="l-challenges-tab">
     <ChallengeTabHeader />
-    <div v-if="autoEC && isAutoECVisible">
+    <div v-if="isAutoECVisible">
       Eternity Challenges are automatically completed sequentially, requiring all previous
       Eternity Challenges to be fully completed before any progress is made.
     </div>
     <div
-      v-if="autoEC && isAutoECVisible && remainingECTiers > 0"
+      v-if="isAutoECVisible && remainingECTiers > 0"
       class="c-challenges-tab__auto-ec-info l-challenges-tab__auto-ec-info"
     >
       <div class="l-challenges-tab__auto-ec-timers">
-        <span v-if="remainingECTiers > 1">
-          Next Auto Eternity Challenge completion in: {{ untilNextEC }} (real time)
+        <span v-if="remainingECTiers > 0">
+          Next Auto Eternity Challenge completion: {{ nextECText }}
         </span>
         <span>
-          All Auto Eternity Challenge completions in: {{ untilAllEC }} (real time)
+          All Auto Eternity Challenge completion: {{ allECText }}
         </span>
+        <br>
       </div>
     </div>
     <div>

@@ -27,7 +27,7 @@ function handleChallengeCompletion() {
 export function manualBigCrunchResetRequest() {
   if (!Player.canCrunch) return;
   if (GameEnd.creditsEverClosed) return;
-  if (player.options.confirmations.bigCrunch) {
+  if (player.options.confirmations.bigCrunch && player.break) {
     Modal.bigCrunch.show();
   } else {
     bigCrunchResetRequest();

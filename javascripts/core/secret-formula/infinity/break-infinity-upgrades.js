@@ -138,8 +138,7 @@ GameDatabase.infinity.breakUpgrades = {
       if (!BreakInfinityUpgrade.ipGen.isCapped) {
         generation += ` ➜ ${formatInt(5 * (1 + player.infinityRebuyables[2]))}%`;
       }
-      const offlineString = player.options.offlineProgress ? ", works offline" : "";
-      return `${generation} of your best IP/min from your last 10 Infinities${offlineString}`;
+      return `${generation} of your best IP/min from your last 10 Infinities`;
     },
     isDisabled: effect => effect.eq(0),
     formatEffect: value => `${format(value, 2, 1)} IP/min`,

@@ -34,7 +34,7 @@ export default {
       };
     },
     // Show EP/min below this threshold, color the EP number above it
-    rateThreshold: () => 5e11,
+    rateThreshold: () => 1e20,
     showEPRate() {
       return this.peakEPRate.lte(this.rateThreshold);
     },

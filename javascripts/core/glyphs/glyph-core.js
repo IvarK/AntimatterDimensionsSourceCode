@@ -448,6 +448,9 @@ export const Glyphs = {
     }
     if (player.reality.autoCollapse) this.collapseEmptySlots();
   },
+  sortByLevel() {
+    this.sort((a, b) => -a.level + b.level);
+  },
   sortByPower() {
     this.sort((a, b) => -a.level * a.strength + b.level * b.strength);
   },

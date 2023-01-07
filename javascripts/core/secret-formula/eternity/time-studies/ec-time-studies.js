@@ -10,7 +10,7 @@ GameDatabase.eternity.timeStudies.ec = [
     secondary: {
       resource: "Eternities",
       current: () => Currency.eternities.value,
-      required: completions => new Decimal(20000 + completions * 20000),
+      required: completions => new Decimal(20000 + Math.min(completions, 4) * 20000),
       formatValue: formatInt
     }
   },
@@ -22,7 +22,7 @@ GameDatabase.eternity.timeStudies.ec = [
     secondary: {
       resource: "Tickspeed upgrades from Time Dimensions",
       current: () => player.totalTickGained,
-      required: completions => 1300 + completions * 150,
+      required: completions => 1300 + Math.min(completions, 4) * 150,
       formatValue: formatInt
     }
   },
@@ -34,7 +34,7 @@ GameDatabase.eternity.timeStudies.ec = [
     secondary: {
       resource: "8th Antimatter Dimensions",
       current: () => AntimatterDimension(8).totalAmount,
-      required: completions => new Decimal(17300 + completions * 1250),
+      required: completions => new Decimal(17300 + Math.min(completions, 4) * 1250),
       formatValue: value => formatInt(Math.floor(value.toNumber()))
     }
   },
@@ -46,7 +46,7 @@ GameDatabase.eternity.timeStudies.ec = [
     secondary: {
       resource: "Infinities",
       current: () => Currency.infinitiesTotal.value,
-      required: completions => new Decimal(1e8 + completions * 5e7),
+      required: completions => new Decimal(1e8 + Math.min(completions, 4) * 2.5e7),
       formatValue: value => formatInt(Math.floor(value.toNumber()))
     }
   },
@@ -58,7 +58,7 @@ GameDatabase.eternity.timeStudies.ec = [
     secondary: {
       resource: "Antimatter Galaxies",
       current: () => player.galaxies,
-      required: completions => 160 + completions * 14,
+      required: completions => 160 + Math.min(completions, 4) * 14,
       formatValue: formatInt
     }
   },
@@ -70,7 +70,7 @@ GameDatabase.eternity.timeStudies.ec = [
     secondary: {
       resource: "Replicanti Galaxies",
       current: () => player.replicanti.galaxies,
-      required: completions => 40 + completions * 5,
+      required: completions => 40 + Math.min(completions, 4) * 5,
       formatValue: formatInt
     }
   },
@@ -82,7 +82,7 @@ GameDatabase.eternity.timeStudies.ec = [
     secondary: {
       resource: "antimatter",
       current: () => Currency.antimatter.value,
-      required: completions => DC.E300000.pow(completions).times(DC.E500000),
+      required: completions => DC.E300000.pow(Math.min(completions, 4)).times(DC.E500000),
       formatValue: value => format(value)
     }
   },
@@ -94,7 +94,7 @@ GameDatabase.eternity.timeStudies.ec = [
     secondary: {
       resource: "Infinity Points",
       current: () => Currency.infinityPoints.value,
-      required: completions => DC.E1000.pow(completions).times(DC.E4000),
+      required: completions => DC.E1000.pow(Math.min(completions, 4)).times(DC.E4000),
       formatValue: value => format(value)
     }
   },
@@ -106,7 +106,7 @@ GameDatabase.eternity.timeStudies.ec = [
     secondary: {
       resource: "Infinity Power",
       current: () => Currency.infinityPower.value,
-      required: completions => DC.E2000.pow(completions).times(DC.E17500),
+      required: completions => DC.E2000.pow(Math.min(completions, 4)).times(DC.E17500),
       formatValue: value => format(value)
     }
   },
@@ -118,7 +118,7 @@ GameDatabase.eternity.timeStudies.ec = [
     secondary: {
       resource: "Eternity Points",
       current: () => Currency.eternityPoints.value,
-      required: completions => DC.E20.pow(completions).times(DC.E100),
+      required: completions => DC.E20.pow(Math.min(completions, 4)).times(DC.E100),
       formatValue: value => format(value)
     }
   },

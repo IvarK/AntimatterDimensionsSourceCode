@@ -36,6 +36,17 @@ export const Effarig = {
     }
     return EFFARIG_STAGES.COMPLETED;
   },
+  get currentStageName() {
+    switch (this.currentStage) {
+      case EFFARIG_STAGES.INFINITY:
+        return "Infinity";
+      case EFFARIG_STAGES.ETERNITY:
+        return "Eternity";
+      case EFFARIG_STAGES.REALITY:
+      default:
+        return "Reality";
+    }
+  },
   get eternityCap() {
     return this.isRunning && this.currentStage === EFFARIG_STAGES.ETERNITY ? DC.E50 : undefined;
   },

@@ -92,3 +92,5 @@ export * from "./ui/tab-notifications";
 export * from "./speedrun";
 
 export * from "./automator/script-templates";
+
+export * from "./discord-parser";

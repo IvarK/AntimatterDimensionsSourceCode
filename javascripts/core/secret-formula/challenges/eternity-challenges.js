@@ -168,7 +168,7 @@ GameDatabase.challenges.eternity = [
     id: 11,
     description: () => `all Dimension multipliers and powers are disabled except for the multipliers from
       Infinity Power and Dimension Boosts (to Antimatter Dimensions). ${specialInfinityGlyphDisabledEffectText()}`,
-    goal: DC.E500,
+    goal: DC.E450,
     pelleGoal: DC.E11200,
     goalIncrease: DC.E200,
     pelleGoalIncrease: DC.E1400,

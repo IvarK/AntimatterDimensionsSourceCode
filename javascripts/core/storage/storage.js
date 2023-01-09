@@ -17,6 +17,10 @@ export const GameStorage = {
   offlineEnabled: undefined,
   offlineTicks: undefined,
 
+  maxOfflineTicks(simulatedMs, defaultTicks = this.offlineTicks) {
+    return Math.clampMax(defaultTicks, Math.floor(simulatedMs / 50));
+  },
+
   get localStorageKey() {
     return DEV ? "dimensionTestSave" : "dimensionSave";
   },
@@ -253,6 +257,7 @@ export const GameStorage = {
     Enslaved.boostReality = false;
     GameEnd.additionalEnd = 0;
     Theme.set(Theme.currentName());
+    Glyphs.unseen = [];
     Notations.find(player.options.notation).setAsCurrent(true);
     ADNotations.Settings.exponentCommas.show = player.options.commas;
 

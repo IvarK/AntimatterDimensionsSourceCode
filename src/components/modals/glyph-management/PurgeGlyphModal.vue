@@ -25,7 +25,8 @@ export default {
     extraMessage() {
       if (this.glyphsDeleted === 0) return `This will Purge no Glyphs.`;
       if (this.glyphsDeleted === this.glyphsTotal) return `This will Purge all your Glyphs.`;
-      return `${this.harsh ? `Harsh Purging` : `Purging`} will delete ${this.glyphsDeleted}/${this.glyphsTotal}
+      return `${this.harsh ? `Harsh Purging` : `Purging`} will delete
+        ${formatInt(this.glyphsDeleted)}/${formatInt(this.glyphsTotal)}
       of your Glyphs.`;
     },
     explanation() {

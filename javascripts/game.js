@@ -3,11 +3,11 @@ import TWEEN from "tween.js";
 import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
 import { playFabLogin } from "./core/playfab";
+import { DEV } from "./core/devtools";
 import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
 
 import Payments from "./core/payments";
-import { DEV } from "./core/devtools";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -653,7 +653,7 @@ function passivePrestigeGen() {
     let infGen = DC.D0;
     if (BreakInfinityUpgrade.infinitiedGen.isBought) {
       // Multipliers are done this way to explicitly exclude ach87 and TS32
-      infGen = infGen.plus(0.2 * Time.deltaTimeMs / Math.clampMin(33, player.records.bestInfinity.time));
+      infGen = infGen.plus(0.5 * Time.deltaTimeMs / Math.clampMin(50, player.records.bestInfinity.time));
       infGen = infGen.timesEffectsOf(
         RealityUpgrade(5),
         RealityUpgrade(7),
@@ -686,12 +686,7 @@ function applyAutoUnlockPerks() {
   }
   if (Perk.autounlockDilation3.canBeApplied) buyDilationUpgrade(DilationUpgrade.ttGenerator.id);
   if (Perk.autounlockReality.canBeApplied) TimeStudy.reality.purchase(true);
-  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.canBeApplied) {
-    const secondRow = EternityUpgrade.all.filter(u => u.id > 3);
-    for (const upgrade of secondRow) {
-      if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);
-    }
-  }
+  applyEU2();
 }
 
 function laitelaRealityTick(realDiff) {
@@ -875,7 +870,7 @@ export function simulateTime(seconds, real, fast) {
   GameUI.notify.showBlackHoles = false;
 
   // Limit the tick count (this also applies if the black hole is unlocked)
-  const maxTicks = GameStorage.offlineTicks ?? player.options.offlineTicks;
+  const maxTicks = GameStorage.maxOfflineTicks(1000 * seconds, GameStorage.offlineTicks ?? player.options.offlineTicks);
   if (ticks > maxTicks && !real && !fast) {
     ticks = maxTicks;
   } else if (ticks > 50 && !real && fast) {

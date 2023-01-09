@@ -672,7 +672,7 @@ export function finishProcessReality(realityProps) {
   } else if (RealityUpgrade(14).isBought) {
     // Eternal flow will always give eternities after the first tick,
     // better to try apply EU1 immediately once at the start rather than on every tick
-    applyRealityUpgradesAfterEternity();
+    applyEU1();
   }
 
   if (!isReset) Ra.applyAlchemyReactions(realityRealTime);
@@ -734,7 +734,7 @@ export function applyRUPG10() {
   Replicanti.amount = Replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
 
-  applyRealityUpgradesAfterEternity();
+  applyEU1();
 }
 
 export function clearCelestialRuns() {

@@ -222,20 +222,20 @@ GameDatabase.reality.glyphEffects = {
     isGenerated: true,
     glyphTypes: ["replication"],
     singleDesc: () => (GlyphAlteration.isAdded("replication")
-      ? "Multiply Dilated Time \n[and Replicanti speed] by \nlog₁₀(replicanti)×{value}"
-      : "Multiply Dilated Time gain by \nlog₁₀(replicanti)×{value}"),
+      ? `Multiply Dilated Time \n[and Replicanti speed] by \n+{value} per ${format(DC.E10000)} replicanti`
+      : `Multiply Dilated Time gain by \n+{value} per ${format(DC.E10000)} replicanti`),
     totalDesc: () => (GlyphAlteration.isAdded("replication")
-      ? "Dilated Time gain and Replication speed ×(log₁₀(replicanti)×{value})"
-      : "Dilated Time gain ×(log₁₀(replicanti)×{value})"),
+      ? `Multiply Dilated Time and Replication speed by +{value} per ${format(DC.E10000)} replicanti`
+      : `Multiply Dilated Time gain by +{value} per ${format(DC.E10000)} replicanti`),
     genericDesc: () => (GlyphAlteration.isAdded("replication")
-      ? "Dilated Time+Replicanti mult (log₁₀(replicanti))"
-      : "Dilated Time gain multiplier (log₁₀(replicanti))"),
+      ? "Dilated Time+Replicanti mult from replicanti"
+      : "Dilated Time gain multiplier from replicanti"),
     shortDesc: () => (GlyphAlteration.isAdded("replication")
-      ? "DT and repl. ×log₁₀(repl.)×{value}"
-      : "DT ×log₁₀(repl.)×{value}"),
+      ? `×DT and repl. by +{value} per ${format(DC.E10000)} replicanti`
+      : `×DT by +{value} per ${format(DC.E10000)} replicanti`),
     effect: (level, strength) => 0.0003 * Math.pow(level, 0.3) * Math.pow(strength, 0.65),
-    formatEffect: x => format(x, 5, 5),
-    formatSingleEffect: x => format(x, 5, 5),
+    formatEffect: x => format(10000 * x, 2, 2),
+    formatSingleEffect: x => format(10000 * x, 2, 2),
     // It's bad to stack this one additively (N glyphs acts as a DT mult of N) or multiplicatively (the raw number is
     // less than 1), so instead we do a multiplicative stacking relative to the "base" effect of a level 1, 0% glyph.
     // We also introduce a 3x mult per glyph after the first, so that stacking level 1, 0% glyphs still has an effect.

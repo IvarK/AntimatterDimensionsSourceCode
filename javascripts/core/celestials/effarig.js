@@ -51,10 +51,10 @@ export const Effarig = {
     }
   },
   get glyphEffectAmount() {
-    const genEffectBitmask = Glyphs.activeList
+    const genEffectBitmask = Glyphs.activeWithoutCompanion
       .filter(g => generatedTypes.includes(g.type))
       .reduce((prev, curr) => prev | curr.effects, 0);
-    const nongenEffectBitmask = Glyphs.activeList
+    const nongenEffectBitmask = Glyphs.activeWithoutCompanion
       .filter(g => !generatedTypes.includes(g.type))
       .reduce((prev, curr) => prev | curr.effects, 0);
     return countValuesFromBitmask(genEffectBitmask) + countValuesFromBitmask(nongenEffectBitmask);

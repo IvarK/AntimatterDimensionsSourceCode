@@ -72,6 +72,10 @@ export default {
         if (remainingTime === 0) {
           this.remainingTimeText = `At Infinite Replicanti (normally takes
             ${TimeSpan.fromSeconds(secondsPerGalaxy.toNumber())})`;
+        } else if (replicantiAmount.lt(100)) {
+          // Because of discrete replication, we add "Approximately" at very low amounts
+          this.remainingTimeText = `Approximately ${TimeSpan.fromSeconds(remainingTime)} remaining
+            until Infinite Replicanti`;
         } else {
           this.remainingTimeText = `${TimeSpan.fromSeconds(remainingTime)} remaining until Infinite Replicanti`;
         }

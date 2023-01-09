@@ -40,6 +40,7 @@ Autobuyer.epMult = new class EPMultAutobuyerState extends AutobuyerState {
   }
 
   tick() {
+    applyEU2();
     EternityUpgrade.epMult.buyMax();
   }
 }();

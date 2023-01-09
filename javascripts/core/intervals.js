@@ -59,7 +59,7 @@ export const GameIntervals = (function() {
     ),
     checkCloudSave: interval(() => {
       if (player.options.cloudEnabled && Cloud.loggedIn) Cloud.saveCheck();
-    }, 300000),
+    }, 600 * 1000),
     randomSecretAchievement: interval(() => {
       if (Math.random() < 0.00001) SecretAchievement(18).unlock();
     }, 1000),

@@ -31,13 +31,13 @@ const SteamFunctions = {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         window.requestAnimationFrame(SteamFunctions.forceRefresh);
     },
-    SetRichPresence(status){
+    SetRichPresence(){
         if(SteamFunctions.discordOn){
             Steam.setDiscordActivity({
                 smallImage: "icon",
                 largeImage: "icon",
-                state: status,
-                details: "Playing Antimatter Dimensions"
+                state: RichPresenceInfo.state,
+                details: RichPresenceInfo.details
             })
         }
     },

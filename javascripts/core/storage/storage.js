@@ -67,6 +67,7 @@ export const GameStorage = {
     Cloud.resetTempState();
     GameUI.notify.info("Game loaded");
     SteamFunctions.BackfillAchievements()
+    if(SteamFunctions.discordOn){SteamFunctions.SetRichPresence()};
   },
 
   import(saveData) {
@@ -170,7 +171,7 @@ export const GameStorage = {
     };
     localStorage.setItem(this.localStorageKey, GameSaveSerializer.serialize(root));
     if (!silent) GameUI.notify.info("Game saved");
-    if(SteamFunctions.discordOn){SteamFunctions.SetRichPresence(`${format(player.antimatter,2)} Antimatter`)}
+    if(SteamFunctions.discordOn){SteamFunctions.SetRichPresence()};
   },
 
   export() {

@@ -19,11 +19,12 @@ export const RichPresenceInfo = {
   // First line of info for DRP
   get details() {
     const chall = this.challengeState;
-    if (!chall) return `${this.gameStage.name} (${this.gameStage.mainResource()})`;
+    const stageName = typeof this.gameStage.name === "function" ? this.gameStage.name() : this.gameStage.name;
+    if (!chall) return `At ${stageName} (${this.gameStage.mainResource()})`;
     const challResStr = chall.resource()
       ? `, ${chall.resource()}`
       : "";
-    return `${this.gameStage.name} (In ${chall.name(chall.activityToken())}${challResStr})`;
+    return `At ${stageName} (In ${chall.name(chall.activityToken())}${challResStr})`;
   },
   // Second line of info for DRP
   get state() {

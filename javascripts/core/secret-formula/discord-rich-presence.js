@@ -1,5 +1,19 @@
 import { GameDatabase } from "./game-database";
 
+// We define these in the local scope to override the player's notation setting; this is something we'll probably
+// expand upon later once we look more closely at support for extended Unicode in DRP
+function format(number, places, placesUnder1000) {
+  return Notation.scientific.format(number, places, placesUnder1000);
+}
+
+function formatInt(number, places) {
+  return Notation.scientific.formatInt(number, places);
+}
+
+function formatMachines(realPart, imagPart) {
+  return Notation.scientific.formatMachines(realPart, imagPart);
+}
+
 // This is used for Discord Rich Presence, the information which shows up on a person's profile badge in Discord if
 // they are playing a game on Steam which has integration that pushes the info to Discord
 GameDatabase.discordRichPresence = {
@@ -141,56 +155,56 @@ GameDatabase.discordRichPresence = {
         () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`],
     },
     {
-      name: "Celestial 1",
+      name: "Teresa",
       hasReached: () => Teresa.isUnlocked,
       mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
       resourceList: [() => quantify("Reality", player.realities),
         () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`],
     },
     {
-      name: "Celestial 2",
+      name: "Effarig",
       hasReached: () => TeresaUnlocks.effarig.isUnlocked,
       mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
       resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
         () => quantify("Relic Shard", player.celestials.effarig.relicShards)],
     },
     {
-      name: "Celestial 3",
+      name: "The Nameless Ones",
       hasReached: () => EffarigUnlock.eternity.isUnlocked,
       mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
       resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`],
     },
     {
-      name: "Celestial 4",
+      name: "V",
       hasReached: () => Achievement(151).isUnlocked,
       mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
       resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
         () => quantify("V-Achievement", player.celestials.v.runUnlocks.sum())],
     },
     {
-      name: "Celestial 5",
+      name: "Ra",
       hasReached: () => VUnlocks.raUnlock.isUnlocked,
       mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
       resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
         () => `Levels: ${Ra.pets.all.map(p => formatInt(p.level)).join("/")}`],
     },
     {
-      name: "Celestial 5",
+      name: "Ra",
       hasReached: () => MachineHandler.isIMUnlocked,
       mainResource: () => `${formatMachines(player.reality.realityMachines, player.reality.imaginaryMachines)} RM`,
       resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`],
     },
     {
-      name: "Celestial 6",
+      name: "Lai'tela",
       hasReached: () => Laitela.isUnlocked,
       mainResource: () => `${formatMachines(player.reality.realityMachines, player.reality.imaginaryMachines)} RM`,
       resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
         () => quantify("Singularity", player.celestials.laitela.singularities)],
     },
     {
-      name: "Celestial 7",
+      name: "Pelle",
       hasReached: () => Pelle.isDoomed,
-      mainResource: () => quantify("Reality Shard", player.celestials.pelle.realityShards),
+      mainResource: () => quantify("Reality Shard", player.celestials.pelle.realityShards, 2),
       resourceList: [() => quantify("Remnant", player.celestials.pelle.remnants)],
     },
   ]

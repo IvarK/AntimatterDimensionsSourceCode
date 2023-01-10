@@ -7,6 +7,7 @@ const SteamFunctions = {
     macUser: false,
     macInterval: 0,
     discordInterval: 0,
+    richPresenceInterval: 0,
     discordOn: false,
     macIntervalOn: false,
     zoomLevel: 1,
@@ -18,9 +19,9 @@ const SteamFunctions = {
           SteamFunctions.macUser = true;
         }else{
             Steam.initDiscordAPI("1057439416819396689",1399720)
-            SteamFunctions.discordInterval = setInterval(Steam.runDiscordCallbacks, 4000);
             SteamFunctions.discordOn = true
-            //setInterval(()=>{SteamFunctions.SetRichPresence(`${format(player.antimatter,2)} Antimatter)`},4000)
+            SteamFunctions.richPresenceInterval = setInterval(SteamFunctions.SetRichPresence,8000)
+            SteamFunctions.discordInterval = setInterval(Steam.runDiscordCallbacks, 4000);
         }
         this.GetZoom()
     },
@@ -32,7 +33,7 @@ const SteamFunctions = {
         window.requestAnimationFrame(SteamFunctions.forceRefresh);
     },
     SetRichPresence(){
-        if(SteamFunctions.discordOn){
+        if(SteamFunctions.discordOn && RichPresenceInfo){
             Steam.setDiscordActivity({
                 smallImage: "icon",
                 largeImage: "icon",

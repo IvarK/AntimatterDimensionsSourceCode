@@ -1021,6 +1021,7 @@ window.onload = function() {
     if(Steam){
 			if(Steam.initAPI()){
         playFabLogin();
+        if(SteamFunctions.discordOn){SteamFunctions.SetRichPresence()};
       }
     }
     document.getElementById("loading").style.display = "none";

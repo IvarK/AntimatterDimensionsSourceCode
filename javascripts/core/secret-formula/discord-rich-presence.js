@@ -105,12 +105,12 @@ GameDatabase.discordRichPresence = {
    */
   stages: [
     {
-      stateName: "Pre-Infinity",
+      name: "Pre-Infinity",
       hasReached: () => true,
       mainResource: () => `${format(player.antimatter, 2, 2)} AM`,
     },
     {
-      stateName: "Infinity",
+      name: "Infinity",
       hasReached: () => PlayerProgress.infinityUnlocked(),
       mainResource: () => `${format(player.infinityPoints, 2, 2)} IP`,
       resourceList: [() => quantify("Infinity", player.infinities)],

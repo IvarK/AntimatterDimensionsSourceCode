@@ -48,7 +48,7 @@ GameDatabase.discordRichPresence = {
         : `${format(player.eternityPoints, 2)} EP`),
     },
     {
-      name: () => `${Effarig.possessiveName} Reality - ${Effarig.currentStageName} Layer`,
+      name: () => `${Effarig.possessiveName} Reality - ${Effarig.currentStageName}`,
       activityToken: () => Effarig.isRunning,
       resource: () => {
         switch (Effarig.currentStage) {
@@ -80,27 +80,37 @@ GameDatabase.discordRichPresence = {
       // Ra doesn't have a meaningful in-reality resource to display
     },
     {
-      name: () => `${Laitela.possessiveName} Reality`,
+      name: () => {
+        const dims = Laitela.maxAllowedDimension;
+        const dimStr = dims ? `D${dims} max` : "Final";
+        return `${Laitela.possessiveName} Reality - ${dimStr}`;
+      },
       activityToken: () => Laitela.isRunning,
       resource: () => `${formatPercents(player.celestials.laitela.entropy, 2, 2)} Entropy`,
     },
     {
-      name: () => "Dilated Eternity",
+      name: () => "Dilation",
       activityToken: () => player.dilation.active,
       resource: () => `${format(player.antimatter, 2, 1)} AM`,
     },
     {
-      name: token => `Eternity Challenge ${token}`,
-      activityToken: () => player.challenge.eternity.current,
+      name: token => `EC ${token}`,
+      // This results in "EC 3x3" (for example) when there are remaining completions, and just "EC 3" if not
+      activityToken: () => {
+        if (!player.challenge.eternity.current) return false;
+        const num = player.challenge.eternity.current;
+        const ec = EternityChallenge(num);
+        return ec.remainingCompletions ? `${num}x${ec.completions + 1}` : num;
+      },
       resource: () => `${format(player.infinityPoints, 2)} IP`,
     },
     {
-      name: token => `Infinity Challenge ${token}`,
+      name: token => `IC ${token}`,
       activityToken: () => player.challenge.infinity.current,
       resource: () => `${format(player.antimatter, 2, 1)} AM`,
     },
     {
-      name: token => `Normal Challenge ${token}`,
+      name: token => `NC ${token}`,
       activityToken: () => player.challenge.normal.current,
       resource: () => `${format(player.antimatter, 2, 1)} AM`,
     },
@@ -118,8 +128,8 @@ GameDatabase.discordRichPresence = {
    *  @property {function: @return String} mainResource           Function returning the string describing the main
    *    resource for a stage of the game
    *  @property {Array: function: @return String} resourceList    Array of strings containing relevant resources for
-   *    each particular part of the game. Largely just a list of key resources that are relevant at each section. May
-   *    be undefined.
+   *    each particular part of the game. Largely just a list of key resources that are relevant at each section. The
+   *    logic *can* handle this being undefined, but it probably shouldn't be due to poor appearance
    * }
    */
   stages: [
@@ -127,6 +137,10 @@ GameDatabase.discordRichPresence = {
       name: "Pre-Infinity",
       hasReached: () => true,
       mainResource: () => `${format(player.antimatter, 2, 1)} AM`,
+      resourceList: [
+        () => quantify("Boost", player.dimensionBoosts, 0, 0, formatInt),
+        () => quantify("Galaxy", player.galaxies, 0, 0, formatInt),
+      ],
     },
     {
       name: "Infinity",
@@ -233,10 +247,17 @@ GameDatabase.discordRichPresence = {
         () => quantify("Singularity", player.celestials.laitela.singularities, 2, 0, format)],
     },
     {
-      name: () => Pelle.displayName,
+      // We can't use celestial displayName here like the others because that will cause the text scramble to get put on DRP
+      name: "Pelle",
       hasReached: () => Pelle.isDoomed,
       mainResource: () => quantify("Reality Shard", player.celestials.pelle.realityShards, 2),
-      resourceList: [() => quantify("Remnant", player.celestials.pelle.remnants)],
+      resourceList: [() => quantify("Remnant", player.celestials.pelle.remnants, 2)],
+    },
+    {
+      name: "END",
+      hasReached: () => GameEnd.endState >= END_STATE_MARKERS.GAME_END,
+      mainResource: () => "END Antimatter",
+      resourceList: [() => "Nothing remains."],
     },
   ]
 };

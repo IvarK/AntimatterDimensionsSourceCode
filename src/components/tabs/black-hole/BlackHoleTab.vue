@@ -55,7 +55,6 @@ export default {
       this.isEnslaved = Enslaved.isRunning;
       this.isPermanent = BlackHoles.arePermanent;
       this.pauseMode = player.blackHoleAutoPauseMode;
-      this.canAdjustStoredTime = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.hasBH2 = BlackHole(2).isUnlocked;
       this.blackHoleUptime = [BlackHole(1).duration / BlackHole(1).cycleLength,
         BlackHole(2).duration / BlackHole(2).cycleLength];

@@ -348,9 +348,8 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
     factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   }
 
-  // Time storage is linearly scaled because exponential scaling is pretty useless in practice
   if (Enslaved.isStoringGameTime && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
-    const storedTimeWeight = player.celestials.enslaved.storedFraction;
+    const storedTimeWeight = 0.99;
     factor = factor * (1 - storedTimeWeight) + storedTimeWeight;
   }
 

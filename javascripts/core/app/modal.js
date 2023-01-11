@@ -299,7 +299,7 @@ function getSaveInfo(save) {
   resources.remnants = save.celestials?.pelle.remnants ?? 0;
   resources.realityShards.copyFrom(new Decimal(save.celestials?.pelle.realityShards));
   resources.pelleLore = save.celestials?.pelle.quoteBits ?? 0;
-  resources.saveName = save.options.saveFileName ?? "";
+  resources.saveName = save.options?.saveFileName ?? "";
   resources.compositeProgress = ProgressChecker.getCompositeProgress(save);
 
   return resources;

@@ -6,12 +6,17 @@ function format(number, places, placesUnder1000) {
   return Notation.scientific.format(number, places, placesUnder1000);
 }
 
-function formatInt(number, places) {
-  return Notation.scientific.formatInt(number, places);
+function formatInt(value) {
+  if (Notations.current.isPainful) return format(value, 2);
+  return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
 function formatMachines(realPart, imagPart) {
-  return Notation.scientific.formatMachines(realPart, imagPart);
+  const parts = [];
+  if (Decimal.neq(realPart, 0)) parts.push(format(realPart, 2));
+  if (Decimal.neq(imagPart, 0)) parts.push(`${format(imagPart, 2, 2)}i`);
+  if (Decimal.eq(realPart, 0) && Decimal.eq(imagPart, 0)) return format(0);
+  return parts.join(" + ");
 }
 
 // This is used for Discord Rich Presence, the information which shows up on a person's profile badge in Discord if
@@ -39,8 +44,8 @@ GameDatabase.discordRichPresence = {
       activityToken: () => Teresa.isRunning,
       // Reward is based on antimatter, but EP is more meaningful pre-completion
       resource: () => (Teresa.runCompleted
-        ? `${format(player.antimatter, 2, 2)} AM`
-        : `${format(player.eternityPoints, 2, 2)} EP`),
+        ? `${format(player.antimatter, 2, 1)} AM`
+        : `${format(player.eternityPoints, 2)} EP`),
     },
     {
       name: () => `${Effarig.possessiveName} Reality - ${Effarig.currentStageName} Layer`,
@@ -48,19 +53,19 @@ GameDatabase.discordRichPresence = {
       resource: () => {
         switch (Effarig.currentStage) {
           case EFFARIG_STAGES.INFINITY:
-            return `${format(player.antimatter, 2, 2)} AM`;
+            return `${format(player.antimatter, 2, 1)} AM`;
           case EFFARIG_STAGES.ETERNITY:
-            return `${format(player.infinityPoints, 2, 2)} IP`;
+            return `${format(player.infinityPoints, 2)} IP`;
           case EFFARIG_STAGES.REALITY:
           default:
-            return `${format(player.eternityPoints, 2, 2)} EP`;
+            return `${format(player.eternityPoints, 2)} EP`;
         }
       },
     },
     {
       name: () => `${Enslaved.possessiveName} Reality`,
       activityToken: () => Enslaved.isRunning,
-      resource: () => `${format(player.eternityPoints, 2, 2)} EP`,
+      resource: () => `${format(player.eternityPoints, 2)} EP`,
     },
     {
       name: () => `${V.possessiveName} Reality`,
@@ -82,22 +87,22 @@ GameDatabase.discordRichPresence = {
     {
       name: () => "Dilated Eternity",
       activityToken: () => player.dilation.active,
-      resource: () => `${format(player.antimatter, 2, 2)} AM`,
+      resource: () => `${format(player.antimatter, 2, 1)} AM`,
     },
     {
       name: token => `Eternity Challenge ${token}`,
       activityToken: () => player.challenge.eternity.current,
-      resource: () => `${format(player.infinityPoints, 2, 2)} IP`,
+      resource: () => `${format(player.infinityPoints, 2)} IP`,
     },
     {
       name: token => `Infinity Challenge ${token}`,
       activityToken: () => player.challenge.infinity.current,
-      resource: () => `${format(player.antimatter, 2, 2)} AM`,
+      resource: () => `${format(player.antimatter, 2, 1)} AM`,
     },
     {
       name: token => `Normal Challenge ${token}`,
       activityToken: () => player.challenge.normal.current,
-      resource: () => `${format(player.antimatter, 2, 2)} AM`,
+      resource: () => `${format(player.antimatter, 2, 1)} AM`,
     },
   ],
 
@@ -121,88 +126,114 @@ GameDatabase.discordRichPresence = {
     {
       name: "Pre-Infinity",
       hasReached: () => true,
-      mainResource: () => `${format(player.antimatter, 2, 2)} AM`,
+      mainResource: () => `${format(player.antimatter, 2, 1)} AM`,
     },
     {
       name: "Infinity",
       hasReached: () => PlayerProgress.infinityUnlocked(),
-      mainResource: () => `${format(player.infinityPoints, 2, 2)} IP`,
-      resourceList: [() => quantify("Infinity", player.infinities)],
+      mainResource: () => `${format(player.infinityPoints, 2)} IP`,
+      resourceList: [() => quantify("Infinity", player.infinities, 0, 0, formatInt)],
+    },
+    {
+      name: "Broken Infinity",
+      hasReached: () => player.break,
+      mainResource: () => `${format(player.infinityPoints, 2)} IP`,
+      resourceList: [() => quantify("Infinity", player.infinities, 2, 0, format)],
     },
     {
       name: "Eternity",
       hasReached: () => PlayerProgress.eternityUnlocked(),
-      mainResource: () => `${format(player.eternityPoints, 2, 2)} EP`,
-      resourceList: [() => quantify("Eternity", player.eternities)],
+      mainResource: () => `${format(player.eternityPoints, 2)} EP`,
+      resourceList: [() => quantify("Eternity", player.eternities, 0, 0, formatInt)],
     },
     {
+      // Eternity Challenge era
       name: "Eternity",
       hasReached: () => player.eternityChalls.eterc1 > 0,
-      mainResource: () => `${format(player.eternityPoints, 2, 2)} EP`,
-      resourceList: [() => quantify("EC completion", player.eternityChalls.reduce((sum, c) => sum + c, 0))],
+      mainResource: () => `${format(player.eternityPoints, 2)} EP`,
+      resourceList: [
+        () => quantify("EC completion", player.eternityChalls.reduce((sum, c) => sum + c, 0), 0, 0, formatInt)
+      ]
     },
     {
       name: "Time Dilation",
       hasReached: () => PlayerProgress.dilationUnlocked(),
-      mainResource: () => `${format(player.eternityPoints, 2, 2)} EP`,
+      mainResource: () => `${format(player.eternityPoints, 2)} EP`,
       resourceList: [() => `${format(player.dilation.dilatedTime, 2, 2)} DT`],
     },
     {
       name: "Reality",
       hasReached: () => player.realities > 0,
-      mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
-      resourceList: [() => quantify("Reality", player.realities),
-        () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`],
+      mainResource: () => `${format(player.reality.realityMachines, 2)} RM`,
+      resourceList: [
+        () => quantify("Reality", player.realities, 0, 0, formatInt),
+        () => `Best Glyph Level: ${formatInt(player.records.bestReality.glyphLevel)}`
+      ]
     },
     {
-      name: "Teresa",
+      name: () => Teresa.displayName,
       hasReached: () => Teresa.isUnlocked,
-      mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
-      resourceList: [() => quantify("Reality", player.realities),
-        () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`],
+      mainResource: () => `${format(player.reality.realityMachines, 2)} RM`,
+      resourceList: [
+        () => quantify("Reality", player.realities, 0, 0, formatInt),
+        () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
+        () => `Poured: ${format(player.celestials.teresa.pouredAmount, 2)} RM`
+      ]
     },
     {
-      name: "Effarig",
+      name: () => Effarig.displayName,
       hasReached: () => TeresaUnlocks.effarig.isUnlocked,
-      mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
-      resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
-        () => quantify("Relic Shard", player.celestials.effarig.relicShards)],
+      mainResource: () => `${format(player.reality.realityMachines, 2)} RM`,
+      resourceList: [
+        () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
+        () => quantify("Relic Shard", player.celestials.effarig.relicShards, 2, 0, format)
+      ]
     },
     {
-      name: "The Nameless Ones",
+      name: () => Enslaved.displayName,
       hasReached: () => EffarigUnlock.eternity.isUnlocked,
-      mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
-      resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`],
+      mainResource: () => `${format(player.reality.realityMachines, 2)} RM`,
+      resourceList: [
+        () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
+        () => `Charged: ${format(TimeSpan.fromMilliseconds(player.celestials.enslaved.stored).totalYears, 2)} years`
+      ],
     },
     {
-      name: "V",
+      name: () => V.displayName,
       hasReached: () => Achievement(151).isUnlocked,
-      mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
-      resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
-        () => quantify("V-Achievement", player.celestials.v.runUnlocks.sum())],
+      mainResource: () => `${format(player.reality.realityMachines, 2)} RM`,
+      resourceList: [
+        () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
+        () => quantify("V-Achievement", player.celestials.v.runUnlocks.sum(), 0, 0, formatInt)],
     },
     {
-      name: "Ra",
+      name: () => Ra.displayName,
       hasReached: () => VUnlocks.raUnlock.isUnlocked,
-      mainResource: () => `${format(player.reality.realityMachines, 2, 2)} RM`,
-      resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
-        () => `Levels: ${Ra.pets.all.map(p => formatInt(p.level)).join("/")}`],
+      mainResource: () => `${format(player.reality.realityMachines, 2)} RM`,
+      resourceList: [
+        () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
+        () => `Ra Levels: ${Ra.pets.all.map(p => formatInt(p.level)).join("/")}`],
     },
     {
-      name: "Ra",
+      // Imaginary Machines unlocked
+      name: () => Ra.displayName,
       hasReached: () => MachineHandler.isIMUnlocked,
       mainResource: () => `${formatMachines(player.reality.realityMachines, player.reality.imaginaryMachines)} RM`,
-      resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`],
+      resourceList: [
+        () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
+        () => `Ra Levels: ${Ra.pets.all.map(p => formatInt(p.level)).join("/")}`
+      ],
     },
     {
-      name: "Lai'tela",
+      name: () => Laitela.displayName,
       hasReached: () => Laitela.isUnlocked,
       mainResource: () => `${formatMachines(player.reality.realityMachines, player.reality.imaginaryMachines)} RM`,
-      resourceList: [() => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
-        () => quantify("Singularity", player.celestials.laitela.singularities)],
+      resourceList: [
+        () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
+        () => quantify("Singularity", player.celestials.laitela.singularities, 2, 0, format)],
     },
     {
-      name: "Pelle",
+      name: () => Pelle.displayName,
       hasReached: () => Pelle.isDoomed,
       mainResource: () => quantify("Reality Shard", player.celestials.pelle.realityShards, 2),
       resourceList: [() => quantify("Remnant", player.celestials.pelle.remnants)],

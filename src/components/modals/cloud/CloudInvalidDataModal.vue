@@ -61,7 +61,7 @@ export default {
     </span>
     <br>
     Note: This modal will show up regardless of your settings, because this issue will continue to prevent
-    the 5-minute autosave until it is resolved.
+    the 10-minute autosave until it is resolved.
     <template #cancel-text>
       {{ overwriteText }}
     </template>

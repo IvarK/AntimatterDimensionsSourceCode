@@ -83,7 +83,7 @@ GameDatabase.multiplierTabValues.gamespeed = {
   },
   chargingBH: {
     name: "Black Hole Charging",
-    multValue: () => 1 - player.celestials.enslaved.storedFraction,
+    multValue: () => (Enslaved.isAutoReleasing ? 0.99 : 1),
     isActive: () => Enslaved.isStoringGameTime,
     icon: MultiplierTabIcons.BLACK_HOLE,
   },

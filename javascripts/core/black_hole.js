@@ -197,16 +197,7 @@ class BlackHoleState {
       if (Enslaved.autoReleaseTick < 3) return `<i class="fas fa-compress-arrows-alt u-fa-padding"></i> Pulsing`;
       return `<i class="fas fa-expand-arrows-alt u-fa-padding"></i> Pulsing`;
     }
-    if (Enslaved.isStoringGameTime) {
-      if (Ra.unlocks.adjustableStoredTime.canBeApplied) {
-        const storedTimeWeight = player.celestials.enslaved.storedFraction;
-        if (storedTimeWeight !== 0) {
-          return `<i class="fas fa-compress-arrows-alt"></i> Charging (${formatPercents(storedTimeWeight, 1)})`;
-        }
-      } else {
-        return `<i class="fas fa-compress-arrows-alt"></i> Charging`;
-      }
-    }
+    if (Enslaved.isStoringGameTime) return `<i class="fas fa-compress-arrows-alt"></i> Charging`;
     if (BlackHoles.areNegative) return `<i class="fas fa-caret-left"></i> Inverted`;
     if (BlackHoles.arePaused) return `<i class="fas fa-pause"></i> Paused`;
     if (this.isPermanent) return `<i class="fas fa-infinity"></i> Permanent`;

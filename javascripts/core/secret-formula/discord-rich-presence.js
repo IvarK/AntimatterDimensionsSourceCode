@@ -152,7 +152,7 @@ GameDatabase.discordRichPresence = {
       hasReached: () => player.eternityChalls.eterc1 > 0,
       mainResource: () => `${format(player.eternityPoints, 2)} EP`,
       resourceList: [
-        () => quantify("EC completion", player.eternityChalls.reduce((sum, c) => sum + c, 0), 0, 0, formatInt)
+        () => quantify("EC completion", Object.values(player.eternityChalls).reduce((sum, c) => sum + c, 0), 0, 0, formatInt)
       ]
     },
     {

@@ -118,7 +118,7 @@ GameDatabase.reality.upgrades = [
       return invalidEquippedGlyphs || (Glyphs.activeWithoutCompanion.length === 0 && !hasValidGlyphInInventory);
     },
     checkRequirement: () => Currency.eternityPoints.exponent >= 4000 &&
-      Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
+      Glyphs.activeWithoutCompanion.length === 1 && Glyphs.activeWithoutCompanion[0].level >= 3,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
     description: "Gain another Glyph slot",
     effect: () => 1

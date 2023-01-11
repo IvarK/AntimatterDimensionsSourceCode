@@ -1090,7 +1090,7 @@ GameDatabase.achievements.normal = [
       .every(type => Glyphs.activeList.some(g => g.type === type)),
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     reward: "Gained Glyph level is increased by number of distinct Glyph types equipped.",
-    effect: () => (new Set(Glyphs.activeList.map(g => g.type))).size,
+    effect: () => (new Set(Glyphs.activeWithoutCompanion.map(g => g.type))).size,
     formatEffect: value => `+${formatInt(value)}`
   },
   {
@@ -1253,7 +1253,7 @@ GameDatabase.achievements.normal = [
       any Charged Infinity Upgrades, having any equipped Glyphs, or buying any Triad Studies.`;
     },
     checkRequirement: () => MachineHandler.gainedRealityMachines.gte(Decimal.NUMBER_MAX_VALUE) &&
-      player.celestials.ra.charged.size === 0 && Glyphs.activeList.length === 0 &&
+      player.celestials.ra.charged.size === 0 && Glyphs.activeWithoutCompanion.length === 0 &&
       player.requirementChecks.reality.noTriads,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },

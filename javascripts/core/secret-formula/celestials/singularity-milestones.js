@@ -282,7 +282,7 @@ GameDatabase.celestials.singularityMilestones = {
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.BOOSTS_MAIN,
   },
   tesseractMultFromSingularities: {
-    start: 8e45,
+    start: 2.5e45,
     repeat: 0,
     limit: 1,
     description: "Singularities increase effective Tesseract count",

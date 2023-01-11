@@ -171,6 +171,9 @@ export const Enslaved = {
   get isCompleted() {
     return player.celestials.enslaved.completed;
   },
+  get canTickHintTimer() {
+    return !EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted;
+  },
   get isUnlocked() {
     return EffarigUnlock.eternity.isUnlocked;
   },

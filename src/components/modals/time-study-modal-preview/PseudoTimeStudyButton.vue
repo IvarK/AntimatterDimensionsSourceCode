@@ -1,4 +1,6 @@
 <script>
+import { ForceBoughtState } from "./StudyStringPreview";
+
 export default {
   name: "PseudoTimeStudyButton",
   props: {
@@ -7,8 +9,8 @@ export default {
       required: true
     },
     forceIsBought: {
-      type: [Boolean, undefined],
-      default: undefined
+      type: Number,
+      default: 1
     },
     isNewFromImport: {
       type: Boolean,
@@ -85,7 +87,7 @@ export default {
     update() {
       const study = this.study;
       this.isUseless = Pelle.uselessTimeStudies.includes(this.study.id) && Pelle.isDoomed;
-      this.isBought = this.forceIsBought ?? study.isBought;
+      this.isBought = ForceBoughtState.getState(this.forceIsBought, study.isBought);
       this.doomedRealityStudy = study.type === TIME_STUDY_TYPE.DILATION && study.id === 6 && Pelle.isDoomed;
     },
   }

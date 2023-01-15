@@ -156,9 +156,8 @@ export default {
       } else if (this.isImporting) {
         if (this.respecAndLoad && Player.canEternity) {
           player.respec = true;
-          const shouldDelayImport = animateAndEternity();
           const studies = new TimeStudyTree(this.truncatedInput).purchasedStudies;
-          setTimeout(() => TimeStudyTree.commitToGameState(studies, false), shouldDelayImport ? 2500 : 0);
+          animateAndEternity(() => TimeStudyTree.commitToGameState(studies, false));
           return;
         }
         this.importTree();

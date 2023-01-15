@@ -1,14 +1,16 @@
 <script>
+import { ForceBoughtState } from "./StudyStringPreview";
+
 export default {
-  name: "TimeStudyConnection",
+  name: "PseudoTimeStudyConnection",
   props: {
     setup: {
       type: Object,
       required: true
     },
     forceIsBought: {
-      type: [Boolean, undefined],
-      default: undefined
+      type: Number,
+      default: 1
     },
   },
   data() {
@@ -59,7 +61,7 @@ export default {
   methods: {
     update() {
       this.isOverridden = this.setup.connection.isOverridden;
-      this.isBought = this.forceIsBought ?? this.setup.isBought;
+      this.isBought = ForceBoughtState.getState(this.forceIsBought, this.setup.isBought);
     },
     percents(value) {
       return `${value * 100}%`;

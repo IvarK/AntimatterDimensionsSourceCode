@@ -4,6 +4,24 @@ import PseudoTimeStudyConnection from "./PseudoTimeStudyConnection";
 
 import { STUDY_TREE_LAYOUT_TYPE, TimeStudyTreeLayout } from "@/components/tabs/time-studies/time-study-tree-layout";
 
+export const ForceBoughtState = {
+  notBought: 0,
+  unspecified: 1,
+  bought: 2,
+
+  getState(forceState, currentState) {
+    switch (forceState) {
+      case this.notBought:
+        return false;
+      case this.unspecified:
+        return currentState;
+      case this.bought:
+        return true;
+    }
+    return currentState;
+  }
+};
+
 export default {
   name: "TimeStudiesTab",
   components: {
@@ -16,8 +34,8 @@ export default {
       default: false
     },
     newStudies: {
-      type: [Object, undefined],
-      required: true
+      required: true,
+      validator: newStudies => Array.isArray(newStudies) || newStudies === undefined,
     },
     showPreview: {
       type: Boolean,
@@ -83,6 +101,17 @@ export default {
         case TIME_STUDY_TYPE.ETERNITY_CHALLENGE: return `EC${study.id}`;
       }
       return "Dilation Study";
+    },
+    getStudyForceBoughtState(studyStr) {
+      if (!this.disregardCurrentStudies) return ForceBoughtState.unspecified;
+      return this.newStudies.includes(studyStr) ? ForceBoughtState.bought : ForceBoughtState.notBought;
+    },
+    getConnectionForceBoughtState(setup) {
+      if (!this.disregardCurrentStudies) return ForceBoughtState.unspecified;
+      return (this.newStudies.includes(this.studyString(setup.connection.to)) &&
+        this.newStudies.includes(this.studyString(setup.connection.from)))
+        ? ForceBoughtState.bought
+        : ForceBoughtState.notBought;
     }
   }
 };
@@ -99,7 +128,7 @@ export default {
         v-for="setup in studies"
         :key="setup.study.type.toString() + setup.study.id.toString()"
         :setup="setup"
-        :force-is-bought="disregardCurrentStudies ? newStudies.includes(studyString(setup.study)) : undefined"
+        :force-is-bought="getStudyForceBoughtState(studyString(setup.study))"
         :is-new-from-import="!disregardCurrentStudies && newStudies.includes(studyString(setup.study))"
       />
       <svg
@@ -109,10 +138,7 @@ export default {
         <PseudoTimeStudyConnection
           v-for="(setup, index) in connections"
           :key="'connection' + index"
-          :force-is-bought="disregardCurrentStudies ?
-            newStudies.includes(studyString(setup.connection.to)) &&
-            newStudies.includes(studyString(setup.connection.from))
-            : undefined"
+          :force-is-bought="getConnectionForceBoughtState(setup)"
           :setup="setup"
         />
       </svg>

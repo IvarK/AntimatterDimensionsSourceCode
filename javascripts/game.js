@@ -349,7 +349,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   }
 
   if (Enslaved.isStoringGameTime && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
-    const storedTimeWeight = 0.99;
+    const storedTimeWeight = Ra.unlocks.autoPulseTime.canBeApplied ? 0.99 : 1;
     factor = factor * (1 - storedTimeWeight) + storedTimeWeight;
   }
 

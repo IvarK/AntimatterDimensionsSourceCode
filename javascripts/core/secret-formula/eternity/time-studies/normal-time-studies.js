@@ -55,8 +55,16 @@ GameDatabase.eternity.timeStudies.normal = [
     requirement: [11],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => `Improve Replicanti multiplier formula to
-    (log2(x)${formatPow(2)})+x${formatPow(0.032, 3, 3)}`,
-    effect: () => Replicanti.amount.pow(0.032)
+      (log2(x)${formatPow(2)})+x${formatPow(0.032, 3, 3)}`,
+    effect: () => Replicanti.amount.pow(0.032),
+    // This is a special case because the study itself is *added* to the existing formula, but it makes more sense
+    // to display a multiplicative increase just like every other study. We need to do the calculation in here in order
+    // to properly show only the effect of this study and nothing else
+    formatEffect: value => {
+      const oldVal = Decimal.pow(Decimal.log2(Replicanti.amount.clampMin(1)), 2);
+      const newVal = oldVal.plus(value);
+      return formatX(newVal.div(oldVal).clampMin(1), 2, 2);
+    }
   },
   {
     id: 22,

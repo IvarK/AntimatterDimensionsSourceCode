@@ -186,8 +186,8 @@ GameDatabase.celestials.ra = {
     },
     autoPulseTime: {
       id: 17,
-      reward: () => `Black Hole charging can be done at a ${formatPercents(0.99)} rate and automatically
-        pulsed every ${formatInt(5)} ticks. You can toggle this in The Nameless Ones' tab and the header.`,
+      reward: () => `Black Hole charging now only uses ${formatPercents(0.99)} of your game speed and you can
+        automatically discharge ${formatPercents(0.01)} of your stored game time every ${formatInt(5)} ticks.`,
       pet: "enslaved",
       level: 10,
       displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`,

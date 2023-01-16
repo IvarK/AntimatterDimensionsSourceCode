@@ -157,6 +157,9 @@ GameStorage.migrations = {
       GameStorage.migrations.moveTS33(player);
       GameStorage.migrations.addBestPrestigeCurrency(player);
       GameStorage.migrations.migrateTheme(player);
+    },
+    14: player => {
+      GameStorage.migrations.reworkBHPulsing(player);
     }
   },
 
@@ -939,6 +942,11 @@ GameStorage.migrations = {
       : player.options.theme;
     delete player.options.themes;
     delete player.options.secretThemeKey;
+  },
+
+  // This change removed the ability to adjust stored time rate after Ra-Nameless 10, instead forcing it to be 99%
+  reworkBHPulsing(player) {
+    delete player.celestials.enslaved.storedFraction;
   },
 
   prePatch(saveData) {

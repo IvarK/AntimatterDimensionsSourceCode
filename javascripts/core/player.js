@@ -584,7 +584,6 @@ window.player = {
       storedReal: 0,
       autoStoreReal: false,
       isAutoReleasing: false,
-      storedFraction: 1,
       quoteBits: 0,
       unlocks: [],
       run: false,

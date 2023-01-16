@@ -30,7 +30,7 @@ export default {
       this.saveDisabled = GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
     },
     save() {
-      GameStorage.save(false);
+      GameStorage.save(false, true);
     }
   }
 };

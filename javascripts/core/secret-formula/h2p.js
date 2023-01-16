@@ -223,8 +223,8 @@ ${Laitela.isUnlocked ? "- <b>DE</b>: Dark Energy<br>" : ""}
     }, {
       name: "Antimatter Dimensions",
       info: () => `
-Antimatter is a resource that is throughout the entire game for purchasing various things as you progress. You start
-with ${formatInt(10)} antimatter when you first open the game. And you can
+Antimatter is a resource that is used throughout the entire game for purchasing various things as you progress. You
+start with ${formatInt(10)} antimatter when you first open the game, and you can
 spend it to buy the 1st Antimatter Dimension to start the game.
 <br>
 <br>
@@ -337,7 +337,7 @@ available, but will increase the effect of your Tickspeed Upgrades by +${format(
 Galaxies. As you get more Galaxies, the multiplier will continue becoming stronger and stronger.
 <br>
 <br>
-Though it will have very little impact for the first few purchases,
+Though it will have very little impact for the first few Tickspeed purchases,
 the increase is multiplicative and won't take long to be visible.
 <br>
 <br>

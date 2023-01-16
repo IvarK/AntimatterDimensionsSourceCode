@@ -586,7 +586,7 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => {
-          if (complete >= 1) return "Broken the chain with Glyph level";
+          if (complete >= 1) return "Glyph level chain has been broken";
           const goal = 5000;
           return [
             "Break a chain",
@@ -631,7 +631,7 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => {
-          if (complete >= 1) return "Broken the chain with Glyph rarity";
+          if (complete >= 1) return "Glyph rarity chain has been broken";
           const goal = 100;
           return [
             "Break a chain",
@@ -1527,8 +1527,8 @@ GameDatabase.celestials.navigation = {
           if (upgrade.isAvailableForPurchase) return [
             dmdText,
             `Imaginary Machines
-            ${format(Math.min(upgrade.currency.value, upgrade.cost), upgrade.canBeBought ? 0 : 2)}
-            / ${format(upgrade.cost)}`
+            ${format(Math.min(upgrade.currency.value, upgrade.cost), upgrade.canBeBought ? 1 : 2)}
+            / ${format(upgrade.cost, 1)}`
           ];
 
           if (player.celestials.laitela.fastestCompletion > 30 && Laitela.difficultyTier < 0) return [

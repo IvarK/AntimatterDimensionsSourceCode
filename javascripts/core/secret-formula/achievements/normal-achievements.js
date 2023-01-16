@@ -933,8 +933,8 @@ GameDatabase.achievements.normal = [
     id: 132,
     name: "Unique snowflakes",
     get description() {
-      return `Have ${formatInt(569)} Antimatter Galaxies without getting any
-      Replicanti Galaxies in your current Eternity.`;
+      return `Have ${formatInt(569)} Antimatter Galaxies without gaining any
+        Replicanti Galaxies in your current Eternity.`;
     },
     checkRequirement: () => player.galaxies >= 569 && player.requirementChecks.eternity.noRG,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,

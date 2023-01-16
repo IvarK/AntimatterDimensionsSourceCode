@@ -143,14 +143,14 @@ GameDatabase.reality.perks = {
   },
   autounlockDilation1: {
     id: 42,
-    label: "UD1",
+    label: "DU1",
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
     defaultPosition: new Vector(165, 565)
   },
   autounlockDilation2: {
     id: 43,
-    label: "UD2",
+    label: "DU2",
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
     defaultPosition: new Vector(310, 605)

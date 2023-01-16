@@ -16,15 +16,7 @@ export default {
       isAutoECVisible: false,
       showAllChallenges: false,
       autoEC: false,
-      isECTab: false,
     };
-  },
-  computed: {
-    redoText() {
-      return this.isECTab
-        ? "Automatically re-enter Challenges:"
-        : "Automatically retry Challenges:";
-    }
   },
   watch: {
     retryChallenge(newValue) {
@@ -45,7 +37,6 @@ export default {
       this.isShowAllVisible = PlayerProgress.eternityUnlocked();
       this.isAutoECVisible = Perk.autocompleteEC1.canBeApplied;
       this.autoEC = player.reality.autoEC;
-      this.isECTab = Tab.challenges.eternity.isOpen;
     },
     restartChallenge() {
       const current = Player.anyChallenge;
@@ -70,7 +61,7 @@ export default {
       <PrimaryToggleButton
         v-model="retryChallenge"
         class="o-primary-btn--subtab-option"
-        :label="redoText"
+        label="Automatically retry challenges:"
       />
       <PrimaryToggleButton
         v-if="isShowAllVisible"

@@ -888,7 +888,8 @@ window.player = {
       maxEntries: 200,
       clearOnReality: true,
       clearOnRestart: true,
-    }
+    },
+    invertTTgenDisplay: false,
   },
   IAP: {
     enabled: false,

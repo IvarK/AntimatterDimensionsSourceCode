@@ -8,6 +8,8 @@ import StudyStringLine from "@/components/modals/StudyStringLine";
 import StudyStringPreview from "./time-study-modal-preview/StudyStringPreview";
 import StudyTreeInfo from "./StudyTreeInfo";
 
+let savedImportString = "";
+
 export default {
   name: "StudyStringModal",
   components: {
@@ -137,10 +139,15 @@ export default {
       return this.isImporting ? "Import" : "Save";
     }
   },
+  watch: {
+    input(newInput) {
+      savedImportString = newInput;
+    }
+  },
   // Needs to be assigned in created() or else they will end up being undefined when importing
   created() {
     const preset = player.timestudy.presets[this.id];
-    this.input = preset ? preset.studies : "";
+    this.input = preset ? preset.studies : savedImportString;
     this.name = preset ? preset.name : "";
   },
   mounted() {
@@ -171,6 +178,7 @@ export default {
     importTree() {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
+      savedImportString = "";
       this.emitClose();
       // We need to use a combined tree for committing to the game state, or else it won't buy studies in the imported
       // tree are only reachable if the current tree is already bought

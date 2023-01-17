@@ -230,8 +230,8 @@ export default {
 .l-load-tree-area {
   display: flex;
   flex-direction: column;
-  align-items: left;
   width: 50%;
+  align-items: left;
 }
 
 .l-tree-load-button-wrapper {

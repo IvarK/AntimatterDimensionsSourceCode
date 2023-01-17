@@ -8,10 +8,12 @@ export function animateAndDilate() {
   setTimeout(startDilatedEternity, 1000);
 }
 
-export function animateAndUndilate() {
+// eslint-disable-next-line no-empty-function
+export function animateAndUndilate(callback = () => {}) {
   FullScreenAnimationHandler.display("a-undilate", 2);
   setTimeout(() => {
     eternity(false, false, { switchingDilation: true });
+    callback();
   }, 1000);
 }
 

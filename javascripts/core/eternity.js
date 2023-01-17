@@ -137,22 +137,28 @@ export function eternity(force, auto, specialConditions = {}) {
   return true;
 }
 
-export function animateAndEternity() {
-  if (!Player.canEternity) return;
+// eslint-disable-next-line no-empty-function
+export function animateAndEternity(callback = () => {}) {
+  if (!Player.canEternity) return false;
   const hasAnimation = !FullScreenAnimationHandler.isDisplaying &&
     ((player.dilation.active && player.options.animations.dilation) ||
     (!player.dilation.active && player.options.animations.eternity));
 
   if (hasAnimation) {
     if (player.dilation.active) {
-      animateAndUndilate();
+      animateAndUndilate(callback);
     } else {
       eternityAnimation();
-      setTimeout(eternity, 2250);
+      setTimeout(() => {
+        eternity();
+        callback();
+      }, 2250);
     }
   } else {
     eternity();
+    callback();
   }
+  return hasAnimation;
 }
 
 export function initializeChallengeCompletions(isReality) {

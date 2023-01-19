@@ -2754,8 +2754,10 @@ br {
   overflow: hidden;
   background-color: var(--color-base);
   border: 0.1rem var(--color-good);
-  border-style: none solid solid;
+  border-style: solid;
   border-radius: var(--var-border-radius, 0.4rem);
+  /* May be removed if it makes things to blurry */
+  transform: translateY(-0.1rem);
 }
 
 /* We need scrollbar-color in this rule as well as identical color specifications in the following two; some

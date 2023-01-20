@@ -215,7 +215,9 @@ window.AUTO_REALITY_MODE = {
   RM: 0,
   GLYPH: 1,
   EITHER: 2,
-  BOTH: 3
+  BOTH: 3,
+  TIME: 4,
+  RELIC_SHARD: 5,
 };
 
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it

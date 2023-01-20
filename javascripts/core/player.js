@@ -62,6 +62,8 @@ window.player = {
       mode: 0,
       rm: DC.D1,
       glyph: 0,
+      time: 0,
+      shard: 0,
       isActive: false
     },
     eternity: {

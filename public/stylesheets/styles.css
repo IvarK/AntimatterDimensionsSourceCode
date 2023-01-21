@@ -47,6 +47,10 @@ html {
   scrollbar-gutter: stable;
 }
 
+.t-s12 #ui {
+  scrollbar-gutter: auto;
+}
+
 :root {
   /* Don't change this instance of --color-text or any of its values in other themes to not be hex; it's parsed as hex
     elsewhere to provide theme-dependent color gradients */

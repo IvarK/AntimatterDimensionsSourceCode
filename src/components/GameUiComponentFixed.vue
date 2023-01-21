@@ -73,7 +73,7 @@ export default {
       class="l-time-studies-tab__tt-shop"
     />
     <ModernSidebar
-      v-if="view.newUI"
+      v-if="view.newUI && view.theme !== 'S12'"
       :style="hideIfMatoFullscreen"
     />
     <SaveTimer :style="hideIfMatoFullscreen" />
@@ -110,5 +110,9 @@ export default {
   z-index: 5;
   justify-content: center;
   pointer-events: none;
+}
+
+.t-s12 .c-game-ui--fixed {
+  position: absolute;
 }
 </style>

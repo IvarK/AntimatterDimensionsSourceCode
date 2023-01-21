@@ -14,6 +14,10 @@
   --color-eternity--bg: #b341e04d;
 }
 
+:root .t-s12 {
+  --sidebar-width: 0;
+}
+
 :root .t-normal,
 :root .t-s9,
 :root .t-s12 {

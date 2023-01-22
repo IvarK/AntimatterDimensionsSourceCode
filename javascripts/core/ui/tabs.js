@@ -71,6 +71,16 @@ function findLastOpenSubtab(tabId, subtabs) {
   return subtabs.find(s => s.id === player.options.lastOpenSubtab[tabId]) ?? subtabs[0];
 }
 
+function cycleThroughSubtabs(subtabs, currentSubtab) {
+  const availableTabs = subtabs.filter(tab => tab.isAvailable);
+  const currentIndex = availableTabs.indexOf(currentSubtab);
+  const direction = ui.view.shiftDown ? -1 : 1;
+  let newIndex = currentIndex + direction;
+  newIndex = newIndex < 0 ? availableTabs.length - 1 : newIndex;
+  newIndex = newIndex > availableTabs.length - 1 ? 0 : newIndex;
+  return availableTabs[newIndex];
+}
+
 class TabState {
   constructor(config) {
     this.config = config;
@@ -129,17 +139,19 @@ class TabState {
 
   show(manual, subtab = undefined) {
     if (!manual && !player.options.automaticTabSwitching || Quote.isOpen) return;
-    ui.view.tab = this.key;
-    if (subtab === undefined) {
-      this._currentSubtab = findLastOpenSubtab(this.id, this.subtabs);
-    } else {
+    if (subtab !== undefined) {
       if (!Enslaved.isRunning) subtab.unhideTab();
       this._currentSubtab = subtab;
+    } else if (ui.view.tab === this.key && ui.view.initialized) {
+      this._currentSubtab = cycleThroughSubtabs(this.subtabs, this._currentSubtab);
+    } else {
+      this._currentSubtab = findLastOpenSubtab(this.id, this.subtabs);
     }
 
     if (!this._currentSubtab.isUnlocked) this.resetToUnlocked();
     if (!this._currentSubtab.isAvailable) this.resetToAvailable();
 
+    ui.view.tab = this.key;
     ui.view.subtab = this._currentSubtab.key;
     const tabNotificationKey = this.key + this._currentSubtab.key;
     if (player.tabNotifications.has(tabNotificationKey)) player.tabNotifications.delete(tabNotificationKey);

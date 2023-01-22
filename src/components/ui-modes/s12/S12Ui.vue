@@ -43,6 +43,9 @@ export default {
     topMargin() {
       return this.$viewModel.news ? "" : "margin-top: 3.9rem";
     },
+    isOldUi() {
+      return !this.$viewModel.newUI;
+    },
   },
   methods: {
     update() {
@@ -70,11 +73,12 @@ export default {
     <link
       rel="stylesheet"
       type="text/css"
-      href="stylesheets/new-ui-styles.css"
+      :href="isOldUi ? 'stylesheets/old-ui.css' : 'stylesheets/new-ui-styles.css'"
     >
     <div
       :key="newGameKey"
       class="game-container c-s12-window__inner"
+      :class="isOldUi ? 'c-old-ui l-old-ui' : ''"
       :style="topMargin"
     >
       <GameUiComponentFixed />
@@ -108,7 +112,8 @@ export default {
   width: 100%;
   /* stylelint-disable-next-line unit-allowed-list */
   height: calc(100vh - var(--s12-taskbar-height));
-  position: relative;
+  position: absolute;
+  top: 0;
   background-color: rgba(255, 255, 255, 0.5);
   background-image: repeating-linear-gradient(
     50deg,
@@ -143,10 +148,17 @@ export default {
   box-shadow: 0 0 0.4rem 0.2rem rgba(255, 255, 255, 0.5);
 }
 
+.c-old-ui.c-s12-window__inner {
+  background-color: white;
+}
+
 .c-s12-window__content-container {
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
   height: 100%;
+  position: relative;
+
+  scrollbar-gutter: stable both-edges;
 }
 </style>

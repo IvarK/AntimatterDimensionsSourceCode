@@ -114,6 +114,7 @@ export default {
   height: calc(100vh - var(--s12-taskbar-height));
   position: absolute;
   top: 0;
+  z-index: 0;
   background-color: rgba(255, 255, 255, 0.5);
   background-image: repeating-linear-gradient(
     50deg,
@@ -129,7 +130,7 @@ export default {
     rgba(60, 60, 60, 0.3)
   );
   margin-top: 0;
-  padding: 2.3rem 0.7rem 0.7rem 0.7rem;
+  padding: 2.3rem 0.7rem 0.7rem;
 
   -webkit-backdrop-filter: blur(1rem);
 

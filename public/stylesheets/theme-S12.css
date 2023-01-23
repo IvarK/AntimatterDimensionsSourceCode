@@ -17,7 +17,57 @@ body.t-s12 {
   color: black;
 }
 
+.t-s12 #ui {
+  justify-content: flex-start;
+  /* stylelint-disable-next-line unit-allowed-list */
+  perspective: 200vh;
+
+  scrollbar-gutter: auto;
+}
+
 .t-s12 .ui-wrapper {
   flex-direction: column;
   height: 100%;
+}
+
+.c-s12-close-button {
+  display: flex;
+  width: 5rem;
+  height: 1.8rem;
+  position: absolute;
+  top: 0;
+  right: 0.7rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  background-image:
+    url("../images/s12/xmark.png"),
+    linear-gradient(to bottom, rgba(255, 255, 255, 40%) 40%, transparent 60%),
+    radial-gradient(#b43721, #844740);
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 0.15rem solid var(--s12-border-color);
+  border-top: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+  box-shadow: inset 0 0 0.2rem 0.1rem rgba(255, 255, 255, 80%);
+  cursor: pointer;
+}
+
+.c-s12-close-button::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background-image:
+    url("../images/s12/xmark.png"),
+    linear-gradient(to bottom, transparent 50%, rgba(224, 178, 64, 60%));
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: inherit;
+  box-shadow: 0 0 1rem 0.3rem #d35532;
+  transition: opacity 0.4s;
+}
+
+.c-s12-close-button:hover::before {
+  opacity: 1;
 }

@@ -66,15 +66,19 @@ export default {
 
 <template>
   <div
-    v-if="!S12Windows.isMinimised"
     id="page"
-    class="c-s12-window--outer"
+    class="c-s12-window__outer"
+    :class="S12Windows.isMinimised ? 'c-s12-window__outer--minimised' : ''"
   >
     <link
       rel="stylesheet"
       type="text/css"
       :href="isOldUi ? 'stylesheets/old-ui.css' : 'stylesheets/new-ui-styles.css'"
     >
+    <span
+      class="c-s12-close-button"
+      @click="S12Windows.isMinimised = true"
+    />
     <div
       :key="newGameKey"
       class="game-container c-s12-window__inner"
@@ -134,6 +138,20 @@ export default {
   -webkit-backdrop-filter: blur(1rem);
 
   backdrop-filter: blur(1rem);
+}
+
+.c-s12-window__outer {
+  transition: opacity 0.3s, transform 0.4s, visibility 0.3s;
+
+  transform-style: preserve-3d;
+}
+
+.c-s12-window__outer--minimised {
+  visibility: hidden;
+  opacity: 0;
+  /* stylelint-disable-next-line unit-allowed-list */
+  transform: rotateX(90deg) scale(0.7);
+  pointer-events: none;
 }
 
 .c-s12-window__inner {

@@ -35,7 +35,7 @@ export default {
       this.left = this.getSubtabsPosition();
     },
     isCurrentSubtab(id) {
-      return player.options.lastOpenSubtab[this.tab.id] === id;
+      return player.options.lastOpenSubtab[this.tab.id] === id && !S12Windows.isMinimised;
     },
     getSubtabsPosition() {
       if (!this.$refs.subtabs) return "0px";
@@ -66,7 +66,7 @@ export default {
         :key="index"
         class="c-s12-subtab-btn"
         :class="{ 'c-s12-subtab-btn--active': isCurrentSubtab(subtab.id) }"
-        @click="subtab.show(true)"
+        @click="subtab.show(true); S12Windows.isMinimised = false;"
       >
         <span class="c-s12-subtab-btn__text">
           {{ subtab.name }}

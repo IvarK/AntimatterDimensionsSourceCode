@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     isCurrentTab() {
-      return this.tab.isOpen;
+      return this.tab.isOpen && !S12Windows.isMinimised;
     }
   },
   methods: {
@@ -62,7 +62,7 @@ export default {
     :title="tab.name"
     @mouseenter="S12Windows.tabs.setHoveringTab(tab)"
     @mouseleave="S12Windows.tabs.unsetHoveringTab()"
-    @click="tab.show(true)"
+    @click="tab.show(true); S12Windows.isMinimised = false;"
   >
     <img
       class="c-taskbar-icon__image"

@@ -67,12 +67,24 @@ export default {
     update() {
       this.runs = this.clone(this.getRuns());
       this.hasEmptyRecord = this.runs[0][0] === Number.MAX_VALUE;
-      if (!this.hasEmptyRecord) this.runs.push(this.averageRun);
+      this.runs.push(this.averageRun);
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
       this.shown = player.shownRuns[this.singular];
       this.showRate = player.options.showRecentRate;
       this.hasChallenges = this.runs.map(r => this.challengeText(r)).some(t => t);
-      this.longestRow = this.runs.map(r => r.length).max();
+
+      // Entries always have all values, but sometimes the trailing ones will be blank or zero which we want to hide
+      const lastIndex = arr => {
+        let val = arr.length;
+        while (val > 0) {
+          const curr = arr[val - 1];
+          if (typeof curr === "string" && curr !== "") return val;
+          if (typeof curr !== "string" && Decimal.neq(curr, 0)) return val;
+          val--;
+        }
+        return 0;
+      };
+      this.longestRow = this.runs.map(r => lastIndex(r)).max();
     },
     clone(runs) {
       return runs.map(run =>
@@ -98,11 +110,10 @@ export default {
       }
 
       if (this.hasChallenges) cells.push(this.challengeText(run));
-      const baseLength = cells.length;
       for (let i = 0; i < this.layer.extra?.length && cells.length <= this.longestRow; i++) {
         const formatFn = this.layer.formatExtra[i];
-        const val = run[baseLength + i - 1];
-        if (this.layer.allowRate[i] && this.showRate) cells.push(this.rateText(run, run[baseLength + i - 1]));
+        const val = run[i + 5] ?? 0;
+        if (this.layer.allowRate[i] && this.showRate) cells.push(this.rateText(run, run[i + 5]));
         else cells.push(formatFn(val));
       }
 
@@ -155,7 +166,7 @@ export default {
     toggleShown() {
       player.shownRuns[this.singular] = !player.shownRuns[this.singular];
     },
-    cellStyle(col) {
+    cellStyle(col, isHeader) {
       let width;
       switch (col) {
         case 0:
@@ -172,7 +183,10 @@ export default {
       }
       return {
         width,
-        border: "0.1rem solid var(--color-text)",
+        border: "0.1rem solid #999999",
+        padding: "0.2rem 0",
+        "border-bottom-width": isHeader ? "0.2rem" : "0.1rem",
+        "font-weight": isHeader ? "bold" : null,
         color: "var(--color-text)",
       };
     }
@@ -199,7 +213,7 @@ export default {
         <span
           v-for="(entry, col) in infoCol()"
           :key="col"
-          :style="cellStyle(col)"
+          :style="cellStyle(col, true)"
         >
           {{ entry }}
         </span>
@@ -212,10 +226,13 @@ export default {
           v-if="run[0] === Number.MAX_VALUE"
           class="c-empty-row"
         >
-          <span>
+          <i v-if="index === 10">
+            An average cannot be calculated with no {{ plural }}.
+          </i>
+          <i v-else>
             You have not done {{ formatInt(index + 1) }}
             {{ index === 0 ? singular : plural }} yet.
-          </span>
+          </i>
         </span>
         <span
           v-else
@@ -224,7 +241,7 @@ export default {
           <span
             v-for="(entry, col) in infoArray(run, index)"
             :key="10 * index + col"
-            :style="cellStyle(col)"
+            :style="cellStyle(col, false)"
           >
             {{ entry }}
           </span>
@@ -243,9 +260,10 @@ export default {
 
 .c-empty-row {
   display: block;
-  border: 0.1rem solid var(--color-text);
+  border: 0.1rem solid #999999;
   color: var(--color-text);
   width: 100%;
+  padding: 0.2rem 0;
 }
 
 .l-no-records {

@@ -343,9 +343,10 @@ window.GLYPH_SIDEBAR_MODE = {
 
 window.AUTO_SORT_MODE = {
   NONE: 0,
-  POWER: 1,
-  EFFECT: 2,
-  SCORE: 3
+  LEVEL: 1,
+  POWER: 2,
+  EFFECT: 3,
+  SCORE: 4
 };
 
 window.AUTO_GLYPH_SCORE = {

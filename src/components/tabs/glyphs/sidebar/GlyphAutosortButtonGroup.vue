@@ -20,7 +20,8 @@ export default {
   },
   computed: {
     sortModes() {
-      const availableSortModes = ["NONE", "POWER", "EFFECT"];
+      // These are the keys for AUTO_SORT_MODE, with SCORE only added conditionally if unlocked
+      const availableSortModes = ["NONE", "LEVEL", "POWER", "EFFECT"];
       if (this.showScoreFilter) availableSortModes.push("SCORE");
       return availableSortModes;
     },

@@ -5361,7 +5361,7 @@ properly on certain themes. */
   border: var(--var-border-width, 0.3rem) solid black;
   border-radius: var(--var-border-radius, 0.6rem);
   padding: 1rem;
-  transition-duration: 0.2s;
+  transition: all 0.2s, left 0s, top 0s, transform 0s;
 }
 
 .c-modal--short {
@@ -9257,6 +9257,11 @@ input.o-automator-block-input {
   padding: 0.5rem;
 }
 
+.t-s12 .l-h2p-body {
+  font-size: 1.3rem;
+  margin-left: 0;
+}
+
 .l-h2p-body::-webkit-scrollbar {
   width: 1rem;
 }
@@ -9316,6 +9321,10 @@ input.o-automator-block-input {
 
 .s-base--dark .o-h2p-tab-button {
   border-bottom: 0.1rem solid white;
+}
+
+.t-s12 .o-h2p-tab-button {
+  border-bottom: 0.1rem solid black;
 }
 
 .l-help-me {

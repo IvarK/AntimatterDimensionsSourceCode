@@ -31,36 +31,38 @@ export default {
   <div
     class="l-modal-overlay c-modal-overlay progress-bar-modal"
   >
-    <div class="modal-progress-bar c-modal">
-      <div class="modal-progress-bar__label">
-        {{ progress.label }}
-      </div>
-      <div>
-        {{ progress.info() }}
-      </div>
-      <div class="modal-progress-bar__margin">
-        <div>
-          {{ progress.progressName }}: {{ formatInt(progress.current) }}/{{ formatInt(progress.max) }}
+    <div class="c-modal">
+      <div class="modal-progress-bar">
+        <div class="modal-progress-bar__label">
+          {{ progress.label }}
         </div>
         <div>
-          Remaining: {{ remainingTime }}
+          {{ progress.info() }}
         </div>
-        <div class="modal-progress-bar__hbox">
-          <div class="modal-progress-bar__bg">
-            <div
-              class="modal-progress-bar__fg"
-              :style="foregroundStyle"
-            />
+        <div class="modal-progress-bar__margin">
+          <div>
+            {{ progress.progressName }}: {{ formatInt(progress.current) }}/{{ formatInt(progress.max) }}
+          </div>
+          <div>
+            Remaining: {{ remainingTime }}
+          </div>
+          <div class="modal-progress-bar__hbox">
+            <div class="modal-progress-bar__bg">
+              <div
+                class="modal-progress-bar__fg"
+                :style="foregroundStyle"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="modal-progress-bar__buttons">
-        <OfflineSpeedupButton
-          v-for="(button, id) in buttons"
-          :key="id"
-          :button="button"
-          :progress="progress"
-        />
+        <div class="modal-progress-bar__buttons">
+          <OfflineSpeedupButton
+            v-for="(button, id) in buttons"
+            :key="id"
+            :button="button"
+            :progress="progress"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -71,19 +73,22 @@ export default {
   z-index: 8;
 }
 
-.modal-progress-bar {
-  display: flex;
-  flex-direction: column;
-  width: 40rem;
+.c-modal {
   position: fixed;
   /* stylelint-disable-next-line unit-allowed-list */
   top: 50vh;
   /* stylelint-disable-next-line unit-allowed-list */
   left: 50vw;
+  transform: translate(-50%, -50%);
+}
+
+.modal-progress-bar {
+  display: flex;
+  flex-direction: column;
+  width: 40rem;
   z-index: 3;
   justify-content: space-between;
   align-items: center;
-  transform: translate(-50%, -50%);
 }
 
 .modal-progress-bar__hbox {

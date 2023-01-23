@@ -18,12 +18,8 @@ export default {
       S12Windows,
       windowWidth: 0,
       left: "0px",
+      useCompact: false,
     };
-  },
-  computed: {
-    isCurrentTab() {
-      return this.tab.isOpen;
-    }
   },
   methods: {
     update() {
@@ -31,6 +27,7 @@ export default {
       this.isHidden = this.tab.isHidden;
       this.subtabVisibilities = this.tab.subtabs.map(x => x.isAvailable);
       this.windowWidth = window.innerWidth;
+      this.useCompact = this.subtabVisibilities.reduce((a, v) => a + v) * 180 > window.innerWidth - 10;
 
       this.left = this.getSubtabsPosition();
     },
@@ -53,7 +50,10 @@ export default {
   <div
     ref="subtabs"
     class="c-s12-subtabs"
-    :class="{ 'c-s12-subtabs--show': S12Windows.tabs.hoveringTab === tab.id }"
+    :class="{
+      'c-s12-subtabs--show': S12Windows.tabs.hoveringTab === tab.id,
+      'c-s12-subtabs--compact': useCompact,
+    }"
     :style="{ left }"
     @mouseenter="S12Windows.tabs.setHoveringTab(tab)"
     @mouseleave="S12Windows.tabs.unsetHoveringTab()"
@@ -69,9 +69,15 @@ export default {
         @click="subtab.show(true); S12Windows.isMinimised = false; S12Windows.tabs.unsetHoveringTab(true);"
       >
         <span class="c-s12-subtab-btn__text">
+          <span
+            v-if="useCompact"
+            class="c-s12-subtab-btn__symbol--small"
+            v-html="subtab.symbol"
+          />
           {{ subtab.name }}
         </span>
         <span
+          v-if="!useCompact"
           class="c-s12-subtab-btn__symbol"
           v-html="subtab.symbol"
         />
@@ -90,6 +96,7 @@ export default {
   visibility: hidden;
   position: absolute;
   bottom: calc(var(--s12-taskbar-height) + 0.5rem);
+  z-index: 6;
   opacity: 0;
   background-color: rgba(120, 120, 120, 0.7);
   background-image: repeating-linear-gradient(
@@ -118,6 +125,12 @@ export default {
   backdrop-filter: blur(0.3rem);
 }
 
+.c-s12-subtabs--compact {
+  flex-direction: column;
+  padding: 0.5rem;
+  padding-bottom: 0;
+}
+
 .c-s12-subtabs--show {
   visibility: visible;
   opacity: 1;
@@ -128,8 +141,8 @@ export default {
 .c-s12-subtab-btn {
   display: flex;
   flex-direction: column;
-  width: 14rem;
-  height: 10rem;
+  width: 17rem;
+  height: 12rem;
   border: 0.1rem solid transparent;
   border-radius: 0.5rem;
   margin: 0.5rem;
@@ -137,6 +150,13 @@ export default {
   transition: background-color 0.5s, border 0.5s;
   user-select: none;
   cursor: pointer;
+}
+
+.c-s12-subtabs--compact .c-s12-subtab-btn {
+  height: auto;
+  margin: 0;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem;
 }
 
 .c-s12-subtab-btn:hover {
@@ -154,9 +174,10 @@ export default {
 }
 
 .c-s12-subtab-btn__text {
+  display: flex;
   align-self: flex-start;
   color: white;
-  text-shadow: 0 0 5px var(--s12-border-color);
+  text-shadow: 0 0 0.5rem var(--s12-border-color);
 }
 
 .c-s12-subtab-btn__symbol {
@@ -165,8 +186,13 @@ export default {
   justify-content: center;
   align-items: center;
   align-self: center;
-  font-size: 5rem;
+  font-size: 6rem;
   color: white;
-  text-shadow: 0 0 5px var(--s12-border-color);
+  text-shadow: 0 0 0.5rem var(--s12-border-color);
+}
+
+.c-s12-subtab-btn__symbol--small {
+  width: 1.4rem;
+  margin-right: 0.5rem;
 }
 </style>

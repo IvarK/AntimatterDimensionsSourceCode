@@ -6,6 +6,7 @@ import FadeAway from "@/components/tabs/celestial-pelle/FadeAway";
 import ModalProgressBar from "@/components/modals/ModalProgressBar";
 import NewGame from "@/components/tabs/celestial-pelle/NewGame";
 import PopupModal from "@/components/modals/PopupModal";
+import S12Taskbar from "./S12Taskbar";
 import SpectateGame from "@/components/SpectateGame";
 
 export default {
@@ -18,7 +19,8 @@ export default {
     FadeAway,
     CreditsContainer,
     SpectateGame,
-    NewGame
+    NewGame,
+    S12Taskbar,
   },
   data() {
     return {
@@ -40,7 +42,7 @@ export default {
 
 
 <template>
-  <span>
+  <div class="c-game-ui--fixed">
     <ModalProgressBar v-if="view.modal.progressBar" />
     <CelestialQuoteModal
       v-else-if="view.quotes.current"
@@ -54,12 +56,12 @@ export default {
       v-else-if="view.modal.current"
       :modal="view.modal.current"
     />
-    <ModalProgressBar v-if="view.modal.progressBar" />
     <FadeAway v-if="ending" />
     <CreditsContainer v-if="ending" />
     <NewGame v-if="ending" />
     <SpectateGame />
-  </span>
+    <S12Taskbar />
+  </div>
 </template>
 
 <style scoped>

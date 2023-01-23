@@ -117,4 +117,8 @@ export default {
 .s-base--dark .o-h2p-tab-button--first-irrelevant {
   border-top-color: white;
 }
+
+.t-s12 .o-h2p-tab-button--first-irrelevant {
+  border-top-color: black;
+}
 </style>

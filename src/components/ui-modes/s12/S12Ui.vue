@@ -133,7 +133,7 @@ export default {
     rgba(60, 60, 60, 0.3)
   );
   margin-top: 0;
-  padding: 2.3rem 0.7rem 0.7rem;
+  padding: 2.4rem 1rem 1rem;
 
   -webkit-backdrop-filter: blur(1rem);
 

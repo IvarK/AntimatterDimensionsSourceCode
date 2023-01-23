@@ -206,15 +206,18 @@ export function averageRun(allRuns, name) {
 
 // eslint-disable-next-line max-params
 export function addInfinityTime(time, realTime, ip, infinities) {
+  let challenge = "";
+  if (player.challenge.normal.current) challenge = `Normal Challenge ${player.challenge.normal.current}`;
+  if (player.challenge.infinity.current) challenge = `Infinity Challenge ${player.challenge.infinity.current}`;
   player.records.lastTenInfinities.pop();
-  player.records.lastTenInfinities.unshift([time, ip, infinities, realTime]);
+  player.records.lastTenInfinities.unshift([time, ip, infinities, realTime, challenge]);
   GameCache.bestRunIPPM.invalidate();
 }
 
 export function resetInfinityRuns() {
   player.records.lastTenInfinities = Array.from(
     { length: 10 },
-    () => [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]
+    () => [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE, ""]
   );
   GameCache.bestRunIPPM.invalidate();
 }
@@ -229,15 +232,24 @@ export function getInfinitiedMilestoneReward(ms, considerMilestoneReached) {
 
 // eslint-disable-next-line max-params
 export function addEternityTime(time, realTime, ep, eternities) {
+  let challenge = "";
+  if (player.challenge.eternity.current) {
+    const currEC = player.challenge.eternity.current;
+    const ec = EternityChallenge(currEC);
+    challenge = `Eternity Challenge ${currEC} (${formatInt(ec.completions)}/${formatInt(ec.maxCompletions)})`;
+  }
+  if (player.dilation.active) challenge = "Time Dilation";
+  // If we call this function outside of dilation, it uses the existing AM and produces an erroneous number
+  const gainedTP = player.dilation.active ? getTachyonGain() : DC.D0;
   player.records.lastTenEternities.pop();
-  player.records.lastTenEternities.unshift([time, ep, eternities, realTime]);
+  player.records.lastTenEternities.unshift([time, ep, eternities, realTime, challenge, gainedTP]);
   GameCache.averageRealTimePerEternity.invalidate();
 }
 
 export function resetEternityRuns() {
   player.records.lastTenEternities = Array.from(
     { length: 10 },
-    () => [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]
+    () => [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE, "", DC.D0]
   );
   GameCache.averageRealTimePerEternity.invalidate();
 }
@@ -262,8 +274,14 @@ export function getOfflineEPGain(ms) {
 
 // eslint-disable-next-line max-params
 export function addRealityTime(time, realTime, rm, level, realities) {
+  let reality = "";
+  const celestials = [Teresa, Effarig, Enslaved, V, Ra, Laitela];
+  for (const cel of celestials) {
+    if (cel.isRunning) reality = `${cel.possessiveName} Reality`;
+  }
+  const shards = Effarig.shardsGained;
   player.records.lastTenRealities.pop();
-  player.records.lastTenRealities.unshift([time, rm, realities, realTime, level]);
+  player.records.lastTenRealities.unshift([time, rm, realities, realTime, level, reality, shards]);
 }
 
 export function gainedInfinities() {

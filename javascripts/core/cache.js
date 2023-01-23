@@ -48,14 +48,14 @@ export const GameCache = {
   worstChallengeTime: new Lazy(() => player.challenge.normal.bestTimes.max()),
 
   bestRunIPPM: new Lazy(() =>
-    player.records.lastTenInfinities
-      .map(run => ratePerMinute(run[1], run[0]))
+    player.records.recentInfinities
+      .map(run => ratePerMinute(run[2], run[0]))
       .reduce(Decimal.maxReducer)
   ),
 
-  averageRealTimePerEternity: new Lazy(() => player.records.lastTenEternities
-    .map(run => run[3])
-    .reduce(Number.sumReducer) / (1000 * player.records.lastTenEternities.length)),
+  averageRealTimePerEternity: new Lazy(() => player.records.recentEternities
+    .map(run => run[1])
+    .reduce(Number.sumReducer) / (1000 * player.records.recentEternities.length)),
 
   tickSpeedMultDecrease: new Lazy(() => 10 - Effects.sum(
     BreakInfinityUpgrade.tickspeedCostMult,

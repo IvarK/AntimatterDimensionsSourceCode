@@ -274,12 +274,12 @@ window.player = {
     realTimeDoomed: 0,
     fullGameCompletions: 0,
     totalAntimatter: DC.E1,
-    lastTenInfinities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE, ""]),
-    lastTenEternities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE, "", DC.D0]),
-    lastTenRealities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, DC.D1, 1, Number.MAX_VALUE, 0, "", 0]),
+    recentInfinities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, ""]),
+    recentEternities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, "", DC.D0]),
+    recentRealities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, 1, "", 0, 0]),
     thisInfinity: {
       time: 0,
       realTime: 0,
@@ -794,7 +794,7 @@ window.player = {
     automaticTabSwitching: true,
     respecIntoProtected: false,
     offlineTicks: 1000,
-    showLastTenResourceGain: true,
+    showRecentRate: true,
     autosaveInterval: 30000,
     showTimeSinceSave: true,
     saveFileName: "",

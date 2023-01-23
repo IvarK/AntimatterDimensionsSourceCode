@@ -165,6 +165,49 @@ GameStorage.migrations = {
       // order, AUTO_SORT_MODE had to be changed to insert LEVEL mode at the top and shift the others down. This
       // makes sure that older saves maintain the same settings after this shift
       if (player.reality.autoSort !== 0) player.reality.autoSort++;
+    },
+    16: player => {
+      // Added additional resource tracking in last 10 prestige records and adjusted data format to be more consistent
+      // by reordering to be [game time, real time, prestige currency, prestige count, challenge, ...(other resources)]
+      // Also fixes a migration bug where values could be undefined or null by assigning defaults when necessary
+      for (let i = 0; i < 10; i++) {
+        const infRec = player.records.lastTenInfinities[i];
+        player.records.recentInfinities[i] = [
+          infRec[0] ?? Number.MAX_VALUE,
+          Number(infRec[3] ?? Number.MAX_VALUE),
+          new Decimal(infRec[1] ?? 1),
+          new Decimal(infRec[2] ?? 1),
+          ""
+        ];
+
+        const eterRec = player.records.lastTenEternities[i];
+        player.records.recentEternities[i] = [
+          eterRec[0] ?? Number.MAX_VALUE,
+          Number(eterRec[3] ?? Number.MAX_VALUE),
+          new Decimal(eterRec[1] ?? 1),
+          new Decimal(eterRec[2] ?? 1),
+          "",
+          new Decimal(0)
+        ];
+
+        // Previous migrations fill the other two layers, but this prop doesn't exist for pre-reality migrations
+        if (!player.records.lastTenRealities) continue;
+        const realRec = player.records.lastTenRealities[i];
+        player.records.recentRealities[i] = [
+          realRec[0] ?? Number.MAX_VALUE,
+          Number(realRec[3] ?? Number.MAX_VALUE),
+          new Decimal(realRec[1] ?? 1),
+          realRec[2] ?? 1,
+          "",
+          0,
+          0
+        ];
+      }
+
+      delete player.records.lastTenInfinities;
+      delete player.records.lastTenEternities;
+      delete player.records.lastTenRealities;
+      delete player.options.showLastTenResourceGain;
     }
   },
 

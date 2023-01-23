@@ -2,6 +2,8 @@
 import S12Subtabs from "./S12Subtabs";
 import TaskbarIcon from "./TaskbarIcon";
 
+import { S12Windows } from "./windows";
+
 export default {
   name: "S12Taskbar",
   components: {
@@ -11,7 +13,8 @@ export default {
   data() {
     return {
       isHidden: false,
-      tabVisibilities: []
+      tabVisibilities: [],
+      S12Windows,
     };
   },
   computed: {
@@ -45,6 +48,10 @@ export default {
           :tab-position="tabPosition"
         />
       </template>
+      <div
+        class="c-s12-show-desktop"
+        @click="S12Windows.isMinimised = true;"
+      />
     </div>
     <template
       v-for="(tab, tabPosition) in tabs"
@@ -100,5 +107,29 @@ export default {
 .c-start-icon {
   height: 100%;
   margin: 0 2rem 0 1rem;
+}
+
+.c-s12-show-desktop {
+  width: 1rem;
+  height: 100%;
+  position: absolute; right: 0;
+  border: 0.15rem solid var(--s12-border-color);
+  border-style: none none solid solid;
+  border-radius: 0.2rem 0 0 0.2rem;
+  cursor: pointer;
+}
+
+.c-s12-show-desktop::before {
+  content: "";
+  display: block;
+  width: 200%;
+  height: 100%;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0.5rem 0.1rem rgba(255, 255, 255, 0.5);
+  transition: box-shadow 0.4s;
+}
+
+.c-s12-show-desktop:hover::before {
+  box-shadow: inset 0 0 0.5rem 0.1rem white;
 }
 </style>

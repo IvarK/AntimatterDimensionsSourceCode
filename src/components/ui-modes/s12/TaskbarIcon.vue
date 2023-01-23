@@ -106,6 +106,7 @@ export default {
 }
 
 .c-taskbar-icon__image {
-  height: 90%;
+  height: 80%;
+  border-radius: 1rem;
 }
 </style>

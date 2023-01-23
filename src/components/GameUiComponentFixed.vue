@@ -78,24 +78,26 @@ export default {
     />
     <SaveTimer :style="hideIfMatoFullscreen" />
     <SpeedrunStatus :style="hideIfMatoFullscreen" />
-    <ModalProgressBar v-if="view.modal.progressBar" />
-    <CelestialQuoteModal
-      v-else-if="view.quotes.current"
-      :quote="view.quotes.current"
-    />
-    <CelestialQuoteHistoryDisplay
-      v-else-if="view.quotes.history"
-      :quotes="view.quotes.history"
-    />
-    <PopupModal
-      v-else-if="view.modal.current"
-      :modal="view.modal.current"
-    />
-    <ModalProgressBar v-if="view.modal.progressBar" />
-    <FadeAway v-if="ending" />
-    <CreditsContainer v-if="ending" />
-    <NewGame v-if="ending" />
-    <SpectateGame />
+    <template v-if="view.theme !== 'S12'">
+      <ModalProgressBar v-if="view.modal.progressBar" />
+      <CelestialQuoteModal
+        v-else-if="view.quotes.current"
+        :quote="view.quotes.current"
+      />
+      <CelestialQuoteHistoryDisplay
+        v-else-if="view.quotes.history"
+        :quotes="view.quotes.history"
+      />
+      <PopupModal
+        v-else-if="view.modal.current"
+        :modal="view.modal.current"
+      />
+      <ModalProgressBar v-if="view.modal.progressBar" />
+      <FadeAway v-if="ending" />
+      <CreditsContainer v-if="ending" />
+      <NewGame v-if="ending" />
+      <SpectateGame />
+    </template>
   </div>
 </template>
 

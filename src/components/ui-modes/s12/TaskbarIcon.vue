@@ -62,7 +62,7 @@ export default {
     :title="tab.name"
     @mouseenter="S12Windows.tabs.setHoveringTab(tab)"
     @mouseleave="S12Windows.tabs.unsetHoveringTab()"
-    @click="tab.show(true); S12Windows.isMinimised = false;"
+    @click="tab.show(true); S12Windows.isMinimised = false; S12Windows.tabs.unsetHoveringTab(true);"
   >
     <img
       class="c-taskbar-icon__image"
@@ -80,6 +80,7 @@ export default {
   display: flex;
   width: 6rem;
   height: 100%;
+  position: relative;
   z-index: 2;
   justify-content: center;
   align-items: center;

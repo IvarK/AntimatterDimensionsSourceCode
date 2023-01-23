@@ -5,6 +5,7 @@ import GameUiComponentFixed from "@/components/GameUiComponentFixed";
 import ModernUi from "@/components/ui-modes/modern/ModernUi";
 import S12Taskbar from "@/components/ui-modes/s12/S12Taskbar";
 import S12Ui from "@/components/ui-modes/s12/S12Ui";
+import S12UiFixed from "@/components/ui-modes/s12/S12UiFixed";
 import TabComponents from "@/components/tabs";
 
 export default {
@@ -14,6 +15,7 @@ export default {
     ClassicUi,
     ModernUi,
     S12Ui,
+    S12UiFixed,
     S12Taskbar,
     GameUiComponentFixed,
     BackgroundAnimations,
@@ -70,6 +72,7 @@ export default {
     <GameUiComponentFixed v-if="!isThemeS12" />
     <BackgroundAnimations v-if="!isThemeS12" />
     <S12Taskbar v-if="isThemeS12" />
+    <S12UiFixed v-if="isThemeS12" />
   </div>
 </template>
 

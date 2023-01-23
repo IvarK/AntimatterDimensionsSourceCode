@@ -66,7 +66,7 @@ export default {
         :key="index"
         class="c-s12-subtab-btn"
         :class="{ 'c-s12-subtab-btn--active': isCurrentSubtab(subtab.id) }"
-        @click="subtab.show(true); S12Windows.isMinimised = false;"
+        @click="subtab.show(true); S12Windows.isMinimised = false; S12Windows.tabs.unsetHoveringTab(true);"
       >
         <span class="c-s12-subtab-btn__text">
           {{ subtab.name }}
@@ -128,12 +128,12 @@ export default {
 .c-s12-subtab-btn {
   display: flex;
   flex-direction: column;
-  width: 16rem;
-  height: 12rem;
+  width: 14rem;
+  height: 10rem;
   border: 0.1rem solid transparent;
   border-radius: 0.5rem;
   margin: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.3rem;
   transition: background-color 0.5s, border 0.5s;
   user-select: none;
   cursor: pointer;
@@ -165,7 +165,7 @@ export default {
   justify-content: center;
   align-items: center;
   align-self: center;
-  font-size: 6rem;
+  font-size: 5rem;
   color: white;
   text-shadow: 0 0 5px var(--s12-border-color);
 }

@@ -31,7 +31,7 @@ body.t-s12 {
 }
 
 .c-s12-close-button,
-.c-modal__close-btn {
+.t-s12 .c-modal .c-modal__close-btn {
   display: flex;
   width: 5rem;
   height: 1.8rem;
@@ -60,7 +60,7 @@ body.t-s12 {
 }
 
 .c-s12-close-button::before,
-.c-modal__close-btn:not(.c-modal__close-btn--disabled)::before {
+.t-s12 .c-modal .c-modal__close-btn:not(.c-modal__close-btn--disabled)::before {
   content: "";
   width: 100%;
   height: 100%;
@@ -108,7 +108,8 @@ body.t-s12 {
 .t-s12 .c-modal-message,
 .t-s12 .l-h2p-modal,
 .t-s12 .c-information-modal,
-.t-s12 .l-changelog-modal {
+.t-s12 .l-changelog-modal,
+.t-s12 .c-modal-away-progress {
   align-items: flex-start;
   text-align: left;
   font-size: 1.3rem;
@@ -194,6 +195,40 @@ body.t-s12 {
   transition: box-shadow 0.3s;
 }
 
+.t-s12 .c-modal .o-primary-btn.c-select-notation__item,
+.t-s12 .c-modal .o-primary-btn.c-select-theme__item {
+  background-color: white;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+.t-s12 .c-modal .o-primary-btn.c-select-notation__item::before,
+.t-s12 .c-modal .o-primary-btn.c-select-theme__item::before {
+  display: none;
+}
+
+.t-s12 .c-modal .o-primary-btn.c-dropdown-btn {
+  z-index: 1;
+  align-self: center;
+}
+
+.t-s12 .c-modal .l-select-notation,
+.t-s12 .c-modal .l-select-theme {
+  scrollbar-color: #747474 white;
+  border-color: #747474;
+}
+
+.l-select-notation__inner::-webkit-scrollbar,
+.l-select-theme__inner::-webkit-scrollbar {
+  background-color: white;
+}
+
+.t-s12 .c-modal .l-select-notation__inner::-webkit-scrollbar-thumb,
+.t-s12 .c-modal .l-select-theme__inner::-webkit-scrollbar-thumb {
+  background-color: #747474;
+}
+
 .t-s12 .c-modal .o-primary-btn--disabled {
   opacity: 0.5;
 }
@@ -216,6 +251,13 @@ body.t-s12 {
 
 .t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn):hover::before {
   background-color: rgba(46, 210, 255, 30%);
+}
+
+.t-s12 .c-modal .o-primary-btn.o-primary-btn.c-select-notation__item:hover,
+.t-s12 .c-modal .o-primary-btn.o-primary-btn.c-select-theme__item:hover {
+  color: white;
+  background-color: #2a90ff;
+  box-shadow: none;
 }
 
 .t-s12 .l-modal-buttons {

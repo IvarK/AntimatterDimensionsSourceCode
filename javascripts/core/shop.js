@@ -124,11 +124,14 @@ class ShopPurchaseState extends RebuyableMechanicState {
     return typeof cost === "function" ? cost() : cost;
   }
 
+  // ShopPurchaseData for any particular key is undefined in between page load and STD load,
+  // so we need to guard against that causing NaNs to propagate through the save
   get purchases() {
-    return ShopPurchaseData[this.config.key];
+    return ShopPurchaseData[this.config.key] ?? 0;
   }
 
   set purchases(value) {
+    if (!Number.isFinite(value)) return;
     ShopPurchaseData[this.config.key] = value;
   }
 

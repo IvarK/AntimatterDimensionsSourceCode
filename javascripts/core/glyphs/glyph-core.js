@@ -546,6 +546,9 @@ export const Glyphs = {
     switch (player.reality.autoSort) {
       case AUTO_SORT_MODE.NONE:
         break;
+      case AUTO_SORT_MODE.LEVEL:
+        this.sortByLevel();
+        break;
       case AUTO_SORT_MODE.POWER:
         this.sortByPower();
         break;

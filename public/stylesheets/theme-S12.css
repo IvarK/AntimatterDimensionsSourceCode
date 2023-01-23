@@ -16,3 +16,8 @@ body.t-s12 {
 .t-s12 .container {
   color: black;
 }
+
+.t-s12 .ui-wrapper {
+  flex-direction: column;
+  height: 100%;
+}

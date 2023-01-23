@@ -2,13 +2,16 @@ let subtabTimeoutId;
 
 export const S12Windows = {
   isMinimised: false,
-  hoveringTab: undefined,
-  setHoveringTab(tab) {
-    this.hoveringTab = tab.id;
-    clearTimeout(subtabTimeoutId);
-  },
-  unsetHoveringTab() {
-    subtabTimeoutId = setTimeout(() => this.hoveringTab = undefined, 1000);
+  tabs: {
+    hoveringTab: undefined,
+    setHoveringTab(tab) {
+      this.hoveringTab = tab.id;
+      clearTimeout(subtabTimeoutId);
+    },
+    unsetHoveringTab() {
+      subtabTimeoutId = setTimeout(() => this.hoveringTab = undefined, 1000);
+    },
+    tabButtonPositions: [],
   }
 };
 

@@ -1,10 +1,12 @@
 <script>
+import S12Subtabs from "./S12Subtabs";
 import TaskbarIcon from "./TaskbarIcon";
 
 export default {
   name: "S12Taskbar",
   components: {
-    TaskbarIcon
+    TaskbarIcon,
+    S12Subtabs,
   },
   data() {
     return {
@@ -18,32 +20,42 @@ export default {
   methods: {
     update() {
       this.isHidden = AutomatorData.isEditorFullscreen;
-      this.tabVisibilities = Tabs.newUI.map(x => x.isAvailable);
+      this.tabVisibilities = Tabs.newUI.map(x => !x.isHidden && x.isAvailable);
     },
   },
 };
 </script>
 
 <template>
-  <div
+  <span
     v-if="!isHidden"
-    class="c-taskbar"
   >
-    <img
-      class="c-start-icon"
-      src="images/s12/win7-start-menu-inactive.png"
-    >
+    <div class="c-taskbar">
+      <img
+        class="c-start-icon"
+        src="images/s12/win7-start-menu-inactive.png"
+      >
+      <template
+        v-for="(tab, tabPosition) in tabs"
+      >
+        <TaskbarIcon
+          v-if="tabVisibilities[tabPosition]"
+          :key="tab.name"
+          :tab="tab"
+          :tab-position="tabPosition"
+        />
+      </template>
+    </div>
     <template
       v-for="(tab, tabPosition) in tabs"
     >
-      <TaskbarIcon
+      <S12Subtabs
         v-if="tabVisibilities[tabPosition]"
         :key="tab.name"
         :tab="tab"
-        :tab-position="tabPosition"
       />
     </template>
-  </div>
+  </span>
 </template>
 
 <style scoped>
@@ -51,9 +63,6 @@ export default {
   display: flex;
   width: 100%;
   height: 4.5rem;
-  position: fixed;
-  bottom: 0;
-  left: 0;
   background-color: rgba(120, 120, 120, 0.15);
   background-image:
   repeating-linear-gradient(

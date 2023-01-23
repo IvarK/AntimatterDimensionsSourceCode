@@ -110,8 +110,7 @@ export default {
 <style scoped>
 #page {
   width: 100%;
-  /* stylelint-disable-next-line unit-allowed-list */
-  height: calc(100vh - var(--s12-taskbar-height));
+  height: 100%;
   position: absolute;
   top: 0;
   z-index: 0;

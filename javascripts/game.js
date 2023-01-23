@@ -179,45 +179,20 @@ export function ratePerMinute(amount, time) {
   return Decimal.divide(amount, time / (60 * 1000));
 }
 
-export function averageRun(allRuns, name) {
-  // Filter out all runs which have the default infinite value for time, but if we're left with no valid runs then we
-  // take just one entry so that the averages also have the same value and we don't get division by zero.
-  let runs = allRuns.filter(run => run[0] !== Number.MAX_VALUE);
-  if (runs.length === 0) runs = [allRuns[0]];
-  const totalTime = runs.map(run => run[0]).sum();
-  const totalAmount = runs
-    .map(run => run[1])
-    .reduce(Decimal.sumReducer);
-  const totalPrestigeGain = runs
-    .map(run => run[2])
-    .reduce(name === "Reality" ? Number.sumReducer : Decimal.sumReducer);
-  const realTime = runs.map(run => run[3]).sum();
-  const average = [
-    totalTime / runs.length,
-    totalAmount.dividedBy(runs.length),
-    (name === "Reality") ? totalPrestigeGain / runs.length : totalPrestigeGain.dividedBy(runs.length),
-    realTime / runs.length
-  ];
-  if (name === "Reality") {
-    average.push(runs.map(x => x[4]).sum() / runs.length);
-  }
-  return average;
-}
-
 // eslint-disable-next-line max-params
 export function addInfinityTime(time, realTime, ip, infinities) {
   let challenge = "";
   if (player.challenge.normal.current) challenge = `Normal Challenge ${player.challenge.normal.current}`;
   if (player.challenge.infinity.current) challenge = `Infinity Challenge ${player.challenge.infinity.current}`;
-  player.records.lastTenInfinities.pop();
-  player.records.lastTenInfinities.unshift([time, ip, infinities, realTime, challenge]);
+  player.records.recentInfinities.pop();
+  player.records.recentInfinities.unshift([time, realTime, ip, infinities, challenge]);
   GameCache.bestRunIPPM.invalidate();
 }
 
 export function resetInfinityRuns() {
-  player.records.lastTenInfinities = Array.from(
+  player.records.recentInfinities = Array.from(
     { length: 10 },
-    () => [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE, ""]
+    () => [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, ""]
   );
   GameCache.bestRunIPPM.invalidate();
 }
@@ -236,20 +211,20 @@ export function addEternityTime(time, realTime, ep, eternities) {
   if (player.challenge.eternity.current) {
     const currEC = player.challenge.eternity.current;
     const ec = EternityChallenge(currEC);
-    challenge = `Eternity Challenge ${currEC} (${formatInt(ec.completions)}/${formatInt(ec.maxCompletions)})`;
-  }
-  if (player.dilation.active) challenge = "Time Dilation";
+    const challText = player.dilation.active ? "Dilated EC" : "Eternity Challenge";
+    challenge = `${challText} ${currEC} (${formatInt(ec.completions)}/${formatInt(ec.maxCompletions)})`;
+  } else if (player.dilation.active) challenge = "Time Dilation";
   // If we call this function outside of dilation, it uses the existing AM and produces an erroneous number
   const gainedTP = player.dilation.active ? getTachyonGain() : DC.D0;
-  player.records.lastTenEternities.pop();
-  player.records.lastTenEternities.unshift([time, ep, eternities, realTime, challenge, gainedTP]);
+  player.records.recentEternities.pop();
+  player.records.recentEternities.unshift([time, realTime, ep, eternities, challenge, gainedTP]);
   GameCache.averageRealTimePerEternity.invalidate();
 }
 
 export function resetEternityRuns() {
-  player.records.lastTenEternities = Array.from(
+  player.records.recentEternities = Array.from(
     { length: 10 },
-    () => [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE, "", DC.D0]
+    () => [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, "", DC.D0]
   );
   GameCache.averageRealTimePerEternity.invalidate();
 }
@@ -277,11 +252,11 @@ export function addRealityTime(time, realTime, rm, level, realities) {
   let reality = "";
   const celestials = [Teresa, Effarig, Enslaved, V, Ra, Laitela];
   for (const cel of celestials) {
-    if (cel.isRunning) reality = `${cel.possessiveName} Reality`;
+    if (cel.isRunning) reality = cel.displayName;
   }
   const shards = Effarig.shardsGained;
-  player.records.lastTenRealities.pop();
-  player.records.lastTenRealities.unshift([time, rm, realities, realTime, level, reality, shards]);
+  player.records.recentRealities.pop();
+  player.records.recentRealities.unshift([time, realTime, rm, realities, reality, level, shards]);
 }
 
 export function gainedInfinities() {

@@ -57,15 +57,15 @@ export const AutomatorCommands = ((() => {
     let addedECs, gainedEP;
     switch (layer) {
       case "INFINITY":
-        return `${format(player.records.lastTenInfinities[0][1], 2)} IP`;
+        return `${format(player.records.recentInfinities[0][1], 2)} IP`;
       case "ETERNITY":
         addedECs = AutomatorData.lastECCompletionCount;
-        gainedEP = `${format(player.records.lastTenEternities[0][1], 2)} EP`;
+        gainedEP = `${format(player.records.recentEternities[0][1], 2)} EP`;
         return addedECs === 0
           ? `${gainedEP}`
           : `${gainedEP}, ${addedECs} completions`;
       case "REALITY":
-        return `${format(player.records.lastTenRealities[0][1], 2)} RM`;
+        return `${format(player.records.recentRealities[0][1], 2)} RM`;
       default:
         throw Error(`Unrecognized prestige ${layer} in Automator event log`);
     }

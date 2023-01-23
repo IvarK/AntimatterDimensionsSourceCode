@@ -79,6 +79,12 @@ export default {
       const gameTimeString = this.runTime(run);
       const realTimeString = this.isRealityUnlocked ? ` (${this.realRunTime(run)} real time)` : "";
       return `${gameTimeString}${realTimeString}`;
+    },
+    runChallenge(run) {
+      return this.singular === "Reality" ? run[5] : run[4];
+    },
+    gainedTP(run) {
+      return (this.singular === "Eternity" && Decimal.neq(run[5], 0)) ? format(run[5], 2, 2) : null;
     }
   }
 };
@@ -119,6 +125,12 @@ export default {
           <span v-else>
             {{ prestigeCountReward(runPrestigeCountGain(run, false), run) }},
             {{ averageRunGain(run, 2, plural) }}
+          </span>
+          <span v-if="gainedTP(run)">
+            and {{ gainedTP(run) }} TP
+          </span>
+          <span v-if="runChallenge(run)">
+            ({{ runChallenge(run) }})
           </span>
         </span>
       </div>

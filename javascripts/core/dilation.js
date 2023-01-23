@@ -176,8 +176,8 @@ export function getTP(antimatter, requireEternity) {
   return getBaseTP(antimatter, requireEternity).times(tachyonGainMultiplier());
 }
 
-// Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
-// and for "exit dilation" button (saying whether you need more antimatter)
+// Returns the amount of TP gained, subtracting out current TP; used for displaying gained TP, text on the
+// "exit dilation" button (saying whether you need more antimatter), and in last 10 eternities
 export function getTachyonGain(requireEternity) {
   return getTP(Currency.antimatter.value, requireEternity).minus(Currency.tachyonParticles.value).clampMin(0);
 }

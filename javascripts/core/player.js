@@ -275,11 +275,11 @@ window.player = {
     fullGameCompletions: 0,
     totalAntimatter: DC.E1,
     lastTenInfinities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
+      [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE, ""]),
     lastTenEternities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
+      [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE, "", DC.D0]),
     lastTenRealities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, DC.D1, 1, Number.MAX_VALUE, 0]),
+      [Number.MAX_VALUE, DC.D1, 1, Number.MAX_VALUE, 0, "", 0]),
     thisInfinity: {
       time: 0,
       realTime: 0,

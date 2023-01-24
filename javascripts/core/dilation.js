@@ -9,11 +9,11 @@ export function animateAndDilate() {
 }
 
 // eslint-disable-next-line no-empty-function
-export function animateAndUndilate(callback = () => {}) {
+export function animateAndUndilate(callback) {
   FullScreenAnimationHandler.display("a-undilate", 2);
   setTimeout(() => {
     eternity(false, false, { switchingDilation: true });
-    callback();
+    if (callback) callback();
   }, 1000);
 }
 

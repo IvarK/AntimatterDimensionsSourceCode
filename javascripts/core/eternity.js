@@ -138,7 +138,7 @@ export function eternity(force, auto, specialConditions = {}) {
 }
 
 // eslint-disable-next-line no-empty-function
-export function animateAndEternity(callback = () => {}) {
+export function animateAndEternity(callback) {
   if (!Player.canEternity) return false;
   const hasAnimation = !FullScreenAnimationHandler.isDisplaying &&
     ((player.dilation.active && player.options.animations.dilation) ||
@@ -151,7 +151,7 @@ export function animateAndEternity(callback = () => {}) {
       eternityAnimation();
       setTimeout(() => {
         eternity();
-        callback();
+        if (callback) callback();
       }, 2250);
     }
   } else {

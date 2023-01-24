@@ -160,10 +160,10 @@ GameStorage.migrations = {
     },
     14: player => {
       GameStorage.migrations.reworkBHPulsing(player);
-    },
-    15: player => {
+
       // Added glyph auto-sort by level; in order to keep the button state cycling consistent with the sort buttons' UI
-      // order, AUTO_SORT_MODE had to be changed to insert LEVEL mode at the top and shift the others down
+      // order, AUTO_SORT_MODE had to be changed to insert LEVEL mode at the top and shift the others down. This
+      // makes sure that older saves maintain the same settings after this shift
       if (player.reality.autoSort !== 0) player.reality.autoSort++;
     }
   },

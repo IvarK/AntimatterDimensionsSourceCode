@@ -117,21 +117,9 @@ export default {
   height: 100%;
   position: absolute;
   top: 0;
-  z-index: 0;
+  z-index: 1;
   background-color: rgba(255, 255, 255, 0.5);
-  background-image: repeating-linear-gradient(
-    50deg,
-    rgba(170, 170, 170, 0.1), rgba(170, 170, 170, 0.1) 2rem,
-    rgba(255, 255, 255, 0.1) 4rem, rgba(255, 255, 255, 0.1) 5rem,
-    rgba(170, 170, 170, 0.1) 6rem, rgba(170, 170, 170, 0.1) 8rem
-  ),
-  linear-gradient(
-    -50deg,
-    rgba(60, 60, 60, 0.3),
-    transparent 20%,
-    transparent 80%,
-    rgba(60, 60, 60, 0.3)
-  );
+  background-image: var(--s12-background-gradient);
   margin-top: 0;
   padding: 2.4rem 1rem 1rem;
 

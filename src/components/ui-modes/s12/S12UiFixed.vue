@@ -6,8 +6,9 @@ import FadeAway from "@/components/tabs/celestial-pelle/FadeAway";
 import ModalProgressBar from "@/components/modals/ModalProgressBar";
 import NewGame from "@/components/tabs/celestial-pelle/NewGame";
 import PopupModal from "@/components/modals/PopupModal";
-import S12Taskbar from "./S12Taskbar";
 import SpectateGame from "@/components/SpectateGame";
+
+import S12Taskbar from "./S12Taskbar";
 
 export default {
   name: "S12UiFixed",

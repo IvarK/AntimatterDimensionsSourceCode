@@ -1,6 +1,23 @@
 body.t-s12 {
   --s12-taskbar-height: 4.5rem;
   --s12-border-color: #27221e;
+  --s12-background-gradient:
+    repeating-linear-gradient(
+      50deg,
+      rgba(170, 170, 170, 10%),
+      rgba(170, 170, 170, 10%) 2rem,
+      rgba(255, 255, 255, 10%) 4rem,
+      rgba(255, 255, 255, 10%) 5rem,
+      rgba(170, 170, 170, 10%) 6rem,
+      rgba(170, 170, 170, 10%) 8rem
+    ),
+    linear-gradient(
+      -50deg,
+      rgba(60, 60, 60, 30%),
+      transparent 20%,
+      transparent 80%,
+      rgba(60, 60, 60, 30%)
+    );
 
   height: 100%;
   background: url("../images/s12-bg.jpg") no-repeat;
@@ -86,17 +103,7 @@ body.t-s12 {
   font-family: "Segoe UI", Typewriter;
   font-weight: normal;
   background-color: rgba(187, 216, 242, 75%);
-  background-image:
-    repeating-linear-gradient(
-      50deg,
-      rgba(170, 170, 170, 10%),
-      rgba(170, 170, 170, 10%) 2rem,
-      rgba(255, 255, 255, 10%) 4rem,
-      rgba(255, 255, 255, 10%) 5rem,
-      rgba(170, 170, 170, 10%) 6rem,
-      rgba(170, 170, 170, 10%) 8rem
-    ),
-    linear-gradient(-50deg, rgba(60, 60, 60, 30%), transparent 20%, transparent 80%, rgba(60, 60, 60, 30%));
+  background-image: var(--s12-background-gradient);
   border: 0.1rem solid var(--s12-border-color);
   padding: 2.4rem 1rem 1rem;
 

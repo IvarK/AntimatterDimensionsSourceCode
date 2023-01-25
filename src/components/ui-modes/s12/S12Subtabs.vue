@@ -99,19 +99,7 @@ export default {
   z-index: 6;
   opacity: 0;
   background-color: rgba(120, 120, 120, 0.7);
-  background-image: repeating-linear-gradient(
-    50deg,
-    rgba(170, 170, 170, 0.1), rgba(170, 170, 170, 0.1) 2rem,
-    rgba(255, 255, 255, 0.1) 4rem, rgba(255, 255, 255, 0.1) 5rem,
-    rgba(170, 170, 170, 0.1) 6rem, rgba(170, 170, 170, 0.1) 8rem
-  ),
-  linear-gradient(
-    -50deg,
-    rgba(60, 60, 60, 0.3),
-    transparent 20%,
-    transparent 80%,
-    rgba(60, 60, 60, 0.3)
-  );
+  background-image: var(--s12-background-gradient);
   border: 0.15rem solid var(--s12-border-color);
   border-radius: 0.5rem;
   box-shadow: 0 0 1rem 0.2rem var(--s12-border-color),

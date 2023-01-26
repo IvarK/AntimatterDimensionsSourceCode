@@ -156,6 +156,7 @@ export default {
         Buy More
       </button>
     </div>
+    Note: All numbers on this page are intentionally unaffected by your notation settings
     <div class="l-shop-buttons-container">
       <ShopButton
         v-for="purchase in purchases"

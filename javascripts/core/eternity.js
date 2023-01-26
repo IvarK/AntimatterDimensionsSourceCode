@@ -156,7 +156,7 @@ export function animateAndEternity(callback) {
     }
   } else {
     eternity();
-    callback();
+    if (callback) callback();
   }
   return hasAnimation;
 }

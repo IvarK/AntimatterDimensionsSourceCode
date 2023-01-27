@@ -40,8 +40,8 @@ export default {
     news() {
       return this.$viewModel.news;
     },
-    topMargin() {
-      return this.$viewModel.news ? "" : "margin-top: 3.9rem";
+    topPadding() {
+      return this.$viewModel.news ? "" : "padding-top: 3.9rem";
     },
     isOldUi() {
       return !this.$viewModel.newUI;
@@ -83,7 +83,7 @@ export default {
       :key="newGameKey"
       class="game-container c-s12-window__inner"
       :class="isOldUi ? 'c-old-ui l-old-ui' : ''"
-      :style="topMargin"
+      :style="topPadding"
     >
       <GameUiComponentFixed />
       <BackgroundAnimations />

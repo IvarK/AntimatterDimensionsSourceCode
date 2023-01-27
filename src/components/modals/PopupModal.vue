@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     update() {
-      const oldShowModal = false;
+      const oldShowModal = this.showModal;
       // 2.5 is the cutoff point where the screen starts fading (interactivity disabled). However, we specifically
       // want to allow glyph customization to appear at the very end (and nothing else)
       this.showModal = GameEnd.endState <= END_STATE_MARKERS.INTERACTIVITY_DISABLED ||

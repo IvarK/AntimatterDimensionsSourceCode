@@ -3,7 +3,7 @@ export default {
     name: "Windows Media Player",
     action() {
       const links = [
-      // Get trolled
+        // Get trolled
         "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         // Rite of spring
         "https://youtu.be/rP42C-4zL3w?t=2",

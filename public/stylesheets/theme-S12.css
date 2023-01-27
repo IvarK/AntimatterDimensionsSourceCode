@@ -186,7 +186,8 @@ body.t-s12 {
   transform: none;
 }
 
-.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn) {
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn),
+.t-s12 .c-new-game-button {
   position: relative;
   z-index: 0;
   align-self: flex-end;
@@ -200,6 +201,10 @@ body.t-s12 {
   padding-top: 0;
   padding-bottom: 0;
   transition: box-shadow 0.3s;
+}
+
+.t-s12 .c-new-game-button {
+  padding: 1rem;
 }
 
 .t-s12 .c-modal .o-primary-btn.c-select-notation__item,
@@ -240,7 +245,8 @@ body.t-s12 {
   opacity: 0.5;
 }
 
-.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn)::before {
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn)::before,
+.t-s12 .c-new-game-button::before {
   content: "";
   width: 100%;
   height: 100%;
@@ -252,11 +258,13 @@ body.t-s12 {
   transition: background-color 0.3s;
 }
 
-.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn):hover {
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn):hover,
+.t-s12 .c-new-game-button:hover {
   box-shadow: inset 0 0 0.2rem 0.1rem #52d9fb;
 }
 
-.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn):hover::before {
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn):hover::before,
+.t-s12 .c-new-game-button:hover::before {
   background-color: rgba(46, 210, 255, 30%);
 }
 

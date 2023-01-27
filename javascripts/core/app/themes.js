@@ -1,7 +1,5 @@
 import { sha512_256 } from "js-sha512";
 
-window.sha512_256 = sha512_256;
-
 export const Theme = function Theme(name, config) {
   this.name = name;
 

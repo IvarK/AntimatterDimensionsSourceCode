@@ -1814,7 +1814,7 @@ GameDatabase.celestials.navigation = {
       if (Pelle.isUnlocked) return 1;
       const imCost = Math.clampMax(emphasizeEnd(Math.log10(Currency.imaginaryMachines.value) / Math.log10(1.6e15)), 1);
       let laitelaProgress = Laitela.isRunning ? Math.min(Currency.eternityPoints.value.log10() / 4000, 0.99) : 0;
-      if (Laitela.difficultyTier !== 8 || Glyphs.activeList.length > 1) laitelaProgress = 0;
+      if (Laitela.difficultyTier !== 8 || Glyphs.activeWithoutCompanion.length > 1) laitelaProgress = 0;
       else if (ImaginaryUpgrade(25).isAvailableForPurchase) laitelaProgress = 1;
       return (imCost + laitelaProgress) / 2;
     },
@@ -1835,7 +1835,7 @@ GameDatabase.celestials.navigation = {
             ];
           }
           let laitelaString = `${format(Currency.eternityPoints.value)} / ${format("1e4000")} EP`;
-          if (!Laitela.isRunning || Laitela.difficultyTier !== 8 || Glyphs.activeList.length > 1) {
+          if (!Laitela.isRunning || Laitela.difficultyTier !== 8 || Glyphs.activeWithoutCompanion.length > 1) {
             laitelaString = "Lai'tela's Reality is still intact";
           } else if (ImaginaryUpgrade(25).isAvailableForPurchase) {
             laitelaString = "Lai'tela's Reality has been destroyed";

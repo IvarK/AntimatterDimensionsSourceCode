@@ -51,7 +51,7 @@ export default {
       this.canCharge = Enslaved.isUnlocked;
       this.isCharging = Enslaved.isStoringGameTime;
       this.storedTime = player.celestials.enslaved.stored;
-      this.canAutoRelease = Ra.unlocks.adjustableStoredTime.canBeApplied;
+      this.canAutoRelease = Ra.unlocks.autoPulseTime.canBeApplied;
       this.isAutoReleasing = player.celestials.enslaved.isAutoReleasing;
     },
     pauseButtonText() {
@@ -65,6 +65,12 @@ export default {
     timeDisplayShort(ms) {
       return timeDisplayShort(ms);
     },
+    chargingClassObject() {
+      return {
+        "o-primary-btn--buy-max c-primary-btn--black-hole-header": true,
+        "o-bh-charge-disabled": this.isAutoReleasing
+      };
+    }
   }
 };
 </script>
@@ -82,7 +88,7 @@ export default {
     </PrimaryButton>
     <span v-if="canCharge">
       <PrimaryButton
-        class="o-primary-btn--buy-max c-primary-btn--black-hole-header"
+        :class="chargingClassObject()"
         onclick="Enslaved.toggleStoreBlackHole()"
       >
         <span v-if="isCharging">
@@ -147,5 +153,11 @@ export default {
 .o-small-discharge-text {
   font-size: 1rem;
   line-height: 1rem;
+}
+
+.o-bh-charge-disabled {
+  background-color: var(--color-disabled);
+  user-select: none;
+  cursor: not-allowed;
 }
 </style>

@@ -115,6 +115,8 @@ export default {
         Each Memory Chunk generates a base of one Memory per second, which has been increased to
         {{ quantify("Memory", memoriesPerChunk, 2, 3) }}
         per second.
+        <br>
+        Storing real time prevents Memory Chunk generation, but Memories will still be gained normally.
         <span v-if="memoriesPerChunk > 1">
           <br>
           This is being increased due to {{ memoryBoosts }}.

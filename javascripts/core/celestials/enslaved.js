@@ -44,9 +44,6 @@ export const Enslaved = {
     if (!this.canModifyGameTimeStorage) return;
     player.celestials.enslaved.isStoring = !player.celestials.enslaved.isStoring;
     player.celestials.enslaved.isStoringReal = false;
-    if (!Ra.unlocks.adjustableStoredTime.canBeApplied) {
-      player.celestials.enslaved.storedFraction = 1;
-    }
   },
   toggleStoreReal() {
     if (!this.canModifyRealTimeStorage && !this.isStoredRealTimeCapped) return;
@@ -69,8 +66,9 @@ export const Enslaved = {
   },
   // We assume that the situations where you can't modify time storage settings (of either type) are exactly the cases
   // where they have also been explicitly disabled via other game mechanics. This also reduces UI boilerplate code.
+  // Note that we force time storage when auto-releasing, as not doing so caused a lot of poor usability issues
   get isStoringGameTime() {
-    return this.canModifyGameTimeStorage && player.celestials.enslaved.isStoring;
+    return this.canModifyGameTimeStorage && (this.isAutoReleasing || player.celestials.enslaved.isStoring);
   },
   get isStoringRealTime() {
     return this.canModifyRealTimeStorage && player.celestials.enslaved.isStoringReal;
@@ -170,6 +168,9 @@ export const Enslaved = {
   },
   get isCompleted() {
     return player.celestials.enslaved.completed;
+  },
+  get canTickHintTimer() {
+    return !EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted;
   },
   get isUnlocked() {
     return EffarigUnlock.eternity.isUnlocked;

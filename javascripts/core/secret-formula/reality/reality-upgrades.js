@@ -71,7 +71,7 @@ GameDatabase.reality.upgrades = [
     name: "Cosmically Duplicate",
     id: 6,
     cost: 15,
-    requirement: "Complete your first Eternity without using Replicanti Galaxies",
+    requirement: "Complete your first manual Eternity without using Replicanti Galaxies",
     // Note that while noRG resets on eternity, the reality-level check will be false after the first eternity.
     // The noRG variable is eternity-level as it's also used for an achievement check
     hasFailed: () => !(player.requirementChecks.eternity.noRG && player.requirementChecks.reality.noEternities),
@@ -97,7 +97,7 @@ GameDatabase.reality.upgrades = [
     name: "Paradoxically Attain",
     id: 8,
     cost: 15,
-    requirement: "Get to Eternity without any automatic Achievements",
+    requirement: "Manually Eternity without any automatic Achievements",
     hasFailed: () => player.reality.gainedAutoAchievements,
     checkRequirement: () => !player.reality.gainedAutoAchievements,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
@@ -118,7 +118,7 @@ GameDatabase.reality.upgrades = [
       return invalidEquippedGlyphs || (Glyphs.activeWithoutCompanion.length === 0 && !hasValidGlyphInInventory);
     },
     checkRequirement: () => Currency.eternityPoints.exponent >= 4000 &&
-      Glyphs.activeList.length === 1 && Glyphs.activeList[0].level >= 3,
+      Glyphs.activeWithoutCompanion.length === 1 && Glyphs.activeWithoutCompanion[0].level >= 3,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
     description: "Gain another Glyph slot",
     effect: () => 1
@@ -127,7 +127,7 @@ GameDatabase.reality.upgrades = [
     name: "Existentially Prolong",
     id: 10,
     cost: 15,
-    requirement: () => `Complete your first Eternity with at least ${formatPostBreak(DC.E400)} Infinity Points`,
+    requirement: () => `Complete your first manual Eternity with at least ${formatPostBreak(DC.E400)} Infinity Points`,
     hasFailed: () => !player.requirementChecks.reality.noEternities,
     checkRequirement: () => Currency.infinityPoints.exponent >= 400 &&
       player.requirementChecks.reality.noEternities,

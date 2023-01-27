@@ -83,7 +83,8 @@ GameDatabase.multiplierTabValues.gamespeed = {
   },
   chargingBH: {
     name: "Black Hole Charging",
-    multValue: () => 1 - player.celestials.enslaved.storedFraction,
+    // The 0 in multValue is irrelevant; if this upgrade isn't available, the subtab is hidden by 1x total effect
+    multValue: () => (Ra.unlocks.autoPulseTime.canBeApplied ? 0.01 : 0),
     isActive: () => Enslaved.isStoringGameTime,
     icon: MultiplierTabIcons.BLACK_HOLE,
   },

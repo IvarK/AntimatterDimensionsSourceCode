@@ -349,9 +349,8 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
     factor = Math.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   }
 
-  // Time storage is linearly scaled because exponential scaling is pretty useless in practice
   if (Enslaved.isStoringGameTime && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
-    const storedTimeWeight = player.celestials.enslaved.storedFraction;
+    const storedTimeWeight = Ra.unlocks.autoPulseTime.canBeApplied ? 0.99 : 1;
     factor = factor * (1 - storedTimeWeight) + storedTimeWeight;
   }
 
@@ -537,7 +536,7 @@ export function gameLoop(passDiff, options = {}) {
   Currency.realities.add(uncountabilityGain);
   Currency.perkPoints.add(uncountabilityGain);
 
-  if (Perk.autocompleteEC1.canBeApplied && player.reality.autoEC) player.reality.lastAutoEC += realDiff;
+  if (Perk.autocompleteEC1.canBeApplied) player.reality.lastAutoEC += realDiff;
 
   EternityChallenge(12).tryFail();
   Achievements._power.invalidate();
@@ -594,8 +593,8 @@ export function gameLoop(passDiff, options = {}) {
   const teresa25 = !isInCelestialReality() && Ra.unlocks.unlockDilationStartingTP.canBeApplied;
   if ((teresa1 || teresa25) && !Pelle.isDoomed) rewardTP();
 
-  if (!EnslavedProgress.hintsUnlocked.hasProgress && Enslaved.has(ENSLAVED_UNLOCKS.RUN) && !Enslaved.isCompleted) {
-    player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : realDiff / 25;
+  if (Enslaved.canTickHintTimer) {
+    player.celestials.enslaved.hintUnlockProgress += Enslaved.isRunning ? realDiff : (realDiff * 0.4);
     if (player.celestials.enslaved.hintUnlockProgress >= TimeSpan.fromHours(5).totalMilliseconds) {
       EnslavedProgress.hintsUnlocked.giveProgress();
       Enslaved.quotes.hintUnlock.show();

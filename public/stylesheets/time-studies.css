@@ -224,6 +224,10 @@
   background-color: #490066;
 }
 
+.o-time-study-eternity-challenge--complete {
+  box-shadow: inset 0 0 3rem var(--color-good-dark);
+}
+
 .o-time-study-dilation--available {
   color: #64dd17;
   background-color: black;

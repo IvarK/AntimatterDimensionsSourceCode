@@ -8,6 +8,8 @@ import StudyStringLine from "@/components/modals/StudyStringLine";
 import StudyStringPreview from "./time-study-modal-preview/StudyStringPreview";
 import StudyTreeInfo from "./StudyTreeInfo";
 
+let savedImportString = "";
+
 export default {
   name: "StudyStringModal",
   components: {
@@ -32,6 +34,8 @@ export default {
     return {
       input: "",
       name: "",
+      respecAndLoad: false,
+      canEternity: false
     };
   },
   computed: {
@@ -41,12 +45,14 @@ export default {
     },
     // This represents the state reached from importing into an empty tree
     importedTree() {
-      if (!this.inputIsValidTree) return false;
+      if (!this.inputIsValidTree) return {};
       const importedTree = new TimeStudyTree(this.truncatedInput);
+      const newStudiesArray = importedTree.purchasedStudies.map(s => this.studyString(s));
       return {
         timeTheorems: importedTree.spentTheorems[0],
         spaceTheorems: importedTree.spentTheorems[1],
-        newStudies: makeEnumeration(importedTree.purchasedStudies.map(s => this.studyString(s))),
+        newStudies: makeEnumeration(newStudiesArray),
+        newStudiesArray,
         invalidStudies: importedTree.invalidStudies,
         firstPaths: makeEnumeration(importedTree.dimensionPaths),
         secondPaths: makeEnumeration(importedTree.pacePaths),
@@ -57,14 +63,16 @@ export default {
     // This is only shown when importing; when modifying a preset we assume that generally the current state of the
     // tree is irrelevant because if it mattered then the player would simply import instead
     combinedTree() {
-      if (!this.inputIsValidTree) return false;
+      if (!this.inputIsValidTree) return {};
       const currentStudyTree = GameCache.currentStudyTree.value;
       const combinedTree = this.combinedTreeObject;
+      const newStudiesArray = combinedTree.purchasedStudies
+        .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => this.studyString(s));
       return {
         timeTheorems: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
         spaceTheorems: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
-        newStudies: makeEnumeration(combinedTree.purchasedStudies
-          .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => this.studyString(s))),
+        newStudies: makeEnumeration(newStudiesArray),
+        newStudiesArray,
         firstPaths: makeEnumeration(combinedTree.dimensionPaths),
         secondPaths: makeEnumeration(combinedTree.pacePaths),
         ec: combinedTree.ec,
@@ -131,20 +139,38 @@ export default {
       return this.isImporting ? "Import" : "Save";
     }
   },
+  watch: {
+    input(newInput) {
+      savedImportString = newInput;
+    }
+  },
   // Needs to be assigned in created() or else they will end up being undefined when importing
   created() {
     const preset = player.timestudy.presets[this.id];
-    this.input = preset ? preset.studies : "";
+    this.input = preset ? preset.studies : savedImportString;
     this.name = preset ? preset.name : "";
   },
   mounted() {
     this.$refs.input.select();
   },
   methods: {
+    update() {
+      this.canEternity = Player.canEternity;
+    },
     confirm() {
-      if (this.deleting) this.deletePreset();
-      else if (this.isImporting) this.importTree();
-      else this.savePreset();
+      if (this.deleting) {
+        this.deletePreset();
+      } else if (this.isImporting) {
+        if (this.respecAndLoad && Player.canEternity) {
+          player.respec = true;
+          const studies = new TimeStudyTree(this.truncatedInput).purchasedStudies;
+          animateAndEternity(() => TimeStudyTree.commitToGameState(studies, false));
+          return;
+        }
+        this.importTree();
+      } else {
+        this.savePreset();
+      }
     },
     convertInputShorthands() {
       this.input = TimeStudyTree.formatStudyList(this.input);
@@ -152,6 +178,7 @@ export default {
     importTree() {
       if (!this.inputIsValid) return;
       if (this.inputIsSecret) SecretAchievement(37).unlock();
+      savedImportString = "";
       this.emitClose();
       // We need to use a combined tree for committing to the game state, or else it won't buy studies in the imported
       // tree are only reachable if the current tree is already bought
@@ -237,7 +264,9 @@ export default {
       <StudyStringPreview
         v-if="!deleting"
         :show-preview="inputIsValidTree"
-        :tree-status="combinedTree"
+        :new-studies="!isImporting || (canEternity && respecAndLoad) ? importedTree.newStudiesArray
+          : combinedTree.newStudiesArray"
+        :disregard-current-studies="!isImporting || (canEternity && respecAndLoad)"
       />
       <div v-else-if="hasInput">
         Not a valid tree
@@ -253,6 +282,35 @@ export default {
         Format Preset Text
       </PrimaryButton>
     </div>
+    <span v-if="isImporting">
+      <br>
+      <div
+        v-tooltip="canEternity ? '' : 'You are currently unable to eternity, so this will only do a normal load.'"
+        class="c-modal__confirmation-toggle"
+        @click="respecAndLoad = !respecAndLoad"
+      >
+        <div
+          :class="{
+            'c-modal__confirmation-toggle__checkbox': true,
+            'c-modal__confirmation-toggle__checkbox--active': respecAndLoad,
+          }"
+        >
+          <span
+            v-if="respecAndLoad"
+            class="fas fa-check"
+          />
+        </div>
+        <span class="c-modal__confirmation-toggle__text">
+          Also respec tree and eternity
+          <span
+            v-if="!canEternity"
+            class="c-modal__confirmation-toggle__warning"
+          >
+            !
+          </span>
+        </span>
+      </div>
+    </span>
     <template #confirm-text>
       {{ confirmText }}
     </template>
@@ -265,5 +323,23 @@ export default {
   background-color: var(--color-disabled);
   pointer-events: none;
   user-select: none;
+}
+
+.c-modal__confirmation-toggle__text {
+  opacity: 1;
+}
+
+.c-modal__confirmation-toggle__warning {
+  display: inline-flex;
+  /* stylelint-disable-next-line unit-allowed-list */
+  width: 1em;
+  /* stylelint-disable-next-line unit-allowed-list */
+  height: 1em;
+  justify-content: center;
+  align-items: center;
+  color: #332222;
+  background: var(--color-bad);
+  border-radius: 100%;
+  margin-left: 0.3rem;
 }
 </style>

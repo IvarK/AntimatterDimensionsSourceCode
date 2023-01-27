@@ -40,8 +40,11 @@ export const Speedrun = {
       if (typeof player.options.animations[key] === "boolean") player.options.animations[key] = false;
     }
 
-    // "Fake News" Achievement, given for free to partially mitigate promoting weird strategies at the beginning of runs
+    // A few achievements are given for free to mitigate weird strategies at the beginning of runs or unavoidable
+    // timewalls for particularly fast/optimized runs
     Achievement(22).unlock();
+    Achievement(35).unlock();
+    Achievement(76).unlock();
 
     // Some time elapses after the reset and before the UI is actually ready, which ends up getting "counted" as offline
     player.speedrun.offlineTimeUsed = 0;

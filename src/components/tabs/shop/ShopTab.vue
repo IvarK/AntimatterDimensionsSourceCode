@@ -47,6 +47,9 @@ export default {
       if (!this.loggedIn) return "Not logged in!";
       if (!this.canRespec) return "No respec available! (Purchase STDs or wait 3 days since your last one)";
       return null;
+    },
+    hiddenName() {
+      return player.options.hideGoogleName;
     }
   },
   methods: {

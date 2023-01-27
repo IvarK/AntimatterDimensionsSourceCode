@@ -27,7 +27,9 @@ function handleChallengeCompletion() {
 export function manualBigCrunchResetRequest() {
   if (!Player.canCrunch) return;
   if (GameEnd.creditsEverClosed) return;
-  if (player.options.confirmations.bigCrunch) {
+  // We show the modal under two conditions - on the first ever infinity (to explain the mechanic) and
+  // post-break (to show total IP and infinities gained)
+  if (player.options.confirmations.bigCrunch && (!PlayerProgress.infinityUnlocked() || player.break)) {
     Modal.bigCrunch.show();
   } else {
     bigCrunchResetRequest();

@@ -233,7 +233,7 @@ export const GameStorage = {
         // Needed to check some notification about reality unlock study.
         EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
       }
-      if (DEV || player.options.testVersion !== undefined) {
+      if (DEV && player.options.testVersion !== undefined) {
         this.devMigrations.patch(player);
       }
     }

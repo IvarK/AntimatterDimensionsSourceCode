@@ -78,9 +78,9 @@ export default {
       <span v-if="maxDimTier > 0">
         <br><br>
         {{ completionTime }}
-        <br><br>
+        <br>
         <span v-if="maxDimTier <= 7">
-          Highest active dimension: {{ formatInt(maxDimTier) }}
+          <b>Highest active dimension: {{ formatInt(maxDimTier) }}</b>
         </span>
         <br><br>
         Glyph Set:
@@ -99,11 +99,11 @@ export default {
         <br><br>
         Lai'tela's Reality has been fully destabilized and cannot have its reward further improved.
       </span>
-      <br><br>
+      <br>
     </div>
     <div
       v-for="(line, lineId) in runEffects"
-      :key="lineId + '-laitela-run-desc'"
+      :key="lineId + '-laitela-run-desc' + maxDimTier"
     >
       {{ line }} <br>
     </div>

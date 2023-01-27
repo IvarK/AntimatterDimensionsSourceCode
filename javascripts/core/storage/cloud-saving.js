@@ -45,7 +45,8 @@ export const Cloud = {
     try {
       await signInWithPopup(this.auth, this.provider);
       ShopPurchaseData.syncSTD();
-      GameUI.notify.success(`Logged in as ${this.user.displayName}`);
+      if (player.options.hideGoogleName) GameUI.notify.success(`Successfully logged in to Google Account`);
+      else GameUI.notify.success(`Successfully logged in as ${this.user.displayName}`);
     } catch (e) {
       GameUI.notify.error("Google Account login failed");
     }
@@ -159,7 +160,8 @@ export const Cloud = {
   async loadCheck() {
     const save = await this.load();
     if (save === null) {
-      GameUI.notify.info(`No cloud save for user ${this.user.displayName}`);
+      if (player.options.hideGoogleName) GameUI.notify.info(`No cloud save for current Google Account`);
+      else GameUI.notify.info(`No cloud save for user ${this.user.displayName}`);
     } else {
       const root = GameSaveSerializer.deserialize(save);
       const saveId = GameStorage.currentSlot;

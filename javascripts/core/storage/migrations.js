@@ -157,6 +157,14 @@ GameStorage.migrations = {
       GameStorage.migrations.moveTS33(player);
       GameStorage.migrations.addBestPrestigeCurrency(player);
       GameStorage.migrations.migrateTheme(player);
+    },
+    14: player => {
+      GameStorage.migrations.reworkBHPulsing(player);
+
+      // Added glyph auto-sort by level; in order to keep the button state cycling consistent with the sort buttons' UI
+      // order, AUTO_SORT_MODE had to be changed to insert LEVEL mode at the top and shift the others down. This
+      // makes sure that older saves maintain the same settings after this shift
+      if (player.reality.autoSort !== 0) player.reality.autoSort++;
     }
   },
 
@@ -939,6 +947,11 @@ GameStorage.migrations = {
       : player.options.theme;
     delete player.options.themes;
     delete player.options.secretThemeKey;
+  },
+
+  // This change removed the ability to adjust stored time rate after Ra-Nameless 10, instead forcing it to be 99%
+  reworkBHPulsing(player) {
+    delete player.celestials.enslaved.storedFraction;
   },
 
   prePatch(saveData) {

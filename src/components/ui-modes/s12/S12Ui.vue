@@ -56,10 +56,6 @@ export default {
       // if it isn't redrawn
       this.newGameKey = Pelle.isDoomed;
     },
-    handleClick() {
-      if (PlayerProgress.infinityUnlocked()) manualBigCrunchResetRequest();
-      else Modal.bigCrunch.show();
-    }
   },
 };
 </script>

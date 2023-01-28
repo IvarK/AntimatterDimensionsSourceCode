@@ -4,6 +4,7 @@ import TaskbarIcon from "./TaskbarIcon";
 
 import { S12Windows } from "./windows";
 
+const startupSound = new Audio("audio/s12-startup.mp3");
 export default {
   name: "S12Taskbar",
   components: {
@@ -15,6 +16,7 @@ export default {
       isHidden: false,
       tabVisibilities: [],
       S12Windows,
+      startupSound,
     };
   },
   computed: {
@@ -37,6 +39,7 @@ export default {
       <img
         class="c-start-icon"
         src="images/s12/win7-start-menu-inactive.png"
+        @click="startupSound.play()"
       >
       <template
         v-for="(tab, tabPosition) in tabs"
@@ -107,6 +110,7 @@ export default {
 .c-start-icon {
   height: 100%;
   margin: 0 2rem 0 1rem;
+  cursor: pointer;
 }
 
 .c-s12-show-desktop {

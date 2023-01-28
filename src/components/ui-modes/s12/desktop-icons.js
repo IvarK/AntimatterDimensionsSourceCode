@@ -24,18 +24,11 @@ export default {
     image: "desktop--discord-logo.png"
   },
   {
-    name: "Synergism",
+    name: "Games",
     action() {
-      window.open("https://pseudo-corp.github.io/SynergismOfficial/");
+      Modal.s12Games.show();
     },
-    image: "desktop--synergism.png"
-  },
-  {
-    name: "Universal Paperclips",
-    action() {
-      window.open("https://www.decisionproblem.com/paperclips/");
-    },
-    image: "desktop--universal-paperclips.png"
+    image: "desktop--games.png"
   }],
   selected: -1,
 };

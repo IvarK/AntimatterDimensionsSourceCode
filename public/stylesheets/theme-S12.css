@@ -100,6 +100,7 @@ body.t-s12 {
 .t-s12 .c-modal {
   --color-text: black;
   --color-text-inverted: white;
+  max-width: calc(100% - 10rem);
   font-family: "Segoe UI", Typewriter;
   font-weight: normal;
   background-color: rgba(187, 216, 242, 75%);

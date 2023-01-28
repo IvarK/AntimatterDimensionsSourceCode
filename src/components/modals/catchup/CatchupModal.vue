@@ -81,7 +81,7 @@ export default {
   text-align: left;
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-radius, 0.4rem);
-  margin: 1rem;
+  margin: 1rem 0;
   padding: 1.5rem;
 }
 

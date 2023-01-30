@@ -273,6 +273,7 @@ window.player = {
     realTimePlayed: 0,
     realTimeDoomed: 0,
     fullGameCompletions: 0,
+    previousRunRealTime: 0,
     totalAntimatter: DC.E1,
     recentInfinities: Array.range(0, 10).map(() =>
       [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, ""]),

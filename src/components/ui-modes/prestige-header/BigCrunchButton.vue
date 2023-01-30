@@ -7,6 +7,7 @@ export default {
       gainedIP: new Decimal(0),
       currentIPRate: new Decimal(0),
       peakIPRate: new Decimal(0),
+      peakIPRateVal: new Decimal(0),
       currentIP: new Decimal(0),
       tesseractAffordable: false,
       canCrunch: false,
@@ -89,6 +90,7 @@ export default {
         this.currentIPRate.copyFrom(gainedIP.dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes)));
       }
       this.peakIPRate.copyFrom(player.records.thisInfinity.bestIPmin);
+      this.peakIPRateVal.copyFrom(player.records.thisInfinity.bestIPminVal);
     },
     switchToInfinity() {
       Tab.dimensions.infinity.show(true);
@@ -130,13 +132,16 @@ export default {
       <b>
         Big Crunch for
         <span :style="amountStyle">{{ format(gainedIP, 2) }}</span>
-        Infinity {{ pluralize("Point", gainedIP) }}.
+        <span v-if="showIPRate"> IP</span>
+        <span v-else> Infinity {{ pluralize("Point", gainedIP) }}</span>
       </b>
       <template v-if="showIPRate">
         <br>
-        {{ format(currentIPRate, 2) }} IP/min
+        Current: {{ format(currentIPRate, 2) }} IP/min
         <br>
-        Peaked at {{ format(peakIPRate, 2) }} IP/min
+        Peak: {{ format(peakIPRate, 2) }} IP/min
+        <br>
+        at {{ format(peakIPRateVal, 2) }} IP
       </template>
       <div v-else />
     </template>

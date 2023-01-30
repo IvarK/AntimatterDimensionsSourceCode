@@ -23,6 +23,7 @@ export const NewsHandler = {
     // we pad the array with zeroes until we can fit the new ID in before actually adding it.
     while (this.BITS_PER_MASK * player.news.seen[type].length <= number) player.news.seen[type].push(0);
     player.news.seen[type][Math.floor(number / this.BITS_PER_MASK)] |= 1 << (number % this.BITS_PER_MASK);
+    player.news.totalSeen++;
   },
 
   hasSeenNews(id) {

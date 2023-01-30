@@ -3,6 +3,7 @@ import { GameDatabase } from "./secret-formula/game-database";
 class AwayProgress {
   constructor(config) {
     this.name = config.name;
+    this.forcedName = config.forcedName;
     this.isUnlocked = config.isUnlocked;
     this.awayOption = config.awayOption ?? this.name;
     this.showOption = config.showOption ?? true;
@@ -32,6 +33,7 @@ class AwayProgress {
   }
 
   get formatName() {
+    if (this.forcedName) return this.forcedName;
     // Format the camelCase name to Title Case, with spaces added before the capital letters
     return this.name
       .replace(/[A-Z]/gu, match => ` ${match}`)

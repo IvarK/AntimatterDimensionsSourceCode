@@ -63,8 +63,8 @@ GameDatabase.challenges.infinity = [
   {
     id: 5,
     description:
-      `buying Antimatter Dimensions 1-4 causes all smaller Antimatter Dimension costs to increase.
-      Buying Antimatter Dimensions 5-8 causes all larger Antimatter Dimension costs to increase.`,
+      `buying Antimatter Dimensions 1-4 causes all cheaper AD costs to increase.
+      Buying Antimatter Dimensions 5-8 causes all more expensive AD costs to increase.`,
     goal: DC.E16500,
     isQuickResettable: true,
     reward: {

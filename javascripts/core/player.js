@@ -287,6 +287,7 @@ window.player = {
       lastBuyTime: 0,
       maxAM: DC.D0,
       bestIPmin: DC.D0,
+      bestIPminVal: DC.D0,
     },
     bestInfinity: {
       time: Number.MAX_VALUE,
@@ -301,6 +302,7 @@ window.player = {
       maxIP: DC.D0,
       bestIPMsWithoutMaxAll: DC.D0,
       bestEPmin: DC.D0,
+      bestEPminVal: DC.D0,
       bestInfinitiesPerMs: DC.D0,
     },
     bestEternity: {
@@ -317,6 +319,8 @@ window.player = {
       bestEternitiesPerMs: DC.D0,
       maxReplicanti: DC.D0,
       maxDT: DC.D0,
+      bestRSmin: 0,
+      bestRSminVal: 0,
     },
     bestReality: {
       time: Number.MAX_VALUE,

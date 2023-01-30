@@ -540,20 +540,12 @@ export function gameLoop(passDiff, options = {}) {
   const gain = Math.clampMin(FreeTickspeed.fromShards(Currency.timeShards.value).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
 
-  const currentIPmin = gainedInfinityPoints().dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes));
-  if (currentIPmin.gt(player.records.thisInfinity.bestIPmin) && Player.canCrunch)
-    player.records.thisInfinity.bestIPmin = currentIPmin;
-
+  updatePrestigeRates();
   tryCompleteInfinityChallenges();
 
   EternityChallenges.autoComplete.tick();
 
   replicantiLoop(diff);
-
-
-  const currentEPmin = gainedEternityPoints().dividedBy(Math.clampMin(0.0005, Time.thisEternityRealTime.totalMinutes));
-  if (currentEPmin.gt(player.records.thisEternity.bestEPmin) && Player.canEternity)
-    player.records.thisEternity.bestEPmin = currentEPmin;
 
   if (PlayerProgress.dilationUnlocked()) {
     Currency.dilatedTime.add(getDilationGainPerSecond().times(diff / 1000));
@@ -622,6 +614,26 @@ export function gameLoop(passDiff, options = {}) {
   GameUI.update();
   player.lastUpdate = thisUpdate;
   PerformanceStats.end("Game Update");
+}
+
+function updatePrestigeRates() {
+  const currentIPmin = gainedInfinityPoints().dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes));
+  if (currentIPmin.gt(player.records.thisInfinity.bestIPmin) && Player.canCrunch) {
+    player.records.thisInfinity.bestIPmin = currentIPmin;
+    player.records.thisInfinity.bestIPminVal = gainedInfinityPoints();
+  }
+
+  const currentEPmin = gainedEternityPoints().dividedBy(Math.clampMin(0.0005, Time.thisEternityRealTime.totalMinutes));
+  if (currentEPmin.gt(player.records.thisEternity.bestEPmin) && Player.canEternity) {
+    player.records.thisEternity.bestEPmin = currentEPmin;
+    player.records.thisEternity.bestEPminVal = gainedEternityPoints();
+  }
+
+  const currentRSmin = Effarig.shardsGained / Math.clampMin(0.0005, Time.thisRealityRealTime.totalMinutes);
+  if (currentRSmin > player.records.thisReality.bestRSmin && isRealityAvailable()) {
+    player.records.thisReality.bestRSmin = currentRSmin;
+    player.records.thisReality.bestRSminVal = Effarig.shardsGained;
+  }
 }
 
 function passivePrestigeGen() {

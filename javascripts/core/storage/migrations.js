@@ -171,37 +171,41 @@ GameStorage.migrations = {
       // by reordering to be [game time, real time, prestige currency, prestige count, challenge, ...(other resources)]
       // Also fixes a migration bug where values could be undefined or null by assigning defaults when necessary
       for (let i = 0; i < 10; i++) {
-        const infRec = player.records.lastTenInfinities[i];
-        player.records.recentInfinities[i] = [
-          infRec[0] ?? Number.MAX_VALUE,
-          Number(infRec[3] ?? Number.MAX_VALUE),
-          new Decimal(infRec[1] ?? 1),
-          new Decimal(infRec[2] ?? 1),
-          ""
-        ];
+        if (player.records.lastTenInfinities) {
+          const infRec = player.records.lastTenInfinities[i];
+          player.records.recentInfinities[i] = [
+            infRec[0] ?? Number.MAX_VALUE,
+            Number(infRec[3] ?? Number.MAX_VALUE),
+            new Decimal(infRec[1] ?? 1),
+            new Decimal(infRec[2] ?? 1),
+            ""
+          ];
+        }
 
-        const eterRec = player.records.lastTenEternities[i];
-        player.records.recentEternities[i] = [
-          eterRec[0] ?? Number.MAX_VALUE,
-          Number(eterRec[3] ?? Number.MAX_VALUE),
-          new Decimal(eterRec[1] ?? 1),
-          new Decimal(eterRec[2] ?? 1),
-          "",
-          new Decimal(0)
-        ];
+        if (player.records.lastTenEternities) {
+          const eterRec = player.records.lastTenEternities[i];
+          player.records.recentEternities[i] = [
+            eterRec[0] ?? Number.MAX_VALUE,
+            Number(eterRec[3] ?? Number.MAX_VALUE),
+            new Decimal(eterRec[1] ?? 1),
+            new Decimal(eterRec[2] ?? 1),
+            "",
+            new Decimal(0)
+          ];
+        }
 
-        // Previous migrations fill the other two layers, but this prop doesn't exist for pre-reality migrations
-        if (!player.records.lastTenRealities) continue;
-        const realRec = player.records.lastTenRealities[i];
-        player.records.recentRealities[i] = [
-          realRec[0] ?? Number.MAX_VALUE,
-          Number(realRec[3] ?? Number.MAX_VALUE),
-          new Decimal(realRec[1] ?? 1),
-          realRec[2] ?? 1,
-          "",
-          0,
-          0
-        ];
+        if (player.records.lastTenRealities) {
+          const realRec = player.records.lastTenRealities[i];
+          player.records.recentRealities[i] = [
+            realRec[0] ?? Number.MAX_VALUE,
+            Number(realRec[3] ?? Number.MAX_VALUE),
+            new Decimal(realRec[1] ?? 1),
+            realRec[2] ?? 1,
+            "",
+            0,
+            0
+          ];
+        }
       }
 
       delete player.records.lastTenInfinities;

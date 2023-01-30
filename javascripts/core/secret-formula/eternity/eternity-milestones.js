@@ -143,8 +143,9 @@ GameDatabase.eternity.milestones = {
         player.eternities.gte(200));
       // As far as I can tell, using templates here as Codefactor wants would lead to nested templates,
       // which seems messy to say the least.
+      const realTime = PlayerProgress.seenAlteredSpeed() ? " real-time" : "";
       // eslint-disable-next-line prefer-template
-      return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest Eternity ` +
+      return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest${realTime} Eternity ` +
         (eternities.gt(0) ? `(Currently ${format(eternities, 2, 2)}/hour)` : "(Inactive)");
     },
     activeCondition: () => (player.options.offlineProgress

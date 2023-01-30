@@ -97,6 +97,7 @@ GameDatabase.awayProgressTypes = [
     showOption: false,
   }, {
     name: "enslavedMemories",
+    forcedName: "Nameless Memories",
     awayOption: "celestialMemories",
     reference: ["celestials", "ra", "pets", "enslaved", "memories"],
     isUnlocked: () => Ra.pets.enslaved.isUnlocked && !Ra.pets.enslaved.isCapped,

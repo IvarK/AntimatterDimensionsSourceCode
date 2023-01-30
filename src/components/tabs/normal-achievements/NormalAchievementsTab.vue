@@ -77,7 +77,7 @@ export default {
       this.totalCountdown = ((Achievements.preReality.countWhere(a => !a.isUnlocked) - 1) * Achievements.period +
         Achievements.timeToNextAutoAchieve) / gameSpeedupFactor;
       this.missingAchievements = Achievements.preReality.countWhere(a => !a.isUnlocked);
-      this.showAutoAchieve = PlayerProgress.realityUnlocked() && !Perk.achievementGroup5.isBought;
+      this.showAutoAchieve = PlayerProgress.realityUnlocked();
       this.isAutoAchieveActive = player.reality.autoAchieve;
       this.hideCompletedRows = player.options.hideCompletedAchievementRows;
       this.achMultBreak = BreakInfinityUpgrade.achievementMult.canBeApplied;

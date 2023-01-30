@@ -210,13 +210,15 @@ GameStorage.migrations = {
       delete player.options.showLastTenResourceGain;
 
       // Fixes a desync which occasionally causes unique > total seen due to total not being updated properly
-      let unique = 0;
-      for (const bitmaskArray of Object.values(player.news.seen)) {
-        for (const bitmask of bitmaskArray) {
-          unique += countValuesFromBitmask(bitmask);
+      if (player.news.seen) {
+        let unique = 0;
+        for (const bitmaskArray of Object.values(player.news.seen)) {
+          for (const bitmask of bitmaskArray) {
+            unique += countValuesFromBitmask(bitmask);
+          }
         }
+        player.news.totalSeen = Math.max(player.news.totalSeen, unique);
       }
-      player.news.totalSeen = Math.max(player.news.totalSeen, unique);
     }
   },
 

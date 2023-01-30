@@ -280,7 +280,7 @@ body {
 
 @font-face {
   font-family: Typewriter;
-  src: url("MonospaceTypewriter.ttf");
+  src: url("BlobEmoji-Bold.ttf"), url("MonospaceTypewriter.ttf");
 }
 
 @font-face {
@@ -302,11 +302,6 @@ body {
 @font-face {
   font-family: "Font Awesome";
   src: url("fa-solid-900.ttf");
-}
-
-@font-face {
-  font-family: Typewriter;
-  src: url("BlobEmoji-Bold.ttf"), url("MonospaceTypewriter.ttf");
 }
 
 /* Background for s6 and s10 is not displayed by default */

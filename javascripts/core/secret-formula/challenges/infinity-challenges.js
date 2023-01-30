@@ -104,7 +104,7 @@ GameDatabase.challenges.infinity = [
         TimeStudy(81)
       );
       return `you cannot buy Antimatter Galaxies. Base Dimension Boost multiplier is increased to a maximum
-        of ${formatX(10)}. (Current base multiplier: ${formatX(mult)})`;
+        of ${formatX(10)}. (Current base multiplier: ${formatX(mult, 2, 1)})`;
     },
     goal: DC.E10000,
     isQuickResettable: false,

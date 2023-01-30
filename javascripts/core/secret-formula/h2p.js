@@ -1142,6 +1142,10 @@ Unlocking or defeating a Celestial has different conditions depending on the Cel
 <br>
 All Celestials have their own Celestial Reality, but how the Reality is relevant to each Celestial and the rest of
 the game will depend on the Celestial.
+<br>
+<br>
+Celestials are timeless entities. Unless otherwise stated, any new mechanics introduced by Celestials are not affected
+by game speed multipliers and instead refer specifically to real time instead of game time.
 `,
       isUnlocked: () => Teresa.isUnlocked,
       tags: ["reality", "challenges", "endgame", "lategame"],

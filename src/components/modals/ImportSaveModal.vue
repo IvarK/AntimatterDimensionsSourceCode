@@ -89,7 +89,7 @@ export default {
     },
     willLoseCosmetics() {
       const currSets = player.reality.glyphs.cosmetics.unlockedFromNG;
-      const importedSets = this.player.reality?.glyphs.cosmetics.unlockedFromNG ?? [];
+      const importedSets = this.player.reality?.glyphs.cosmetics?.unlockedFromNG ?? [];
       return currSets.filter(set => !importedSets.includes(set)).length > 0;
     },
     willLoseSpeedrun() {

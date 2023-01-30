@@ -166,7 +166,7 @@ GameStorage.migrations = {
       // makes sure that older saves maintain the same settings after this shift
       if (player.reality.autoSort !== 0) player.reality.autoSort++;
     },
-    16: player => {
+    15: player => {
       // Added additional resource tracking in last 10 prestige records and adjusted data format to be more consistent
       // by reordering to be [game time, real time, prestige currency, prestige count, challenge, ...(other resources)]
       // Also fixes a migration bug where values could be undefined or null by assigning defaults when necessary

@@ -35,6 +35,7 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
 
   tick() {
     applyEU2();
+    Autobuyer.epMult.tick();
     const tier = this.tier;
     if (!TimeDimension(tier).isAvailableForPurchase) return;
     super.tick();

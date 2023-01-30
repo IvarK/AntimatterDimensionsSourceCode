@@ -112,7 +112,7 @@ body.t-s12 {
   backdrop-filter: blur(1rem);
 }
 
-.t-s12 .c-modal__inner,
+.t-s12 .c-modal__inner:not(.c-credits-modal),
 .t-s12 .c-modal-message,
 .t-s12 .l-h2p-modal,
 .t-s12 .c-information-modal,
@@ -128,7 +128,8 @@ body.t-s12 {
   padding: 1rem;
 }
 
-.t-s12 .modal-progress-bar {
+.t-s12 .modal-progress-bar,
+.t-s12 .c-credits-modal {
   color: black;
   background-color: #f0f0f0;
   border: 0.1rem solid var(--s12-border-color);
@@ -161,6 +162,15 @@ body.t-s12 {
   font-weight: normal;
   text-shadow: 0 0 0.7rem white;
   padding-left: 1rem;
+}
+
+.c-credits-modal .c-modal__title {
+  display: inline;
+  position: static;
+}
+
+.c-credits-modal .c-game-header__antimatter {
+  color: black;
 }
 
 .t-s12 .c-h2p-title,

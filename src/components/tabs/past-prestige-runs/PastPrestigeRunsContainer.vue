@@ -183,9 +183,10 @@ export default {
       }
       return {
         width,
-        border: "0.1rem solid #999999",
+        border: "0.05rem solid #999999",
+        margin: "-0.05rem",
         padding: "0.2rem 0",
-        "border-bottom-width": isHeader ? "0.2rem" : "0.1rem",
+        "border-bottom-width": isHeader ? "0.3rem" : "0.1rem",
         "font-weight": isHeader ? "bold" : null,
         color: "var(--color-text)",
       };
@@ -196,7 +197,6 @@ export default {
 
 <template>
   <div v-if="condition">
-    <br>
     <div
       class="c-past-runs-header"
       @click="toggleShown"
@@ -260,10 +260,11 @@ export default {
 
 .c-empty-row {
   display: block;
-  border: 0.1rem solid #999999;
+  border: 0.05rem solid #999999;
   color: var(--color-text);
   width: 100%;
   padding: 0.2rem 0;
+  margin: -0.1rem;
 }
 
 .l-no-records {

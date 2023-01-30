@@ -230,6 +230,9 @@ GameDatabase.credits = {
       name: "Anthios",
       roles: 13
     }, {
+      name: "Aubrey",
+      roles: 13
+    }, {
       name: "Auti",
       name2: "Lucia Tolle",
       roles: 13
@@ -320,9 +323,6 @@ GameDatabase.credits = {
       roles: 13
     }, {
       name: "Pavlxiiv",
-      roles: 13
-    }, {
-      name: "Porygon-Z",
       roles: 13
     }, {
       name: "PotatoTIAB",

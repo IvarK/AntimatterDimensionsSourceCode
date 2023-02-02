@@ -483,7 +483,6 @@ GameDatabase.reality.perks = {
     label: "ACHNR",
     family: PERK_FAMILY.ACHIEVEMENT,
     description: "Reality no longer resets your Achievements.",
-    effect: 2,
     automatorPoints: 10,
     shortDescription: () => "Keep Achievements on Reality",
     defaultPosition: new Vector(-195, -630)

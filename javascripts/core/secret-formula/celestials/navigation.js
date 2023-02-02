@@ -140,7 +140,7 @@ function pelleRiftFill(name, index, textAngle, fillType) {
       visibleCheck = () => riftFillStage(name) === FILL_STATE.FILL;
       progressFn = () => Math.clamp(0.1 + PelleRifts[name.toLowerCase()].realPercentage / 0.9, 1e-6, 1);
       legendFn = () => false;
-      percentFn = x => (x - 0.1) / 0.9;
+      percentFn = () => PelleRifts[name.toLowerCase()].realPercentage;
       incompleteClass = "c-celestial-nav__test-incomplete";
       nodeFill = "crimson";
       connectorFill = "crimson";
@@ -153,7 +153,7 @@ function pelleRiftFill(name, index, textAngle, fillType) {
       visibleCheck = () => riftFillStage(name) >= FILL_STATE.DRAIN;
       progressFn = () => Math.clamp(Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo), 1e-6, 1);
       legendFn = () => riftFillStage(name) === FILL_STATE.DRAIN && PelleRifts[name.toLowerCase()].reducedTo < 1;
-      percentFn = x => x;
+      percentFn = () => PelleRifts[name.toLowerCase()].reducedTo;
       incompleteClass = "c-celestial-nav__drained-rift";
       nodeFill = "crimson";
       connectorFill = "#550919";
@@ -161,7 +161,7 @@ function pelleRiftFill(name, index, textAngle, fillType) {
     case FILL_STATE.OVERFILL:
       visibleCheck = () => riftFillStage(name) === FILL_STATE.OVERFILL;
       progressFn = () => Math.clamp(PelleRifts[name.toLowerCase()].percentage - 1, 1e-6, 1);
-      percentFn = x => x + 1;
+      percentFn = () => PelleRifts[name.toLowerCase()].percentage;
       legendFn = () => true;
       incompleteClass = undefined;
       nodeFill = "#ff7700";
@@ -182,8 +182,8 @@ function pelleRiftFill(name, index, textAngle, fillType) {
       },
       forceLegend: () => legendFn(),
       legend: {
-        text: complete => [
-          `${formatPercents(percentFn(complete), 1)} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`
+        text: () => [
+          `${formatPercents(percentFn(), 1)} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`
         ],
         angle: textAngle,
         diagonal: 30,

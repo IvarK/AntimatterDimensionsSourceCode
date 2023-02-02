@@ -25,7 +25,8 @@ export default {
       simRealities: 0,
       realityMachines: new Decimal(),
       shardsGained: 0,
-      effarigUnlocked: false
+      effarigUnlocked: false,
+      willAutoPurge: false,
     };
   },
   computed: {
@@ -89,6 +90,7 @@ export default {
       const simRMGained = MachineHandler.gainedRealityMachines.times(this.simRealities);
       this.realityMachines.copyFrom(simRMGained.clampMax(MachineHandler.distanceToRMCap));
       this.shardsGained = Effarig.shardsGained * (simulatedRealityCount(false) + 1);
+      this.willAutoPurge = player.reality.autoAutoClean;
       if (this.firstReality) return;
       for (let i = 0; i < this.glyphs.length; ++i) {
         const currentGlyph = this.glyphs[i];
@@ -171,6 +173,12 @@ export default {
       <br>
       automatically choosing another {{ quantifyInt("Glyph", simRealities - 1) }}
       based on your Glyph filter settings.
+    </div>
+    <div v-if="willAutoPurge">
+      <br>
+      Auto-purge is currently enabled; your selected Glyph
+      <br>
+      may not appear in your inventory after it triggers.
     </div>
     <div
       v-if="!hasSpace"

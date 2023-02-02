@@ -34,8 +34,8 @@ export default {
         "o-pelle-disabled-pointer": this.creditsClosed,
       };
     },
-    // Show EP/min below this threshold, color the EP number above it
-    rateThreshold: () => 1e20,
+    // Show EP/min below this threshold, color the EP number above it (1e40 is roughly when TS181 is attainable)
+    rateThreshold: () => 1e40,
     showEPRate() {
       return this.peakEPRate.lte(this.rateThreshold);
     },

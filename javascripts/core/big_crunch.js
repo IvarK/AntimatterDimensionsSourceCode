@@ -179,7 +179,7 @@ export function preProductionGenerateIP(diff) {
       genCount = Math.floor(player.partInfinityPoint);
       player.partInfinityPoint -= genCount;
     }
-    let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
+    let gainedPerGen = player.records.bestInfinity.time >= 999999999999 ? DC.D0 : InfinityUpgrade.ipGen.effectValue;
     if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);
     const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
     Currency.infinityPoints.add(gainedThisTick);

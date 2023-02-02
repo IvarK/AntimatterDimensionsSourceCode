@@ -149,8 +149,7 @@ body.t-s12 {
 
 .t-s12 .c-modal__title,
 .t-s12 .l-h2p-header,
-.t-s12 .l-changelog-header,
-.t-s12 .c-modal-away-progress__header {
+.t-s12 .l-changelog-header {
   display: flex;
   width: auto;
   height: 2.2rem;
@@ -197,7 +196,7 @@ body.t-s12 {
   transform: none;
 }
 
-.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn),
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn, .c-autobuyer-box__mode-select),
 .t-s12 .c-new-game-button {
   position: relative;
   z-index: 0;
@@ -256,8 +255,8 @@ body.t-s12 {
   opacity: 0.5;
 }
 
-.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn)::before,
-.t-s12 .c-new-game-button::before {
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn, .c-autobuyer-box__mode-select)::after,
+.t-s12 .c-new-game-button::after {
   content: "";
   width: 100%;
   height: 100%;
@@ -274,8 +273,8 @@ body.t-s12 {
   box-shadow: inset 0 0 0.2rem 0.1rem #52d9fb;
 }
 
-.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn):hover::before,
-.t-s12 .c-new-game-button:hover::before {
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn):hover::after,
+.t-s12 .c-new-game-button:hover::after {
   background-color: rgba(46, 210, 255, 30%);
 }
 
@@ -319,4 +318,9 @@ body.t-s12 {
 
 .t-s12 .modal-progress-bar__fg {
   background: linear-gradient(to right, #0cb826, #20da3e 20%, #20da3e 80%, #0cb826);
+}
+
+.t-s12 .c-modal .c-autobuyer-box-row {
+  text-align: center;
+  background-color: transparent;
 }

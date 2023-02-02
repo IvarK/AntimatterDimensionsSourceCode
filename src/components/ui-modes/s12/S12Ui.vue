@@ -33,6 +33,7 @@ export default {
       bigCrunch: false,
       hasReality: false,
       newGameKey: "",
+      tabName: "",
       S12Windows,
     };
   },
@@ -55,6 +56,7 @@ export default {
       // This only exists to force a key-swap after pressing the button to start a new game; the news ticker can break
       // if it isn't redrawn
       this.newGameKey = Pelle.isDoomed;
+      this.tabName = Tabs.current[this.$viewModel.subtab].name;
     },
   },
 };
@@ -75,6 +77,9 @@ export default {
       class="c-s12-close-button"
       @click="S12Windows.isMinimised = true"
     />
+    <span class="c-modal__title">
+      {{ tabName }}
+    </span>
     <div
       :key="newGameKey"
       class="game-container c-s12-window__inner"
@@ -162,5 +167,10 @@ export default {
   position: relative;
 
   scrollbar-gutter: stable both-edges;
+}
+
+.c-modal__title {
+  font-family: "Segoe UI", Typewriter;
+  color: black;
 }
 </style>

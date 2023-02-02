@@ -131,6 +131,7 @@ export default {
   flex-direction: column;
   width: 17rem;
   height: 12rem;
+  position: relative;
   border: 0.1rem solid transparent;
   border-radius: 0.5rem;
   margin: 0.5rem;

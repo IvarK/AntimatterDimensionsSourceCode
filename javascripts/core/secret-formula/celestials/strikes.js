@@ -37,7 +37,7 @@ GameDatabase.celestials.pelle.strikes = {
     id: 5,
     requirementDescription: "Dilate Time",
     penaltyDescription: "Time Dilation is permanently active",
-    rewardDescription: () => `Keep access to Time Dilation upgrades across Armageddon and unlock
+    rewardDescription: () => `Keep the Time Dilation study across Armageddon, boost Remnant gain, and unlock
       ${wordShift.wordCycle(PelleRifts.paradox.name)}`,
     rift: () => PelleRifts.paradox
   }

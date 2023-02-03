@@ -43,27 +43,40 @@ export default {
 
 
 <template>
-  <div class="c-game-ui--fixed">
-    <ModalProgressBar v-if="view.modal.progressBar" />
-    <CelestialQuoteModal
-      v-else-if="view.quotes.current"
-      :quote="view.quotes.current"
-    />
-    <CelestialQuoteHistoryDisplay
-      v-else-if="view.quotes.history"
-      :quotes="view.quotes.history"
-    />
-    <PopupModal
-      v-else-if="view.modal.current"
-      :modal="view.modal.current"
-    />
-    <FadeAway v-if="ending" />
-    <CreditsContainer v-if="ending" />
-    <NewGame v-if="ending" />
-    <SpectateGame />
+  <span>
+    <div class="c-game-ui--fixed">
+      <ModalProgressBar v-if="view.modal.progressBar" />
+      <CelestialQuoteModal
+        v-else-if="view.quotes.current"
+        :quote="view.quotes.current"
+      />
+      <CelestialQuoteHistoryDisplay
+        v-else-if="view.quotes.history"
+        :quotes="view.quotes.history"
+      />
+      <PopupModal
+        v-else-if="view.modal.current"
+        :modal="view.modal.current"
+      />
+      <FadeAway v-if="ending" />
+      <CreditsContainer v-if="ending" />
+      <NewGame v-if="ending" />
+      <SpectateGame />
+    </div>
     <S12Taskbar />
-  </div>
+  </span>
 </template>
 
 <style scoped>
+.c-game-ui--fixed {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  justify-content: center;
+  pointer-events: none;
+}
 </style>

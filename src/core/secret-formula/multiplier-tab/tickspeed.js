@@ -60,6 +60,12 @@ GameDatabase.multiplierTabValues.tickspeed = {
     isActive: true,
     icon: MultiplierTabIcons.GALAXY,
   },
+  pelleTickspeedPow: {
+    name: "Tickspeed Dilation Upgrade",
+    powValue: () => DilationUpgrade.tickspeedPower.effectValue,
+    isActive: () => DilationUpgrade.tickspeedPower.canBeApplied,
+    icon: MultiplierTabIcons.UPGRADE("dilation"),
+  },
 };
 
 GameDatabase.multiplierTabValues.tickspeedUpgrades = {

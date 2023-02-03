@@ -214,7 +214,7 @@ GameDatabase.multiplierTabValues.TD = {
     name: "Temporal Transcendence",
     multValue: dim => Decimal.pow(RealityUpgrade(22).effectOrDefault(1),
       dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
-    isActive: () => RealityUpgrade(22).canBeApplied,
+    isActive: () => !Pelle.isDoomed && RealityUpgrade(22).canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   glyph: {

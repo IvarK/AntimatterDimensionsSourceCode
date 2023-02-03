@@ -62,7 +62,9 @@ GameDatabase.multiplierTabValues.EP = {
   },
   glyph: {
     name: "Equipped Glyphs",
-    multValue: () => DC.D1.timesEffectsOf(GlyphEffect.epMult).times(Pelle.specialGlyphEffect.time),
+    multValue: () => DC.D1
+      .timesEffectsOf(Pelle.isDoomed ? null : GlyphEffect.epMult)
+      .times(Pelle.specialGlyphEffect.time),
     powValue: () => (GlyphAlteration.isAdded("time") ? getSecondaryGlyphEffect("timeEP") : 1),
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.GENERIC_GLYPH,

@@ -780,6 +780,7 @@ window.player = {
     respecIntoProtected: false,
     offlineTicks: 1e5,
     showRecentRate: true,
+    showMultTabAltFirst: false,
     autosaveInterval: 30000,
     showTimeSinceSave: true,
     saveFileName: "",

@@ -74,6 +74,11 @@ export default {
         : `You have no multipliers for this resource (will gain ${format(1)} on prestige)`;
     }
   },
+  created() {
+    if (this.groups.length > 1 && player.options.showMultTabAltFirst) {
+      this.changeGroup();
+    }
+  },
   methods: {
     update() {
       for (let i = 0; i < this.entries.length; i++) {
@@ -92,6 +97,7 @@ export default {
     },
     changeGroup() {
       this.selected = (this.selected + 1) % this.groups.length;
+      player.options.showMultTabAltFirst = this.selected === 1;
       this.showGroup = Array.repeat(false, this.entries.length);
       this.hadChildEntriesAt = Array.repeat(0, this.entries.length);
       this.lastLayoutChange = Date.now();
@@ -366,7 +372,10 @@ export default {
           </div>
         </div>
       </div>
-      <div v-if="resource.key === 'AD_total'">
+      <div
+        v-if="resource.key === 'AD_total'"
+        class="c-no-effect"
+      >
         <br>
         "Base AD Production" is the amount of Antimatter that you would be producing with your current AD upgrades
         as if you had waited a fixed amount of time ({{ formatInt(10) }}-{{ formatInt(40) }} seconds depending on

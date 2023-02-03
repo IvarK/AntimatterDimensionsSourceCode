@@ -52,16 +52,16 @@ GameDatabase.multiplierTabTree = {
     ["AD_total", "tickspeed_total", "AM_effarigAM"]
   ],
   AD_total: [
-    append8("AD_total"),
-    getProps("AD")
+    getProps("AD"),
+    append8("AD_total")
   ],
   ID_total: [
-    append8("ID_total"),
-    getProps("ID")
+    getProps("ID"),
+    append8("ID_total")
   ],
   TD_total: [
-    append8("TD_total"),
-    getProps("TD")
+    getProps("TD"),
+    append8("TD_total")
   ],
   IP_total: [
     getProps("IP")
@@ -181,8 +181,8 @@ for (let dim = 1; dim <= 8; dim++) {
 }
 
 // Tesseracts are added one layer deep, but we don't want to override the existing ID_purchase entry
-GameDatabase.multiplierTabTree.ID_purchase.push(["ID_basePurchase", "ID_tesseractPurchase", "ID_infinityGlyphSacrifice",
-  "ID_powPurchase"]);
+GameDatabase.multiplierTabTree.ID_purchase.unshift(["ID_basePurchase", "ID_tesseractPurchase",
+  "ID_infinityGlyphSacrifice", "ID_powPurchase"]);
 for (let dim = 1; dim <= 7; dim++) {
   GameDatabase.multiplierTabTree[`ID_purchase_${dim}`] = [[`ID_basePurchase_${dim}`, `ID_tesseractPurchase_${dim}`,
     "ID_powPurchase"]];

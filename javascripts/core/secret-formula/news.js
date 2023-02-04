@@ -1436,6 +1436,9 @@ GameDatabase.news = [
           ${BLOB} are just blobbling and bouncing around, occasionally merging and dividing. Only ${BLOB} know where
           they are from or where they are going to go. Still, ${BLOB} are there, always with me.
           You love ${BLOB}, so ${BLOB} loves you too.`,
+        S12:
+          `it makes you feel warm and comfortable, as if you were right at home. However, it is highly recommended
+          to update your theme to the newest theme for the best user experience.`,
       };
       const reason = reasons[Theme.current().name.replace(/\s/gu, "")];
       return `Ah, a fellow ${theme} theme user. I see that you have impeccable taste.

@@ -53,8 +53,8 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  text-align: left;
   z-index: 5;
+  text-align: left;
   color: var(--color-text);
   background-color: var(--color-base);
   border-top: 0.1rem solid var(--color-accent);

@@ -87,6 +87,11 @@ export default {
   padding: 0.5rem;
 }
 
+.t-s12 .c-info-body {
+  font-size: 1.3rem;
+  margin: 0;
+}
+
 .c-socials {
   font-size: 7.5rem;
 }
@@ -95,5 +100,10 @@ export default {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+}
+
+.t-s12 .l-socials {
+  width: 100%;
+  align-self: center;
 }
 </style>

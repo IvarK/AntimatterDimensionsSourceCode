@@ -276,7 +276,7 @@ export default {
       <br>
       <PrimaryButton
         v-if="!deleting"
-        ach-tooltip="This will format the study preset text, for example, changing 'a,b,c|d' to 'a, b, c | d'."
+        v-tooltip="'This will format the study preset text, for example, changing \'a,b,c|d\' to \'a, b, c | d\'.'"
         @click="convertInputShorthands"
       >
         Format Preset Text

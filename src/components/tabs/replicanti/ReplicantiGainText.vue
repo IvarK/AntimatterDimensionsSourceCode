@@ -32,7 +32,7 @@ export default {
         // replicanti growth scales as time^1/postScale, which turns out to be a reasonable approximation.
         const milestoneStep = Pelle.isDoomed ? 100 : 1000;
         const nextMilestone = Decimal.pow10(milestoneStep * Math.floor(replicantiAmount.log10() / milestoneStep + 1));
-        const coeff = Decimal.divide(updateRateMs / 1000, logGainFactorPerTick.exp().pow(postScale).minus(1));
+        const coeff = Decimal.divide(updateRateMs / 1000, exp1m(logGainFactorPerTick.times(postScale)));
         const timeToThousand = coeff.times(nextMilestone.divide(replicantiAmount).pow(postScale).minus(1));
         // The calculation seems to choke and return zero if the time is too large, probably because of rounding issues
         const timeEstimateText = timeToThousand.eq(0)

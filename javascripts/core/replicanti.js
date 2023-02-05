@@ -7,6 +7,7 @@ export const ReplicantiGrowth = {
     return Math.log10(Number.MAX_VALUE);
   },
   get scaleFactor() {
+    if (PelleStrikes.eternity.hasStrike && Replicanti.amount.gte(DC.E2000)) return 10;
     if (Pelle.isDoomed) return 2;
     return AlchemyResource.cardinality.effectValue;
   }
@@ -89,12 +90,13 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
   }
 
   if (overCap) {
-    const increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
-    interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
-    if (PelleStrikes.eternity.hasStrike && amount.e > 2000) {
-      const pelleIncreases = (amount.log10() - 2000) / ReplicantiGrowth.scaleLog10;
-      interval = interval.times(Decimal.pow(5, pelleIncreases));
+    let increases = (amount.log10() - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
+    if (PelleStrikes.eternity.hasStrike && amount.gte(DC.E2000)) {
+      // The above code assumes in this case there's 10x scaling for every 1e308 increase;
+      // in fact, before e2000 it's only 2x.
+      increases -= Math.log10(5) * (2000 - replicantiCap().log10()) / ReplicantiGrowth.scaleLog10;
     }
+    interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
   }
 
   interval = interval.div(PelleRifts.decay.effectValue);
@@ -180,6 +182,10 @@ export function replicantiLoop(diff) {
     if (isUncapped && Replicanti.amount.gte(replicantiCap()) && remainingGain.gt(0)) {
       // Recalculate the interval (it may have increased due to additional replicanti, or,
       // far less importantly, decreased due to Reality Upgrade 6 and additional RG).
+      // Don't worry here about the lack of e2000 scaling in Pelle on the first tick
+      // (with replicanti still under e2000) causing a huge replicanti jump;
+      // there's code later to stop replicanti from increasing by more than e308
+      // in a single tick in Pelle.
       const intervalRatio = getReplicantiInterval(true).div(interval);
       remainingGain = remainingGain.div(intervalRatio);
       Replicanti.amount =

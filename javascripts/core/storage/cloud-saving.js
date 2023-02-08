@@ -169,10 +169,13 @@ export const Cloud = {
   },
 
   async load() {
-    const combinedSlots = await this.readFromCloudDB(null);
-    if (combinedSlots.exists()) await this.separateSaveSlots(combinedSlots.val());
+    let singleSlot = await this.readFromCloudDB(GameStorage.currentSlot);
+    if (singleSlot.exists()) return GameSaveSerializer.deserialize(singleSlot.val());
 
-    const singleSlot = await this.readFromCloudDB(GameStorage.currentSlot);
+    // If it doesn't exist, we assume that the cloud save hasn't been migrated yet and apply the migration before
+    // trying again. If it still doesn't exist, the cloud save was actually empty and there was nothing to migrate
+    await this.separateSaveSlots(combinedSlots.val());
+    singleSlot = await this.readFromCloudDB(GameStorage.currentSlot);
     if (singleSlot.exists()) return GameSaveSerializer.deserialize(singleSlot.val());
 
     return null;

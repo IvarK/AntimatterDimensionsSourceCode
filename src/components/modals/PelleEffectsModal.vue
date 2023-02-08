@@ -14,6 +14,7 @@ export default {
         // Numerical nerfs and disabled boosts
         "Anything unlocked through a Pelle upgrade cannot be unlocked normally",
         "All pre-Doomed IP and EP multipliers are disabled",
+        "IP generation based on fastest infinity speed is disabled",
         "All pre-Doomed Replicanti speed multipliers are disabled",
         "Most Eternity Challenges are harder",
         `All Galaxies are only ${formatPercents(0.5)} as effective`,
@@ -30,7 +31,7 @@ export default {
         "Automatic Infinity and Eternity Challenges are disabled",
         "All Dimension and pre-Infinity Autobuyers are disabled until reacquired through Pelle",
         "The Time Theorem Autobuyer is disabled",
-        "All Automation related to Time Dilation or later are disabled",
+        "All Automation related to Time Dilation or later is disabled",
 
         // Time studies + Dilation
         "Eternity Upgrade to Time Dimensions based on days played is based on this Armageddon time",
@@ -45,11 +46,14 @@ export default {
 
         // Celestial features
         "You cannot enter any other Celestial Realities",
+        "Music Glyphs cannot be bought",
         "All rewards from Effarig are disabled",
+        "All features related to storing time are disabled",
         "All rewards from V are disabled",
+        `The Teresa Level ${formatInt(1)} effect from Ra is disabled`,
         "Infinity Upgrades cannot be charged",
         "Triad Studies and Space Theorems are disabled",
-        "Imaginary Upgrades are disabled",
+        "Imaginary Upgrades are disabled excluding those relating to DMD's and Celestial unlocks",
         "Continuum and Singularity rewards are disabled"
       ];
     }

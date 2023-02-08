@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     resetActionDisplay() {
-      return this.isDivideUnlocked
+      return this.isDivideUnlocked && !Pelle.isDoomed
         ? `Divide Replicanti by ${format(Number.MAX_VALUE, 1, 1)}`
         : "Reset Replicanti amount";
     },

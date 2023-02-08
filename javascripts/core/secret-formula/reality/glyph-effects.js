@@ -248,7 +248,8 @@ GameDatabase.reality.glyphEffects = {
     formatSecondaryEffect: x => format(x, 2, 3),
     formatSingleSecondaryEffect: x => format(x, 5, 5),
     alteredColor: () => GlyphAlteration.getAdditionColor("replication"),
-    alterationType: ALTERATION_TYPE.ADDITION
+    alterationType: ALTERATION_TYPE.ADDITION,
+    enabledInDoomed: true,
   },
   replicationglyphlevel: {
     id: "replicationglyphlevel",

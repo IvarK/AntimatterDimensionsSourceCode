@@ -30,7 +30,7 @@ export default {
       this.saveDisabled = GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
     },
     save() {
-      GameStorage.save(false);
+      GameStorage.save(false, true);
     }
   }
 };
@@ -53,8 +53,8 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  text-align: left;
   z-index: 5;
+  text-align: left;
   color: var(--color-text);
   background-color: var(--color-base);
   border-top: 0.1rem solid var(--color-accent);

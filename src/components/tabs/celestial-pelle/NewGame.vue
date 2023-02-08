@@ -90,6 +90,10 @@ export default {
   pointer-events: auto;
 }
 
+.t-s12 .c-new-game-container {
+  color: white;
+}
+
 .c-new-game-button-container {
   display: flex;
   flex-direction: column;

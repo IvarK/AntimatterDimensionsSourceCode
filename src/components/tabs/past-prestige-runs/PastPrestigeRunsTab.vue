@@ -16,43 +16,41 @@ export default {
           plural: "Realities",
           currency: "RM",
           condition: () => PlayerProgress.realityUnlocked(),
-          getRuns: () => player.records.lastTenRealities,
-          reward: (runGain, run, average) => (average
-            ? `${runGain} RM`
-            : `a level ${formatInt(run[4])} Glyph, ${runGain} RM`),
-          // Note that runGain is a string so we can't use it for pluralize
-          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Reality", run[2])}`,
+          getRuns: () => player.records.recentRealities,
+          extra: ["Glyph Level", "Relic Shards"],
+          formatExtra: [x => formatInt(x), x => format(x, 2)],
+          allowRate: [false, true],
+          rateString: ["", "Relic Shard Rate"],
         },
         eternity: {
           name: "Eternity",
           plural: "Eternities",
           currency: "EP",
           condition: () => PlayerProgress.eternityUnlocked(),
-          getRuns: () => player.records.lastTenEternities,
-          reward: runGain => `${runGain} EP`,
-          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Eternity", run[2])}`,
+          getRuns: () => player.records.recentEternities,
+          extra: ["Tachyon Particles"],
+          formatExtra: [x => format(x, 2)],
+          allowRate: [false],
         },
         infinity: {
           name: "Infinity",
           plural: "Infinities",
           currency: "IP",
           condition: () => PlayerProgress.infinityUnlocked(),
-          getRuns: () => player.records.lastTenInfinities,
-          reward: runGain => `${runGain} IP`,
-          prestigeCountReward: (runGain, run) => `${runGain} ${pluralize("Infinity", run[2])}`,
+          getRuns: () => player.records.recentInfinities,
         },
       },
-      showLastTenResourceGain: false
+      showRate: false,
     };
   },
   watch: {
-    showLastTenResourceGain(newValue) {
-      player.options.showLastTenResourceGain = newValue;
-    }
+    showRate(newValue) {
+      player.options.showRecentRate = newValue;
+    },
   },
   methods: {
     update() {
-      this.showLastTenResourceGain = player.options.showLastTenResourceGain;
+      this.showRate = player.options.showRecentRate;
     }
   }
 };
@@ -62,9 +60,9 @@ export default {
   <div class="c-stats-tab">
     <div class="c-subtab-option-container">
       <PrimaryToggleButton
-        v-model="showLastTenResourceGain"
-        on="Showing resource gain"
-        off="Showing prestige count gain"
+        v-model="showRate"
+        on="Showing resource gain rate"
+        off="Showing absolute resource gain"
         class="o-primary-btn--subtab-option"
       />
     </div>

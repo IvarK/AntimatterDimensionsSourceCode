@@ -18,17 +18,22 @@ export const NG = {
     const automatorConstants = JSON.stringify(player.reality.automator.constants);
     const automatorScripts = JSON.stringify(player.reality.automator.scripts);
     const fullCompletions = player.records.fullGameCompletions;
+    const fullTimePlayed = player.records.previousRunRealTime + player.records.realTimePlayed;
     GlyphAppearanceHandler.unlockSet();
     const glyphCosmetics = JSON.stringify(player.reality.glyphs.cosmetics);
     Modal.hideAll();
     Quote.clearAll();
     GameStorage.hardReset();
     player.options = JSON.parse(backUpOptions);
+    // We need to force this one to be true because otherwise the player will be unable to select their glyphs
+    // until they can auto-reality
+    player.options.confirmations.glyphSelection = true;
     player.secretUnlocks = secretUnlocks;
     player.secretAchievementBits = JSON.parse(secretAchievements);
     player.reality.automator.constants = JSON.parse(automatorConstants);
     player.reality.automator.scripts = JSON.parse(automatorScripts);
     player.records.fullGameCompletions = fullCompletions + 1;
+    player.records.previousRunRealTime = fullTimePlayed;
     ui.view.newUI = player.options.newUI;
     ui.view.news = player.options.news.enabled;
     player.reality.glyphs.cosmetics = JSON.parse(glyphCosmetics);

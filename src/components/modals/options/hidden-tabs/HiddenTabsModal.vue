@@ -63,4 +63,8 @@ export default {
 .l-wrapper {
   width: 62rem;
 }
+
+.t-s12 .l-wrapper {
+  width: 65rem;
+}
 </style>

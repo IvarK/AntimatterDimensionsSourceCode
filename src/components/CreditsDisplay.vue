@@ -11,6 +11,7 @@ export default {
   computed: {
     people() { return GameDatabase.credits.people; },
     roles() { return GameDatabase.credits.roles; },
+    isS12EndDisplay() { return this.$viewModel.theme === "S12" && !this.isModal; },
   },
   methods: {
     relevantPeople(role) {
@@ -23,7 +24,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div :class="{ 'c-credits-s12-end': isS12EndDisplay }">
     <h1
       v-if="!isModal"
       class="c-credits-header"
@@ -60,6 +61,11 @@ export default {
 </template>
 
 <style scoped>
+.c-credits-s12-end {
+  --color-text: white;
+  color: white;
+}
+
 .c-credits-header {
   color: black;
 }
@@ -68,6 +74,10 @@ export default {
 .t-s6 .c-credits-header,
 .t-s10 .c-credits-header {
   animation: a-credits-header--glow 25s infinite;
+}
+
+.t-s12 .c-credits-header {
+  color: var(--color-antimatter);
 }
 
 @keyframes a-credits-header--glow {

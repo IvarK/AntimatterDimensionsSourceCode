@@ -76,7 +76,7 @@ export default {
 
       this.buy10Mult.copyFrom(AntimatterDimensions.buyTenMultiplier);
 
-      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 1)}`;
+      this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 2)}`;
       if (!isSacrificeUnlocked) return;
       this.isSacrificeAffordable = Sacrifice.canSacrifice;
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);

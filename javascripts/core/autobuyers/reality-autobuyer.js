@@ -41,12 +41,30 @@ Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
     this.data.glyph = value;
   }
 
+  get time() {
+    return this.data.time;
+  }
+
+  set time(value) {
+    this.data.time = value;
+  }
+
+  get shard() {
+    return this.data.shard;
+  }
+
+  set shard(value) {
+    this.data.shard = value;
+  }
+
   toggleMode() {
     this.mode = [
       AUTO_REALITY_MODE.RM,
       AUTO_REALITY_MODE.GLYPH,
       AUTO_REALITY_MODE.EITHER,
-      AUTO_REALITY_MODE.BOTH
+      AUTO_REALITY_MODE.BOTH,
+      AUTO_REALITY_MODE.TIME,
+      AUTO_REALITY_MODE.RELIC_SHARD
     ]
       .nextSibling(this.mode);
   }
@@ -73,6 +91,12 @@ Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
         break;
       case AUTO_REALITY_MODE.BOTH:
         proc = rmProc && glyphProc;
+        break;
+      case AUTO_REALITY_MODE.TIME:
+        proc = player.records.thisReality.realTime / 1000 > this.time;
+        break;
+      case AUTO_REALITY_MODE.RELIC_SHARD:
+        proc = Effarig.shardsGained > this.shard;
         break;
     }
     if (proc) autoReality();

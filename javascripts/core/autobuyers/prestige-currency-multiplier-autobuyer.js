@@ -40,6 +40,11 @@ Autobuyer.epMult = new class EPMultAutobuyerState extends AutobuyerState {
   }
 
   tick() {
+    // While the active check is normally automatically handled with the global autobuyer ticking method, we also
+    // call this from the TD autobuyers in order to make sure this is executed before TDs are purchased. Simply
+    // reordering the autobuyer call order is undesirable because much of the codebase relies on autobuyers being
+    // grouped as they are, and many other autobuyers in the 5xEP group must execute *after* dimensions
+    if (!this.isActive) return;
     applyEU2();
     EternityUpgrade.epMult.buyMax();
   }

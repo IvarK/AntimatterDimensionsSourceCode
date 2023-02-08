@@ -230,7 +230,7 @@ GameDatabase.celestials.v = {
     },
     autoAutoClean: {
       id: 4,
-      reward: "Unlock the ability to Automatically Purge on Reality.",
+      reward: "Unlock the ability to Automatically Purge Glyphs on Reality.",
       description: () => `Have ${formatInt(16)} V-Achievements`,
       requirement: () => V.spaceTheorems >= 16
     },

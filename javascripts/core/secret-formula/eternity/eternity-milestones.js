@@ -17,7 +17,8 @@ GameDatabase.eternity.milestones = {
   keepInfinityUpgrades: {
     eternities: 4,
     reward: "You start Eternity with all Infinity Upgrades",
-    givenByPelle: () => PelleUpgrade.keepInfinityUpgrades.isBought
+    givenByPelle: () => PelleUpgrade.keepInfinityUpgrades.isBought,
+    pelleUseless: true
   },
   bigCrunchModes: {
     eternities: 5,
@@ -52,6 +53,7 @@ GameDatabase.eternity.milestones = {
     eternities: 8,
     reward: "You start Eternity with all Break Infinity Upgrades",
     givenByPelle: () => PelleUpgrade.keepBreakInfinityUpgrades.isBought,
+    pelleUseless: true
   },
   autobuyMaxGalaxies: {
     eternities: 9,
@@ -61,46 +63,55 @@ GameDatabase.eternity.milestones = {
     eternities: 10,
     reward: "You start with Replicanti unlocked",
     givenByPelle: () => PelleUpgrade.replicantiStayUnlocked.isBought,
+    pelleUseless: true
   },
   autobuyerID1: {
     eternities: 11,
     reward: "Unlock the 1st Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID2: {
     eternities: 12,
     reward: "Unlock the 2nd Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID3: {
     eternities: 13,
     reward: "Unlock the 3rd Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID4: {
     eternities: 14,
     reward: "Unlock the 4th Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID5: {
     eternities: 15,
     reward: "Unlock the 5th Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID6: {
     eternities: 16,
     reward: "Unlock the 6th Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID7: {
     eternities: 17,
     reward: "Unlock the 7th Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID8: {
     eternities: 18,
     reward: "Unlock the 8th Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autoUnlockID: {
     eternities: 25,
@@ -119,16 +130,19 @@ GameDatabase.eternity.milestones = {
     eternities: 50,
     reward: "Unlock the Replicanti Chance Upgrade Autobuyer",
     givenByPelle: () => PelleUpgrade.replicantiAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerReplicantiInterval: {
     eternities: 60,
     reward: "Unlock the Replicanti Interval Upgrade Autobuyer",
     givenByPelle: () => PelleUpgrade.replicantiAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerReplicantiMaxGalaxies: {
     eternities: 80,
     reward: "Unlock the Max Replicanti Galaxy Upgrade Autobuyer",
     givenByPelle: () => PelleUpgrade.replicantiAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerEternity: {
     eternities: 100,
@@ -143,14 +157,16 @@ GameDatabase.eternity.milestones = {
         player.eternities.gte(200));
       // As far as I can tell, using templates here as Codefactor wants would lead to nested templates,
       // which seems messy to say the least.
+      const realTime = PlayerProgress.seenAlteredSpeed() ? " real-time" : "";
       // eslint-disable-next-line prefer-template
-      return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest Eternity ` +
+      return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest${realTime} Eternity ` +
         (eternities.gt(0) ? `(Currently ${format(eternities, 2, 2)}/hour)` : "(Inactive)");
     },
     activeCondition: () => (player.options.offlineProgress
       ? `Must be outside of all Challenges and Dilation, and the Eternity Autobuyer must be set to Eternity at zero EP.
         This milestone's effect is capped at ${formatInt(33)}ms.`
       : ""),
+      pelleUseless: true
   },
   autoInfinities: {
     eternities: 1000,
@@ -169,5 +185,6 @@ GameDatabase.eternity.milestones = {
         the Big Crunch Autobuyer must be turned on and set to time mode with less than ${formatInt(60)} seconds,
         and the Eternity Autobuyer must be turned off.`
       : ""),
+      pelleUseless: true
   }
 };

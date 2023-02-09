@@ -449,13 +449,13 @@ export const Glyphs = {
     if (player.reality.autoCollapse) this.collapseEmptySlots();
   },
   sortByLevel() {
-    this.sort((a, b) => -a.level + b.level);
+    this.sort((a, b) => b.level - a.level);
   },
   sortByPower() {
-    this.sort((a, b) => -a.level * a.strength + b.level * b.strength);
+    this.sort((a, b) => b.level * b.strength - a.level * a.strength);
   },
   sortByScore() {
-    this.sort((a, b) => -AutoGlyphProcessor.filterValue(a) + AutoGlyphProcessor.filterValue(b));
+    this.sort((a, b) => AutoGlyphProcessor.filterValue(b) - AutoGlyphProcessor.filterValue(a));
   },
   sortByEffect() {
     function reverseBitstring(eff) {
@@ -463,7 +463,7 @@ export const Glyphs = {
     }
     // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
     // This primarily meant for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
-    this.sort((a, b) => -reverseBitstring(a.effects) + reverseBitstring(b.effects));
+    this.sort((a, b) => reverseBitstring(b.effects) - reverseBitstring(a.effects));
   },
   // If there are enough glyphs that are better than the specified glyph, in every way, then
   // the glyph is objectively a useless piece of garbage.

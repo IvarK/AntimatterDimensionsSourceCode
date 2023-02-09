@@ -63,8 +63,8 @@ GameDatabase.challenges.infinity = [
   {
     id: 5,
     description:
-      `buying Antimatter Dimensions 1-4 causes all smaller Antimatter Dimension costs to increase.
-      Buying Antimatter Dimensions 5-8 causes all larger Antimatter Dimension costs to increase.`,
+      `buying Antimatter Dimensions 1-4 causes all cheaper AD costs to increase.
+      Buying Antimatter Dimensions 5-8 causes all more expensive AD costs to increase.`,
     goal: DC.E16500,
     isQuickResettable: true,
     reward: {
@@ -104,7 +104,7 @@ GameDatabase.challenges.infinity = [
         TimeStudy(81)
       );
       return `you cannot buy Antimatter Galaxies. Base Dimension Boost multiplier is increased to a maximum
-        of ${formatX(10)}. (Current base multiplier: ${formatX(mult)})`;
+        of ${formatX(10)}. (Current base multiplier: ${formatX(mult, 2, 1)})`;
     },
     goal: DC.E10000,
     isQuickResettable: false,

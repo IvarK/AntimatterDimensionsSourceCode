@@ -51,6 +51,7 @@ export default {
       matterScale: [],
       lastMatterTime: 0,
       paperclips: 0,
+      fullTimePlayed: 0,
     };
   },
   computed: {
@@ -77,6 +78,7 @@ export default {
       const records = player.records;
       this.totalAntimatter.copyFrom(records.totalAntimatter);
       this.realTimePlayed.setFrom(records.realTimePlayed);
+      this.fullTimePlayed = TimeSpan.fromMilliseconds(records.previousRunRealTime + records.realTimePlayed);
       this.uniqueNews = NewsHandler.uniqueTickersSeen;
       this.totalNews = player.news.totalSeen;
       this.secretAchievementCount = SecretAchievements.all.filter(a => a.isUnlocked).length;
@@ -181,7 +183,11 @@ export default {
         You have {{ quantifyInt("useless paperclip", paperclips) }}.
       </div>
       <div v-if="fullGameCompletions">
-        <b>You have completed the entire game {{ quantifyInt("time", fullGameCompletions) }}.</b>
+        <b>
+          You have completed the entire game {{ quantifyInt("time", fullGameCompletions) }}.
+          <br>
+          You have played for {{ fullTimePlayed }} across all playthroughs.
+        </b>
       </div>
       <div>
         <br>

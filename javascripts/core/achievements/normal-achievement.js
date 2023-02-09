@@ -142,12 +142,6 @@ export const Achievements = {
       return;
     }
     if (Achievements.preReality.every(a => a.isUnlocked)) return;
-    if (Perk.achievementGroup5.isBought) {
-      for (const achievement of Achievements.preReality) {
-        achievement.unlock(true);
-      }
-      return;
-    }
 
     player.reality.achTimer += diff;
     if (player.reality.achTimer < this.period) return;

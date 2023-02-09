@@ -174,7 +174,7 @@ GameDatabase.celestials.pelle.rifts = {
       {
         resource: "recursion",
         requirement: 1,
-        description: "Unlock the Galaxy Generator",
+        description: "Permanently unlock the Galaxy Generator",
       },
     ],
     galaxyGeneratorText: "Creating more Galaxies is unsustainable, you must focus the $value to allow more"

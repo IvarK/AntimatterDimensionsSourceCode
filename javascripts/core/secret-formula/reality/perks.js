@@ -143,14 +143,14 @@ GameDatabase.reality.perks = {
   },
   autounlockDilation1: {
     id: 42,
-    label: "UD1",
+    label: "DU1",
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
     defaultPosition: new Vector(165, 565)
   },
   autounlockDilation2: {
     id: 43,
-    label: "UD2",
+    label: "DU2",
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
     defaultPosition: new Vector(310, 605)
@@ -482,8 +482,10 @@ GameDatabase.reality.perks = {
     id: 205,
     label: "ACHNR",
     family: PERK_FAMILY.ACHIEVEMENT,
-    description: "Reality no longer resets your Achievements.",
-    effect: 2,
+    get description() {
+      return `Immediately unlock the first ${formatInt(13)} rows of Achievements
+        and Reality no longer resets them.`;
+    },
     automatorPoints: 10,
     shortDescription: () => "Keep Achievements on Reality",
     defaultPosition: new Vector(-195, -630)

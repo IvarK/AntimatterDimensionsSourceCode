@@ -80,7 +80,7 @@ export default {
           Next Auto Eternity Challenge completion: {{ nextECText }}
         </span>
         <span>
-          All Auto Eternity Challenge completion: {{ allECText }}
+          All Auto Eternity Challenge completions: {{ allECText }}
         </span>
         <br>
       </div>

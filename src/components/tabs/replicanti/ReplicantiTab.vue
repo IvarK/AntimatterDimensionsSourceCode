@@ -196,7 +196,7 @@ export default {
         class="c-replicanti-description"
       >
         Your maximum Replicanti reached this Reality is
-        <span class="max-accent">{{ format(maxReplicanti, 2, 2) }}</span>.
+        <span class="max-accent">{{ format(maxReplicanti, 2) }}</span>.
       </div>
       <br>
       <div v-if="isInEC8">

@@ -223,7 +223,9 @@ GameDatabase.news = [
   },
   {
     id: "a49",
-    text: "Can we get 1e169 likes on this video??? Smash that like button!!"
+    get text() {
+      return `Can we get ${format(1e169)} likes on this video??? Smash that like button!!`;
+    }
   },
   {
     id: "a50",
@@ -317,7 +319,7 @@ GameDatabase.news = [
   },
   {
     id: "a70",
-    text: "If you can't read this you disabled the news."
+    text: "If you can't read this, you disabled the news."
   },
   {
     id: "a71",
@@ -511,7 +513,8 @@ GameDatabase.news = [
     id: "a103",
     text:
       `Antimatter... antimatter never changes... until you get to quantum physics of antimatter,
-      but we don't have enough tachyon particles for that.`
+      but we don't have enough tachyon particles for that.`,
+    get unlocked() { return PlayerProgress.realityUnlocked() || PlayerProgress.dilationUnlocked(); }
   },
   {
     id: "a104",
@@ -601,7 +604,8 @@ GameDatabase.news = [
       Sacrifice' is moving away. You have to give up a lot of the things you had that made you happy, but there is
       new opportunity in where you move to. And that new opportunity gives you more happiness than you ever had.
       'Tickspeed' is how easy it is to make you happy, and 'Time Dimensions' make it even easier to be happy.
-      Antimatter Dimensions is a metaphor for a depressed man's successful battle against his illness.`
+      Antimatter Dimensions is a metaphor for a depressed man's successful battle against his illness.`,
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
     id: "a114",
@@ -719,7 +723,8 @@ GameDatabase.news = [
   },
   {
     id: "a134",
-    text: "Because of this game I can now use the word \"infinity\" as a verb."
+    text: "Because of this game I can now use the word \"infinity\" as a verb.",
+    get unlocked() { return PlayerProgress.infinityUnlocked(); }
   },
   {
     id: "a135",
@@ -845,7 +850,8 @@ GameDatabase.news = [
     id: "a159",
     text:
       `What does it mean when you "bank" Infinities? Is there a bank somewhere that you just deposit these
-      infinities? Does having a lot of banked Infinities improve your credit score? Do you get a credit card?`
+      infinities? Does having a lot of banked Infinities improve your credit score? Do you get a credit card?`,
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
     id: "a160",
@@ -1281,7 +1287,8 @@ GameDatabase.news = [
   },
   {
     id: "a223",
-    text: "If you find your infinity lasting longer than 5 hours please contact a medical professional."
+    text: "If you find your infinity lasting longer than 5 hours please contact a medical professional.",
+    get unlocked() { return PlayerProgress.infinityUnlocked(); }
   },
   {
     id: "a224",
@@ -1436,6 +1443,9 @@ GameDatabase.news = [
           ${BLOB} are just blobbling and bouncing around, occasionally merging and dividing. Only ${BLOB} know where
           they are from or where they are going to go. Still, ${BLOB} are there, always with me.
           You love ${BLOB}, so ${BLOB} loves you too.`,
+        S12:
+          `it makes you feel warm and comfortable, as if you were right at home. However, it is highly recommended
+          to update your theme to the newest theme for the best user experience.`,
       };
       const reason = reasons[Theme.current().name.replace(/\s/gu, "")];
       return `Ah, a fellow ${theme} theme user. I see that you have impeccable taste.
@@ -1511,6 +1521,7 @@ GameDatabase.news = [
     get text() {
       return `<span style='animation: a-text-stretch ${newsAnimSpd(35)}s 1 forwards'>This message is dilated.</span>`;
     },
+    get unlocked() { return PlayerProgress.realityUnlocked() || PlayerProgress.dilationUnlocked(); }
   },
   {
     id: "a253",
@@ -1574,7 +1585,8 @@ GameDatabase.news = [
     id: "a260",
     text:
       `It seems that the Replicanti have a very divide-and-conquer method of doing things.
-      Well, everything at this rate.`
+      Well, everything at this rate.`,
+    get unlocked() { return PlayerProgress.eternityUnlocked() || PlayerProgress.replicantiUnlocked(); }
   },
   {
     id: "a261",
@@ -2283,8 +2295,8 @@ GameDatabase.news = [
       }
     };
   }()),
-  // Blob from the blob font
   {
+    // Blob from the blob font
     id: "a354",
     text:
       `<span style='color: #FBC21B; text-shadow: 0px 1px 0px black, 1px 0px 0px black, 1px 1px 0px black,
@@ -2320,13 +2332,13 @@ GameDatabase.news = [
     id: "a360",
     text: `Press "Choose save" to explore the other 2 parallel universes.`
   },
-  // Discord contest winner #1
   {
+    // Discord contest winner #1
     id: "a361",
     text: "We're having a sale of top quality waterproof towels! Be sure to get some on your way out!"
   },
-  // Discord contest winner #2
   {
+    // Discord contest winner #2
     id: "a362",
     text:
       `Hevipelle Incorporated is proud to present a new brand of cereal: The Big Crunch! This nutritious breakfast
@@ -2334,7 +2346,8 @@ GameDatabase.news = [
       Replicanti, and Eternity-flavored Marshmallows. Now you can experience Antimatter Dimensions inside of your
       stomach! Warning: Side effects may include spontaneous combustion, nausea, vomiting, diarrhea,
       dematerialization, vaporization, heart failure, the end of the world, or death. If you are not made out of
-      antimatter, consult an educated professional on Antimatter Consumption before eating 'The Big Crunch'.`
+      antimatter, consult an educated professional on Antimatter Consumption before eating 'The Big Crunch'.`,
+    get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
   {
     id: "a363",
@@ -2372,7 +2385,8 @@ GameDatabase.news = [
   },
   {
     id: "a365",
-    text: "I don't like Replicanti. They're coarse and rough and irritating and they replicate everywhere."
+    text: "I don't like Replicanti. They're coarse and rough and irritating and they replicate everywhere.",
+    get unlocked() { return PlayerProgress.eternityUnlocked() || PlayerProgress.replicantiUnlocked(); }
   },
   {
     id: "a366",
@@ -2457,8 +2471,8 @@ GameDatabase.news = [
   {
     id: "a372",
     text:
-      `If you’re ever lost in a forest, look at the trees around you. It’s said that moss grows north, so by the
-      time you’ve finished looking at a tree, a roaming guitarist will run up to you and ask if you want to hear
+      `If you're ever lost in a forest, look at the trees around you. It's said that moss grows north, so by the
+      time you've finished looking at a tree, a roaming guitarist will run up to you and ask if you want to hear
       wonderwall`
   },
   {
@@ -2500,7 +2514,7 @@ GameDatabase.news = [
       has been revealed. The first codename, as it currently stands, is “antimatter”. This conveniently works well
       with the predicted generation of phones that will use Android 20 - these phones will be the most explosive
       ever due to their annihilation-based power source. Sources tell us that a billion dollar research unit is
-      working on a name for android 21, by tradition to start with B, “that doesn’t sound too bad when you think
+      working on a name for android 21, by tradition to start with B, “that doesn't sound too bad when you think
       about it”. `
   },
   {

@@ -248,7 +248,7 @@ export const Pelle = {
       case undefined:
         return "No Glyph equipped!";
       default:
-        return "";
+        return "You cannot equip this Glyph while Doomed!";
     }
   },
 

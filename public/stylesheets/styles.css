@@ -280,7 +280,7 @@ body {
 
 @font-face {
   font-family: Typewriter;
-  src: url("MonospaceTypewriter.ttf");
+  src: url("BlobEmoji-Bold.ttf"), url("MonospaceTypewriter.ttf");
 }
 
 @font-face {
@@ -302,11 +302,6 @@ body {
 @font-face {
   font-family: "Font Awesome";
   src: url("fa-solid-900.ttf");
-}
-
-@font-face {
-  font-family: Typewriter;
-  src: url("BlobEmoji-Bold.ttf"), url("MonospaceTypewriter.ttf");
 }
 
 /* Background for s6 and s10 is not displayed by default */
@@ -2754,8 +2749,10 @@ br {
   overflow: hidden;
   background-color: var(--color-base);
   border: 0.1rem var(--color-good);
-  border-style: none solid solid;
+  border-style: solid;
   border-radius: var(--var-border-radius, 0.4rem);
+  /* May be removed if it makes things to blurry */
+  transform: translateY(-0.1rem);
 }
 
 /* We need scrollbar-color in this rule as well as identical color specifications in the following two; some
@@ -5361,7 +5358,7 @@ properly on certain themes. */
   border: var(--var-border-width, 0.3rem) solid black;
   border-radius: var(--var-border-radius, 0.6rem);
   padding: 1rem;
-  transition-duration: 0.2s;
+  transition: all 0.2s, left 0s, top 0s, transform 0s;
 }
 
 .c-modal--short {
@@ -7496,6 +7493,10 @@ kbd {
   cursor: pointer;
 }
 
+.c-ra-pet-remembrance-button:hover {
+  box-shadow: 0 0 1rem inset var(--color-ra--base);
+}
+
 .s-base--metro .c-ra-pet-remembrance-button {
   border-color: black;
 }
@@ -8075,7 +8076,7 @@ kbd {
 }
 
 .o-laitela-run-button {
-  width: 22rem;
+  width: 24rem;
   height: 84rem;
   font-family: Typewriter;
   font-size: 1.1rem;
@@ -8276,7 +8277,7 @@ kbd {
 
 .c-laitela-singularity-container {
   display: flex;
-  width: 96rem;
+  width: 98rem;
   justify-content: space-around;
   align-items: center;
   color: var(--color-laitela--accent);
@@ -8877,39 +8878,40 @@ kbd {
 }
 
 .c-reality-upgrade-btn--possible {
-  color: black;
+  /* Text color gets inherited from other pseudo-classes; so we use !important here in order to ensure good contrast
+    specifically on reality and imaginary upgrades, the only upgrades which use this and the related --locked below */
+  color: black !important;
   background:
     repeating-linear-gradient(
       -45deg,
-      #979729,
-      #979729 3rem,
-      #777722 3rem,
-      #777722 6rem
+      #A2A229,
+      #A2A229 3rem,
+      #919122 3rem,
+      #919122 6rem
     );
   cursor: default;
 }
 
 .c-reality-upgrade-btn--possible:hover {
-  color: black;
-  background-color: #8b8529;
+  /* This is actually a solid color, but it flickers on hover if we don't make it a linear-gradient */
+  background: linear-gradient(0deg, #919122, #919122);
 }
 
 .c-reality-upgrade-btn--locked {
-  color: black;
-  background: #954040;
+  color: white !important;
+  background: #952020;
   background-image:
-    linear-gradient(45deg, #a55252 25%, transparent 25%),
-    linear-gradient(135deg, #a55252 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #a55252 75%),
-    linear-gradient(135deg, transparent 75%, #a55252 75%);
+    linear-gradient(45deg, #802222 25%, transparent 25%),
+    linear-gradient(135deg, #802222 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #802222 75%),
+    linear-gradient(135deg, transparent 75%, #802222 75%);
   background-position: 0 0, 2rem 0, 2rem -2rem, 0 2rem;
   background-size: 4rem 4rem;
   cursor: default;
 }
 
 .c-reality-upgrade-btn--locked:hover {
-  color: var(--color-reality-light);
-  background-color: #a53939;
+  background-color: #802222;
 }
 
 .c-reality-upgrade-btn--black-hole-unlock {
@@ -8920,11 +8922,6 @@ kbd {
 .t-dark .c-reality-upgrade-btn--unavailable {
   color: var(--color-reality-light);
   background-color: #37474f;
-}
-
-.t-dark .c-reality-upgrade-btn--locked {
-  color: var(--color-reality-light);
-  background-color: var(--color-bad);
 }
 
 .t-s6.c-reality-upgrade-btn:hover,
@@ -9257,6 +9254,11 @@ input.o-automator-block-input {
   padding: 0.5rem;
 }
 
+.t-s12 .l-h2p-body {
+  font-size: 1.3rem;
+  margin-left: 0;
+}
+
 .l-h2p-body::-webkit-scrollbar {
   width: 1rem;
 }
@@ -9316,6 +9318,10 @@ input.o-automator-block-input {
 
 .s-base--dark .o-h2p-tab-button {
   border-bottom: 0.1rem solid white;
+}
+
+.t-s12 .o-h2p-tab-button {
+  border-bottom: 0.1rem solid black;
 }
 
 .l-help-me {

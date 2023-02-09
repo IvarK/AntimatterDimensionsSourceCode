@@ -73,29 +73,31 @@ export default {
       class="l-time-studies-tab__tt-shop"
     />
     <ModernSidebar
-      v-if="view.newUI"
+      v-if="view.newUI && view.theme !== 'S12'"
       :style="hideIfMatoFullscreen"
     />
     <SaveTimer :style="hideIfMatoFullscreen" />
     <SpeedrunStatus :style="hideIfMatoFullscreen" />
-    <ModalProgressBar v-if="view.modal.progressBar" />
-    <CelestialQuoteModal
-      v-else-if="view.quotes.current"
-      :quote="view.quotes.current"
-    />
-    <CelestialQuoteHistoryDisplay
-      v-else-if="view.quotes.history"
-      :quotes="view.quotes.history"
-    />
-    <PopupModal
-      v-else-if="view.modal.current"
-      :modal="view.modal.current"
-    />
-    <ModalProgressBar v-if="view.modal.progressBar" />
-    <FadeAway v-if="ending" />
-    <CreditsContainer v-if="ending" />
-    <NewGame v-if="ending" />
-    <SpectateGame />
+    <template v-if="view.theme !== 'S12'">
+      <ModalProgressBar v-if="view.modal.progressBar" />
+      <CelestialQuoteModal
+        v-else-if="view.quotes.current"
+        :quote="view.quotes.current"
+      />
+      <CelestialQuoteHistoryDisplay
+        v-else-if="view.quotes.history"
+        :quotes="view.quotes.history"
+      />
+      <PopupModal
+        v-else-if="view.modal.current"
+        :modal="view.modal.current"
+      />
+      <ModalProgressBar v-if="view.modal.progressBar" />
+      <FadeAway v-if="ending" />
+      <CreditsContainer v-if="ending" />
+      <NewGame v-if="ending" />
+      <SpectateGame />
+    </template>
   </div>
 </template>
 
@@ -110,5 +112,9 @@ export default {
   z-index: 5;
   justify-content: center;
   pointer-events: none;
+}
+
+.t-s12 .c-game-ui--fixed {
+  position: absolute;
 }
 </style>

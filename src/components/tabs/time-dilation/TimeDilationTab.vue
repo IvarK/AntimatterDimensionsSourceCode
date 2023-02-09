@@ -19,6 +19,7 @@ export default {
       tachyonGalaxyGain: 1,
       hasPelleDilationUpgrades: false,
       galaxyTimeEstimate: "",
+      maxDT: new Decimal(),
     };
   },
   computed: {
@@ -67,7 +68,8 @@ export default {
     },
     baseGalaxyText() {
       return `${formatInt(this.baseGalaxies)} Base`;
-    }
+    },
+    hasMaxText: () => PlayerProgress.realityUnlocked() && !Pelle.isDoomed,
   },
   methods: {
     update() {
@@ -96,6 +98,7 @@ export default {
         this.tachyonGalaxyGain = 1;
       }
       this.tachyonGalaxyGain *= DilationUpgrade.galaxyMultiplier.effectValue;
+      this.maxDT.copyFrom(player.records.thisReality.maxDT);
     }
   }
 };
@@ -129,6 +132,10 @@ export default {
         :ach-tooltip="baseGalaxyText"
       >{{ formatInt(totalGalaxies) }}</span>
       {{ pluralize("Tachyon Galaxy", totalGalaxies) }}
+    </span>
+    <span v-if="hasMaxText">
+      Your maximum Dilated Time reached this Reality is
+      <span class="max-accent">{{ format(maxDT, 2, 1) }}</span>.
     </span>
     <div class="l-dilation-upgrades-grid">
       <div class="l-dilation-upgrades-grid__row">
@@ -186,5 +193,8 @@ export default {
 </template>
 
 <style scoped>
-
+.max-accent {
+  color: var(--color-dilation);
+  font-size: 1.5rem;
+}
 </style>

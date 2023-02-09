@@ -165,11 +165,8 @@ GameDatabase.infinity.upgrades = {
     formatEffect: value => {
       if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
       if (Pelle.isDoomed) return "Disabled";
-      const income = format(value, 2, 0);
-      const period = player.records.bestInfinity.time >= 999999999999
-        ? "∞"
-        : Time.bestInfinity.times(10).toStringShort();
-      return `${income} every ${period}`;
+      if (player.records.bestInfinity.time >= 999999999999) return "Too slow to generate";
+      return `${format(value, 2)} every ${Time.bestInfinity.times(10).toStringShort()}`;
     },
     charged: {
       description: () =>

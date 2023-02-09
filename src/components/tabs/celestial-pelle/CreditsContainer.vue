@@ -204,6 +204,10 @@ perfectly the same. */
   cursor: pointer;
 }
 
+.t-s12 .c-mute-button {
+  color: white;
+}
+
 .c-credits-container {
   width: 100%;
   height: 100%;

@@ -124,7 +124,8 @@ GameDatabase.eternity.milestones = {
   replicantiNoReset: {
     eternities: 40,
     reward: `Replicanti Galaxies no longer reset Antimatter, Antimatter Dimensions,
-      Tickspeed, Dimensional Sacrifice, or Dimension Boosts`
+      Tickspeed, Dimensional Sacrifice, or Dimension Boosts`,
+    pelleUseless: true
   },
   autobuyerReplicantiChance: {
     eternities: 50,

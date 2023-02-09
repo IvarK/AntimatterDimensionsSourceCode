@@ -1,5 +1,4 @@
 import { DC } from "./constants";
-import { Pelle } from "./globals";
 
 // Slowdown parameters for replicanti growth, interval will increase by scaleFactor for every scaleLog10
 // OoM past the cap (default is 308.25 (log10 of 1.8e308), 1.2, Number.MAX_VALUE)

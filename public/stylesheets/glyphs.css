@@ -50,10 +50,10 @@
 
 .l-glyph-info {
   position: absolute;
-  font-size: 0.9rem;
-  bottom: -0.5rem;
   right: -0.5rem;
+  bottom: -0.5rem;
   z-index: 5;
+  font-size: 0.9rem;
   color: white;
   background-color: gray;
   border-radius: var(--var-border-radius, 0.2rem);
@@ -665,11 +665,10 @@
   background-color: var(--color-glyph-empty-slot);
 }
 
-.t-dark-metro .c-equipped-glyphs__empty {
-  background-color: #333333;
-}
-
-.t-dark .c-equipped-glyphs__empty {
+.t-dark-metro .c-equipped-glyphs__empty,
+.t-dark .c-equipped-glyphs__empty,
+.t-amoled .c-equipped-glyphs__empty,
+.t-amoled-metro .c-equipped-glyphs__empty {
   background-color: #333333;
 }
 
@@ -1018,7 +1017,9 @@
 }
 
 .t-s6 .c-glyph-choice-icon,
-.t-s10 .c-glyph-choice-icon {
+.t-s10 .c-glyph-choice-icon,
+.t-amoled .c-glyph-choice-icon,
+.t-amoled-metro .c-glyph-choice-icon {
   border: 0.1rem solid white;
   box-shadow: 0 0 0.5rem;
 }
@@ -1035,7 +1036,9 @@
 }
 
 .t-s6 .c-glyph-choice-effect-list,
-.t-s10 .c-glyph-choice-effect-list {
+.t-s10 .c-glyph-choice-effect-list,
+.t-amoled .c-glyph-choice-effect-list,
+.t-amoled-metro .c-glyph-choice-effect-list {
   border: 0.1rem solid white;
 }
 
@@ -1531,5 +1534,4 @@
     border-color: #b67f33;
     box-shadow: 0 0 0.5rem 0.1rem #b67f33, 0 0 0.8rem #b67f33 inset;
   }
-}
 }

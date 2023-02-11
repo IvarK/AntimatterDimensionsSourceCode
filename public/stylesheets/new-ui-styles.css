@@ -142,6 +142,7 @@ body.t-s12 {
 }
 
 .t-dark .o-sidebar-currency--antimatter,
+.t-amoled .o-sidebar-currency--antimatter,
 .t-s6 .o-sidebar-currency--antimatter,
 .t-s10 .o-sidebar-currency--antimatter {
   animation: a-game-header__antimatter--glow 25s infinite;
@@ -151,7 +152,8 @@ body.t-s12 {
   animation: a-game-header__antimatter--glow-blob 25s infinite;
 }
 
-.t-dark-metro .o-sidebar-currency--antimatter {
+.t-dark-metro .o-sidebar-currency--antimatter,
+.t-amoled-metro .o-sidebar-currency--antimatter {
   color: #e0e0e0;
 }
 
@@ -692,6 +694,15 @@ body.t-s12 {
   color: black;
   background-color: #455a64;
   border: 0.1rem solid black;
+}
+
+.t-amoled .o-autobuyer-input,
+.t-amoled-metro .o-autobuyer-input,
+.t-amoled .c-autobuyer-box__mode-select,
+.t-amoled-metro .c-autobuyer-box__mode-select {
+  color: white;
+  background-color: black;
+  border: 0.1rem solid var(--color-accent);
 }
 
 .t-s1 .o-autobuyer-input,

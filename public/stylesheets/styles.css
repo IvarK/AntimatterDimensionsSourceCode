@@ -158,6 +158,46 @@ html {
   --color-laitela--accent: white;
 }
 
+:root .t-amoled {
+  --color-text: #e0e0e0;
+  --color-text-inverted: black;
+  --color-base: #000000;
+  --color-disabled: #2d2421;
+  --color-accent: #2fa6f7;
+  --color-notification: yellow;
+  --color-overlay: rgba(60, 60, 100, 50%);
+
+  --color-reality-dark: #0ba00e;
+  --color-prestige--accent: black;
+
+  --color-teresa--accent: black;
+
+  --color-laitela--base: black;
+  --color-laitela--accent: white;
+}
+
+:root .t-amoled-metro {
+  --color-text: #e0e0e0;
+  --color-text-inverted: black;
+  --color-base: #000000;
+  --color-disabled: #2d2421;
+  --color-accent: #2fa6f7;
+  --color-notification: yellow;
+  --color-overlay: rgba(60, 60, 100, 50%);
+
+  --color-infinity: #ff9800;
+  --color-eternity: #673ab7;
+  --color-reality: #4caf50;
+  --color-reality-dark: #0ba00e;
+  --color-celestials: #00bcd4;
+  --color-prestige--accent: black;
+
+  --color-teresa--accent: black;
+
+  --color-laitela--base: black;
+  --color-laitela--accent: white;
+}
+
 :root .t-s1 {
   --color-text: #000000;
   --color-text-inverted: #dbd242;
@@ -2265,6 +2305,7 @@ br {
 }
 
 .t-dark .c-game-header__antimatter,
+.t-amoled .c-game-header__antimatter,
 .t-s6 .c-game-header__antimatter,
 .t-s10 .c-game-header__antimatter {
   animation: a-game-header__antimatter--glow 25s infinite;
@@ -2288,7 +2329,8 @@ br {
   100% { color: #fbc21b; }
 }
 
-.t-dark-metro .c-game-header__antimatter {
+.t-dark-metro .c-game-header__antimatter,
+.t-amoled-metro .c-game-header__antimatter {
   color: #e0e0e0;
 }
 
@@ -2591,6 +2633,8 @@ br {
 }
 
 .t-dark .c-infinity-dim-description__accent,
+.t-amoled .c-infinity-dim-description__accent,
+.t-amoled-metro .c-infinity-dim-description__accent,
 .t-s6 .c-infinity-dim-description__accent,
 .t-s10 .c-infinity-dim-description__accent,
 .t-s11 .c-infinity-dim-description__accent {
@@ -2634,6 +2678,8 @@ br {
 }
 
 .t-dark .c-time-dim-description__accent,
+.t-amoled .c-time-dim-description__accent,
+.t-amoled-metro .c-time-dim-description__accent,
 .t-s6 .c-time-dim-description__accent,
 .t-s10 .c-time-dim-description__accent,
 .t-s11 .c-time-dim-description__accent {
@@ -4256,6 +4302,12 @@ br {
   background-color: var(--color-bad);
 }
 
+.t-amoled .o-autobuyer-btn--unavailable,
+.t-amoled-metro .o-autobuyer-btn--unavailable {
+  color: #ddd3cc;
+  border-color: var(--color-bad);
+}
+
 .t-dark .o-autobuyer-btn,
 .t-s6 .o-autobuyer-btn,
 .t-s10 .o-autobuyer-btn {
@@ -4367,6 +4419,17 @@ br {
   color: black;
   background-color: #455a64;
   border: 0.1rem solid black;
+}
+
+.t-amoled .c-autobuyer-box__mode-select,
+.t-amoled-metro .c-autobuyer-box__mode-select {
+  color: white;
+}
+
+.t-amoled .c-autobuyer-box__mode-select:hover,
+.t-amoled-metro .c-autobuyer-box__mode-select:hover {
+  color: black;
+  background-color: var(--color-good);
 }
 
 .t-s1 .c-autobuyer-box__mode-select {
@@ -5359,6 +5422,12 @@ properly on certain themes. */
   border-radius: var(--var-border-radius, 0.6rem);
   padding: 1rem;
   transition: all 0.2s, left 0s, top 0s, transform 0s;
+}
+
+.t-amoled .c-modal,
+.t-amoled-metro .c-modal {
+  border-color: var(--color-good-dark);
+  box-shadow: 0 0 1rem 0.3rem black;
 }
 
 .c-modal--short {

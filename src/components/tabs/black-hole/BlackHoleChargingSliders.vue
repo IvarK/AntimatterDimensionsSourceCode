@@ -10,20 +10,15 @@ export default {
   },
   data() {
     return {
-      isAdjustableChargingUnlocked: false,
       isNegativeBHUnlocked: false,
       isInverted: false,
       isLaitela: false,
       negativeSlider: 0,
       negativeBHDivisor: 1,
       maxNegativeBlackHole: 300,
-      storedFraction: 0,
     };
   },
   computed: {
-    storedTimeRate() {
-      return formatPercents(this.storedFraction / 1000, 1);
-    },
     infoTooltip() {
       return this.isLaitela
         ? "The physics of this Reality do not allow Black Hole Inversion"
@@ -32,14 +27,11 @@ export default {
   },
   methods: {
     update() {
-      this.isAdjustableChargingUnlocked = Ra.unlocks.adjustableStoredTime.canBeApplied;
       this.isNegativeBHUnlocked = V.isFlipped && BlackHoles.arePermanent;
       this.isInverted = BlackHoles.areNegative;
       this.isLaitela = Laitela.isRunning;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
-      this.canAdjustStoredTime = Ra.unlocks.adjustableStoredTime.canBeApplied;
-      this.storedFraction = 1000 * player.celestials.enslaved.storedFraction;
     },
     adjustSliderNegative(value) {
       this.negativeSlider = value;
@@ -48,10 +40,6 @@ export default {
         player.requirementChecks.reality.slowestBH,
         player.blackHoleNegative
       );
-    },
-    adjustSliderStoring(value) {
-      this.storedFraction = value;
-      player.celestials.enslaved.storedFraction = value / 1000;
     },
     sliderProps(negative) {
       return {
@@ -68,17 +56,6 @@ export default {
 
 <template>
   <div>
-    <div
-      v-if="isAdjustableChargingUnlocked"
-      class="l-black-hole-sliders"
-    >
-      <b>Black Hole charging rate: {{ storedTimeRate }}</b>
-      <SliderComponent
-        v-bind="sliderProps(false)"
-        :value="storedFraction"
-        @input="adjustSliderStoring($event)"
-      />
-    </div>
     <div
       v-if="isNegativeBHUnlocked"
       class="l-black-hole-sliders"

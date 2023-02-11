@@ -139,7 +139,7 @@ export class EternityChallengeState extends GameMechanicState {
   }
 
   get isGoalReached() {
-    return Currency.infinityPoints.gte(this.currentGoal);
+    return player.records.thisEternity.maxIP.gte(this.currentGoal);
   }
 
   get canBeCompleted() {
@@ -188,10 +188,11 @@ export class EternityChallengeState extends GameMechanicState {
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
+    const enteringGamespeed = getGameSpeedupFactor();
     if (Player.canEternity) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (player.requirementChecks.reality.slowestBH < 1) {
+      if (enteringGamespeed < 0.001) {
         SecretAchievement(42).unlock();
       }
       player.requirementChecks.reality.slowestBH = 1;
@@ -310,7 +311,10 @@ export const EternityChallenges = {
 
   autoComplete: {
     tick() {
-      if (!player.reality.autoEC || Pelle.isDisabled("autoec")) return;
+      if (!player.reality.autoEC || Pelle.isDisabled("autoec")) {
+        player.reality.lastAutoEC = Math.clampMax(player.reality.lastAutoEC, this.interval);
+        return;
+      }
       if (Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied) {
         let next = this.nextChallenge;
         while (next !== undefined) {

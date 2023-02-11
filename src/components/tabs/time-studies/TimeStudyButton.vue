@@ -92,6 +92,10 @@ export default {
       if (this.isBought) {
         pathClasses += `${this.pathClass}--bought`;
       }
+      if (this.study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE &&
+        EternityChallenge(this.study.id).remainingCompletions === 0) {
+        pathClasses += ` ${this.pathClass}--complete`;
+      }
       return pathClasses;
     },
     eternityChallengeAnim() {

@@ -39,7 +39,7 @@ export default {
     },
     upgradeCount() {
       const purchased = this.purchasedTickspeed;
-      if (!this.freeTickspeed) return `${formatInt(purchased)} Purchased Upgrades`;
+      if (!this.freeTickspeed) return quantifyInt("Purchased Upgrade", purchased);
       if (purchased === 0 || this.isContinuumActive) return `${formatInt(this.freeTickspeed)} Free Upgrades`;
       return `${formatInt(purchased)} Purchased + ${formatInt(this.freeTickspeed)} Free`;
     }
@@ -54,7 +54,7 @@ export default {
       if (!this.isVisible) return;
       this.mult.copyFrom(Tickspeed.multiplier);
       this.cost.copyFrom(Tickspeed.cost);
-      this.isAffordable = !isEC9Running && canAfford(Tickspeed.cost);
+      this.isAffordable = Tickspeed.isAvailableForPurchase && Tickspeed.isAffordable;
       this.tickspeed.copyFrom(Tickspeed.perSecond);
       this.gameSpeedMult = getGameSpeedupForDisplay();
       this.galaxyCount = player.galaxies;

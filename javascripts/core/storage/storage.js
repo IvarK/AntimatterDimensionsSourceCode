@@ -17,6 +17,10 @@ export const GameStorage = {
   offlineEnabled: undefined,
   offlineTicks: undefined,
 
+  maxOfflineTicks(simulatedMs, defaultTicks = this.offlineTicks) {
+    return Math.clampMax(defaultTicks, Math.floor(simulatedMs / 50));
+  },
+
   get localStorageKey() {
     return DEV ? "dimensionTestSave" : "dimensionSave";
   },
@@ -226,7 +230,7 @@ export const GameStorage = {
         // Needed to check some notification about reality unlock study.
         EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
       }
-      if (DEV || player.options.testVersion !== undefined) {
+      if (DEV && player.options.testVersion !== undefined) {
         this.devMigrations.patch(player);
       }
     }
@@ -249,6 +253,7 @@ export const GameStorage = {
     Enslaved.boostReality = false;
     GameEnd.additionalEnd = 0;
     Theme.set(Theme.currentName());
+    Glyphs.unseen = [];
     Notations.find(player.options.notation).setAsCurrent(true);
     ADNotations.Settings.exponentCommas.show = player.options.commas;
 

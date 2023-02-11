@@ -27,7 +27,9 @@ function handleChallengeCompletion() {
 export function manualBigCrunchResetRequest() {
   if (!Player.canCrunch) return;
   if (GameEnd.creditsEverClosed) return;
-  if (player.options.confirmations.bigCrunch) {
+  // We show the modal under two conditions - on the first ever infinity (to explain the mechanic) and
+  // post-break (to show total IP and infinities gained)
+  if (player.options.confirmations.bigCrunch && (!PlayerProgress.infinityUnlocked() || player.break)) {
     Modal.bigCrunch.show();
   } else {
     bigCrunchResetRequest();
@@ -177,7 +179,7 @@ export function preProductionGenerateIP(diff) {
       genCount = Math.floor(player.partInfinityPoint);
       player.partInfinityPoint -= genCount;
     }
-    let gainedPerGen = InfinityUpgrade.ipGen.effectValue;
+    let gainedPerGen = player.records.bestInfinity.time >= 999999999999 ? DC.D0 : InfinityUpgrade.ipGen.effectValue;
     if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);
     const gainedThisTick = new Decimal(genCount).times(gainedPerGen);
     Currency.infinityPoints.add(gainedThisTick);

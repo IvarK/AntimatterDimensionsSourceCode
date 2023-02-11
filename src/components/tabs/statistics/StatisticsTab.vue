@@ -49,6 +49,9 @@ export default {
         bestRarity: 0,
       },
       matterScale: [],
+      lastMatterTime: 0,
+      paperclips: 0,
+      fullTimePlayed: 0,
     };
   },
   computed: {
@@ -75,6 +78,7 @@ export default {
       const records = player.records;
       this.totalAntimatter.copyFrom(records.totalAntimatter);
       this.realTimePlayed.setFrom(records.realTimePlayed);
+      this.fullTimePlayed = TimeSpan.fromMilliseconds(records.previousRunRealTime + records.realTimePlayed);
       this.uniqueNews = NewsHandler.uniqueTickersSeen;
       this.totalNews = player.news.totalSeen;
       this.secretAchievementCount = SecretAchievements.all.filter(a => a.isUnlocked).length;
@@ -129,13 +133,21 @@ export default {
         reality.bestRate.copyFrom(bestReality.RMmin);
         reality.bestRarity = Math.max(strengthToRarity(bestReality.glyphStrength), 0);
       }
-      this.matterScale = MatterScale.estimate(Currency.antimatter.value);
+      this.updateMatterScale();
 
       this.isDoomed = Pelle.isDoomed;
       this.realTimeDoomed.setFrom(player.records.realTimeDoomed);
+      this.paperclips = player.news.specialTickerData.paperclips;
     },
     formatDecimalAmount(value) {
       return value.gt(1e9) ? format(value, 3, 0) : formatInt(value.toNumber());
+    },
+    // Only updates once per second to reduce jitter
+    updateMatterScale() {
+      if (Date.now() - this.lastMatterTime > 1000) {
+        this.matterScale = MatterScale.estimate(Currency.antimatter.value);
+        this.lastMatterTime = Date.now();
+      }
     }
   },
 };
@@ -167,8 +179,15 @@ export default {
       <div>
         You have unlocked {{ quantifyInt("Secret Achievement", secretAchievementCount) }}.
       </div>
+      <div v-if="paperclips">
+        You have {{ quantifyInt("useless paperclip", paperclips) }}.
+      </div>
       <div v-if="fullGameCompletions">
-        <b>You have completed the entire game {{ quantifyInt("time", fullGameCompletions) }}.</b>
+        <b>
+          You have completed the entire game {{ quantifyInt("time", fullGameCompletions) }}.
+          <br>
+          You have played for {{ fullTimePlayed }} across all playthroughs.
+        </b>
       </div>
       <div>
         <br>

@@ -8,10 +8,12 @@ export function animateAndDilate() {
   setTimeout(startDilatedEternity, 1000);
 }
 
-export function animateAndUndilate() {
+// eslint-disable-next-line no-empty-function
+export function animateAndUndilate(callback) {
   FullScreenAnimationHandler.display("a-undilate", 2);
   setTimeout(() => {
     eternity(false, false, { switchingDilation: true });
+    if (callback) callback();
   }, 1000);
 }
 
@@ -174,8 +176,8 @@ export function getTP(antimatter, requireEternity) {
   return getBaseTP(antimatter, requireEternity).times(tachyonGainMultiplier());
 }
 
-// Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
-// and for "exit dilation" button (saying whether you need more antimatter)
+// Returns the amount of TP gained, subtracting out current TP; used for displaying gained TP, text on the
+// "exit dilation" button (saying whether you need more antimatter), and in last 10 eternities
 export function getTachyonGain(requireEternity) {
   return getTP(Currency.antimatter.value, requireEternity).minus(Currency.tachyonParticles.value).clampMin(0);
 }

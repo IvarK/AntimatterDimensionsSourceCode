@@ -77,7 +77,7 @@ export function eternity(force, auto, specialConditions = {}) {
   if (!force) {
     if (!Player.canEternity) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
-    if (!player.dilation.active) giveEternityRewards(auto);
+    giveEternityRewards(auto);
     player.requirementChecks.reality.noEternities = false;
   }
 
@@ -125,7 +125,7 @@ export function eternity(force, auto, specialConditions = {}) {
   resetTickspeed();
   playerInfinityUpgradesOnReset();
   AchievementTimers.marathon2.reset();
-  applyRealityUpgradesAfterEternity();
+  applyEU1();
   player.records.thisInfinity.maxAM = DC.D0;
   player.records.thisEternity.maxAM = DC.D0;
   Currency.antimatter.reset();
@@ -137,22 +137,28 @@ export function eternity(force, auto, specialConditions = {}) {
   return true;
 }
 
-export function animateAndEternity() {
-  if (!Player.canEternity) return;
+// eslint-disable-next-line no-empty-function
+export function animateAndEternity(callback) {
+  if (!Player.canEternity) return false;
   const hasAnimation = !FullScreenAnimationHandler.isDisplaying &&
     ((player.dilation.active && player.options.animations.dilation) ||
     (!player.dilation.active && player.options.animations.eternity));
 
   if (hasAnimation) {
     if (player.dilation.active) {
-      animateAndUndilate();
+      animateAndUndilate(callback);
     } else {
       eternityAnimation();
-      setTimeout(eternity, 2250);
+      setTimeout(() => {
+        eternity();
+        if (callback) callback();
+      }, 2250);
     }
   } else {
     eternity();
+    if (callback) callback();
   }
+  return hasAnimation;
 }
 
 export function initializeChallengeCompletions(isReality) {
@@ -189,9 +195,20 @@ export function initializeResourcesAfterEternity() {
   Player.resetRequirements("eternity");
 }
 
-function applyRealityUpgradesAfterEternity() {
+export function applyEU1() {
   if (player.eternityUpgrades.size < 3 && Perk.autounlockEU1.canBeApplied) {
     for (const id of [1, 2, 3]) player.eternityUpgrades.add(id);
+  }
+}
+
+// We want this to be checked before any EP-related autobuyers trigger, but we need to call this from the autobuyer
+// code since those run asynchronously from gameLoop
+export function applyEU2() {
+  if (player.eternityUpgrades.size < 6 && Perk.autounlockEU2.canBeApplied) {
+    const secondRow = EternityUpgrade.all.filter(u => u.id > 3);
+    for (const upgrade of secondRow) {
+      if (player.eternityPoints.gte(upgrade.cost / 1e10)) player.eternityUpgrades.add(upgrade.id);
+    }
   }
 }
 

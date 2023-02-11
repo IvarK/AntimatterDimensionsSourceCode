@@ -128,8 +128,8 @@ GameDatabase.challenges.normal = [
     legacyId: 7,
     isQuickResettable: false,
     description: () => `each Antimatter Dimension produces the Dimension ${formatInt(2)} tiers below it 
-      instead of ${formatInt(1)}. The 1st Dimension still produces antimatter, and the 2nd, 4th, and 6th
-      Dimensions are made stronger to compensate.`,
+      instead of ${formatInt(1)}. Both 1st and 2nd Dimensions produce antimatter.
+      The 2nd, 4th, and 6th Dimensions are made stronger to compensate.`,
     name: "Automated Big Crunches",
     reward: "Big Crunches Autobuyer",
     lockedAt: DC.D16,

@@ -38,7 +38,7 @@ export default {
       Your Machine cap is <span class="c-reality-tab__reality-machines">{{ capStr }}</span>.
     </div>
     <br>
-    You have reached the limits of reality and cannot hold more than {{ format(capRM) }} Reality Machines.
+    You have reached the limits of Reality and cannot hold more than {{ format(capRM) }} Reality Machines.
     <br>
     Machines gained in excess of {{ format(baseRMCap) }} will raise the maximum amount of Imaginary Machines
     you can have.

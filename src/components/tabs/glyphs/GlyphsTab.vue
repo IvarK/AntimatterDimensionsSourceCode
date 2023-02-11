@@ -69,7 +69,7 @@ export default {
       this.sacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.sacrificeDisplayed = player.reality.showGlyphSacrifice;
       if (!Enslaved.isRunning) return;
-      const haveBoost = Glyphs.activeList.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
+      const haveBoost = Glyphs.activeWithoutCompanion.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
       if (haveBoost) {
         this.enslavedHint = "done... what little... I can... with Glyphs...";
       }

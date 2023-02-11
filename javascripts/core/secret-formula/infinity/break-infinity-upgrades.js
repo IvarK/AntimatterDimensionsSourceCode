@@ -85,7 +85,10 @@ GameDatabase.infinity.breakUpgrades = {
         Ra.unlocks.continuousTTBoost.effects.infinity
       );
       infinities = infinities.times(getAdjustedGlyphEffect("infinityinfmult"));
-      return `${quantify("Infinity", infinities)} every ${Time.bestInfinity.times(5).toStringShort()}`;
+      const timeStr = Time.bestInfinity.totalMilliseconds <= 50
+        ? `${TimeSpan.fromMilliseconds(100).toStringShort()} (capped)`
+        : `${Time.bestInfinity.times(2).toStringShort()}`;
+      return `${quantify("Infinity", infinities)} every ${timeStr}`;
     }
   },
   autobuyMaxDimboosts: {
@@ -135,8 +138,7 @@ GameDatabase.infinity.breakUpgrades = {
       if (!BreakInfinityUpgrade.ipGen.isCapped) {
         generation += ` ➜ ${formatInt(5 * (1 + player.infinityRebuyables[2]))}%`;
       }
-      const offlineString = player.options.offlineProgress ? ", works offline" : "";
-      return `${generation} of your best IP/min from your last 10 Infinities${offlineString}`;
+      return `${generation} of your best IP/min from your last 10 Infinities`;
     },
     isDisabled: effect => effect.eq(0),
     formatEffect: value => `${format(value, 2, 1)} IP/min`,

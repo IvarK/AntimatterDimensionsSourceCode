@@ -62,6 +62,8 @@ window.player = {
       mode: 0,
       rm: DC.D1,
       glyph: 0,
+      time: 0,
+      shard: 0,
       isActive: false
     },
     eternity: {
@@ -271,19 +273,21 @@ window.player = {
     realTimePlayed: 0,
     realTimeDoomed: 0,
     fullGameCompletions: 0,
+    previousRunRealTime: 0,
     totalAntimatter: DC.E1,
-    lastTenInfinities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
-    lastTenEternities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, DC.D1, DC.D1, Number.MAX_VALUE]),
-    lastTenRealities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, DC.D1, 1, Number.MAX_VALUE, 0]),
+    recentInfinities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, ""]),
+    recentEternities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, "", DC.D0]),
+    recentRealities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, 1, "", 0, 0]),
     thisInfinity: {
       time: 0,
       realTime: 0,
       lastBuyTime: 0,
       maxAM: DC.D0,
       bestIPmin: DC.D0,
+      bestIPminVal: DC.D0,
     },
     bestInfinity: {
       time: Number.MAX_VALUE,
@@ -298,6 +302,7 @@ window.player = {
       maxIP: DC.D0,
       bestIPMsWithoutMaxAll: DC.D0,
       bestEPmin: DC.D0,
+      bestEPminVal: DC.D0,
       bestInfinitiesPerMs: DC.D0,
     },
     bestEternity: {
@@ -314,6 +319,8 @@ window.player = {
       bestEternitiesPerMs: DC.D0,
       maxReplicanti: DC.D0,
       maxDT: DC.D0,
+      bestRSmin: 0,
+      bestRSminVal: 0,
     },
     bestReality: {
       time: Number.MAX_VALUE,
@@ -521,7 +528,7 @@ window.player = {
       },
       constants: {},
       execTimer: 0,
-      type: AUTOMATOR_TYPE.BLOCK,
+      type: AUTOMATOR_TYPE.TEXT,
       forceUnlock: false,
       currentInfoPane: AutomatorPanels.INTRO_PAGE,
     },
@@ -584,7 +591,6 @@ window.player = {
       storedReal: 0,
       autoStoreReal: false,
       isAutoReleasing: false,
-      storedFraction: 1,
       quoteBits: 0,
       unlocks: [],
       run: false,
@@ -779,6 +785,7 @@ window.player = {
     retryCelestial: false,
     showAllChallenges: false,
     cloudEnabled: true,
+    hideGoogleName: false,
     showCloudModal: true,
     forceCloudOverwrite: false,
     syncSaveIntervals: true,
@@ -791,8 +798,8 @@ window.player = {
     offlineProgress: true,
     automaticTabSwitching: true,
     respecIntoProtected: false,
-    offlineTicks: 1000,
-    showLastTenResourceGain: true,
+    offlineTicks: 1e5,
+    showRecentRate: true,
     autosaveInterval: 30000,
     showTimeSinceSave: true,
     saveFileName: "",
@@ -888,7 +895,8 @@ window.player = {
       maxEntries: 200,
       clearOnReality: true,
       clearOnRestart: true,
-    }
+    },
+    invertTTgenDisplay: false,
   },
   IAP: {
     enabled: false,

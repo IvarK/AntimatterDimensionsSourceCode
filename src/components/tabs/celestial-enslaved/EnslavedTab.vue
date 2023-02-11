@@ -17,7 +17,7 @@ export default {
     isStoringReal: false,
     autoStoreReal: false,
     offlineEnabled: false,
-    canAdjustStoredTime: false,
+    hasAutoRelease: false,
     isRunning: false,
     completed: false,
     storedBlackHole: 0,
@@ -123,7 +123,7 @@ export default {
       this.isStoringReal = Enslaved.isStoringRealTime;
       this.autoStoreReal = player.celestials.enslaved.autoStoreReal;
       this.offlineEnabled = player.options.offlineProgress;
-      this.canAdjustStoredTime = Ra.unlocks.adjustableStoredTime.canBeApplied;
+      this.hasAutoRelease = Ra.unlocks.autoPulseTime.canBeApplied;
       this.isRunning = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted && !this.isDoomed;
       this.storedReal = player.celestials.enslaved.storedReal;
@@ -204,11 +204,10 @@ export default {
   <div class="l-enslaved-celestial-tab">
     <CelestialQuoteHistory celestial="enslaved" />
     <div
-      v-if="canAdjustStoredTime"
+      v-if="hasAutoRelease && canAutoRelease"
       class="c-subtab-option-container"
     >
       <PrimaryToggleButton
-        v-if="canAutoRelease"
         v-model="autoRelease"
         class="o-primary-btn--subtab-option"
         label="Pulse Black Hole:"
@@ -263,7 +262,7 @@ export default {
         </PrimaryButton>
         <div class="l-enslaved-top-container">
           <div class="l-enslaved-top-container__half">
-            While charging, the Black Hole's speed boost is {{ canAdjustStoredTime ? "decreased" : "disabled" }},
+            While charging, game speed multipliers are {{ hasAutoRelease ? "decreased" : "disabled" }},
             and the lost speed is converted into stored game time. Discharging the Black Hole allows you to skip
             forward in time. Stored game time is also used to unlock certain upgrades.
             <button

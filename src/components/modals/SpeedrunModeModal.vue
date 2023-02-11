@@ -51,9 +51,9 @@ export default {
       the game. These will be visible in the bottom-right of the screen and on a dedicated subtab of Statistics.
       <br>
       <br>
-      All animations and confirmations are disabled by default. When you start the run, the game remains paused until
-      your antimatter changes, allowing you to configure all your settings before starting the run. Because of this,
-      "Fake News" is given immediately instead of forcing you to wait.
+      All animations and confirmations are disabled by default. When you begin the run, the game remains paused until
+      your antimatter changes, allowing you to configure all your settings before starting. In order to avoid having
+      to wait for a long time before actually starting an optimized run, a few achievements are given for free.
       <br>
       <br>
       <i>

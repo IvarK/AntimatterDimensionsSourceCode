@@ -32,7 +32,7 @@ export default {
         // replicanti growth scales as time^1/postScale, which turns out to be a reasonable approximation.
         const milestoneStep = Pelle.isDoomed ? 100 : 1000;
         const nextMilestone = Decimal.pow10(milestoneStep * Math.floor(replicantiAmount.log10() / milestoneStep + 1));
-        const coeff = Decimal.divide(updateRateMs / 1000, logGainFactorPerTick.exp().pow(postScale).minus(1));
+        const coeff = Decimal.divide(updateRateMs / 1000, exp1m(logGainFactorPerTick.times(postScale)));
         const timeToThousand = coeff.times(nextMilestone.divide(replicantiAmount).pow(postScale).minus(1));
         // The calculation seems to choke and return zero if the time is too large, probably because of rounding issues
         const timeEstimateText = timeToThousand.eq(0)
@@ -66,12 +66,16 @@ export default {
         effectiveMaxRG = Replicanti.galaxies.max;
         effectiveCurrentRG = Replicanti.galaxies.bought;
       }
-      const secondsPerGalaxy = baseGalaxiesPerSecond.reciprocal();
+      const secondsPerGalaxy = galaxiesPerSecond.reciprocal();
 
       if (this.remainingTimeText === "") {
         if (remainingTime === 0) {
           this.remainingTimeText = `At Infinite Replicanti (normally takes
             ${TimeSpan.fromSeconds(secondsPerGalaxy.toNumber())})`;
+        } else if (replicantiAmount.lt(100)) {
+          // Because of discrete replication, we add "Approximately" at very low amounts
+          this.remainingTimeText = `Approximately ${TimeSpan.fromSeconds(remainingTime)} remaining
+            until Infinite Replicanti`;
         } else {
           this.remainingTimeText = `${TimeSpan.fromSeconds(remainingTime)} remaining until Infinite Replicanti`;
         }
@@ -104,12 +108,14 @@ export default {
           // To solve this problem, after 1e308, it uses the pending value as the basis of
           // how ""close"" you are to the next galaxy instead of replicanti amount,
           // which is a good enough best case approximation in my opinion.
+          // Note: This pending case ignores Reality Upgrade 6 but it's not really accurate anyway
+          // (basically assumes you'll get all your possible RGs now) so that's probably fine.
           const pending = Replicanti.galaxies.gain;
           let pendingTime = pending * secondsPerGalaxy.toNumber();
           // If popular music is unlocked add the divide amount
           if (Achievement(126).isUnlocked) {
             const leftPercentAfterGalaxy = replicantiAmount.log10() / LOG10_MAX_VALUE - pending;
-            pendingTime += leftPercentAfterGalaxy / log10GainFactorPerTickUncapped.toNumber();
+            pendingTime += leftPercentAfterGalaxy * secondsPerGalaxy.toNumber();
           }
           const thisGalaxyTime = pending > 0 ? pendingTime : secondsPerGalaxy.toNumber() - remainingTime;
           this.galaxyText += ` (all Replicanti Galaxies within

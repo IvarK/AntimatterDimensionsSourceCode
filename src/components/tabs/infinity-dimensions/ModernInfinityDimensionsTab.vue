@@ -149,18 +149,18 @@ export default {
       purchases each.
     </div>
     <div>You are getting {{ format(powerPerSecond, 2, 0) }} {{ incomeType }} per second.</div>
+    <b
+      v-if="isEC8Running"
+      class="l-infinity-dim-tab__ec8-purchases"
+    >
+      You have {{ quantifyInt("purchase", EC8PurchasesLeft) }} left within Eternity Challenge 8.
+    </b>
     <div class="l-dimensions-container">
       <InfinityDimensionRow
         v-for="tier in 8"
         :key="tier"
         :tier="tier"
       />
-    </div>
-    <div
-      v-if="isEC8Running"
-      class="l-infinity-dim-tab__ec8-purchases"
-    >
-      You have {{ quantifyInt("purchase", EC8PurchasesLeft) }} left.
     </div>
     <div v-if="showLockedDimCostNote">
       Hold shift to see the Infinity Point cost for locked Infinity Dimensions.

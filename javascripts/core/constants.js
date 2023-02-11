@@ -215,7 +215,9 @@ window.AUTO_REALITY_MODE = {
   RM: 0,
   GLYPH: 1,
   EITHER: 2,
-  BOTH: 3
+  BOTH: 3,
+  TIME: 4,
+  RELIC_SHARD: 5,
 };
 
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it
@@ -343,9 +345,10 @@ window.GLYPH_SIDEBAR_MODE = {
 
 window.AUTO_SORT_MODE = {
   NONE: 0,
-  POWER: 1,
-  EFFECT: 2,
-  SCORE: 3
+  LEVEL: 1,
+  POWER: 2,
+  EFFECT: 3,
+  SCORE: 4
 };
 
 window.AUTO_GLYPH_SCORE = {

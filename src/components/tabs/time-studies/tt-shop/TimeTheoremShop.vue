@@ -31,7 +31,9 @@ export default {
       },
       showST: false,
       STamount: 0,
-      showTTGen: false
+      hasTTGen: false,
+      showTTGen: false,
+      invertTTgenDisplay: false,
     };
   },
   computed: {
@@ -79,7 +81,10 @@ export default {
   watch: {
     isAutobuyerOn(newValue) {
       Autobuyer.timeTheorem.isActive = newValue;
-    }
+    },
+    invertTTgenDisplay(newValue) {
+      player.options.invertTTgenDisplay = newValue;
+    },
   },
   methods: {
     minimize() {
@@ -108,7 +113,7 @@ export default {
     },
     update() {
       this.theoremAmount.copyFrom(Currency.timeTheorems);
-      this.theoremGeneration.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
+      this.theoremGeneration.copyFrom(getTTPerSecond().times(getGameSpeedupForDisplay()));
       this.totalTimeTheorems.copyFrom(Currency.timeTheorems.max);
       this.shopMinimized = player.timestudy.shopMinimized;
       this.hasTTAutobuyer = Autobuyer.timeTheorem.isUnlocked;
@@ -124,8 +129,13 @@ export default {
       costs.ep.copyFrom(TimeTheoremPurchaseType.ep.cost);
       this.showST = V.spaceTheorems > 0 && !Pelle.isDoomed;
       this.STamount = V.availableST;
-      this.showTTGen = this.theoremGeneration.gt(0) && !ui.view.shiftDown;
+      this.hasTTGen = this.theoremGeneration.gt(0);
+      this.showTTGen = this.hasTTGen && (ui.view.shiftDown === this.invertTTgenDisplay);
+      this.invertTTgenDisplay = player.options.invertTTgenDisplay;
     },
+    toggleTTgen() {
+      this.invertTTgenDisplay = !this.invertTTgenDisplay;
+    }
   },
 };
 </script>
@@ -161,12 +171,28 @@ export default {
               :saveslot="saveslot"
             />
           </div>
-          <span v-if="showTTGen">
-            You are gaining {{ TTgenRateText }}.
-          </span>
-          <span v-else>
-            You have {{ totalTimeTheoremText }}.
-          </span>
+          <div class="tt-gen-container">
+            <span
+              v-if="hasTTGen"
+              class="checkbox-margin"
+              ach-tooltip="This shows TT generation by default and total TT if you hold shift.
+                Check this box to swap this behavior."
+            >
+              <input
+                v-model="invertTTgenDisplay"
+                type="checkbox"
+                :value="invertTTgenDisplay"
+                class="o-clickable"
+                @input="toggleTTgen()"
+              >
+            </span>
+            <span v-if="showTTGen">
+              You are gaining {{ TTgenRateText }}.
+            </span>
+            <span v-else>
+              You have {{ totalTimeTheoremText }}.
+            </span>
+          </div>
         </div>
       </div>
       <div
@@ -230,8 +256,8 @@ export default {
 .l-load-tree-area {
   display: flex;
   flex-direction: column;
-  align-items: left;
   width: 50%;
+  align-items: left;
 }
 
 .l-tree-load-button-wrapper {
@@ -243,5 +269,16 @@ export default {
 
 .ttbuttons-bottom-row-hide {
   height: 0;
+}
+
+.tt-gen-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.checkbox-margin {
+  margin: 0 0.4rem;
 }
 </style>

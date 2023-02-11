@@ -340,6 +340,30 @@ export function beginProcessReality(realityProps) {
   // Do this before processing glyphs so that we don't try to reality again while async is running.
   finishProcessReality(realityProps);
 
+  // If we have less than a certain amount of simulated realities, then we just shortcut the heavier async and
+  // sampling code in order to just directly give all the glyphs. The later code is a fixed amount of overhead
+  // which is large enough that quick realities can cause it to softlock the game due to lag on slower devices
+  // Note: This is mostly a copy-paste of a code block in processManualReality() with slight modifications
+  if (glyphsToProcess < 100) {
+    for (let glyphNum = 0; glyphNum < glyphsToProcess; glyphNum++) {
+      if (EffarigUnlock.glyphFilter.isUnlocked) {
+        const glyphChoices = GlyphSelection.glyphList(GlyphSelection.choiceCount,
+          realityProps.gainedGlyphLevel, { rng });
+        const newGlyph = AutoGlyphProcessor.pick(glyphChoices);
+        if (!AutoGlyphProcessor.wouldKeep(newGlyph) || GameCache.glyphInventorySpace.value === 0) {
+          AutoGlyphProcessor.getRidOfGlyph(newGlyph);
+        } else {
+          Glyphs.addToInventory(newGlyph);
+        }
+      } else {
+        GlyphSelection.select(Math.floor(Math.random() * GlyphSelection.choiceCount), false);
+      }
+    }
+    rng.finalize();
+    Glyphs.processSortingAfterReality();
+    return;
+  }
+
   // We need these variables in this scope in order to modify the behavior of the Async loop while it's running
   const progress = {};
   let fastToggle = false;
@@ -409,7 +433,7 @@ export function beginProcessReality(realityProps) {
       if (VUnlocks.autoAutoClean.canBeApplied && player.reality.autoAutoClean) Glyphs.autoClean();
     }
   };
-  const glyphsToSample = 10000;
+  const glyphsToSample = Math.min(glyphsToProcess, 10000);
   Async.run(glyphFunction,
     glyphsToProcess,
     {
@@ -669,6 +693,10 @@ export function finishProcessReality(realityProps) {
 
   if (TeresaUnlocks.startEU.canBeApplied) {
     for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
+  } else if (RealityUpgrade(14).isBought) {
+    // Eternal flow will always give eternities after the first tick,
+    // better to try apply EU1 immediately once at the start rather than on every tick
+    applyEU1();
   }
 
   if (!isReset) Ra.applyAlchemyReactions(realityRealTime);
@@ -729,6 +757,8 @@ export function applyRUPG10() {
   Currency.eternities.bumpTo(100);
   Replicanti.amount = Replicanti.amount.clampMin(1);
   Replicanti.unlock(true);
+
+  applyEU1();
 }
 
 export function clearCelestialRuns() {

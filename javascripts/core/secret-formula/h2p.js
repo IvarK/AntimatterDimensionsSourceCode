@@ -189,10 +189,42 @@ ${PlayerProgress.realityUnlocked()
       tags: ["effect", "stack", "combine", "add", "reduce", "multiply", "divide", "power", "dilation", "glyph"],
       tab: "options/gameplay"
     }, {
+      name: "Common Abbreviations",
+      info: () => `
+Many resources within the game may appear in an abbreviated format as text in order to save space. This How to
+Play entry will update itself with additional entries for new resources as you encounter them for the first time
+<br>
+- <b>AM</b>: Antimatter<br>
+- <b>AD</b>: Antimatter Dimension<br>
+- <b>AG</b>: Antimatter Galaxy<br>
+${PlayerProgress.infinityUnlocked() ? "- <b>IP</b>: Infinity Point<br>" : ""}
+${PlayerProgress.infinityUnlocked() ? "- <b>NC</b>: Normal Challenge<br>" : ""}
+${PlayerProgress.infinityUnlocked() ? "- <b>IC</b>: Infinity Challenge<br>" : ""}
+${InfinityDimension(1).isUnlocked || PlayerProgress.eternityUnlocked() ? "- <b>ID</b>: Infinity Dimension<br>" : ""}
+${PlayerProgress.replicantiUnlocked() ? "- <b>RG</b>: Replicanti Galaxy<br>" : ""}
+${PlayerProgress.eternityUnlocked() ? "- <b>EP</b>: Eternity Point<br>" : ""}
+${PlayerProgress.eternityUnlocked() ? "- <b>TT</b>: Time Theorem<br>" : ""}
+${PlayerProgress.eternityUnlocked() ? "- <b>TD</b>: Time Dimension<br>" : ""}
+${PlayerProgress.eternityUnlocked() ? "- <b>EC</b>: Eternity Challenge<br>" : ""}
+${PlayerProgress.dilationUnlocked() ? "- <b>TP</b>: Tachyon Particle<br>" : ""}
+${PlayerProgress.dilationUnlocked() ? "- <b>DT</b>: Dilated Time<br>" : ""}
+${PlayerProgress.dilationUnlocked() ? "- <b>TG</b>: Tachyon Galaxy<br>" : ""}
+${PlayerProgress.realityUnlocked() ? "- <b>RM</b>: Reality Machine<br>" : ""}
+${PlayerProgress.realityUnlocked() ? "- <b>AP</b>: Automator Point<br>" : ""}
+${PlayerProgress.realityUnlocked() ? "- <b>BH</b>: Black Hole<br>" : ""}
+${MachineHandler.isIMUnlocked ? "- <b>iM</b>: Imaginary Machine<br>" : ""}
+${Laitela.isUnlocked ? "- <b>DM</b>: Dark Matter<br>" : ""}
+${Laitela.isUnlocked ? "- <b>DE</b>: Dark Energy<br>" : ""}
+`,
+      isUnlocked: () => true,
+      tags: ["abbreviation", "shorten", "am", "ad", "ag", "ip", "nc", "ic", "id", "rg", "ep", "tt", "td", "ec", "tp",
+        "dt", "tg", "rm", "ap", "bh", "im", "dm", "de"],
+      tab: ""
+    }, {
       name: "Antimatter Dimensions",
       info: () => `
-Antimatter is a resource that is throughout the entire game for purchasing various things as you progress. You start
-with ${formatInt(10)} antimatter when you first open the game. And you can
+Antimatter is a resource that is used throughout the entire game for purchasing various things as you progress. You
+start with ${formatInt(10)} antimatter when you first open the game, and you can
 spend it to buy the 1st Antimatter Dimension to start the game.
 <br>
 <br>
@@ -305,7 +337,7 @@ available, but will increase the effect of your Tickspeed Upgrades by +${format(
 Galaxies. As you get more Galaxies, the multiplier will continue becoming stronger and stronger.
 <br>
 <br>
-Though it will have very little impact for the first few purchases,
+Though it will have very little impact for the first few Tickspeed purchases,
 the increase is multiplicative and won't take long to be visible.
 <br>
 <br>
@@ -328,7 +360,7 @@ increases by another ${formatPercents(0.002, 1)} per Galaxy, on top of Distant s
     }, {
       name: "Dimensional Sacrifice",
       info: () => `
-<b>You unlock Dimensional Sacrifice after your first Dimension Boost.</b>
+<b>You unlock Dimensional Sacrifice after your fifth Dimension Boost.</b>
 <br>
 <br>
 Sacrificing will immediately reset the owned quantity of all non-Eighth Dimensions to zero, without reducing the
@@ -476,7 +508,7 @@ It does not change individual autobuyer settings. Think of it like a master swit
 Additionally, holding <b>Alt</b> when pressing a hotkey associated with an upgrade, dimension, or prestige will
 toggle the associated autobuyer.
 `,
-      isUnlocked: () => PlayerProgress.infinityUnlocked(),
+      isUnlocked: () => true,
       tags: ["infinity", "automation", "challenges", "rewards", "interval", "earlygame"],
       tab: "automation/autobuyers"
     }, {
@@ -732,7 +764,7 @@ to buy your preferred path and continue on instead of stopping completely at the
 for the Dimension split in this dialog if you have purchased the relevant Time Study.
 <br>
 <br>
-<b>Respecs:</b> A respec allows you to reset the upgrades you have in the tree to retreive all of the Time Theorems
+<b>Respecs:</b> A respec allows you to reset the upgrades you have in the tree to retrieve all of the Time Theorems
 spent on them. It can be done for free, but only triggers on finishing an Eternity; you can't respec Time Studies in
 the middle of an Eternity.
 <br>
@@ -769,9 +801,10 @@ goal to the next completion also increases. Additionally, the secondary requirem
 also increase. The Time Theorem cost does not increase.
 <br>
 <br>
-After you have unlocked an Eternity Challenge, you can unlock it without meeting its secondary requirements until you
-unlock another Eternity Challenge or beat that Eternity Challenge, allowing you to unlock an Eternity Challenge
-with one set of studies, and then respec into a different set of studies to beat the challenge.
+Completing an Eternity Challenge's secondary requirements will remove them from the study requirement until you complete
+that particular Eternity Challenge, meaning you only need to complete the secondary requirement <i>once</i>.
+As a result, you can unlock an Eternity Challenge with one set of studies, and then respec into a different set of
+studies to beat the challenge.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["ec", "study", "time", "rewards", "completions", "midgame"],
@@ -1109,6 +1142,10 @@ Unlocking or defeating a Celestial has different conditions depending on the Cel
 <br>
 All Celestials have their own Celestial Reality, but how the Reality is relevant to each Celestial and the rest of
 the game will depend on the Celestial.
+<br>
+<br>
+Celestials are timeless entities. Unless otherwise stated, any new mechanics introduced by Celestials are not affected
+by game speed multipliers and instead refer specifically to real time instead of game time.
 `,
       isUnlocked: () => Teresa.isUnlocked,
       tags: ["reality", "challenges", "endgame", "lategame"],
@@ -1231,6 +1268,12 @@ being selected; this can be useful for effect testing and other more limited sit
 <br>
 - Setting an impossible condition (eg. a threshold score of ${formatInt(999)} and all effects worth ${formatInt(0)})
 will let you forbid entire types like Specified Effect Mode as well
+<br>
+<br>
+The Glyph Filter mode is a global setting which applies to all Glyph types at once; for example, you cannot filter
+power Glyphs with "Rarity Threshold" and time Glyphs with "Specified Effect". Selecting one mode will require
+you to configure every Glyph type within its settings for proper filtering. Each filter mode has its own settings
+which will be kept if you switch to another mode.
 <br>
 <br>
 Glyph Presets are purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic
@@ -1463,7 +1506,8 @@ with a higher refinement value.
 Alchemy Resources can be combined together in certain combinations in order to create new compound resources, which
 are unlocked at certain Effarig levels. Resources are combined once per Reality, unaffected by real time
 amplification. Reactions have a higher yield and thus happen faster when your reagent amounts are higher. The cap for
-compound resources is equal to the lowest cap amongst all of its reagents.
+compound resources is equal to the lowest cap amongst all of its reagents. In order for a reaction to occur, the
+current amount of all reagents must be greater than the current amount of the produced resource.
 <br>
 <br>
 To activate or deactivate a reaction, click the circle corresponding to the reaction's product. When the reaction can

@@ -5,6 +5,10 @@ import GameUiComponentFixed from "@/components/GameUiComponentFixed";
 import ModernUi from "@/components/ui-modes/modern/ModernUi";
 import TabComponents from "@/components/tabs";
 
+import S12DesktopIcons from "@/components/ui-modes/s12/DesktopIcons";
+import S12Ui from "@/components/ui-modes/s12/S12Ui";
+import S12UiFixed from "@/components/ui-modes/s12/S12UiFixed";
+
 export default {
   name: "GameUIComponent",
   components: {
@@ -13,12 +17,19 @@ export default {
     ModernUi,
     GameUiComponentFixed,
     BackgroundAnimations,
+    S12Ui,
+    S12UiFixed,
+    S12DesktopIcons,
   },
   computed: {
     view() {
       return this.$viewModel;
     },
+    isThemeS12() {
+      return this.view.theme === "S12";
+    },
     uiLayout() {
+      if (this.isThemeS12) return "S12Ui";
       return this.view.newUI ? "ModernUi" : "ClassicUi";
     },
     containerClass() {
@@ -52,6 +63,7 @@ export default {
           class="c-game-tab"
         />
       </component>
+      <S12DesktopIcons v-if="isThemeS12" />
       <link
         v-if="view.theme !== 'Normal'"
         type="text/css"
@@ -59,8 +71,9 @@ export default {
         :href="themeCss"
       >
     </div>
-    <GameUiComponentFixed />
-    <BackgroundAnimations />
+    <GameUiComponentFixed v-if="!isThemeS12" />
+    <BackgroundAnimations v-if="!isThemeS12" />
+    <S12UiFixed v-if="isThemeS12" />
   </div>
 </template>
 

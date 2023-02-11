@@ -146,6 +146,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     name: "Recollection of Intrusion",
     id: 14,
     cost: 3.5e8,
+    formatCost: x => format(x, 1),
     requirement: () => `Reach a tickspeed of ${format("1e75000000000")} / sec within Eternity Challenge 5`,
     hasFailed: () => false,
     checkRequirement: () => EternityChallenge(5).isRunning && Tickspeed.perSecond.exponent >= 7.5e10,
@@ -294,9 +295,10 @@ GameDatabase.reality.imaginaryUpgrades = [
     formatCost: x => format(x, 1),
     requirement: () => `Reach Reality in Lai'tela's Reality with all Dimensions disabled and
       at least ${formatInt(4)} empty Glyph slots`,
-    hasFailed: () => !Laitela.isRunning || Laitela.maxAllowedDimension !== 0 || Glyphs.activeList.length > 1,
+    hasFailed: () => !Laitela.isRunning || Laitela.maxAllowedDimension !== 0 ||
+      Glyphs.activeWithoutCompanion.length > 1,
     checkRequirement: () => Laitela.isRunning && Laitela.maxAllowedDimension === 0 &&
-      Glyphs.activeList.length <= 1 && TimeStudy.reality.isBought,
+      Glyphs.activeWithoutCompanion.length <= 1 && TimeStudy.reality.isBought,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "Unlock Pelle, Celestial of Antimatter",
   },

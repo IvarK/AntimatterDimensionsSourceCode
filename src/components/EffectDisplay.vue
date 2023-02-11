@@ -18,7 +18,12 @@ export default {
       type: String,
       default: "Currently",
       required: false
-    }
+    },
+    ignoreCapped: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
   },
   data() {
     return {
@@ -38,7 +43,7 @@ export default {
       if (this.config.noLabel) {
         return "";
       }
-      return `${this.reachedCap ? "Capped" : this.label}: `;
+      return `${this.reachedCap && !this.ignoreCapped ? "Capped" : this.label}: `;
     },
     effectDisplay() {
       return this.formatEffect(this.reachedCap ? this.cap : this.effectValue);

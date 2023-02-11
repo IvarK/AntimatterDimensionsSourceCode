@@ -88,7 +88,7 @@ export default {
         case 3: return V.initializeRun();
         case 4: return Ra.initializeRun();
         case 5: return Laitela.initializeRun();
-        case 6: throw new Error(`Pelle confirmations not implemented yet.`);
+        case 6: throw new Error(`Attempted to start Pelle through EnterCelestialsModal instead of ArmageddonModal`);
         default: throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
       }
     },

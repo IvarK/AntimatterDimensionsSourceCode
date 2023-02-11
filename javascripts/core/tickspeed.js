@@ -87,7 +87,7 @@ export function buyMaxTickSpeed() {
   let boughtTickspeed = false;
 
   Tutorial.turnOffEffect(TUTORIAL_STATE.TICKSPEED);
-  if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
+  if (NormalChallenge(9).isRunning) {
     const goal = Player.infinityGoal;
     let cost = Tickspeed.cost;
     while (Currency.antimatter.gt(cost) && cost.lt(goal)) {
@@ -127,7 +127,6 @@ export const Tickspeed = {
 
   get isAvailableForPurchase() {
     return this.isUnlocked &&
-      Currency.antimatter.lt(Player.infinityLimit) &&
       !EternityChallenge(9).isRunning &&
       !Laitela.continuumActive &&
       (player.break || this.cost.lt(Decimal.NUMBER_MAX_VALUE));

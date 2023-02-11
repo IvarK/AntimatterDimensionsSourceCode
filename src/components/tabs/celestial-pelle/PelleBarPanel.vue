@@ -53,6 +53,7 @@ export default {
       When active, Rifts consume {{ formatPercents(decayRate) }} of another resource per second.
       <br>
       Rift effects apply even when not activated, and are based on the total amount drained.
+      <b class="o-strike-warning">Pelle Strike penalties are permanent and remain active even after Armageddon!</b>
       <div class="c-pelle-bar-container">
         <div
           v-for="strike in strikes"
@@ -87,5 +88,10 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+}
+
+.o-strike-warning {
+  color: var(--color-pelle--base);
+  font-size: 1.4rem;
 }
 </style>

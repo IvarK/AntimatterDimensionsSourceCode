@@ -17,6 +17,9 @@ export default {
     modal() {
       return this.$viewModel.modal.current;
     },
+    isThemeS12() {
+      return this.$viewModel.theme === "S12";
+    }
   },
   created() {
     this.on$(GAME_EVENT.ENTER_PRESSED, this.handleClick);
@@ -41,8 +44,12 @@ export default {
   <div class="c-modal-message l-modal-content--centered">
     <ModalCloseButton
       v-if="modal.closeButton"
-      class="c-modal__close-btn--tiny"
+      :class="isThemeS12 ? 'c-modal__close-btn' : 'c-modal__close-btn--tiny'"
       @click="emitClose"
+    />
+    <ModalCloseButton
+      v-else-if="isThemeS12"
+      class="c-modal__close-btn c-modal__close-btn--disabled"
     />
     <div
       class="c-modal-message__text"
@@ -54,5 +61,11 @@ export default {
     >
       Okay
     </PrimaryButton>
+    <div
+      v-if="isThemeS12"
+      class="c-modal__title"
+    >
+      Message
+    </div>
   </div>
 </template>

@@ -10,6 +10,9 @@ export default {
     update() {
       this.showScoreFilter = EffarigUnlock.glyphFilter.isUnlocked;
     },
+    sortByLevel() {
+      Glyphs.sortByLevel();
+    },
     sortByPower() {
       Glyphs.sortByPower();
     },
@@ -31,6 +34,15 @@ export default {
     <div class="l-glyph-sacrifice-options__header">
       Sort Glyphs:
     </div>
+    <button
+      class="c-glyph-inventory-option"
+      @click="sortByLevel"
+    >
+      Sort by level
+      <div class="c-glyph-inventory-option__tooltip">
+        Arranges by decreasing Glyph level
+      </div>
+    </button>
     <button
       class="c-glyph-inventory-option"
       @click="sortByPower"

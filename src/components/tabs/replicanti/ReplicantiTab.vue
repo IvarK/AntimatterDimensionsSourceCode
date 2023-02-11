@@ -38,6 +38,7 @@ export default {
       canSeeGalaxyButton: false,
       unlockCost: new Decimal(),
       scrambledText: "",
+      maxReplicanti: new Decimal(),
     };
   },
   computed: {
@@ -113,6 +114,7 @@ export default {
       if (boostList.length === 2) return `${boostList[0]}<br> and ${boostList[1]}.`;
       return `${boostList.slice(0, -1).join(",<br>")},<br> and ${boostList[boostList.length - 1]}.`;
     },
+    hasMaxText: () => PlayerProgress.realityUnlocked() && !Pelle.isDoomed,
   },
   methods: {
     update() {
@@ -150,6 +152,7 @@ export default {
       );
       this.canSeeGalaxyButton =
         Replicanti.galaxies.max >= 1 || PlayerProgress.eternityUnlocked();
+      this.maxReplicanti.copyFrom(player.records.thisReality.maxReplicanti);
     },
     vacuumText() {
       return wordShift.wordCycle(PelleRifts.vacuum.name);
@@ -172,9 +175,6 @@ export default {
       Cost: {{ format(unlockCost) }} IP
     </PrimaryButton>
     <template v-else>
-      <div v-if="isInEC8">
-        You have {{ quantifyInt("purchase", ec8Purchases) }} left.
-      </div>
       <div v-if="isDoomed">
         Your Replicanti cap has been removed due to the second {{ scrambledText }} milestone.
       </div>
@@ -191,7 +191,17 @@ export default {
         <br>
         <span v-html="boostText" />
       </p>
+      <div
+        v-if="hasMaxText"
+        class="c-replicanti-description"
+      >
+        Your maximum Replicanti reached this Reality is
+        <span class="max-accent">{{ format(maxReplicanti, 2) }}</span>.
+      </div>
       <br>
+      <div v-if="isInEC8">
+        You have {{ quantifyInt("purchase", ec8Purchases) }} left within Eternity Challenge 8.
+      </div>
       <div class="l-replicanti-upgrade-row">
         <ReplicantiUpgradeButton :setup="replicantiChanceSetup" />
         <ReplicantiUpgradeButton :setup="replicantiIntervalSetup" />
@@ -212,5 +222,7 @@ export default {
 </template>
 
 <style scoped>
-
+.max-accent {
+  color: var(--color-accent);
+}
 </style>

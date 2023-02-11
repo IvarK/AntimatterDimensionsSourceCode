@@ -23,8 +23,9 @@ GameDatabase.multiplierTabValues.TD = {
         .filter(td => td.isProducing)
         .map(td => td.multiplier)
         .reduce((x, y) => x.times(y), DC.D1)),
-    isActive: dim => !EternityChallenge(11).isRunning &&
-      (dim ? TimeDimension(dim).isProducing : (PlayerProgress.realityUnlocked() || TimeDimension(1).isProducing)),
+    isActive: dim => (dim
+      ? TimeDimension(dim).isProducing
+      : (PlayerProgress.realityUnlocked() || TimeDimension(1).isProducing)),
     dilationEffect: () => {
       const baseEff = player.dilation.active
         ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty)

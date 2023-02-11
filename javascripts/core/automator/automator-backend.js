@@ -856,9 +856,12 @@ export const AutomatorBackend = {
   },
 
   start(scriptID = this.state.topLevelScript, initialMode = AUTOMATOR_MODE.RUN, compile = true) {
+    // Automator execution behaves oddly across new games, so we explicitly stop it from running if not unlocked
+    if (!Player.automatorUnlocked) return;
     this.hasJustCompleted = false;
     this.state.topLevelScript = scriptID;
     const scriptObject = this.findScript(scriptID);
+    if (!scriptObject) return;
     if (compile) scriptObject.compile();
     if (scriptObject.commands) {
       this.reset(scriptObject.commands);

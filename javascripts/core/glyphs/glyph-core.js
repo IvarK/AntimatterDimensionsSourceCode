@@ -40,6 +40,9 @@ export const Glyphs = {
   get activeList() {
     return player.reality.glyphs.active;
   },
+  get activeWithoutCompanion() {
+    return this.activeList.filter(g => g.type !== "companion");
+  },
   get allGlyphs() {
     return this.inventoryList.concat(this.activeList);
   },
@@ -292,7 +295,7 @@ export const Glyphs = {
       this.addToInventory(glyph, freeIndex, true);
     }
     this.updateRealityGlyphEffects();
-    this.updateMaxGlyphCount();
+    this.updateMaxGlyphCount(true);
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     return !player.reality.glyphs.active.length;
@@ -305,7 +308,7 @@ export const Glyphs = {
     this.active[activeIndex] = null;
     this.addToInventory(glyph, requestedInventoryIndex, true);
     this.updateRealityGlyphEffects();
-    this.updateMaxGlyphCount();
+    this.updateMaxGlyphCount(true);
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
@@ -445,11 +448,14 @@ export const Glyphs = {
     }
     if (player.reality.autoCollapse) this.collapseEmptySlots();
   },
+  sortByLevel() {
+    this.sort((a, b) => b.level - a.level);
+  },
   sortByPower() {
-    this.sort((a, b) => -a.level * a.strength + b.level * b.strength);
+    this.sort((a, b) => b.level * b.strength - a.level * a.strength);
   },
   sortByScore() {
-    this.sort((a, b) => -AutoGlyphProcessor.filterValue(a) + AutoGlyphProcessor.filterValue(b));
+    this.sort((a, b) => AutoGlyphProcessor.filterValue(b) - AutoGlyphProcessor.filterValue(a));
   },
   sortByEffect() {
     function reverseBitstring(eff) {
@@ -457,7 +463,7 @@ export const Glyphs = {
     }
     // The bitwise reversal is so that the effects with the LOWER id are valued higher in the sorting.
     // This primarily meant for effarig glyph effect sorting, which makes it prioritize timespeed pow highest.
-    this.sort((a, b) => -reverseBitstring(a.effects) + reverseBitstring(b.effects));
+    this.sort((a, b) => reverseBitstring(b.effects) - reverseBitstring(a.effects));
   },
   // If there are enough glyphs that are better than the specified glyph, in every way, then
   // the glyph is objectively a useless piece of garbage.
@@ -539,6 +545,9 @@ export const Glyphs = {
     if (VUnlocks.autoAutoClean.canBeApplied && player.reality.autoAutoClean) this.autoClean();
     switch (player.reality.autoSort) {
       case AUTO_SORT_MODE.NONE:
+        break;
+      case AUTO_SORT_MODE.LEVEL:
+        this.sortByLevel();
         break;
       case AUTO_SORT_MODE.POWER:
         this.sortByPower();
@@ -637,7 +646,7 @@ export const Glyphs = {
   // Normal glyph count minus 3 for each cursed glyph, uses 4 instead of 3 in the calculation because cursed glyphs
   // still contribute to the length of the active list. Note that it only ever decreases if startingReality is true.
   updateMaxGlyphCount(startingReality = false) {
-    const activeGlyphList = this.activeList;
+    const activeGlyphList = this.activeWithoutCompanion;
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
     if (startingReality) player.requirementChecks.reality.maxGlyphs = currCount;
     player.requirementChecks.reality.maxGlyphs = Math.max(player.requirementChecks.reality.maxGlyphs, currCount);
@@ -664,7 +673,7 @@ export const Glyphs = {
     this.active[targetSlot] = glyph;
     glyph.idx = targetSlot;
     this.updateRealityGlyphEffects();
-    this.updateMaxGlyphCount();
+    this.updateMaxGlyphCount(true);
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();

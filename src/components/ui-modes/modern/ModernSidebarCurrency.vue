@@ -19,9 +19,9 @@ export default {
   methods: {
     update() {
       this.AM.copyFrom(Currency.antimatter);
-      this.IP.copyFrom(Currency.infinityPoints);
-      this.EP.copyFrom(Currency.eternityPoints);
-      this.RM.copyFrom(Currency.realityMachines);
+      this.IP.copyFrom(Currency.infinityPoints.value.floor());
+      this.EP.copyFrom(Currency.eternityPoints.value.floor());
+      this.RM.copyFrom(Currency.realityMachines.value.floor());
       this.IM = Currency.imaginaryMachines.value;
       this.RS.copyFrom(Currency.realityShards);
       this.machineStr = formatMachines(this.RM, this.IM);

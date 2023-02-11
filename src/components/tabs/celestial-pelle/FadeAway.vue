@@ -114,4 +114,13 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+.t-s12 .c-background-overlay {
+  background: url("../../../../public/images/s12-bg.jpg") no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: brightness(0.5);
+}
 </style>

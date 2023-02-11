@@ -80,15 +80,16 @@ export default {
       if (this.offlineImport === OFFLINE_PROGRESS_TYPE.IGNORED) {
         return `Save will be imported without offline progress.`;
       }
-      const ticks = GameStorage.offlineTicks;
+      const durationInMs = Date.now() - this.player.lastUpdate;
+      const ticks = GameStorage.maxOfflineTicks(durationInMs);
       return GameStorage.offlineEnabled
         ? `After importing, will simulate ${formatInt(ticks)} ticks of duration
-          ${TimeSpan.fromMilliseconds((Date.now() - this.player.lastUpdate) / ticks).toStringShort()} each.`
+          ${TimeSpan.fromMilliseconds(durationInMs / ticks).toStringShort()} each.`
         : "This setting will not apply any offline progress after importing.";
     },
     willLoseCosmetics() {
       const currSets = player.reality.glyphs.cosmetics.unlockedFromNG;
-      const importedSets = this.player.reality?.glyphs.cosmetics.unlockedFromNG ?? [];
+      const importedSets = this.player.reality?.glyphs.cosmetics?.unlockedFromNG ?? [];
       return currSets.filter(set => !importedSets.includes(set)).length > 0;
     },
     willLoseSpeedrun() {

@@ -47,6 +47,13 @@ class PerkState extends SetPurchasableMechanicState {
 
   onPurchased() {
     if (this.config.bumpCurrency !== undefined) this.config.bumpCurrency();
+    if (this.label === "EU1" && Currency.eternities.gt(0)) applyEU1();
+    if (this.label === "ACHNR") {
+      if (Achievements.preReality.some(a => !a.isUnlocked)) player.reality.gainedAutoAchievements = true;
+      for (const achievement of Achievements.preReality) {
+        achievement.unlock(true);
+      }
+    }
     GameCache.achievementPeriod.invalidate();
     GameCache.buyablePerks.invalidate();
     EventHub.dispatch(GAME_EVENT.PERK_BOUGHT);

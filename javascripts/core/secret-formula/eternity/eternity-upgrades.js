@@ -32,7 +32,9 @@ GameDatabase.eternity.upgrades = {
     id: 3,
     cost: 5e4,
     description: "Infinity Dimensions multiplier based on sum of Infinity Challenge times",
-    effect: () => DC.D2.pow(30 / Time.infinityChallengeSum.totalSeconds),
+    // The cap limits this at a lower value, but we also need an explicit cap here because very old versions have
+    // allowed EC12 to make all the challenge records sum to zero (causing a division by zero here)
+    effect: () => DC.D2.pow(30 / Math.clampMin(Time.infinityChallengeSum.totalSeconds, 0.1)),
     cap: DC.D2P30D0_61,
     formatEffect: value => formatX(value, 2, 1)
   },
@@ -57,7 +59,7 @@ GameDatabase.eternity.upgrades = {
       ? "Time Dimensions are multiplied by days played in this Armageddon"
       : "Time Dimensions are multiplied by days played"
     ),
-    effect: () => (Pelle.isDoomed ? 1 + Time.thisReality.totalDays : Time.totalTimePlayed.totalDays),
+    effect: () => (Pelle.isDoomed ? 1 + Time.thisReality.totalDays : Math.max(Time.totalTimePlayed.totalDays, 1)),
     formatEffect: value => formatX(value, 2, 1)
   }
 };

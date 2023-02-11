@@ -140,7 +140,7 @@ function pelleRiftFill(name, index, textAngle, fillType) {
       visibleCheck = () => riftFillStage(name) === FILL_STATE.FILL;
       progressFn = () => Math.clamp(0.1 + PelleRifts[name.toLowerCase()].realPercentage / 0.9, 1e-6, 1);
       legendFn = () => false;
-      percentFn = x => (x - 0.1) / 0.9;
+      percentFn = () => PelleRifts[name.toLowerCase()].realPercentage;
       incompleteClass = "c-celestial-nav__test-incomplete";
       nodeFill = "crimson";
       connectorFill = "crimson";
@@ -153,7 +153,7 @@ function pelleRiftFill(name, index, textAngle, fillType) {
       visibleCheck = () => riftFillStage(name) >= FILL_STATE.DRAIN;
       progressFn = () => Math.clamp(Math.sqrt(PelleRifts[name.toLowerCase()].reducedTo), 1e-6, 1);
       legendFn = () => riftFillStage(name) === FILL_STATE.DRAIN && PelleRifts[name.toLowerCase()].reducedTo < 1;
-      percentFn = x => x;
+      percentFn = () => PelleRifts[name.toLowerCase()].reducedTo;
       incompleteClass = "c-celestial-nav__drained-rift";
       nodeFill = "crimson";
       connectorFill = "#550919";
@@ -161,7 +161,7 @@ function pelleRiftFill(name, index, textAngle, fillType) {
     case FILL_STATE.OVERFILL:
       visibleCheck = () => riftFillStage(name) === FILL_STATE.OVERFILL;
       progressFn = () => Math.clamp(PelleRifts[name.toLowerCase()].percentage - 1, 1e-6, 1);
-      percentFn = x => x + 1;
+      percentFn = () => PelleRifts[name.toLowerCase()].percentage;
       legendFn = () => true;
       incompleteClass = undefined;
       nodeFill = "#ff7700";
@@ -182,8 +182,8 @@ function pelleRiftFill(name, index, textAngle, fillType) {
       },
       forceLegend: () => legendFn(),
       legend: {
-        text: complete => [
-          `${formatPercents(percentFn(complete), 1)} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`
+        text: () => [
+          `${formatPercents(percentFn(), 1)} ${wordShift.wordCycle(PelleRifts[name.toLowerCase()].name)}`
         ],
         angle: textAngle,
         diagonal: 30,
@@ -586,7 +586,7 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => {
-          if (complete >= 1) return "Broken the chain with Glyph level";
+          if (complete >= 1) return "Glyph level chain has been broken";
           const goal = 5000;
           return [
             "Break a chain",
@@ -631,7 +631,7 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => {
-          if (complete >= 1) return "Broken the chain with Glyph rarity";
+          if (complete >= 1) return "Glyph rarity chain has been broken";
           const goal = 100;
           return [
             "Break a chain",
@@ -1527,8 +1527,8 @@ GameDatabase.celestials.navigation = {
           if (upgrade.isAvailableForPurchase) return [
             dmdText,
             `Imaginary Machines
-            ${format(Math.min(upgrade.currency.value, upgrade.cost), upgrade.canBeBought ? 0 : 2)}
-            / ${format(upgrade.cost)}`
+            ${format(Math.min(upgrade.currency.value, upgrade.cost), upgrade.canBeBought ? 1 : 2)}
+            / ${format(upgrade.cost, 1)}`
           ];
 
           if (player.celestials.laitela.fastestCompletion > 30 && Laitela.difficultyTier < 0) return [
@@ -1814,7 +1814,7 @@ GameDatabase.celestials.navigation = {
       if (Pelle.isUnlocked) return 1;
       const imCost = Math.clampMax(emphasizeEnd(Math.log10(Currency.imaginaryMachines.value) / Math.log10(1.6e15)), 1);
       let laitelaProgress = Laitela.isRunning ? Math.min(Currency.eternityPoints.value.log10() / 4000, 0.99) : 0;
-      if (Laitela.difficultyTier !== 8 || Glyphs.activeList.length > 1) laitelaProgress = 0;
+      if (Laitela.difficultyTier !== 8 || Glyphs.activeWithoutCompanion.length > 1) laitelaProgress = 0;
       else if (ImaginaryUpgrade(25).isAvailableForPurchase) laitelaProgress = 1;
       return (imCost + laitelaProgress) / 2;
     },
@@ -1835,7 +1835,7 @@ GameDatabase.celestials.navigation = {
             ];
           }
           let laitelaString = `${format(Currency.eternityPoints.value)} / ${format("1e4000")} EP`;
-          if (!Laitela.isRunning || Laitela.difficultyTier !== 8 || Glyphs.activeList.length > 1) {
+          if (!Laitela.isRunning || Laitela.difficultyTier !== 8 || Glyphs.activeWithoutCompanion.length > 1) {
             laitelaString = "Lai'tela's Reality is still intact";
           } else if (ImaginaryUpgrade(25).isAvailableForPurchase) {
             laitelaString = "Lai'tela's Reality has been destroyed";

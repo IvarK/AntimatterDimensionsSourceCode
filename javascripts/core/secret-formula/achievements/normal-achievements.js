@@ -377,10 +377,11 @@ GameDatabase.achievements.normal = [
     name: "Bulked Up",
     get description() {
       return `Get all of your Antimatter Dimension Autobuyer bulk amounts to
-      ${formatInt(Autobuyer.antimatterDimension.bulkCap)} or higher.`;
+        ${formatInt(Autobuyer.antimatterDimension.bulkCap)}.`;
     },
     checkRequirement: () => Autobuyer.antimatterDimension.zeroIndexed.every(x => x.hasMaxedBulk),
-    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT],
+    checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_TEN_BOUGHT,
+      GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION],
     reward: "Dimension Autobuyer bulks are unlimited."
   },
   {
@@ -712,7 +713,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Currency.infinityPoints.exponent >= 1000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
-      return `Make the Infinity Point formula better. log(x/${formatInt(308)}) ➜ log(x/${formatFloat(307.8, 1)})`;
+      return `Make the Infinity Point formula better. log(x)/${formatInt(308)} ➜ log(x)/${formatFloat(307.8, 1)}`;
     },
     effect: 307.8
   },
@@ -764,8 +765,8 @@ GameDatabase.achievements.normal = [
       ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} times higher Infinity Points than the previous one.`;
     },
     checkRequirement: () => {
-      if (player.records.lastTenInfinities.some(i => i[0] === Number.MAX_VALUE)) return false;
-      const infinities = player.records.lastTenInfinities.map(run => run[1]);
+      if (player.records.recentInfinities.some(i => i[0] === Number.MAX_VALUE)) return false;
+      const infinities = player.records.recentInfinities.map(run => run[2]);
       for (let i = 0; i < infinities.length - 1; i++) {
         if (infinities[i].lt(infinities[i + 1].times(Decimal.NUMBER_MAX_VALUE))) return false;
       }
@@ -932,8 +933,8 @@ GameDatabase.achievements.normal = [
     id: 132,
     name: "Unique snowflakes",
     get description() {
-      return `Have ${formatInt(569)} Antimatter Galaxies without getting any
-      Replicanti Galaxies in your current Eternity.`;
+      return `Have ${formatInt(569)} Antimatter Galaxies without gaining any
+        Replicanti Galaxies in your current Eternity.`;
     },
     checkRequirement: () => player.galaxies >= 569 && player.requirementChecks.eternity.noRG,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
@@ -1040,8 +1041,8 @@ GameDatabase.achievements.normal = [
       ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} times higher Eternity Points than the previous one.`;
     },
     checkRequirement: () => {
-      if (player.records.lastTenEternities.some(i => i[0] === Number.MAX_VALUE)) return false;
-      const eternities = player.records.lastTenEternities.map(run => run[1]);
+      if (player.records.recentEternities.some(i => i[0] === Number.MAX_VALUE)) return false;
+      const eternities = player.records.recentEternities.map(run => run[2]);
       for (let i = 0; i < eternities.length - 1; i++) {
         if (eternities[i].lt(eternities[i + 1].times(Decimal.NUMBER_MAX_VALUE))) return false;
       }
@@ -1089,7 +1090,7 @@ GameDatabase.achievements.normal = [
       .every(type => Glyphs.activeList.some(g => g.type === type)),
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     reward: "Gained Glyph level is increased by number of distinct Glyph types equipped.",
-    effect: () => (new Set(Glyphs.activeList.map(g => g.type))).size,
+    effect: () => (new Set(Glyphs.activeWithoutCompanion.map(g => g.type))).size,
     formatEffect: value => `+${formatInt(value)}`
   },
   {
@@ -1141,7 +1142,7 @@ GameDatabase.achievements.normal = [
     description: "Reality without buying Time Theorems.",
     checkRequirement: () => player.requirementChecks.reality.noPurchasedTT,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
-    get reward() { return `Gain ${formatX(2.5, 0, 1)} Time Theorems, and a free coupon to McDonalds™️.`; },
+    get reward() { return `Gain ${formatX(2.5, 0, 1)} generated Time Theorems, and a free coupon to McDonalds™️.`; },
     effect: 2.5
   },
   {
@@ -1252,7 +1253,7 @@ GameDatabase.achievements.normal = [
       any Charged Infinity Upgrades, having any equipped Glyphs, or buying any Triad Studies.`;
     },
     checkRequirement: () => MachineHandler.gainedRealityMachines.gte(Decimal.NUMBER_MAX_VALUE) &&
-      player.celestials.ra.charged.size === 0 && Glyphs.activeList.length === 0 &&
+      player.celestials.ra.charged.size === 0 && Glyphs.activeWithoutCompanion.length === 0 &&
       player.requirementChecks.reality.noTriads,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },

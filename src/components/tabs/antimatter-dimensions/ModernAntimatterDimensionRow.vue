@@ -60,7 +60,7 @@ export default {
       if (!this.isUnlocked) return "Locked";
       if (this.isCapped) return "Shattered by Nameless";
       if (this.isContinuumActive) return "Continuum: ";
-      return `Buy ${this.howManyCanBuy}`;
+      return `Buy ${formatInt(this.howManyCanBuy)}`;
     },
     buttonValue() {
       if (this.isCapped) return "";
@@ -133,7 +133,7 @@ export default {
 <template>
   <div
     v-show="showRow"
-    class="c-dimension-row c-antimatter-dim-row l-dimension-single-row"
+    class="c-dimension-row l-dimension-row-antimatter-dim c-antimatter-dim-row l-dimension-single-row"
     :class="{ 'c-dim-row--not-reached': !isUnlocked }"
   >
     <GenericDimensionRowText

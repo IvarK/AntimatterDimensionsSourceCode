@@ -39,6 +39,9 @@ export default {
       if (!this.loggedIn) return "Not logged in!";
       if (!this.canRespec) return "No respec available! (Purchase STDs or wait 3 days since your last one)";
       return null;
+    },
+    hiddenName() {
+      return player.options.hideGoogleName;
     }
   },
   methods: {
@@ -118,7 +121,8 @@ export default {
       v-if="loggedIn"
       class="c-login-info"
     >
-      You are logged in as {{ username }}.
+      <span v-if="hiddenName">You are logged in. <i>(name hidden)</i></span>
+      <span v-else>You are logged in as {{ username }}.</span>
       <button
         class="o-shop-button-button"
         onclick="GameOptions.logout()"
@@ -152,6 +156,7 @@ export default {
         Buy More
       </button>
     </div>
+    Note: All numbers on this page are intentionally unaffected by your notation settings
     <div class="l-shop-buttons-container">
       <ShopButton
         v-for="purchase in purchases"

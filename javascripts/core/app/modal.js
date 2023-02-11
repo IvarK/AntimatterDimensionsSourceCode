@@ -72,6 +72,8 @@ import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEdito
 import UiChoiceModal from "@/components/modals/UiChoiceModal";
 import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
 
+import S12GamesModal from "@/components/modals/secret-themes/S12GamesModal";
+
 let nextModalID = 0;
 export class Modal {
   constructor(component, priority = 0, closeEvent) {
@@ -255,6 +257,8 @@ Modal.sacrifice = new Modal(SacrificeModal, 1, GAME_EVENT.DIMBOOST_AFTER);
 Modal.breakInfinity = new Modal(BreakInfinityModal, 1, GAME_EVENT.ETERNITY_RESET_AFTER);
 Modal.respecIAP = new Modal(RespecIAPModal);
 
+Modal.s12Games = new Modal(S12GamesModal);
+
 function getSaveInfo(save) {
   const resources = {
     realTimePlayed: 0,
@@ -287,13 +291,15 @@ function getSaveInfo(save) {
   resources.eternityPoints.copyFrom(new Decimal(save.eternityPoints));
   resources.realityMachines.copyFrom(new Decimal(save.reality?.realityMachines));
   resources.imaginaryMachines = save.reality?.iMCap ?? 0;
-  resources.dilatedTime.copyFrom(new Decimal(save.dilation.dilatedTime));
+  // Use max DT instead of current DT because spending it can cause it to drop and trigger the conflict modal
+  // unnecessarily. We only use current DT as a fallback (eg. loading a save from pre-reality versions)
+  resources.dilatedTime.copyFrom(new Decimal(save.records?.thisReality.maxDT ?? (save.dilation?.dilatedTime ?? 0)));
   resources.bestLevel = save.records?.bestReality.glyphLevel ?? 0;
   resources.pelleAM.copyFrom(new Decimal(save.celestials?.pelle.records.totalAntimatter));
   resources.remnants = save.celestials?.pelle.remnants ?? 0;
   resources.realityShards.copyFrom(new Decimal(save.celestials?.pelle.realityShards));
   resources.pelleLore = save.celestials?.pelle.quoteBits ?? 0;
-  resources.saveName = save.options.saveFileName ?? "";
+  resources.saveName = save.options?.saveFileName ?? "";
   resources.compositeProgress = ProgressChecker.getCompositeProgress(save);
 
   return resources;

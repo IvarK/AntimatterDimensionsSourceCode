@@ -136,7 +136,7 @@ export function manualRequestGalaxyReset(bulk) {
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return;
   if (GameEnd.creditsEverClosed) return;
   if (player.options.confirmations.antimatterGalaxy) {
-    Modal.antimatterGalaxy.show({ bulk });
+    Modal.antimatterGalaxy.show({ bulk: bulk && EternityMilestone.autobuyMaxGalaxies.isReached });
     return;
   }
   requestGalaxyReset(bulk);

@@ -59,7 +59,7 @@ GameDatabase.progressStages = [
     name: "Eternity",
     hasReached: save => new Decimal(save.eternities).gt(0),
     suggestedResource: "Eternity Points and Eternity count",
-    subProgressValue: save => Math.sqrt(new Decimal(save.eternityPoints).pLog10() / 18),
+    subProgressValue: save => new Decimal(save.eternities).clampMax(1e5).toNumber() / 1e5,
   },
   {
     id: PROGRESS_STAGE.ETERNITY_CHALLENGES,

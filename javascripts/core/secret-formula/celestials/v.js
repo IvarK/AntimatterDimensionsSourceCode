@@ -71,7 +71,7 @@ GameDatabase.celestials.v = {
       // This achievement has internally negated values since the check is always greater than
       values: [-5, -4, -3, -2, -1, 0],
       condition: () => V.isRunning && TimeStudy.reality.isBought,
-      currentValue: () => -Glyphs.activeList.length,
+      currentValue: () => -Glyphs.activeWithoutCompanion.length,
       formatRecord: x => (x >= -5 ? formatInt(-x) : "Not reached"),
       shardReduction: () => 0,
       maxShardReduction: () => 0,
@@ -230,7 +230,7 @@ GameDatabase.celestials.v = {
     },
     autoAutoClean: {
       id: 4,
-      reward: "Unlock the ability to Automatically Purge on Reality.",
+      reward: "Unlock the ability to Automatically Purge Glyphs on Reality.",
       description: () => `Have ${formatInt(16)} V-Achievements`,
       requirement: () => V.spaceTheorems >= 16
     },

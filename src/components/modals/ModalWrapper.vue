@@ -15,7 +15,7 @@ export default {
 </script>
 
 <template>
-  <div>
+  <div class="c-modal__inner">
     <div class="c-modal__header">
       <ModalCloseButton @click="closeModal" />
       <span

@@ -28,10 +28,10 @@ export default {
     :key="endState"
   >
     <PrimaryButton
-      class="c-swap-button o-primary-btn--modal-close c-modal__close-btn"
+      class="c-swap-button o-primary-btn--modal-close c-modal__close-btn tutorial--glow"
       @click="swap"
     >
-      &times;
+      <i class="fas fa-sync" />
     </PrimaryButton>
   </div>
 </template>

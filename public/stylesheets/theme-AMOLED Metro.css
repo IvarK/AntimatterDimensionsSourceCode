@@ -43,3 +43,19 @@ input.t-amoled-metro {
   color: white;
   border-color: white;
 }
+
+.t-amoled-metro .o-primary-btn--disabled {
+  background-color: #333333;
+}
+
+.t-amoled-metro .c-challenge-box--normal {
+  border-color: var(--color-text);
+}
+
+.t-amoled-metro .c-autobuyer-box-row {
+  border-color: #333333;
+}
+
+.t-amoled-metro .ttshop-background {
+  border-color: var(--color-text);
+}

@@ -43,3 +43,15 @@ input.t-amoled {
   color: white;
   border-color: white;
 }
+
+.t-amoled .o-primary-btn--disabled {
+  background-color: #333333;
+}
+
+.t-amoled .c-challenge-box--normal {
+  border-color: var(--color-text);
+}
+
+.t-amoled .ttshop-background {
+  border-color: var(--color-text);
+}

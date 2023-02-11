@@ -17,7 +17,7 @@ function addReplicantiGalaxies(newGalaxies) {
   if (newGalaxies > 0) {
     player.replicanti.galaxies += newGalaxies;
     player.requirementChecks.eternity.noRG = false;
-    if (!EternityMilestone.replicantiNoReset.isReached) {
+    if (!EternityMilestone.replicantiNoReset.isReached || Pelle.isDoomed) {
       player.dimensionBoosts = 0;
       softReset(0, true, true);
     }
@@ -29,7 +29,7 @@ export function replicantiGalaxy() {
   const galaxyGain = Replicanti.galaxies.gain;
   if (galaxyGain < 1) return;
   player.replicanti.timer = 0;
-  Replicanti.amount = Achievement(126).isUnlocked
+  Replicanti.amount = Achievement(126).isUnlocked && !Pelle.isDoomed
     ? Decimal.pow10(Replicanti.amount.log10() - LOG10_MAX_VALUE * galaxyGain)
     : DC.D1;
   addReplicantiGalaxies(galaxyGain);

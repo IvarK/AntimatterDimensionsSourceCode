@@ -17,7 +17,8 @@ GameDatabase.eternity.milestones = {
   keepInfinityUpgrades: {
     eternities: 4,
     reward: "You start Eternity with all Infinity Upgrades",
-    givenByPelle: () => PelleUpgrade.keepInfinityUpgrades.isBought
+    givenByPelle: () => PelleUpgrade.keepInfinityUpgrades.isBought,
+    pelleUseless: true
   },
   bigCrunchModes: {
     eternities: 5,
@@ -52,6 +53,7 @@ GameDatabase.eternity.milestones = {
     eternities: 8,
     reward: "You start Eternity with all Break Infinity Upgrades",
     givenByPelle: () => PelleUpgrade.keepBreakInfinityUpgrades.isBought,
+    pelleUseless: true
   },
   autobuyMaxGalaxies: {
     eternities: 9,
@@ -61,46 +63,55 @@ GameDatabase.eternity.milestones = {
     eternities: 10,
     reward: "You start with Replicanti unlocked",
     givenByPelle: () => PelleUpgrade.replicantiStayUnlocked.isBought,
+    pelleUseless: true
   },
   autobuyerID1: {
     eternities: 11,
     reward: "Unlock the 1st Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID2: {
     eternities: 12,
     reward: "Unlock the 2nd Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID3: {
     eternities: 13,
     reward: "Unlock the 3rd Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID4: {
     eternities: 14,
     reward: "Unlock the 4th Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID5: {
     eternities: 15,
     reward: "Unlock the 5th Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID6: {
     eternities: 16,
     reward: "Unlock the 6th Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID7: {
     eternities: 17,
     reward: "Unlock the 7th Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerID8: {
     eternities: 18,
     reward: "Unlock the 8th Infinity Dimension Autobuyer",
     givenByPelle: () => PelleUpgrade.IDAutobuyers.isBought,
+    pelleUseless: true
   },
   autoUnlockID: {
     eternities: 25,
@@ -113,22 +124,26 @@ GameDatabase.eternity.milestones = {
   replicantiNoReset: {
     eternities: 40,
     reward: `Replicanti Galaxies no longer reset Antimatter, Antimatter Dimensions,
-      Tickspeed, Dimensional Sacrifice, or Dimension Boosts`
+      Tickspeed, Dimensional Sacrifice, or Dimension Boosts`,
+    pelleUseless: true
   },
   autobuyerReplicantiChance: {
     eternities: 50,
     reward: "Unlock the Replicanti Chance Upgrade Autobuyer",
     givenByPelle: () => PelleUpgrade.replicantiAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerReplicantiInterval: {
     eternities: 60,
     reward: "Unlock the Replicanti Interval Upgrade Autobuyer",
     givenByPelle: () => PelleUpgrade.replicantiAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerReplicantiMaxGalaxies: {
     eternities: 80,
     reward: "Unlock the Max Replicanti Galaxy Upgrade Autobuyer",
     givenByPelle: () => PelleUpgrade.replicantiAutobuyers.isBought,
+    pelleUseless: true
   },
   autobuyerEternity: {
     eternities: 100,
@@ -152,6 +167,7 @@ GameDatabase.eternity.milestones = {
       ? `Must be outside of all Challenges and Dilation, and the Eternity Autobuyer must be set to Eternity at zero EP.
         This milestone's effect is capped at ${formatInt(33)}ms.`
       : ""),
+      pelleUseless: true
   },
   autoInfinities: {
     eternities: 1000,
@@ -170,5 +186,6 @@ GameDatabase.eternity.milestones = {
         the Big Crunch Autobuyer must be turned on and set to time mode with less than ${formatInt(60)} seconds,
         and the Eternity Autobuyer must be turned off.`
       : ""),
+      pelleUseless: true
   }
 };

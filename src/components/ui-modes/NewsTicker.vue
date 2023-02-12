@@ -47,25 +47,27 @@ export default {
       const line = this.$refs.line;
       if (line === undefined) return;
 
-      const isUnlocked = news => news.unlocked || news.unlocked === undefined;
+      // Prevent tickers from repeating if they aren't unlocked or were seen recently
+      const canShow = news => (news.unlocked ?? true) && !this.recentTickers.includes(news.id);
 
       if (nextNewsMessageId && GameDatabase.news.find(message => message.id === nextNewsMessageId)) {
         this.currentNews = GameDatabase.news.find(message => message.id === nextNewsMessageId);
         nextNewsMessageId = undefined;
       } else if (this.currentNews && this.currentNews.id === "a236") {
         this.currentNews = GameDatabase.news
-          .filter(message => message.isAdvertising && isUnlocked(message))
+          .filter(message => message.isAdvertising && canShow(message))
           .randomElement();
       } else {
         const isAI = Math.random() < player.options.news.AIChance;
         this.currentNews = GameDatabase.news
           .filter(message => message.id.includes("ai") === isAI)
-          .filter(message => !this.recentTickers.includes(message) && isUnlocked(message))
+          .filter(message => canShow(message))
           .randomElement();
-        // Prevent tickers from repeating if they were seen recently
-        this.recentTickers.push(this.currentNews.id);
-        while (this.recentTickers.length > player.options.news.repeatBuffer) this.recentTickers.shift();
       }
+
+      this.recentTickers.push(this.currentNews.id);
+      while (this.recentTickers.length > player.options.news.repeatBuffer) this.recentTickers.shift();
+
       if (this.currentNews.reset) {
         this.currentNews.reset();
       }
@@ -98,7 +100,6 @@ export default {
 
       NewsHandler.addSeenNews(this.currentNews.id);
       if (NewsHandler.uniqueTickersSeen >= 50) Achievement(22).unlock();
-      player.news.totalSeen++;
 
       this.scrollTimeout = setTimeout(this.prepareNextMessage.bind(this), scrollDuration * 1000);
     },

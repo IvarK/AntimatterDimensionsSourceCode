@@ -514,6 +514,16 @@ window.logFactorial = (function() {
   };
 }());
 
+window.exp1m = function(x) {
+  if (x.abs().gte(0.001)) {
+    return x.exp().minus(1);
+  }
+  // This sum contains all the terms that are relevant for |x| < 0.001. We could do some sort of loop
+  // (add terms as long as they matter) but that probably has a greater fixed overhead, and we don't
+  // call this enough for efficiency to be very worrying anyway.
+  return x.plus(x.pow(2).div(2)).plus(x.pow(3).div(6)).plus(x.pow(4).div(24)).plus(x.pow(5).div(120));
+};
+
 /** 32 bit XORSHIFT generator */
 window.xorshift32Update = function xorshift32Update(state) {
   /* eslint-disable no-param-reassign */

@@ -73,6 +73,8 @@ import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEdito
 import UiChoiceModal from "@/components/modals/UiChoiceModal";
 import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
 
+import S12GamesModal from "@/components/modals/secret-themes/S12GamesModal";
+
 let nextModalID = 0;
 export class Modal {
   constructor(component, priority = 0, closeEvent) {
@@ -256,6 +258,8 @@ Modal.sacrifice = new Modal(SacrificeModal, 1, GAME_EVENT.DIMBOOST_AFTER);
 Modal.breakInfinity = new Modal(BreakInfinityModal, 1, GAME_EVENT.ETERNITY_RESET_AFTER);
 Modal.respecIAP = new Modal(RespecIAPModal);
 
+Modal.s12Games = new Modal(S12GamesModal);
+
 function getSaveInfo(save) {
   const resources = {
     realTimePlayed: 0,
@@ -296,7 +300,7 @@ function getSaveInfo(save) {
   resources.remnants = save.celestials?.pelle.remnants ?? 0;
   resources.realityShards.copyFrom(new Decimal(save.celestials?.pelle.realityShards));
   resources.pelleLore = save.celestials?.pelle.quoteBits ?? 0;
-  resources.saveName = save.options.saveFileName ?? "";
+  resources.saveName = save.options?.saveFileName ?? "";
   resources.compositeProgress = ProgressChecker.getCompositeProgress(save);
 
   return resources;

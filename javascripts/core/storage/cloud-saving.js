@@ -71,6 +71,7 @@ export const Cloud = {
     }*/
   },
 
+  // NOTE: This function is largely untested due to not being used at any place within web reality code
   async loadMobile() {
     if (!this.user) return;
     const snapshot = await get(ref(this.db, `users/${this.user.id}/player`));
@@ -102,23 +103,16 @@ export const Cloud = {
   },
 
   async saveCheck(forceModal = false) {
-    const save = await this.load();
-    if (save === null) {
+    const saveId = GameStorage.currentSlot;
+    const cloudSave = await this.load();
+    if (cloudSave === null) {
       this.save();
     } else {
-      const root = GameSaveSerializer.deserialize(save);
-      const saveId = GameStorage.currentSlot;
-      const cloudSave = root.saves[saveId];
       const thisCloudHash = sha512_256(GameSaveSerializer.serialize(cloudSave));
       if (!this.lastCloudHash) this.lastCloudHash = thisCloudHash;
       const localSave = GameStorage.saves[saveId];
       const saveComparison = this.compareSaves(cloudSave, localSave, thisCloudHash);
-
-      // eslint-disable-next-line no-loop-func
-      const overwriteAndSendCloudSave = () => {
-        root.saves[saveId] = GameStorage.saves[saveId];
-        this.save(saveId);
-      };
+      const overwriteAndSendCloudSave = () => this.save();
 
       // If the comparison fails, we assume the cloud data is corrupted and show the relevant modal
       if (!saveComparison) {
@@ -141,20 +135,19 @@ export const Cloud = {
     }
   },
 
-  save(slot) {
+  save() {
     if (!this.user) return;
     if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
     if (player.options.syncSaveIntervals) GameStorage.save();
-    const root = {
-      current: GameStorage.currentSlot,
-      saves: GameStorage.saves,
-    };
+    const serializedSave = GameSaveSerializer.serialize(GameStorage.saves[GameStorage.currentSlot]);
 
-    this.lastCloudHash = sha512_256(GameSaveSerializer.serialize(root.saves[slot]));
+    this.lastCloudHash = sha512_256(serializedSave);
     GameStorage.lastCloudSave = Date.now();
     GameIntervals.checkCloudSave.restart();
-    set(ref(this.db, `users/${this.user.id}/web`), GameSaveSerializer.serialize(root));
-    GameUI.notify.info(`Game saved to cloud`);/* with user ${this.user.displayName}`);*/
+
+    const slot = GameStorage.currentSlot;
+    this.writeToCloudDB(slot, serializedSave);
+    GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud as user ${this.user.displayName}`)
   },
 
   async loadCheck() {
@@ -163,9 +156,8 @@ export const Cloud = {
       if (player.options.hideGoogleName) GameUI.notify.info(`No cloud save for current Google Account`);
       else GameUI.notify.info(`No cloud save for user ${this.user.displayName}`);
     } else {
-      const root = GameSaveSerializer.deserialize(save);
+      const cloudSave = save;
       const saveId = GameStorage.currentSlot;
-      const cloudSave = root.saves[saveId];
       const localSave = GameStorage.saves[saveId];
       const saveComparison = this.compareSaves(cloudSave, localSave);
 
@@ -196,10 +188,40 @@ export const Cloud = {
   },
 
   async load() {
-    const snapshot = await get(ref(this.db, `users/${this.user.id}/web`));
-    if (snapshot.exists) return snapshot.val();
+    let singleSlot = await this.readFromCloudDB(GameStorage.currentSlot);
+    if (singleSlot.exists()) return GameSaveSerializer.deserialize(singleSlot.val());
+
+    // If it doesn't exist, we assume that the cloud save hasn't been migrated yet and apply the migration before
+    // trying again. If it still doesn't exist, the cloud save was actually empty and there was nothing to migrate
+    await this.separateSaveSlots(combinedSlots.val());
+    singleSlot = await this.readFromCloudDB(GameStorage.currentSlot);
+    if (singleSlot.exists()) return GameSaveSerializer.deserialize(singleSlot.val());
 
     return null;
+  },
+
+  // The initial implementation of cloud saving combined all save files in the same DB entry, but we have since changed
+  // it so that they're all saved in separate slots. The database itself retains the single-entry data until the first
+  // player load attempt after this change, at which point this is called client-side to do a one-time format migration
+  // Before the migration, saves were stored in ".../web" and afterward they have been moved to ".../web/1" and similar
+  async separateSaveSlots(oldData) {
+    const allData = GameSaveSerializer.deserialize(oldData);
+    if (!allData) return;
+
+    for (const slot of Object.keys(allData.saves)) {
+      const newData = GameSaveSerializer.serialize(allData.saves[slot]);
+      await this.writeToCloudDB(Number(slot), newData);
+    }
+  },
+
+  readFromCloudDB(slot) {
+    const slotStr = slot === null ? "" : `/${slot}`;
+    return get(ref(this.db, `users/${this.user.id}/web${slotStr}`));
+  },
+
+  writeToCloudDB(slot, data) {
+    const slotStr = slot === null ? "" : `/${slot}`;
+    return set(ref(this.db, `users/${this.user.id}/web${slotStr}`), data);
   },
 
   logout() {

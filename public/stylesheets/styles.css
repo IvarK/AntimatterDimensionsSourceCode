@@ -158,6 +158,46 @@ html {
   --color-laitela--accent: white;
 }
 
+:root .t-amoled {
+  --color-text: #e0e0e0;
+  --color-text-inverted: black;
+  --color-base: #000000;
+  --color-disabled: #2d2421;
+  --color-accent: #2fa6f7;
+  --color-notification: yellow;
+  --color-overlay: rgba(60, 60, 100, 50%);
+
+  --color-reality-dark: #0ba00e;
+  --color-prestige--accent: black;
+
+  --color-teresa--accent: black;
+
+  --color-laitela--base: black;
+  --color-laitela--accent: white;
+}
+
+:root .t-amoled-metro {
+  --color-text: #e0e0e0;
+  --color-text-inverted: black;
+  --color-base: #000000;
+  --color-disabled: #2d2421;
+  --color-accent: #2fa6f7;
+  --color-notification: yellow;
+  --color-overlay: rgba(60, 60, 100, 50%);
+
+  --color-infinity: #ff9800;
+  --color-eternity: #673ab7;
+  --color-reality: #4caf50;
+  --color-reality-dark: #0ba00e;
+  --color-celestials: #00bcd4;
+  --color-prestige--accent: black;
+
+  --color-teresa--accent: black;
+
+  --color-laitela--base: black;
+  --color-laitela--accent: white;
+}
+
 :root .t-s1 {
   --color-text: #000000;
   --color-text-inverted: #dbd242;
@@ -280,7 +320,7 @@ body {
 
 @font-face {
   font-family: Typewriter;
-  src: url("MonospaceTypewriter.ttf");
+  src: url("BlobEmoji-Bold.ttf"), url("MonospaceTypewriter.ttf");
 }
 
 @font-face {
@@ -302,11 +342,6 @@ body {
 @font-face {
   font-family: "Font Awesome";
   src: url("fa-solid-900.ttf");
-}
-
-@font-face {
-  font-family: Typewriter;
-  src: url("BlobEmoji-Bold.ttf"), url("MonospaceTypewriter.ttf");
 }
 
 /* Background for s6 and s10 is not displayed by default */
@@ -2270,6 +2305,7 @@ br {
 }
 
 .t-dark .c-game-header__antimatter,
+.t-amoled .c-game-header__antimatter,
 .t-s6 .c-game-header__antimatter,
 .t-s10 .c-game-header__antimatter {
   animation: a-game-header__antimatter--glow 25s infinite;
@@ -2293,7 +2329,8 @@ br {
   100% { color: #fbc21b; }
 }
 
-.t-dark-metro .c-game-header__antimatter {
+.t-dark-metro .c-game-header__antimatter,
+.t-amoled-metro .c-game-header__antimatter {
   color: #e0e0e0;
 }
 
@@ -2596,6 +2633,8 @@ br {
 }
 
 .t-dark .c-infinity-dim-description__accent,
+.t-amoled .c-infinity-dim-description__accent,
+.t-amoled-metro .c-infinity-dim-description__accent,
 .t-s6 .c-infinity-dim-description__accent,
 .t-s10 .c-infinity-dim-description__accent,
 .t-s11 .c-infinity-dim-description__accent {
@@ -2639,6 +2678,8 @@ br {
 }
 
 .t-dark .c-time-dim-description__accent,
+.t-amoled .c-time-dim-description__accent,
+.t-amoled-metro .c-time-dim-description__accent,
 .t-s6 .c-time-dim-description__accent,
 .t-s10 .c-time-dim-description__accent,
 .t-s11 .c-time-dim-description__accent {
@@ -2754,8 +2795,10 @@ br {
   overflow: hidden;
   background-color: var(--color-base);
   border: 0.1rem var(--color-good);
-  border-style: none solid solid;
+  border-style: solid;
   border-radius: var(--var-border-radius, 0.4rem);
+  /* May be removed if it makes things to blurry */
+  transform: translateY(-0.1rem);
 }
 
 /* We need scrollbar-color in this rule as well as identical color specifications in the following two; some
@@ -4259,6 +4302,12 @@ br {
   background-color: var(--color-bad);
 }
 
+.t-amoled .o-autobuyer-btn--unavailable,
+.t-amoled-metro .o-autobuyer-btn--unavailable {
+  color: #ddd3cc;
+  border-color: var(--color-bad);
+}
+
 .t-dark .o-autobuyer-btn,
 .t-s6 .o-autobuyer-btn,
 .t-s10 .o-autobuyer-btn {
@@ -4370,6 +4419,17 @@ br {
   color: black;
   background-color: #455a64;
   border: 0.1rem solid black;
+}
+
+.t-amoled .c-autobuyer-box__mode-select,
+.t-amoled-metro .c-autobuyer-box__mode-select {
+  color: white;
+}
+
+.t-amoled .c-autobuyer-box__mode-select:hover,
+.t-amoled-metro .c-autobuyer-box__mode-select:hover {
+  color: black;
+  background-color: var(--color-good);
 }
 
 .t-s1 .c-autobuyer-box__mode-select {
@@ -5361,7 +5421,13 @@ properly on certain themes. */
   border: var(--var-border-width, 0.3rem) solid black;
   border-radius: var(--var-border-radius, 0.6rem);
   padding: 1rem;
-  transition-duration: 0.2s;
+  transition: all 0.2s, left 0s, top 0s, transform 0s;
+}
+
+.t-amoled .c-modal,
+.t-amoled-metro .c-modal {
+  border-color: var(--color-good-dark);
+  box-shadow: 0 0 1rem 0.3rem black;
 }
 
 .c-modal--short {
@@ -7496,6 +7562,10 @@ kbd {
   cursor: pointer;
 }
 
+.c-ra-pet-remembrance-button:hover {
+  box-shadow: 0 0 1rem inset var(--color-ra--base);
+}
+
 .s-base--metro .c-ra-pet-remembrance-button {
   border-color: black;
 }
@@ -8075,7 +8145,7 @@ kbd {
 }
 
 .o-laitela-run-button {
-  width: 22rem;
+  width: 24rem;
   height: 84rem;
   font-family: Typewriter;
   font-size: 1.1rem;
@@ -8276,7 +8346,7 @@ kbd {
 
 .c-laitela-singularity-container {
   display: flex;
-  width: 96rem;
+  width: 98rem;
   justify-content: space-around;
   align-items: center;
   color: var(--color-laitela--accent);
@@ -8877,39 +8947,40 @@ kbd {
 }
 
 .c-reality-upgrade-btn--possible {
-  color: black;
+  /* Text color gets inherited from other pseudo-classes; so we use !important here in order to ensure good contrast
+    specifically on reality and imaginary upgrades, the only upgrades which use this and the related --locked below */
+  color: black !important;
   background:
     repeating-linear-gradient(
       -45deg,
-      #979729,
-      #979729 3rem,
-      #777722 3rem,
-      #777722 6rem
+      #A2A229,
+      #A2A229 3rem,
+      #919122 3rem,
+      #919122 6rem
     );
   cursor: default;
 }
 
 .c-reality-upgrade-btn--possible:hover {
-  color: black;
-  background-color: #8b8529;
+  /* This is actually a solid color, but it flickers on hover if we don't make it a linear-gradient */
+  background: linear-gradient(0deg, #919122, #919122);
 }
 
 .c-reality-upgrade-btn--locked {
-  color: black;
-  background: #954040;
+  color: white !important;
+  background: #952020;
   background-image:
-    linear-gradient(45deg, #a55252 25%, transparent 25%),
-    linear-gradient(135deg, #a55252 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #a55252 75%),
-    linear-gradient(135deg, transparent 75%, #a55252 75%);
+    linear-gradient(45deg, #802222 25%, transparent 25%),
+    linear-gradient(135deg, #802222 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #802222 75%),
+    linear-gradient(135deg, transparent 75%, #802222 75%);
   background-position: 0 0, 2rem 0, 2rem -2rem, 0 2rem;
   background-size: 4rem 4rem;
   cursor: default;
 }
 
 .c-reality-upgrade-btn--locked:hover {
-  color: var(--color-reality-light);
-  background-color: #a53939;
+  background-color: #802222;
 }
 
 .c-reality-upgrade-btn--black-hole-unlock {
@@ -8920,11 +8991,6 @@ kbd {
 .t-dark .c-reality-upgrade-btn--unavailable {
   color: var(--color-reality-light);
   background-color: #37474f;
-}
-
-.t-dark .c-reality-upgrade-btn--locked {
-  color: var(--color-reality-light);
-  background-color: var(--color-bad);
 }
 
 .t-s6.c-reality-upgrade-btn:hover,
@@ -9257,6 +9323,11 @@ input.o-automator-block-input {
   padding: 0.5rem;
 }
 
+.t-s12 .l-h2p-body {
+  font-size: 1.3rem;
+  margin-left: 0;
+}
+
 .l-h2p-body::-webkit-scrollbar {
   width: 1rem;
 }
@@ -9316,6 +9387,10 @@ input.o-automator-block-input {
 
 .s-base--dark .o-h2p-tab-button {
   border-bottom: 0.1rem solid white;
+}
+
+.t-s12 .o-h2p-tab-button {
+  border-bottom: 0.1rem solid black;
 }
 
 .l-help-me {

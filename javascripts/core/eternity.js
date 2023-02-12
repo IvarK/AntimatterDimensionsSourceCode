@@ -77,7 +77,7 @@ export function eternity(force, auto, specialConditions = {}) {
   if (!force) {
     if (!Player.canEternity) return false;
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
-    if (!player.dilation.active) giveEternityRewards(auto);
+    giveEternityRewards(auto);
     player.requirementChecks.reality.noEternities = false;
   }
 

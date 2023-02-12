@@ -78,7 +78,7 @@ export function buyDilationUpgrade(id, bulk = 1) {
     Currency.dilatedTime.subtract(cost);
     player.dilation.rebuyables[id] += buying;
     if (id === 2) {
-      if (!Perk.bypassTGReset.isBought) Currency.dilatedTime.reset();
+      if (!Perk.bypassTGReset.isBought || Pelle.isDoomed) Currency.dilatedTime.reset();
       player.dilation.nextThreshold = DC.E3;
       player.dilation.baseTachyonGalaxies = 0;
       player.dilation.totalTachyonGalaxies = 0;
@@ -176,8 +176,8 @@ export function getTP(antimatter, requireEternity) {
   return getBaseTP(antimatter, requireEternity).times(tachyonGainMultiplier());
 }
 
-// Returns the amount of TP gained, subtracting out current TP; used only for displaying gained TP
-// and for "exit dilation" button (saying whether you need more antimatter)
+// Returns the amount of TP gained, subtracting out current TP; used for displaying gained TP, text on the
+// "exit dilation" button (saying whether you need more antimatter), and in last 10 eternities
 export function getTachyonGain(requireEternity) {
   return getTP(Currency.antimatter.value, requireEternity).minus(Currency.tachyonParticles.value).clampMin(0);
 }

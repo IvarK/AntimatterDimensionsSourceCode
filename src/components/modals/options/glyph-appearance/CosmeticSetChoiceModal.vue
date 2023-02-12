@@ -130,8 +130,13 @@ export default {
 .c-center {
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 38rem;
+  align-items: center;
+}
+
+.t-s12 .c-center {
+  width: 50rem;
+  text-align: center;
 }
 
 .c-dropdown-btn {
@@ -141,8 +146,8 @@ export default {
 }
 
 .c-dropdown-header {
-  padding: 0.5rem;
   height: 5rem;
+  padding: 0.5rem;
   user-select: none;
 }
 

@@ -188,7 +188,7 @@ export default {
       <span v-else>Not logged in</span>
     </h2>
     <div v-if="loggedIn">
-      <span v-if="cloudEnabled">Cloud Saving will occur automatically every 5 minutes.</span>
+      <span v-if="cloudEnabled">Cloud Saving will occur automatically every 10 minutes.</span>
       <span v-else>Cloud Saving has been disabled on this save.</span>
     </div>
     <div class="l-options-grid">

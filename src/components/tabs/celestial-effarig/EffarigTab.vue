@@ -190,3 +190,9 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-effarig-relic-description {
+  width: 46rem;
+}
+</style>

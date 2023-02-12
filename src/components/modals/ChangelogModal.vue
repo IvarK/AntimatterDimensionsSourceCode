@@ -127,6 +127,11 @@ export default {
   padding: 0.5rem;
 }
 
+.t-s12 .l-changelog-body {
+  font-size: 1.3rem;
+  margin-left: 0;
+}
+
 .l-changelog-body::-webkit-scrollbar {
   width: 1rem;
 }
@@ -186,6 +191,10 @@ export default {
 
 .s-base--dark .o-changelog-tab-button {
   border-bottom: 0.1rem solid white;
+}
+
+.t-s12 .o-changelog-tab-button {
+  border-bottom: 0.1rem solid black;
 }
 </style>
 

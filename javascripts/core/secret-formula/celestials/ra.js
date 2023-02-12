@@ -75,7 +75,8 @@ GameDatabase.celestials.ra = {
       reward: "Unlock Altered Glyphs, which grant new effects to Glyphs based on Glyph Sacrifice",
       pet: "teresa",
       level: 10,
-      displayIcon: `<span class="fas fa-bolt"></span>`
+      displayIcon: `<span class="fas fa-bolt"></span>`,
+      disabledByPelle: true
     },
     effarigUnlock: {
       id: 4,

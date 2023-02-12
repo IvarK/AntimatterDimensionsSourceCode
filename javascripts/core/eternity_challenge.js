@@ -188,10 +188,11 @@ export class EternityChallengeState extends GameMechanicState {
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
     // this causes TP to still be gained.
+    const enteringGamespeed = getGameSpeedupFactor();
     if (Player.canEternity) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (player.requirementChecks.reality.slowestBH < 1) {
+      if (enteringGamespeed < 0.001) {
         SecretAchievement(42).unlock();
       }
       player.requirementChecks.reality.slowestBH = 1;

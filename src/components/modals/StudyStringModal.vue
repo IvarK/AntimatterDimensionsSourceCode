@@ -262,13 +262,13 @@ export default {
         />
       </template>
       <StudyStringPreview
-        v-if="!deleting"
+        v-if="!deleting && inputIsValidTree"
         :show-preview="inputIsValidTree"
         :new-studies="!isImporting || (canEternity && respecAndLoad) ? importedTree.newStudiesArray
           : combinedTree.newStudiesArray"
         :disregard-current-studies="!isImporting || (canEternity && respecAndLoad)"
       />
-      <div v-else-if="hasInput">
+      <div v-else-if="!deleting && hasInput">
         Not a valid tree
       </div>
     </div>
@@ -276,7 +276,7 @@ export default {
       <br>
       <PrimaryButton
         v-if="!deleting"
-        ach-tooltip="This will format the study preset text, for example, changing 'a,b,c|d' to 'a, b, c | d'."
+        v-tooltip="'This will format the study preset text, for example, changing \'a,b,c|d\' to \'a, b, c | d\'.'"
         @click="convertInputShorthands"
       >
         Format Preset Text

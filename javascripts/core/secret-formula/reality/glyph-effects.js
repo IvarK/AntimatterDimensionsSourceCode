@@ -248,7 +248,7 @@ GameDatabase.reality.glyphEffects = {
     formatSecondaryEffect: x => format(x, 2, 3),
     formatSingleSecondaryEffect: x => format(x, 5, 5),
     alteredColor: () => GlyphAlteration.getAdditionColor("replication"),
-    alterationType: ALTERATION_TYPE.ADDITION
+    alterationType: ALTERATION_TYPE.ADDITION,
   },
   replicationglyphlevel: {
     id: "replicationglyphlevel",
@@ -269,7 +269,8 @@ GameDatabase.reality.glyphEffects = {
       return sum > 0.1
         ? { value: 0.1 + 0.2 * (sum - 0.1), capped: true }
         : { value: sum, capped: effects.length > 2 };
-    }
+    },
+    enabledInDoomed: true,
   },
   infinitypow: {
     id: "infinitypow",

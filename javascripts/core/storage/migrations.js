@@ -165,6 +165,64 @@ GameStorage.migrations = {
       // order, AUTO_SORT_MODE had to be changed to insert LEVEL mode at the top and shift the others down. This
       // makes sure that older saves maintain the same settings after this shift
       if (player.reality.autoSort !== 0) player.reality.autoSort++;
+    },
+    15: player => {
+      // Added additional resource tracking in last 10 prestige records and adjusted data format to be more consistent
+      // by reordering to be [game time, real time, prestige currency, prestige count, challenge, ...(other resources)]
+      // Also fixes a migration bug where values could be undefined or null by assigning defaults when necessary
+      for (let i = 0; i < 10; i++) {
+        if (player.records.lastTenInfinities) {
+          const infRec = player.records.lastTenInfinities[i];
+          player.records.recentInfinities[i] = [
+            infRec[0] ?? Number.MAX_VALUE,
+            Number(infRec[3] ?? Number.MAX_VALUE),
+            new Decimal(infRec[1] ?? 1),
+            new Decimal(infRec[2] ?? 1),
+            ""
+          ];
+        }
+
+        if (player.records.lastTenEternities) {
+          const eterRec = player.records.lastTenEternities[i];
+          player.records.recentEternities[i] = [
+            eterRec[0] ?? Number.MAX_VALUE,
+            Number(eterRec[3] ?? Number.MAX_VALUE),
+            new Decimal(eterRec[1] ?? 1),
+            new Decimal(eterRec[2] ?? 1),
+            "",
+            new Decimal(0)
+          ];
+        }
+
+        if (player.records.lastTenRealities) {
+          const realRec = player.records.lastTenRealities[i];
+          player.records.recentRealities[i] = [
+            realRec[0] ?? Number.MAX_VALUE,
+            Number(realRec[3] ?? Number.MAX_VALUE),
+            new Decimal(realRec[1] ?? 1),
+            realRec[2] ?? 1,
+            "",
+            0,
+            0
+          ];
+        }
+      }
+
+      delete player.records.lastTenInfinities;
+      delete player.records.lastTenEternities;
+      delete player.records.lastTenRealities;
+      delete player.options.showLastTenResourceGain;
+
+      // Fixes a desync which occasionally causes unique > total seen due to total not being updated properly
+      if (player.news.seen) {
+        let unique = 0;
+        for (const bitmaskArray of Object.values(player.news.seen)) {
+          for (const bitmask of bitmaskArray) {
+            unique += countValuesFromBitmask(bitmask);
+          }
+        }
+        player.news.totalSeen = Math.max(player.news.totalSeen, unique);
+      }
     }
   },
 

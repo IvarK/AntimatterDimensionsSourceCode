@@ -15,6 +15,8 @@ export default {
       nextMachineEP: 0,
       shardsGained: 0,
       currentShardsRate: 0,
+      bestShardRate: 0,
+      bestShardRateVal: 0,
       ppGained: 0,
       celestialRunText: ["", "", "", "", ""]
     };
@@ -98,6 +100,8 @@ export default {
       this.ppGained = multiplier;
       this.shardsGained = Effarig.shardsGained * multiplier;
       this.currentShardsRate = (this.shardsGained / Time.thisRealityRealTime.totalMinutes);
+      this.bestShardRate = player.records.thisReality.bestRSmin;
+      this.bestShardRateVal = player.records.thisReality.bestRSminVal;
 
       const teresaReward = this.formatScalingMultiplierText(
         "Glyph Sacrifice",
@@ -163,6 +167,8 @@ export default {
           <div>{{ quantifyInt("Perk Point", ppGained) }}</div>
           <div v-if="shardsGained !== 0">
             {{ shardsGainedText }} ({{ format(currentShardsRate, 2) }}/min)
+            <br>
+            Peak: {{ format(bestShardRate, 2) }}/min at {{ format(bestShardRateVal, 2) }} RS
           </div>
           <div
             v-for="(celestialInfo, i) in celestialRunText"

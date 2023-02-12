@@ -14,8 +14,13 @@
   --color-eternity--bg: #b341e04d;
 }
 
+:root .t-s12 {
+  --sidebar-width: 0;
+}
+
 :root .t-normal,
-:root .t-s9 {
+:root .t-s9,
+:root .t-s12 {
   --color-text: #ffffff;
   --color-text-inverted: black;
   --color-base: #1d1b22;
@@ -41,7 +46,8 @@
 }
 
 body.t-normal,
-body.t-s9 {
+body.t-s9,
+body.t-s12 {
   color: white;
   background-color: #111014;
 }
@@ -136,6 +142,7 @@ body.t-s9 {
 }
 
 .t-dark .o-sidebar-currency--antimatter,
+.t-amoled .o-sidebar-currency--antimatter,
 .t-s6 .o-sidebar-currency--antimatter,
 .t-s10 .o-sidebar-currency--antimatter {
   animation: a-game-header__antimatter--glow 25s infinite;
@@ -145,7 +152,8 @@ body.t-s9 {
   animation: a-game-header__antimatter--glow-blob 25s infinite;
 }
 
-.t-dark-metro .o-sidebar-currency--antimatter {
+.t-dark-metro .o-sidebar-currency--antimatter,
+.t-amoled-metro .o-sidebar-currency--antimatter {
   color: #e0e0e0;
 }
 
@@ -549,7 +557,8 @@ body.t-s9 {
   background-color: var(--color-infinity);
 }
 
-.t-normal .c-game-header__tesseract-available {
+.t-normal .c-game-header__tesseract-available,
+.t-s12 .c-game-header__tesseract-available {
   background: #eeeeee;
   animation: a-tesseract-shift-dark 5s infinite;
 }
@@ -570,12 +579,14 @@ body.t-s9 {
   margin: 0.6rem 0.4rem;
 }
 
-.t-normal .o-achievement__tooltip {
+.t-normal .o-achievement__tooltip,
+.t-s12 .o-achievement__tooltip {
   background: var(--color-base);
   border: 0.1rem solid var(--color-accent);
 }
 
-.t-normal .o-achievement__tooltip::after {
+.t-normal .o-achievement__tooltip::after,
+.t-s12 .o-achievement__tooltip::after {
   border-top-color: var(--color-accent);
 }
 
@@ -683,6 +694,15 @@ body.t-s9 {
   color: black;
   background-color: #455a64;
   border: 0.1rem solid black;
+}
+
+.t-amoled .o-autobuyer-input,
+.t-amoled-metro .o-autobuyer-input,
+.t-amoled .c-autobuyer-box__mode-select,
+.t-amoled-metro .c-autobuyer-box__mode-select {
+  color: white;
+  background-color: black;
+  border: 0.1rem solid var(--color-accent);
 }
 
 .t-s1 .o-autobuyer-input,
@@ -891,11 +911,13 @@ body.t-s9 {
   color: var(--color-eternity);
 }
 
-.t-normal .c-game-header__antimatter {
+.t-normal .c-game-header__antimatter,
+.t-s12 .c-game-header__antimatter {
   color: var(--color-accent);
 }
 
-.t-normal .c-credits-header {
+.t-normal .c-credits-header,
+.t-s12 .c-credits-header {
   color: var(--color-accent);
 }
 
@@ -924,17 +946,20 @@ body.t-s9 {
   justify-content: flex-end;
 }
 
-.t-normal .c-sacrificed-glyphs--dragover {
+.t-normal .c-sacrificed-glyphs--dragover,
+.t-s12 .c-sacrificed-glyphs--dragover {
   border-color: rgb(255, 255, 255);
   box-shadow: 0 0 0.1rem 0.1rem  rgb(255, 255, 255);
 }
 
-.t-normal .c-glyph-choice-icon {
+.t-normal .c-glyph-choice-icon,
+.t-s12 .c-glyph-choice-icon {
   background-color: rgba(0, 0, 0, 30%);
   border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 40%);
 }
 
-.t-normal .c-glyph-choice-effect-list {
+.t-normal .c-glyph-choice-effect-list,
+.t-s12 .c-glyph-choice-effect-list {
   background-color: rgba(0, 0, 0, 30%);
   border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 40%);
 }

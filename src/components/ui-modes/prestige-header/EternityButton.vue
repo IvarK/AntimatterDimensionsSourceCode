@@ -8,6 +8,7 @@ export default {
       gainedEP: new Decimal(0),
       currentEP: new Decimal(0),
       currentEPRate: new Decimal(0),
+      currentEPRateVal: new Decimal(0),
       peakEPRate: new Decimal(0),
       currentTachyons: new Decimal(0),
       gainedTachyons: new Decimal(0),
@@ -33,8 +34,8 @@ export default {
         "o-pelle-disabled-pointer": this.creditsClosed,
       };
     },
-    // Show EP/min below this threshold, color the EP number above it
-    rateThreshold: () => 1e20,
+    // Show EP/min below this threshold, color the EP number above it (1e40 is roughly when TS181 is attainable)
+    rateThreshold: () => 1e40,
     showEPRate() {
       return this.peakEPRate.lte(this.rateThreshold);
     },
@@ -156,9 +157,8 @@ export default {
         ? EP_BUTTON_DISPLAY_TYPE.NORMAL_EXPLORE_NEW_CONTENT
         : EP_BUTTON_DISPLAY_TYPE.NORMAL;
       if (this.showEPRate) {
-        this.currentEPRate.copyFrom(gainedEP.dividedBy(
-          TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes)
-        );
+        this.currentEPRate.copyFrom(player.records.thisEternity.bestEPmin);
+        this.currentEPRateVal.copyFrom(player.records.thisEternity.bestEPminVal);
       }
       this.peakEPRate.copyFrom(player.records.thisEternity.bestEPmin);
       this.creditsClosed = GameEnd.creditsEverClosed;
@@ -212,12 +212,16 @@ const EP_BUTTON_DISPLAY_TYPE = {
     <!-- Normal -->
     <template v-else-if="type === 1">
       Eternity for
-      <span :style="amountStyle">{{ format(gainedEP, 2) }}</span> {{ pluralize("Eternity Point", gainedEP) }}.
+      <span :style="amountStyle">{{ format(gainedEP, 2) }}</span>
+      <span v-if="showEPRate"> EP</span>
+      <span v-else> Eternity {{ pluralize("Point", gainedEP) }}</span>
       <br>
       <template v-if="showEPRate">
-        {{ format(currentEPRate, 2, 2) }} EP/min
+        Current: {{ format(currentEPRate, 2, 2) }} EP/min
         <br>
-        Peaked at {{ format(peakEPRate, 2, 2) }} EP/min
+        Peak: {{ format(peakEPRate, 2, 2) }} EP/min
+        <br>
+        at {{ format(currentEPRateVal, 2, 2) }} EP
       </template>
     </template>
 

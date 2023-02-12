@@ -765,8 +765,8 @@ GameDatabase.achievements.normal = [
       ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} times higher Infinity Points than the previous one.`;
     },
     checkRequirement: () => {
-      if (player.records.lastTenInfinities.some(i => i[0] === Number.MAX_VALUE)) return false;
-      const infinities = player.records.lastTenInfinities.map(run => run[1]);
+      if (player.records.recentInfinities.some(i => i[0] === Number.MAX_VALUE)) return false;
+      const infinities = player.records.recentInfinities.map(run => run[2]);
       for (let i = 0; i < infinities.length - 1; i++) {
         if (infinities[i].lt(infinities[i + 1].times(Decimal.NUMBER_MAX_VALUE))) return false;
       }
@@ -933,8 +933,8 @@ GameDatabase.achievements.normal = [
     id: 132,
     name: "Unique snowflakes",
     get description() {
-      return `Have ${formatInt(569)} Antimatter Galaxies without getting any
-      Replicanti Galaxies in your current Eternity.`;
+      return `Have ${formatInt(569)} Antimatter Galaxies without gaining any
+        Replicanti Galaxies in your current Eternity.`;
     },
     checkRequirement: () => player.galaxies >= 569 && player.requirementChecks.eternity.noRG,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
@@ -1041,8 +1041,8 @@ GameDatabase.achievements.normal = [
       ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} times higher Eternity Points than the previous one.`;
     },
     checkRequirement: () => {
-      if (player.records.lastTenEternities.some(i => i[0] === Number.MAX_VALUE)) return false;
-      const eternities = player.records.lastTenEternities.map(run => run[1]);
+      if (player.records.recentEternities.some(i => i[0] === Number.MAX_VALUE)) return false;
+      const eternities = player.records.recentEternities.map(run => run[2]);
       for (let i = 0; i < eternities.length - 1; i++) {
         if (eternities[i].lt(eternities[i + 1].times(Decimal.NUMBER_MAX_VALUE))) return false;
       }

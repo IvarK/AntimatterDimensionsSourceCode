@@ -48,7 +48,6 @@ function playFabLoginCallback(data, error) {
     return;
   }
   if (data) {
-    //NOTE: SAVE 'playFabId' to a global variable somewhere, I just declare mine at the start of the playfab stuff. Use this variable to tell if your player is logged in to playfab or not.
     playFabId = data.data.PlayFabId;
     PlayFab.PlayFabID = playFabId
     GameUI.notify.info("Logged in to PlayFab Cloud");

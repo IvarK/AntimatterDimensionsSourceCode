@@ -13,7 +13,6 @@ const SteamFunctions = {
     zoomLevel: 1,
     SteamInitialize() {
         this.forceRefresh();
-        //this.BackfillAchievements();
         this.EventHandlers();
         if (window.navigator.platform === "MacIntel") {
           SteamFunctions.macUser = true;
@@ -25,8 +24,7 @@ const SteamFunctions = {
         }
         this.GetZoom()
     },
-    // Canvas workaround to enable overlay
-    forceRefresh() { 
+    forceRefresh() { // Canvas workaround to enable overlay
         const canvas = document.getElementById("forceRefreshCanvas");
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -110,29 +108,24 @@ const SteamFunctions = {
                         );
                     }
                 }
-                //console.log(achAchieved)
-                //console.log(achErrored)
             }
         }
     },
     async autoLogin(){
         if(!Cloud.loggedIn){
-            //console.log(Cloud.loggedIn)
             const AutoEmail = `${Steam.getSteamId().accountId}@ad.com`
             const AutoPass = Steam.getSteamId().staticAccountId
-            //console.log(AutoEmail,AutoPass)
             try{
-            await Cloud.manualCloudCreate(AutoEmail,AutoPass);
+                await Cloud.manualCloudCreate(AutoEmail,AutoPass);
             }catch(e){
-            //console.log(e);
-            try{
-                await Cloud.manualCloudLogin(AutoEmail,AutoPass)
-            }catch(LoginError){
-                this.error = true;
-                this.errorMessage = "Unable to login, please recheck email/password";
-                console.log(`Login Error, Retrying (${LoginError})`)
-                return;
-            }
+                try{
+                    await Cloud.manualCloudLogin(AutoEmail,AutoPass)
+                }catch(LoginError){
+                    this.error = true;
+                    this.errorMessage = "Unable to login, please recheck email/password";
+                    console.log(`Login Error, Retrying (${LoginError})`)
+                    return;
+                }
             }
             Cloud.user.displayName = Steam.getSteamId().screenName
         }
@@ -176,21 +169,17 @@ const SteamFunctions = {
         });
     },
     ConfirmSteamPurchase(OrderIdentifier) {
-        //console.log(OrderIdentifier);
         PlayFab.ClientApi.ConfirmPurchase({ OrderId: OrderIdentifier }, (result, error) => {
             if (result !== null && result.data.Items != null) {
-                //console.log(result);
                 const PurchaseName = result.data.Items[0].ItemId;
                 const PurchaseInstance = result.data.Items[0].ItemInstanceId;
                 PlayFab.ClientApi.ConsumeItem({ ItemInstanceId: PurchaseInstance, ConsumeCount: 1 }, 
                     (consumeResult, consumeError) => {
                         if (consumeResult !== null) {
-                            //console.log(consumeResult);
                             const stdsBought = Number(PurchaseName.replace("STD", ""));
                             const currencyAddRequest = {Amount: stdsBought,VirtualCurrency: "ST"}
                             PlayFab.ClientApi.AddUserVirtualCurrency(currencyAddRequest, (result, error) => {
                                 if (result !== null) {
-                                    //console.log(result);
                                     SteamFunctions.SyncPlayFabSTD()
                                 } else if (error !== null) {
                                     console.log(error);
@@ -218,7 +207,6 @@ const SteamFunctions = {
         if(PlayFab.ClientApi.IsClientLoggedIn()){
             PlayFab.ClientApi.GetUserInventory({PlayFabId: PlayFab.PlayFabId}, (result, error) => {
                 if (result !== null) {
-                    //console.log(result);
                     const CurrentSTD = result.data.VirtualCurrency.ST
                     const Inventory = result.data.Inventory
                     ShopPurchaseData.totalSTD = CurrentSTD
@@ -236,16 +224,13 @@ const SteamFunctions = {
         }
     },
     PurchaseShopItem(itemCost,itemKey,itemConfig,chosenSet){
-        //console.log(itemCost,itemKey,itemConfig,chosenSet)
         const itemPurchaseRequest = {
             ItemId: itemKey,
             Price: typeof itemCost === "function" ? itemCost() : itemCost,
             VirtualCurrency: "ST"
         }
-        //console.log(itemPurchaseRequest)
         PlayFab.ClientApi.PurchaseItem(itemPurchaseRequest, (result, error) => {
             if (result !== null) {
-                //console.log(result);
                 if (itemConfig.instantPurchase) itemConfig.onPurchase();
                 if (itemKey === "singleCosmeticSet") this.StoreCosmetics(chosenSet)
                 SteamFunctions.SyncPlayFabSTD();
@@ -269,7 +254,6 @@ const SteamFunctions = {
                         Cosmetics: updatedCosmetics.join(",")
                     }
                 }
-                //console.log(UpdateRequest)
                 PlayFab.ClientApi.UpdateUserData(UpdateRequest, (result, error) => {
                     if (result !== null) {
                         console.log("Cosmetics Updated on Server");

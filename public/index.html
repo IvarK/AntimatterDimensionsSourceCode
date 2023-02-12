@@ -51,7 +51,7 @@
   <script>
     /*--Post GameLoad Steam Initialization--*/
       var nodeOn = window.require!==undefined ? true : false
-      steamOn=false //change to false!!
+      steamOn=false
       if(nodeOn){
         var JQ = require('jquery');
         var Steam = require('greenworks')
@@ -73,7 +73,7 @@
           }else{
           }
         }
-        console.log("SteamOn is "+steamOn) //REMOVE! JUST FOR TESTING
+        //console.log("SteamOn is "+steamOn) 
       }
   </script>
 </body>

@@ -3,7 +3,7 @@ import TWEEN from "tween.js";
 import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
 import { playFabLogin } from "./core/playfab";
-import { DEV } from "./core/devtools";
+import { DEV } from "@/env";
 import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
 

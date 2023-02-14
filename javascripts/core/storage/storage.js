@@ -1,6 +1,6 @@
 import * as ADNotations from "@antimatter-dimensions/notations";
 
-import { DEV } from "../devtools";
+import { DEV } from "@/env";
 
 import { deepmergeAll } from "@/utility/deepmerge";
 

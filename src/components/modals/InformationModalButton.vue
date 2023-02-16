@@ -1,4 +1,6 @@
 <script>
+import { openExternalLink } from "@/utility/open-external-link";
+
 export default {
   name: "InformationModalButton",
   props: {
@@ -25,9 +27,7 @@ export default {
     openAssociatedModal() {
       Modal[this.showModal].show();
     },
-    openExternalLink(){
-      shell.openExternal(this.link);
-    }
+    openExternalLink
   }
 };
 </script>

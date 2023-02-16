@@ -1,3 +1,4 @@
+import { ElectronRuntime } from "@/steam";
 import Mousetrap from "mousetrap";
 
 import { GameKeyboard } from "./keyboard";
@@ -280,28 +281,28 @@ export const shortcuts = [
     name: "Zoom In",
     keys: ["ctrl", "="],
     type: "bind",
-    function: () => {SteamFunctions.SetZoomLevel("Increase")},
+    function: () => ElectronRuntime.increaseZoom(),
     visible: () => false
   },
   {
     name: "Zoom In",
     keys: ["ctrl", "+"],
     type: "bind",
-    function: () => {SteamFunctions.SetZoomLevel("Increase")},
+    function: () => ElectronRuntime.increaseZoom(),
     visible: () => false
   },
   {
     name: "Zoom Out",
     keys: ["ctrl", "-"],
     type: "bind",
-    function: () => {SteamFunctions.SetZoomLevel("Decrease")},
+    function: () => ElectronRuntime.decreaseZoom(),
     visible: () => false
   },
   {
     name: "Reset Zoom",
     keys: ["ctrl", "0"],
     type: "bind",
-    function: () => {SteamFunctions.ResetZoom()},
+    function: () => ElectronRuntime.resetZoom(),
     visible: () => false
   },
 ];

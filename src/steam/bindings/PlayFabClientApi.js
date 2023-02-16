@@ -1303,7 +1303,7 @@ PlayFab.ClientApi = {
 
 };
 
-export var PlayFabClientSDK = PlayFab.ClientApi;
+var PlayFabClientSDK = PlayFab.ClientApi;
 
 PlayFab.RegisterWithPhaser = function() {
     if ( typeof Phaser === "undefined" || typeof Phaser.Plugin === "undefined" )

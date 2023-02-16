@@ -1,5 +1,6 @@
 <script>
 import "vue-loading-overlay/dist/vue-loading.css";
+import { STEAM } from "@/env";
 
 import Loading from "vue-loading-overlay";
 
@@ -33,7 +34,7 @@ export default {
       return ShopPurchase.all;
     },
     buySTDText() {
-      return steamOn ? "Buy More" : "Play Online on Steam to buy STDs";
+      return STEAM ? "Buy More" : "Play Online on Steam to buy STDs";
     }
   },
   watch: {
@@ -67,7 +68,7 @@ export default {
       }
     },
     showStore() {
-      if (!steamOn) return;
+      if (!STEAM) return;
       if (this.creditsClosed) return;
       SecretAchievement(33).unlock();
       if (this.loggedIn) Modal.shop.show();

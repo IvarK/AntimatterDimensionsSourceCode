@@ -1,5 +1,4 @@
 <script>
-import { purchase } from 'vue-gtag';
 export default {
   name: "ShopButton",
   props: {
@@ -45,10 +44,11 @@ export default {
     openSelectionModal() {
       Modal.cosmeticSetChoice.show();
     },
-    SteamPurchase(){
-      if(!this.isSingleCosmeticSet || this.hasChosen){
-        SteamFunctions.PurchaseShopItem(this.purchase.cost,this.purchase.config.key,this.purchase.config,this.chosenSet)
+    performPurchase() {
+      if (this.isSingleCosmeticSet && !this.hasChosen) {
+        return;
       }
+      this.purchase.purchase();
     },
     purchaseButtonObject() {
       return {
@@ -105,7 +105,7 @@ export default {
     </div>
     <button
       :class="purchaseButtonObject()"
-      @click="SteamPurchase()"
+      @click="performPurchase"
     >
       Cost: {{ cost }}
       <img

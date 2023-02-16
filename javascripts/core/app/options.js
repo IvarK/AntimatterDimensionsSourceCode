@@ -1,3 +1,4 @@
+import { ElectronRuntime } from "@/steam";
 import { sha512_256 } from "js-sha512";
 
 import { DEV } from "@/env";
@@ -18,7 +19,7 @@ export class GameOptions {
     // This is needed because .s-base--dark is on newUI/normal but not on oldUI/normal
     // So the classes on body need to be updated
     Themes.find(Theme.currentName()).set();
-    SteamFunctions.UIZoom()
+    ElectronRuntime.updateZoom();
     GameStorage.save();
   }
 

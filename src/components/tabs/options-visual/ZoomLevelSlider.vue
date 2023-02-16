@@ -1,4 +1,5 @@
 <script>
+import { ElectronRuntime } from "@/steam";
 import SliderComponent from "@/components/SliderComponent";
 
 export default {
@@ -8,7 +9,7 @@ export default {
   },
   data() {
     return {
-      updatedZoom: 0
+      zoomLevel: 0
     };
   },
   computed: {
@@ -24,14 +25,11 @@ export default {
   },
   methods: {
     update() {
-        this.updatedZoom = Math.round(SteamFunctions.zoomLevel*100);
+      this.zoomLevel = Math.round(ElectronRuntime.zoomFactor * 100);
     },
     adjustSliderValue(value) {
-        this.updatedZoom = value;
-        SteamFunctions.zoomLevel = Math.round(value/10)/10
-        localStorage.setItem("Zoom",SteamFunctions.zoomLevel)
-        SteamFunctions.UIZoom()
-        GameUI.notify.info(`Size changed to ${Math.round(SteamFunctions.zoomLevel*100)}%`);
+      this.zoomLevel = value;
+      ElectronRuntime.zoomLevel = Math.round(value / 10) / 10;
     }
   }
 };
@@ -39,11 +37,11 @@ export default {
 
 <template>
   <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
-    <b>Zoom Level: {{ formatInt(updatedZoom) }}%</b>
+    <b>Zoom Level: {{ formatInt(zoomLevel) }}%</b>
     <SliderComponent
       class="o-primary-btn--slider__slider"
       v-bind="sliderProps"
-      :value="updatedZoom"
+      :value="zoomLevel"
       @input="adjustSliderValue($event)"
     />
   </div>

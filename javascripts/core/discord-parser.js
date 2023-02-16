@@ -1,14 +1,15 @@
+import { discordRichPresence } from "./secret-formula/discord-rich-presence";
 
 export const RichPresenceInfo = {
   get gameStage() {
-    const stageDB = GameDatabase.discordRichPresence.stages;
+    const stageDB = discordRichPresence.stages;
     for (let stage = stageDB.length - 1; stage >= 0; stage--) {
       if (stageDB[stage].hasReached()) return stageDB[stage];
     }
     throw Error("No valid progress stage found");
   },
   get challengeState() {
-    const challDB = GameDatabase.discordRichPresence.challenges;
+    const challDB = discordRichPresence.challenges;
     for (let index = 0; index < challDB.length; index++) {
       const chall = challDB[index];
       if (chall.activityToken()) return chall;

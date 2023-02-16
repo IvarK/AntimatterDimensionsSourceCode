@@ -90,7 +90,7 @@ const Payments = {
   },
 
   // Sends a request to purchase a STD upgrade, returning true if successful (and syncs data), false if not
-  async buyUpgrade(upgradeKey) {
+  async buyUpgrade(upgradeKey, cosmeticName) {
     if (!Cloud.loggedIn) return false;
     let res;
     try {
@@ -103,7 +103,7 @@ const Payments = {
           user: Cloud.user.id,
           upgrade: upgradeKey,
           extraData: {
-            requestedSet: GlyphAppearanceHandler.chosenFromModal?.id,
+            requestedSet: cosmeticName,
             fullCompletions: player.records.fullGameCompletions
           }
         })

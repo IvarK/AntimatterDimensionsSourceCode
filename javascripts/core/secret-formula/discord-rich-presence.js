@@ -21,7 +21,7 @@ function formatMachines(realPart, imagPart) {
 
 // This is used for Discord Rich Presence, the information which shows up on a person's profile badge in Discord if
 // they are playing a game on Steam which has integration that pushes the info to Discord
-GameDatabase.discordRichPresence = {
+export const discordRichPresence = {
   /**
    * List of all challenges to display within DRP, checked from the first entry and iterating forward. It will only
    * show the first one it finds for space reasons, but this also has the desirable effect of hiding key challenges
@@ -261,3 +261,5 @@ GameDatabase.discordRichPresence = {
     },
   ]
 };
+
+GameDatabase.discordRichPresence = discordRichPresence;

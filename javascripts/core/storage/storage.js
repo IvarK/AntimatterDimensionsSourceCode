@@ -1,8 +1,10 @@
+import { SteamRuntime } from "@/steam";
 import * as ADNotations from "@antimatter-dimensions/notations";
 
 import { DEV } from "@/env";
 
 import { deepmergeAll } from "@/utility/deepmerge";
+import { Achievement } from "../achievements/normal-achievement";
 
 export const GameStorage = {
   currentSlot: 0,
@@ -30,7 +32,7 @@ export const GameStorage = {
     const root = GameSaveSerializer.deserialize(save);
 
     this.loadRoot(root);
-    SteamFunctions.BackfillAchievements()
+    Achievements.updateSteamStatus();
   },
 
   loadRoot(root) {
@@ -66,7 +68,7 @@ export const GameStorage = {
     Tabs.all.find(t => t.id === player.options.lastOpenTab).show(true);
     Cloud.resetTempState();
     GameUI.notify.info("Game loaded");
-    SteamFunctions.BackfillAchievements()
+    Achievements.updateSteamStatus();
   },
 
   import(saveData) {
@@ -93,7 +95,7 @@ export const GameStorage = {
     // is showing
     Tab.options.subtabs[0].show();
     GameUI.notify.info("Game imported");
-    SteamFunctions.BackfillAchievements()
+    Achievements.updateSteamStatus();
   },
 
   importAsFile() {

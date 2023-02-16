@@ -1,4 +1,7 @@
 <script>
+import { openExternalLink } from "@/utility/open-external-link";
+import { STEAM } from "@/env";
+
 export default {
   name: "NewsTicker",
   data() {
@@ -72,7 +75,14 @@ export default {
         this.currentNews.reset();
       }
 
-      line.innerHTML = this.currentNews.text.replace(/href='/g, `onClick='shell.openExternal("`).replace(/' target='_blank'/g, `")'`);
+      let text = this.currentNews.text;
+      if (STEAM) {
+        window.openNewsLink = openExternalLink;
+        text = text
+          .replace(/href='/gu, `onClick='window.openNewsLink("`)
+          .replace(/' target='_blank'/gu, `")'`);
+      }
+      line.innerHTML = text;
 
       line.style["transition-duration"] = "0ms";
       if (this.currentNews?.id === "a244" || this.currentNews?.id === "ai63") {

@@ -1,4 +1,5 @@
 <script>
+import { SteamRuntime } from "@/steam";
 import Payments from "../../../javascripts/core/payments";
 
 export default {
@@ -15,7 +16,7 @@ export default {
   },
   methods: {
     purchase() {
-      SteamFunctions.PurchaseIAP(this.amount, this.cost);
+      SteamRuntime.purchaseIap(this.amount);
     }
   },
 

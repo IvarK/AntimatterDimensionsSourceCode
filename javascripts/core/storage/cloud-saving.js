@@ -1,4 +1,5 @@
 /* eslint-disable import/extensions */
+import { SteamRuntime } from "@/steam";
 import pako from "pako/dist/pako.esm.mjs";
 /* eslint-enable import/extensions */
 
@@ -52,6 +53,29 @@ export const Cloud = {
     }
   },
 
+  async loginWithSteam(accountId, staticAccountId, screenName) {
+    if (this.loggedIn) {
+      Cloud.user.displayName = screenName;
+      return true;
+    }
+
+    const email = `${accountId}@ad.com`;
+    const pass = staticAccountId;
+    try {
+      await Cloud.manualCloudCreate(email, pass);
+    } catch {
+      try {
+        await Cloud.manualCloudLogin(email, pass);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(`Firebase Login Error: ${error}`);
+        return false;
+      }
+    }
+
+    Cloud.user.displayName = screenName;
+    return true;
+  },
 
   async manualCloudLogin(EmailAddress,Password) {
     //try{
@@ -234,16 +258,15 @@ export const Cloud = {
       if (user) {
         this.user = {
           id: user.uid,
-          displayName: steamOn ? Steam.getSteamId().screenName : "",//user.displayName,
+          displayName: SteamRuntime.isActive
+            ? SteamRuntime.screenName
+            : user.displayName,
           email: user.email,
         };
-        SteamFunctions.SyncPlayFabSTD()
+        SteamRuntime.syncIap();
       } else {
         this.user = null;
       }
     });
   },
 };
-
-Cloud.init();
-//this.user.displayName = Steam.getSteamId().screenName

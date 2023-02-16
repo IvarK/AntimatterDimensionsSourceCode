@@ -46,3 +46,7 @@ window.onerror = (event, source) => {
   if (!source.endsWith(".js")) return;
   GlobalErrorHandler.onerror(event);
 };
+
+window.addEventListener("unhandledrejection", event => {
+  GlobalErrorHandler.onerror(event);
+});

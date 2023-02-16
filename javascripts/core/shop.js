@@ -1,3 +1,4 @@
+import { SteamRuntime } from "@/steam";
 import { RebuyableMechanicState } from "./game-mechanics/index";
 
 import Payments from "./payments";
@@ -177,8 +178,14 @@ class ShopPurchaseState extends RebuyableMechanicState {
     if (GameEnd.creditsEverClosed) return false;
     if (this.config.instantPurchase && ui.$viewModel.modal.progressBar) return false;
 
-    // Contact the firebase server to verify the purchase
-    const success = true//await Payments.buyUpgrade(this.config.key);
+    const cosmeticName = this.config.key === "singleCosmeticSet"
+      ? GlyphAppearanceHandler.chosenFromModal?.name
+      : undefined;
+
+    // Contact the purchase provider to verify the purchase
+    const success = SteamRuntime.isActive
+      ? await SteamRuntime.purchaseShopItem(this.cost, this.config.key, cosmeticName)
+      : await Payments.buyUpgrade(this.config.key, cosmeticName);
     if (!success) return false;
 
     if (player.IAP.enabled) Speedrun.setSTDUse(true);

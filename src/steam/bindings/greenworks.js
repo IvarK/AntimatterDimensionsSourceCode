@@ -1,4 +1,4 @@
-import { NodeModule } from "../node-module";
+import { NodeModule } from "./node-module";
 
 /**
  * @type {NodeModule<Greenworks.NodeModule>}

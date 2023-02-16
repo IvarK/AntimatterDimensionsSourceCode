@@ -5,6 +5,8 @@ import OptionsButton from "@/components/OptionsButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import SaveFileName from "./SaveFileName";
 
+import { STEAM } from "@/env";
+
 export default {
   name: "OptionsSavingTab",
   components: {
@@ -38,6 +40,9 @@ export default {
       return this.forceCloudOverwrite
         ? `Your local save will always overwrite your cloud save no matter what.`
         : `Save conflicts will prevent your local save from being saved to the cloud.`;
+    },
+    STEAM() {
+      return STEAM;
     }
   },
   watch: {
@@ -192,23 +197,33 @@ export default {
       <span v-else>Cloud Saving has been disabled on this save.</span>
     </div>
     <div class="l-options-grid">
-      <!--div
+      <div
+        v-if="!STEAM"
         class="l-options-grid__row"
       >
         <OptionsButton
           v-if="loggedIn"
           onclick="GameOptions.logout()"
         >
-          Disconnect Steam Account and disable Cloud Saving
+          Disconnect Google Account and disable Cloud Saving
         </OptionsButton>
         <OptionsButton
           v-else
           v-tooltip="'This will connect your Google Account to your Antimatter Dimensions savefiles'"
-          onclick="Modal.manualCloud.show()"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          onclick="GameOptions.login()"
         >
           Login with Google to enable Cloud Saving
         </OptionsButton>
-      </div-->
+        <PrimaryToggleButton
+          v-if="loggedIn"
+          v-model="hideGoogleName"
+          v-tooltip="'This will hide your Google Account name from the UI for privacy. Saving/loading is unaffected.'"
+          class="o-primary-btn--option l-options-grid__button"
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          label="Hide Google Account name:"
+        />
+      </div>
       <div
         v-if="loggedIn"
         class="l-options-grid__row"

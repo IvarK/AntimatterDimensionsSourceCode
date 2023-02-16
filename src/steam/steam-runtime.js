@@ -3,9 +3,9 @@ import { RichPresenceInfo } from "../../javascripts/core/discord-parser";
 
 import {
   hasPendingPurchaseConfirmations,
-  purchaseIap,
+  purchaseIAP,
   purchaseShopItem,
-  syncIap,
+  syncIAP,
   validatePurchases
 } from "./steam-purchases";
 
@@ -72,12 +72,12 @@ export const SteamRuntime = {
     Greenworks.activateAchievement(`Achievement${id}`);
   },
 
-  async purchaseIap(std) {
+  async purchaseIAP(std) {
     if (!this.isActive) {
       return;
     }
 
-    await purchaseIap(std);
+    await purchaseIAP(std);
   },
 
   validatePurchases() {
@@ -88,12 +88,12 @@ export const SteamRuntime = {
     validatePurchases();
   },
 
-  async syncIap() {
+  async syncIAP() {
     if (!this.isActive) {
       return;
     }
 
-    await syncIap();
+    await syncIAP();
   },
 
   async purchaseShopItem(key, cost, cosmeticName) {
@@ -127,6 +127,7 @@ async function loginPlayFab(steamId) {
     await PlayFab.LoginWithSteam(ticket.ticket.toString("hex"), screenName);
     PlayFab.UpdateUserTitleDisplayName(screenName);
     GameUI.notify.info("Logged in to PlayFab Cloud");
+    syncIAP();
   } catch (error) {
     GameUI.notify.error("Couldn't log in to PlayFab Cloud.");
     throw error;
@@ -137,9 +138,7 @@ async function loginFirebase(steamId) {
   const accountId = steamId.accountId;
   const staticAccountId = steamId.staticAccountId;
   const screenName = steamId.screenName;
-  if (await Cloud.loginWithSteam(accountId, staticAccountId, screenName)) {
-    syncIap();
-  }
+  await Cloud.loginWithSteam(accountId, staticAccountId, screenName);
 }
 
 function initializeDiscord() {

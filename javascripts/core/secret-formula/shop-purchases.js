@@ -1,3 +1,4 @@
+import { STEAM } from "@/env";
 import { GameDatabase } from "./game-database";
 
 // NOTE: IF ANY COSTS ARE CHANGED HERE, THEY ALSO NEED TO BE CHANGED ON THE BACKEND TOO
@@ -99,7 +100,7 @@ GameDatabase.shopPurchases = {
     },
     isUnlocked: () => PlayerProgress.realityUnlocked(),
     lockText: "Reality",
-  },/*
+  },
   allCosmeticSets: {
     key: "allCosmeticSets",
     cost: () => {
@@ -121,5 +122,9 @@ GameDatabase.shopPurchases = {
     },
     isUnlocked: () => PlayerProgress.realityUnlocked(),
     lockText: "Reality",
-  },*/
+  },
 };
+
+if (STEAM) {
+  delete GameDatabase.shopPurchases.allCosmeticSets;
+}

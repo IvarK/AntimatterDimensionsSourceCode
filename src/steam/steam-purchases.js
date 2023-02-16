@@ -8,7 +8,7 @@ export function hasPendingPurchaseConfirmations() {
   return MAC && pendingConfirmations.length > 0;
 }
 
-export async function purchaseIap(std) {
+export async function purchaseIAP(std) {
   const itemId = `${std}STD`;
   const quantity = 1;
   const annotation = "Purchased via in-game store";
@@ -51,10 +51,10 @@ async function validatePurchase(orderId) {
   pendingConfirmations = pendingConfirmations.filter(item => item !== orderId);
   await PlayFab.AddUserVirtualCurrency(stdsBought, "ST");
   GameUI.notify.info(`${stdsBought} STDs Obtained!`);
-  syncIap();
+  syncIAP();
 }
 
-export async function syncIap() {
+export async function syncIAP() {
   const userInventory = await PlayFab.GetUserInventory();
   ShopPurchaseData.totalSTD = userInventory.VirtualCurrency?.ST ?? 0;
   for (const key of Object.keys(GameDatabase.shopPurchases)) {
@@ -71,7 +71,7 @@ export async function syncIap() {
 export async function purchaseShopItem(key, cost, cosmeticName) {
   await PlayFab.PurchaseItem(key, cost, "ST");
   await storeCosmetic(cosmeticName);
-  syncIap();
+  syncIAP();
 }
 
 async function storeCosmetic(name) {

@@ -80,7 +80,9 @@ export default {
         window.openNewsLink = openExternalLink;
         text = text
           .replace(/href='/gu, `onClick='window.openNewsLink("`)
-          .replace(/' target='_blank'/gu, `")'`);
+          .replace(/' target='_blank'/gu, `")'`)
+          .replace(/href="/gu, `onClick='window.openNewsLink("`)
+          .replace(/" target="_blank"/gu, `")'`);
       }
       line.innerHTML = text;
 

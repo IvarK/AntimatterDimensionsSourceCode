@@ -30,19 +30,14 @@ export default {
     };
   },
   computed: {
+    STEAM() {
+      return STEAM;
+    },
     purchases() {
       return ShopPurchase.all;
     },
-    buySTDText() {
-      return STEAM ? "Buy More" : "Play Online on Steam to buy STDs";
-    }
-  },
-  watch: {
-    IAPsDisabled(newValue) {
-      player.IAP.disabled = newValue;
-    },
     enableText() {
-      return `In-app Purchases: ${player.IAP.enabled ? "Enabled" : "Disabled"}`;
+      return `In-app Purchases: ${this.IAPsEnabled ? "Enabled" : "Disabled"}`;
     },
     respecText() {
       if (!this.loggedIn) return "Not logged in!";
@@ -114,30 +109,37 @@ export default {
         label="Disable in-app-purchases:"
         @click="toggleEnable()"
       >
-        {{ `In-app Purchases: ${IAPsEnabled ? "Enabled" : "Disabled"}` }}
+        {{ enableText }}
       </PrimaryButton>
-      <!--PrimaryButton
+      <PrimaryButton
+        v-if="!STEAM"
         v-tooltip="respecText"
         :class="respecClass()"
         @click="respec()"
       >
         Respec Shop
-      </PrimaryButton-->
+      </PrimaryButton>
     </div>
-    <!--div v-if="loggedIn && !canRespec">
+    <div v-if="loggedIn && !canRespec && !STEAM">
       Time until respec available: {{ respecTimeStr }}
-    </div-->
+    </div>
     <div
       v-if="loggedIn"
       class="c-login-info"
     >
-      You are logged in as {{ username }}.
-      <!--button
-        class="o-shop-button-button"
-        onclick="GameOptions.logout()"
-      >
-        Disconnect Google Account
-      </button-->
+      <template v-if="STEAM">
+        You are logged in as {{ username }}.
+      </template>
+      <template v-else>
+        <span v-if="hiddenName">You are logged in. <i>(name hidden)</i></span>
+        <span v-else>You are logged in as {{ username }}.</span>
+        <button
+          class="o-shop-button-button"
+          onclick="GameOptions.logout()"
+        >
+          Disconnect Google Account
+        </button>
+      </template>
     </div>
     <div
       v-else

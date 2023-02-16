@@ -1,17 +1,23 @@
 /* eslint-disable import/extensions */
-import { SteamRuntime } from "@/steam";
+import { STEAM } from "@/env";
 import pako from "pako/dist/pako.esm.mjs";
 /* eslint-enable import/extensions */
 
-//import { get, getDatabase, ref, set } from "firebase/database";
-//import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut
+} from "firebase/auth";
+import { get, getDatabase, ref, set } from "firebase/database";
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider } from "firebase/auth";
-import { getDatabase, ref, get, set } from "firebase/database";
 import { sha512_256 } from "js-sha512";
 
 import { decodeBase64Binary } from "./base64-binary";
 import { ProgressChecker } from "./progress-checker";
+import { SteamRuntime } from "@/steam";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuRTTluAFufmvw1zxGH6fsyEHmmbu8IHI",
@@ -56,43 +62,24 @@ export const Cloud = {
   async loginWithSteam(accountId, staticAccountId, screenName) {
     if (this.loggedIn) {
       Cloud.user.displayName = screenName;
-      return true;
+      return;
     }
 
     const email = `${accountId}@ad.com`;
     const pass = staticAccountId;
     try {
-      await Cloud.manualCloudCreate(email, pass);
+      await createUserWithEmailAndPassword(this.auth, email, pass);
     } catch {
       try {
-        await Cloud.manualCloudLogin(email, pass);
+        await signInWithEmailAndPassword(this.auth, email, pass);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log(`Firebase Login Error: ${error}`);
-        return false;
+        return;
       }
     }
 
     Cloud.user.displayName = screenName;
-    return true;
-  },
-
-  async manualCloudLogin(EmailAddress,Password) {
-    //try{
-      await signInWithEmailAndPassword(this.auth, EmailAddress, Password)
-    /*}catch(error){
-      console.log(`Could Not Login (Error: ${error}`)
-      Cloud.manualCloudCreate(EmailAddress,Password)
-    }*/
-  },
-
-  async manualCloudCreate(EmailAddress,Password) {
-    //try{
-      await createUserWithEmailAndPassword(this.auth, EmailAddress, Password);
-    /*}catch(error){
-      console.log(`Could Not Create (Error: ${error}`)
-      Cloud.manualCloudLogin(EmailAddress,Password)
-    }*/
   },
 
   // NOTE: This function is largely untested due to not being used at any place within web reality code
@@ -171,7 +158,14 @@ export const Cloud = {
 
     const slot = GameStorage.currentSlot;
     this.writeToCloudDB(slot, serializedSave);
-    GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud as user ${this.user.displayName}`)
+
+    if (STEAM) {
+      GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud as user ${this.user.displayName}`);
+      return;
+    }
+
+    if (player.options.hideGoogleName) GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud`);
+    else GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud as user ${this.user.displayName}`);
   },
 
   async loadCheck() {
@@ -188,7 +182,14 @@ export const Cloud = {
       // eslint-disable-next-line no-loop-func
       const overwriteLocalSave = () => {
         GameStorage.overwriteSlot(saveId, cloudSave);
-        GameUI.notify.info(`Cloud save loaded`);/* for user ${this.user.displayName}`);*/
+
+        if (STEAM) {
+          GameUI.notify.info(`Cloud save loaded`);
+          return;
+        }
+
+        if (player.options.hideGoogleName) GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded`);
+        else GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded for user ${this.user.displayName}`);
       };
 
       // If the comparison fails, we assume the cloud data is corrupted and show the relevant modal
@@ -258,12 +259,16 @@ export const Cloud = {
       if (user) {
         this.user = {
           id: user.uid,
-          displayName: SteamRuntime.isActive
+          displayName: STEAM
             ? SteamRuntime.screenName
             : user.displayName,
           email: user.email,
         };
-        SteamRuntime.syncIap();
+        if (STEAM) {
+          SteamRuntime.syncIAP();
+        } else {
+          ShopPurchaseData.syncSTD();
+        }
       } else {
         this.user = null;
       }

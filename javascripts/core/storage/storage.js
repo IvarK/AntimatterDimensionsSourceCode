@@ -1,10 +1,8 @@
-import { SteamRuntime } from "@/steam";
 import * as ADNotations from "@antimatter-dimensions/notations";
 
 import { DEV } from "@/env";
 
 import { deepmergeAll } from "@/utility/deepmerge";
-import { Achievement } from "../achievements/normal-achievement";
 
 export const GameStorage = {
   currentSlot: 0,

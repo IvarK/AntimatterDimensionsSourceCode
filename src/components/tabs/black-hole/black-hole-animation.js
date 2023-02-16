@@ -129,7 +129,7 @@ export const BlackHoleAnimation = (function() {
       this.lastDistance = this.distance;
       this.distance *= 1 + 0.3 * particleSpeed * Math.pow(this.distance / holeSize, -2);
 
-      if (this.distance < 0.1 * holeSize) {
+      if (this.distance > 3 * holeSize) {
         this.respawn();
         return;
       }

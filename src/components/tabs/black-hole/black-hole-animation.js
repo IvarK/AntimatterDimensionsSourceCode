@@ -122,12 +122,12 @@ export const BlackHoleAnimation = (function() {
       if (!this.isInside) {
         this.preLastAngle = this.lastAngle;
         this.lastAngle = this.angle;
-        this.angle = (this.angle + 20 * particleSpeed * Math.PI * Math.pow(this.distance, -1.5)) % 1;
+        this.angle = (this.angle - 20 * particleSpeed * Math.PI * Math.pow(this.distance, -1.5)) % 1;
       }
 
       this.preLastDistance = this.lastDistance;
       this.lastDistance = this.distance;
-      this.distance /= 1 + 0.3 * particleSpeed * Math.pow(this.distance / holeSize, -2);
+      this.distance *= 1 + 0.3 * particleSpeed * Math.pow(this.distance / holeSize, -2);
 
       if (this.distance < 0.1 * holeSize) {
         this.respawn();

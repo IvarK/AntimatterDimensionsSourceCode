@@ -147,12 +147,11 @@ export const BlackHoleAnimation = (function() {
       } else {
         this.distance /= 1 + 0.3 * particleSpeed * Math.pow(this.distance / holeSize, -2);
       }
-      
+
       // I have no idea what the max of this formula is, so copy paste we go.
       if (this.distance > holeSize + 0.5 * SEMIMAJOR_AXIS * 2 && BlackHoles.areNegative) {
         this.respawn();
-        return;
-      } else if (this.distance < 0.03 * holeSize && !BlackHoles.areNegative) {
+      } else if (this.distance < 0.01 * holeSize && !BlackHoles.areNegative) {
         this.respawn();
         return;
       }

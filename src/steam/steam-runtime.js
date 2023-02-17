@@ -96,14 +96,14 @@ export const SteamRuntime = {
     await syncIAP();
   },
 
-  async purchaseShopItem(key, cost, cosmeticName) {
+  async purchaseShopItem(key, cost, cosmeticId) {
     if (!this.isActive) {
       GameUI.notify.error("Shop purchases are not available.");
       return false;
     }
 
     try {
-      await purchaseShopItem(key, cost, cosmeticName);
+      await purchaseShopItem(key, cost, cosmeticId);
       return true;
     } catch (e) {
       GameUI.notify.error(e.errorMessage ?? e);

@@ -68,27 +68,18 @@ export async function syncIAP() {
   GameUI.update();
 }
 
-export async function purchaseShopItem(key, cost, cosmeticName) {
+export async function purchaseShopItem(key, cost, cosmeticId) {
   await PlayFab.PurchaseItem(key, cost, "ST");
-  await storeCosmetic(cosmeticName);
+  if (cosmeticId !== undefined) {
+    await storeCosmetic(cosmeticId);
+  }
   syncIAP();
 }
 
-async function storeCosmetic(name) {
-  if (name === undefined) {
-    return;
-  }
-
-  const cosmetic = Object.values(GameDatabase.reality.glyphCosmeticSets)
-    .find(x => x.name === name);
-  if (cosmetic === undefined) {
-    GameUI.notify.error(`Failed to store cosmetic "${name}"`);
-    return;
-  }
-
+async function storeCosmetic(id) {
   const userData = await PlayFab.GetUserData();
   const cosmetics = new Set(userData.Data?.Cosmetics?.Value?.split(",") ?? []);
-  cosmetics.add(cosmetic.id);
+  cosmetics.add(id);
   const updatedCosmetics = [...cosmetics];
   await PlayFab.UpdateUserData({
     Cosmetics: updatedCosmetics.join(",")

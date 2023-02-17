@@ -178,14 +178,14 @@ class ShopPurchaseState extends RebuyableMechanicState {
     if (GameEnd.creditsEverClosed) return false;
     if (this.config.instantPurchase && ui.$viewModel.modal.progressBar) return false;
 
-    const cosmeticName = this.config.key === "singleCosmeticSet"
+    const cosmeticId = this.config.key === "singleCosmeticSet"
       ? GlyphAppearanceHandler.chosenFromModal?.id
       : undefined;
 
     // Contact the purchase provider to verify the purchase
     const success = SteamRuntime.isActive
-      ? await SteamRuntime.purchaseShopItem(this.cost, this.config.key, cosmeticName)
-      : await Payments.buyUpgrade(this.config.key, cosmeticName);
+      ? await SteamRuntime.purchaseShopItem(this.cost, this.config.key, cosmeticId)
+      : await Payments.buyUpgrade(this.config.key, cosmeticId);
     if (!success) return false;
 
     if (player.IAP.enabled) Speedrun.setSTDUse(true);

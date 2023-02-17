@@ -40,7 +40,6 @@ export function activateAchievement(id) {
   );
 }
 
-// Mako, please rename the second parameter. I have no idea what it is.
 export function initDiscordAPI(clientId, steamGameId) {
   return module.safeCall(
     x => x.initDiscordAPI(clientId, steamGameId)

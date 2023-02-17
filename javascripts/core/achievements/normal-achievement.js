@@ -177,7 +177,7 @@ export const Achievements = {
   },
 
   updateSteamStatus() {
-    for (const achievement in Achievements.all.filter(x => x.isUnlocked)) {
+    for (const achievement of Achievements.all.filter(x => x.isUnlocked)) {
       SteamRuntime.activateAchievement(achievement.id);
     }
   }

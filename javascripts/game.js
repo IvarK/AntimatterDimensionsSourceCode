@@ -1023,6 +1023,7 @@ window.onload = function() {
   GameUI.initialized = supportedBrowser;
   ui.view.initialized = supportedBrowser;
   setTimeout(() => {
+    ElectronRuntime.updateZoom();
     document.getElementById("loading").style.display = "none";
   }, 500);
   if (!supportedBrowser) {

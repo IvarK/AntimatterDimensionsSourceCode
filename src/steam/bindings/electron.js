@@ -10,10 +10,8 @@ export function isModuleLoaded() {
 }
 
 export function setZoomFactor(zoomFactor) {
-  const setSize = 1020;
-  const sizeDiff = window.outerHeight / setSize;
   return module.safeCall(
-    x => x.webFrame.setZoomFactor(sizeDiff * zoomFactor)
+    x => x.webFrame.setZoomFactor(zoomFactor)
   );
 }
 

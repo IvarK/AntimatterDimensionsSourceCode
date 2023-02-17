@@ -151,8 +151,7 @@ export const BlackHoleAnimation = (function() {
       // I have no idea what the max of this formula is, so copy paste we go.
       if (this.distance > holeSize + 0.5 * SEMIMAJOR_AXIS * 2 && BlackHoles.areNegative) {
         this.respawn();
-        return;
-      } if (this.distance < 0.01 * holeSize && !BlackHoles.areNegative) {
+      } else if (this.distance < 0.01 * holeSize && !BlackHoles.areNegative) {
         this.respawn();
         return;
       }

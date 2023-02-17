@@ -152,7 +152,7 @@ export const BlackHoleAnimation = (function() {
       if (this.distance > holeSize + 0.5 * SEMIMAJOR_AXIS * 2 && BlackHoles.areNegative) {
         this.respawn();
         return;
-      } else if (this.distance < 0.01 * holeSize && !BlackHoles.areNegative) {
+      } else if (this.distance < 0.03 * holeSize && !BlackHoles.areNegative) {
         this.respawn();
         return;
       }

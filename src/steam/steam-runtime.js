@@ -16,6 +16,7 @@ import { MAC, STEAM } from "@/env";
 
 let isInitialized = false;
 let isActive = false;
+let achievementNames = [];
 
 export const SteamRuntime = {
   initialize() {
@@ -34,6 +35,8 @@ export const SteamRuntime = {
     const steamId = Greenworks.getSteamId();
     loginPlayFab(steamId);
     loginFirebase(steamId);
+
+    achievementNames = Greenworks.getAchievementNames();
 
     Greenworks.on("micro-txn-authorization-response", (data, ordered, orderstate) => {
       if (orderstate === true) {
@@ -69,7 +72,12 @@ export const SteamRuntime = {
       return;
     }
 
-    Greenworks.activateAchievement(`Achievement${id}`);
+    const name = `Achievement${id}`;
+    if (!achievementNames.includes(name)) {
+      return;
+    }
+
+    Greenworks.activateAchievement(name);
   },
 
   async purchaseIAP(std) {

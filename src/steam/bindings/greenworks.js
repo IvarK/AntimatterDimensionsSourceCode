@@ -40,6 +40,13 @@ export function activateAchievement(id) {
   );
 }
 
+export function getAchievementNames() {
+  return module.safeCall(
+    x => x.getAchievementNames(),
+    []
+  );
+}
+
 export function initDiscordAPI(clientId, steamGameId) {
   return module.safeCall(
     x => x.initDiscordAPI(clientId, steamGameId)

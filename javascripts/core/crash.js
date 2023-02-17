@@ -1,3 +1,5 @@
+import { DEV } from "@/env";
+
 window.NotImplementedError = class NotImplementedError extends Error {
   constructor() {
     super("The method is not implemented.");
@@ -48,5 +50,7 @@ window.onerror = (event, source) => {
 };
 
 window.addEventListener("unhandledrejection", event => {
-  GlobalErrorHandler.onerror(event);
+  if (DEV) {
+    GlobalErrorHandler.onerror(event);
+  }
 });

@@ -4,6 +4,7 @@ export declare module Greenworks {
     getSteamId(): SteamId;
     getAuthSessionTicket(resolve: (ticket: SteamAuthTicket) => void, reject: (error: any) => void): void;
     activateAchievement(id: string, resolve: () => void, reject: (error: any) => void): void;
+    getAchievementNames(): string[];
     initDiscordAPI(clientId: string, steamGameId: number): void;
     runDiscordCallbacks(): void;
     setDiscordActivity(info: DiscordActivityInfo): void;

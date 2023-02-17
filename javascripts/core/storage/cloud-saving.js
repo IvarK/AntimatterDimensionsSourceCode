@@ -68,16 +68,16 @@ export const Cloud = {
 
     const email = `${accountId}@ad.com`;
     const pass = staticAccountId;
-    try {
-      await createUserWithEmailAndPassword(this.auth, email, pass);
-    } catch {
-      try {
-        await signInWithEmailAndPassword(this.auth, email, pass);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.log(`Firebase Login Error: ${error}`);
-        return;
-      }
+    let error = undefined;
+
+    await signInWithEmailAndPassword(this.auth, email, pass)
+      .catch(() => createUserWithEmailAndPassword(this.auth, email, pass))
+      .catch(x => error = x);
+
+    if (error !== undefined) {
+      // eslint-disable-next-line no-console
+      console.log(`Firebase Login Error: ${error}`);
+      return;
     }
 
     Cloud.user.displayName = screenName;

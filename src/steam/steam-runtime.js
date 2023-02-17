@@ -3,14 +3,13 @@ import { RichPresenceInfo } from "../../javascripts/core/discord-parser";
 
 import {
   hasPendingPurchaseConfirmations,
+  loginPlayFabWithSteam,
   purchaseIAP,
   purchaseShopItem,
-  syncIAP,
   validatePurchases
 } from "./steam-purchases";
 
 import * as Greenworks from "./bindings/greenworks";
-import * as PlayFab from "./bindings/playfab";
 
 import { MAC, STEAM } from "@/env";
 
@@ -123,10 +122,8 @@ async function loginPlayFab(steamId) {
   try {
     const screenName = steamId.screenName;
     const ticket = await Greenworks.getAuthSessionTicket();
-    await PlayFab.LoginWithSteam(ticket.ticket.toString("hex"), screenName);
-    PlayFab.UpdateUserTitleDisplayName(screenName);
+    await loginPlayFabWithSteam(ticket.ticket.toString("hex"), screenName);
     GameUI.notify.info("Logged in to PlayFab Cloud");
-    syncIAP();
   } catch (error) {
     GameUI.notify.error("Couldn't log in to PlayFab Cloud.");
     throw error;

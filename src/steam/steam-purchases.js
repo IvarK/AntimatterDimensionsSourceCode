@@ -8,6 +8,12 @@ export function hasPendingPurchaseConfirmations() {
   return MAC && pendingConfirmations.length > 0;
 }
 
+export async function loginPlayFabWithSteam(ticket, screenName) {
+  await PlayFab.LoginWithSteam(ticket);
+  PlayFab.UpdateUserTitleDisplayName(screenName);
+  syncIAP();
+}
+
 export async function purchaseIAP(std) {
   const itemId = `${std}STD`;
   const quantity = 1;
@@ -54,7 +60,7 @@ async function validatePurchase(orderId) {
   syncIAP();
 }
 
-export async function syncIAP() {
+async function syncIAP() {
   const userInventory = await PlayFab.GetUserInventory();
   ShopPurchaseData.totalSTD = userInventory.VirtualCurrency?.ST ?? 0;
   for (const key of Object.keys(GameDatabase.shopPurchases)) {

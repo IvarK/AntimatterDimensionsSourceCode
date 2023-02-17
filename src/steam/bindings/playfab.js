@@ -73,7 +73,7 @@ export function ConsumeItem(itemInstanceId, consumeCount) {
 }
 
 export function AddUserVirtualCurrency(amount, virtualCurrency) {
-  return makeAuthorizedPromise(clientApi.ConfirmPurchase, {
+  return makeAuthorizedPromise(clientApi.AddUserVirtualCurrency, {
     Amount: amount,
     VirtualCurrency: virtualCurrency
   });

@@ -268,9 +268,7 @@ export const Cloud = {
             : user.displayName,
           email: user.email,
         };
-        if (STEAM) {
-          SteamRuntime.syncIAP();
-        } else {
+        if (!STEAM) {
           ShopPurchaseData.syncSTD();
         }
       } else {

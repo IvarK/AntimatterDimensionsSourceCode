@@ -120,7 +120,7 @@ export const discordRichPresence = {
    * List of all the different progress stages which will have distinct behavior in DRP
    * @template
    * {
-   *  @property {Number} stateName                                Name of this stage of the game to display. This will
+   *  @property {String} name                                     Name of this stage of the game to display. This will
    *    be used for the first line of text in DRP. This isn't necessarily unique, as the tracked resources may change
    *    without the stage changing
    *  @property {function: @return Boolean} hasReached            Function to check if this stage of the game has been

@@ -1,10 +1,11 @@
 <script>
 import "vue-loading-overlay/dist/vue-loading.css";
-import { STEAM } from "@/env";
 
 import Loading from "vue-loading-overlay";
 
 import Payments from "../../../../javascripts/core/payments";
+
+import { STEAM } from "@/env";
 
 import PrimaryButton from "@/components/PrimaryButton";
 import ShopButton from "./ShopButton";
@@ -63,7 +64,7 @@ export default {
       }
     },
     showStore() {
-      if (!STEAM) return;
+      if (STEAM && !SteamRuntime.isActive) return;
       if (this.creditsClosed) return;
       SecretAchievement(33).unlock();
       if (this.loggedIn) Modal.shop.show();

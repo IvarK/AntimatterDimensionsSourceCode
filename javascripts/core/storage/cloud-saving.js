@@ -1,5 +1,4 @@
 /* eslint-disable import/extensions */
-import { STEAM } from "@/env";
 import pako from "pako/dist/pako.esm.mjs";
 /* eslint-enable import/extensions */
 
@@ -14,6 +13,8 @@ import {
 import { get, getDatabase, ref, set } from "firebase/database";
 import { initializeApp } from "firebase/app";
 import { sha512_256 } from "js-sha512";
+
+import { STEAM } from "@/env";
 
 import { decodeBase64Binary } from "./base64-binary";
 import { ProgressChecker } from "./progress-checker";
@@ -159,6 +160,9 @@ export const Cloud = {
     const slot = GameStorage.currentSlot;
     this.writeToCloudDB(slot, serializedSave);
 
+    // TODO We should revisit this (and the below in loadCheck) at some point after the steam-web merge
+    // since the hiding motivation was identifying info, and Steam usernames are generally more publicly
+    // visible than Google info. Also affects the visibility of the button in the Options/Saving subtab
     if (STEAM) {
       GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud as user ${this.user.displayName}`);
       return;

@@ -179,7 +179,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
     if (this.config.instantPurchase && ui.$viewModel.modal.progressBar) return false;
 
     const cosmeticName = this.config.key === "singleCosmeticSet"
-      ? GlyphAppearanceHandler.chosenFromModal?.name
+      ? GlyphAppearanceHandler.chosenFromModal?.id
       : undefined;
 
     // Contact the purchase provider to verify the purchase

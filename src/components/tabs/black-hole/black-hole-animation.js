@@ -79,10 +79,10 @@ export const BlackHoleAnimation = (function() {
     performDraw(context) {
       // Glowing effect to make the hole more visible on dark themes
       const glow = context.createRadialGradient(200, 200, 0, 200, 200, this.size * 2);
-      glow.addColorStop(0, "rgba(0, 0, 0, 1)");
-      glow.addColorStop(0.9, "rgba(0, 0, 0, 1)");
-      glow.addColorStop(0.92, "rgba(100, 100, 100, 1)");
-      glow.addColorStop(1, "rgba(100, 100, 100, 0)");
+      glow.addColorStop(0, "rgba(255, 255, 255, 1)");
+      glow.addColorStop(0.85, "rgba(190, 190, 190, 1)");
+      glow.addColorStop(0.87, "rgba(170, 170, 170, 1)");
+      glow.addColorStop(1, "rgba(135, 135, 135, 0)");
       context.fillStyle = glow;
       context.fillRect(0, 0, 400, 400);
       context.strokeStyle = "black";
@@ -98,20 +98,20 @@ export const BlackHoleAnimation = (function() {
     }
 
     respawn() {
-      this.distance = Particle.randomDistance();
+      this.distance = (Math.random() * (2 - 0.01) + 0.01) * holeSize;
       this.lastDistance = this.distance;
       this.preLastDistance = this.distance;
       this.angle = Math.random();
       this.lastAngle = this.angle;
       this.preLastAngle = this.angle;
       this.respawnTick = true;
-      this.isInside = false;
+      this.isInside = true;
       this.blob = blobs[Math.floor(Math.random() * blobs.length)];
       this.isBlob = Theme.currentName() === "S11";
     }
 
     static randomDistance() {
-      return holeSize + 0.5 * SEMIMAJOR_AXIS * Math.random() * (BlackHole(1).isActive ? 2 : 1);
+      return holeSize - 0.5 * SEMIMAJOR_AXIS * Math.random() * (BlackHole(1).isActive ? 2 : 1);
     }
 
     update(delta, dilationFactor) {
@@ -129,12 +129,12 @@ export const BlackHoleAnimation = (function() {
       this.lastDistance = this.distance;
       this.distance *= 1 + 0.3 * particleSpeed * Math.pow(this.distance / holeSize, -2);
 
-      if (this.distance > 3 * holeSize) {
+      if (this.distance > 2 * holeSize) {
         this.respawn();
         return;
       }
 
-      this.isInside = this.distance <= holeSize * 0.85;
+      this.isInside = this.distance <= holeSize * 0.865;
       this.respawnTick = false;
     }
 
@@ -151,7 +151,7 @@ export const BlackHoleAnimation = (function() {
       if (distance > holeSize) {
         // Trails outside black hole
         const dist = Math.floor(127 * (distance - holeSize) / SEMIMAJOR_AXIS);
-        context.strokeStyle = `rgb(${255 - dist}, ${dist}, ${dist})`;
+        context.strokeStyle = `rgb(${135 - dist}, ${dist}, ${dist})`;
       }
 
       if (distance <= holeSize) {

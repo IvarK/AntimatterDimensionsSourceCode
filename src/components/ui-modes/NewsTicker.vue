@@ -78,11 +78,10 @@ export default {
       let text = this.currentNews.text;
       if (STEAM) {
         window.openNewsLink = openExternalLink;
-        text = text
-          .replace(/href='/gu, `onClick='window.openNewsLink("`)
-          .replace(/' target='_blank'/gu, `")'`)
-          .replace(/href="/gu, `onClick='window.openNewsLink("`)
-          .replace(/" target="_blank"/gu, `")'`);
+        text = text.replace(
+          /href=['"]([^"']+)['"]/gu,
+          "href onClick='window.openNewsLink(\"$1\"); return false;'"
+        );
       }
       line.innerHTML = text;
 

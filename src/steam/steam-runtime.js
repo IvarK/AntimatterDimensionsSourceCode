@@ -37,8 +37,8 @@ export const SteamRuntime = {
 
     achievementNames = Greenworks.getAchievementNames();
 
-    Greenworks.on("micro-txn-authorization-response", (data, ordered, orderstate) => {
-      if (orderstate === true) {
+    Greenworks.on("micro-txn-authorization-response", (data, ordered, orderState) => {
+      if (orderState === true) {
         validatePurchases();
       }
     });

@@ -6,6 +6,7 @@ import Loading from "vue-loading-overlay";
 import Payments from "../../../../javascripts/core/payments";
 
 import { STEAM } from "@/env";
+import { SteamRuntime } from "@/steam";
 
 import PrimaryButton from "@/components/PrimaryButton";
 import ShopButton from "./ShopButton";

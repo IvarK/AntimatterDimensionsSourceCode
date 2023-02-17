@@ -106,7 +106,7 @@ export const BlackHoleAnimation = (function() {
 
     respawn() {
       if (BlackHoles.areNegative) {
-        this.distance = (Math.random() * (2 - 0.01) + 0.01) * holeSize;
+        this.distance = (Math.random() * (2 - 0.03) + 0.03) * holeSize;
       } else {
         this.distance = Particle.randomDistance();
       }

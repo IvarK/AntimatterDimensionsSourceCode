@@ -1,6 +1,5 @@
 import { DC } from "./constants";
 import FullScreenAnimationHandler from "./full-screen-animation-handler";
-import { Pelle } from "./globals";
 
 export function bigCrunchAnimation() {
   FullScreenAnimationHandler.display("a-implode", 2);

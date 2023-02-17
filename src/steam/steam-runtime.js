@@ -46,9 +46,8 @@ export const SteamRuntime = {
 
     if (!MAC) {
       initializeDiscord();
+      createForceRefreshCanvas();
     }
-
-    createForceRefreshCanvas();
   },
 
   get isActive() {

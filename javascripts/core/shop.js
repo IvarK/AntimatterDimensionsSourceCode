@@ -184,7 +184,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
 
     // Contact the purchase provider to verify the purchase
     const success = SteamRuntime.isActive
-      ? await SteamRuntime.purchaseShopItem(this.cost, this.config.key, cosmeticId)
+      ? await SteamRuntime.purchaseShopItem(this.config.key, this.cost, cosmeticId)
       : await Payments.buyUpgrade(this.config.key, cosmeticId);
     if (!success) return false;
 

@@ -1621,7 +1621,9 @@ scaling. However, these upgrades won't function if Continuum is disabled on the 
 in a loss of production if disabled. Continuum makes your autobuyers for Antimatter Dimensions obsolete, so all the
 autobuyer settings for Antimatter Dimension autobuyers are now hidden on that tab as long as Continuum is active.
 `,
-      isUnlocked: () => Laitela.continuumUnlocked,
+// Apparently continuumUnlocked is really important in a lot of places and if we keep it unlocked
+// Things break, so we check for the iMU instead.
+      isUnlocked: () => ImaginaryUpgrade(15).isBought,
       tags: ["continuum", "purchase", "reality", "lategame", "endgame"],
       tab: ""
     }, {

@@ -380,8 +380,12 @@ function toggleBuySingles(buyer) {
 }
 
 function keyboardToggleAutobuyers() {
-  Autobuyers.toggle();
-  GameUI.notify.info(`Autobuyers ${(player.auto.autobuyersOn) ? "resumed" : "paused"}`);
+
+  if (Tab.automation.isUnlocked) {
+    Autobuyers.toggle();
+    GameUI.notify.info(`Autobuyers ${(player.auto.autobuyersOn) ? "resumed" : "paused"}`);
+  }
+
 }
 
 function keyboardToggleContinuum() {

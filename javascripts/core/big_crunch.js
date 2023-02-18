@@ -130,7 +130,7 @@ export function bigCrunchResetValues(enteringAntimatterChallenge) {
     Replicanti.amount = currentReplicanti;
     remainingGalaxies += Math.min(currentReplicantiGalaxies, 1);
   }
-  if (TimeStudy(33).isBought) {
+  if (TimeStudy(33).isBought && !Pelle.isDoomed) {
     remainingGalaxies += Math.floor(currentReplicantiGalaxies / 2);
   }
 

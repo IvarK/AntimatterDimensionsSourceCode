@@ -5,6 +5,9 @@ import Loading from "vue-loading-overlay";
 
 import Payments from "../../../../javascripts/core/payments";
 
+import { STEAM } from "@/env";
+import { SteamRuntime } from "@/steam";
+
 import PrimaryButton from "@/components/PrimaryButton";
 import ShopButton from "./ShopButton";
 
@@ -29,6 +32,9 @@ export default {
     };
   },
   computed: {
+    STEAM() {
+      return STEAM;
+    },
     purchases() {
       return ShopPurchase.all;
     },
@@ -59,6 +65,7 @@ export default {
       }
     },
     showStore() {
+      if (STEAM && !SteamRuntime.isActive) return;
       if (this.creditsClosed) return;
       SecretAchievement(33).unlock();
       if (this.loggedIn) Modal.shop.show();
@@ -107,6 +114,7 @@ export default {
         {{ enableText }}
       </PrimaryButton>
       <PrimaryButton
+        v-if="!STEAM"
         v-tooltip="respecText"
         :class="respecClass()"
         @click="respec()"
@@ -114,21 +122,26 @@ export default {
         Respec Shop
       </PrimaryButton>
     </div>
-    <div v-if="loggedIn && !canRespec">
+    <div v-if="loggedIn && !canRespec && !STEAM">
       Time until respec available: {{ respecTimeStr }}
     </div>
     <div
       v-if="loggedIn"
       class="c-login-info"
     >
-      <span v-if="hiddenName">You are logged in. <i>(name hidden)</i></span>
-      <span v-else>You are logged in as {{ username }}.</span>
-      <button
-        class="o-shop-button-button"
-        onclick="GameOptions.logout()"
-      >
-        Disconnect Google Account
-      </button>
+      <template v-if="STEAM">
+        You are logged in as {{ username }}.
+      </template>
+      <template v-else>
+        <span v-if="hiddenName">You are logged in. <i>(name hidden)</i></span>
+        <span v-else>You are logged in as {{ username }}.</span>
+        <button
+          class="o-shop-button-button"
+          onclick="GameOptions.logout()"
+        >
+          Disconnect Google Account
+        </button>
+      </template>
     </div>
     <div
       v-else

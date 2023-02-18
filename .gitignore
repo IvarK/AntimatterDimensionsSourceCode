@@ -5,4 +5,4 @@ dist
 .idea
 node_modules
 .eslintrc.js
-playfab.js
+.DS_Store

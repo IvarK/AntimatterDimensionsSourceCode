@@ -44,6 +44,12 @@ export default {
     openSelectionModal() {
       Modal.cosmeticSetChoice.show();
     },
+    performPurchase() {
+      if (this.isSingleCosmeticSet && !this.hasChosen) {
+        return;
+      }
+      this.purchase.purchase();
+    },
     purchaseButtonObject() {
       return {
         "o-shop-button-button": true,
@@ -99,7 +105,7 @@ export default {
     </div>
     <button
       :class="purchaseButtonObject()"
-      @click="purchase.purchase()"
+      @click="performPurchase"
     >
       Cost: {{ cost }}
       <img

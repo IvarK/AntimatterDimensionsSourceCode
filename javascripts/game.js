@@ -1,9 +1,11 @@
+import { ElectronRuntime, SteamRuntime } from "@/steam";
 import TWEEN from "tween.js";
 
 import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
-import { DEV } from "./core/devtools";
+import { DEV } from "@/env";
 import { SpeedrunMilestones } from "./core/speedrun";
+import { Cloud } from "./core/storage";
 import { supportedBrowsers } from "./supported-browsers";
 
 import Payments from "./core/payments";
@@ -1021,6 +1023,7 @@ window.onload = function() {
   GameUI.initialized = supportedBrowser;
   ui.view.initialized = supportedBrowser;
   setTimeout(() => {
+    ElectronRuntime.updateZoom();
     document.getElementById("loading").style.display = "none";
   }, 500);
   if (!supportedBrowser) {
@@ -1057,6 +1060,9 @@ export function init() {
     // eslint-disable-next-line no-console
     console.log("👨‍💻 Development Mode 👩‍💻");
   }
+  ElectronRuntime.initialize();
+  SteamRuntime.initialize();
+  Cloud.init();
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   Payments.init();

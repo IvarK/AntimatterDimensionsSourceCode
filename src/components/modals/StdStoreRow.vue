@@ -1,4 +1,6 @@
 <script>
+import { STEAM } from "@/env";
+import { SteamRuntime } from "@/steam";
 import Payments from "../../../javascripts/core/payments";
 
 export default {
@@ -15,7 +17,11 @@ export default {
   },
   methods: {
     purchase() {
-      Payments.buyMoreSTD(this.amount, this.cost);
+      if (STEAM) {
+        SteamRuntime.purchaseIAP(this.amount);
+      } else {
+        Payments.buyMoreSTD(this.amount, this.cost);
+      }
     }
   },
 

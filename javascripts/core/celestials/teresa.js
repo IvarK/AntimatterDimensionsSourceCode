@@ -55,7 +55,7 @@ export const Teresa = {
     return player.celestials.teresa.run;
   },
   get runCompleted() {
-    return player.celestials.teresa.bestRunAM.gt(0);
+    return player.celestials.teresa.bestRunAM.gt(1);
   },
   quotes: Quotes.teresa,
   symbol: "Ϟ"

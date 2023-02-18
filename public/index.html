@@ -24,7 +24,7 @@
 
 <body>
   <div id="browser-warning">
-    Your browser is not supported. 
+    Your browser is not supported.
     <br>
     Please update to a newer browser.
   </div>
@@ -48,7 +48,7 @@
 <script>
   // We use an IE only document variable to check here to force it to show the browser warning.
   // For some reason, IE really does *not* want to cooperate, even when you have a file as a <script> that you load
-  // in the body. 
+  // in the body.
   // Other browsers will be checked whenever window.onload is ran.
   if (document.documentMode) {
     document.getElementById("loading").style.display = "none";

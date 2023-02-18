@@ -1,3 +1,4 @@
+import { SteamRuntime } from "@/steam";
 import { GameMechanicState } from "../game-mechanics/index";
 
 class AchievementState extends GameMechanicState {
@@ -70,6 +71,7 @@ class AchievementState extends GameMechanicState {
       GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
     } else {
       GameUI.notify.success(`Achievement: ${this.name}`);
+      SteamRuntime.activateAchievement(this.id);
     }
     if (player.speedrun.isActive && !player.speedrun.achievementTimes[this.id]) {
       // This stores a lot of data in the savefile and seems particularly suceptible to floating-point rounding issues
@@ -172,6 +174,12 @@ export const Achievements = {
   get power() {
     if (Pelle.isDisabled("achievementMult")) return 1;
     return Achievements._power.value;
+  },
+
+  updateSteamStatus() {
+    for (const achievement of Achievements.all.filter(x => x.isUnlocked)) {
+      SteamRuntime.activateAchievement(achievement.id);
+    }
   }
 };
 

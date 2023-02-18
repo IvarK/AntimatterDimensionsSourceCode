@@ -1,4 +1,6 @@
 <script>
+import { openExternalLink } from "@/utility/open-external-link";
+
 export default {
   name: "InformationModalButton",
   props: {
@@ -24,7 +26,8 @@ export default {
   methods: {
     openAssociatedModal() {
       Modal[this.showModal].show();
-    }
+    },
+    openExternalLink
   }
 };
 </script>
@@ -36,8 +39,7 @@ export default {
   >
     <a
       v-if="link"
-      :href="link"
-      target="_blank"
+      @click="openExternalLink"
       class="c-socials--icon"
     >
       <i :class="icon" />

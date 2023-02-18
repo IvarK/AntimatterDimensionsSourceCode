@@ -1,3 +1,5 @@
+import { DEV } from "@/env";
+
 window.NotImplementedError = class NotImplementedError extends Error {
   constructor() {
     super("The method is not implemented.");

@@ -1,3 +1,4 @@
+import { ElectronRuntime } from "@/steam";
 import Mousetrap from "mousetrap";
 
 import { GameKeyboard } from "./keyboard";
@@ -268,6 +269,41 @@ export const shortcuts = [
     type: "bind",
     function: () => keyboardEditAutobuyers(),
     visible: () => Autobuyers.hasAutobuyersForEditModal
+  },
+  {
+    name: "Fullscreen",
+    keys: ["F10"],
+    type: "bind",
+    function: () => {},
+    visible: () => false
+  },
+  {
+    name: "Zoom In",
+    keys: ["ctrl", "="],
+    type: "bind",
+    function: () => ElectronRuntime.increaseZoom(),
+    visible: () => false
+  },
+  {
+    name: "Zoom In",
+    keys: ["ctrl", "+"],
+    type: "bind",
+    function: () => ElectronRuntime.increaseZoom(),
+    visible: () => false
+  },
+  {
+    name: "Zoom Out",
+    keys: ["ctrl", "-"],
+    type: "bind",
+    function: () => ElectronRuntime.decreaseZoom(),
+    visible: () => false
+  },
+  {
+    name: "Reset Zoom",
+    keys: ["ctrl", "0"],
+    type: "bind",
+    function: () => ElectronRuntime.resetZoom(),
+    visible: () => false
   },
 ];
 

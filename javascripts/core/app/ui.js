@@ -1,7 +1,7 @@
 import VTooltip from "v-tooltip";
 import VueGtag from "vue-gtag";
 
-import { DEV } from "../devtools";
+import { DEV } from "@/env";
 
 import { useLongPress, useRepeatingClick } from "./longpress";
 import { notify } from "./notify";

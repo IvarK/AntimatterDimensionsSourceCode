@@ -48,6 +48,7 @@ import "./shop-purchases";
 export * from "./celestials/singularity-milestones";
 import "./script-templates";
 import "./speedrun-milestones";
+import "./discord-rich-presence";
 
 import "./multiplier-tab/index";
 

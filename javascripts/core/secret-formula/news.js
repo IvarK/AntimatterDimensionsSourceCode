@@ -2200,7 +2200,7 @@ GameDatabase.news = [
     id: "a346",
     text:
       `Did you know Antimatter Dimensions is also available on Android? <a
-      href="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions">
+      href="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions" target="_blank">
       Click here to check it out!<a>`
   },
   {

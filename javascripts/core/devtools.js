@@ -3,8 +3,6 @@ import { sha512_256 } from "js-sha512";
 import { DC } from "./constants";
 import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
-export const DEV = process.env.VUE_APP_DEV === "true";
-
 /* eslint-disable no-console */
 // Disabling no-console here seems
 // reasonable, since these are the devtools after all

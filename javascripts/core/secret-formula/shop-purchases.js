@@ -1,3 +1,4 @@
+import { STEAM } from "@/env";
 import { GameDatabase } from "./game-database";
 
 // NOTE: IF ANY COSTS ARE CHANGED HERE, THEY ALSO NEED TO BE CHANGED ON THE BACKEND TOO
@@ -66,6 +67,24 @@ GameDatabase.shopPurchases = {
     isUnlocked: () => PlayerProgress.realityUnlocked(),
     lockText: "Reality",
   },
+  smallTimeSkip: {
+    key: "smallTimeSkip",
+    cost: 10,
+    description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
+    instantPurchase: true,
+    onPurchase: () => {
+      shop.purchaseTimeSkip();
+    }
+  },
+  bigTimeSkip: {
+    key: "bigTimeSkip",
+    cost: 20,
+    description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
+    instantPurchase: true,
+    onPurchase: () => {
+      shop.purchaseLongerTimeSkip();
+    }
+  },
   singleCosmeticSet: {
     key: "singleCosmeticSet",
     cost: 20,
@@ -104,22 +123,8 @@ GameDatabase.shopPurchases = {
     isUnlocked: () => PlayerProgress.realityUnlocked(),
     lockText: "Reality",
   },
-  smallTimeSkip: {
-    key: "smallTimeSkip",
-    cost: 10,
-    description: "Get 6 hours worth of offline production. (Autobuyers don't work at full speed)",
-    instantPurchase: true,
-    onPurchase: () => {
-      shop.purchaseTimeSkip();
-    }
-  },
-  bigTimeSkip: {
-    key: "bigTimeSkip",
-    cost: 20,
-    description: "Get 24 hours worth of offline production. (Autobuyers don't work at full speed)",
-    instantPurchase: true,
-    onPurchase: () => {
-      shop.purchaseLongerTimeSkip();
-    }
-  },
 };
+
+if (STEAM) {
+  delete GameDatabase.shopPurchases.allCosmeticSets;
+}

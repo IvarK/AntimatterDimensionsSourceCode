@@ -1,6 +1,6 @@
 import * as ADNotations from "@antimatter-dimensions/notations";
 
-import { DEV } from "../devtools";
+import { DEV } from "@/env";
 
 import { deepmergeAll } from "@/utility/deepmerge";
 
@@ -30,6 +30,7 @@ export const GameStorage = {
     const root = GameSaveSerializer.deserialize(save);
 
     this.loadRoot(root);
+    Achievements.updateSteamStatus();
   },
 
   loadRoot(root) {
@@ -65,6 +66,7 @@ export const GameStorage = {
     Tabs.all.find(t => t.id === player.options.lastOpenTab).show(true);
     Cloud.resetTempState();
     GameUI.notify.info("Game loaded");
+    Achievements.updateSteamStatus();
   },
 
   import(saveData) {
@@ -91,6 +93,7 @@ export const GameStorage = {
     // is showing
     Tab.options.subtabs[0].show();
     GameUI.notify.info("Game imported");
+    Achievements.updateSteamStatus();
   },
 
   importAsFile() {

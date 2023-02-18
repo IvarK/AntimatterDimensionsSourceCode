@@ -11,7 +11,8 @@ export default {
       updateIndicies: [],
       visible: [],
       timeStudyUnlocked: false,
-      glyphSacUnlocked: false
+      glyphSacUnlocked: false,
+      isElectron: false
     };
   },
   computed: {
@@ -57,6 +58,7 @@ export default {
       const progress = PlayerProgress.current;
       this.timeStudyUnlocked = progress.isEternityUnlocked;
       this.glyphSacUnlocked = RealityUpgrade(19).isBought;
+      this.isElectron = ElectronRuntime.isActive;
     },
     format(x) {
       switch (x) {
@@ -147,6 +149,25 @@ export default {
           a numpad key with <kbd>shift</kbd> will not buy a single Dimension. It may instead, depending on your device,
           cause the page to scroll or change game tabs. <kbd>alt</kbd> will still work as expected.
         </span>
+        <template v-if="isElectron">
+          <br>
+          <div class="l-modal-hotkeys-row">
+            <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Window Zoom</span>
+            <kbd>-</kbd><kbd>0</kbd><kbd>+</kbd>
+          </div>
+          <span class="c-modal-hotkeys__shift-description">
+            To adjust zoom level, hold <kbd>ctrl</kbd> and press either <kbd>-</kbd> or <kbd>+</kbd> to decrease or
+            increase zoom. <kbd>ctrl</kbd><kbd>0</kbd> will reset zoom to 100%.
+          </span>
+          <br>
+          <div class="l-modal-hotkeys-row">
+            <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Fullscreen</span>
+            <kbd>F10</kbd>
+          </div>
+          <span class="c-modal-hotkeys__shift-description">
+            To enter or exit fullscreen, press <kbd>F10</kbd>.
+          </span>
+        </template>
       </div>
     </span>
   </ModalWrapper>

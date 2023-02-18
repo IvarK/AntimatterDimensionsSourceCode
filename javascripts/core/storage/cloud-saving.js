@@ -2,13 +2,23 @@
 import pako from "pako/dist/pako.esm.mjs";
 /* eslint-enable import/extensions */
 
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut
+} from "firebase/auth";
 import { get, getDatabase, ref, set } from "firebase/database";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { sha512_256 } from "js-sha512";
 
+import { STEAM } from "@/env";
+
 import { decodeBase64Binary } from "./base64-binary";
 import { ProgressChecker } from "./progress-checker";
+import { SteamRuntime } from "@/steam";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDuRTTluAFufmvw1zxGH6fsyEHmmbu8IHI",
@@ -48,6 +58,29 @@ export const Cloud = {
     } catch (e) {
       GameUI.notify.error("Google Account login failed");
     }
+  },
+
+  async loginWithSteam(accountId, staticAccountId, screenName) {
+    if (this.loggedIn) {
+      Cloud.user.displayName = screenName;
+      return;
+    }
+
+    const email = `${accountId}@ad.com`;
+    const pass = staticAccountId;
+    let error = undefined;
+
+    await signInWithEmailAndPassword(this.auth, email, pass)
+      .catch(() => createUserWithEmailAndPassword(this.auth, email, pass))
+      .catch(x => error = x);
+
+    if (error !== undefined) {
+      // eslint-disable-next-line no-console
+      console.log(`Firebase Login Error: ${error}`);
+      return;
+    }
+
+    Cloud.user.displayName = screenName;
   },
 
   // NOTE: This function is largely untested due to not being used at any place within web reality code
@@ -126,6 +159,15 @@ export const Cloud = {
 
     const slot = GameStorage.currentSlot;
     this.writeToCloudDB(slot, serializedSave);
+
+    // TODO We should revisit this (and the below in loadCheck) at some point after the steam-web merge
+    // since the hiding motivation was identifying info, and Steam usernames are generally more publicly
+    // visible than Google info. Also affects the visibility of the button in the Options/Saving subtab
+    if (STEAM) {
+      GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud as user ${this.user.displayName}`);
+      return;
+    }
+
     if (player.options.hideGoogleName) GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud`);
     else GameUI.notify.info(`Game saved (slot ${slot + 1}) to cloud as user ${this.user.displayName}`);
   },
@@ -144,6 +186,12 @@ export const Cloud = {
       // eslint-disable-next-line no-loop-func
       const overwriteLocalSave = () => {
         GameStorage.overwriteSlot(saveId, cloudSave);
+
+        if (STEAM) {
+          GameUI.notify.info(`Cloud save loaded`);
+          return;
+        }
+
         if (player.options.hideGoogleName) GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded`);
         else GameUI.notify.info(`Cloud save (slot ${saveId + 1}) loaded for user ${this.user.displayName}`);
       };
@@ -172,9 +220,11 @@ export const Cloud = {
     let singleSlot = await this.readFromCloudDB(GameStorage.currentSlot);
     if (singleSlot.exists()) return GameSaveSerializer.deserialize(singleSlot.val());
 
-    // If it doesn't exist, we assume that the cloud save hasn't been migrated yet and apply the migration before
-    // trying again. If it still doesn't exist, the cloud save was actually empty and there was nothing to migrate
-    await this.separateSaveSlots(combinedSlots.val());
+    // An optimization to reduce cloud save operations was done which migrates the format from an old one where all
+    // slots were saved together to a new one where all three are saved in separate spots. This part of the code should
+    // only be reached and executed if this migration hasn't happened yet, in which case we migrate and try again. If
+    // it's *still* empty, then there was nothing to migrate in the first place
+    await this.separateSaveSlots();
     singleSlot = await this.readFromCloudDB(GameStorage.currentSlot);
     if (singleSlot.exists()) return GameSaveSerializer.deserialize(singleSlot.val());
 
@@ -185,8 +235,10 @@ export const Cloud = {
   // it so that they're all saved in separate slots. The database itself retains the single-entry data until the first
   // player load attempt after this change, at which point this is called client-side to do a one-time format migration
   // Before the migration, saves were stored in ".../web" and afterward they have been moved to ".../web/1" and similar
-  async separateSaveSlots(oldData) {
-    const allData = GameSaveSerializer.deserialize(oldData);
+  async separateSaveSlots() {
+    const oldData = await this.readFromCloudDB(null);
+    if (!oldData.exists()) return;
+    const allData = GameSaveSerializer.deserialize(oldData.val());
     if (!allData) return;
 
     for (const slot of Object.keys(allData.saves)) {
@@ -215,15 +267,17 @@ export const Cloud = {
       if (user) {
         this.user = {
           id: user.uid,
-          displayName: user.displayName,
+          displayName: STEAM
+            ? SteamRuntime.screenName
+            : user.displayName,
           email: user.email,
         };
-        ShopPurchaseData.syncSTD();
+        if (!STEAM) {
+          ShopPurchaseData.syncSTD();
+        }
       } else {
         this.user = null;
       }
     });
   },
 };
-
-Cloud.init();

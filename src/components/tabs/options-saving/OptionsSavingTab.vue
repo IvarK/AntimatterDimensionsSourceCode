@@ -5,6 +5,8 @@ import OptionsButton from "@/components/OptionsButton";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 import SaveFileName from "./SaveFileName";
 
+import { STEAM } from "@/env";
+
 export default {
   name: "OptionsSavingTab",
   components: {
@@ -38,6 +40,9 @@ export default {
       return this.forceCloudOverwrite
         ? `Your local save will always overwrite your cloud save no matter what.`
         : `Save conflicts will prevent your local save from being saved to the cloud.`;
+    },
+    STEAM() {
+      return STEAM;
     }
   },
   watch: {
@@ -193,6 +198,7 @@ export default {
     </div>
     <div class="l-options-grid">
       <div
+        v-if="!STEAM"
         class="l-options-grid__row"
       >
         <OptionsButton

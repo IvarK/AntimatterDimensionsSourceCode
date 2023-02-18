@@ -4,6 +4,8 @@
     "serve": "node build/check-npm.js && vue-cli-service serve",
     "build:master": "node build/pre-build.js && vue-cli-service build --mode master && node build/post-build.js",
     "build:release": "node build/pre-build.js && vue-cli-service build && node build/post-build.js",
+    "build:steam-development": "node build/pre-build.js && vue-cli-service build --mode steam-development",
+    "build:steam-release": "node build/pre-build.js && vue-cli-service build --mode steam-release",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -17,7 +19,6 @@
     "firebase": "^9.6.6",
     "gamma": "^1.0.0",
     "js-sha512": "^0.8.0",
-    "lz-string": "^1.4.4",
     "mousetrap": "^1.6.5",
     "pako": "^2.0.4",
     "svg-pan-zoom": "^3.6.1",

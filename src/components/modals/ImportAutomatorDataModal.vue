@@ -1,5 +1,5 @@
 <script>
-import { AutomatorBackend } from "../../../javascripts/core/globals";
+import { AutomatorBackend } from "@/core/globals";
 
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 

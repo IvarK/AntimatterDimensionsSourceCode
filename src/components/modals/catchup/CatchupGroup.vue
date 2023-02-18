@@ -1,5 +1,5 @@
 <script>
-import { CatchupResources } from "../../../../javascripts/core/storage/progress-checker";
+import { CatchupResources } from "@/core/storage/progress-checker";
 
 import CatchupEntry from "@/components/modals/catchup/CatchupEntry";
 

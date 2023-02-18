@@ -1,4 +1,4 @@
 public/**/*.js
 src/components/SliderComponent.vue
-javascripts/supported-browsers.js
+src/supported-browsers.js
 src/steam/bindings/PlayFabClientApi.js

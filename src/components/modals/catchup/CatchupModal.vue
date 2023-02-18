@@ -1,5 +1,5 @@
 <script>
-import { GameProgress, ProgressChecker } from "../../../../javascripts/core/storage/progress-checker";
+import { GameProgress, ProgressChecker } from "@/core/storage/progress-checker";
 
 import CatchupGroup from "@/components/modals/catchup/CatchupGroup";
 import PrimaryButton from "@/components/PrimaryButton";

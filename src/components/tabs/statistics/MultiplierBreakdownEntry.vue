@@ -1,5 +1,5 @@
 <script>
-import { DC } from "../../../../javascripts/core/constants";
+import { DC } from "@/core/constants";
 
 import { BreakdownEntryInfo } from "./breakdown-entry-info";
 import { getResourceEntryInfoGroups } from "./breakdown-entry-info-group";

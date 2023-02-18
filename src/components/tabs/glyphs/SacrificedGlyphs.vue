@@ -1,5 +1,5 @@
 <script>
-import { DC } from "../../../../javascripts/core/constants";
+import { DC } from "@/core/constants";
 
 import TypeSacrifice from "./TypeSacrifice";
 

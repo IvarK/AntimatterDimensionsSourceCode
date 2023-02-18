@@ -1,5 +1,5 @@
 <script>
-import FullScreenAnimationHandler from "../../../../javascripts/core/full-screen-animation-handler";
+import FullScreenAnimationHandler from "@/core/full-screen-animation-handler";
 
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 

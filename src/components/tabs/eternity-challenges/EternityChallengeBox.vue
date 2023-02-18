@@ -1,5 +1,5 @@
 <script>
-import wordShift from "../../../../javascripts/core/wordShift";
+import wordShift from "@/core/word-shift";
 
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";

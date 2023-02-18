@@ -1,5 +1,5 @@
 <script>
-import wordShift from "../../../../javascripts/core/wordShift";
+import wordShift from "@/core/word-shift";
 
 import ReplicantiUpgradeButton, { ReplicantiUpgradeButtonSetup } from "./ReplicantiUpgradeButton";
 import PrimaryButton from "@/components/PrimaryButton";

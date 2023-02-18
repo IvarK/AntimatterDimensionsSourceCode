@@ -3,7 +3,7 @@ import "vue-loading-overlay/dist/vue-loading.css";
 
 import Loading from "vue-loading-overlay";
 
-import Payments from "../../../../javascripts/core/payments";
+import Payments from "@/core/payments";
 
 import { STEAM } from "@/env";
 import { SteamRuntime } from "@/steam";

@@ -1,7 +1,7 @@
 <script>
 import { STEAM } from "@/env";
 import { SteamRuntime } from "@/steam";
-import Payments from "../../../javascripts/core/payments";
+import Payments from "@/core/payments";
 
 export default {
   name: "StdStoreRow",

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { RichPresenceInfo } from "../../javascripts/core/discord-parser";
+import { RichPresenceInfo } from "@/core/discord-parser";
 
 import {
   hasPendingPurchaseConfirmations,

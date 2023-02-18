@@ -1,4 +1,4 @@
-import { DC } from "../../../../javascripts/core/constants";
+import { DC } from "@/core/constants";
 
 export const MatterScale = {
   proton: new Decimal("2.82e-45"),

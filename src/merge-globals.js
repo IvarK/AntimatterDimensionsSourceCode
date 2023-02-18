@@ -15,34 +15,31 @@ function mergeIntoGlobal(object) {
   }
 }
 
-import * as Utils from "../javascripts/core/utils";
+import * as Utils from "./core/utils";
 mergeIntoGlobal(Utils);
 
-import * as GameDB from "../javascripts/core/secret-formula";
+import * as GameDB from "./core/secret-formula";
 mergeIntoGlobal(GameDB);
 
-// Start of bullshit
+// This is a list of legacy stuff, please don't add
+// any more globals to the component files
 
-// Hevi, why
 import * as AutomatorBlockEditor from "@/components/tabs/automator/AutomatorBlockEditor";
 mergeIntoGlobal(AutomatorBlockEditor);
 
-// Hevi, whyy
 import * as AutomatorBlocks from "@/components/tabs/automator/AutomatorBlocks";
 mergeIntoGlobal(AutomatorBlocks);
 
-// Garnet, nooo
 import * as AutomatorTextEditor from "@/components/tabs/automator/AutomatorTextEditor";
 mergeIntoGlobal(AutomatorTextEditor);
 
-// Spec, reeee
 import * as PerksTab from "@/components/tabs/perks/PerksTab";
 mergeIntoGlobal(PerksTab);
 
-// End of bullshit
+// End of legacy stuff
 
-import * as core from "../javascripts/core/globals";
+import * as core from "./core/globals";
 mergeIntoGlobal(core);
 
-import * as game from "../javascripts/game";
+import * as game from "./game";
 mergeIntoGlobal(game);

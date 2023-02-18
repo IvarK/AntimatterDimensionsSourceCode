@@ -1,5 +1,5 @@
 <script>
-import { Laitela } from "../../../../javascripts/core/globals";
+import { Laitela } from "@/core/globals";
 
 import SliderComponent from "@/components/SliderComponent";
 

@@ -79,10 +79,17 @@ export const BlackHoleAnimation = (function() {
     performDraw(context) {
       // Glowing effect to make the hole more visible on dark themes
       const glow = context.createRadialGradient(200, 200, 0, 200, 200, this.size * 2);
-      glow.addColorStop(0, "rgba(0, 0, 0, 1)");
-      glow.addColorStop(0.9, "rgba(0, 0, 0, 1)");
-      glow.addColorStop(0.92, "rgba(100, 100, 100, 1)");
-      glow.addColorStop(1, "rgba(100, 100, 100, 0)");
+      if (BlackHoles.areNegative) {
+        glow.addColorStop(0, "rgba(255, 255, 255, 1)");
+        glow.addColorStop(0.85, "rgba(190, 190, 190, 1)");
+        glow.addColorStop(0.87, "rgba(170, 170, 170, 1)");
+        glow.addColorStop(1, "rgba(135, 135, 135, 0)");
+      } else {
+        glow.addColorStop(0, "rgba(0, 0, 0, 1)");
+        glow.addColorStop(0.9, "rgba(0, 0, 0, 1)");
+        glow.addColorStop(0.92, "rgba(100, 100, 100, 1)");
+        glow.addColorStop(1, "rgba(100, 100, 100, 0)");
+      }
       context.fillStyle = glow;
       context.fillRect(0, 0, 400, 400);
       context.strokeStyle = "black";
@@ -105,13 +112,15 @@ export const BlackHoleAnimation = (function() {
       this.lastAngle = this.angle;
       this.preLastAngle = this.angle;
       this.respawnTick = true;
-      this.isInside = false;
+      this.isInside = BlackHoles.areNegative;
       this.blob = blobs[Math.floor(Math.random() * blobs.length)];
       this.isBlob = Theme.currentName() === "S11";
     }
 
     static randomDistance() {
-      return holeSize + 0.5 * SEMIMAJOR_AXIS * Math.random() * (BlackHole(1).isActive ? 2 : 1);
+      return BlackHoles.areNegative
+        ? (1.97 * Math.random() + 0.03) * holeSize
+        : holeSize + 0.5 * SEMIMAJOR_AXIS * Math.random() * (BlackHole(1).isActive ? 2 : 1);
     }
 
     update(delta, dilationFactor) {
@@ -127,14 +136,25 @@ export const BlackHoleAnimation = (function() {
 
       this.preLastDistance = this.lastDistance;
       this.lastDistance = this.distance;
-      this.distance /= 1 + 0.3 * particleSpeed * Math.pow(this.distance / holeSize, -2);
+      const distFactor = 1 + 0.3 * particleSpeed * Math.pow(this.distance / holeSize, -2);
+      if (BlackHoles.areNegative) {
+        this.distance *= distFactor;
+      } else {
+        this.distance /= distFactor;
+      }
 
-      if (this.distance < 0.1 * holeSize) {
+      // This magic number is a numerical result from the arcane (and probably now-unneeded) math below
+      // in the Animation constructor, assuming reasonable values for the game state at the point when
+      // inverting is unlocked. The end result is that particles despawn in the inverted animation at
+      // roughly the maximum spawning distance as the forward animation
+      if (this.distance > 2.74645 * holeSize && BlackHoles.areNegative) {
+        this.respawn();
+      } else if (this.distance < 0.01 * holeSize && !BlackHoles.areNegative) {
         this.respawn();
         return;
       }
 
-      this.isInside = this.distance <= holeSize * 0.85;
+      this.isInside = this.distance <= holeSize * 0.865;
       this.respawnTick = false;
     }
 
@@ -151,7 +171,7 @@ export const BlackHoleAnimation = (function() {
       if (distance > holeSize) {
         // Trails outside black hole
         const dist = Math.floor(127 * (distance - holeSize) / SEMIMAJOR_AXIS);
-        context.strokeStyle = `rgb(${255 - dist}, ${dist}, ${dist})`;
+        context.strokeStyle = `rgb(${135 - dist}, ${dist}, ${dist})`;
       }
 
       if (distance <= holeSize) {
@@ -253,7 +273,7 @@ export const BlackHoleAnimation = (function() {
         particle.draw(this.context);
       }
 
-      if (BlackHoles.arePaused) return;
+      if (BlackHoles.arePaused && !BlackHoles.areNegative) return;
 
 
       // Time dilation factor (Realistic formula, but only actually used for particle speed)

@@ -220,9 +220,11 @@ export const Cloud = {
     let singleSlot = await this.readFromCloudDB(GameStorage.currentSlot);
     if (singleSlot.exists()) return GameSaveSerializer.deserialize(singleSlot.val());
 
-    // If it doesn't exist, we assume that the cloud save hasn't been migrated yet and apply the migration before
-    // trying again. If it still doesn't exist, the cloud save was actually empty and there was nothing to migrate
-    await this.separateSaveSlots(combinedSlots.val());
+    // An optimization to reduce cloud save operations was done which migrates the format from an old one where all
+    // slots were saved together to a new one where all three are saved in separate spots. This part of the code should
+    // only be reached and executed if this migration hasn't happened yet, in which case we migrate and try again. If
+    // it's *still* empty, then there was nothing to migrate in the first place
+    await this.separateSaveSlots();
     singleSlot = await this.readFromCloudDB(GameStorage.currentSlot);
     if (singleSlot.exists()) return GameSaveSerializer.deserialize(singleSlot.val());
 
@@ -233,8 +235,10 @@ export const Cloud = {
   // it so that they're all saved in separate slots. The database itself retains the single-entry data until the first
   // player load attempt after this change, at which point this is called client-side to do a one-time format migration
   // Before the migration, saves were stored in ".../web" and afterward they have been moved to ".../web/1" and similar
-  async separateSaveSlots(oldData) {
-    const allData = GameSaveSerializer.deserialize(oldData);
+  async separateSaveSlots() {
+    const oldData = await this.readFromCloudDB(null);
+    if (!oldData.exists()) return;
+    const allData = GameSaveSerializer.deserialize(oldData.val());
     if (!allData) return;
 
     for (const slot of Object.keys(allData.saves)) {

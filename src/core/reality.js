@@ -271,7 +271,7 @@ function updateRealityRecords(realityProps) {
 function giveRealityRewards(realityProps) {
   const multiplier = realityProps.simulatedRealities + 1;
   const realityAndPPMultiplier = multiplier + binomialDistribution(multiplier, Achievement(154).effectOrDefault(0));
-  const gainedRM = realityProps.gainedRM;
+  const gainedRM = Currency.realityMachines.gte(MachineHandler.hardcapRM) ? DC.D0 : realityProps.gainedRM;
   Currency.realityMachines.add(gainedRM.times(multiplier));
   updateRealityRecords(realityProps);
   addRealityTime(
@@ -679,6 +679,8 @@ export function finishProcessReality(realityProps) {
   player.records.thisEternity.bestIPMsWithoutMaxAll = DC.D0;
   player.records.bestEternity.bestEPminReality = DC.D0;
   player.records.thisReality.bestEternitiesPerMs = DC.D0;
+  player.records.thisReality.bestRSmin = 0;
+  player.records.thisReality.bestRSminVal = 0;
   resetTimeDimensions();
   resetTickspeed();
   AchievementTimers.marathon2.reset();

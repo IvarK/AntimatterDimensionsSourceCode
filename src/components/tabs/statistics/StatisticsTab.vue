@@ -183,6 +183,7 @@ export default {
         You have {{ quantifyInt("useless paperclip", paperclips) }}.
       </div>
       <div v-if="fullGameCompletions">
+        <br>
         <b>
           You have completed the entire game {{ quantifyInt("time", fullGameCompletions) }}.
           <br>

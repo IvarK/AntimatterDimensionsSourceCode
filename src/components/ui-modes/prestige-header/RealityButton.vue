@@ -100,8 +100,8 @@ export default {
       this.ppGained = multiplier;
       this.shardsGained = Effarig.shardsGained * multiplier;
       this.currentShardsRate = (this.shardsGained / Time.thisRealityRealTime.totalMinutes);
-      this.bestShardRate = player.records.thisReality.bestRSmin;
-      this.bestShardRateVal = player.records.thisReality.bestRSminVal;
+      this.bestShardRate = player.records.thisReality.bestRSmin * multiplier;
+      this.bestShardRateVal = player.records.thisReality.bestRSminVal * multiplier;
 
       const teresaReward = this.formatScalingMultiplierText(
         "Glyph Sacrifice",

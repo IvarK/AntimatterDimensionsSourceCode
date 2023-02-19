@@ -34,8 +34,12 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   }
 
   tick() {
+    // We specifically call these two things before actually running the TD autobuyer code because that behavior
+    // is desirable to gameplay, but simply reordering the autobuyers overall has undesired side-effects. There
+    // are checks internal to these calls which ensure that they don't trigger even when still locked
     applyEU2();
     Autobuyer.epMult.tick();
+
     const tier = this.tier;
     if (!TimeDimension(tier).isAvailableForPurchase) return;
     super.tick();

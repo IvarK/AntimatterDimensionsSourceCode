@@ -1,5 +1,6 @@
-import { ElectronRuntime, SteamRuntime } from "@/steam";
 import TWEEN from "tween.js";
+
+import { ElectronRuntime, SteamRuntime } from "@/steam";
 
 import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
@@ -258,7 +259,8 @@ export function addRealityTime(time, realTime, rm, level, realities) {
   }
   const shards = Effarig.shardsGained;
   player.records.recentRealities.pop();
-  player.records.recentRealities.unshift([time, realTime, rm, realities, reality, level, shards]);
+  player.records.recentRealities.unshift([time, realTime, rm.times(realities), realities,
+    reality, level, shards * realities]);
 }
 
 export function gainedInfinities() {

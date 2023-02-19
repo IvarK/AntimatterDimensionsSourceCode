@@ -8,7 +8,7 @@ GameDatabase.shopPurchases = {
     cost: 30,
     description: "Double all your Antimatter Dimension multipliers. Forever.",
     multiplier: purchases => Math.pow(2, purchases),
-    formatEffect: x => `×${Notation.scientific.formatDecimal(new Decimal(x))}`,
+    formatEffect: x => `×${x > 1000 ? Notation.scientific.formatDecimal(new Decimal(x), 2) : x.toFixed(0)}`,
   },
   allDimPurchases: {
     key: "allDimPurchases",

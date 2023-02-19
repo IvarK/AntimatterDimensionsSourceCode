@@ -638,7 +638,7 @@ GameDatabase.celestials.navigation = {
             `Reach Glyph rarity ${formatPercents(complete * goal / 100, 1)}/${formatPercents(goal / 100, 1)}`
           ];
         },
-        angle: 135,
+        angle: 45,
         diagonal: 32,
         horizontal: 32,
       },

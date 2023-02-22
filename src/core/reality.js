@@ -346,6 +346,7 @@ export function beginProcessReality(realityProps) {
   // Note: This is mostly a copy-paste of a code block in processManualReality() with slight modifications
   if (glyphsToProcess < 100) {
     for (let glyphNum = 0; glyphNum < glyphsToProcess; glyphNum++) {
+      GlyphSelection.generate(GlyphSelection.choiceCount);
       if (EffarigUnlock.glyphFilter.isUnlocked) {
         const glyphChoices = GlyphSelection.glyphList(GlyphSelection.choiceCount,
           realityProps.gainedGlyphLevel, { rng });

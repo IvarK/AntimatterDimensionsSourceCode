@@ -12,13 +12,6 @@ function giveEternityRewards(auto) {
     Tab.dimensions.time.show();
   }
 
-  addEternityTime(
-    player.records.thisEternity.time,
-    player.records.thisEternity.realTime,
-    gainedEternityPoints(),
-    newEternities
-  );
-
   Currency.eternities.add(newEternities);
 
   if (EternityChallenge.isRunning) {
@@ -36,6 +29,13 @@ function giveEternityRewards(auto) {
     player.challenge.eternity.requirementBits &= ~(1 << challenge.id);
     respecTimeStudies(auto);
   }
+
+  addEternityTime(
+    player.records.thisEternity.time,
+    player.records.thisEternity.realTime,
+    gainedEternityPoints(),
+    newEternities
+  );
 
   player.records.thisReality.bestEternitiesPerMs = player.records.thisReality.bestEternitiesPerMs.clampMin(
     newEternities.div(Math.clampMin(33, player.records.thisEternity.realTime))

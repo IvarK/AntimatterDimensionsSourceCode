@@ -111,6 +111,7 @@ export default {
 
       if (this.hasChallenges) cells.push(this.challengeText(run));
       for (let i = 0; i < this.layer.extra?.length && cells.length <= this.longestRow; i++) {
+        if (!this.layer.showExtra[i]()) continue;
         const formatFn = this.layer.formatExtra[i];
         const val = run[i + 5] ?? 0;
         if (this.layer.allowRate[i] && this.showRate) cells.push(this.rateText(run, run[i + 5]));
@@ -129,6 +130,7 @@ export default {
       if (this.hasChallenges) cells.push("Challenge");
 
       for (let index = 0; index < this.layer.extra?.length && cells.length <= this.longestRow; index++) {
+        if (!this.layer.showExtra[index]()) continue;
         cells.push((this.layer.allowRate[index] && this.showRate)
           ? this.layer.rateString[index]
           : this.layer.extra[index]);
@@ -256,6 +258,7 @@ export default {
 .c-row-container {
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .c-empty-row {

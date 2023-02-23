@@ -11,6 +11,191 @@ GameDatabase.changelog = [
    * }
    */
   {
+    date: [2023, 2, 22],
+    name: "Visuals and Code prep",
+    info: `
+<b>Big Changes:</b><br>
+<ul>
+<li>Cloud saving now only saves one slot at a time and does so every 10 minutes instead of every 5.
+  <b>If you are using the Cloud, please back up your saves locally just in case. This was hard to thoroughly
+  test and we don't want you to lose your saves.</b></li>
+<li>Please update your theme to v10 for the best user experience (added a new secret theme)</li>
+<li>Blobs now have color in the font file</li>
+<li>Changed recent prestige page to be an organized table with more information</li>
+<li>Multiversal effect should no longer cause a UI softlock if the game processes too slowly</li>
+<li>Lots of changes on the backend and Github repository in preparation for making the game open-source</li>
+</ul>
+<br>
+
+<b>New QoL/features:</b><br>
+<ul>
+<li>5xEP now always triggers before TD autobuyers</li>
+<li>Added time and relic shard modes for auto-reality</li>
+<li>Added tracking for total time across full game completions</li>
+<li>Changed some default player properties to make poor game behavior less likely</li>
+<li>Added an option to invert generated/total TT in study tab</li>
+<li>Expanded info for optimizing prestige for resource/time</li>
+<li>Added a new animation for inverted black holes</li>
+</ul>
+<br>
+
+<b>Improved UI/Layout:</b><br>
+<ul>
+<li>Fixed option dropdown being blurry on some browsers</li>
+<li>Fixed some numbers being formatted with the wrong number of decimal places or not using notation</li>
+<li>Added text for unequippable glyphs in cel7</li>
+<li>Further clarified game/real time behavior in various places</li>
+<li>TS21 now shows its effect as a multiplier</li>
+<li>Increased contrast on reality upgrade buttons</li>
+<li>Made ACHNR perk behave more consistently</li>
+<li>Updated some entries in the credits</li>
+<li>Added max DT this reality</li>
+<li>Fixed a lot of things not being visually disabled in cel7</li>
+<li>Many more minor fixes</li>
+</ul>
+<br>
+
+<b>Bugfixes:</b><br>
+<ul>
+</li><li>Fixed Modern sidebar resource rounding incorrectly
+</li><li>Fixed automator errors on post-completion new games
+</li><li>Fixed some news entry stats not being updated properly
+</li><li>Fixed news repeat buffer not working
+</li><li>Updated progress-locking conditions for some news messages
+</li><li>Fixed edge cases for secret achievements 12 and 42
+</li><li>Fixed cel5-3 memories having the wrong name in offline progress
+</li><li>Fixed Dilated runs not giving EP or being tracked in records
+</li><li>Fixed replicanti time being incorrect in cel7
+</li><li>Fixed hotkeys allowing autobuyers to be changed even when locked
+</li><li>Fixed Continuum H2P entry disappearing in cel7
+</ul>
+`
+  },
+  {
+    date: [2023, 1, 26],
+    name: "Timewall Reduction",
+    info: `
+<b>Balance Changes:</b><br>
+<ul>
+<li>EC4 infinity requirement scales slower (50M => 25M per tier)</li>
+<li>EC11 goals have been reduced by e50 on all tiers</li>
+<li>Improved visibility for cel3 hints (progress is now always visible and accumulates 10x faster)</li>
+<li>Made BH auto-pulse always force charging at 99%, removed adjustability for charge rate</li>
+<li>Momentum grows 2.5x faster</li>
+<li>Reduced final singularity milestone (8e45 => 2.5e45)</li>
+<li>Speedruns now also start with achievements 35 and 76</li>
+</ul>
+<br>
+
+<b>New Quality-of-Life:</b><br>
+<ul>
+<li>Made TS tree import text persist between closing the modal</li>
+<li>Added "Respec and load" buttons/options for TS loading</li>
+<li>Added "Sort by Level" to glyph inventory</li>
+<li>Auto-EC now holds (but doesn't complete) the next one when paused</li>
+</ul>
+<br>
+
+<b>Bugfixes:</b><br>
+<ul>
+<li>Modern-Metro themes now have the correct AD color</li>
+<li>Cloud save conflict option buttons now work properly</li>
+<li>"Buy 10" multiplier now always shows</li>
+<li>Crunch modal no longer shows up pre-break with hotkeys</li>
+<li>Next EC rewards now show "Next:" even when capped</li>
+<li>EC requirements no longer scale up after max completions</li>
+<li>Fixed Companion Glyph still counting as a glyph in some cases (LE, nav, achievements)</li>
+<li>Fixed black hole-related achievements not affecting displayed interval/duration</li>
+<li>Cel5 times now account for storing real time</li>
+<li>Cel6 text now updates properly after destabilization</li>
+</ul>
+<br>
+
+<b>Minor Changes:</b><br>
+<ul>
+<li>Improved Cloud conflict detection (eternities in early eternity and max DT in dilation)</li>
+<li>Added ability to hide Google info when Cloud saving</li>
+<li>Added "Common Abbreviations" to H2P</li>
+<li>Added max replicanti text</li>
+<li>Reduced IP/min and EP/min hiding thresholds on prestige buttons</li>
+<li>Added an outline for fully-completed EC studies</li>
+<li>Added cel3 icon to cosmetics</li>
+<li>Made paperclips less invisible</li>
+<li>Fixed more minor typos and made many minor wording improvements</li>
+</ul>
+`
+  },
+  {
+    date: [2023, 1, 9],
+    name: "The Companion Glyph doesn't want to hurt you",
+    info: `
+<b>Mechanic Changes:</b><br>
+<ul>
+<li>Buffed Break Infinity passive infinity generation upgrade (Cap is now once per 100ms instead of
+  165ms and is reached at a fastest of 50ms instead of 33ms)</li>
+<li>Limited offline ticks to a minimum length of 50ms</li>
+<li>The Companion Glyph no longer counts as a Glyph for the purposes of Glyph-based requirements</li>
+</ul>
+<br>
+
+<b>Bugfixes:</b><br>
+<ul>
+<li>Fixed EM6 being disabled even if EM200/EM1000 are still locked</li>
+<li>Fixed EM200 applying when auto-eternity is in the wrong mode</li>
+<li>Made EU1 apply properly on-purchase</li>
+<li>Made EU2 always check before EP-based autobuyers trigger</li>
+<li>Fixed being able to enter cel7 while in another celestial reality</li>
+<li>Fixed autobuyers being unmodifiable in early cel7</li>
+<li>Fixed ECB using current IP instead of max IP</li>
+<li>Cleared New! notifications upon loading different saves</li>
+<li>Fixed IC5 erroneously applying C9 effect to tickspeed cost</li>
+</ul>
+<br>
+
+<b>Text Changes:</b><br>
+<ul>
+<li>Added warning for lag in animated themes</li>
+<li>Fixed incorrect text on references to the IP formula</li>
+<li>Clarified ach156 only applying to generated TT</li>
+<li>Updated some slightly out-of-date How To Play entries</li>
+<li>Added additional info to Glyph Filter and Alchemy in H2P</li>
+<li>Reworded DT mult from replicanti glyph effect to not use very small numbers</li>
+<li>Improved Perk wording consistency</li>
+<li>Fixed a few spots with unformatted and/or unblinded numbers</li>
+<li>Fixed various punctuation inconsistencies</li>
+<li>Made Big Crunch autobuyer always show interval, even if below update rate</li>
+<li>Moved EC8 ID purchase count nearer to the top of the page</li>
+<li>Added "approximately" to replicanti timer at low amounts</li>
+<li>Made AG button text account for achievements which stop certain resources from being reset</li>
+<li>Added text in a few places for capped upgrades/effects</li>
+<li>Added news ticker suggestions up to Dec 26th, fixed some incorrect news tickers</li>
+</ul>
+`
+  },
+  {
+    date: [2022, 12, 21],
+    name: "First Post-release Patch",
+    info: `
+<b>Various Miscellaneous Changes:</b><br>
+<ul>
+<li>Fixed NC6 not actually spending lower dimensions when purchasing upgrades</li>
+<li>Changed matter scale text ("If every antimatter were...") to only change once per second</li>
+<li>Fixed some text overflow issues in IC3 and reality upgrades</li>
+<li>Reworded reality reminder text</li>
+<li>Fixed Alt-T hotkey not working before completing tickspeed challenge</li>
+<li>Fixed glyph tooltips not appearing in a certain secret theme</li>
+<li>Made clicking challenge header switch to the tab of the innermost challenge</li>
+<li>Changed EU1 perk to apply to all forms of eternity gain, not just manual ones</li>
+<li>Fixed some bugs related to achievement Bulked Up</li>
+<li>Fixed various typos</li>
+<li>Rolled back styling change for unpurchasable upgrades on dark themes</li>
+<li>Fixed ID/TD multiplier tabs disappearing within EC11</li>
+<li>Fixed a game crash when attempting to run empty or invalid automator scripts</li>
+<li>Fixed a few bugs in celestial content</li>
+</ul>
+`
+  },
+  {
     date: [2022, 12, 17],
     name: "The Reality Update",
     info: `

@@ -8,7 +8,7 @@ export default {
       gainedEP: new Decimal(0),
       currentEP: new Decimal(0),
       currentEPRate: new Decimal(0),
-      currentEPRateVal: new Decimal(0),
+      peakEPRateVal: new Decimal(0),
       peakEPRate: new Decimal(0),
       currentTachyons: new Decimal(0),
       gainedTachyons: new Decimal(0),
@@ -157,10 +157,11 @@ export default {
         ? EP_BUTTON_DISPLAY_TYPE.NORMAL_EXPLORE_NEW_CONTENT
         : EP_BUTTON_DISPLAY_TYPE.NORMAL;
       if (this.showEPRate) {
-        this.currentEPRate.copyFrom(player.records.thisEternity.bestEPmin);
-        this.currentEPRateVal.copyFrom(player.records.thisEternity.bestEPminVal);
+        this.currentEPRate.copyFrom(gainedEP.dividedBy(
+          TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes));
+        this.peakEPRateVal.copyFrom(player.records.thisEternity.bestEPminVal);
+        this.peakEPRate.copyFrom(player.records.thisEternity.bestEPmin);
       }
-      this.peakEPRate.copyFrom(player.records.thisEternity.bestEPmin);
       this.creditsClosed = GameEnd.creditsEverClosed;
     },
     updateChallengeWithRUPG() {
@@ -221,7 +222,7 @@ const EP_BUTTON_DISPLAY_TYPE = {
         <br>
         Peak: {{ format(peakEPRate, 2, 2) }} EP/min
         <br>
-        at {{ format(currentEPRateVal, 2, 2) }} EP
+        at {{ format(peakEPRateVal, 2, 2) }} EP
       </template>
     </template>
 

@@ -335,9 +335,13 @@ export function beginProcessReality(realityProps) {
     return;
   }
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_BEFORE);
+
+  // Save a few important props before resetting all resources. We need to do this before processing glyphs so
+  // that we don't try to reality again while async is running, but we need to retain RNG and level or else
+  // glyphs will be generated with values based on post-reset values
   const glyphsToProcess = realityProps.simulatedRealities + (realityProps.alreadyGotGlyph ? 0 : 1);
   const rng = GlyphGenerator.getRNG(false);
-  // Do this before processing glyphs so that we don't try to reality again while async is running.
+  const glyphLevel = gainedGlyphLevel();
   finishProcessReality(realityProps);
 
   // If we have less than a certain amount of simulated realities, then we just shortcut the heavier async and
@@ -346,7 +350,7 @@ export function beginProcessReality(realityProps) {
   // Note: This is mostly a copy-paste of a code block in processManualReality() with slight modifications
   if (glyphsToProcess < 100) {
     for (let glyphNum = 0; glyphNum < glyphsToProcess; glyphNum++) {
-      GlyphSelection.generate(GlyphSelection.choiceCount);
+      GlyphSelection.generate(GlyphSelection.choiceCount, glyphLevel);
       if (EffarigUnlock.glyphFilter.isUnlocked) {
         const glyphChoices = GlyphSelection.glyphList(GlyphSelection.choiceCount,
           realityProps.gainedGlyphLevel, { rng });

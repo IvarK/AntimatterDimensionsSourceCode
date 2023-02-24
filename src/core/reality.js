@@ -364,7 +364,6 @@ export function beginProcessReality(realityProps) {
         GlyphSelection.select(Math.floor(Math.random() * GlyphSelection.choiceCount), false);
       }
     }
-    rng.finalize();
     Glyphs.processSortingAfterReality();
     return;
   }

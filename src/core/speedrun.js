@@ -21,12 +21,8 @@ export const Speedrun = {
   },
   // Hard-resets the current save and puts it in a state ready to be "unpaused" once resources start being generated
   prepareSave(name) {
-    // Carry full completion count and cosmetic settings into speedrun mode as well
-    const fullCompletions = player.records.fullGameCompletions;
-    const glyphCosmetics = JSON.stringify(player.reality.glyphs.cosmetics);
-    GameStorage.hardReset();
-    player.records.fullGameCompletions = fullCompletions;
-    player.reality.glyphs.cosmetics = JSON.parse(glyphCosmetics);
+    // Carry all relevant post-completion variables over too
+    NG.restartWithCarryover();
 
     player.speedrun.isUnlocked = true;
     player.speedrun.isActive = true;

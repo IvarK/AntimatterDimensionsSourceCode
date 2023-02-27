@@ -8,6 +8,23 @@ export const NG = {
     // We set this ASAP so that the AD tab is immediately recreated without END formatting, and any lag which could
     // happen is instead hidden by the overlay from the credits rollback
     player.celestials.pelle.doomed = false;
+
+    // Modify beaten-game quantities before doing a carryover reset
+    player.records.fullGameCompletions++;
+    GlyphAppearanceHandler.unlockSet();
+    this.restartWithCarryover();
+
+    // The ending animation ends at 12.5, although the value continues to increase after that. We set it to a bit above
+    // 12.5 when we start the rollback animation to hide some of the unavoidable lag from all the reset functions
+    GameEnd.removeAdditionalEnd = true;
+    GameEnd.additionalEnd = 15;
+    // Without the delay, this causes the saving (and its notification) to occur during the credits rollback
+    setTimeout(() => GameStorage.save(), 10000);
+  },
+
+  // Reset the game, but carry over some post-completion stats. We also call this when starting a speedrun, so make sure
+  // any stats which are updated due to completion happen in startNewGame() instead of in here
+  restartWithCarryover() {
     const backUpOptions = JSON.stringify(player.options);
     // This can't be JSONed as it contains sets
     const secretUnlocks = player.secretUnlocks;
@@ -19,7 +36,6 @@ export const NG = {
     const automatorScripts = JSON.stringify(player.reality.automator.scripts);
     const fullCompletions = player.records.fullGameCompletions;
     const fullTimePlayed = player.records.previousRunRealTime + player.records.realTimePlayed;
-    GlyphAppearanceHandler.unlockSet();
     const glyphCosmetics = JSON.stringify(player.reality.glyphs.cosmetics);
     Modal.hideAll();
     Quote.clearAll();
@@ -32,7 +48,7 @@ export const NG = {
     player.secretAchievementBits = JSON.parse(secretAchievements);
     player.reality.automator.constants = JSON.parse(automatorConstants);
     player.reality.automator.scripts = JSON.parse(automatorScripts);
-    player.records.fullGameCompletions = fullCompletions + 1;
+    player.records.fullGameCompletions = fullCompletions;
     player.records.previousRunRealTime = fullTimePlayed;
     ui.view.newUI = player.options.newUI;
     ui.view.news = player.options.news.enabled;
@@ -41,11 +57,5 @@ export const NG = {
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
     ADNotations.Settings.exponentCommas.show = player.options.commas;
     player.lastUpdate = Date.now();
-    // The ending animation ends at 12.5, although the value continues to increase after that. We set it to a bit above
-    // 12.5 when we start the rollback animation to hide some of the unavoidable lag from all the reset functions
-    GameEnd.removeAdditionalEnd = true;
-    GameEnd.additionalEnd = 15;
-    // Without the delay, this causes the saving (and its notification) to occur during the credits rollback
-    setTimeout(() => GameStorage.save(), 10000);
   }
 };

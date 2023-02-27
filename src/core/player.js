@@ -353,6 +353,8 @@ window.player = {
     // One spot for every entry in GameDatabase.speedrunMilestones (note: 1-indexed)
     records: Array.repeat(0, 26),
     achievementTimes: {},
+    seedSelection: SPEEDRUN_SEED_STATE.FIXED,
+    initialSeed: 0,
   },
   IPMultPurchases: 0,
   version: 16,

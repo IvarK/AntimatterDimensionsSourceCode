@@ -27,7 +27,9 @@ export default {
       loggedIn: false,
       userName: "",
       canSpeedrun: false,
+      inSpeedrun: false,
       creditsClosed: false,
+      canModifySeed: false,
     };
   },
   computed: {
@@ -76,6 +78,8 @@ export default {
       this.hideGoogleName = options.hideGoogleName;
       this.loggedIn = Cloud.loggedIn;
       this.canSpeedrun = player.speedrun.isUnlocked;
+      this.inSpeedrun = player.speedrun.isActive;
+      this.canModifySeed = player.realities < 1;
       this.creditsClosed = GameEnd.creditsEverClosed;
       if (!this.loggedIn) return;
       this.userName = Cloud.user.displayName;
@@ -97,6 +101,14 @@ export default {
       };
       reader.readAsText(event.target.files[0]);
     },
+    openSeedModal() {
+      if (this.canModifySeed) {
+        Modal.modifySeed.show();
+      } else {
+        Modal.message.show(`You cannot modify your seed any more. Glyph RNG has already been used to generate
+          at least one Glyph on this run.`);
+      }
+    }
   }
 };
 </script>
@@ -183,6 +195,16 @@ export default {
           onclick="Modal.enterSpeedrun.show()"
         >
           Start Speedrun
+        </OptionsButton>
+        <OptionsButton
+          v-if="inSpeedrun"
+          :class="{
+            'o-pelle-disabled-pointer': creditsClosed,
+            'o-primary-btn--disabled': !canModifySeed
+          }"
+          @click="openSeedModal()"
+        >
+          Change Glyph RNG Seed
         </OptionsButton>
       </div>
       <OpenModalHotkeysButton />

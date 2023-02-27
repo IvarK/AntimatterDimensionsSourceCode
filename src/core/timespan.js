@@ -229,13 +229,14 @@ window.TimeSpan = class TimeSpan {
   }
 
   /**
+   * Note: For speedruns, we give 3 digits of hours on HMS formatting on the milestone tab, and suppress END formatting
    * @param {boolean} useHMS If true, will display times as HH:MM:SS in between a minute and 100 hours.
    * @returns {String}
    */
-  toStringShort(useHMS = true) {
+  toStringShort(useHMS = true, isSpeedrun = false) {
     // Probably not worth the trouble of importing the isEND function from formatting since this accomplishes the same
     // thing; we do however need this to prevent strings like "02:32" from showing up though
-    if (format(0) === "END") return "END";
+    if (format(0) === "END" && !isSpeedrun) return "END";
 
     const totalSeconds = this.totalSeconds;
     if (totalSeconds > 5e-7 && totalSeconds < 1e-3) {
@@ -259,7 +260,7 @@ window.TimeSpan = class TimeSpan {
     if (totalSeconds < 60) {
       return `${format(totalSeconds, 0, 2)} seconds`;
     }
-    if (this.totalHours < 100) {
+    if (this.totalHours < 100 || (isSpeedrun && this.totalHours < 1000)) {
       if (useHMS && !Notations.current.isPainful) {
         if (Math.floor(this.totalHours) === 0) return `${formatHMS(this.minutes)}:${formatHMS(this.seconds)}`;
         return `${formatHMS(Math.floor(this.totalHours))}:${formatHMS(this.minutes)}:${formatHMS(this.seconds)}`;

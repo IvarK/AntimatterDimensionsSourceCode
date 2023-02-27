@@ -499,7 +499,7 @@ export function gameLoop(passDiff, options = {}) {
   // updating and game time updating.  This is only particularly noticeable when game speed is 1 and the player
   // expects to see identical numbers.
   player.records.realTimeDoomed += realDiff;
-  player.records.realTimePlayed += realDiff;
+  if (!Achievement(188).isUnlocked) player.records.realTimePlayed += realDiff;
   player.records.totalTimePlayed += diff;
   player.records.thisInfinity.realTime += realDiff;
   player.records.thisInfinity.time += diff;

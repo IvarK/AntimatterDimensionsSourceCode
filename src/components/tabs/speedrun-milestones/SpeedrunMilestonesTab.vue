@@ -14,10 +14,16 @@ export default {
       maxMilestone: 1,
       startTimeStr: "",
       displayAll: false,
+      isSpectating: false,
     };
   },
   computed: {
     milestones: () => GameDatabase.speedrunMilestones,
+    spectateText() {
+      return this.isSpectating
+        ? "Times here are unaffected by END so that you can see your final records"
+        : null;
+    }
   },
   watch: {
     displayAll(newValue) {
@@ -32,6 +38,7 @@ export default {
         ? "Speedrun not started yet."
         : `Speedrun started at ${Time.toDateTimeString(player.speedrun.startDate)}`;
       this.displayAll = player.speedrun.displayAllMilestones;
+      this.isSpectating = GameEnd.endState > END_STATE_MARKERS.SPECTATE_GAME;
     },
   },
 };
@@ -46,6 +53,8 @@ export default {
     />
     <br>
     <b>{{ startTimeStr }}</b>
+    <br>
+    <b>{{ spectateText }}</b>
     <br>
     <div class="l-speedrun-milestone-tab">
       <SpeedrunMilestoneSingle

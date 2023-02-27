@@ -15,6 +15,7 @@ export default {
       mostRecent: {},
       isCollapsed: false,
       timeSince: 0,
+      seedText: 0,
     };
   },
   computed: {
@@ -63,6 +64,7 @@ export default {
       this.mostRecent = Speedrun.mostRecentMilestone();
       this.timeSince = Time.realTimePlayed.minus(TimeSpan.fromMilliseconds(speedrun.records[this.mostRecent] ?? 0))
         .toStringShort();
+      this.seedText = Speedrun.seedModeText();
     },
     milestoneName(id) {
       const db = GameDatabase.speedrunMilestones;
@@ -102,6 +104,8 @@ export default {
       <i>{{ segmentText }}</i>
       <br>
       <i>{{ iapText }}</i>
+      <br>
+      {{ seedText }}
       <br>
       Total real playtime since start: {{ timePlayedStr }}
       <br>

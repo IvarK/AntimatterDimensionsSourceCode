@@ -19,6 +19,7 @@ import EternityModal from "@/components/modals/prestige/EternityModal";
 import ExitCelestialModal from "@/components/modals/prestige/ExitCelestialModal";
 import ExitDilationModal from "@/components/modals/prestige/ExitDilationModal";
 import HardResetModal from "@/components/modals/prestige/HardResetModal";
+import ModifySeedModal from "@/components/modals/ModifySeedModal";
 import RealityModal from "@/components/modals/prestige/RealityModal";
 import ReplicantiGalaxyModal from "@/components/modals/prestige/ReplicantiGalaxyModal";
 import ResetRealityModal from "@/components/modals/prestige/ResetRealityModal";
@@ -207,6 +208,7 @@ Modal.exitCelestialReality = new Modal(ExitCelestialModal, 1, GAME_EVENT.REALITY
 Modal.celestials = new Modal(EnterCelestialsModal, 1);
 Modal.hardReset = new Modal(HardResetModal, 1);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
+Modal.modifySeed = new Modal(ModifySeedModal);
 Modal.changeName = new Modal(ChangeNameModal);
 Modal.armageddon = new Modal(ArmageddonModal, 1);
 

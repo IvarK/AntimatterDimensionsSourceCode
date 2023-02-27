@@ -2,6 +2,7 @@ import { GameDatabase } from "./secret-formula/game-database";
 import { GameMechanicState } from "./game-mechanics";
 
 export const Speedrun = {
+  officialFixedSeed: 69420,
   unlock() {
     if (player.speedrun.isUnlocked) return;
     Modal.message.show(`You have unlocked Speedrun Mode! This allows you to start a new save file with some slight
@@ -9,6 +10,40 @@ export const Speedrun = {
       start a Speedrun Save is now available in the Options tab, under Saving. Choosing to start a Speedrun Save
       will provide you with another modal with more in-depth information.`, {}, 3);
     player.speedrun.isUnlocked = true;
+  },
+  modifySeed(key, seed) {
+    player.speedrun.seedSelection = key;
+    let newSeed;
+    switch (key) {
+      case SPEEDRUN_SEED_STATE.FIXED:
+        player.reality.seed = this.officialFixedSeed;
+        player.speedrun.initialSeed = this.officialFixedSeed;
+        return;
+      case SPEEDRUN_SEED_STATE.RANDOM:
+        // This gives seeds of roughly the same magnitude that the first-run Date.now() would give
+        newSeed = Math.floor(1e13 * Math.random());
+        player.reality.seed = newSeed;
+        player.speedrun.initialSeed = newSeed;
+        return;
+      case SPEEDRUN_SEED_STATE.PLAYER:
+        player.reality.seed = seed;
+        player.speedrun.initialSeed = seed;
+        return;
+      default:
+        throw new Error("Unrecognized speedrun seed setting option");
+    }
+  },
+  seedModeText() {
+    switch (player.speedrun.seedSelection) {
+      case SPEEDRUN_SEED_STATE.FIXED:
+        return `Official fixed seed (${player.speedrun.initialSeed})`;
+      case SPEEDRUN_SEED_STATE.RANDOM:
+        return `Random seed (${player.speedrun.initialSeed})`;
+      case SPEEDRUN_SEED_STATE.PLAYER:
+        return `Player seed (${player.speedrun.initialSeed})`;
+      default:
+        throw new Error("Unrecognized speedrun seed option in seedModeText");
+    }
   },
   // If a name isn't given, choose a somewhat-likely-to-be-unique big number instead
   generateName(name) {
@@ -26,7 +61,7 @@ export const Speedrun = {
 
     player.speedrun.isUnlocked = true;
     player.speedrun.isActive = true;
-    player.reality.seed = Date.now();
+    this.modifySeed(SPEEDRUN_SEED_STATE.FIXED);
     player.speedrun.name = name;
 
     // We make a few assumptions on settings which are likely to be changed for all speedrunners

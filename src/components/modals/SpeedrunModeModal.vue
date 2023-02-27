@@ -89,6 +89,9 @@ export default {
       Without importing, saves will remain as Single-segment runs.
       <br>
       <br>
+      You can modify the Glyph RNG seed in the Options tab before starting your run, if desired.
+      <br>
+      <br>
       <div class="c-modal-hard-reset-danger">
         Starting a speedrun will overwrite your current save, replacing this save with the new speedrun save. Some
         things will carry over, such as full-game completion stats, visual settings, automator scripts, and Glyph

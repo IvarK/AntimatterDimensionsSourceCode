@@ -76,6 +76,11 @@ export const Speedrun = {
     if (this.isPausedAtStart() || ShopPurchaseData.spentSTD === 0) return;
     player.speedrun.usedSTD = state;
   },
+  mostRecentMilestone() {
+    const newestTime = player.speedrun.records.max();
+    if (newestTime === 0) return 0;
+    return player.speedrun.records.indexOf(newestTime);
+  }
 };
 
 class SpeedrunMilestone extends GameMechanicState {
@@ -99,8 +104,8 @@ class SpeedrunMilestone extends GameMechanicState {
 
   complete() {
     if (this.isReached || !player.speedrun.isActive) return;
-    player.speedrun.records[this.config.key] = player.records.realTimePlayed;
-    player.speedrun.milestones.push(this.config.id);
+    // Rounding slightly reduces filesize by removing weird float rounding
+    player.speedrun.records[this.config.key] = Math.round(player.records.realTimePlayed);
     GameUI.notify.success(`Speedrun Milestone Reached: ${this.name}`);
   }
 }

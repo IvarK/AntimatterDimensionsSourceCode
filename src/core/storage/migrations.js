@@ -225,10 +225,26 @@ GameStorage.migrations = {
       }
     },
     16: player => {
+      // This won't preserve *current* glyph choices, but is necessary to give uniformity moving forward. We need to
+      // prevent either seed from being 0 due to it being a special case that freezes up the RNG code
       player.reality.initialSeed = player.reality.seed;
 
       player.options.perkLayout = player.options.fixedPerkStartingPos ? 0 : 1;
       delete player.options.fixedPerkStartingPos;
+
+      if (player.reality.initialSeed === 0) player.reality.initialSeed = 1;
+
+      // In order to add cross-run speedrun time tracking without inflating savefile size too much, there was a
+      // refactor which changed the format from an object with a bunch of named props, to an array of times using
+      // the key-id pairs in GameDatabase.speedrunMilestones
+      const newArr = Array.repeat(0, 26);
+      for (const entry of GameDatabase.speedrunMilestones) {
+        newArr[entry.id] = player.speedrun.records[entry.key];
+      }
+      player.speedrun.records = newArr;
+
+      // This contains redundant info and was never cleaned up during the initial implementation
+      delete player.speedrun.milestones;
     },
   },
 

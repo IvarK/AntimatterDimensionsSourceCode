@@ -35,6 +35,9 @@ export default {
     seedAttr() {
       let symbol;
       switch (this.prevRunInfo.seedSelection) {
+        case SPEEDRUN_SEED_STATE.UNKNOWN:
+          symbol = "fa-question";
+          break;
         case SPEEDRUN_SEED_STATE.FIXED:
           symbol = "fa-gamepad";
           break;

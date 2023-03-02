@@ -72,8 +72,10 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
   }
 
   get willEternity() {
-    // We Eternity asap if we're in an Eternity Challenge and can't reach more completions.
-    if (EternityChallenge.current?.gainedCompletionStatus.hasMoreCompletions === false) return true;
+    if (EternityChallenge.isRunning) {
+      // We Eternity asap if we're in an Eternity Challenge and can't reach more completions.
+      return EternityChallenge.current?.gainedCompletionStatus.hasMoreCompletions === false;
+    }
 
     switch (this.mode) {
       case AUTO_ETERNITY_MODE.AMOUNT:

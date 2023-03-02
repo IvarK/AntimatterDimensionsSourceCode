@@ -93,10 +93,10 @@ export default {
       <br>
       <br>
       <div class="c-modal-hard-reset-danger">
-        Starting a speedrun will overwrite your current save, replacing this save with the new speedrun save. Some
-        things will carry over, such as full-game completion stats, visual settings, automator scripts, and Glyph
-        cosmetics. Otherwise, this will generally act as if you had started a new game. Export this save first
-        if you want to keep anything else on your save. Type in "Gotta Go Fast!" below to confirm and start the run.
+        Starting a speedrun will reset your save to the beginning of the game. Some things will remain, such as
+        full-game completion stats, visual settings, automator scripts, and Glyph cosmetics, but otherwise it
+        will be as if you had just finished the entire game and chose to restart at the credits screen. Type
+        in "Gotta Go Fast!" below to confirm and (re)start the run.
       </div>
       <input
         ref="confirmPhrase"

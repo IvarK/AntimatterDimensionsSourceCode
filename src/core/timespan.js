@@ -262,8 +262,9 @@ window.TimeSpan = class TimeSpan {
     }
     if (this.totalHours < 100 || (isSpeedrun && this.totalHours < 1000)) {
       if (useHMS && !Notations.current.isPainful) {
-        if (Math.floor(this.totalHours) === 0) return `${formatHMS(this.minutes)}:${formatHMS(this.seconds)}`;
-        return `${formatHMS(Math.floor(this.totalHours))}:${formatHMS(this.minutes)}:${formatHMS(this.seconds)}`;
+        const sec = seconds(this.seconds, isSpeedrun ? this.milliseconds : undefined);
+        if (Math.floor(this.totalHours) === 0) return `${formatHMS(this.minutes)}:${sec}`;
+        return `${formatHMS(Math.floor(this.totalHours))}:${formatHMS(this.minutes)}:${sec}`;
       }
       if (this.totalMinutes < 60) {
         return `${format(this.totalMinutes, 0, 2)} minutes`;
@@ -280,6 +281,11 @@ window.TimeSpan = class TimeSpan {
     function formatHMS(value) {
       const s = value.toString();
       return s.length === 1 ? `0${s}` : s;
+    }
+
+    function seconds(s, ms) {
+      const sec = formatHMS(s);
+      return isSpeedrun ? `${sec}.${Math.round(ms / 100)}` : sec;
     }
   }
 

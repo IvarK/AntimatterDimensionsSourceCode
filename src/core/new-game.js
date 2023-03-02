@@ -9,6 +9,27 @@ export const NG = {
     // happen is instead hidden by the overlay from the credits rollback
     player.celestials.pelle.doomed = false;
 
+    // This is where we "confirm" a speedrun as completed and store all its information into the previous run prop
+    // before resetting everything.
+    const speedrun = player.speedrun;
+    player.speedrun.previousRuns[player.records.fullGameCompletions + 1] = {
+      isSegmented: speedrun.isSegmented,
+      usedSTD: speedrun.usedSTD,
+      startDate: speedrun.startDate,
+      name: speedrun.name,
+      offlineTimeUsed: speedrun.offlineTimeUsed,
+      records: [...speedrun.records],
+      achievementTimes: JSON.parse(JSON.stringify(speedrun.achievementTimes)),
+      seedSelection: speedrun.seedSelection,
+      initialSeed: speedrun.initialSeed,
+    };
+
+    // For the sake of keeping a bounded savefile size, we only keep a queue of the last 100 full runs. The earliest
+    // this will feasibly become an issue from nonstop speedruns is around 2030; I guess we can revisit it at that point
+    // if we really need to, but I suspect this limit should be high enough
+    const prevRunIndices = Object.keys(player.speedrun.previousRuns).map(k => Number(k));
+    if (prevRunIndices.length > 100) player.speedrun.previousRuns[prevRunIndices.min()] = undefined;
+
     // Modify beaten-game quantities before doing a carryover reset
     player.records.fullGameCompletions++;
     GlyphAppearanceHandler.unlockSet();
@@ -37,6 +58,8 @@ export const NG = {
     const fullCompletions = player.records.fullGameCompletions;
     const fullTimePlayed = player.records.previousRunRealTime + player.records.realTimePlayed;
     const glyphCosmetics = JSON.stringify(player.reality.glyphs.cosmetics);
+    const speedrunRecords = JSON.stringify(player.speedrun.previousRuns);
+    const hasSpeedrun = player.speedrun.isUnlocked;
     Modal.hideAll();
     Quote.clearAll();
     GameStorage.hardReset();
@@ -53,6 +76,8 @@ export const NG = {
     ui.view.newUI = player.options.newUI;
     ui.view.news = player.options.news.enabled;
     player.reality.glyphs.cosmetics = JSON.parse(glyphCosmetics);
+    player.speedrun.previousRuns = JSON.parse(speedrunRecords);
+    player.speedrun.isUnlocked = hasSpeedrun;
     Themes.find(Theme.currentName()).set();
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
     ADNotations.Settings.exponentCommas.show = player.options.commas;

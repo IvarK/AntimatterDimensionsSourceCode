@@ -33,14 +33,15 @@ export const Speedrun = {
         throw new Error("Unrecognized speedrun seed setting option");
     }
   },
-  seedModeText() {
-    switch (player.speedrun.seedSelection) {
+  seedModeText(rec) {
+    const record = rec ?? player.speedrun;
+    switch (record.seedSelection) {
       case SPEEDRUN_SEED_STATE.FIXED:
-        return `Official fixed seed (${player.speedrun.initialSeed})`;
+        return `Official fixed seed (${record.initialSeed})`;
       case SPEEDRUN_SEED_STATE.RANDOM:
-        return `Random seed (${player.speedrun.initialSeed})`;
+        return `Random seed (${record.initialSeed})`;
       case SPEEDRUN_SEED_STATE.PLAYER:
-        return `Player seed (${player.speedrun.initialSeed})`;
+        return `Player seed (${record.initialSeed})`;
       default:
         throw new Error("Unrecognized speedrun seed option in seedModeText");
     }

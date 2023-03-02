@@ -28,6 +28,7 @@ import OptionsVisualTab from "./options-visual/OptionsVisualTab";
 import PastPrestigeRunsTab from "./past-prestige-runs/PastPrestigeRunsTab";
 import PelleTab from "./celestial-pelle/PelleTab";
 import PerksTab from "./perks/PerksTab";
+import PreviousSpeedrunTab from "./speedrun-milestones/PreviousSpeedrunTab";
 import RaTab from "./celestial-ra/RaTab";
 import RealityUpgradesTab from "./reality-upgrades/RealityUpgradesTab";
 import ReplicantiTab from "./replicanti/ReplicantiTab";
@@ -53,6 +54,7 @@ const TabComponents = {
   PastPrestigeRunsTab,
   GlyphSetRecordsTab,
   SpeedrunMilestonesTab,
+  PreviousSpeedrunTab,
   NormalAchievementsTab,
   SecretAchievementTab,
   TeresaTab,

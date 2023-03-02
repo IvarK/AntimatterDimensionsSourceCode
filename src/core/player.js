@@ -347,6 +347,7 @@ window.player = {
     hasStarted: false,
     hideInfo: false,
     displayAllMilestones: false,
+    compareBest: false,
     startDate: 0,
     name: "",
     offlineTimeUsed: 0,
@@ -355,6 +356,7 @@ window.player = {
     achievementTimes: {},
     seedSelection: SPEEDRUN_SEED_STATE.FIXED,
     initialSeed: 0,
+    previousRuns: {}
   },
   IPMultPurchases: 0,
   version: 16,

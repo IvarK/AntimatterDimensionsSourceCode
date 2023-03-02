@@ -61,7 +61,6 @@ export default {
         v-for="milestone in milestones"
         :key="milestone.id"
         :milestone="milestone"
-        :index="milestone.id"
         :display="displayAll || milestone.id <= maxMilestone"
         :time="milestoneTimes[milestone.id]"
       />

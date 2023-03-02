@@ -25,6 +25,11 @@ export default {
       required: true,
     }
   },
+  data() {
+    return {
+      realTime: 0,
+    };
+  },
   computed: {
     classObject() {
       const hasTime = this.currTime > 0 && this.refTime > 0;
@@ -37,9 +42,13 @@ export default {
     },
   },
   methods: {
+    update() {
+      this.realTime = player.records.realTimePlayed;
+    },
     timeString(ms, showGap) {
       const timeStr = TimeSpan.fromMilliseconds(ms).toStringShort(true, true);
-      let gapStr = TimeSpan.fromMilliseconds(Math.abs(this.currTime - ms)).toStringShort(true, true);
+      const diff = this.currTime > 0 ? this.currTime - ms : this.realTime - ms;
+      let gapStr = TimeSpan.fromMilliseconds(Math.abs(diff)).toStringShort(true, true);
       gapStr = `${this.currTime > ms ? "-" : "+"}${gapStr}`;
       return ms > 0
         ? `${timeStr}${showGap ? ` (${gapStr})` : ""}`

@@ -242,6 +242,7 @@ GameStorage.migrations = {
         newArr[entry.id] = player.speedrun.records[entry.key];
       }
       player.speedrun.records = newArr;
+      player.speedrun.seedSelection = SPEEDRUN_SEED_STATE.UNKNOWN;
 
       // This contains redundant info and was never cleaned up during the initial implementation
       delete player.speedrun.milestones;

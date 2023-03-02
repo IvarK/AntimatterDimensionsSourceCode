@@ -36,6 +36,8 @@ export const Speedrun = {
   seedModeText(rec) {
     const record = rec ?? player.speedrun;
     switch (record.seedSelection) {
+      case SPEEDRUN_SEED_STATE.UNKNOWN:
+        return `No seed data (old save)`;
       case SPEEDRUN_SEED_STATE.FIXED:
         return `Official fixed seed (${record.initialSeed})`;
       case SPEEDRUN_SEED_STATE.RANDOM:

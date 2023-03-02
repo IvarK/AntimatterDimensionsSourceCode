@@ -285,7 +285,7 @@ window.TimeSpan = class TimeSpan {
 
     function seconds(s, ms) {
       const sec = formatHMS(s);
-      return isSpeedrun ? `${sec}.${Math.round(ms / 100)}` : sec;
+      return isSpeedrun ? `${sec}.${Math.floor(ms / 100)}` : sec;
     }
   }
 

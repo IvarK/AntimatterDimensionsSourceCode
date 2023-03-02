@@ -75,7 +75,7 @@ export default {
       Modal.changeName.show();
     },
     collapseText() {
-      return `Click to ${this.isCollapsed ? "expand" : "collapse"} Speedrun info`;
+      return this.isCollapsed ? "Expand" : `Click to collapse Speedrun info`;
     },
     toggleCollapse() {
       player.speedrun.hideInfo = !this.isCollapsed;

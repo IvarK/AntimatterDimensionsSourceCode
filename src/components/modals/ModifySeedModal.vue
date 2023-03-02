@@ -21,7 +21,7 @@ export default {
     officialSeed: () => Speedrun.officialFixedSeed,
   },
   created() {
-    if (player.speedrun.seedSelection === this.choiceEnum.PLAYER) this.inputSeed = player.speedrun.initialSeed;
+    if (player.speedrun.seedSelection === this.choiceEnum.PLAYER) this.inputSeed = `${player.speedrun.initialSeed}`;
   },
   methods: {
     update() {

@@ -2,9 +2,15 @@
 export default {
   name: "PreviousSpeedrunInfo",
   props: {
+    // This will be undefined for records which don't exist in the speedrun history
     prevRunInfo: {
       type: Object,
-      required: true
+      required: false,
+      default: () => {}
+    },
+    index: {
+      type: Number,
+      required: true,
     },
   },
   computed: {
@@ -70,8 +76,11 @@ export default {
 </script>
 
 <template>
-  <div class="c-icon-container">
-    <span>Run {{ prevRunInfo.id }}</span>
+  <div
+    v-if="prevRunInfo"
+    class="c-icon-container"
+  >
+    <span>Run {{ index }}</span>
     <span>{{ prevRunInfo.name }}</span>
     <span
       v-for="attr in iconAttrs"
@@ -82,6 +91,12 @@ export default {
     <span>Started: {{ startDate }}</span>
     <span>Final Time: {{ finalTime }}</span>
   </div>
+  <div
+    v-else
+    class="c-no-record"
+  >
+    No speedrun records found for run {{ index }}.
+  </div>
 </template>
 
 <style scoped>
@@ -90,6 +105,13 @@ export default {
   grid-template-columns: 7rem 20rem 4rem 4rem 4rem 4rem 30rem 20rem;
   align-items: center;
   font-size: 1.3rem;
+}
+
+.c-no-record {
+  align-items: center;
+  font-size: 1.3rem;
+  padding: 0.65rem;
+  width: 100%;
 }
 
 .o-icon {

@@ -72,9 +72,11 @@ export default {
     <AutobuyerToggles />
     <OpenModalHotkeysButton />
     <div v-if="hasSeenGamespeedAlteringEffects">
-      Autobuyers intervals are real time and therefore unaffected
+      Autobuyer intervals and time-based settings are always <b>real time</b> and therefore
       <br>
-      by anything which may alter how fast the game itself is running.
+      unaffected by anything which may alter how fast the game itself is running.
+      <br>
+      <br>
     </div>
     <div v-if="!hasInfinity">
       Challenges for upgrading autobuyers are unlocked by reaching Infinity.

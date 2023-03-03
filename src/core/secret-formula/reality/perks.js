@@ -156,7 +156,7 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.ETERNITY,
     get description() {
       return `The second row of Eternity Upgrades is automatically purchased
-        at ${formatX(1e10)} times less than their original price`;
+        at ${formatX(1e10)} times less than their original price.`;
     },
     layoutPosList: [106210, 81001, 81867],
   },

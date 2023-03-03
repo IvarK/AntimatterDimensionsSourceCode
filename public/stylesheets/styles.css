@@ -4112,6 +4112,7 @@ br {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: var(--color-text);
 }
 
 .l-autobuyers-tab td {

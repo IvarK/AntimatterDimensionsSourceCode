@@ -270,9 +270,9 @@ GameDatabase.reality.automator = {
         }
       ],
       examples: [
-        "store time on",
-        "store time off",
-        "store time use",
+        "store game time on",
+        "store game time off",
+        "store game time use",
       ]
     },
     {

@@ -135,7 +135,9 @@ GameDatabase.reality.imaginaryUpgrades = [
     requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} projected Reality Machines within
     The Nameless Ones' Reality`,
     hasFailed: () => !Enslaved.isRunning,
-    checkRequirement: () => Enslaved.isRunning && MachineHandler.uncappedRM.gte(Number.MAX_VALUE),
+    // This is for consistency with the UI, which displays an amplified "projected RM" value on the reality button
+    checkRequirement: () => Enslaved.isRunning &&
+      MachineHandler.uncappedRM.times(simulatedRealityCount(false)).gte(Number.MAX_VALUE),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "Increase Imaginary Machine Cap based on Imaginary Upgrades purchased",
     effect: () => 1 + ImaginaryUpgrades.totalRebuyables / 20 + ImaginaryUpgrades.totalSinglePurchase / 2,

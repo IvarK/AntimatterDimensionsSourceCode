@@ -114,12 +114,19 @@ export default {
     <div class="l-effarig-shop-and-run">
       <div class="l-effarig-shop">
         <div class="c-effarig-relics">
-          You have {{ quantify("Relic Shard", relicShards, 2, 0) }}, which increases
+          You have {{ quantify("Relic Shard", relicShards, 2, 0) }}.
           <br>
-          the rarity of new Glyphs by {{ relicShardRarityAlwaysMax ? "" : "up to" }}
-          +{{ formatPercents(shardRarityBoost, 2) }}
+          <span v-if="relicShardRarityAlwaysMax">
+            The rarity of new Glyphs is being increased by +{{ formatPercents(shardRarityBoost, 2) }}.
+          </span>
+          <span v-else>
+            Each new Glyph will have its rarity increased
+            <br>
+            by a random value between +{{ formatPercents(0) }} and +{{ formatPercents(shardRarityBoost, 2) }}.
+          </span>
           <span v-if="shardPower > 1">
-            <br> and is raising Glyph Sacrifice gain to {{ formatPow(shardPower, 0, 2) }}
+            <br>
+            Glyph Sacrifice gain is also being raised to {{ formatPow(shardPower, 0, 2) }}.
           </span>
         </div>
         <div class="c-effarig-relic-description">

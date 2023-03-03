@@ -71,7 +71,7 @@ GameDatabase.eternity.timeStudies.normal = [
     cost: 2,
     requirement: [11],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => `Replicanti interval limit ${formatInt(50)}ms ➜ ${formatInt(1)}ms`,
+    description: () => `Base Replicanti interval limit ${formatInt(50)}ms ➜ ${formatInt(1)}ms`,
     effect: 1
   },
   {

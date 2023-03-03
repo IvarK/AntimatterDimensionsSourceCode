@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     rateText() {
-      return this.tier < 8
+      return this.rate.neq(0)
         ? ` (+${format(this.rate, 2, 2)}%/s)`
         : "";
     },

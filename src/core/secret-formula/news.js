@@ -1258,7 +1258,7 @@ GameDatabase.news = [
     text:
       `Hello, Vsauce, Michael here. We all know that the 9th dimension doesn't exist, but what is 9? You know it's
       the number after 8... right? What if... there's a number in between? And no I'm not talking about numbers
-      like 8.5 or 8.76, I'm taking about an integer between 8 and 9. Now all this may sound crazy to you, and it
+      like 8.5 or 8.76, I'm talking about an integer between 8 and 9. Now all this may sound crazy to you, and it
       kinda is, but what if, we've missed a number? We've all been taught that 2 comes after 1 and 3 comes after
       2, but what if the number that comes after 8 isn't 9? After years of research and experimentation, we've
       finally found the number. It is dangerous, even knowing its existence will let it consume your mind, but

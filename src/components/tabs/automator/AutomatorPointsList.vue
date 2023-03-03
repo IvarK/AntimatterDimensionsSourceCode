@@ -102,7 +102,7 @@ export default {
       It can also force prestige events on certain conditions independently from your Autobuyers or modify
       some of your Autobuyer settings.
       <br>
-      The speed of the Automator gradually speeds up as you get more Realities. If unlocked right now,
+      The speed of the Automator gradually increases as you get more Realities. If unlocked right now,
       it would run {{ format(1000 / automatorInterval, 2, 2) }} commands per real-time second.
     </div>
   </div>

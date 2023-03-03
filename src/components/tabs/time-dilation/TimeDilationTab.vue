@@ -20,6 +20,7 @@ export default {
       hasPelleDilationUpgrades: false,
       galaxyTimeEstimate: "",
       maxDT: new Decimal(),
+      toMaxTooltip: "",
     };
   },
   computed: {
@@ -99,6 +100,10 @@ export default {
       }
       this.tachyonGalaxyGain *= DilationUpgrade.galaxyMultiplier.effectValue;
       this.maxDT.copyFrom(player.records.thisReality.maxDT);
+
+      const estimateText = getDilationTimeEstimate(this.maxDT);
+      if (this.dilatedTimeIncome.lte(0)) this.toMaxTooltip = "No DT gain";
+      else this.toMaxTooltip = estimateText.startsWith("<") ? "Currently Increasing" : estimateText;
     }
   }
 };
@@ -135,7 +140,10 @@ export default {
     </span>
     <span v-if="hasMaxText">
       Your maximum Dilated Time reached this Reality is
-      <span class="max-accent">{{ format(maxDT, 2, 1) }}</span>.
+      <span
+        v-tooltip="toMaxTooltip"
+        class="max-accent"
+      >{{ format(maxDT, 2, 1) }}</span>.
     </span>
     <div class="l-dilation-upgrades-grid">
       <div class="l-dilation-upgrades-grid__row">
@@ -196,5 +204,7 @@ export default {
 .max-accent {
   color: var(--color-dilation);
   font-size: 1.5rem;
+  text-shadow: 0 0 0.2rem var(--color-reality-dark);
+  cursor: default;
 }
 </style>

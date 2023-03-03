@@ -4655,6 +4655,7 @@ properly on certain themes. */
 .l-replicanti-tab {
   display: flex;
   flex-direction: column;
+  color: var(--color-text);
 
   /* To prevent button jitter */
   width: 100%;

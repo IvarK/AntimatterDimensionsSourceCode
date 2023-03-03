@@ -39,6 +39,7 @@ export default {
       unlockCost: new Decimal(),
       scrambledText: "",
       maxReplicanti: new Decimal(),
+      estimateToMax: 0,
     };
   },
   computed: {
@@ -115,6 +116,11 @@ export default {
       return `${boostList.slice(0, -1).join(",<br>")},<br> and ${boostList[boostList.length - 1]}.`;
     },
     hasMaxText: () => PlayerProgress.realityUnlocked() && !Pelle.isDoomed,
+    toMaxTooltip() {
+      return this.estimateToMax.lt(0.01)
+        ? "Currently increasing"
+        : TimeSpan.fromSeconds(this.estimateToMax.toNumber()).toStringShort();
+    }
   },
   methods: {
     update() {
@@ -153,9 +159,20 @@ export default {
       this.canSeeGalaxyButton =
         Replicanti.galaxies.max >= 1 || PlayerProgress.eternityUnlocked();
       this.maxReplicanti.copyFrom(player.records.thisReality.maxReplicanti);
+      this.estimateToMax = this.calculateEstimate();
     },
     vacuumText() {
       return wordShift.wordCycle(PelleRifts.vacuum.name);
+    },
+    // This is copied out of a short segment of ReplicantiGainText with comments and unneeded variables stripped
+    calculateEstimate() {
+      const updateRateMs = player.options.updateRate;
+      const logGainFactorPerTick = Decimal.divide(getGameSpeedupForDisplay() * updateRateMs *
+        (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
+      const postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
+      const nextMilestone = this.maxReplicanti;
+      const coeff = Decimal.divide(updateRateMs / 1000, exp1m(logGainFactorPerTick.times(postScale)));
+      return coeff.times(nextMilestone.divide(this.amount).pow(postScale).minus(1));
     }
   },
 };
@@ -196,7 +213,10 @@ export default {
         class="c-replicanti-description"
       >
         Your maximum Replicanti reached this Reality is
-        <span class="max-accent">{{ format(maxReplicanti, 2) }}</span>.
+        <span
+          v-tooltip="toMaxTooltip"
+          class="max-accent"
+        >{{ format(maxReplicanti, 2) }}</span>.
       </div>
       <br>
       <div v-if="isInEC8">
@@ -224,5 +244,7 @@ export default {
 <style scoped>
 .max-accent {
   color: var(--color-accent);
+  text-shadow: 0 0 0.2rem var(--color-reality-dark);
+  cursor: default;
 }
 </style>

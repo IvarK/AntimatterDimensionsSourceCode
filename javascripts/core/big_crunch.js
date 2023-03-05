@@ -126,7 +126,7 @@ export function bigCrunchResetValues(enteringAntimatterChallenge) {
   secondSoftReset(enteringAntimatterChallenge);
 
   let remainingGalaxies = 0;
-  if (Achievement(95).isUnlocked) {
+  if (Achievement(95).isUnlocked || !Pelle.isDoomed ) {
     Replicanti.amount = currentReplicanti;
     remainingGalaxies += Math.min(currentReplicantiGalaxies, 1);
   }

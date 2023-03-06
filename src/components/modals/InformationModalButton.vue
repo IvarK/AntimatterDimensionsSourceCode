@@ -27,7 +27,9 @@ export default {
     openAssociatedModal() {
       Modal[this.showModal].show();
     },
-    openExternalLink
+    openLink() {
+      openExternalLink(this.link);
+    }
   }
 };
 </script>
@@ -39,8 +41,8 @@ export default {
   >
     <a
       v-if="link"
-      @click="openExternalLink"
       class="c-socials--icon"
+      @click="openLink"
     >
       <i :class="icon" />
     </a>

@@ -63,7 +63,8 @@ export const GameStorage = {
     // Save current slot to make sure no changes are lost
     this.save(true);
     this.loadPlayerObject(this.saves[slot] ?? Player.defaultStart);
-    Tabs.all.find(t => t.id === player.options.lastOpenTab).show(true);
+    Tabs.all.find(t => t.id === player.options.lastOpenTab).show(false);
+    Modal.hideAll();
     Cloud.resetTempState();
     GameUI.notify.info("Game loaded");
     Achievements.updateSteamStatus();

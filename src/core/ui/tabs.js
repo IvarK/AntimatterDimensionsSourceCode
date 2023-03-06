@@ -142,7 +142,7 @@ class TabState {
     if (subtab !== undefined) {
       if (!Enslaved.isRunning) subtab.unhideTab();
       this._currentSubtab = subtab;
-    } else if (ui.view.tab === this.key && ui.view.initialized) {
+    } else if (ui.view.tab === this.key && ui.view.initialized && manual) {
       this._currentSubtab = cycleThroughSubtabs(this.subtabs, this._currentSubtab);
     } else {
       this._currentSubtab = findLastOpenSubtab(this.id, this.subtabs);

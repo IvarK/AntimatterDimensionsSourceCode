@@ -27,9 +27,9 @@ export default {
       The game has unfolding gameplay and multiple prestige layers. The "How to Play" button contains useful
       information about progressing.
     </div>
-    <div class="l-socials c-socials">
+    <div class="l-socials">
       <InformationModalButton
-        name="GitHub repository"
+        name="GitHub repository (pre-Reality code)"
         icon="fa-brands fa-github"
         link="https://github.com/IvarK/IvarK.github.io"
       />
@@ -92,14 +92,11 @@ export default {
   margin: 0;
 }
 
-.c-socials {
-  font-size: 7.5rem;
-}
-
 .l-socials {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+  font-size: 7.5rem;
 }
 
 .t-s12 .l-socials {

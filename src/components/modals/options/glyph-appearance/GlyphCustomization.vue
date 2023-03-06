@@ -91,7 +91,12 @@ export default {
         "c-type-current": this.selectedIndex === index,
         "c-type-other": this.selectedIndex !== index,
       };
-    }
+    },
+    resetIndividual() {
+      for (const glyph of Glyphs.allGlyphs) glyph.cosmetic = undefined;
+      this.defaultKeySwap = false;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
   }
 };
 </script>
@@ -155,6 +160,12 @@ export default {
       <br>
       <span v-if="hasSpecialTypes">
         Enabling this setting will allow you to change individual Glyphs to special cosmetic types you have unlocked.
+        <PrimaryButton
+          class="o-primary-btn--subtab-option"
+          @click="resetIndividual"
+        >
+          Reset all individual Glyph cosmetics
+        </PrimaryButton>
       </span>
       <span v-else>
         Enabling or disabling this option will currently do nothing.

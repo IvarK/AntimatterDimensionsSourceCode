@@ -60,7 +60,9 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
       Laitela.quotes.finalRowIM.show();
     }
     if (this.id === 22) {
-      BASIC_GLYPH_TYPES.forEach(x => player.reality.glyphs.sac[x] = ImaginaryUpgrade(22).effectValue);
+      for (const key of Object.keys(player.reality.glyphs.sac)) {
+        player.reality.glyphs.sac[key] = ImaginaryUpgrade(22).effectValue;
+      }
     }
     if (this.id === 25) {
       TabNotification.pelleUnlock.tryTrigger();

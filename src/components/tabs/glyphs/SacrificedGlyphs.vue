@@ -42,6 +42,15 @@ export default {
       return GlyphAlteration.boostingThreshold;
     },
     cosmeticTypes: () => CosmeticGlyphTypes,
+    addStyle() {
+      return { color: GlyphAlteration.baseAdditionColor() };
+    },
+    empowerStyle() {
+      return { color: GlyphAlteration.baseEmpowermentColor() };
+    },
+    boostStyle() {
+      return { color: GlyphAlteration.baseBoostColor() };
+    },
   },
   created() {
     this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
@@ -132,9 +141,13 @@ export default {
         Glyph types will have one of their effects improved<br>
         when their Glyph type's total sacrifice value is above:
         <br><br>
-        {{ format(addThreshold) }} - an additional secondary effect<br>
-        {{ format(empowerThreshold) }} - formula drastically improved<br>
-        {{ format(boostThreshold) }} - a boost depending on Glyph Sacrifice
+        <b>
+          <span :style="addStyle">{{ format(addThreshold) }} - an additional secondary effect</span>
+          <br>
+          <span :style="empowerStyle">{{ format(empowerThreshold) }} - formula drastically improved</span>
+          <br>
+          <span :style="boostStyle">{{ format(boostThreshold) }} - a boost depending on Glyph Sacrifice</span>
+        </b>
         <br><br>
         All effects from Glyph Sacrifice can no longer be increased once they reach {{ format(maxSacrifice) }}.
       </div>

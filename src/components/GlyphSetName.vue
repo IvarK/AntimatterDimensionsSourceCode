@@ -9,8 +9,10 @@ const GLYPH_NAMES = {
     noun: "Reality"
   },
   music: {
-    adjective: { high: "Melodic", mid: "Chordal", low: "Tuned" }
-    // This doesn't need noun entries because music glyphs also apply their actual types
+    adjective: { high: "Melodic", mid: "Chordal", low: "Tuned" },
+    // This noun is only used in the case of a single companion reskinned as music (resulting in "Huggable Music");
+    // otherwise the set's noun will always come from an actual glyph type instead of music
+    noun: "Music"
   },
   effarig: {
     adjective: { both: "Meta", glyph: "Stable", rm: "Mechanical", none: "Fragmented" },

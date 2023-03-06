@@ -160,10 +160,6 @@ export default {
       equipped in their place.
     </div>
     <div class="c-glyph-set-save-container">
-      <!-- Clicking this intentionally does nothing, but we want consistent visual styling -->
-      <button class="c-glyph-set-save-setting-button c-glyph-set-save-setting-button--disabled">
-        Type: Exact (always)
-      </button>
       <ToggleButton
         v-model="effects"
         class="c-glyph-set-save-setting-button"
@@ -243,6 +239,14 @@ export default {
 </template>
 
 <style scoped>
+.c-glyph-set-save-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  margin: 1rem auto 0;
+}
+
 .c-glyph-single-set-save-flexbox {
   width: 17rem;
 }

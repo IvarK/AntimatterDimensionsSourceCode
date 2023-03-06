@@ -420,18 +420,24 @@ export const GlyphAlteration = {
     const capped = Math.clampMax(this.getSacrificePower(type), GlyphSacrificeHandler.maxSacrificeForEffects);
     return Math.log10(Math.clampMin(capped / this.boostingThreshold, 1)) / 2;
   },
+  baseAdditionColor() {
+    return Theme.current().isDark() ? "#CCCCCC" : "black";
+  },
+  baseEmpowermentColor() {
+    return Theme.current().isDark() ? "#EEEE30" : "#C6C610";
+  },
+  baseBoostColor() {
+    return Theme.current().isDark() ? "#60DDDD" : "#28BDBD";
+  },
   getAdditionColor(type) {
-    const color = Theme.current().isDark() ? "#CCCCCC" : "black";
-    return this.isAdded(type) ? color : undefined;
+    return this.isAdded(type) ? this.baseAdditionColor() : undefined;
   },
   getEmpowermentColor(type) {
-    const color = Theme.current().isDark() ? "#EEEE30" : "#C6C610";
-    return this.isEmpowered(type) ? color : undefined;
+    return this.isEmpowered(type) ? this.baseEmpowermentColor() : undefined;
   },
   getBoostColor(type) {
-    const color = Theme.current().isDark() ? "#60DDDD" : "#28BDBD";
-    return this.isBoosted(type) ? color : undefined;
-  },
+    return this.isBoosted(type) ? this.baseBoostColor() : undefined;
+  }
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {

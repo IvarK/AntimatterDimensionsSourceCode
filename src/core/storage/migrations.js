@@ -246,6 +246,13 @@ GameStorage.migrations = {
 
       // This contains redundant info and was never cleaned up during the initial implementation
       delete player.speedrun.milestones;
+
+      // Add more glyph presets (older version had only 5, now default is 7)
+      if (player.reality.glyphs.sets.length < 7) {
+        while (player.reality.glyphs.sets.length < 7) {
+          player.reality.glyphs.sets.push({ name: "", glyphs: [] });
+        }
+      }
     },
   },
 

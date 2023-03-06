@@ -692,14 +692,6 @@
   margin-top: 1rem;
 }
 
-.c-glyph-set-save-container {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 30rem;
-  justify-content: center;
-  margin: 1rem auto 0;
-}
-
 .c-glyph-single-set-save {
   display: flex;
   flex-wrap: wrap;

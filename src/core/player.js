@@ -435,7 +435,7 @@ window.player = {
         reality: 0
       },
       undo: [],
-      sets: new Array(5).fill({
+      sets: new Array(7).fill({
         name: "",
         glyphs: [],
       }),

@@ -38,16 +38,20 @@ export const GlyphSelection = {
     let glyphList = [];
     const rng = config.rng || new GlyphGenerator.RealGlyphRNG();
     const types = [];
-    if (player.realities <= 20) {
-      types.push(...GlyphGenerator.uniformRandomTypes(player.realities));
+
+    // To attempt to reduce RNG swing, we follow slightly different logic early on in order
+    // to spread out types and effects more equally for the first few realities
+    if (player.realities <= GlyphGenerator.uniformityThreshold) {
+      glyphList = GlyphGenerator.uniformGlyphs(level, rng, player.realities);
     } else {
       for (let out = 0; out < count; ++out) {
         types.push(GlyphGenerator.randomType(rng, types));
       }
+      for (let out = 0; out < count; ++out) {
+        glyphList.push(GlyphGenerator.randomGlyph(level, rng, types[out]));
+      }
     }
-    for (let out = 0; out < count; ++out) {
-      glyphList.push(GlyphGenerator.randomGlyph(level, rng, types[out]));
-    }
+
     this.glyphUncommonGuarantee(glyphList, rng);
     // If we generated extra choices due to always generating at least 4 choices,
     // we remove the extra choices here.
@@ -143,10 +147,6 @@ export function processManualReality(sacrifice, glyphID) {
     // If this is our first Reality, give them the companion and the starting power glyph.
     Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
     Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
-    // Uniform early glyph code is massively simplified if we also store the initial seed, and use that for
-    // generation but the seed itself advances after every reality. Since they need to be the same value, on the
-    // first random glyph we randomize the initial value and set the current value to it after the first reality
-    player.reality.seed = player.reality.initialSeed;
   } else if (Perk.firstPerk.isEffectActive) {
     // If we have firstPerk, we pick from 4+ glyphs, and glyph generation functions as normal.
     GlyphSelection.generate(GlyphSelection.choiceCount);

@@ -53,6 +53,10 @@ class GlyphRNG {
 }
 
 export const GlyphGenerator = {
+  // Glyph choices will have more uniformly-distributed properties up until this reality count.
+  // Should be a multiple of 5, as the uniformity conditions only work within groups of 5 realities
+  uniformityThreshold: 20,
+
   fakeSeed: Date.now() % Math.pow(2, 32),
   fakeSecondGaussian: null,
   /* eslint-disable lines-between-class-members */
@@ -282,31 +286,70 @@ export const GlyphGenerator = {
   },
 
   /**
-   * If we call the set of basic glyph types excluding power as 1, basic glyph types excluding infinity as 2, etc.
-   *  then the problem of multiple-reality type uniformity can be reframed as finding a certain sequence of the
-   *  numbers 1-5 which uphold some definition of "uniformity" which is friendly to the player.
-   * Here we use the player's initial RNG seed to determine a sequence of numbers 1-5 which are grouped
-   *  together such that every block of 5 contains a pseudorandom permutation of the numbers 1-5, and then uses the
-   *  current reality count to select an index from this sequence. (eg. 43521 31524 51342 24135 45132...)
-   * This makes types more "uniform" by ensuring that any individual glyph type is never *repeatedly* absent for more
-   *  than 2 realities in a row, as well as ensuring that trends of long-term type absences never happen
+   * To generate glyphs with a "uniformly random" effect spread, we effectively need to generate all the glyphs in
+   *  uniform groups of some size at once, and then select from that generated group. In this case, we've decided
+   *  that a group which satisfies uniformity is that of 5 realities, such that all 20 choices amongst the group
+   *  must contain each individual glyph effect at least once. This makes types more "uniform" by ensuring that
+   *  any individual glyph type is never *repeatedly* absent for more than 2 realities in a row (which can only
+   *  happen between groups), as well as ensuring that trends of long-term type/effect absences never happen
    * Note: At this point, realityCount should be the number of realities BEFORE processing completes (ie. the first
    *  random generated set begins at a parameter of 1)
    */
-  uniformRandomTypes(realityCount) {
-    // Reality count divided by 5 is used as an input to generate a random permutation of 1-5, while count mod 5
-    // determines the index within that block
-    const setIndex = Math.floor((realityCount - 1) / 5);
-    const permIndex = realityCount % 5;
+  uniformGlyphs(level, rng, realityCount) {
+    // Reality count divided by 5 to determine which group of 5 we're in, while count mod 5 determines the index
+    // within that block. Note that we have a minus 1 because we want to exclude the first fixed glyph
+    const groupNum = Math.floor((realityCount - 1) / 5);
+    const groupIndex = (realityCount - 1) % 5;
 
     // The usage of the initial seed is complicated in order to prevent future prediction without using information
-    // not normally available in-game (ie. the console). This is primarily to make it appear less predictable overall
+    // not normally available in-game (ie. the console). This makes it appear less predictable overall
     const initSeed = player.reality.initialSeed;
-    const perm = permutationIndex(5, (31 + initSeed % 7) * setIndex + initSeed % 1123);
+    const typePerm = permutationIndex(5, (31 + initSeed % 7) * groupNum + initSeed % 1123);
 
-    const types = [...BASIC_GLYPH_TYPES];
-    types.splice(perm[permIndex], 1);
-    return types;
+    // Figure out a permutation index for each generated glyph type this reality by counting through the sets
+    // for choices which have already been generated for group in previous realities
+    const typePermIndex = Array.repeat(0, 5);
+    for (let i = 0; i < groupIndex; i++) {
+      for (let type = 0; type < 5; type++) {
+        if (type !== typePerm[i]) typePermIndex[type]++;
+      }
+    }
+
+    // Determine which effect needs to be added for uniformity (startID is a hardcoded array of the lowest ID glyph
+    // effect of each type, in the same type order as BASIC_GLYPH_TYPES). We use type, initial seed, and group index
+    // to pick a random permutation, again to make it less predictable and to make sure they're generally different
+    const uniformEffects = [];
+    const startID = [16, 12, 8, 0, 4];
+    const typesThisReality = Array.range(0, 5);
+    typesThisReality.splice(typePerm[groupIndex], 1);
+    for (let i = 0; i < 4; i++) {
+      const type = typesThisReality[i];
+      const effectPerm = permutationIndex(4, 6 * type + (7 + initSeed % 5) * groupNum + initSeed % 11);
+      uniformEffects.push(startID[type] + effectPerm[typePermIndex[type]]);
+    }
+
+    // Generate the glyphs without uniformity applied first, assuming 4 glyph choices early on, then add the new effect
+    // Note that if this would give us more than 2 effects, we remove one of the existing ones (having extra effects
+    // this early on *increases* RNG variance to an undesirable amount)
+    const glyphs = [];
+    for (let i = 0; i < 4; ++i) {
+      const newGlyph = GlyphGenerator.randomGlyph(level, rng, BASIC_GLYPH_TYPES[typesThisReality[i]]);
+      if (countValuesFromBitmask(newGlyph.effects | (1 << uniformEffects[i])) > 2) {
+        // Turn the existing effect bitmask into an array of IDs, deterministically remove one based on seed and
+        // reality count, and then reconstruct the effect mask with the new one added
+        const effectIDs = getGlyphEffectsFromBitmask(newGlyph.effects)
+          .filter(eff => eff.isGenerated)
+          .map(eff => eff.bitmaskIndex);
+        effectIDs.splice((initSeed + realityCount) % effectIDs.length, 1);
+        effectIDs.push(uniformEffects[i]);
+        newGlyph.effects = effectIDs.reduce((mask, bit) => mask + (1 << bit), 0);
+      } else {
+        newGlyph.effects |= 1 << uniformEffects[i];
+      }
+      glyphs.push(newGlyph);
+    }
+
+    return glyphs;
   },
 
   getRNG(fake) {

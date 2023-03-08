@@ -223,7 +223,10 @@ GameStorage.migrations = {
         }
         player.news.totalSeen = Math.max(player.news.totalSeen, unique);
       }
-    }
+    },
+    16: player => {
+      player.reality.initialSeed = player.reality.seed;
+    },
   },
 
   normalizeTimespans(player) {

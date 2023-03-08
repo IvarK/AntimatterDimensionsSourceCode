@@ -52,6 +52,11 @@ export class DilationTimeStudyState extends TimeStudyState {
           Points and capped at ${format("1e8000")} Eternity Points. This is due to balance changes made in the Reality
           update which affect the difficulty of reaching those amounts, such as the increased Time Dimension cost
           scaling above ${format("1e6000")}.`, {}, 3);
+
+        // Uniform early glyph code is massively simplified if we also store the initial seed, and use that for
+        // generation but the seed itself advances after every reality. Since they need to be the same value and the
+        // initial seed is set on save creation, we set the actual seed upon reality unlocking for the first time
+        player.reality.seed = player.reality.initialSeed;
         EventHub.dispatch(GAME_EVENT.REALITY_FIRST_UNLOCKED);
       }
       if (!Perk.autounlockReality.isBought) Tab.reality.glyphs.show();

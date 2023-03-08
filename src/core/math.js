@@ -478,6 +478,27 @@ window.productLog = function productLog(x) {
   return curr;
 };
 
+// Implementation of "Lehmer code" decoding to produce a specific permutation, given a permutation length and a
+// lexicographic index for the specified permutation. Calling with a lexicographic index that is too large will
+// not throw an error, but will use lexIndex % len! as an index instead.
+// This may behave incorrectly if len! > 9e15, which occurs when len > 18.
+window.permutationIndex = function permutationIndex(len, lexIndex) {
+  let numPerm = 1;
+  for (let n = 1; n <= len; n++) numPerm *= n;
+  let index = lexIndex % numPerm;
+  let remOrder = numPerm / len;
+  const ordered = Array.range(0, len);
+  const perm = [];
+  while (ordered.length > 0) {
+    const div = Math.floor(index / remOrder);
+    const rem = index % remOrder;
+    perm.push(ordered.splice(div, 1)[0]);
+    index = rem;
+    remOrder /= ordered.length;
+  }
+  return perm;
+};
+
 // Calculate cost scaling for something that follows getCostWithLinearCostScaling() under Infinity and immediately
 // starts accelerated ExponentialCostScaling above Infinity.  Yes this is a fuckton of arguments, sorry.  It sort of
 // needs to inherit all arguments from both cost scaling functions.

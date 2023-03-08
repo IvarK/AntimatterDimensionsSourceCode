@@ -38,8 +38,12 @@ export const GlyphSelection = {
     let glyphList = [];
     const rng = config.rng || new GlyphGenerator.RealGlyphRNG();
     const types = [];
-    for (let out = 0; out < count; ++out) {
-      types.push(GlyphGenerator.randomType(rng, types));
+    if (player.realities <= 20) {
+      types.push(...GlyphGenerator.uniformRandomTypes(player.realities));
+    } else {
+      for (let out = 0; out < count; ++out) {
+        types.push(GlyphGenerator.randomType(rng, types));
+      }
     }
     for (let out = 0; out < count; ++out) {
       glyphList.push(GlyphGenerator.randomGlyph(level, rng, types[out]));
@@ -139,6 +143,10 @@ export function processManualReality(sacrifice, glyphID) {
     // If this is our first Reality, give them the companion and the starting power glyph.
     Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
     Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
+    // Uniform early glyph code is massively simplified if we also store the initial seed, and use that for
+    // generation but the seed itself advances after every reality. Since they need to be the same value, on the
+    // first random glyph we randomize the initial value and set the current value to it after the first reality
+    player.reality.seed = player.reality.initialSeed;
   } else if (Perk.firstPerk.isEffectActive) {
     // If we have firstPerk, we pick from 4+ glyphs, and glyph generation functions as normal.
     GlyphSelection.generate(GlyphSelection.choiceCount);

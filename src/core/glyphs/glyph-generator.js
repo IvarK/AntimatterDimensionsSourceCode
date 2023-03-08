@@ -281,6 +281,34 @@ export const GlyphGenerator = {
     return GlyphTypes.random(rng, blacklisted);
   },
 
+  /**
+   * If we call the set of basic glyph types excluding power as 1, basic glyph types excluding infinity as 2, etc.
+   *  then the problem of multiple-reality type uniformity can be reframed as finding a certain sequence of the
+   *  numbers 1-5 which uphold some definition of "uniformity" which is friendly to the player.
+   * Here we use the player's initial RNG seed to determine a sequence of numbers 1-5 which are grouped
+   *  together such that every block of 5 contains a pseudorandom permutation of the numbers 1-5, and then uses the
+   *  current reality count to select an index from this sequence. (eg. 43521 31524 51342 24135 45132...)
+   * This makes types more "uniform" by ensuring that any individual glyph type is never *repeatedly* absent for more
+   *  than 2 realities in a row, as well as ensuring that trends of long-term type absences never happen
+   * Note: At this point, realityCount should be the number of realities BEFORE processing completes (ie. the first
+   *  random generated set begins at a parameter of 1)
+   */
+  uniformRandomTypes(realityCount) {
+    // Reality count divided by 5 is used as an input to generate a random permutation of 1-5, while count mod 5
+    // determines the index within that block
+    const setIndex = Math.floor((realityCount - 1) / 5);
+    const permIndex = realityCount % 5;
+
+    // The usage of the initial seed is complicated in order to prevent future prediction without using information
+    // not normally available in-game (ie. the console). This is primarily to make it appear less predictable overall
+    const initSeed = player.reality.initialSeed;
+    const perm = permutationIndex(5, (31 + initSeed % 7) * setIndex + initSeed % 1123);
+
+    const types = [...BASIC_GLYPH_TYPES];
+    types.splice(perm[permIndex], 1);
+    return types;
+  },
+
   getRNG(fake) {
     return fake ? new GlyphGenerator.FakeGlyphRNG() : new GlyphGenerator.RealGlyphRNG();
   },

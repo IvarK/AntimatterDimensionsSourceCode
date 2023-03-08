@@ -472,7 +472,8 @@ window.player = {
         colorMap: {},
       }
     },
-    seed: Math.floor(Date.now() * Math.random() + 1),
+    initialSeed: Math.floor(Date.now() * Math.random() + 1),
+    seed: 0,
     secondGaussian: 1e6,
     musicSeed: Math.floor(Date.now() * Math.random() + 0xBCDDECCB),
     musicSecondGaussian: 1e6,

@@ -54,8 +54,9 @@ class GlyphRNG {
 
 export const GlyphGenerator = {
   // Glyph choices will have more uniformly-distributed properties up until this reality count.
-  // Should be a multiple of 5, as the uniformity conditions only work within groups of 5 realities
-  uniformityThreshold: 20,
+  // Should be 1 plus a multiple of 5, as the uniformity conditions only work within groups of 5
+  // realities and we need to exclude the first reality due to it being the fixed starter
+  uniformityThreshold: 21,
 
   fakeSeed: Date.now() % Math.pow(2, 32),
   fakeSecondGaussian: null,
@@ -324,18 +325,21 @@ export const GlyphGenerator = {
     typesThisReality.splice(typePerm[groupIndex], 1);
     for (let i = 0; i < 4; i++) {
       const type = typesThisReality[i];
-      const effectPerm = permutationIndex(4, 6 * type + (7 + initSeed % 5) * groupNum + initSeed % 11);
+      const effectPerm = permutationIndex(4, 5 * type + (7 + initSeed % 5) * groupNum + initSeed % 11);
       uniformEffects.push(startID[type] + effectPerm[typePermIndex[type]]);
     }
 
-    // Generate the glyphs without uniformity applied first, assuming 4 glyph choices early on, then add the new effect
+    // Generate the glyphs without uniformity applied first, assuming 4 glyph choices early on, then fix it to contain
+    // the new effect. This fixing process is a 50% chance to add to existing effects and 50% to replace them instead.
     // Note that if this would give us more than 2 effects, we remove one of the existing ones (having extra effects
     // this early on *increases* RNG variance to an undesirable amount)
     const glyphs = [];
     for (let i = 0; i < 4; ++i) {
       const newGlyph = GlyphGenerator.randomGlyph(level, rng, BASIC_GLYPH_TYPES[typesThisReality[i]]);
-      const combinedMask = newGlyph.effects | (1 << uniformEffects[i]);
-      if (countValuesFromBitmask(combinedMask) > 2) {
+      const newMask = (initSeed + realityCount + i) % 2 === 0
+        ? (1 << uniformEffects[i])
+        : newGlyph.effects | (1 << uniformEffects[i]);
+      if (countValuesFromBitmask(newMask) > 2) {
         // Turn the existing effect bitmask into an array of removable effects, filtering out the dimension power
         // effects which should always be there, and then deterministically remove one based on seed and reality count
         const replacable = getGlyphEffectsFromBitmask(newGlyph.effects)
@@ -343,9 +347,9 @@ export const GlyphGenerator = {
           .map(eff => eff.bitmaskIndex)
           .filter(eff => ![0, 12, 16].includes(eff));
         const toRemove = replacable[(initSeed + realityCount) % replacable.length];
-        newGlyph.effects = combinedMask - (1 << toRemove);
+        newGlyph.effects = newMask - (1 << toRemove);
       } else {
-        newGlyph.effects = combinedMask;
+        newGlyph.effects = newMask;
       }
       glyphs.push(newGlyph);
     }

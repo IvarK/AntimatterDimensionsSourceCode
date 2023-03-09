@@ -334,17 +334,18 @@ export const GlyphGenerator = {
     const glyphs = [];
     for (let i = 0; i < 4; ++i) {
       const newGlyph = GlyphGenerator.randomGlyph(level, rng, BASIC_GLYPH_TYPES[typesThisReality[i]]);
-      if (countValuesFromBitmask(newGlyph.effects | (1 << uniformEffects[i])) > 2) {
-        // Turn the existing effect bitmask into an array of IDs, deterministically remove one based on seed and
-        // reality count, and then reconstruct the effect mask with the new one added
-        const effectIDs = getGlyphEffectsFromBitmask(newGlyph.effects)
+      const combinedMask = newGlyph.effects | (1 << uniformEffects[i]);
+      if (countValuesFromBitmask(combinedMask) > 2) {
+        // Turn the existing effect bitmask into an array of removable effects, filtering out the dimension power
+        // effects which should always be there, and then deterministically remove one based on seed and reality count
+        const replacable = getGlyphEffectsFromBitmask(newGlyph.effects)
           .filter(eff => eff.isGenerated)
-          .map(eff => eff.bitmaskIndex);
-        effectIDs.splice((initSeed + realityCount) % effectIDs.length, 1);
-        effectIDs.push(uniformEffects[i]);
-        newGlyph.effects = effectIDs.reduce((mask, bit) => mask + (1 << bit), 0);
+          .map(eff => eff.bitmaskIndex)
+          .filter(eff => ![0, 12, 16].includes(eff));
+        const toRemove = replacable[(initSeed + realityCount) % replacable.length];
+        newGlyph.effects = combinedMask - (1 << toRemove);
       } else {
-        newGlyph.effects |= 1 << uniformEffects[i];
+        newGlyph.effects = combinedMask;
       }
       glyphs.push(newGlyph);
     }

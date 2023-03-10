@@ -85,9 +85,29 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
       .nextSibling(this.mode);
   }
 
+  // We don't want to directly call super.canTick here because the game logic works really weirdly in terms of
+  // interactions between individual and group AD autobuyers. The UI can change and certain settings can become
+  // unmodifiable in some conditions. This is basically the lowest-effort solution to support legacy behavior
+  // because the only real alternatve is a massive AD autobuyer refactor to untangle this mess
   get canTick() {
+    // AD autobuyer-specific logic; If the UI is collapsed then we are unable to toggle groupSetting.
+    // In terms of UX for this case it makes the most sense to ignore it and pretend it's true
+    const settingConfig = player.auto.antimatterDims;
+    const individualSetting = settingConfig.all[this.tier - 1];
+    const groupSetting = settingConfig.isActive;
+    const thisSetting = individualSetting && (Autobuyer.antimatterDimension.collapseDisplay ? groupSetting : true);
+
+    // General availability
     const dim = AntimatterDimension(this.tier);
-    return dim.isAvailableForPurchase && dim.isAffordable && super.canTick;
+    const hasAutobuyer = dim.isAvailableForPurchase && dim.isAffordable;
+
+    // From IntervaledAutobuyerState.canTick
+    const intervalTick = this.timeSinceLastTick >= this.interval;
+
+    // From AutobuyerState.canTick (ignores this.constructor.isActive because that's accounted for in thisSetting)
+    const autoTick = player.auto.autobuyersOn && this.isActive && (this.isUnlocked || this.isBought);
+
+    return thisSetting && hasAutobuyer && intervalTick && autoTick;
   }
 
   tick() {
@@ -132,6 +152,8 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
 
   static get entryCount() { return 8; }
   static get autobuyerGroupName() { return "Antimatter Dimension"; }
+
+  // These are toggled on and off from the group autobuyer checkbox
   static get isActive() { return player.auto.antimatterDims.isActive; }
   static set isActive(value) { player.auto.antimatterDims.isActive = value; }
 
@@ -141,7 +163,8 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
       allBought: { get: () => accessor.zeroIndexed.every(x => x.isBought) },
       // We can get away with this since allUnlimitedBulk is the same for all AD autos
       allUnlimitedBulk: { get: () => accessor.zeroIndexed[0].hasUnlimitedBulk },
-      bulkCap: { get: () => accessor.zeroIndexed[0].bulkCap }
+      bulkCap: { get: () => accessor.zeroIndexed[0].bulkCap },
+      collapseDisplay: { get: () => accessor.allMaxedInterval && accessor.allUnlocked && accessor.allUnlimitedBulk }
     });
     return accessor;
   }

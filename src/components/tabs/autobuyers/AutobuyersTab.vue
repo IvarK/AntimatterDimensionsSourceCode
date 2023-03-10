@@ -58,10 +58,7 @@ export default {
         return;
       }
       this.hasInstant = ad.hasInstant;
-      const allMaxedInterval = ad.allMaxedInterval;
-      const allUnlocked = ad.allUnlocked;
-      const allUnlimitedBulk = ad.allUnlimitedBulk;
-      this.displayADAutobuyersIndividually = !(allMaxedInterval && allUnlocked && allUnlimitedBulk);
+      this.displayADAutobuyersIndividually = !ad.collapseDisplay;
     },
   }
 };

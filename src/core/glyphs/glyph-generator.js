@@ -53,10 +53,10 @@ class GlyphRNG {
 }
 
 export const GlyphGenerator = {
-  // Glyph choices will have more uniformly-distributed properties up until this reality count.
-  // Should be 1 plus a multiple of 5, as the uniformity conditions only work within groups of 5
-  // realities and we need to exclude the first reality due to it being the fixed starter
-  uniformityThreshold: 21,
+  // Glyph choices will have more uniformly-distributed properties up for this many groups
+  // of uniform glyphs. The size of a uniformity group is 5, so this gives uniformly-distributed
+  // properties up to a reality count equal to 5x this value
+  uniformityGroups: 4,
 
   fakeSeed: Date.now() % Math.pow(2, 32),
   fakeSecondGaussian: null,
@@ -331,26 +331,35 @@ export const GlyphGenerator = {
 
     // Generate the glyphs without uniformity applied first, assuming 4 glyph choices early on, then fix it to contain
     // the new effect. This fixing process is a 50% chance to add to existing effects and 50% to replace them instead.
-    // Note that if this would give us more than 2 effects, we remove one of the existing ones (having extra effects
-    // this early on *increases* RNG variance to an undesirable amount)
+    // Note that if this would give us "too many" effects, we remove one of the existing ones, and the threshold for
+    // having "too many" depends on if the player has the upgrade that improves effect count - we don't want the
+    // uniformity code to make glyph generation disproportionately worse in that case
     const glyphs = [];
     for (let i = 0; i < 4; ++i) {
       const newGlyph = GlyphGenerator.randomGlyph(level, rng, BASIC_GLYPH_TYPES[typesThisReality[i]]);
       const newMask = (initSeed + realityCount + i) % 2 === 0
         ? (1 << uniformEffects[i])
         : newGlyph.effects | (1 << uniformEffects[i]);
-      if (countValuesFromBitmask(newMask) > 2) {
-        // Turn the existing effect bitmask into an array of removable effects, filtering out the dimension power
-        // effects which should always be there, and then deterministically remove one based on seed and reality count
+      const maxEffects = RealityUpgrade(17).isBought ? 3 : 2;
+      if (countValuesFromBitmask(newMask) > maxEffects) {
+        // Turn the old effect bitmask into an array of removable effects and then deterministically remove one
+        // of the non-power effects based on seed and reality count
         const replacable = getGlyphEffectsFromBitmask(newGlyph.effects)
           .filter(eff => eff.isGenerated)
           .map(eff => eff.bitmaskIndex)
           .filter(eff => ![0, 12, 16].includes(eff));
         const toRemove = replacable[(initSeed + realityCount) % replacable.length];
-        newGlyph.effects = newMask - (1 << toRemove);
+        newGlyph.effects = newMask & ~(1 << toRemove);
       } else {
         newGlyph.effects = newMask;
       }
+
+      // Add the power effects on power/infinity/time, since the initial setting of newMask removes them half the time
+      const dimPowers = { power: 16, infinity: 12, time: 0 };
+      if (dimPowers[newGlyph.type] !== undefined) {
+        newGlyph.effects |= 1 << dimPowers[newGlyph.type];
+      }
+
       glyphs.push(newGlyph);
     }
 

@@ -2883,29 +2883,6 @@ br {
 .t-s10 .c-stats-tab {
   color: #e0e0e0;
 }
-
-.c-stats-tab-general {
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--color-text);
-}
-
-.c-stats-tab-subheader {
-  height: 15rem;
-}
-
-.c-stats-tab-infinity {
-  color: var(--color-infinity);
-}
-
-.c-stats-tab-eternity {
-  color: var(--color-eternity);
-}
-
-.c-stats-tab-reality {
-  color: var(--color-reality);
-}
-
 /* #endregion c-stats-tab */
 
 /* #region Past Prestige Runs */

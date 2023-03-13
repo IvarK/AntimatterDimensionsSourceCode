@@ -250,8 +250,10 @@ export function getOfflineEPGain(ms) {
   return player.records.bestEternity.bestEPminReality.times(TimeSpan.fromMilliseconds(ms).totalMinutes / 4);
 }
 
+// Note: realities and ampFactor must be distinct because there are a few things farther up which only multiply
+// reality count and none of the other things
 // eslint-disable-next-line max-params
-export function addRealityTime(time, realTime, rm, level, realities) {
+export function addRealityTime(time, realTime, rm, level, realities, ampFactor) {
   let reality = "";
   const celestials = [Teresa, Effarig, Enslaved, V, Ra, Laitela];
   for (const cel of celestials) {
@@ -259,8 +261,8 @@ export function addRealityTime(time, realTime, rm, level, realities) {
   }
   const shards = Effarig.shardsGained;
   player.records.recentRealities.pop();
-  player.records.recentRealities.unshift([time, realTime, rm.times(realities), realities,
-    reality, level, shards * realities]);
+  player.records.recentRealities.unshift([time, realTime, rm.times(ampFactor),
+    realities, reality, level, shards * ampFactor]);
 }
 
 export function gainedInfinities() {

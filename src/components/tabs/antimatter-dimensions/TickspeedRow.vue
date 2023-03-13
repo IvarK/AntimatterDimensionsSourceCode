@@ -16,6 +16,7 @@ export default {
       continuumValue: 0,
       hasTutorial: false,
       hasRealityButton: false,
+      isEC9: false,
     };
   },
   computed: {
@@ -49,8 +50,8 @@ export default {
       this.hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
       this.purchasedTickspeed = player.totalTickBought;
       this.freeTickspeed = FreeTickspeed.amount;
-      const isEC9Running = EternityChallenge(9).isRunning;
-      this.isVisible = Tickspeed.isUnlocked || isEC9Running;
+      this.isEC9 = EternityChallenge(9).isRunning;
+      this.isVisible = Tickspeed.isUnlocked || this.isEC9;
       if (!this.isVisible) return;
       this.mult.copyFrom(Tickspeed.multiplier);
       this.cost.copyFrom(Tickspeed.cost);
@@ -85,6 +86,9 @@ export default {
       >
         <span v-if="isContinuumActive">
           Tickspeed Continuum: {{ continuumString }}
+        </span>
+        <span v-else-if="isEC9">
+          Tickspeed Unpurchasable (EC 9)
         </span>
         <span v-else>
           Tickspeed Cost: {{ format(cost) }}

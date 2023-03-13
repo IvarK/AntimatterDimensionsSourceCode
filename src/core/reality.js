@@ -285,7 +285,7 @@ function giveRealityRewards(realityProps) {
   updateRealityRecords(realityProps);
   addRealityTime(
     player.records.thisReality.time, player.records.thisReality.realTime, gainedRM,
-    realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier);
+    realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier, multiplier);
   Currency.realities.add(realityAndPPMultiplier);
   Currency.perkPoints.add(realityAndPPMultiplier);
   if (TeresaUnlocks.effarig.canBeApplied) {

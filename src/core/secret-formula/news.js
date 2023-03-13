@@ -786,7 +786,7 @@ GameDatabase.news = [
   {
     id: "a146",
     text:
-      `How many licks does it take to get to the center of a antimatter tootsie pop? A whole lot, because unless
+      `How many licks does it take to get to the center of an antimatter tootsie pop? A whole lot, because unless
       you're made out of antimatter too, you'll explode every time you try to lick it.`
   },
   {
@@ -4612,7 +4612,7 @@ GameDatabase.news = [
   },
   {
     id: "ai324",
-    text: "How many tickers does it take to get to the center of a antimatter, by counting the tickspeed upgrade and the upgrade itself?"
+    text: "How many tickers does it take to get to the center of an antimatter, by counting the tickspeed upgrade and the upgrade itself?"
   },
   {
     id: "ai325",

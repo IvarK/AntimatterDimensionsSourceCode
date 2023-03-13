@@ -148,6 +148,13 @@ export default {
         this.matterScale = MatterScale.estimate(Currency.antimatter.value);
         this.lastMatterTime = Date.now();
       }
+    },
+    realityClassObject() {
+      return {
+        "c-stats-tab-title": true,
+        "c-stats-tab-reality": !this.isDoomed,
+        "c-stats-tab-doomed": this.isDoomed,
+      };
     }
   },
 };
@@ -159,40 +166,39 @@ export default {
       <PrimaryButton onclick="Modal.catchup.show(0)">
         View Content Summary
       </PrimaryButton>
-      <div class="c-stats-tab-general">
+      <div class="c-stats-tab-title c-stats-tab-general">
         General
       </div>
-      <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
-      <div>You have played for {{ realTimePlayed }}. (real time)</div>
-      <div v-if="reality.isUnlocked">
-        Your existence has spanned {{ reality.totalTimePlayed }} of time. (game time)
-      </div>
-      <div v-if="isDoomed">
-        You have been doomed for {{ realTimeDoomed }}. (real time)
-      </div>
-      <div>
-        You have seen {{ quantifyInt("news message", totalNews) }} in total.
-      </div>
-      <div>
-        You have seen {{ quantifyInt("unique news message", uniqueNews) }}.
-      </div>
-      <div>
-        You have unlocked {{ quantifyInt("Secret Achievement", secretAchievementCount) }}.
-      </div>
-      <div v-if="paperclips">
-        You have {{ quantifyInt("useless paperclip", paperclips) }}.
-      </div>
-      <div v-if="fullGameCompletions">
-        <br>
-        <b>
-          You have completed the entire game {{ quantifyInt("time", fullGameCompletions) }}.
+      <div class="c-stats-tab-general">
+        <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
+        <div>You have played for {{ realTimePlayed }}. (real time)</div>
+        <div v-if="reality.isUnlocked">
+          Your existence has spanned {{ reality.totalTimePlayed }} of time. (game time)
+        </div>
+        <div>
+          You have seen {{ quantifyInt("news message", totalNews) }} in total.
+        </div>
+        <div>
+          You have seen {{ quantifyInt("unique news message", uniqueNews) }}.
+        </div>
+        <div>
+          You have unlocked {{ quantifyInt("Secret Achievement", secretAchievementCount) }}.
+        </div>
+        <div v-if="paperclips">
+          You have {{ quantifyInt("useless paperclip", paperclips) }}.
+        </div>
+        <div v-if="fullGameCompletions">
           <br>
-          You have played for {{ fullTimePlayed }} across all playthroughs.
-        </b>
+          <b>
+            You have completed the entire game {{ quantifyInt("time", fullGameCompletions) }}.
+            <br>
+            You have played for {{ fullTimePlayed }} across all playthroughs.
+          </b>
+        </div>
       </div>
       <div>
         <br>
-        <div class="c-matter-scale-container">
+        <div class="c-matter-scale-container c-stats-tab-general">
           <div
             v-for="(line, i) in matterScale"
             :key="i"
@@ -207,9 +213,9 @@ export default {
     </div>
     <div
       v-if="infinity.isUnlocked"
-      class="c-stats-tab-subheader"
+      class="c-stats-tab-subheader c-stats-tab-general"
     >
-      <div class="c-stats-tab-general c-stats-tab-infinity">
+      <div class="c-stats-tab-title c-stats-tab-infinity">
         Infinity
       </div>
       <div>
@@ -240,9 +246,9 @@ export default {
     </div>
     <div
       v-if="eternity.isUnlocked"
-      class="c-stats-tab-subheader"
+      class="c-stats-tab-subheader c-stats-tab-general"
     >
-      <div class="c-stats-tab-general c-stats-tab-eternity">
+      <div class="c-stats-tab-title c-stats-tab-eternity">
         Eternity
       </div>
       <div>
@@ -277,17 +283,24 @@ export default {
     </div>
     <div
       v-if="reality.isUnlocked"
-      class="c-stats-tab-subheader"
+      class="c-stats-tab-subheader c-stats-tab-general"
     >
-      <div class="c-stats-tab-general c-stats-tab-reality">
-        Reality
+      <div :class="realityClassObject()">
+        {{ isDoomed ? "Doomed Reality" : "Reality" }}
       </div>
       <div>You have {{ quantifyInt("Reality", reality.count) }}.</div>
       <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
       <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
-      <div>
-        You have spent
-        {{ reality.this.toStringShort() }} in this Reality. ({{ reality.thisReal.toStringShort() }} real time)
+      <div :class="{ 'c-stats-tab-doomed' : isDoomed }">
+        You have spent {{ reality.this.toStringShort() }}
+        in this {{ isDoomed ? "Armageddon" : "Reality" }}.
+        ({{ reality.thisReal.toStringShort() }} real time)
+      </div>
+      <div
+        v-if="isDoomed"
+        class="c-stats-tab-doomed"
+      >
+        You have been Doomed for {{ realTimeDoomed.toStringShort() }} real time.
       </div>
       <div>
         Your best Reality Machines per minute is {{ format(reality.bestRate, 2, 2) }}.
@@ -301,5 +314,34 @@ export default {
 <style scoped>
 .c-matter-scale-container {
   height: 5rem;
+}
+
+.c-stats-tab-general {
+  color: var(--color-text);
+}
+
+.c-stats-tab-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.c-stats-tab-subheader {
+  height: 15rem;
+}
+
+.c-stats-tab-infinity {
+  color: var(--color-infinity);
+}
+
+.c-stats-tab-eternity {
+  color: var(--color-eternity);
+}
+
+.c-stats-tab-reality {
+  color: var(--color-reality);
+}
+
+.c-stats-tab-doomed {
+  color: var(--color-pelle--base);
 }
 </style>

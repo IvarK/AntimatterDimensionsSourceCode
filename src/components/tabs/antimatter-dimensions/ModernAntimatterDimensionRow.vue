@@ -118,7 +118,7 @@ export default {
         "o-primary-btn": true,
         "o-primary-btn--new": true,
         "o-primary-btn--disabled": (!this.isAffordable && !this.isContinuumActive) || !this.isUnlocked || this.isCapped,
-        "o-non-clickable": this.isContinuumActive
+        "o-non-clickable o-continuum": this.isContinuumActive
       };
     },
     tutorialClass() {
@@ -190,5 +190,17 @@ export default {
 
 .o-non-clickable {
   cursor: auto;
+}
+
+.o-continuum {
+  border-color: var(--color-laitela--accent);
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
+}
+
+.o-continuum:hover {
+  border-color: var(--color-laitela--accent);
+  color: var(--color-laitela--base);
+  background: var(--color-laitela--accent);
 }
 </style>

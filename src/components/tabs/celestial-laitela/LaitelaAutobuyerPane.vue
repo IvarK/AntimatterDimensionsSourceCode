@@ -36,7 +36,7 @@ export default {
     autoSingularityStr() {
       return this.autoSingularityFactor === 1
         ? "At Cap"
-        : `At Cap ${formatX(this.autoSingularityFactor, 2, 2)}`;
+        : `Cap ${formatX(this.autoSingularityFactor, 2, 2)}`;
     },
   },
   watch: {

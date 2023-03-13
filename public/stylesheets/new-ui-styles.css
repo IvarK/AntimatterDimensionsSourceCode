@@ -675,7 +675,7 @@ body.t-s12 {
 
 .o-autobuyer-input,
 .c-autobuyer-box__mode-select {
-  color: var(--color-accent);
+  color: var(--color-text);
   background: var(--color-base);
   border: 0.1rem solid var(--color-accent);
 }

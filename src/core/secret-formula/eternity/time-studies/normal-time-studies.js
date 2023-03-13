@@ -562,9 +562,9 @@ GameDatabase.eternity.timeStudies.normal = [
     requirement: [213],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     requiresST: [226],
-    description: "You gain extra Replicanti Galaxies based on your Replicanti amount",
+    description: "You gain extra Replicanti Galaxies based on Replicanti amount",
     effect: () => Math.floor(Replicanti.amount.exponent / 1000),
-    formatEffect: value => `+${quantifyInt("RG", value)}`
+    formatEffect: value => `+${formatInt(value)} RG`
   },
   {
     id: 226,
@@ -575,7 +575,7 @@ GameDatabase.eternity.timeStudies.normal = [
     requiresST: [225],
     description: "You gain extra Replicanti Galaxies based on their max",
     effect: () => Math.floor(player.replicanti.boughtGalaxyCap / 15),
-    formatEffect: value => `+${quantifyInt("RG", value)}`
+    formatEffect: value => `+${formatInt(value)} RG`
   },
   {
     id: 227,

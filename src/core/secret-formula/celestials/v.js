@@ -147,10 +147,7 @@ GameDatabase.celestials.v = {
     {
       id: 6,
       name: "Requiem for a Glyph",
-      description: value => `Unlock Reality with at most ${formatInt(-value)} Glyphs equipped for the entire Reality.
-        <div ach-tooltip="Each equipped Cursed Glyph counts as ${formatInt(-3)} Glyphs">
-          <i class="fas fa-question-circle"></i>
-        </div>`,
+      description: value => `Unlock Reality with at most ${formatInt(-value)} Glyphs equipped for the entire Reality.`,
       // This achievement has internally negated values since the check is always greater than
       values: [1, 4, 7, 10, 13],
       condition: () => V.isRunning && TimeStudy.reality.isBought,

@@ -194,6 +194,8 @@ export default {
         <br>
         Cursed Glyphs can be created in the Effarig tab.
         <br>
+        Cursed Glyphs count as {{ formatInt(-3) }} Glyphs for the purposes of all requirements related to Glyph count.
+        <br>
         <span v-if="!isDoomed">The Black Hole can now be used to slow down time if they are both permanent.</span>
         <br><br>
         Each Hard V-Achievement counts as two V-Achievements and will award {{ formatInt(2) }} Space Theorems

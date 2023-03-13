@@ -377,12 +377,16 @@
   color: white;
   background-color: black;
   border-color: white;
+  border-width: 0.3rem;
+  border-style: double;
 }
 
 .o-time-study-light--bought {
   color: black;
   background-color: white;
   border-color: black;
+  border-width: 0.3rem;
+  border-style: double;
 }
 
 .o-time-study-eternity-challenge--bought {

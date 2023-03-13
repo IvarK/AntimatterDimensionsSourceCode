@@ -167,7 +167,7 @@ export default {
         class="o-primary-btn--buy-ad o-primary-btn--buy-dim"
         :class="{
           'o-primary-btn--buy-10-ad': !isContinuumActive,
-          'o-primary-btn--continuum-ad': isContinuumActive,
+          'o-primary-btn--continuum-ad o-continuum': isContinuumActive,
           'l-dim-row-small-text': isLongText(until10Text) && !isContinuumActive
         }"
         :ach-tooltip="boughtTooltip"
@@ -190,5 +190,17 @@ export default {
   justify-content: center;
   align-items: center;
   border-radius: var(--var-border-radius, inherit);
+}
+
+.o-continuum {
+  border-color: var(--color-laitela--accent);
+  color: var(--color-laitela--accent);
+  background: var(--color-laitela--base);
+}
+
+.o-continuum:hover {
+  border-color: var(--color-laitela--accent);
+  color: var(--color-laitela--base);
+  background: var(--color-laitela--accent);
 }
 </style>

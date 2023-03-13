@@ -149,5 +149,12 @@ export const AutobuyerInputFunctions = {
 </template>
 
 <style scoped>
+.o-autobuyer-input--invalid {
+  background-color: var(--color-bad);
+}
 
+.s-base--dark .o-autobuyer-input--invalid,
+.t-s1 .o-autobuyer-input--invalid {
+  background-color: var(--color-bad);
+}
 </style>

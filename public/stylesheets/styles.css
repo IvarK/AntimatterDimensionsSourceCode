@@ -4149,15 +4149,6 @@ br {
   border-color: #cccccc;
 }
 
-.o-autobuyer-input--invalid {
-  background-color: var(--color-bad);
-}
-
-.s-base--dark .o-autobuyer-input--invalid,
-.t-s1 .o-autobuyer-input--invalid {
-  background-color: var(--color-bad);
-}
-
 /* #endregion o-autobuyer-input */
 
 /* #region o-autobuyer-toggle-checkbox */

@@ -118,15 +118,15 @@ GameDatabase.challenges.infinity = [
   {
     id: 8,
     description: () =>
-      `your production rapidly and continually drops down over time. Purchasing an Antimatter Dimension or Tickspeed
-        upgrade sets production back to ${formatPercents(1)} before it starts dropping again.`,
+      `AD production rapidly and continually drops over time. Purchasing Antimatter Dimension or Tickspeed
+        upgrades sets production back to ${formatPercents(1)} before it starts dropping again.`,
     goal: DC.E27000,
     isQuickResettable: true,
     effect: () => DC.D0_8446303389034288.pow(
       Math.max(0, player.records.thisInfinity.time - player.records.thisInfinity.lastBuyTime)),
     reward: {
       description:
-        "You get a multiplier to Antimatter Dimensions 2-7 based on 1st and 8th Antimatter Dimension multipliers.",
+        "You get a multiplier to AD 2-7 based on 1st and 8th AD multipliers.",
       effect: () => AntimatterDimension(1).multiplier.times(AntimatterDimension(8).multiplier).pow(0.02),
       formatEffect: value => formatX(value, 2, 2)
     },

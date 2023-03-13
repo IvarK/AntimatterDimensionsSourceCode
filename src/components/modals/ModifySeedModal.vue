@@ -12,8 +12,9 @@ export default {
     return {
       mode: 0,
       inputSeed: "",
-      validInput: false,
       seedText: "",
+      convertedInput: false,
+      seedValue: 0,
     };
   },
   computed: {
@@ -21,16 +22,27 @@ export default {
     officialSeed: () => Speedrun.officialFixedSeed,
   },
   created() {
-    if (player.speedrun.seedSelection === this.choiceEnum.PLAYER) this.inputSeed = `${player.speedrun.initialSeed}`;
+    this.seedValue = player.speedrun.initialSeed;
+    this.inputSeed = `${player.speedrun.initialSeed}`;
+    this.convertedInput = false;
   },
   methods: {
     update() {
       this.mode = player.speedrun.seedSelection;
-      this.validInput = this.inputSeed.match(/^\d+$/gu);
       this.seedText = Speedrun.seedModeText();
+      if (this.inputSeed.match(/^-?\d+$/gu)) {
+        const num = Number(this.inputSeed);
+        this.seedValue = Math.abs(num) > 9e15
+          ? this.hashStringToSeed(this.inputSeed)
+          : Number(this.inputSeed);
+      } else {
+        this.seedValue = this.hashStringToSeed(this.inputSeed);
+      }
+      this.convertedInput = this.seedValue !== Number(this.inputSeed);
+      if (this.seedValue === 0) this.setMode(this.choiceEnum.FIXED);
     },
     setMode(mode, seed) {
-      if (mode === this.choiceEnum.PLAYER && !this.validInput) return;
+      if (mode === this.choiceEnum.PLAYER && this.seedValue === 0) return;
       Speedrun.modifySeed(mode, parseInt(seed, 10));
     },
     buttonClass(mode) {
@@ -38,6 +50,20 @@ export default {
         "o-primary-btn--subtab-option": true,
         "o-selected": mode === this.mode,
       };
+    },
+    // String-to-number hashing function, using a fixed numerical seed inspired by Number.MAX_VALUE
+    // See https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+    hashStringToSeed(str) {
+      const seed = 17977308;
+      let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
+      for (let i = 0, ch; i < str.length; i++) {
+        ch = str.charCodeAt(i);
+        h1 = Math.imul(h1 ^ ch, 2654435761);
+        h2 = Math.imul(h2 ^ ch, 1597334677);
+      }
+      h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+      h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+      return 4294967296 * (2097151 & h2) + (h1 >>> 0);
     }
   },
 };
@@ -83,9 +109,9 @@ export default {
       <br>
       <br>
       <PrimaryButton
-        v-tooltip="validInput ? '' : 'Text box contains an invalid input'"
+        v-tooltip="seedValue === 0 ? 'Input seed cannot be zero!' : ''"
         :class="buttonClass(choiceEnum.PLAYER)"
-        @click="setMode(choiceEnum.PLAYER, inputSeed)"
+        @click="setMode(choiceEnum.PLAYER, seedValue)"
       >
         Player-selected Seed:
       </PrimaryButton>
@@ -96,7 +122,12 @@ export default {
         class="c-modal-input"
       >
       <br>
-      This option sets your seed to the value you type into the text box. It must be a positive integer.
+      This option sets your seed to the value you type into the text box.
+      <br>
+      Your current input will be {{ convertedInput ? "converted to" : "used as" }}
+      the number <b>{{ seedValue }}</b>.
+      <br>
+      For technical reasons, this value must be must be non-zero to be accepted.
     </div>
   </ModalWrapper>
 </template>

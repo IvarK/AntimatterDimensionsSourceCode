@@ -1081,18 +1081,18 @@ the Reality Upgrade "Replicative Rapidity" for example.
 <br>
 You can buy upgrades for the Black Hole by using Reality Machines. There are three upgrades for the Black Hole:
 <br>
-Interval - How long the Black Hole is inactive between bursts,
+<b>Interval</b> - How long the Black Hole is inactive between bursts,
 reduced by ${formatPercents(0.2)} per upgrade.
 <br>
-Power - How much faster the game runs during the temporary speed bursts,
+<b>Power</b> - How much faster the game runs during the temporary speed bursts,
 increased by ${formatPercents(0.35)} per upgrade.
 <br>
-Duration - How long each speed burst lasts before going back to normal speed,
+<b>Duration</b> - How long each speed burst lasts before going back to normal speed,
 increased by ${formatPercents(0.3)} per upgrade.
 <br>
 <br>
 ${formatInt(100)} days of <i>game time</i> after unlocking the Black Hole, you unlock the ability to purchase
-a Reality Upgrade that allows you to have a second Black Hole. 
+a Reality Upgrade that allows you to have a second Black Hole.
 The timer on the second Black Hole only advances when the first Black Hole is active. So, for example, if the first
 Black Hole has a duration of ${formatInt(4)} minutes and the second has an interval of ${formatInt(8)} minutes, the
 second Black Hole will only activate once every two cycles of the first Black Hole regardless of how short the
@@ -1120,6 +1120,23 @@ while pausing gives some more control, it also ultimately results in some booste
 Pausing and unpausing affects both Black Holes; they can't be paused or unpaused independently. They can be paused
 automatically ${BlackHoles.ACCELERATION_TIME} real-time seconds before activation by toggling the relevant setting on
 the Black Hole tab.
+<br>
+<br>
+<b>Upgrade Cost Information:</b>
+<br>
+<b>Interval</b> - Base cost of ${formatInt(15)} RM and increase of ${formatX(3.5, 0, 1)} per upgrade.
+<br>
+<b>Power</b> - Base cost of ${formatInt(20)} RM and increase of ${formatX(2)} per upgrade.
+<br>
+<b>Duration</b> - Base cost of ${formatInt(10)} RM and increase of ${formatX(4)} per upgrade.
+<br>
+<b>Increased cost scaling:</b> Above ${format(1e30)} RM, the cost multiplier between purchases increases by an additive
++${format(0.2, 0, 1)} per upgrade. Above ${format(Number.MAX_VALUE, 1)} RM, a new scaling occurs which ignores all the
+previous behavior. From this point, all upgrades instead behave as if they had an initial cost of ${format(DC.E310)}
+and further upgrade costs increase by ${format(1e6)}, ${format(1e7)}, and so on (${formatX(10)} between upgrades).
+<br>
+<b>Black Hole 2:</b> All upgrades have an initial cost ${formatX(1000)} higher than the first Black Hole,
+but the same cost multipliers.
 <br>
 <br>
 <b>Hotkey: B</b> will pause/unpause the Black Holes.
@@ -1621,8 +1638,8 @@ scaling. However, these upgrades won't function if Continuum is disabled on the 
 in a loss of production if disabled. Continuum makes your autobuyers for Antimatter Dimensions obsolete, so all the
 autobuyer settings for Antimatter Dimension autobuyers are now hidden on that tab as long as Continuum is active.
 `,
-// Apparently continuumUnlocked is really important in a lot of places and if we keep it unlocked
-// Things break, so we check for the iMU instead.
+      // Apparently continuumUnlocked is really important in a lot of places and if we keep it unlocked
+      // Things break, so we check for the iMU instead.
       isUnlocked: () => ImaginaryUpgrade(15).isBought,
       tags: ["continuum", "purchase", "reality", "lategame", "endgame"],
       tab: ""

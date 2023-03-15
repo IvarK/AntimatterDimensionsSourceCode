@@ -78,13 +78,6 @@ export default {
       if (this.projectedTimeEstimate.startsWith(">")) return this.projectedTimeEstimate;
       return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
     },
-    estimateImprovementTooltipStyle() {
-      const show = this.showImprovedEstimate && this.shouldEstimateImprovement;
-      return {
-        visibility: show ? "visible" : "hidden",
-        opacity: show ? 1 : 0
-      };
-    }
   },
   methods: {
     update() {

@@ -21,6 +21,7 @@ export default {
       galaxyTimeEstimate: "",
       maxDT: new Decimal(),
       toMaxTooltip: "",
+      isHovering: false,
     };
   },
   computed: {
@@ -71,6 +72,19 @@ export default {
       return `${formatInt(this.baseGalaxies)} Base`;
     },
     hasMaxText: () => PlayerProgress.realityUnlocked() && !Pelle.isDoomed,
+    allRebuyables() {
+      const upgradeRows = [];
+      upgradeRows.push(this.rebuyables);
+      if (this.hasPelleDilationUpgrades) upgradeRows.push(this.pelleRebuyables);
+      return upgradeRows;
+    },
+    allSingleUpgrades() {
+      const upgradeRows = [];
+      upgradeRows.push(...this.upgrades);
+      if (this.hasPelleDilationUpgrades) upgradeRows.push(this.pelleUpgrades);
+      upgradeRows.push([this.ttGenerator]);
+      return upgradeRows;
+    },
   },
   methods: {
     update() {
@@ -116,7 +130,12 @@ export default {
       <span class="c-dilation-tab__tachyons">{{ format(tachyons, 2, 1) }}</span>
       {{ pluralize("Tachyon Particle", tachyons) }}.
     </span>
-    <DilationButton />
+    <div
+      @mouseover="isHovering = true"
+      @mouseleave="isHovering = false"
+    >
+      <DilationButton />
+    </div>
     <span>
       You have
       <span class="c-dilation-tab__dilated-time">{{ format(dilatedTime, 2, 1) }}</span>
@@ -146,54 +165,32 @@ export default {
       >{{ format(maxDT, 2, 1) }}</span>.
     </span>
     <div class="l-dilation-upgrades-grid">
-      <div class="l-dilation-upgrades-grid__row">
+      <div
+        v-for="(upgradeRow, row) in allRebuyables"
+        :key="'rebuyable' + row"
+        class="l-dilation-upgrades-grid__row"
+      >
         <DilationUpgradeButton
-          v-for="upgrade in rebuyables"
+          v-for="upgrade in upgradeRow"
           :key="upgrade.id"
           :upgrade="upgrade"
           :is-rebuyable="true"
           class="l-dilation-upgrades-grid__cell"
+          :show-tooltip="isHovering"
         />
       </div>
       <div
-        v-if="hasPelleDilationUpgrades"
+        v-for="(upgradeRow, row) in allSingleUpgrades"
+        :key="'single' + row"
         class="l-dilation-upgrades-grid__row"
       >
         <DilationUpgradeButton
-          v-for="upgrade in pelleRebuyables"
+          v-for="upgrade in upgradeRow"
           :key="upgrade.id"
           :upgrade="upgrade"
-          :is-rebuyable="true"
+          :is-rebuyable="false"
           class="l-dilation-upgrades-grid__cell"
-        />
-      </div>
-      <div
-        v-for="(row, i) in upgrades"
-        :key="i"
-        class="l-dilation-upgrades-grid__row"
-      >
-        <DilationUpgradeButton
-          v-for="upgrade in row"
-          :key="upgrade.id"
-          :upgrade="upgrade"
-          class="l-dilation-upgrades-grid__cell"
-        />
-      </div>
-      <div
-        v-if="hasPelleDilationUpgrades"
-        class="l-dilation-upgrades-grid__row"
-      >
-        <DilationUpgradeButton
-          v-for="upgrade in pelleUpgrades"
-          :key="upgrade.id"
-          :upgrade="upgrade"
-          class="l-dilation-upgrades-grid__cell"
-        />
-      </div>
-      <div class="l-dilation-upgrades-grid__row">
-        <DilationUpgradeButton
-          :upgrade="ttGenerator"
-          class="l-dilation-upgrades-grid__cell"
+          :show-tooltip="isHovering"
         />
       </div>
     </div>
@@ -206,5 +203,20 @@ export default {
   font-size: 1.5rem;
   text-shadow: 0 0 0.2rem var(--color-reality-dark);
   cursor: default;
+}
+
+.l-dilation-upgrades-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.l-dilation-upgrades-grid__row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.l-dilation-upgrades-grid__cell {
+  margin: 1.2rem 1.5rem;
 }
 </style>

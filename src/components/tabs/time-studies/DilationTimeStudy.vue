@@ -58,6 +58,21 @@ export default {
       }
       this.currTT.copyFrom(Currency.timeTheorems.value);
       this.ttGen.copyFrom(getTTPerSecond().times(getGameSpeedupFactor()));
+    },
+    clickHandler() {
+      switch (this.id) {
+        case 1:
+          return () => Tab.eternity.dilation.show();
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+          return () => Tab.dimensions.time.show();
+        case 6:
+          return () => Tab.reality.glyphs.show();
+        default:
+          throw new Error("Unrecognized Dilation study was clicked");
+      }
     }
   }
 };
@@ -67,6 +82,7 @@ export default {
   <TimeStudyButton
     :setup="setup"
     :ach-tooltip="theoremTimeEstimate"
+    :special-click="clickHandler()"
   >
     <DescriptionDisplay :config="study.config" />
     <template v-if="showRequirement">

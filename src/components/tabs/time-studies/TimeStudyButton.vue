@@ -20,6 +20,11 @@ export default {
       type: Boolean,
       required: false,
       default: false
+    },
+    specialClick: {
+      type: Function,
+      required: false,
+      default: null,
     }
   },
   data() {
@@ -120,7 +125,8 @@ export default {
       this.STCost = this.study.STCost;
     },
     handleClick() {
-      this.study.purchase();
+      if (this.specialClick === null || !this.study.isBought) this.study.purchase();
+      else this.specialClick();
     },
     shiftClick() {
       if (this.study.purchaseUntil) this.study.purchaseUntil();

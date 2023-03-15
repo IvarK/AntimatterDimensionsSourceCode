@@ -224,13 +224,16 @@ GameDatabase.credits = {
       name: "ÆiOuF",
       roles: 13
     }, {
+      name: "Akirious",
+      roles: 13
+    }, {
       name: "Anjinho01",
       roles: 13
     }, {
       name: "Anthios",
       roles: 13
     }, {
-      name: "Aubrey",
+      name: "Aubrey Ark",
       roles: 13
     }, {
       name: "Auti",
@@ -243,6 +246,9 @@ GameDatabase.credits = {
       name: "Barrin84",
       roles: 13
     }, {
+      name: "Calmcat",
+      roles: 13
+    }, {
       name: "ChizuX",
       roles: 13
     }, {
@@ -253,8 +259,14 @@ GameDatabase.credits = {
       name2: "Aaryan Sarawgi",
       roles: 13
     }, {
+      name: "Daniella",
+      roles: 13
+    }, {
       name: "DarthDie",
       name2: "Briar Bowser",
+      roles: 13
+    }, {
+      name: "ElPopote83",
       roles: 13
     }, {
       name: "Epsilon",
@@ -265,6 +277,9 @@ GameDatabase.credits = {
       roles: 13
     }, {
       name: "Gaunter",
+      roles: 13
+    }, {
+      name: "Gimmick",
       roles: 13
     }, {
       name: "HarrisL2",
@@ -289,6 +304,9 @@ GameDatabase.credits = {
       name2: "Jan-Niklas Petersen",
       roles: 13
     }, {
+      name: "Joseph Micheli",
+      roles: 13
+    }, {
       name: "kaislash",
       name2: "Lily",
       roles: 13
@@ -301,6 +319,19 @@ GameDatabase.credits = {
       name2: "Arthur",
       roles: 13
     }, {
+      name: "Klötzchen",
+      roles: 13
+    }, {
+      name: "L5racer",
+      roles: 13
+    }, {
+      name: "Marshmallow",
+      roles: 13
+    }, {
+      name: "HyperionMike",
+      name2: "Miikael Siitan",
+      roles: 13
+    }, {
       name: "Mirai",
       roles: 13
     }, {
@@ -311,7 +342,15 @@ GameDatabase.credits = {
       name: "Nani",
       roles: 13
     }, {
+      name: "Neo",
+      name2: "Joon",
+      roles: 13
+    }, {
       name: "netweak",
+      roles: 13
+    }, {
+      name: "NiZeKiHo",
+      name2: "DominusDane",
       roles: 13
     }, {
       name: "NotBrewst",
@@ -337,11 +376,24 @@ GameDatabase.credits = {
       name: "ReacTivity",
       roles: 13
     }, {
+      name: "Reaxt",
+      name2: "Rea Koehler",
+      roles: 13
+    }, {
+      name: "Ruins",
+      roles: 13
+    }, {
       name: "Rukimix",
+      roles: 13
+    }, {
+      name: "shadowevil",
       roles: 13
     }, {
       name: "Skunky",
       name2: "Lukas",
+      roles: 13
+    }, {
+      name: "Snaeky",
       roles: 13
     }, {
       name: "Socks",
@@ -357,11 +409,20 @@ GameDatabase.credits = {
       name: "Taylor Reeves",
       roles: 13
     }, {
+      name: "TheAhmex",
+      roles: 13
+    }, {
+      name: "The Trust Melon",
+      roles: 13
+    }, {
       name: "Tim Wong",
       roles: 13
     }, {
       name: "tragedt",
       name2: "Ethan Manninen",
+      roles: 13
+    }, {
+      name: "tui sapo",
       roles: 13
     }, {
       name: "Valentine Clarissa Alanis Star Z",

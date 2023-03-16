@@ -112,17 +112,35 @@ export default {
       this.resetCelestial = player.options.retryCelestial;
       this.inPelle = Pelle.isDoomed;
     },
-    // Process exit requests from the inside out; exit any Challenges first, then dilation, then Celestial Reality
+    // Process exit requests from the inside out; Challenges first, then dilation, then Celestial Reality. If the
+    // relevant option is toggled, we pass a bunch of information over to a modal - otherwise we immediately exit
     exitButtonClicked() {
-      const current = Player.anyChallenge;
+      let names, clickFn;
       if (Player.isInAnyChallenge) {
-        current.exit();
+        // Regex replacement is used to remove the "(X/Y)" which appears after ECs. The ternary statement is there
+        // because this path gets called for NCs, ICs, and ECs
+        const toExit = this.activeChallengeNames[this.activeChallengeNames.length - 1].replace(/\W+\(.*\)/u, "");
+        names = { chall: toExit, normal: toExit.match("Eternity") ? "Eternity" : "Infinity" };
+        clickFn = () => Player.anyChallenge.exit();
       } else if (player.dilation.active) {
-        startDilatedEternityRequest();
-      } else if (player.options.confirmations.resetCelestial) {
-        Modal.exitCelestialReality.show();
+        names = { chall: "Time Dilation", normal: "Eternity" };
+        clickFn = () => startDilatedEternityRequest();
       } else {
-        beginProcessReality(getRealityProps(true));
+        names = { chall: this.activeChallengeNames[0], normal: "Reality" };
+        clickFn = () => beginProcessReality(getRealityProps(true));
+      }
+
+      if (player.options.confirmations.exitChallenge) {
+        Modal.exitChallenge.show(
+          {
+            challengeName: names.chall,
+            normalName: names.normal,
+            hasHigherLayers: this.inPelle || this.activeChallengeNames.length > 1,
+            exitFn: clickFn
+          }
+        );
+      } else {
+        clickFn();
       }
     },
     // Bring the player to the tab related to the innermost challenge
@@ -186,6 +204,18 @@ export default {
 </template>
 
 <style scoped>
+.l-game-header__challenge-text {
+  display: flex;
+  height: 2rem;
+  top: 50%;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-text);
+  margin: 0.5rem;
+}
+
 .l-challenge-display {
   padding: 0.5rem;
   cursor: default;

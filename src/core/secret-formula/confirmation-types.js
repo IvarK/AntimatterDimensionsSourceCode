@@ -22,6 +22,10 @@ GameDatabase.confirmationTypes = [
     option: "challenges",
     isUnlocked: () => PlayerProgress.infinityUnlocked(),
   }, {
+    name: "Exit Challenges",
+    option: "exitChallenge",
+    isUnlocked: () => PlayerProgress.infinityUnlocked(),
+  }, {
     name: "Replicanti Galaxy",
     option: "replicantiGalaxy",
     isUnlocked: () => PlayerProgress.eternityUnlocked() || player.replicanti.unl,

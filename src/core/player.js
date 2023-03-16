@@ -819,6 +819,7 @@ window.player = {
       armageddon: true,
       sacrifice: true,
       challenges: true,
+      exitChallenge: true,
       eternity: true,
       dilation: true,
       resetReality: true,

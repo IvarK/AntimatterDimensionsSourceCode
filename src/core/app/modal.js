@@ -16,7 +16,7 @@ import DimensionBoostModal from "@/components/modals/prestige/DimensionBoostModa
 import EnterCelestialsModal from "@/components/modals/prestige/EnterCelestialsModal";
 import EnterDilationModal from "@/components/modals/prestige/EnterDilationModal";
 import EternityModal from "@/components/modals/prestige/EternityModal";
-import ExitCelestialModal from "@/components/modals/prestige/ExitCelestialModal";
+import ExitChallengeModal from "@/components/modals/prestige/ExitChallengeModal";
 import ExitDilationModal from "@/components/modals/prestige/ExitDilationModal";
 import HardResetModal from "@/components/modals/prestige/HardResetModal";
 import ModifySeedModal from "@/components/modals/ModifySeedModal";
@@ -198,13 +198,13 @@ Modal.dimensionBoost = new Modal(DimensionBoostModal, 1, GAME_EVENT.DIMBOOST_AFT
 
 Modal.antimatterGalaxy = new Modal(AntimatterGalaxyModal, 1, GAME_EVENT.GALAXY_RESET_AFTER);
 Modal.bigCrunch = new Modal(BigCrunchModal, 1, GAME_EVENT.BIG_CRUNCH_AFTER);
+Modal.exitChallenge = new Modal(ExitChallengeModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
 Modal.replicantiGalaxy = new Modal(ReplicantiGalaxyModal, 1, GAME_EVENT.ETERNITY_RESET_AFTER);
 Modal.eternity = new Modal(EternityModal, 1, GAME_EVENT.ETERNITY_RESET_AFTER);
 Modal.enterDilation = new Modal(EnterDilationModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
 Modal.exitDilation = new Modal(ExitDilationModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
 Modal.reality = new Modal(RealityModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
 Modal.resetReality = new Modal(ResetRealityModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
-Modal.exitCelestialReality = new Modal(ExitCelestialModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
 Modal.celestials = new Modal(EnterCelestialsModal, 1);
 Modal.hardReset = new Modal(HardResetModal, 1);
 Modal.enterSpeedrun = new Modal(SpeedrunModeModal);

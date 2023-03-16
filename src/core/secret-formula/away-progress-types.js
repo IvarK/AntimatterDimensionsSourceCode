@@ -40,6 +40,10 @@ GameDatabase.awayProgressTypes = [
     reference: ["dilation", "dilatedTime"],
     isUnlocked: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked(),
   }, {
+    name: "timeTheorems",
+    reference: ["timestudy", "theorem"],
+    isUnlocked: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked(),
+  }, {
     name: "tachyonGalaxies",
     reference: ["dilation", "totalTachyonGalaxies"],
     isUnlocked: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked(),

@@ -72,3 +72,17 @@ export default {
     <span v-if="!nothingHappened && somethingHappened">Note: Click an entry to hide it in the future.</span>
   </ModalWrapper>
 </template>
+
+<style scoped>
+.c-modal-away-progress__resources div {
+  min-width: 55rem;
+  border-bottom: 0.1rem solid var(--color-text);
+  margin-bottom: 0.2rem;
+  padding-bottom: 0.2rem;
+  cursor: pointer;
+}
+
+.c-modal-away-progress__resources div:last-child {
+  border: none;
+}
+</style>

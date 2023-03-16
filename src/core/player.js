@@ -850,6 +850,7 @@ window.player = {
       tachyonParticles: true,
       dilatedTime: true,
       tachyonGalaxies: true,
+      timeTheorems: true,
       achievementCount: true,
       realities: true,
       realityMachines: true,

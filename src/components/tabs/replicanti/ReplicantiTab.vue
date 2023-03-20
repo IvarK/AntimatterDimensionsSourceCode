@@ -117,6 +117,7 @@ export default {
     },
     hasMaxText: () => PlayerProgress.realityUnlocked() && !Pelle.isDoomed,
     toMaxTooltip() {
+      if (this.amount.lte(this.replicantiCap)) return null;
       return this.estimateToMax.lt(0.01)
         ? "Currently increasing"
         : TimeSpan.fromSeconds(this.estimateToMax.toNumber()).toStringShort();
@@ -171,7 +172,7 @@ export default {
         (Math.log(player.replicanti.chance + 1)), getReplicantiInterval());
       const postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
       const nextMilestone = this.maxReplicanti;
-      const coeff = Decimal.divide(updateRateMs / 1000, exp1m(logGainFactorPerTick.times(postScale)));
+      const coeff = Decimal.divide(updateRateMs / 1000, logGainFactorPerTick.times(postScale));
       return coeff.times(nextMilestone.divide(this.amount).pow(postScale).minus(1));
     }
   },

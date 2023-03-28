@@ -890,7 +890,7 @@ window.player = {
     lastOpenTab: 0,
     lastOpenSubtab: Array.repeat(0, 11),
     currentMultiplierSubtab: 0,
-    fixedPerkStartingPos: false,
+    perkLayout: false,
     perkPhysicsEnabled: true,
     automatorEvents: {
       newestFirst: false,

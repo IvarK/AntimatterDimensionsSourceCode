@@ -24,6 +24,7 @@ export default {
   },
   mounted() {
     PerkNetwork.initialStabilization = false;
+    PerkNetwork.currentLayout = PerkLayouts[player.options.perkLayout];
     PerkNetwork.initializeIfNeeded();
     if (ui.view.theme === "S9") PerkNetwork.setLabelVisibility(false);
     else PerkNetwork.setLabelVisibility(ui.view.shiftDown || player.options.showHintText.perks);
@@ -66,6 +67,26 @@ const perkColors = () => ({
   },
 });
 
+// Specification for different starting layouts
+export const PerkLayouts = [
+  {
+    buttonText: "Random Positions",
+    position: () => new Vector(100 * Math.random(), 100 * Math.random()),
+  },
+  {
+    buttonText: "Default Untangled",
+    position: config => config.defaultPosition,
+  },
+  {
+    // This is the perks laid out in the same way that they're laid out in the Android version
+    buttonText: "Grid Layout",
+    // Coordinate specifications are given in grid index, so we need to spread them out since this layout
+    // also disables physics. There's a vertical reflection too, as the positions use an inverted Y axis
+    position: config => config.gridPosition.matrixTransform(100, 0, 0, -100),
+    forcePhysics: false,
+  }
+];
+
 export const PerkNetwork = {
   container: undefined,
   network: undefined,
@@ -75,6 +96,7 @@ export const PerkNetwork = {
   lastPerkNotation: "",
   pulseTimer: 0,
   initialStabilization: false,
+  currentLayout: {},
   initializeIfNeeded() {
     const notation = Notations.current.name;
     if (this.container !== undefined && notation === this.lastPerkNotation) return;
@@ -128,8 +150,8 @@ export const PerkNetwork = {
       return container;
     }
     // Just for a bit of fun, tangle it up a bit unless the player specifically chooses not to
-    const defaultPos = player.options.fixedPerkStartingPos;
     const isDisabled = perk => Pelle.isDoomed && Pelle.uselessPerks.includes(perk.id);
+    const selectPos = config => PerkLayouts[player.options.perkLayout].position(config);
     this.nodes = new DataSet(Perks.all.map(perk => ({
       id: perk.id,
       label: perk.config.label,
@@ -144,8 +166,8 @@ export const PerkNetwork = {
           ? `(+${formatInt(perk.config.automatorPoints)} AP)`
           : ""}`
       ),
-      x: defaultPos ? perk.config.defaultPosition.x : (100 * Math.random()),
-      y: defaultPos ? perk.config.defaultPosition.y : (100 * Math.random()),
+      x: selectPos(perk.config).x,
+      y: selectPos(perk.config).y,
     })));
 
     const edges = [];
@@ -202,7 +224,8 @@ export const PerkNetwork = {
     this.network = new Network(container, nodeData, nodeOptions);
   },
   setPhysics(state) {
-    this.network.physics.physicsEnabled = state;
+    if (this.currentLayout.forcePhysics === undefined) this.network.physics.physicsEnabled = state;
+    else this.network.physics.physicsEnabled = this.currentLayout.forcePhysics;
   },
   forceNetworkRemake() {
     this.container = undefined;

@@ -11,27 +11,37 @@ export default {
   data() {
     return {
       pp: 0,
-      fixedLoadPos: false,
+      treeLayout: 0,
       physicsEnabled: false,
     };
   },
+  computed: {
+    layoutText() {
+      return PerkLayouts[this.treeLayout].buttonText;
+    }
+  },
   watch: {
-    fixedLoadPos(newValue) {
-      player.options.fixedPerkStartingPos = newValue;
-    },
     physicsEnabled(newValue) {
       player.options.perkPhysicsEnabled = newValue;
       PerkNetwork.setPhysics(newValue);
     },
   },
+  created() {
+    this.treeLayout = player.options.perkLayout;
+  },
   methods: {
     update() {
       this.pp = Math.floor(Currency.perkPoints.value);
-      this.fixedLoadPos = player.options.fixedPerkStartingPos;
       this.physicsEnabled = player.options.perkPhysicsEnabled;
     },
     centerTree() {
       PerkNetwork.resetPosition();
+    },
+    cycleLayout() {
+      player.options.perkLayout = (player.options.perkLayout + 1) % PerkLayouts.length;
+      this.treeLayout = player.options.perkLayout;
+      PerkNetwork.currentLayout = PerkLayouts[this.treeLayout];
+      PerkNetwork.setPhysics(player.options.perkPhysicsEnabled);
     }
   }
 };
@@ -46,13 +56,13 @@ export default {
     Diamond-shaped perks also give Automator Points.
     <br>
     <div class="perk-settings">
-      <PrimaryToggleButton
-        v-model="fixedLoadPos"
+      <PrimaryButton
         class="o-primary-btn"
         label="Starting tree layout:"
-        on="Untangled"
-        off="Random Positions"
-      />
+        @click="cycleLayout"
+      >
+        Starting Layout: {{ layoutText }}
+      </PrimaryButton>
       <PrimaryToggleButton
         v-model="physicsEnabled"
         class="o-primary-btn"

@@ -226,6 +226,9 @@ GameStorage.migrations = {
     },
     16: player => {
       player.reality.initialSeed = player.reality.seed;
+
+      player.options.perkLayout = player.options.fixedPerkStartingPos ? 1 : 0;
+      delete player.options.fixedPerkStartingPos;
     },
   },
 

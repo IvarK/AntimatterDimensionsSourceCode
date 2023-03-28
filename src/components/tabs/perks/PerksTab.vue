@@ -67,23 +67,29 @@ const perkColors = () => ({
   },
 });
 
+// Coordinate specifications are sometimes given in a grid index, so we need to spread them out to the proper scaling.
+// Positions use an inverted Y axis, so there's a vertical reflection. Will display well with |x| < 10 and |y| < 6.
+function expandFromGridCoordinates(vec) {
+  return vec.matrixTransform(100, 0, 0, -100);
+}
+
 // Specification for different starting layouts
 export const PerkLayouts = [
   {
     buttonText: "Random Positions",
-    position: () => new Vector(100 * Math.random(), 100 * Math.random()),
+    position: () => new Vector(2000 * Math.random() - 1000, 1200 * Math.random() - 600),
   },
   {
     buttonText: "Default Untangled",
-    position: config => config.defaultPosition,
+    position: config => config.untangledPosition,
   },
   {
     // This is the perks laid out in the same way that they're laid out in the Android version
     buttonText: "Grid Layout",
-    // Coordinate specifications are given in grid index, so we need to spread them out since this layout
-    // also disables physics. There's a vertical reflection too, as the positions use an inverted Y axis
-    position: config => config.gridPosition.matrixTransform(100, 0, 0, -100),
+    position: config => expandFromGridCoordinates(config.gridPosition),
+    centerOffset: new Vector(0, 150),
     forcePhysics: false,
+    straightEdges: true,
   }
 ];
 
@@ -117,6 +123,10 @@ export const PerkNetwork = {
       if (tooltip !== undefined) {
         tooltip.style.visibility = "hidden";
       }
+      if (!this.initialStabilization) {
+        this.setPhysics(player.options.perkPhysicsEnabled);
+        this.initialStabilization = true;
+      }
     });
 
     // Change node side while dragging on Cancer theme, but skip the method otherwise because it's mildly intensive
@@ -136,7 +146,7 @@ export const PerkNetwork = {
     this.network.on("stabilizationIterationsDone", () => {
       // Centering the perk tree doesn't work until the physics-based movement has stopped after the initial creation
       if (!this.initialStabilization) {
-        this.resetPosition();
+        this.resetPosition(false);
         this.initialStabilization = true;
       }
       this.setPhysics(player.options.perkPhysicsEnabled);
@@ -224,8 +234,28 @@ export const PerkNetwork = {
     this.network = new Network(container, nodeData, nodeOptions);
   },
   setPhysics(state) {
-    if (this.currentLayout.forcePhysics === undefined) this.network.physics.physicsEnabled = state;
-    else this.network.physics.physicsEnabled = this.currentLayout.forcePhysics;
+    const newState = this.currentLayout.forcePhysics === undefined ? state : this.currentLayout.forcePhysics;
+    this.network.setOptions({ physics: { enabled: newState } });
+  },
+  setEdgeCurve(state) {
+    this.network.setOptions({ edges: { smooth: { enabled: state } } });
+  },
+  moveToDefaultLayoutPositions(layoutIndex) {
+    // Things go wonky if we don't turn these off before moving
+    this.setPhysics(false);
+    this.setEdgeCurve(false);
+
+    for (const key of Object.keys(PerkNetwork.network.getPositions())) {
+      const id = Number(key);
+      const config = Perks.all.find(p => p.id === id).config;
+      const target = PerkLayouts[layoutIndex].position(config);
+      this.network.moveNode(id, target.x, target.y);
+    }
+
+    // Properly set attributes and window after all the movement
+    this.initialStabilization = false;
+    this.resetPosition(false);
+    this.setEdgeCurve(!(this.currentLayout.straightEdges ?? false));
   },
   forceNetworkRemake() {
     this.container = undefined;
@@ -233,9 +263,11 @@ export const PerkNetwork = {
     // Tangled trees use physics to bring it to a semi-usable state; it gets set properly again after stabilization
     this.setPhysics(true);
   },
-  resetPosition() {
-    const centerPerk = PerkNetwork.network.body.nodes[GameDatabase.reality.perks.firstPerk.id];
-    this.network.moveTo({ position: { x: centerPerk.x, y: centerPerk.y }, scale: 0.8, offset: { x: 0, y: 0 } });
+  resetPosition(centerOnStart) {
+    const center = centerOnStart
+      ? PerkNetwork.network.body.nodes[GameDatabase.reality.perks.firstPerk.id]
+      : (PerkLayouts[player.options.perkLayout].centerOffset ?? new Vector(0, 0));
+    this.network.moveTo({ position: { x: center.x, y: center.y }, scale: 0.4, offset: { x: 0, y: 0 } });
   },
   setLabelVisibility(areVisible) {
     const options = {

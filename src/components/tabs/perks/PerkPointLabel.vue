@@ -35,13 +35,14 @@ export default {
       this.physicsEnabled = player.options.perkPhysicsEnabled;
     },
     centerTree() {
-      PerkNetwork.resetPosition();
+      PerkNetwork.resetPosition(true);
     },
     cycleLayout() {
       player.options.perkLayout = (player.options.perkLayout + 1) % PerkLayouts.length;
       this.treeLayout = player.options.perkLayout;
       PerkNetwork.currentLayout = PerkLayouts[this.treeLayout];
       PerkNetwork.setPhysics(player.options.perkPhysicsEnabled);
+      PerkNetwork.moveToDefaultLayoutPositions(this.treeLayout);
     }
   }
 };
@@ -61,7 +62,7 @@ export default {
         label="Starting tree layout:"
         @click="cycleLayout"
       >
-        Starting Layout: {{ layoutText }}
+        Perk Layout: {{ layoutText }}
       </PrimaryButton>
       <PrimaryToggleButton
         v-model="physicsEnabled"
@@ -74,7 +75,7 @@ export default {
         class="o-primary-btn"
         @click="centerTree"
       >
-        Bring Tree to center
+        Center Tree on START
       </PrimaryButton>
     </div>
   </div>

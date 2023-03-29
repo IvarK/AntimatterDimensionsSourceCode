@@ -238,7 +238,8 @@ export const PerkNetwork = {
     this.network.setOptions({ physics: { enabled: newState } });
   },
   setEdgeCurve(state) {
-    this.network.setOptions({ edges: { smooth: { enabled: state } } });
+    const newState = this.currentLayout.straightEdges === undefined ? state : !this.currentLayout.straightEdges;
+    this.network.setOptions({ edges: { smooth: { enabled: newState } } });
   },
   moveToDefaultLayoutPositions(layoutIndex) {
     // Things go wonky if we don't turn these off before moving
@@ -255,7 +256,7 @@ export const PerkNetwork = {
     // Properly set attributes and window after all the movement
     this.initialStabilization = false;
     this.resetPosition(false);
-    this.setEdgeCurve(!(this.currentLayout.straightEdges ?? false));
+    this.setEdgeCurve(true);
   },
   forceNetworkRemake() {
     this.container = undefined;

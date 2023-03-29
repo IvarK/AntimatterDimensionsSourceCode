@@ -37,6 +37,10 @@ export default {
     centerTree() {
       PerkNetwork.resetPosition(true);
     },
+    straightenEdges() {
+      PerkNetwork.setEdgeCurve(false);
+      PerkNetwork.setEdgeCurve(true);
+    },
     cycleLayout() {
       player.options.perkLayout = (player.options.perkLayout + 1) % PerkLayouts.length;
       this.treeLayout = player.options.perkLayout;
@@ -76,6 +80,12 @@ export default {
         @click="centerTree"
       >
         Center Tree on START
+      </PrimaryButton>
+      <PrimaryButton
+        class="o-primary-btn"
+        @click="straightenEdges"
+      >
+        Straighten Edges
       </PrimaryButton>
     </div>
   </div>

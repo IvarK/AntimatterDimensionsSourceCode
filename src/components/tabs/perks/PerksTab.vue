@@ -31,6 +31,7 @@ export default {
     PerkNetwork.updatePerkColor();
     PerkNetwork.updatePerkSize();
     this.$refs.tab.appendChild(PerkNetwork.container);
+    PerkNetwork.moveToDefaultLayoutPositions(player.options.perkLayout);
   }
 };
 
@@ -76,12 +77,12 @@ function expandFromGridCoordinates(vec) {
 // Specification for different starting layouts
 export const PerkLayouts = [
   {
-    buttonText: "Random Positions",
-    position: () => new Vector(2000 * Math.random() - 1000, 1200 * Math.random() - 600),
-  },
-  {
     buttonText: "Default Untangled",
     position: config => config.untangledPosition,
+  },
+  {
+    buttonText: "Random Positions",
+    position: () => new Vector(2000 * Math.random() - 1000, 1200 * Math.random() - 600),
   },
   {
     // This is the perks laid out in the same way that they're laid out in the Android version
@@ -90,6 +91,14 @@ export const PerkLayouts = [
     centerOffset: new Vector(0, 150),
     forcePhysics: false,
     straightEdges: true,
+  },
+  {
+    buttonText: "Blob",
+    position: config => config.blobPosition,
+    centerOffset: new Vector(50, 0),
+    forcePhysics: false,
+    straightEdges: true,
+    isUnlocked: () => Themes.available().map(t => t.name).includes("S11"),
   }
 ];
 

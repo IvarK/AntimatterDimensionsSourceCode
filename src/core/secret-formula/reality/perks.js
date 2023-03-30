@@ -11,8 +11,25 @@ export const PERK_FAMILY = {
   ACHIEVEMENT: "ACHIEVEMENT",
 };
 
-// Of the two positions, untangledPosition specifies the "default non-overlapping" tree,
-// while gridPosition specifies coordinates based on the Android tree layout
+// This function isn't used in-game, see note below for its intended usage
+// eslint-disable-next-line no-unused-vars
+function vectorToNum(v) {
+  return Math.floor(v.x / 5) + 400 * Math.floor(v.y / 5) + 80200;
+}
+
+/**
+ * In order to reduce boilerplate code and excessive Vector object declarations, the node positions in fixed layouts
+ * are specified as numbers which are decoded on-the-fly using positionNumToVector in PerksTab.vue. The function
+ * vectorToNum above is the inverse of that function.
+ *
+ * To make a new preset layout, define vectorToNum in the console, move all the nodes around in-game and then run
+ *    Object.values(PerkNetwork.network.body.nodes).filter(n => n.edges.length !== 0).map(v => vectorToNum(v))
+ * in the console to get all the current node positions. Then, append the resulting numbers to each layoutPosList
+ * array below and make the appripriate entry in PerkLayouts.
+ *
+ * Note: This encoding/decoding only works properly for coordinates with values between -1000 and 1000, and will
+ * be slightly off for vectors whose coordinates aren't divisible by 5
+ */
 GameDatabase.reality.perks = {
   firstPerk: {
     id: 0,
@@ -23,9 +40,7 @@ GameDatabase.reality.perks = {
       and allow you to choose from ${formatInt(4)} different Glyphs on Reality.`;
     },
     effect: 4,
-    untangledPosition: new Vector(0, 0),
-    gridPosition: new Vector(0, 0),
-    blobPosition: new Vector(-155, -155),
+    layoutPosList: [80200, 80200, 67769],
   },
   startAM: {
     id: 10,
@@ -36,9 +51,7 @@ GameDatabase.reality.perks = {
     },
     bumpCurrency: () => Currency.antimatter.bumpTo(5e130),
     effect: 5e130,
-    untangledPosition: new Vector(-190, 0),
-    gridPosition: new Vector(0, -1),
-    blobPosition: new Vector(-275, -55),
+    layoutPosList: [80162, 80600, 75745],
   },
   startIP1: {
     id: 12,
@@ -49,9 +62,7 @@ GameDatabase.reality.perks = {
     },
     bumpCurrency: () => Currency.infinityPoints.bumpTo(5e15),
     effect: 5e15,
-    untangledPosition: new Vector(-375, -15),
-    gridPosition: new Vector(-1, -1),
-    blobPosition: new Vector(-390, 140),
+    layoutPosList: [78925, 80599, 91322],
   },
   startIP2: {
     id: 13,
@@ -62,9 +73,7 @@ GameDatabase.reality.perks = {
     },
     bumpCurrency: () => Currency.infinityPoints.bumpTo(5e130),
     effect: 5e130,
-    untangledPosition: new Vector(-445, -175),
-    gridPosition: new Vector(-2, -1),
-    blobPosition: new Vector(-550, 145),
+    layoutPosList: [66111, 80598, 91690],
   },
   startEP1: {
     id: 14,
@@ -77,9 +86,7 @@ GameDatabase.reality.perks = {
     effect: 10,
     automatorPoints: 5,
     shortDescription: () => `Start with ${formatInt(10)} EP`,
-    untangledPosition: new Vector(-415, 165),
-    gridPosition: new Vector(-1, -2),
-    blobPosition: new Vector(-330, 295),
+    layoutPosList: [93317, 80999, 103734],
   },
   startEP2: {
     id: 15,
@@ -90,9 +97,7 @@ GameDatabase.reality.perks = {
     },
     bumpCurrency: () => Currency.eternityPoints.bumpTo(5000),
     effect: 5000,
-    untangledPosition: new Vector(-565, 205),
-    gridPosition: new Vector(-2, -3),
-    blobPosition: new Vector(-35, 275),
+    layoutPosList: [96487, 81398, 102193],
   },
   startEP3: {
     id: 16,
@@ -105,9 +110,7 @@ GameDatabase.reality.perks = {
     effect: 5e9,
     automatorPoints: 10,
     shortDescription: () => `Start with ${format(5e9)} EP`,
-    untangledPosition: new Vector(-700, 240),
-    gridPosition: new Vector(-2, -4),
-    blobPosition: new Vector(235, 325),
+    layoutPosList: [99260, 81798, 106247],
   },
   startTP: {
     id: 17,
@@ -119,9 +122,7 @@ GameDatabase.reality.perks = {
     effect: () => (Enslaved.isRunning ? 1 : 10),
     automatorPoints: 5,
     shortDescription: () => `Start with ${formatInt(10)} TP`,
-    untangledPosition: new Vector(-385, 335),
-    gridPosition: new Vector(-1, -3),
-    blobPosition: new Vector(-120, 365),
+    layoutPosList: [106923, 81399, 109376],
   },
   antimatterNoReset: {
     id: 30,
@@ -129,9 +130,7 @@ GameDatabase.reality.perks = {
     family: PERK_FAMILY.ANTIMATTER,
     description: `Dimension Boosts and Antimatter Galaxies no longer reset
       Antimatter, Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice.`,
-    untangledPosition: new Vector(-275, 120),
-    gridPosition: new Vector(0, -2),
-    blobPosition: new Vector(-235, 155),
+    layoutPosList: [89745, 81000, 92553],
   },
   studyPassive: {
     id: 31,
@@ -142,18 +141,14 @@ GameDatabase.reality.perks = {
         Time Study 142 to ${formatX(DC.E50)} Infinity Points.
         ${Pelle.isDoomed ? "" : `In addition, Time Study 132 also makes Replicanti ${format(3)} times faster.`}`;
     },
-    untangledPosition: new Vector(300, -130),
-    gridPosition: new Vector(0, 2),
-    blobPosition: new Vector(-55, -345),
+    layoutPosList: [69860, 79400, 52589],
   },
   autounlockEU1: {
     id: 40,
     label: "EU1",
     family: PERK_FAMILY.ETERNITY,
     description: `Automatically unlock the first row of Eternity Upgrades for free once you have Eternities.`,
-    untangledPosition: new Vector(50, 150),
-    gridPosition: new Vector(1, -1),
-    blobPosition: new Vector(35, -90),
+    layoutPosList: [92210, 80601, 73007],
   },
   autounlockEU2: {
     id: 41,
@@ -163,27 +158,21 @@ GameDatabase.reality.perks = {
       return `The second row of Eternity Upgrades is automatically purchased
         at ${formatX(1e10)} times less than their original price`;
     },
-    untangledPosition: new Vector(50, 325),
-    gridPosition: new Vector(1, -2),
-    blobPosition: new Vector(335, 20),
+    layoutPosList: [106210, 81001, 81867],
   },
   autounlockDilation1: {
     id: 42,
     label: "DU1",
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
-    untangledPosition: new Vector(165, 565),
-    gridPosition: new Vector(1, -4),
-    blobPosition: new Vector(550, 215),
+    layoutPosList: [125433, 81801, 97510],
   },
   autounlockDilation2: {
     id: 43,
     label: "DU2",
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
-    untangledPosition: new Vector(310, 605),
-    gridPosition: new Vector(1, -5),
-    blobPosition: new Vector(565, 65),
+    layoutPosList: [128662, 82201, 85513],
   },
   autounlockDilation3: {
     id: 44,
@@ -192,9 +181,7 @@ GameDatabase.reality.perks = {
     description: "Automatically purchase the passive Time Theorem generation Dilation Upgrade once you can afford it.",
     automatorPoints: 5,
     shortDescription: () => "Auto-purchase TT generation",
-    untangledPosition: new Vector(460, 580),
-    gridPosition: new Vector(1, -6),
-    blobPosition: new Vector(410, -100),
+    layoutPosList: [126692, 82601, 72282],
   },
   autounlockTD: {
     id: 45,
@@ -203,9 +190,7 @@ GameDatabase.reality.perks = {
     description: "Auto-unlock Time Dimensions 5-8 once you can afford them.",
     automatorPoints: 5,
     shortDescription: () => "Auto-unlock TD 5-8",
-    untangledPosition: new Vector(605, 575),
-    gridPosition: new Vector(0, -6),
-    blobPosition: new Vector(345, -230),
+    layoutPosList: [126321, 82600, 61869],
   },
   autounlockReality: {
     id: 46,
@@ -217,27 +202,21 @@ GameDatabase.reality.perks = {
     },
     automatorPoints: 10,
     shortDescription: () => "Auto-unlock Reality",
-    untangledPosition: new Vector(725, 505),
-    gridPosition: new Vector(0, -7),
-    blobPosition: new Vector(230, -115),
+    layoutPosList: [120745, 83000, 71046],
   },
   bypassIDAntimatter: {
     id: 51,
     label: "IDR",
     family: PERK_FAMILY.INFINITY,
     description: "Infinity Dimensions no longer have antimatter requirements.",
-    untangledPosition: new Vector(-580, -230),
-    gridPosition: new Vector(-2, 0),
-    blobPosition: new Vector(-515, -10),
+    layoutPosList: [61684, 80198, 79297],
   },
   bypassTGReset: {
     id: 52,
     label: "TGR",
     family: PERK_FAMILY.DILATION,
     description: "The 2nd rebuyable Dilation Upgrade no longer resets your Dilated Time.",
-    untangledPosition: new Vector(-145, 520),
-    gridPosition: new Vector(0, -3),
-    blobPosition: new Vector(385, 405),
+    layoutPosList: [121771, 81400, 112677],
   },
   bypassECDilation: {
     id: 53,
@@ -247,45 +226,35 @@ GameDatabase.reality.perks = {
       "requirements from Time Dilation unlock.",
     automatorPoints: 5,
     shortDescription: () => `Unlocking Dilation only requires TT`,
-    untangledPosition: new Vector(0, 640),
-    gridPosition: new Vector(2, -4),
-    blobPosition: new Vector(580, 360),
+    layoutPosList: [131400, 81802, 109116],
   },
   bypassEC1Lock: {
     id: 54,
     label: "EC1R",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove the Eternity Challenge 1 requirement from Time Study 181.",
-    untangledPosition: new Vector(450, -160),
-    gridPosition: new Vector(0, 3),
-    blobPosition: new Vector(-165, -450),
+    layoutPosList: [67490, 79000, 44167],
   },
   bypassEC2Lock: {
     id: 55,
     label: "EC2R",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove the Eternity Challenge 2 requirement from Time Study 181.",
-    untangledPosition: new Vector(350, -270),
-    gridPosition: new Vector(-1, 3),
-    blobPosition: new Vector(-280, -390),
+    layoutPosList: [58670, 78999, 48944],
   },
   bypassEC3Lock: {
     id: 56,
     label: "EC3R",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove the Eternity Challenge 3 requirement from Time Study 181.",
-    untangledPosition: new Vector(410, -25),
-    gridPosition: new Vector(1, 3),
-    blobPosition: new Vector(110, -405),
+    layoutPosList: [78282, 79001, 47822],
   },
   bypassEC5Lock: {
     id: 57,
     label: "EC5R",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove the Eternity Challenge 5 requirement from Time Study 62.",
-    untangledPosition: new Vector(155, -85),
-    gridPosition: new Vector(0, 1),
-    blobPosition: new Vector(35, -220),
+    layoutPosList: [73431, 79800, 62607],
   },
   autocompleteEC1: {
     id: 60,
@@ -299,9 +268,7 @@ GameDatabase.reality.perks = {
     effect: 60,
     automatorPoints: 5,
     shortDescription: () => `Auto-complete ECs every ${formatInt(60)} minutes`,
-    untangledPosition: new Vector(345, 135),
-    gridPosition: new Vector(2, 2),
-    blobPosition: new Vector(320, -420),
+    layoutPosList: [91069, 79402, 46664],
   },
   autocompleteEC2: {
     id: 61,
@@ -312,9 +279,7 @@ GameDatabase.reality.perks = {
         (${formatInt(20)} minute decrease)`;
     },
     effect: 40,
-    untangledPosition: new Vector(425, 235),
-    gridPosition: new Vector(2, 3),
-    blobPosition: new Vector(430, -335),
+    layoutPosList: [99085, 79002, 53486],
   },
   autocompleteEC3: {
     id: 62,
@@ -327,18 +292,14 @@ GameDatabase.reality.perks = {
     effect: 20,
     automatorPoints: 10,
     shortDescription: () => `Auto-complete ECs every ${formatInt(20)} minutes`,
-    untangledPosition: new Vector(325, 325),
-    gridPosition: new Vector(2, 4),
-    blobPosition: new Vector(515, -230),
+    layoutPosList: [106265, 78602, 61903],
   },
   studyActiveEP: {
     id: 70,
     label: "ACT",
     family: PERK_FAMILY.ETERNITY,
     description: "Active path multipliers are always maximized.",
-    untangledPosition: new Vector(195, -260),
-    gridPosition: new Vector(-1, 2),
-    blobPosition: new Vector(-175, -270),
+    layoutPosList: [59439, 79399, 58565],
   },
   studyIdleEP: {
     id: 71,
@@ -348,9 +309,7 @@ GameDatabase.reality.perks = {
       return `Idle path multipliers start as if you have spent ${formatInt(15)} minutes in this Infinity/Eternity.`;
     },
     effect: 15,
-    untangledPosition: new Vector(265, 25),
-    gridPosition: new Vector(1, 2),
-    blobPosition: new Vector(195, -300),
+    layoutPosList: [82253, 79401, 56239],
   },
   studyECRequirement: {
     id: 72,
@@ -359,9 +318,7 @@ GameDatabase.reality.perks = {
     description: "Remove non-Time Theorem requirements for unlocking Eternity Challenges.",
     automatorPoints: 10,
     shortDescription: () => "Remove EC secondary requirements",
-    untangledPosition: new Vector(605, -160),
-    gridPosition: new Vector(0, 4),
-    blobPosition: new Vector(-5, -495),
+    layoutPosList: [67521, 78600, 40599],
   },
   studyECBulk: {
     id: 73,
@@ -372,9 +329,7 @@ GameDatabase.reality.perks = {
       you reach the goal for a higher completion of that challenge.`,
     automatorPoints: 15,
     shortDescription: () => "Bulk EC Completion",
-    untangledPosition: new Vector(740, -135),
-    gridPosition: new Vector(0, 5),
-    blobPosition: new Vector(175, -485),
+    layoutPosList: [69548, 78200, 41435],
   },
   retroactiveTP1: {
     id: 80,
@@ -385,9 +340,7 @@ GameDatabase.reality.perks = {
         multiply your current Tachyon Particle amount by ${formatFloat(1.5, 1)}.`;
     },
     effect: 1.5,
-    untangledPosition: new Vector(-290, 460),
-    gridPosition: new Vector(-1, -4),
-    blobPosition: new Vector(170, 440),
+    layoutPosList: [116942, 81799, 115434],
   },
   retroactiveTP2: {
     id: 81,
@@ -398,9 +351,7 @@ GameDatabase.reality.perks = {
         multiply your current Tachyon Particle amount by ${formatInt(2)}.`;
     },
     effect: 2,
-    untangledPosition: new Vector(-200, 360),
-    gridPosition: new Vector(-1, -5),
-    blobPosition: new Vector(-90, 465),
+    layoutPosList: [108960, 82199, 117382],
   },
   retroactiveTP3: {
     id: 82,
@@ -411,9 +362,7 @@ GameDatabase.reality.perks = {
         multiply your current Tachyon Particle amount by ${formatFloat(2.5, 1)}.`;
     },
     effect: 2.5,
-    untangledPosition: new Vector(-120, 260),
-    gridPosition: new Vector(-1, -6),
-    blobPosition: new Vector(-300, 455),
+    layoutPosList: [100976, 82599, 116540],
   },
   retroactiveTP4: {
     id: 83,
@@ -426,9 +375,7 @@ GameDatabase.reality.perks = {
     effect: 3,
     automatorPoints: 10,
     shortDescription: () => `${formatX(3)} TP upgrade applies retroactively`,
-    untangledPosition: new Vector(-65, 145),
-    gridPosition: new Vector(-2, -6),
-    blobPosition: new Vector(-485, 425),
+    layoutPosList: [91787, 82598, 114103],
   },
   autobuyerDilation: {
     id: 100,
@@ -437,9 +384,7 @@ GameDatabase.reality.perks = {
     description: "Unlock autobuyers for the repeatable Dilation Upgrades.",
     automatorPoints: 5,
     shortDescription: () => "Dilation Upgrade Autobuyers",
-    untangledPosition: new Vector(20, 500),
-    gridPosition: new Vector(1, -3),
-    blobPosition: new Vector(360, 205),
+    layoutPosList: [120204, 81401, 96672],
   },
   autobuyerFasterID: {
     id: 101,
@@ -451,9 +396,7 @@ GameDatabase.reality.perks = {
     effect: 1 / 3,
     automatorPoints: 5,
     shortDescription: () => "Faster ID Autobuyers",
-    untangledPosition: new Vector(-515, -20),
-    gridPosition: new Vector(-1, 0),
-    blobPosition: new Vector(-400, -30),
+    layoutPosList: [78497, 80199, 77720],
   },
   autobuyerFasterReplicanti: {
     id: 102,
@@ -465,9 +408,7 @@ GameDatabase.reality.perks = {
     effect: 1 / 3,
     automatorPoints: 5,
     shortDescription: () => "Faster Replicanti Autobuyers",
-    untangledPosition: new Vector(-425, -310),
-    gridPosition: new Vector(-2, -2),
-    blobPosition: new Vector(-555, 305),
+    layoutPosList: [55315, 80998, 104489],
   },
   autobuyerFasterDilation: {
     id: 103,
@@ -479,9 +420,7 @@ GameDatabase.reality.perks = {
     effect: 1 / 3,
     automatorPoints: 5,
     shortDescription: () => "Faster Dilation Autobuyers",
-    untangledPosition: new Vector(490, 450),
-    gridPosition: new Vector(2, -6),
-    blobPosition: new Vector(575, -95),
+    layoutPosList: [116298, 82602, 72715],
   },
   ttBuySingle: {
     id: 104,
@@ -490,9 +429,7 @@ GameDatabase.reality.perks = {
     description: "Unlock a Time Theorem Autobuyer which buys single Time Theorems every tick.",
     automatorPoints: 5,
     shortDescription: () => "Single TT Autobuyer",
-    untangledPosition: new Vector(190, -410),
-    gridPosition: new Vector(-2, 2),
-    blobPosition: new Vector(-375, -285),
+    layoutPosList: [47438, 79398, 57325],
   },
   ttFree: {
     id: 105,
@@ -501,9 +438,7 @@ GameDatabase.reality.perks = {
     get description() {
       return `Purchasing Time Theorems no longer spends your Antimatter, Infinity Points, or Eternity Points.`;
     },
-    untangledPosition: new Vector(255, -540),
-    gridPosition: new Vector(-2, 3),
-    blobPosition: new Vector(-455, -160),
+    layoutPosList: [37051, 78998, 67309],
   },
   ttBuyMax: {
     id: 106,
@@ -514,9 +449,7 @@ GameDatabase.reality.perks = {
     },
     automatorPoints: 10,
     shortDescription: () => "Max TT Autobuyer",
-    untangledPosition: new Vector(360, -625),
-    gridPosition: new Vector(-2, 4),
-    blobPosition: new Vector(-305, -180),
+    layoutPosList: [30272, 78598, 65739],
   },
   achievementGroup1: {
     id: 201,
@@ -529,9 +462,7 @@ GameDatabase.reality.perks = {
     effect: 10,
     automatorPoints: 5,
     shortDescription: () => `Faster Achievements: every ${formatInt(20)} minutes`,
-    untangledPosition: new Vector(-45, -135),
-    gridPosition: new Vector(1, 0),
-    blobPosition: new Vector(-145, 15),
+    layoutPosList: [69391, 80201, 81371],
   },
   achievementGroup2: {
     id: 202,
@@ -542,9 +473,7 @@ GameDatabase.reality.perks = {
         Achievement (${formatInt(8)} minute decrease).`;
     },
     effect: 8,
-    untangledPosition: new Vector(-115, -250),
-    gridPosition: new Vector(2, 0),
-    blobPosition: new Vector(-100, 170),
+    layoutPosList: [60177, 80202, 93780],
   },
   achievementGroup3: {
     id: 203,
@@ -555,9 +484,7 @@ GameDatabase.reality.perks = {
         Achievement (${formatInt(6)} minute decrease).`;
     },
     effect: 6,
-    untangledPosition: new Vector(-175, -365),
-    gridPosition: new Vector(2, -1),
-    blobPosition: new Vector(25, 35),
+    layoutPosList: [50965, 80602, 83005],
   },
   achievementGroup4: {
     id: 204,
@@ -568,9 +495,7 @@ GameDatabase.reality.perks = {
         Achievement (${formatInt(4)} minute decrease).`;
     },
     effect: 4,
-    untangledPosition: new Vector(-180, -500),
-    gridPosition: new Vector(2, -2),
-    blobPosition: new Vector(110, 190),
+    layoutPosList: [40164, 81002, 95422],
   },
   achievementGroup5: {
     id: 205,
@@ -582,9 +507,7 @@ GameDatabase.reality.perks = {
     },
     automatorPoints: 10,
     shortDescription: () => "Keep Achievements on Reality",
-    untangledPosition: new Vector(-195, -630),
-    gridPosition: new Vector(2, -3),
-    blobPosition: new Vector(195, 55),
+    layoutPosList: [29761, 81402, 84639],
   }
 };
 

@@ -71,14 +71,20 @@ const perkColors = () => ({
 // Coordinate specifications are sometimes given in a grid index, so we need to spread them out to the proper scaling.
 // Positions use an inverted Y axis, so there's a vertical reflection. Will display well with |x| < 10 and |y| < 6.
 function expandFromGridCoordinates(vec) {
-  return vec.matrixTransform(100, 0, 0, -100);
+  return vec.matrixTransform(20, 0, 0, -20);
+}
+
+function positionNumToVector(num) {
+  const xPart = num % 400;
+  const yPart = Math.floor(num / 400);
+  return new Vector(5 * (xPart - 200), 5 * (yPart - 200));
 }
 
 // Specification for different starting layouts
 export const PerkLayouts = [
   {
     buttonText: "Default Untangled",
-    position: config => config.untangledPosition,
+    position: config => positionNumToVector(config.layoutPosList[0]),
   },
   {
     buttonText: "Random Positions",
@@ -87,14 +93,14 @@ export const PerkLayouts = [
   {
     // This is the perks laid out in the same way that they're laid out in the Android version
     buttonText: "Grid Layout",
-    position: config => expandFromGridCoordinates(config.gridPosition),
-    centerOffset: new Vector(0, 150),
+    position: config => expandFromGridCoordinates(positionNumToVector(config.layoutPosList[1])),
+    centerOffset: new Vector(0, -100),
     forcePhysics: false,
     straightEdges: true,
   },
   {
     buttonText: "Blob",
-    position: config => config.blobPosition,
+    position: config => positionNumToVector(config.layoutPosList[2]),
     centerOffset: new Vector(50, 0),
     forcePhysics: false,
     straightEdges: true,

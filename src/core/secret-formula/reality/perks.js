@@ -25,6 +25,7 @@ GameDatabase.reality.perks = {
     effect: 4,
     untangledPosition: new Vector(0, 0),
     gridPosition: new Vector(0, 0),
+    blobPosition: new Vector(-155, -155),
   },
   startAM: {
     id: 10,
@@ -37,6 +38,7 @@ GameDatabase.reality.perks = {
     effect: 5e130,
     untangledPosition: new Vector(-190, 0),
     gridPosition: new Vector(0, -1),
+    blobPosition: new Vector(-275, -55),
   },
   startIP1: {
     id: 12,
@@ -49,6 +51,7 @@ GameDatabase.reality.perks = {
     effect: 5e15,
     untangledPosition: new Vector(-375, -15),
     gridPosition: new Vector(-1, -1),
+    blobPosition: new Vector(-390, 140),
   },
   startIP2: {
     id: 13,
@@ -61,6 +64,7 @@ GameDatabase.reality.perks = {
     effect: 5e130,
     untangledPosition: new Vector(-445, -175),
     gridPosition: new Vector(-2, -1),
+    blobPosition: new Vector(-550, 145),
   },
   startEP1: {
     id: 14,
@@ -75,6 +79,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => `Start with ${formatInt(10)} EP`,
     untangledPosition: new Vector(-415, 165),
     gridPosition: new Vector(-1, -2),
+    blobPosition: new Vector(-330, 295),
   },
   startEP2: {
     id: 15,
@@ -87,6 +92,7 @@ GameDatabase.reality.perks = {
     effect: 5000,
     untangledPosition: new Vector(-565, 205),
     gridPosition: new Vector(-2, -3),
+    blobPosition: new Vector(-35, 275),
   },
   startEP3: {
     id: 16,
@@ -101,6 +107,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => `Start with ${format(5e9)} EP`,
     untangledPosition: new Vector(-700, 240),
     gridPosition: new Vector(-2, -4),
+    blobPosition: new Vector(235, 325),
   },
   startTP: {
     id: 17,
@@ -114,6 +121,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => `Start with ${formatInt(10)} TP`,
     untangledPosition: new Vector(-385, 335),
     gridPosition: new Vector(-1, -3),
+    blobPosition: new Vector(-120, 365),
   },
   antimatterNoReset: {
     id: 30,
@@ -123,6 +131,7 @@ GameDatabase.reality.perks = {
       Antimatter, Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice.`,
     untangledPosition: new Vector(-275, 120),
     gridPosition: new Vector(0, -2),
+    blobPosition: new Vector(-235, 155),
   },
   studyPassive: {
     id: 31,
@@ -135,6 +144,7 @@ GameDatabase.reality.perks = {
     },
     untangledPosition: new Vector(300, -130),
     gridPosition: new Vector(0, 2),
+    blobPosition: new Vector(-55, -345),
   },
   autounlockEU1: {
     id: 40,
@@ -143,6 +153,7 @@ GameDatabase.reality.perks = {
     description: `Automatically unlock the first row of Eternity Upgrades for free once you have Eternities.`,
     untangledPosition: new Vector(50, 150),
     gridPosition: new Vector(1, -1),
+    blobPosition: new Vector(35, -90),
   },
   autounlockEU2: {
     id: 41,
@@ -154,6 +165,7 @@ GameDatabase.reality.perks = {
     },
     untangledPosition: new Vector(50, 325),
     gridPosition: new Vector(1, -2),
+    blobPosition: new Vector(335, 20),
   },
   autounlockDilation1: {
     id: 42,
@@ -162,6 +174,7 @@ GameDatabase.reality.perks = {
     description: "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
     untangledPosition: new Vector(165, 565),
     gridPosition: new Vector(1, -4),
+    blobPosition: new Vector(550, 215),
   },
   autounlockDilation2: {
     id: 43,
@@ -170,6 +183,7 @@ GameDatabase.reality.perks = {
     description: "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
     untangledPosition: new Vector(310, 605),
     gridPosition: new Vector(1, -5),
+    blobPosition: new Vector(565, 65),
   },
   autounlockDilation3: {
     id: 44,
@@ -180,6 +194,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Auto-purchase TT generation",
     untangledPosition: new Vector(460, 580),
     gridPosition: new Vector(1, -6),
+    blobPosition: new Vector(410, -100),
   },
   autounlockTD: {
     id: 45,
@@ -190,6 +205,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Auto-unlock TD 5-8",
     untangledPosition: new Vector(605, 575),
     gridPosition: new Vector(0, -6),
+    blobPosition: new Vector(345, -230),
   },
   autounlockReality: {
     id: 46,
@@ -203,6 +219,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Auto-unlock Reality",
     untangledPosition: new Vector(725, 505),
     gridPosition: new Vector(0, -7),
+    blobPosition: new Vector(230, -115),
   },
   bypassIDAntimatter: {
     id: 51,
@@ -211,6 +228,7 @@ GameDatabase.reality.perks = {
     description: "Infinity Dimensions no longer have antimatter requirements.",
     untangledPosition: new Vector(-580, -230),
     gridPosition: new Vector(-2, 0),
+    blobPosition: new Vector(-515, -10),
   },
   bypassTGReset: {
     id: 52,
@@ -219,6 +237,7 @@ GameDatabase.reality.perks = {
     description: "The 2nd rebuyable Dilation Upgrade no longer resets your Dilated Time.",
     untangledPosition: new Vector(-145, 520),
     gridPosition: new Vector(0, -3),
+    blobPosition: new Vector(385, 405),
   },
   bypassECDilation: {
     id: 53,
@@ -230,6 +249,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => `Unlocking Dilation only requires TT`,
     untangledPosition: new Vector(0, 640),
     gridPosition: new Vector(2, -4),
+    blobPosition: new Vector(580, 360),
   },
   bypassEC1Lock: {
     id: 54,
@@ -238,6 +258,7 @@ GameDatabase.reality.perks = {
     description: "Remove the Eternity Challenge 1 requirement from Time Study 181.",
     untangledPosition: new Vector(450, -160),
     gridPosition: new Vector(0, 3),
+    blobPosition: new Vector(-165, -450),
   },
   bypassEC2Lock: {
     id: 55,
@@ -246,6 +267,7 @@ GameDatabase.reality.perks = {
     description: "Remove the Eternity Challenge 2 requirement from Time Study 181.",
     untangledPosition: new Vector(350, -270),
     gridPosition: new Vector(-1, 3),
+    blobPosition: new Vector(-280, -390),
   },
   bypassEC3Lock: {
     id: 56,
@@ -254,6 +276,7 @@ GameDatabase.reality.perks = {
     description: "Remove the Eternity Challenge 3 requirement from Time Study 181.",
     untangledPosition: new Vector(410, -25),
     gridPosition: new Vector(1, 3),
+    blobPosition: new Vector(110, -405),
   },
   bypassEC5Lock: {
     id: 57,
@@ -262,6 +285,7 @@ GameDatabase.reality.perks = {
     description: "Remove the Eternity Challenge 5 requirement from Time Study 62.",
     untangledPosition: new Vector(155, -85),
     gridPosition: new Vector(0, 1),
+    blobPosition: new Vector(35, -220),
   },
   autocompleteEC1: {
     id: 60,
@@ -277,6 +301,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => `Auto-complete ECs every ${formatInt(60)} minutes`,
     untangledPosition: new Vector(345, 135),
     gridPosition: new Vector(2, 2),
+    blobPosition: new Vector(320, -420),
   },
   autocompleteEC2: {
     id: 61,
@@ -289,6 +314,7 @@ GameDatabase.reality.perks = {
     effect: 40,
     untangledPosition: new Vector(425, 235),
     gridPosition: new Vector(2, 3),
+    blobPosition: new Vector(430, -335),
   },
   autocompleteEC3: {
     id: 62,
@@ -303,6 +329,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => `Auto-complete ECs every ${formatInt(20)} minutes`,
     untangledPosition: new Vector(325, 325),
     gridPosition: new Vector(2, 4),
+    blobPosition: new Vector(515, -230),
   },
   studyActiveEP: {
     id: 70,
@@ -311,6 +338,7 @@ GameDatabase.reality.perks = {
     description: "Active path multipliers are always maximized.",
     untangledPosition: new Vector(195, -260),
     gridPosition: new Vector(-1, 2),
+    blobPosition: new Vector(-175, -270),
   },
   studyIdleEP: {
     id: 71,
@@ -322,6 +350,7 @@ GameDatabase.reality.perks = {
     effect: 15,
     untangledPosition: new Vector(265, 25),
     gridPosition: new Vector(1, 2),
+    blobPosition: new Vector(195, -300),
   },
   studyECRequirement: {
     id: 72,
@@ -332,6 +361,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Remove EC secondary requirements",
     untangledPosition: new Vector(605, -160),
     gridPosition: new Vector(0, 4),
+    blobPosition: new Vector(-5, -495),
   },
   studyECBulk: {
     id: 73,
@@ -344,6 +374,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Bulk EC Completion",
     untangledPosition: new Vector(740, -135),
     gridPosition: new Vector(0, 5),
+    blobPosition: new Vector(175, -485),
   },
   retroactiveTP1: {
     id: 80,
@@ -356,6 +387,7 @@ GameDatabase.reality.perks = {
     effect: 1.5,
     untangledPosition: new Vector(-290, 460),
     gridPosition: new Vector(-1, -4),
+    blobPosition: new Vector(170, 440),
   },
   retroactiveTP2: {
     id: 81,
@@ -368,6 +400,7 @@ GameDatabase.reality.perks = {
     effect: 2,
     untangledPosition: new Vector(-200, 360),
     gridPosition: new Vector(-1, -5),
+    blobPosition: new Vector(-90, 465),
   },
   retroactiveTP3: {
     id: 82,
@@ -380,6 +413,7 @@ GameDatabase.reality.perks = {
     effect: 2.5,
     untangledPosition: new Vector(-120, 260),
     gridPosition: new Vector(-1, -6),
+    blobPosition: new Vector(-300, 455),
   },
   retroactiveTP4: {
     id: 83,
@@ -394,6 +428,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => `${formatX(3)} TP upgrade applies retroactively`,
     untangledPosition: new Vector(-65, 145),
     gridPosition: new Vector(-2, -6),
+    blobPosition: new Vector(-485, 425),
   },
   autobuyerDilation: {
     id: 100,
@@ -404,6 +439,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Dilation Upgrade Autobuyers",
     untangledPosition: new Vector(20, 500),
     gridPosition: new Vector(1, -3),
+    blobPosition: new Vector(360, 205),
   },
   autobuyerFasterID: {
     id: 101,
@@ -417,6 +453,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Faster ID Autobuyers",
     untangledPosition: new Vector(-515, -20),
     gridPosition: new Vector(-1, 0),
+    blobPosition: new Vector(-400, -30),
   },
   autobuyerFasterReplicanti: {
     id: 102,
@@ -430,6 +467,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Faster Replicanti Autobuyers",
     untangledPosition: new Vector(-425, -310),
     gridPosition: new Vector(-2, -2),
+    blobPosition: new Vector(-555, 305),
   },
   autobuyerFasterDilation: {
     id: 103,
@@ -443,6 +481,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Faster Dilation Autobuyers",
     untangledPosition: new Vector(490, 450),
     gridPosition: new Vector(2, -6),
+    blobPosition: new Vector(575, -95),
   },
   ttBuySingle: {
     id: 104,
@@ -453,6 +492,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Single TT Autobuyer",
     untangledPosition: new Vector(190, -410),
     gridPosition: new Vector(-2, 2),
+    blobPosition: new Vector(-375, -285),
   },
   ttFree: {
     id: 105,
@@ -463,6 +503,7 @@ GameDatabase.reality.perks = {
     },
     untangledPosition: new Vector(255, -540),
     gridPosition: new Vector(-2, 3),
+    blobPosition: new Vector(-455, -160),
   },
   ttBuyMax: {
     id: 106,
@@ -475,6 +516,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Max TT Autobuyer",
     untangledPosition: new Vector(360, -625),
     gridPosition: new Vector(-2, 4),
+    blobPosition: new Vector(-305, -180),
   },
   achievementGroup1: {
     id: 201,
@@ -489,6 +531,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => `Faster Achievements: every ${formatInt(20)} minutes`,
     untangledPosition: new Vector(-45, -135),
     gridPosition: new Vector(1, 0),
+    blobPosition: new Vector(-145, 15),
   },
   achievementGroup2: {
     id: 202,
@@ -501,6 +544,7 @@ GameDatabase.reality.perks = {
     effect: 8,
     untangledPosition: new Vector(-115, -250),
     gridPosition: new Vector(2, 0),
+    blobPosition: new Vector(-100, 170),
   },
   achievementGroup3: {
     id: 203,
@@ -513,6 +557,7 @@ GameDatabase.reality.perks = {
     effect: 6,
     untangledPosition: new Vector(-175, -365),
     gridPosition: new Vector(2, -1),
+    blobPosition: new Vector(25, 35),
   },
   achievementGroup4: {
     id: 204,
@@ -525,6 +570,7 @@ GameDatabase.reality.perks = {
     effect: 4,
     untangledPosition: new Vector(-180, -500),
     gridPosition: new Vector(2, -2),
+    blobPosition: new Vector(110, 190),
   },
   achievementGroup5: {
     id: 205,
@@ -538,6 +584,7 @@ GameDatabase.reality.perks = {
     shortDescription: () => "Keep Achievements on Reality",
     untangledPosition: new Vector(-195, -630),
     gridPosition: new Vector(2, -3),
+    blobPosition: new Vector(195, 55),
   }
 };
 

@@ -116,15 +116,26 @@ export default {
     // relevant option is toggled, we pass a bunch of information over to a modal - otherwise we immediately exit
     exitButtonClicked() {
       let names, clickFn;
+      const isEC = Player.anyChallenge instanceof EternityChallengeState;
+
+      // Dilation and ECs can't be exited independently and we have a special dilation-exit modal, so we have
+      // to treat that particular case differently. The dilation modal itself will account for EC state
+      if (player.dilation.active && (!Player.isInAnyChallenge || isEC)) {
+        if (player.options.confirmations.dilation) Modal.exitDilation.show();
+        else startDilatedEternityRequest();
+        return;
+      }
+
       if (Player.isInAnyChallenge) {
         // Regex replacement is used to remove the "(X/Y)" which appears after ECs. The ternary statement is there
         // because this path gets called for NCs, ICs, and ECs
         const toExit = this.activeChallengeNames[this.activeChallengeNames.length - 1].replace(/\W+\(.*\)/u, "");
-        names = { chall: toExit, normal: toExit.match("Eternity") ? "Eternity" : "Infinity" };
-        clickFn = () => Player.anyChallenge.exit();
-      } else if (player.dilation.active) {
-        names = { chall: "Time Dilation", normal: "Eternity" };
-        clickFn = () => startDilatedEternityRequest();
+        names = { chall: toExit, normal: isEC ? "Eternity" : "Infinity" };
+        clickFn = () => {
+          const oldChall = Player.anyChallenge;
+          Player.anyChallenge.exit();
+          if (player.options.retryChallenge) oldChall.requestStart();
+        };
       } else {
         names = { chall: this.activeChallengeNames[0], normal: "Reality" };
         clickFn = () => beginProcessReality(getRealityProps(true));
@@ -166,7 +177,7 @@ export default {
       else Tab.celestials[celestial].show(true);
     },
     exitDisplay() {
-      if (Player.isInAnyChallenge) return "Exit Challenge";
+      if (Player.isInAnyChallenge) return player.options.retryChallenge ? "Retry Challenge" : "Exit Challenge";
       if (player.dilation.active) return "Exit Dilation";
       if (this.resetCelestial) return "Restart Reality";
       return "Exit Reality";

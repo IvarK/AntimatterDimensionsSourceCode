@@ -18,6 +18,9 @@ export default {
     gainText() {
       if (this.tachyonGain.lte(0)) return `not gain anything`;
       return `gain ${quantify("Tachyon Particle", this.tachyonGain, 2, 1)}`;
+    },
+    isInEC() {
+      return Player.anyChallenge instanceof EternityChallengeState;
     }
   },
   methods: {
@@ -59,6 +62,10 @@ export default {
       <span v-else>
         If you exit Dilation now, you will {{ gainText }}.
       </span>
+      <div v-if="isInEC">
+        You will also exit your current Eternity Challenge as well.
+      </div>
+      <br>
       Are you sure you want to proceed?
     </div>
     <template #confirm-text>

@@ -58,7 +58,7 @@ export default {
         This will place you back into a regular {{ normalName }} without any restrictions.
       </span>
       <span v-if="hasHigherLayers">
-        However, other effects coming from higher-layer restrictions will still continue to apply.
+        Other effects coming from higher-layer restrictions will still continue to apply.
       </span>
     </div>
     <template #confirm-text>

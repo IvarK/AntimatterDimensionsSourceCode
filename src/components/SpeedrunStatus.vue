@@ -16,6 +16,7 @@ export default {
       isCollapsed: false,
       timeSince: 0,
       seedText: 0,
+      canModifySeed: false,
     };
   },
   computed: {
@@ -49,6 +50,7 @@ export default {
     update() {
       const speedrun = player.speedrun;
       this.isActive = speedrun.isActive;
+      this.canModifySeed = player.realities < 1;
       // Short-circuit if speedrun isn't active; updating some later stuff can cause vue errors outside of speedruns
       if (!this.isActive) return;
       this.isSegmented = speedrun.isSegmented;
@@ -79,6 +81,10 @@ export default {
     },
     toggleCollapse() {
       player.speedrun.hideInfo = !this.isCollapsed;
+    },
+    openSeedModal() {
+      if (!this.canModifySeed) return;
+      Modal.modifySeed.show();
     }
   },
 };
@@ -93,9 +99,7 @@ export default {
       <b>Speedrun Status (<span v-html="statusText" />)</b>
       <br>
       <span
-        :class="{
-          'c-speedrun-status--change-name': !hasStarted
-        }"
+        :class="{ 'c-speedrun-status--change-name': !hasStarted }"
         @click="changeName"
       >
         Player Name: {{ saveName }}
@@ -105,7 +109,10 @@ export default {
       <br>
       <i>{{ iapText }}</i>
       <br>
-      {{ seedText }}
+      <span
+        :class="{ 'c-speedrun-status--change-name': canModifySeed }"
+        @click="openSeedModal()"
+      >{{ seedText }}</span>
       <br>
       Total real playtime since start: {{ timePlayedStr }}
       <br>

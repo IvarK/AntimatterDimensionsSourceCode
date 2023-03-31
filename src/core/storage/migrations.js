@@ -225,13 +225,13 @@ GameStorage.migrations = {
       }
     },
     16: player => {
-      // This won't preserve *current* glyph choices, but is necessary to give uniformity moving forward. We need to
-      // prevent either seed from being 0 due to it being a special case that freezes up the RNG code
-      player.reality.initialSeed = player.reality.seed;
-
+      // Migrate perk layouts to the new format which has more than a boolean toggle
       player.options.perkLayout = player.options.fixedPerkStartingPos ? 0 : 1;
       delete player.options.fixedPerkStartingPos;
 
+      // This won't preserve *current* glyph choices, but is necessary to give uniformity moving forward. We need to
+      // prevent either seed from being 0 due to it being a special case that freezes up the RNG code
+      player.reality.initialSeed = player.reality.seed;
       if (player.reality.initialSeed === 0) player.reality.initialSeed = 1;
 
       // In order to add cross-run speedrun time tracking without inflating savefile size too much, there was a

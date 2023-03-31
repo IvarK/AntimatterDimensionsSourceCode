@@ -120,6 +120,7 @@ export default {
         v-model="inputSeed"
         type="text"
         class="c-modal-input"
+        @blur="setMode(choiceEnum.PLAYER, seedValue)"
       >
       <br>
       This option sets your seed to the value you type into the text box.

@@ -11,6 +11,73 @@ GameDatabase.changelog = [
    * }
    */
   {
+    // TODO Make this the correct day of the month once we're certain
+    date: [2023, 4, 0],
+    name: "Speedrunner and Glyph RNG",
+    info: `
+<b>Major Changes:</b><br>
+<ul>
+<li><b>Glyph RNG for Realities 2-21 has been completely overhauled.</b> The new RNG now attempts to give
+you a much more even spread of effects during these Realities; for each group of 5 consecutive Realities,
+you will now see every Glyph type exactly 4 times and every individual effect will always appear <i>at least once</i>
+amongst those 4 choices.
+</li>
+<li>Two side effects of the above change: 2-effect glyphs are now a fair bit more common
+(about 30% more common for replication and dilation and 140% more common for the other three) and the Glyph options for
+your <i>current</i> Reality may have changed when first loading up this version of the game</li>
+<li>Starting a speedrun save now properly carries over all the other stats which would have normally carried over after
+finishing the game</li>
+<li>Glyph RNG seed can now be modified in-game during a speedrun, as long as you have not realitied yet</li>
+<li>Credits page was updated to include people recently brought on for testing the Reality update on Android</li>
+<li>The "Total Termination" upgrade now affects <i>all</i> Glyph types</li>
+</ul>
+<br>
+
+<b>New QoL/features:</b><br>
+<ul>
+<li>Real time (in stats) is now paused after gaining the final achievement</li>
+<li>Previous speedrun records are now also stored in the save and can now be compared on a newly-added subtab</li>
+<li>Perk tree interactivity has been made generally more responsive</li>
+<li>Added two new default perk tree layouts (an Android-version grid and \uE010)</li>
+<li>Eternity autobuyer now only triggers at full completion count with ECB perk instead of immediately</li>
+<li>Added a button to reset all individual Glyph cosmetics</li>
+<li>Added a confirmation for exiting challenges using the header button</li>
+<li>Shift-clicking the icon on the Glyph filter now bumps it to the next <i>lower</i> threshold</li>
+<li>Glyph presets now have 2 additional slots (5 => 7)</li>
+</ul>
+<br>
+
+<b>Improved UI/Layout:</b><br>
+<ul>
+<li>Speedrun time formatting now has 3 hour digits and suppresses END formatting on some subtabs</li>
+<li>Added time estimates for reaching max Replicanti and Dilated Time this Reality</li>
+<li>Hovering over the dilation button now shows all time estimate tooltips at once</li>
+<li>Clicking already-bought dilation studies now moves you over to the appropriate related tab</li>
+<li>Improved autobuyer textbox contrast on some themes</li>
+<li>Reality header in stats tab now shows cel7-related stats as well</li>
+<li>Clarified how Relic Shard rarity boost and cursed Glyphs work</li>
+<li>Added %/sec to ID8 when relevant</li>
+<li>Added TT to offline progress entries</li>
+<li>Added BH cost scaling to its H2P entry</li>
+<li>Changed AD Dimension purchase buttons to be stylized like cel6 when Continuum is active</li>
+<li>Improved light/dark TS contrast between buyable and bought states</li>
+<li>Other various minor text fixes</li>
+</ul>
+<br>
+
+<b>Bugfixes:</b><br>
+<ul>
+<li>Fixed buggy Glyph set names from reskinned Companion Glyphs</li>
+<li>Fixed broken external links in "About the game"</li>
+<li>Fixed AD autobuyer settings being unmodifiable in some cases</li>
+<li>Fixed some display bugs with fractional Eternity count</li>
+<li>Recent prestige tab now properly accounts for amplification</li>
+<li>Fixed subtab switching when switching game saves</li>
+<li>Various more minor bugfixes</li>
+</ul>
+`
+  },
+  {
     date: [2023, 2, 22],
     name: "Visuals and Code prep",
     info: `

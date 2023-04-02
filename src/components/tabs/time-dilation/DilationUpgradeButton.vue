@@ -82,8 +82,7 @@ export default {
       this.currentDT.copyFrom(Currency.dilatedTime.value);
       this.currentDTGain.copyFrom(getDilationGainPerSecond());
       this.hideEstimate = this.isAffordable || this.isCapped || this.upgrade.isBought || this.isUseless;
-      this.timeEstimate = this.hideEstimate
-        ? null : getDilationTimeEstimate(this.upgrade.cost);
+      this.timeEstimate = this.hideEstimate ? null : getDilationTimeEstimate(this.upgrade.cost);
       if (this.isRebuyable) {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;
@@ -114,6 +113,7 @@ export default {
       @mouseleave="isHovering = false"
     >
       <CustomizeableTooltip
+        v-if="timeEstimate"
         :show="showTooltip && !isHovering && !hideEstimate"
         left="50%"
         top="0"

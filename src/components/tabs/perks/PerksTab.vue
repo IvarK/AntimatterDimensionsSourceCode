@@ -71,7 +71,7 @@ const perkColors = () => ({
 // Coordinate specifications are sometimes given in a grid index, so we need to spread them out to the proper scaling.
 // Positions use an inverted Y axis, so there's a vertical reflection. Will display well with |x| < 10 and |y| < 6.
 function expandFromGridCoordinates(vec) {
-  return vec.matrixTransform(20, 0, 0, -20);
+  return vec.matrixTransform(20, 0, 0, 20);
 }
 
 function positionNumToVector(num) {
@@ -94,7 +94,7 @@ export const PerkLayouts = [
     // This is the perks laid out in the same way that they're laid out in the Android version
     buttonText: "Grid Layout",
     position: config => expandFromGridCoordinates(positionNumToVector(config.layoutPosList[1])),
-    centerOffset: new Vector(0, -100),
+    centerOffset: new Vector(0, 120),
     forcePhysics: false,
     straightEdges: true,
   },

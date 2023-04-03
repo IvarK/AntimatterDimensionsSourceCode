@@ -58,7 +58,13 @@ export default {
       const progress = PlayerProgress.current;
       this.timeStudyUnlocked = progress.isEternityUnlocked;
       this.glyphSacUnlocked = RealityUpgrade(19).isBought;
-      this.isElectron = ElectronRuntime.isActive;
+
+      // ElectronRuntime is a global which only exists on Steam (throws a ReferenceError on web)
+      try {
+        this.isElectron = ElectronRuntime.isActive;
+      } catch {
+        this.isElectron = false;
+      }
     },
     format(x) {
       switch (x) {

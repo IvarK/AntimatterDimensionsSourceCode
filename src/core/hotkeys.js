@@ -1,5 +1,6 @@
-import { ElectronRuntime } from "@/steam";
 import Mousetrap from "mousetrap";
+
+import { ElectronRuntime } from "@/steam";
 
 import { GameKeyboard } from "./keyboard";
 

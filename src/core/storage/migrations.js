@@ -5,6 +5,7 @@ import { GameStorage } from "./storage";
 
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
 GameStorage.migrations = {
+  firstRealityMigration: 13,
   patches: {
     1: player => {
       for (let i = 0; i < player.autobuyers.length; i++) {
@@ -158,6 +159,10 @@ GameStorage.migrations = {
       GameStorage.migrations.addBestPrestigeCurrency(player);
       GameStorage.migrations.migrateTheme(player);
     },
+
+    // ALL MIGRATIONS BELOW THIS POINT ARE POST-RELEASE FOR THE REALITY UPDATE! THE PRECEEDING MIGRATION (13) IS
+    // THE FIRST MIGRATION WHICH DOES THE MAJORITY OF DATA FORMAT CHANGES
+
     14: player => {
       GameStorage.migrations.reworkBHPulsing(player);
 
@@ -248,10 +253,8 @@ GameStorage.migrations = {
       delete player.speedrun.milestones;
 
       // Add more glyph presets (older version had only 5, now default is 7)
-      if (player.reality.glyphs.sets.length < 7) {
-        while (player.reality.glyphs.sets.length < 7) {
-          player.reality.glyphs.sets.push({ name: "", glyphs: [] });
-        }
+      while (player.reality.glyphs.sets.length < 7) {
+        player.reality.glyphs.sets.push({ name: "", glyphs: [] });
       }
     },
   },
@@ -1050,19 +1053,27 @@ GameStorage.migrations = {
     saveData.version = saveData.version || 0;
   },
 
-  patch(saveData) {
+  // Patch up to the specified version; we need this functionality in order to properly migrate both saves from
+  // much older versions and saves from in-development versions
+  patch(saveData, maxVersion) {
     this.prePatch(saveData);
     // This adds all the undefined properties to the save which are in player.js
     const player = deepmergeAll([Player.defaultStart, saveData]);
-    const versions = Object.keys(this.patches)
-      .map(parseFloat)
-      .sort();
+    const versions = Object.keys(this.patches).map(parseFloat).sort();
     let version;
-    while ((version = versions.find(v => player.version < v)) !== undefined) {
+    while ((version = versions.find(v => player.version < v && v < maxVersion)) !== undefined) {
       const patch = this.patches[version];
       patch(player);
       player.version = version;
     }
     return player;
   },
+
+  patchPreReality(saveData) {
+    return this.patch(saveData, this.firstRealityMigration);
+  },
+
+  patchPostReality(saveData) {
+    return this.patch(saveData, Object.keys(GameStorage.migrations.patches).map(k => Number(k)).max());
+  }
 };

@@ -79,7 +79,6 @@ export default {
     <div class="perk-settings">
       <PrimaryButton
         class="o-primary-btn c-button-perk-layout"
-        label="Starting tree layout:"
         @click="cycleLayout"
       >
         Perk Layout: {{ layoutText }}

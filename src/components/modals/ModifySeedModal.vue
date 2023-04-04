@@ -30,6 +30,8 @@ export default {
     update() {
       this.mode = player.speedrun.seedSelection;
       this.seedText = Speedrun.seedModeText();
+    },
+    handleSeedInput() {
       if (this.inputSeed.match(/^-?\d+$/gu)) {
         const num = Number(this.inputSeed);
         this.seedValue = Math.abs(num) > 9e15
@@ -39,7 +41,9 @@ export default {
         this.seedValue = this.hashStringToSeed(this.inputSeed);
       }
       this.convertedInput = this.seedValue !== Number(this.inputSeed);
+
       if (this.seedValue === 0) this.setMode(this.choiceEnum.FIXED);
+      else this.setMode(this.choiceEnum.PLAYER, this.seedValue);
     },
     setMode(mode, seed) {
       if (mode === this.choiceEnum.PLAYER && this.seedValue === 0) return;
@@ -120,13 +124,18 @@ export default {
         v-model="inputSeed"
         type="text"
         class="c-modal-input"
-        @blur="setMode(choiceEnum.PLAYER, seedValue)"
+        @input="handleSeedInput()"
       >
       <br>
       This option sets your seed to the value you type into the text box.
       <br>
-      Your current input will be {{ convertedInput ? "converted to" : "used as" }}
-      the number <b>{{ seedValue }}</b>.
+      <span v-if="seedValue !== 0">
+        Your current input will be {{ convertedInput ? "converted to" : "used as" }} the number <b>{{ seedValue }}</b>.
+      </span>
+      <span v-else>
+        Your current input {{ convertedInput ? "converts to" : "is equal to" }} <b>0</b>;
+        the seed will default to Official Preset.
+      </span>
       <br>
       For technical reasons, this value must be must be non-zero to be accepted.
     </div>

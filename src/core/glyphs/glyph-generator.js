@@ -55,7 +55,8 @@ class GlyphRNG {
 export const GlyphGenerator = {
   // Glyph choices will have more uniformly-distributed properties up for this many groups
   // of uniform glyphs. The size of a uniformity group is 5, so this gives uniformly-distributed
-  // properties up to a reality count equal to 5x this value
+  // properties up to a reality count one more than 5x this value; the modified RNG for uniform
+  // glyphs excludes the first fixed glyph and only starts from the 2nd one onward
   uniformityGroups: 4,
 
   fakeSeed: Date.now() % Math.pow(2, 32),
@@ -297,7 +298,7 @@ export const GlyphGenerator = {
    *  random generated set begins at a parameter of 1)
    */
   uniformGlyphs(level, rng, realityCount) {
-    // Reality count divided by 5 to determine which group of 5 we're in, while count mod 5 determines the index
+    // Reality count divided by 5 determines which group of 5 we're in, while count mod 5 determines the index
     // within that block. Note that we have a minus 1 because we want to exclude the first fixed glyph
     const groupNum = Math.floor((realityCount - 1) / 5);
     const groupIndex = (realityCount - 1) % 5;
@@ -308,7 +309,7 @@ export const GlyphGenerator = {
     const typePerm = permutationIndex(5, (31 + initSeed % 7) * groupNum + initSeed % 1123);
 
     // Figure out a permutation index for each generated glyph type this reality by counting through the sets
-    // for choices which have already been generated for group in previous realities
+    // for choices which have already been generated for options in previous realities for this group
     const typePermIndex = Array.repeat(0, 5);
     for (let i = 0; i < groupIndex; i++) {
       for (let type = 0; type < 5; type++) {

@@ -88,9 +88,9 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   // We don't want to directly call super.canTick here because the game logic works really weirdly in terms of
   // interactions between individual and group AD autobuyers. The UI can change and certain settings can become
   // unmodifiable in some conditions. This is basically the lowest-effort solution to support legacy behavior
-  // because the only real alternatve is a massive AD autobuyer refactor to untangle this mess
+  // because the proper alternatve of an AD autobuyer refactor to untangle this mess is likely not worth the effort
   get canTick() {
-    // AD autobuyer-specific logic; If the UI is collapsed then we are unable to toggle groupSetting.
+    // AD autobuyer-specific logic; if the UI is collapsed then we are unable to toggle groupSetting.
     // In terms of UX for this case it makes the most sense to ignore it and pretend it's true
     const settingConfig = player.auto.antimatterDims;
     const individualSetting = settingConfig.all[this.tier - 1];

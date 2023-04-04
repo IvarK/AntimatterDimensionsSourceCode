@@ -105,7 +105,7 @@ export default {
       </PrimaryButton>
       <br>
       This selects a completely randomized seed value, producing Glyph options which are very likely to be
-      different from anyone else's playthrough unless they intentionally choose it as well.
+      different from anyone else's playthrough unless they intentionally choose the same value.
       <br>
       <br>
       <PrimaryButton

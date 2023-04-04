@@ -229,7 +229,8 @@ window.TimeSpan = class TimeSpan {
   }
 
   /**
-   * Note: For speedruns, we give 3 digits of hours on HMS formatting on the milestone tab, and suppress END formatting
+   * Note: For speedruns, we give 3 digits of hours on HMS formatting, a decimal point on seconds, and
+   *  suppress END formatting on the speedrun record tabs
    * @param {boolean} useHMS If true, will display times as HH:MM:SS in between a minute and 100 hours.
    * @returns {String}
    */
@@ -262,7 +263,7 @@ window.TimeSpan = class TimeSpan {
     }
     if (this.totalHours < 100 || (isSpeedrun && this.totalHours < 1000)) {
       if (useHMS && !Notations.current.isPainful) {
-        const sec = seconds(this.seconds, isSpeedrun ? this.milliseconds : undefined);
+        const sec = seconds(this.seconds, this.milliseconds);
         if (Math.floor(this.totalHours) === 0) return `${formatHMS(this.minutes)}:${sec}`;
         return `${formatHMS(Math.floor(this.totalHours))}:${formatHMS(this.minutes)}:${sec}`;
       }
@@ -274,9 +275,9 @@ window.TimeSpan = class TimeSpan {
       }
     }
     if (this.totalDays < 500) {
-      return `${format(this.totalDays, 0, 2)} days`;
+      return `${isSpeedrun ? this.totalDays.toFixed(2) : format(this.totalDays, 0, 2)} days`;
     }
-    return `${format(this.totalYears, 3, 2)} years`;
+    return `${isSpeedrun ? this.totalYears.toFixed(3) : format(this.totalYears, 3, 2)} years`;
 
     function formatHMS(value) {
       const s = value.toString();

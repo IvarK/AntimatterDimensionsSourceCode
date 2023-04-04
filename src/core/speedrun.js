@@ -11,6 +11,10 @@ export const Speedrun = {
       will provide you with another modal with more in-depth information.`, {}, 3);
     player.speedrun.isUnlocked = true;
   },
+  // Used to block the seed-changing modal from opening (other functions assume this is checked beforehand)
+  canModifySeed() {
+    return player.realities < 1;
+  },
   modifySeed(key, seed) {
     player.speedrun.seedSelection = key;
     let newSeed;
@@ -132,7 +136,7 @@ class SpeedrunMilestone extends GameMechanicState {
   }
 
   get isReached() {
-    return player.speedrun.records[this.config.key] !== 0;
+    return player.speedrun.records[this.config.id] !== 0;
   }
 
   tryComplete(args) {
@@ -143,7 +147,7 @@ class SpeedrunMilestone extends GameMechanicState {
   complete() {
     if (this.isReached || !player.speedrun.isActive) return;
     // Rounding slightly reduces filesize by removing weird float rounding
-    player.speedrun.records[this.config.key] = Math.round(player.records.realTimePlayed);
+    player.speedrun.records[this.config.id] = Math.round(player.records.realTimePlayed);
     GameUI.notify.success(`Speedrun Milestone Reached: ${this.name}`);
   }
 }

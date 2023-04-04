@@ -60,13 +60,13 @@ export default {
     infinityCountString() {
       const num = this.infinity.count;
       return num.gt(0)
-        ? `${this.formatDecimalAmount(num)} ${pluralize("Infinity", num)}`
+        ? `${this.formatDecimalAmount(num)} ${pluralize("Infinity", num.floor())}`
         : "no Infinities";
     },
     eternityCountString() {
       const num = this.eternity.count;
       return num.gt(0)
-        ? `${this.formatDecimalAmount(num)} ${pluralize("Eternity", num)}`
+        ? `${this.formatDecimalAmount(num)} ${pluralize("Eternity", num.floor())}`
         : "no Eternities";
     },
     fullGameCompletions() {
@@ -140,7 +140,7 @@ export default {
       this.paperclips = player.news.specialTickerData.paperclips;
     },
     formatDecimalAmount(value) {
-      return value.gt(1e9) ? format(value, 3, 0) : formatInt(value.toNumber());
+      return value.gt(1e9) ? format(value, 3) : formatInt(Math.floor(value.toNumber()));
     },
     // Only updates once per second to reduce jitter
     updateMatterScale() {
@@ -222,8 +222,8 @@ export default {
         You have {{ infinityCountString }}<span v-if="eternity.isUnlocked"> this Eternity</span>.
       </div>
       <div v-if="infinity.banked.gt(0)">
-        You have {{ formatDecimalAmount(infinity.banked) }}
-        {{ pluralize("Banked Infinity", infinity.banked) }}.
+        You have {{ formatDecimalAmount(infinity.banked.floor()) }}
+        {{ pluralize("Banked Infinity", infinity.banked.floor()) }}.
       </div>
       <div v-if="infinity.hasBest">
         Your fastest Infinity was {{ infinity.best.toStringShort() }}.
@@ -255,8 +255,8 @@ export default {
         You have {{ eternityCountString }}<span v-if="reality.isUnlocked"> this Reality</span>.
       </div>
       <div v-if="infinity.projectedBanked.gt(0)">
-        You will gain {{ formatDecimalAmount(infinity.projectedBanked) }}
-        {{ pluralize("Banked Infinity", infinity.projectedBanked) }} on Eternity
+        You will gain {{ formatDecimalAmount(infinity.projectedBanked.floor()) }}
+        {{ pluralize("Banked Infinity", infinity.projectedBanked.floor()) }} on Eternity
         ({{ formatDecimalAmount(infinity.bankRate) }} per minute).
       </div>
       <div v-else-if="infinity.banked.gt(0)">
@@ -300,7 +300,7 @@ export default {
         v-if="isDoomed"
         class="c-stats-tab-doomed"
       >
-        You have been Doomed for {{ realTimeDoomed.toStringShort() }} real time.
+        You have been Doomed for {{ realTimeDoomed.toStringShort() }}, real time.
       </div>
       <div>
         Your best Reality Machines per minute is {{ format(reality.bestRate, 2, 2) }}.

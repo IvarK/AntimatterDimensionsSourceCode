@@ -1074,6 +1074,7 @@ GameStorage.migrations = {
   },
 
   patchPostReality(saveData) {
-    return this.patch(saveData, Object.keys(GameStorage.migrations.patches).map(k => Number(k)).max());
+    // Plus 1 because this the threshold is exclusive (it migrates up to but not including the maxVersion)
+    return this.patch(saveData, Object.keys(GameStorage.migrations.patches).map(k => Number(k)).max() + 1);
   }
 };

@@ -50,7 +50,7 @@ export default {
     update() {
       const speedrun = player.speedrun;
       this.isActive = speedrun.isActive;
-      this.canModifySeed = player.realities < 1;
+      this.canModifySeed = Speedrun.canModifySeed();
       // Short-circuit if speedrun isn't active; updating some later stuff can cause vue errors outside of speedruns
       if (!this.isActive) return;
       this.isSegmented = speedrun.isSegmented;
@@ -99,7 +99,7 @@ export default {
       <b>Speedrun Status (<span v-html="statusText" />)</b>
       <br>
       <span
-        :class="{ 'c-speedrun-status--change-name': !hasStarted }"
+        :class="{ 'c-speedrun-status--can-change': !hasStarted }"
         @click="changeName"
       >
         Player Name: {{ saveName }}
@@ -110,7 +110,7 @@ export default {
       <i>{{ iapText }}</i>
       <br>
       <span
-        :class="{ 'c-speedrun-status--change-name': canModifySeed }"
+        :class="{ 'c-speedrun-status--can-change': canModifySeed }"
         @click="openSeedModal()"
       >{{ seedText }}</span>
       <br>
@@ -149,7 +149,7 @@ export default {
   user-select: none;
 }
 
-.c-speedrun-status--change-name {
+.c-speedrun-status--can-change {
   text-decoration: underline;
   cursor: pointer;
 }

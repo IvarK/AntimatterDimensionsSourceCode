@@ -4,7 +4,7 @@ class AwayProgress {
   constructor(config) {
     this.name = config.name;
     this.forcedName = config.forcedName;
-    this.isUnlocked = config.isUnlocked;
+    this.isUnlocked = () => config.isUnlocked() || player.records.fullGameCompletions > 0;
     this.awayOption = config.awayOption ?? this.name;
     this.showOption = config.showOption ?? true;
     // This is an array of strings, each one the name of the next entry in the player object to navigate to

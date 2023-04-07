@@ -4,7 +4,7 @@ class ConfirmationState {
   constructor(config) {
     this.name = config.name;
     this._confirmationSetting = config.option;
-    this.isUnlocked = config.isUnlocked;
+    this.isUnlocked = () => config.isUnlocked() || player.records.fullGameCompletions > 0;
   }
 
   get option() {

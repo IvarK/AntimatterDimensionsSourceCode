@@ -27,11 +27,15 @@ export default {
       alchemy: false,
     };
   },
+  computed: {
+    fullCompletion() {
+      return player.records.fullGameCompletions > 0;
+    }
+  },
   watch: {
     showPercentage(newValue) {
       player.options.showHintText.showPercentage = newValue;
     },
-
     achievements(newValue) {
       player.options.showHintText.achievements = newValue;
     },
@@ -63,10 +67,10 @@ export default {
   methods: {
     update() {
       const progress = PlayerProgress.current;
-      this.infinityUnlocked = progress.isInfinityUnlocked;
-      this.eternityUnlocked = progress.isEternityUnlocked;
-      this.realityUnlocked = progress.isRealityUnlocked;
-      this.alchemyUnlocked = Ra.unlocks.effarigUnlock.canBeApplied;
+      this.infinityUnlocked = this.fullCompletion || progress.isInfinityUnlocked;
+      this.eternityUnlocked = this.fullCompletion || progress.isEternityUnlocked;
+      this.realityUnlocked = this.fullCompletion || progress.isRealityUnlocked;
+      this.alchemyUnlocked = this.fullCompletion || Ra.unlocks.effarigUnlock.canBeApplied;
 
       const options = player.options.showHintText;
       this.showPercentage = options.showPercentage;

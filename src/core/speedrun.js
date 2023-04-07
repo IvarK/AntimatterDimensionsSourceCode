@@ -20,17 +20,17 @@ export const Speedrun = {
     let newSeed;
     switch (key) {
       case SPEEDRUN_SEED_STATE.FIXED:
-        player.reality.seed = this.officialFixedSeed;
+        player.reality.initialSeed = this.officialFixedSeed;
         player.speedrun.initialSeed = this.officialFixedSeed;
         return;
       case SPEEDRUN_SEED_STATE.RANDOM:
         // This gives seeds of roughly the same magnitude that the first-run Date.now() would give
         newSeed = Math.floor(1e13 * Math.random());
-        player.reality.seed = newSeed;
+        player.reality.initialSeed = newSeed;
         player.speedrun.initialSeed = newSeed;
         return;
       case SPEEDRUN_SEED_STATE.PLAYER:
-        player.reality.seed = seed;
+        player.reality.initialSeed = seed;
         player.speedrun.initialSeed = seed;
         return;
       default:

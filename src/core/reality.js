@@ -145,7 +145,8 @@ export function processManualReality(sacrifice, glyphID) {
   if (!isRealityAvailable()) return;
 
   if (player.realities === 0) {
-    // If this is our first Reality, give them the companion and the starting power glyph.
+    // If this is our first Reality, lock in the initial seed and then give the companion and starting glyphs
+    player.reality.seed = player.reality.initialSeed;
     Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
     Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
   } else if (Perk.firstPerk.isEffectActive) {

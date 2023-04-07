@@ -37,6 +37,9 @@ export default {
         width: "100%",
         tooltip: false
       };
+    },
+    fullCompletion() {
+      return player.records.fullGameCompletions > 0;
     }
   },
   watch: {
@@ -65,12 +68,12 @@ export default {
   methods: {
     update() {
       const progress = PlayerProgress.current;
-      this.infinityUnlocked = progress.isInfinityUnlocked;
-      this.eternityUnlocked = progress.isEternityUnlocked;
+      this.infinityUnlocked = this.fullCompletion || progress.isInfinityUnlocked;
+      this.eternityUnlocked = this.fullCompletion || progress.isEternityUnlocked;
+      this.realityUnlocked = this.fullCompletion || progress.isRealityUnlocked;
       // 136 is given upon dilating
-      this.dilationUnlocked = progress.isRealityUnlocked || Achievement(136).canBeApplied;
-      this.tachyonsUnlocked = progress.isRealityUnlocked || Currency.tachyonParticles.gt(0);
-      this.realityUnlocked = progress.isRealityUnlocked;
+      this.dilationUnlocked = this.realityUnlocked || Achievement(136).canBeApplied;
+      this.tachyonsUnlocked = this.realityUnlocked || Currency.tachyonParticles.gt(0);
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
       this.isS11Active = Theme.currentName() === "S11";
 

@@ -17,10 +17,12 @@ export default {
       timeSince: 0,
       seedText: 0,
       canModifySeed: false,
+      isComplete: false,
     };
   },
   computed: {
     statusText() {
+      if (this.isComplete) return `<span style="color: var(--color-good)">Finished!</span>`;
       return this.hasStarted
         ? `<span style="color: var(--color-good)">Running!</span>`
         : `<span style="color: var(--color-bad)">Not Started Yet</span>`;
@@ -59,6 +61,7 @@ export default {
       this.startDate = speedrun.startDate;
       this.saveName = speedrun.name;
       this.isCollapsed = speedrun.hideInfo;
+      this.isComplete = Achievement(188).isUnlocked;
 
       this.timePlayedStr = Time.realTimePlayed.toStringShort();
       this.offlineProgress = player.options.offlineProgress;

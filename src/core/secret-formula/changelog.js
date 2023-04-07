@@ -47,6 +47,7 @@ finishing the game</li>
 <li>Added time estimates for reaching max Replicanti and Dilated Time this Reality</li>
 <li>Hovering over the dilation button now shows all time estimate tooltips at once</li>
 <li>Clicking already-bought dilation studies now moves you over to the appropriate related tab</li>
+<li>All progress-locked options now remain permanently modifiable after full game completions</li>
 </ul>
 <br>
 

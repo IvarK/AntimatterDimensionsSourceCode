@@ -11,8 +11,7 @@ GameDatabase.changelog = [
    * }
    */
   {
-    // TODO Make this the correct day of the month once we're certain
-    date: [2023, 4, 0],
+    date: [2023, 4, 7],
     name: "Speedrunner and Glyph RNG",
     info: `
 <b>Major Changes:</b><br>

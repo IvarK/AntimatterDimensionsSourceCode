@@ -88,7 +88,7 @@ GameDatabase.multiplierTabTree = {
     ["tickspeedUpgrades_purchased", "tickspeedUpgrades_free"]
   ],
   tickspeed_galaxies: [
-    ["galaxies_antimatter", "galaxies_replicanti", "galaxies_tachyon"]
+    ["galaxies_antimatter", "galaxies_replicanti", "galaxies_tachyon", "galaxies_nerfPelle"]
   ],
   infinities_total: [
     getProps("infinities")
@@ -190,6 +190,9 @@ for (let dim = 1; dim <= 7; dim++) {
 GameDatabase.multiplierTabTree.ID_purchase_8 = [[`ID_basePurchase_8`, `ID_infinityGlyphSacrifice`, "ID_powPurchase"]];
 
 // These are also added one layer deep
+for (let dim = 1; dim <= 7; dim++) {
+  GameDatabase.multiplierTabTree[`TD_purchase_${dim}`] = [[`TD_basePurchase_${dim}`, `TD_powPurchase_${dim}`]];
+}
 GameDatabase.multiplierTabTree.TD_purchase.push(["TD_basePurchase", "TD_timeGlyphSacrifice", "TD_powPurchase"]);
 GameDatabase.multiplierTabTree.TD_purchase_8 = [["TD_basePurchase_8", "TD_timeGlyphSacrifice", "TD_powPurchase"]];
 

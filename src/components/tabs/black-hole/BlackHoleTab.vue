@@ -52,6 +52,11 @@ export default {
       this.isDoomed = Pelle.isDoomed;
       this.isUnlocked = BlackHoles.areUnlocked;
       this.isPaused = BlackHoles.arePaused;
+      // If stop running enslaved, re-mount the black hole animation as it reappears
+      if (this.isEnslaved && !Enslaved.isRunning) {
+        if (this.animation) this.animation.unmount();
+        this.startAnimation();
+      }
       this.isEnslaved = Enslaved.isRunning;
       this.isPermanent = BlackHoles.arePermanent;
       this.pauseMode = player.blackHoleAutoPauseMode;

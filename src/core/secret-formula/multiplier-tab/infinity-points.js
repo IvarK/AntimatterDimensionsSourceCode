@@ -46,7 +46,7 @@ GameDatabase.multiplierTabValues.IP = {
     icon: MultiplierTabIcons.DIVISOR("IP"),
   },
   infinityUpgrade: {
-    name: () => `Repeatable ${formatX(2)} Infinity Upgrade`,
+    name: () => `Infinity Upgrade - Repeatable ${formatX(2)} IP`,
     multValue: () => InfinityUpgrade.ipMult.effectOrDefault(1),
     isActive: () => player.break && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("infinity"),
@@ -76,7 +76,7 @@ GameDatabase.multiplierTabValues.IP = {
     icon: MultiplierTabIcons.TIME_STUDY,
   },
   dilationUpgrade: {
-    name: "Dilation Upgrade (Based on DT)",
+    name: "Dilation Upgrade - IP multiplier based on DT",
     multValue: () => DilationUpgrade.ipMultDT.effectOrDefault(1),
     isActive: () => DilationUpgrade.ipMultDT.canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("dilation"),
@@ -96,7 +96,7 @@ GameDatabase.multiplierTabValues.IP = {
   },
   pelle: {
     name: "Pelle Rift Effects",
-    multValue: () => DC.D1.timesEffectsOf(PelleRifts.vacuum).times(Pelle.specialGlyphEffect.infinity),
+    multValue: () => DC.D1.timesEffectsOf(PelleRifts.vacuum),
     isActive: () => Pelle.isDoomed,
     icon: MultiplierTabIcons.PELLE,
   },

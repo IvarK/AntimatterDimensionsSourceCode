@@ -204,7 +204,7 @@ GameDatabase.multiplierTabValues.AD = {
     icon: MultiplierTabIcons.BREAK_INFINITY,
   },
   infinityPower: {
-    name: "Infinity Power",
+    name: "Multiplier from Infinity Power",
     fakeValue: () => Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate),
     multValue: dim => {
       const mult = Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1);
@@ -296,7 +296,7 @@ GameDatabase.multiplierTabValues.AD = {
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   v: {
-    name: "V-Achievements",
+    name: "5 V-Achievement Milestone - AD Power based on Space Theorems",
     powValue: () => VUnlocks.adPow.effectOrDefault(1),
     isActive: () => PlayerProgress.realityUnlocked() && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.ACHIEVEMENT,
@@ -329,7 +329,7 @@ GameDatabase.multiplierTabValues.AD = {
     icon: MultiplierTabIcons.ALCHEMY,
   },
   pelle: {
-    name: "Pelle Effects",
+    name: "Pelle Upgrades",
     multValue: dim => Decimal.pow(PelleUpgrade.antimatterDimensionMult.effectOrDefault(1),
       dim ? 1 : MultiplierTabHelper.activeDimCount("AD")),
     powValue: () => PelleRifts.paradox.effectOrDefault(DC.D1).toNumber(),
@@ -409,7 +409,7 @@ GameDatabase.multiplierTabValues.AD = {
     icon: MultiplierTabIcons.SPECIFIC_GLYPH("cursed"),
   },
   nerfPelle: {
-    name: "Doomed Nerfs",
+    name: "Doomed Reality",
     multValue: 0.1,
     powValue: () => (PelleStrikes.infinity.hasStrike ? 0.5 : 1),
     isActive: () => Pelle.isDoomed,

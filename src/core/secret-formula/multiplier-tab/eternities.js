@@ -17,8 +17,8 @@ GameDatabase.multiplierTabValues.eternities = {
     isActive: () => Achievement(113).canBeApplied,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
-  realityUpgrades: {
-    name: "Eternal Amplifier",
+  amplifierEter: {
+    name: "Reality Upgrade - Eternal Amplifier",
     multValue: () => RealityUpgrade(3).effectOrDefault(1),
     isActive: () => RealityUpgrade(3).canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("reality"),

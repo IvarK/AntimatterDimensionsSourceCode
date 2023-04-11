@@ -48,14 +48,14 @@ GameDatabase.multiplierTabValues.gamespeed = {
     icon: MultiplierTabIcons.BLACK_HOLE,
   },
   achievementMult: {
-    name: "Achievement Multiplier",
+    name: "30 V-Achievement Milestone - Achievement Multiplier",
     multValue: () => Math.pow(VUnlocks.achievementBH.effectOrDefault(1),
       BlackHoles.list.countWhere(bh => bh.isUnlocked)),
     isActive: () => !BlackHoles.arePaused && VUnlocks.achievementBH.canBeApplied && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   pulsing: {
-    name: "Auto-releasing Stored Time",
+    name: "Auto-Discharging Stored Time",
     multValue: () => (Enslaved.isAutoReleasing
       ? Math.max(Enslaved.autoReleaseSpeed / getGameSpeedupFactor(), 1)
       : getGameSpeedupFactor()),
@@ -63,13 +63,13 @@ GameDatabase.multiplierTabValues.gamespeed = {
     icon: MultiplierTabIcons.BH_PULSE,
   },
   singularity: {
-    name: "Singularity Milestones",
+    name: "Singularity Milestone - Game speed based on Singularities",
     multValue: () => SingularityMilestone.gamespeedFromSingularities.effectOrDefault(1),
     isActive: () => SingularityMilestone.gamespeedFromSingularities.canBeApplied && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.SINGULARITY,
   },
   pelle: {
-    name: "Pelle game speed Upgrade",
+    name: "Pelle Upgrade - Repeatable Game speed",
     multValue: () => PelleUpgrade.timeSpeedMult.effectValue.toNumber(),
     isActive: () => Pelle.isDoomed && !EternityChallenge(12).isRunning,
     icon: MultiplierTabIcons.PELLE,

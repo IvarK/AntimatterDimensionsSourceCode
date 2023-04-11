@@ -96,7 +96,7 @@ GameDatabase.multiplierTabValues.TD = {
   },
 
   achievementMult: {
-    name: "Achievement Multiplier",
+    name: "Eternity Upgrade - Achievement Multiplier",
     multValue: dim => Decimal.pow(EternityUpgrade.tdMultAchs.effectOrDefault(1),
       dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
     isActive: () => EternityUpgrade.tdMultAchs.canBeApplied && !Pelle.isDoomed,
@@ -142,7 +142,7 @@ GameDatabase.multiplierTabValues.TD = {
     icon: MultiplierTabIcons.TIME_STUDY
   },
   eternityUpgrade: {
-    name: dim => (dim ? `Eternity Upgrades (TD ${dim})` : "Eternity Upgrades"),
+    name: dim => (dim ? `Other Eternity Upgrades (TD ${dim})` : "Other Eternity Upgrades"),
     multValue: dim => {
       const allMult = DC.D1.timesEffectsOf(
         EternityUpgrade.tdMultTheorems,
@@ -200,7 +200,7 @@ GameDatabase.multiplierTabValues.TD = {
     icon: MultiplierTabIcons.TICKSPEED,
   },
   dilationUpgrade: {
-    name: "Dilation Upgrade (Based on Replicanti)",
+    name: "Dilation Upgrade - Replicanti Multiplier",
     multValue: dim => {
       const mult = Replicanti.areUnlocked && Replicanti.amount.gt(1)
         ? DilationUpgrade.tdMultReplicanti.effectValue
@@ -211,7 +211,7 @@ GameDatabase.multiplierTabValues.TD = {
     icon: MultiplierTabIcons.UPGRADE("dilation"),
   },
   realityUpgrade: {
-    name: "Temporal Transcendence",
+    name: "Reality Upgrade - Temporal Transcendence",
     multValue: dim => Decimal.pow(RealityUpgrade(22).effectOrDefault(1),
       dim ? 1 : MultiplierTabHelper.activeDimCount("TD")),
     isActive: () => !Pelle.isDoomed && RealityUpgrade(22).canBeApplied,
@@ -232,7 +232,7 @@ GameDatabase.multiplierTabValues.TD = {
     icon: MultiplierTabIcons.ALCHEMY,
   },
   imaginaryUpgrade: {
-    name: "Suspicion of Interference",
+    name: "Imaginary Upgrade - Suspicion of Interference",
     powValue: () => ImaginaryUpgrade(11).effectOrDefault(1),
     isActive: () => ImaginaryUpgrade(11).canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("imaginary"),

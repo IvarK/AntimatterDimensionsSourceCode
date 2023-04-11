@@ -257,6 +257,11 @@ GameStorage.migrations = {
         player.reality.glyphs.sets.push({ name: "", glyphs: [] });
       }
     },
+    17: player => {
+      // Added replicanti speed mult subtab in the middle of the subtab order (in order to maintain progression order
+      // in the UI), so shift the internal state as needed if the player was on a subtab which was on a later subtab
+      if (player.options.currentMultiplierSubtab > 5) player.options.currentMultiplierSubtab++;
+    },
   },
 
   normalizeTimespans(player) {

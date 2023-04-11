@@ -43,6 +43,7 @@ import "./galaxies";
 import "./infinities";
 import "./eternities";
 import "./gamespeed";
+import "./replicanti";
 
 // Some props in the tree are dynamically generated from value structure in the GameDB
 import "./tree";

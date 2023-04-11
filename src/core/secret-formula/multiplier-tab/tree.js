@@ -4,7 +4,7 @@ import { GameDatabase } from "../game-database";
 
 import { MultiplierTabHelper } from "./helper-functions";
 
-const dynamicGenProps = ["TP", "DT", "infinities", "eternities", "gamespeed"];
+const dynamicGenProps = ["TP", "DT", "infinities", "eternities", "gamespeed", "replicanti"];
 const propList = {
   AD: ["purchase", "dimboost", "sacrifice", "achievementMult", "achievement", "infinityUpgrade",
     "breakInfinityUpgrade", "infinityPower", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph", "v",
@@ -99,6 +99,9 @@ GameDatabase.multiplierTabTree = {
   gamespeed_total: [
     getProps("gamespeed")
   ],
+  replicanti_total: [
+    getProps("replicanti")
+  ],
 };
 
 // Gamespeed's two alternate displays are current and average gamespeed, distinguished by which of two
@@ -112,7 +115,7 @@ GameDatabase.multiplierTabTree.DT_total[0].unshift("TP_total");
 
 // Additional data specification for dynamically-generated props
 const dimTypes = ["AD", "ID", "TD"];
-const singleRes = ["IP", "EP", "DT", "infinities"];
+const singleRes = ["IP", "EP", "DT", "infinities", "replicanti"];
 const targetedEffects = {
   achievement: {
     checkFn: MultiplierTabHelper.achievementDimCheck,
@@ -129,6 +132,7 @@ const targetedEffects = {
     TD: [11, 73, 93, 103, 151, 221, 227, 301],
     IP: [41, 51, 141, 142, 143],
     EP: [61, 121, 122, 123],
+    replicanti: [62, 132, 213],
   },
   infinityChallenge: {
     checkFn: MultiplierTabHelper.ICDimCheck,

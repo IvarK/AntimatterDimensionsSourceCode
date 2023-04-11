@@ -99,11 +99,28 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
     interval = interval.times(Decimal.pow(ReplicantiGrowth.scaleFactor, increases));
   }
 
-  interval = interval.div(PelleRifts.decay.effectValue);
-  interval = interval.div(Pelle.specialGlyphEffect.replication);
-  interval = interval.div(ShopPurchase.replicantiPurchases.currentMult);
+  interval = interval.divide(totalReplicantiSpeedMult(overCap));
 
-  if (Pelle.isDisabled("replicantiIntervalMult")) return new Decimal(interval);
+  if (V.isRunning) {
+    // This is a boost if interval < 1, but that only happens in EC12
+    // and handling it would make the replicanti code a lot more complicated.
+    interval = interval.pow(2);
+  }
+  return interval;
+}
+
+// This only counts the "external" multipliers - that is, it doesn't count any speed changes due to being over the cap.
+// These multipliers are separated out largely for two reasons - more "dynamic" multipliers (such as overcap scaling
+// and celestial nerfs) interact very weirdly and the game balance relies on this behavior, and we also use this same
+// value in the multiplier tab too
+export function totalReplicantiSpeedMult(overCap) {
+  let totalMult = DC.D1;
+
+  // These are the only effects active in Pelle - the function shortcuts everything else if we're in Pelle
+  totalMult = totalMult.times(PelleRifts.decay.effectValue);
+  totalMult = totalMult.times(Pelle.specialGlyphEffect.replication);
+  totalMult = totalMult.times(ShopPurchase.replicantiPurchases.currentMult);
+  if (Pelle.isDisabled("replicantiIntervalMult")) return totalMult;
 
   const preCelestialEffects = Effects.product(
     TimeStudy(62),
@@ -112,24 +129,22 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
     RealityUpgrade(6),
     RealityUpgrade(23),
   );
-  interval = Decimal.divide(interval, preCelestialEffects);
+  totalMult = totalMult.times(preCelestialEffects);
   if (TimeStudy(132).isBought && Perk.studyPassive.isBought) {
-    interval = interval.divide(3);
+    totalMult = totalMult.times(3);
   }
 
   if (!overCap && Achievement(134).isUnlocked) {
-    interval = interval.divide(2);
+    totalMult = totalMult.times(2);
   }
-  interval = interval.divide(getAdjustedGlyphEffect("replicationspeed"));
-  if (GlyphAlteration.isAdded("replication")) interval = interval.divide(
-    Math.clampMin(Decimal.log10(Replicanti.amount) * getSecondaryGlyphEffect("replicationdtgain"), 1));
-  interval = interval.dividedByEffectsOf(AlchemyResource.replication, Ra.unlocks.continuousTTBoost.effects.replicanti);
-  if (V.isRunning) {
-    // This is a boost if interval < 1, but that only happens in EC12
-    // and handling it would make the replicanti code a lot more complicated.
-    interval = interval.pow(2);
+  totalMult = totalMult.times(getAdjustedGlyphEffect("replicationspeed"));
+  if (GlyphAlteration.isAdded("replication")) {
+    totalMult = totalMult.times(
+      Math.clampMin(Decimal.log10(Replicanti.amount) * getSecondaryGlyphEffect("replicationdtgain"), 1));
   }
-  return interval;
+  totalMult = totalMult.timesEffectOf(AlchemyResource.replication, Ra.unlocks.continuousTTBoost.effects.replicanti);
+
+  return totalMult;
 }
 
 export function replicantiCap() {

@@ -9,11 +9,12 @@ const MULT_TAB_OPTIONS = [
   { id: 3, key: "IP", text: "Infinity Points" },
   { id: 4, key: "ID", text: "Infinity Dimensions" },
   { id: 5, key: "infinities", text: "Infinities" },
-  { id: 6, key: "EP", text: "Eternity Points" },
-  { id: 7, key: "TD", text: "Time Dimensions" },
-  { id: 8, key: "eternities", text: "Eternities" },
-  { id: 9, key: "DT", text: "Dilated Time" },
-  { id: 10, key: "gamespeed", text: "Game Speed" },
+  { id: 6, key: "replicanti", text: "Replicanti Speed" },
+  { id: 7, key: "EP", text: "Eternity Points" },
+  { id: 8, key: "TD", text: "Time Dimensions" },
+  { id: 9, key: "eternities", text: "Eternities" },
+  { id: 10, key: "DT", text: "Dilated Time" },
+  { id: 11, key: "gamespeed", text: "Game Speed" },
 ];
 
 export default {
@@ -111,13 +112,14 @@ export default {
 <style scoped>
 .c-list-container {
   position: relative;
+  width: 100rem;
 }
 
 .l-multiplier-subtab-btn-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  width: 90rem;
+  width: 100rem;
   height: calc(4rem - var(--var-border-radius, 0.2rem));
 }
 
@@ -145,7 +147,6 @@ export default {
 
 .c-multiplier-tab-text-line {
   color: var(--color-text);
-  width: 90rem;
   font-size: 1.3rem;
 }
 

@@ -36,7 +36,7 @@ GameDatabase.multiplierTabValues.eternities = {
     icon: MultiplierTabIcons.GENERIC_RA,
   },
   alchemy: {
-    name: "Eternity Alchemy Resource",
+    name: "Alchemy Resource - Eternity",
     powValue: () => AlchemyResource.eternity.effectOrDefault(1),
     isActive: () => AlchemyResource.eternity.canBeApplied,
     icon: MultiplierTabIcons.ALCHEMY,

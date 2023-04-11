@@ -29,6 +29,12 @@ GameDatabase.multiplierTabValues.eternities = {
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
+  ra: {
+    name: "Ra Upgrade - Multiplier based on TT",
+    multValue: () => Ra.unlocks.continuousTTBoost.effects.eternity.effectOrDefault(1),
+    isActive: () => Ra.unlocks.continuousTTBoost.isUnlocked,
+    icon: MultiplierTabIcons.GENERIC_RA,
+  },
   alchemy: {
     name: "Eternity Alchemy Resource",
     powValue: () => AlchemyResource.eternity.effectOrDefault(1),

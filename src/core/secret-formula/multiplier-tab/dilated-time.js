@@ -47,8 +47,8 @@ GameDatabase.multiplierTabValues.DT = {
     isActive: () => getGameSpeedupForDisplay() > 1 && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.GAMESPEED,
   },
-  realityUpgrade: {
-    name: "Temporal Amplifier",
+  amplifierDT: {
+    name: "Reality Upgrade - Temporal Amplifier",
     multValue: () => RealityUpgrade(1).effectOrDefault(1),
     isActive: () => RealityUpgrade(1).canBeApplied && getDilationGainPerSecond().neq(0) && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("reality"),
@@ -65,12 +65,15 @@ GameDatabase.multiplierTabValues.DT = {
     isActive: () => PlayerProgress.realityUnlocked() && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.GENERIC_GLYPH
   },
-  ra: {
-    name: "Ra Upgrades",
-    multValue: () => DC.D1.timesEffectsOf(
-      Ra.unlocks.continuousTTBoost.effects.dilatedTime,
-      Ra.unlocks.peakGamespeedDT
-    ),
+  ra1: {
+    name: "Ra Upgrade - Multiplier based on TT",
+    multValue: () => DC.D1.timesEffectsOf(Ra.unlocks.continuousTTBoost.effects.dilatedTime),
+    isActive: () => Ra.unlocks.autoTP.canBeApplied && getDilationGainPerSecond().neq(0),
+    icon: MultiplierTabIcons.GENERIC_RA,
+  },
+  ra2: {
+    name: "Ra Upgrade - Multiplier based on peak game speed",
+    multValue: () => DC.D1.timesEffectsOf(Ra.unlocks.peakGamespeedDT),
     isActive: () => Ra.unlocks.autoTP.canBeApplied && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.GENERIC_RA,
   },
@@ -94,7 +97,7 @@ GameDatabase.multiplierTabValues.DT = {
     icon: MultiplierTabIcons.GENERIC_V,
   },
   nerfPelle: {
-    name: "Doomed Nerfs",
+    name: "Doomed Reality",
     multValue: 1e-5,
     isActive: () => Pelle.isDoomed && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.PELLE,

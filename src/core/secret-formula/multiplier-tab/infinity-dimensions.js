@@ -108,7 +108,7 @@ GameDatabase.multiplierTabValues.ID = {
     icon: MultiplierTabIcons.SACRIFICE("infinity"),
   },
   powPurchase: {
-    name: "Recollection of Intrusion",
+    name: "Imaginary Upgrade - Recollection of Intrusion",
     powValue: () => ImaginaryUpgrade(14).effectOrDefault(1),
     isActive: () => ImaginaryUpgrade(14).canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("imaginary"),
@@ -243,7 +243,7 @@ GameDatabase.multiplierTabValues.ID = {
     icon: MultiplierTabIcons.ALCHEMY,
   },
   imaginaryUpgrade: {
-    name: "Hyperbolic Apeirogon",
+    name: "Imaginary Upgrade - Hyperbolic Apeirogon",
     multValue: dim => Decimal.pow(ImaginaryUpgrade(8).effectOrDefault(1),
       dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
     isActive: () => ImaginaryUpgrade(8).canBeApplied,
@@ -289,7 +289,7 @@ GameDatabase.multiplierTabValues.ID = {
     icon: MultiplierTabIcons.SPECIFIC_GLYPH("cursed"),
   },
   nerfPelle: {
-    name: "Doomed Nerfs",
+    name: "Doomed Reality",
     powValue: 0.5,
     isActive: () => PelleStrikes.powerGalaxies.hasStrike,
     icon: MultiplierTabIcons.PELLE,

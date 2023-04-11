@@ -29,9 +29,15 @@ GameDatabase.multiplierTabValues.infinities = {
     isActive: () => TimeStudy(32).isBought,
     icon: MultiplierTabIcons.TIME_STUDY,
   },
+  amplifierInf: {
+    name: "Reality Upgrade - Boundless Amplifier",
+    multValue: () => DC.D1.timesEffectsOf(RealityUpgrade(5)),
+    isActive: () => PlayerProgress.realityUnlocked() && !Pelle.isDoomed,
+    icon: MultiplierTabIcons.UPGRADE("reality"),
+  },
   realityUpgrades: {
-    name: "Reality Upgrades",
-    multValue: () => DC.D1.timesEffectsOf(RealityUpgrade(5), RealityUpgrade(7)),
+    name: "Reality Upgrade - Innumerably Construct",
+    multValue: () => DC.D1.timesEffectsOf(RealityUpgrade(7)),
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
@@ -42,13 +48,13 @@ GameDatabase.multiplierTabValues.infinities = {
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   ra: {
-    name: "Ra Boost from Time Theorems",
+    name: "Ra Upgrade - Multiplier based on TT",
     multValue: () => Ra.unlocks.continuousTTBoost.effects.infinity.effectOrDefault(1),
     isActive: () => Ra.unlocks.continuousTTBoost.isUnlocked,
     icon: MultiplierTabIcons.GENERIC_RA,
   },
   singularity: {
-    name: "Singularity Milestones",
+    name: "Singularity Milestone - Power from Singularities",
     powValue: () => SingularityMilestone.infinitiedPow.effectOrDefault(1),
     isActive: () => SingularityMilestone.infinitiedPow.canBeApplied,
     icon: MultiplierTabIcons.SINGULARITY,

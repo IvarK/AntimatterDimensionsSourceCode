@@ -58,7 +58,7 @@ GameDatabase.multiplierTabValues.galaxies = {
     icon: MultiplierTabIcons.SPECIFIC_GLYPH("dilation"),
   },
   nerfPelle: {
-    name: "Doomed Nerfs",
+    name: "Doomed Reality",
     displayOverride: () => `All Galaxy strength /${formatInt(2)}`,
     powValue: 0.5,
     isActive: () => Pelle.isDoomed,

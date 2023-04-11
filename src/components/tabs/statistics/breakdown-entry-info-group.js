@@ -5,8 +5,14 @@ export class BreakdownEntryInfoGroup {
     this.entries = keys.map(key => createEntryInfo(key));
   }
 
+  // We show children entries under two cases; the first is when there is more than one child entry and
+  // therefore showing a list would be useful. The other is when the entry itself is a "general" entry, which
+  // will always be titled something vague like "Achievements" or "Time Studies". In this case, we also still show
+  // it when there is exactly one child, so that the player can see exactly which ach/TS/etc is giving the effect.
   get hasVisibleEntries() {
-    return this.entries.filter(e => e.isActive && (e.mult.neq(1) || e.pow !== 1)).length > 1;
+    const activeChildren = this.entries.filter(e => e.isActive && (e.mult.neq(1) || e.pow !== 1));
+    return activeChildren.length > 1 ||
+      (activeChildren.length === 1 && activeChildren[0].key.startsWith("general"));
   }
 }
 

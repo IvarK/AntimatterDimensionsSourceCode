@@ -71,6 +71,7 @@ export default {
 }
 
 .t-dark .c-credits-header,
+.t-amoled .c-credits-header,
 .t-s6 .c-credits-header,
 .t-s10 .c-credits-header {
   animation: a-credits-header--glow 25s infinite;
@@ -98,7 +99,8 @@ export default {
   100% { color: #fbc21b; }
 }
 
-.t-dark-metro .c-credits-header {
+.t-dark-metro .c-credits-header,
+.t-amoled-metro .c-credits-header {
   color: #e0e0e0;
 }
 

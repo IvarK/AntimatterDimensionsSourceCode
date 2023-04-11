@@ -43,6 +43,8 @@ export default {
 
 .t-inverted .c-background-overlay,
 .t-inverted-metro .c-background-overlay,
+.t-amoled .c-background-overlay,
+.t-amoled-metro .c-background-overlay,
 .t-s11 .c-background-overlay {
   background-color: black;
 }

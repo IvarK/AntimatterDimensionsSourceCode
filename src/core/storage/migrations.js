@@ -258,9 +258,11 @@ GameStorage.migrations = {
       }
     },
     17: player => {
-      // Added replicanti speed mult subtab in the middle of the subtab order (in order to maintain progression order
-      // in the UI), so shift the internal state as needed if the player was on a subtab which was on a later subtab
-      if (player.options.currentMultiplierSubtab > 5) player.options.currentMultiplierSubtab++;
+      // Moved all multiplier tab attributes to be scoped, and added replicanti subtab in the middle to preserve
+      // progression order - shift it up as needed in order to keep players on the same subtab
+      const oldSubtab = player.options.currentMultiplierSubtab ?? 0;
+      player.options.multiplierTab.currTab = oldSubtab + (oldSubtab > 5 ? 1 : 0);
+      delete player.options.currentMultiplierSubtab;
     },
   },
 

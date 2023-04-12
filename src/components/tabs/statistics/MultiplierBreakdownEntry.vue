@@ -4,6 +4,7 @@ import { DC } from "@/core/constants";
 import { BreakdownEntryInfo } from "./breakdown-entry-info";
 import { getResourceEntryInfoGroups } from "./breakdown-entry-info-group";
 import { PercentageRollingAverage } from "./percentage-rolling-average";
+import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 // A few props are special-cased because they're base values which can be less than 1, but we don't want to
 // show them as nerfs
@@ -17,6 +18,9 @@ function padPercents(percents) {
 
 export default {
   name: "MultiplierBreakdownEntry",
+  components: {
+    PrimaryToggleButton
+  },
   props: {
     resource: {
       type: BreakdownEntryInfo,
@@ -42,7 +46,9 @@ export default {
       // This is used to temporarily remove the transition function from the bar styling when changing the way
       // multipliers are split up; the animation which results from not doing this looks very awkward
       lastLayoutChange: Date.now(),
-      now: Date.now()
+      now: Date.now(),
+      totalMultiplier: DC.D1,
+      replacePowers: player.options.multiplierTab.replacePowers,
     };
   },
   computed: {
@@ -72,10 +78,27 @@ export default {
       return Decimal.eq(this.resource.mult, 0)
         ? `You cannot gain this resource (prestige requirement not reached)`
         : `You have no multipliers for this resource (will gain ${format(1)} on prestige)`;
+    },
+    // IC4 is the first time the player sees a power-based effect. This doesn't need to be reactive because
+    // completing IC4 for the first time forces a tab switch
+    hasSeenPowers() {
+      return InfinityChallenge(4).isCompleted || PlayerProgress.eternityUnlocked();
+    },
+    powerToggleClassObject() {
+      return {
+        "o-primary-btn c-change-display-btn fas": true,
+        "fa-xmark": this.replacePowers,
+        "fa-superscript": !this.replacePowers,
+      };
     }
   },
+  watch: {
+    replacePowers(newValue) {
+      player.options.multiplierTab.replacePowers = newValue;
+    },
+  },
   created() {
-    if (this.groups.length > 1 && player.options.showMultTabAltFirst) {
+    if (this.groups.length > 1 && player.options.multiplierTab.showAltGroup) {
       this.changeGroup();
     }
   },
@@ -94,10 +117,11 @@ export default {
       this.isDilated = this.dilationExponent !== 1;
       this.calculatePercents();
       this.now = Date.now();
+      this.replacePowers = player.options.multiplierTab.replacePowers;
     },
     changeGroup() {
       this.selected = (this.selected + 1) % this.groups.length;
-      player.options.showMultTabAltFirst = this.selected === 1;
+      player.options.multiplierTab.showAltGroup = this.selected === 1;
       this.showGroup = Array.repeat(false, this.entries.length);
       this.hadChildEntriesAt = Array.repeat(0, this.entries.length);
       this.lastLayoutChange = Date.now();
@@ -150,6 +174,7 @@ export default {
       this.percentList = percentList;
       this.rollingAverage.add(isEmpty ? undefined : percentList);
       this.averagedPercentList = this.rollingAverage.average;
+      this.totalMultiplier = Decimal.pow10(log10Mult);
     },
     styleObject(index) {
       const netPerc = this.averagedPercentList.sum();
@@ -229,8 +254,12 @@ export default {
             ? format(x, 2, 2)
             : formatX(x, 2, 2);
         };
-        if (Decimal.neq(entry.data.mult, 1)) values.push(formatFn(entry.data.mult));
-        if (entry.data.pow !== 1) values.push(formatPow(entry.data.pow, 2, 3));
+        if (this.replacePowers && entry.data.pow !== 1) {
+          values.push(formatFn(entry.data.mult.times(this.totalMultiplier.pow(entry.data.pow))));
+        } else {
+          if (Decimal.neq(entry.data.mult, 1)) values.push(formatFn(entry.data.mult));
+          if (entry.data.pow !== 1) values.push(formatPow(entry.data.pow, 2, 3));
+        }
         valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
       }
 
@@ -243,16 +272,22 @@ export default {
       // Display both multiplier and powers, but make sure to give an empty string if there's neither
       const overrideStr = entry.displayOverride;
       let valueStr;
+      const formatFn = entry.isBase
+        ? x => format(x, 2, 2)
+        : x => `/${format(x.reciprocal(), 2, 2)}`;
+
       if (overrideStr) valueStr = `(${overrideStr})`;
       else {
         const values = [];
-        if (Decimal.neq(entry.data.mult, 1)) {
-          const formatFn = entry.isBase
-            ? x => format(x, 2, 2)
-            : x => `/${format(x.reciprocal(), 2, 2)}`;
-          values.push(formatFn(entry.data.mult));
+        if (this.replacePowers && entry.data.pow !== 1) {
+          const finalMult = this.resource.fakeValue ?? this.resource.mult;
+          values.push(formatFn(finalMult.pow(1 - 1 / entry.data.pow)));
+        } else {
+          if (Decimal.neq(entry.data.mult, 1)) {
+            values.push(formatFn(entry.data.mult));
+          }
+          if (entry.data.pow !== 1) values.push(formatPow(entry.data.pow, 2, 3));
         }
-        if (entry.data.pow !== 1) values.push(formatPow(entry.data.pow, 2, 3));
         valueStr = values.length === 0 ? "" : `(${values.join(", ")})`;
       }
 
@@ -335,12 +370,22 @@ export default {
         <b>
           {{ totalString() }}
         </b>
-        <i
-          v-if="groups.length > 1"
-          v-tooltip="'Change Multiplier Grouping'"
-          class="o-primary-btn c-change-breakdown-btn fas fa-arrows-rotate"
-          @click="changeGroup"
-        />
+        <span class="c-display-settings">
+          <PrimaryToggleButton
+            v-if="hasSeenPowers"
+            v-model="replacePowers"
+            v-tooltip="'Change Display for Power effects'"
+            off=""
+            on=""
+            :class="powerToggleClassObject"
+          />
+          <i
+            v-if="groups.length > 1"
+            v-tooltip="'Change Multiplier Grouping'"
+            class="o-primary-btn c-change-display-btn fas fa-arrows-rotate"
+            @click="changeGroup"
+          />
+        </span>
       </div>
       <div
         v-if="isEmpty"
@@ -456,10 +501,19 @@ export default {
   padding: 0.2rem;
 }
 
-.c-change-breakdown-btn {
+.c-display-settings {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 8rem;
+}
+
+.c-change-display-btn {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 3rem;
+  margin: 0 0.5rem;
 }
 
 .c-total-mult {

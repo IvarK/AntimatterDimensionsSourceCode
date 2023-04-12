@@ -141,7 +141,7 @@ const targetedEffects = {
   },
   eternityChallenge: {
     checkFn: MultiplierTabHelper.ECDimCheck,
-    ID: [2, 4, 7, 9],
+    ID: [2, 4, 9],
     TD: [1, 10],
   },
 };

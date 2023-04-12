@@ -201,6 +201,42 @@ export const MultiplierTabHelper = {
 
   pluralizeDimensions(dims) {
     return dims === 1 ? "Dimension\xa0" : "Dimensions";
+  },
+
+  // All of the following NC12-related functions are to make the parsing within the GameDB entry easier in terms of
+  // which set of Dimensions are actually producing within NC12 - in nearly every case, one of the odd/even sets will
+  // produce significantly more than the other, so we simply assume the larger one is active and the other isn't
+  evenDimNC12Production() {
+    const nc12Pow = tier => ([2, 4, 6].includes(tier) ? 0.1 * (8 - tier) : 0);
+    const maxTier = Math.clampMin(2 * Math.floor(MultiplierTabHelper.activeDimCount("AD") / 2), 2);
+    return AntimatterDimensions.all
+      .filter(ad => ad.isProducing && ad.tier % 2 === 0)
+      .map(ad => ad.multiplier.times(ad.amount.pow(nc12Pow(ad.tier))))
+      .reduce((x, y) => x.times(y), DC.D1)
+      .times(AntimatterDimension(maxTier).totalAmount);
+  },
+
+  oddDimNC12Production() {
+    const maxTier = Math.clampMin(2 * Math.floor(MultiplierTabHelper.activeDimCount("AD") / 2 - 0.5) + 1, 1);
+    return AntimatterDimensions.all
+      .filter(ad => ad.isProducing && ad.tier % 2 === 1)
+      .map(ad => ad.multiplier)
+      .reduce((x, y) => x.times(y), DC.D1)
+      .times(AntimatterDimension(maxTier).totalAmount);
+  },
+
+  actualNC12Production() {
+    return Decimal.max(this.evenDimNC12Production(), this.oddDimNC12Production());
+  },
+
+  multInNC12(dim) {
+    const nc12Pow = tier => ([2, 4, 6].includes(tier) ? 0.1 * (8 - tier) : 0);
+    const ad = AntimatterDimension(dim);
+    return ad.isProducing ? ad.multiplier.times(ad.totalAmount.pow(nc12Pow(dim))) : DC.D1;
+  },
+
+  isNC12ProducingEven() {
+    return this.evenDimNC12Production().gt(this.oddDimNC12Production());
   }
 };
 

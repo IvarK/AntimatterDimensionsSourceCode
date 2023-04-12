@@ -20,6 +20,7 @@ export class BreakdownEntryInfo {
     this._displayOverride = createGetter(dbEntry.displayOverride, args);
     this._isDilated = createGetter(dbEntry.isDilated, args);
     this._isBase = createGetter(dbEntry.isBase, args);
+    this._ignoresNerfPowers = createGetter(dbEntry.ignoresNerfPowers, args);
     this.data = Vue.observable({
       mult: new Decimal(0),
       pow: 0,
@@ -76,6 +77,10 @@ export class BreakdownEntryInfo {
 
   get isBase() {
     return this._isBase();
+  }
+
+  get ignoresNerfPowers() {
+    return this._ignoresNerfPowers() ?? false;
   }
 
   get isVisible() {

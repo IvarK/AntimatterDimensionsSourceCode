@@ -13,6 +13,7 @@ GameDatabase.multiplierTabValues.general = {
     multValue: (ach, dim) => {
       // There is also a buy10 effect, but we don't track that in the multiplier tab
       if (ach === 141) return Achievement(141).canBeApplied ? Achievement(141).effects.ipGain.effectOrDefault(1) : 1;
+      if (ach === 183) return 1;
       if (!dim) return Achievement(ach).canBeApplied ? Achievement(ach).effectOrDefault(1) : 1;
 
       if (dim?.length === 2) {
@@ -31,6 +32,8 @@ GameDatabase.multiplierTabValues.general = {
       return (MultiplierTabHelper.achievementDimCheck(ach, dim) && Achievement(ach).canBeApplied)
         ? Achievement(ach).effectOrDefault(1) : 1;
     },
+    // 183 is the only time a power effect is in an Achievement, so we special-case it here and return a x1 multiplier
+    powValue: ach => (ach === 183 ? Achievement(183).effectOrDefault(1) : 1),
     isActive: ach => Achievement(ach).canBeApplied,
     icon: ach => {
       const base = MultiplierTabIcons.ACHIEVEMENT;

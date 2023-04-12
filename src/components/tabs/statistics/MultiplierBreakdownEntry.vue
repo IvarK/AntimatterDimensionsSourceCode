@@ -127,16 +127,26 @@ export default {
 
         // This is clamped to a minimum of something that's still nonzero in order to show it at <0.1% instead of 0%
         percentList.push(
-          nerfBlacklist.includes(entry.key) ? Math.clampMin(perc, 0.0001) : perc
+          [entry.ignoresNerfPowers, nerfBlacklist.includes(entry.key) ? Math.clampMin(perc, 0.0001) : perc]
         );
-
       }
 
       // Shortly after a prestige, these may add up to a lot more than the base amount as production catches up. This
       // is also necessary to suppress some visual weirdness for certain categories which have lots of exponents but
       // actually apply only to specific dimensions (eg. charged infinity upgrades)
-      const totalPerc = percentList.filter(p => p > 0).sum();
-      percentList = percentList.map(p => (p > 0 ? p / totalPerc : Math.clampMin(p, -1)));
+      // We have a nerfedPerc variable to give a percentage breakdown as if all multipliers which ARE affected by nerf
+      // power effects already had them applied; there is support in the classes to allow for some to be affected but
+      // not others. The only actual case of this occurring is V's Reality not affecting gamespeed for DT, but it was
+      // cleaner to adjust the class structure instead of specifically special-casing it here
+      const totalPerc = percentList.filter(p => p[1] > 0).map(p => p[1]).sum();
+      const nerfedPerc = percentList.filter(p => p[1] > 0)
+        .reduce((x, y) => x + (y[0] ? y[1] : y[1] * totalNegPow), 0);
+      percentList = percentList.map(p => {
+        if (p[1] > 0) {
+          return (p[0] ? p[1] : p[1] * totalNegPow) / nerfedPerc;
+        }
+        return Math.clampMin(p[1] * (totalPerc - nerfedPerc) / totalPerc / totalNegPow, -1);
+      });
       this.percentList = percentList;
       this.rollingAverage.add(isEmpty ? undefined : percentList);
       this.averagedPercentList = this.rollingAverage.average;

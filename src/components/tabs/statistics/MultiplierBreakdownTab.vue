@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       availableOptions: [],
-      currentID: player.options.currentMultiplierSubtab,
+      currentID: player.options.multiplierTab.currTab,
     };
   },
   computed: {
@@ -61,7 +61,7 @@ export default {
     },
     clickSubtab(index) {
       this.currentID = this.availableOptions[index].id;
-      player.options.currentMultiplierSubtab = MULT_TAB_OPTIONS.find(opt => opt.key === this.currentKey).id;
+      player.options.multiplierTab.currTab = MULT_TAB_OPTIONS.find(opt => opt.key === this.currentKey).id;
     }
   }
 };

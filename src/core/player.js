@@ -780,7 +780,11 @@ window.player = {
     respecIntoProtected: false,
     offlineTicks: 1e5,
     showRecentRate: true,
-    showMultTabAltFirst: false,
+    multiplierTab: {
+      currTab: 0,
+      showAltGroup: false,
+      replacePowers: false,
+    },
     autosaveInterval: 30000,
     showTimeSinceSave: true,
     saveFileName: "",
@@ -869,7 +873,6 @@ window.player = {
     hiddenSubtabBits: Array.repeat(0, 11),
     lastOpenTab: 0,
     lastOpenSubtab: Array.repeat(0, 11),
-    currentMultiplierSubtab: 0,
     perkLayout: 0,
     perkPhysicsEnabled: true,
     automatorEvents: {

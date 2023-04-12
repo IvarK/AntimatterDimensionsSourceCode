@@ -8,18 +8,33 @@ import { MultiplierTabIcons } from "./icons";
 // See index.js for documentation
 GameDatabase.multiplierTabValues.AD = {
   total: {
-    name: dim => (dim ? `AD ${dim} Multiplier` : "Base AD Production"),
+    name: dim => {
+      if (dim) return `AD ${dim} Multiplier`;
+      if (!NormalChallenge(12).isRunning) return "Base AD Production";
+      return `Base AD Production from ${MultiplierTabHelper.isNC12ProducingEven() ? "Even" : "Odd"} Dimensions`;
+    },
     displayOverride: dim => {
-      if (dim) return formatX(AntimatterDimension(dim).multiplier, 2, 2);
-      const highestDim = AntimatterDimension(
-        EternityChallenge(7).isRunning ? 7 : MultiplierTabHelper.activeDimCount("AD")).totalAmount;
+      if (dim) {
+        const singleMult = NormalChallenge(12).isRunning
+          ? MultiplierTabHelper.multInNC12(dim)
+          : AntimatterDimension(dim).multiplier;
+        return formatX(singleMult, 2, 2);
+      }
+      const maxTier = EternityChallenge(7).isRunning ? 7 : MultiplierTabHelper.activeDimCount("AD");
+      if (NormalChallenge(12).isRunning) return `${format(MultiplierTabHelper.actualNC12Production(), 2)}/sec`;
       return `${format(AntimatterDimensions.all
         .filter(ad => ad.isProducing)
         .map(ad => ad.multiplier)
         .reduce((x, y) => x.times(y), DC.D1)
-        .times(highestDim), 2)}/sec`;
+        .times(AntimatterDimension(maxTier).totalAmount), 2)}/sec`;
     },
     multValue: dim => {
+      if (NormalChallenge(12).isRunning) {
+        if (!dim) return MultiplierTabHelper.actualNC12Production();
+        return (MultiplierTabHelper.isNC12ProducingEven() ? dim % 2 === 0 : dim % 2 === 1)
+          ? MultiplierTabHelper.multInNC12(dim)
+          : DC.D1;
+      }
       const mult = dim
         ? AntimatterDimension(dim).multiplier
         : AntimatterDimensions.all
@@ -348,13 +363,44 @@ GameDatabase.multiplierTabValues.AD = {
 
   effectNC: {
     name: dim => (dim ? `Normal Challenge Effect (AD ${dim})` : "Normal Challenge Effects"),
-    multValue: dim => {
+    // Depending on the challenge itself and the game state, this could be either a nerf or a buff, so we make
+    // sure to render a x or / conditionally. This requires we calculate the value itself again, however
+    displayOverride: dim => {
+      const formatFn = num => (num.gte(1) ? formatX(num, 2, 2) : `/${format(num.reciprocal(), 2, 2)}`);
+
       let dimMults = Array.repeat(DC.D1, 9);
       if (NormalChallenge(2).isRunning) {
         dimMults = Array.repeat(new Decimal(player.chall2Pow), 9);
-      } else if (NormalChallenge(3).isRunning) {
-        dimMults[1] = new Decimal(player.chall3Pow);
-      } else if (NormalChallenge(12).isRunning) {
+      }
+      if (NormalChallenge(3).isRunning) {
+        dimMults[1] = dimMults[1].times(player.chall3Pow);
+      }
+
+      if (NormalChallenge(12).isRunning) {
+        dimMults[2] = AntimatterDimension(2).totalAmount.pow(0.6);
+        dimMults[4] = AntimatterDimension(4).totalAmount.pow(0.4);
+        dimMults[6] = AntimatterDimension(6).totalAmount.pow(0.2);
+      }
+
+      if (dim) return formatFn(dimMults[dim]);
+      let totalMult = DC.D1;
+      for (let tier = 1; tier <= MultiplierTabHelper.activeDimCount("AD"); tier++) {
+        totalMult = totalMult.times(dimMults[tier]);
+      }
+      return formatFn(totalMult);
+    },
+    // This and displayOverride contain largely the same code
+    multValue: dim => {
+      let dimMults = Array.repeat(DC.D1, 9);
+      // Do not change this to an else-if, as NC2/NC3 need to be enterable simultaneously in IC1
+      if (NormalChallenge(2).isRunning) {
+        dimMults = Array.repeat(new Decimal(player.chall2Pow), 9);
+      }
+      if (NormalChallenge(3).isRunning) {
+        dimMults[1] = dimMults[1].times(player.chall3Pow);
+      }
+
+      if (NormalChallenge(12).isRunning) {
         dimMults[2] = AntimatterDimension(2).totalAmount.pow(0.6);
         dimMults[4] = AntimatterDimension(4).totalAmount.pow(0.4);
         dimMults[6] = AntimatterDimension(6).totalAmount.pow(0.2);

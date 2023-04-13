@@ -8,7 +8,9 @@ import { MultiplierTabIcons } from "./icons";
 GameDatabase.multiplierTabValues.EP = {
   total: {
     name: "Total EP Gained on Eternity",
-    isBase: true,
+    displayOverride: () => (Player.canEternity
+      ? format(gainedEternityPoints(), 2, 2)
+      : "Cannot Eternity"),
     // This effectively hides everything if the player can't actually gain any
     multValue: () => (Player.canEternity ? gainedEternityPoints() : 0),
     isActive: () => PlayerProgress.eternityUnlocked() || Player.canEternity,
@@ -34,7 +36,7 @@ GameDatabase.multiplierTabValues.EP = {
     icon: MultiplierTabIcons.SPECIFIC_GLYPH("infinity"),
   },
   divisor: {
-    name: "Pelle - EP Formula Improvement",
+    name: "Formula Improvement",
     displayOverride: () => {
       const div = 308 - PelleRifts.recursion.effectValue.toNumber();
       return `log(IP)/${formatInt(308)} ➜ log(IP)/${format(div, 2, 2)}`;
@@ -44,7 +46,7 @@ GameDatabase.multiplierTabValues.EP = {
     icon: MultiplierTabIcons.DIVISOR("EP"),
   },
   eternityUpgrade: {
-    name: () => `Eternity Upgrade - Repeatable ${formatX(5)} EP`,
+    name: () => `Repeatable ${formatX(5)} Eternity Upgrade`,
     multValue: () => EternityUpgrade.epMult.effectOrDefault(1),
     isActive: () => PlayerProgress.eternityUnlocked() && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("eternity"),
@@ -62,21 +64,19 @@ GameDatabase.multiplierTabValues.EP = {
   },
   glyph: {
     name: "Equipped Glyphs",
-    multValue: () => DC.D1
-      .timesEffectsOf(Pelle.isDoomed ? null : GlyphEffect.epMult)
-      .times(Pelle.specialGlyphEffect.time),
+    multValue: () => DC.D1.timesEffectsOf(GlyphEffect.epMult).times(Pelle.specialGlyphEffect.time),
     powValue: () => (GlyphAlteration.isAdded("time") ? getSecondaryGlyphEffect("timeEP") : 1),
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   realityUpgrade: {
-    name: "Reality Upgrade - The Knowing Existence",
+    name: "The Knowing Existence",
     multValue: () => RealityUpgrade(12).effectOrDefault(1),
     isActive: () => RealityUpgrade(12).canBeApplied && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   pelle: {
-    name: "Pelle Strike - Vacuum Rift",
+    name: "Pelle Rift Effects",
     multValue: () => PelleRifts.vacuum.milestones[2].effectOrDefault(1),
     isActive: () => PelleRifts.vacuum.milestones[2].canBeApplied,
     icon: MultiplierTabIcons.PELLE,

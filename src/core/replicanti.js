@@ -142,7 +142,7 @@ export function totalReplicantiSpeedMult(overCap) {
     totalMult = totalMult.times(
       Math.clampMin(Decimal.log10(Replicanti.amount) * getSecondaryGlyphEffect("replicationdtgain"), 1));
   }
-  totalMult = totalMult.timesEffectOf(AlchemyResource.replication, Ra.unlocks.continuousTTBoost.effects.replicanti);
+  totalMult = totalMult.timesEffectsOf(AlchemyResource.replication, Ra.unlocks.continuousTTBoost.effects.replicanti);
 
   return totalMult;
 }

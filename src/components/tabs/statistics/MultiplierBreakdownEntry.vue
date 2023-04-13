@@ -84,13 +84,6 @@ export default {
     hasSeenPowers() {
       return InfinityChallenge(4).isCompleted || PlayerProgress.eternityUnlocked();
     },
-    powerToggleClassObject() {
-      return {
-        "o-primary-btn c-change-display-btn fas": true,
-        "fa-xmark": this.replacePowers,
-        "fa-superscript": !this.replacePowers,
-      };
-    }
   },
   watch: {
     replacePowers(newValue) {
@@ -375,9 +368,9 @@ export default {
             v-if="hasSeenPowers"
             v-model="replacePowers"
             v-tooltip="'Change Display for Power effects'"
-            off=""
-            on=""
-            :class="powerToggleClassObject"
+            off="^N"
+            on="×N"
+            class="o-primary-btn c-change-display-btn"
           />
           <i
             v-if="groups.length > 1"

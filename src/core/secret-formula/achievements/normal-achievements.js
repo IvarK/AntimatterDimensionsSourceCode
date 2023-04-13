@@ -963,8 +963,7 @@ GameDatabase.achievements.normal = [
     checkRequirement: () => Replicanti.amount.exponent >= 18000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() {
-      return `You gain Replicanti ${formatInt(2)} times faster
-      under ${format(Decimal.NUMBER_MAX_VALUE, 1, 0)} Replicanti.`;
+      return `You gain Replicanti ${formatInt(2)} times faster under ${format(replicantiCap(), 1)} Replicanti.`;
     }
   },
   {

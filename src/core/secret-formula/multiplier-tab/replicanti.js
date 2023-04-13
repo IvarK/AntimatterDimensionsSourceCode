@@ -1,3 +1,4 @@
+import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
 
 import { MultiplierTabIcons } from "./icons";
@@ -6,7 +7,7 @@ import { MultiplierTabIcons } from "./icons";
 GameDatabase.multiplierTabValues.replicanti = {
   total: {
     name: "Replicanti Speed",
-    multValue: () => totalReplicantiSpeedMult(Replicanti.amount.gt(replicantiCap())),
+    multValue: () => totalReplicantiSpeedMult(Replicanti.amount.gte(replicantiCap())),
     isActive: () => PlayerProgress.eternityUnlocked(),
     overlay: ["Ξ"],
   },
@@ -29,7 +30,8 @@ GameDatabase.multiplierTabValues.replicanti = {
   glyph: {
     name: "Glyph Effects",
     multValue: () => {
-      const baseEffect = getAdjustedGlyphEffect("replicationspeed").times(Pelle.specialGlyphEffect.replication);
+      const baseEffect = (Pelle.isDoomed ? DC.D1 : getAdjustedGlyphEffect("replicationspeed"))
+        .times(Pelle.specialGlyphEffect.replication);
       const alteredEffect = Math.clampMin(
         Decimal.log10(Replicanti.amount) * getSecondaryGlyphEffect("replicationdtgain"), 1);
       return GlyphAlteration.isAdded("replication") ? baseEffect.times(alteredEffect) : baseEffect;

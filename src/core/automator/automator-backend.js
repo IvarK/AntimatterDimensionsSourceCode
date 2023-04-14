@@ -201,7 +201,7 @@ export const AutomatorData = {
   },
   createNewScript(content, name) {
     const newScript = AutomatorScript.create(name, content);
-    GameUI.notify.info(`Imported Script "${name}"`);
+    GameUI.notify.automator(`Imported Script "${name}"`);
     player.reality.automator.state.editorScript = newScript.id;
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },

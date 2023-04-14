@@ -5806,6 +5806,12 @@ kbd {
   border-color: var(--color-reality);
 }
 
+.o-notification--automator {
+  background-color: var(--color-automator-active-line-background);
+  border-color: var(--color-automator-active-line-outline);
+  color: var(--color-automator-docs-font);
+}
+
 .o-notification--strike {
   background-color: var(--color-pelle--base);
   border-color: var(--color-pelle--base);

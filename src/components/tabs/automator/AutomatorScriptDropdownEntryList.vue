@@ -106,7 +106,7 @@ export default {
       class="l-create-script c-automator-docs-script-select c-script-option-hover-effect"
       @click="createNewScript()"
     >
-      <i>Create a new script (you have {{ formatInt(scriptCount) }} / {{ formatInt(maxScriptCount) }})</i>
+      <i>Create a new script (You have {{ formatInt(scriptCount) }} / {{ formatInt(maxScriptCount) }})</i>
     </div>
     <div
       v-else

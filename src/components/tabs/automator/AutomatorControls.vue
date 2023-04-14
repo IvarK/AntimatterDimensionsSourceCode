@@ -147,7 +147,7 @@ export default {
         @click="repeat"
       />
       <AutomatorButton
-        v-tooltip="'Automatically start this script when finishing or restarting a Reality'"
+        v-tooltip="'Automatically restart the active script when finishing or restarting a Reality'"
         class="fa-reply"
         :class="{ 'c-automator__button--active' : forceRestartOn }"
         @click="restart"

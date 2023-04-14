@@ -794,7 +794,17 @@ export const AutomatorBackend = {
   },
 
   newScript() {
-    const newScript = AutomatorScript.create("New Script");
+    // Make sure the new script has a unique name
+    const scriptNames = AutomatorBackend._scripts.map(s => s.name);
+    let newScript;
+    if (scriptNames.includes("New Script")) {
+      let newIndex = 2;
+      while (scriptNames.includes(`New Script (${newIndex})`)) newIndex++;
+      newScript = AutomatorScript.create(`New Script (${newIndex})`);
+    } else {
+      newScript = AutomatorScript.create("New Script");
+    }
+
     this._scripts.push(newScript);
     return newScript;
   },

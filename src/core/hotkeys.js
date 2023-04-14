@@ -410,7 +410,7 @@ function keyboardAutomatorToggle() {
       AutomatorBackend.restart();
       AutomatorBackend.start(visibleIndex);
       if (AutomatorData.currentErrors().length === 0) {
-        GameUI.notify.info(`Starting script "${AutomatorBackend.scriptName}"`);
+        GameUI.notify.automator(`Starting script "${AutomatorBackend.scriptName}"`);
       } else {
         GameUI.notify.error(`Cannot start script "${AutomatorBackend.scriptName}" (has errors)`);
       }
@@ -418,14 +418,14 @@ function keyboardAutomatorToggle() {
     }
     const action = AutomatorBackend.isRunning ? "Resuming" : "Pausing";
     const linenum = AutomatorBackend.currentLineNumber;
-    GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
+    GameUI.notify.automator(`${action} script "${AutomatorBackend.scriptName}" at line ${linenum}`);
   }
 }
 
 function keyboardAutomatorRestart() {
   if (Player.automatorUnlocked) {
     const action = AutomatorBackend.isOn ? "Restarting" : "Starting";
-    GameUI.notify.info(`${action} script "${AutomatorBackend.scriptName}"`);
+    GameUI.notify.automator(`${action} script "${AutomatorBackend.scriptName}"`);
 
     AutomatorBackend.restart();
     AutomatorBackend.start();

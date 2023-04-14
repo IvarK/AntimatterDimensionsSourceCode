@@ -1,10 +1,12 @@
 <script>
 import AutomatorDefineSingleEntry from "./AutomatorDefineSingleEntry";
+import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
   name: "AutomatorDefinePage",
   components: {
     AutomatorDefineSingleEntry,
+    PrimaryButton,
   },
   data() {
     return {
@@ -26,7 +28,10 @@ export default {
     update() {
       const existingValues = Object.keys(player.reality.automator.constants);
       this.constants = existingValues.length < this.maxConstantCount ? [...existingValues, ""] : [...existingValues];
-    }
+    },
+    deleteAllConstants() {
+      if (this.constants.length > 0) Modal.clearAutomatorConstants.show();
+    },
   }
 };
 </script>
@@ -45,6 +50,14 @@ export default {
     allows you to use
     <b>studies purchase first</b>
     in order to purchase all of the studies in the first three rows.
+    <br>
+    <br>
+    <PrimaryButton
+      class="c-delete-margin o-primary-btn--subtab-option"
+      @click="deleteAllConstants"
+    >
+      Delete all constants
+    </PrimaryButton>
     <div
       :key="constants.length"
       class="l-definition-container"
@@ -59,6 +72,10 @@ export default {
 </template>
 
 <style scoped>
+.c-delete-margin {
+  margin: 0;
+}
+
 .l-panel-padding {
   padding: 0.5rem 2rem 0 0;
 }

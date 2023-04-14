@@ -82,6 +82,12 @@ export default {
       // script before defining them here
       AutomatorData.recalculateErrors();
       if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) BlockAutomator.parseTextFromBlocks();
+    },
+    deleteConstant() {
+      delete player.reality.automator.constants[this.aliasString];
+      this.oldAlias = "";
+      this.aliasString = "";
+      this.valueString = "";
     }
   }
 };
@@ -115,10 +121,32 @@ export default {
       @focusin="handleFocus(true)"
       @focusout="handleFocus(false)"
     >
+    <button
+      v-if="aliasString"
+      v-tooltip="'Delete this constant'"
+      class="c-delete-button fas fa-eraser"
+      @click="deleteConstant"
+    />
   </div>
 </template>
 
 <style scoped>
+.c-delete-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: var(--var-border-width, 0.2rem) solid var(--color-automator-controls-border);
+  border-radius: var(--var-border-radius, 0.3rem);
+  margin: 0.1rem -0.4rem 0.1rem 0.6rem;
+  cursor: pointer;
+  color: var(--color-automator-docs-font);
+  background-color: var(--color-automator-controls-inactive);
+}
+
+.c-delete-button:hover {
+  background-color: var(--color-automator-error-background);
+}
+
 .l-single-definition-container {
   display: flex;
   flex-direction: row;

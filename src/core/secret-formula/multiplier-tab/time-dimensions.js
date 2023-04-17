@@ -89,7 +89,7 @@ GameDatabase.multiplierTabValues.TD = {
     icon: MultiplierTabIcons.SACRIFICE("time"),
   },
   powPurchase: {
-    name: "Recollection of Intrusion",
+    name: "Imaginary Upgrade - Recollection of Intrusion",
     powValue: () => ImaginaryUpgrade(14).effectOrDefault(1),
     isActive: () => ImaginaryUpgrade(14).canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("imaginary"),

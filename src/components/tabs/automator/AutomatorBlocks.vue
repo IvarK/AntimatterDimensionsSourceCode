@@ -177,6 +177,9 @@ export const automatorBlocks = [
     nested: true
   }, {
     cmd: "BLOB"
+  }, {
+    cmd: "STOP",
+    alias: "STOP EXECUTION"
   }
 ];
 const AUTOMATOR_BLOCKS_BLACKLIST = ["BLOB"];

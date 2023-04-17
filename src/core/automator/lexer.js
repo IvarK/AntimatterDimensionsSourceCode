@@ -291,6 +291,7 @@ export const AutomatorLexer = (() => {
   createKeyword("Respec", /respec/i);
   createKeyword("Restart", /restart/i);
   createKeyword("Start", /start/i);
+  createKeyword("Stop", /stop/i);
   createKeyword("Studies", /studies/i);
   createKeyword("Unlock", /unlock/i);
   createKeyword("Until", /until/i);

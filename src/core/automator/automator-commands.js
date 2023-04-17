@@ -1022,6 +1022,23 @@ export const AutomatorCommands = ((() => {
           genericInput2: standardizeAutomatorValues(comparison.genericInput2)
         };
       }
+    },
+    {
+      id: "stop",
+      rule: $ => () => {
+        $.CONSUME(T.Stop);
+      },
+      validate: ctx => {
+        ctx.startLine = ctx.Stop[0].startLine;
+        return true;
+      },
+      compile: ctx => () => {
+        AutomatorData.logCommandEvent(`Automator execution stopped with STOP command`, ctx.startLine);
+        return AUTOMATOR_COMMAND_STATUS.HALT;
+      },
+      blockify: () => ({
+        ...automatorBlocksMap.STOP,
+      })
     }
   ];
 })());

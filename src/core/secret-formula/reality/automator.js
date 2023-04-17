@@ -481,6 +481,22 @@ GameDatabase.reality.automator = {
     {
       id: 16,
       isUnlocked: () => true,
+      keyword: "STOP",
+      category: 4,
+      syntax: `<b>stop</b>`,
+      description: `When the Automator runs this line, it will stop execution as if you clicked the
+        <i class="fas fa-stop"></i> button on the control panel in the top-left of the Automator. This
+        does not need to be placed at the end of every script in order to stop them, as turning off the
+        <i class="fas fa-sync-alt"></i> option on the left panel will do this automatically.
+        This command may be useful when used inside of an IF command, in order to stop execution
+        only under certain conditions.`,
+      examples: [
+        `stop`,
+      ]
+    },
+    {
+      id: 17,
+      isUnlocked: () => true,
       keyword: "Currency List",
       category: 4,
       syntax: "<i>You can use these in any IF, WHILE, UNTIL, or WAIT command</i>",
@@ -511,7 +527,7 @@ GameDatabase.reality.automator = {
       `
     },
     {
-      id: 17,
+      id: 18,
       isUnlocked: () => true,
       keyword: "Formatting Comparisons",
       category: 4,
@@ -550,7 +566,7 @@ GameDatabase.reality.automator = {
       ]
     },
     {
-      id: 18,
+      id: 19,
       isUnlocked: () => true,
       keyword: "Commands with inner blocks",
       category: 4,

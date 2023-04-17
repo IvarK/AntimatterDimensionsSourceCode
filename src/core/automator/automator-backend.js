@@ -24,6 +24,7 @@ export const AUTOMATOR_COMMAND_STATUS = Object.freeze({
   // This is used to handle some special cases, like branches/loops:
   SAME_INSTRUCTION: 3,
   SKIP_INSTRUCTION: 4,
+  HALT: 5,
 });
 
 export const AUTOMATOR_MODE = Object.freeze({
@@ -707,6 +708,10 @@ export const AutomatorBackend = {
           return false;
         case AUTOMATOR_COMMAND_STATUS.SKIP_INSTRUCTION:
           this.nextCommand();
+          break;
+        case AUTOMATOR_COMMAND_STATUS.HALT:
+          this.stop();
+          return false;
       }
 
       // We need to break out of the loop if the last commands are all SKIP_INSTRUCTION, or else it'll start

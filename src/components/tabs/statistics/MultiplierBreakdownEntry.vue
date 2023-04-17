@@ -48,6 +48,7 @@ export default {
       lastLayoutChange: Date.now(),
       now: Date.now(),
       totalMultiplier: DC.D1,
+      totalPositivePower: 1,
       replacePowers: player.options.multiplierTab.replacePowers,
     };
   },
@@ -79,10 +80,16 @@ export default {
         ? `You cannot gain this resource (prestige requirement not reached)`
         : `You have no multipliers for this resource (will gain ${format(1)} on prestige)`;
     },
-    // IC4 is the first time the player sees a power-based effect. This doesn't need to be reactive because
-    // completing IC4 for the first time forces a tab switch
+    // IC4 is the first time the player sees a power-based effect, not counting how infinity power is handled.
+    // This doesn't need to be reactive because completing IC4 for the first time forces a tab switch
     hasSeenPowers() {
       return InfinityChallenge(4).isCompleted || PlayerProgress.eternityUnlocked();
+    },
+    // While infinity power is a power-based effect, we want to disallow showing that as an equivalent multiplier
+    // since that it doesn't make a whole lot of sense to do that. Uses startsWith instead of String equality since
+    // it has to match both the top-level entry and the individual dimension entries
+    allowPowerToggle() {
+      return !this.resource.key.startsWith("AD_infinityPower");
     },
   },
   watch: {
@@ -110,7 +117,7 @@ export default {
       this.isDilated = this.dilationExponent !== 1;
       this.calculatePercents();
       this.now = Date.now();
-      this.replacePowers = player.options.multiplierTab.replacePowers;
+      this.replacePowers = player.options.multiplierTab.replacePowers && this.allowPowerToggle;
     },
     changeGroup() {
       this.selected = (this.selected + 1) % this.groups.length;
@@ -168,6 +175,7 @@ export default {
       this.rollingAverage.add(isEmpty ? undefined : percentList);
       this.averagedPercentList = this.rollingAverage.average;
       this.totalMultiplier = Decimal.pow10(log10Mult);
+      this.totalPositivePower = totalPosPow;
     },
     styleObject(index) {
       const netPerc = this.averagedPercentList.sum();
@@ -248,7 +256,12 @@ export default {
             : formatX(x, 2, 2);
         };
         if (this.replacePowers && entry.data.pow !== 1) {
-          values.push(formatFn(entry.data.mult.times(this.totalMultiplier.pow(entry.data.pow))));
+          // For replacing powers with equivalent multipliers, we calculate what the total additional multiplier
+          // from ALL power effects taken together would be, and then we split up that additional multiplier
+          // proportionally to this individual power's contribution to all positive powers
+          const powFrac = Math.log(entry.data.pow) / Math.log(this.totalPositivePower);
+          const equivMult = this.totalMultiplier.pow((this.totalPositivePower - 1) * powFrac);
+          values.push(formatFn(entry.data.mult.times(equivMult)));
         } else {
           if (Decimal.neq(entry.data.mult, 1)) values.push(formatFn(entry.data.mult));
           if (entry.data.pow !== 1) values.push(formatPow(entry.data.pow, 2, 3));
@@ -365,7 +378,7 @@ export default {
         </b>
         <span class="c-display-settings">
           <PrimaryToggleButton
-            v-if="hasSeenPowers"
+            v-if="hasSeenPowers && allowPowerToggle"
             v-model="replacePowers"
             v-tooltip="'Change Display for Power effects'"
             off="^N"

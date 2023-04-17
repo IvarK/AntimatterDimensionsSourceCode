@@ -145,7 +145,7 @@ GameDatabase.reality.imaginaryUpgrades = [
     isDisabledInDoomed: true
   },
   {
-    name: "Recollection of Intrusion",
+    name: "Imaginary Upgrade - Recollection of Intrusion",
     id: 14,
     cost: 3.5e8,
     formatCost: x => format(x, 1),

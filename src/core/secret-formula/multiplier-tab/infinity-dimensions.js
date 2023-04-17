@@ -87,7 +87,7 @@ GameDatabase.multiplierTabValues.ID = {
       const getMult = id => {
         if (id === 8) return DC.D1;
         const purchases = Math.floor(InfinityDimension(id).baseAmount / 10);
-        return Decimal.pow(InfinityDimension(id).powerMultiplier,
+        return Decimal.pow(InfinityDimension(id)._powerMultiplier,
           Math.clampMin(purchases - InfinityDimensions.HARDCAP_PURCHASES, 0));
       };
       if (dim) return getMult(dim);
@@ -254,8 +254,11 @@ GameDatabase.multiplierTabValues.ID = {
     multValue: dim => {
       const mult = DC.D1.timesEffectsOf(PelleRifts.recursion.milestones[1]);
       const maxActiveDim = MultiplierTabHelper.activeDimCount("ID");
-      return Decimal.pow(mult, dim ? 1 : maxActiveDim)
-        .times(maxActiveDim >= 1 ? PelleRifts.decay.milestones[0].effectOrDefault(1) : DC.D1);
+      // This only affects ID1
+      const decayMult = ((dim ? dim === 1 : maxActiveDim >= 1)
+        ? PelleRifts.decay.milestones[0].effectOrDefault(1)
+        : DC.D1);
+      return Decimal.pow(mult, dim ? 1 : maxActiveDim).times(decayMult);
     },
     powValue: () => PelleRifts.paradox.effectOrDefault(DC.D1).toNumber(),
     isActive: () => Pelle.isDoomed,

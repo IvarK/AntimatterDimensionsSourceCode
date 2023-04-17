@@ -264,6 +264,12 @@ GameStorage.migrations = {
       player.options.multiplierTab.currTab = oldSubtab + (oldSubtab > 5 ? 1 : 0);
       delete player.options.currentMultiplierSubtab;
     },
+    18: player => {
+      // These two props are technically redundant in their values, but we always update both in tandem in order
+      // to ensure a consistent UI sort order. However, before this version the sort order didn't exist, so we have
+      // to immediately fill it
+      player.reality.automator.constantSortOrder = Object.keys(player.reality.automator.constants);
+    }
   },
 
   normalizeTimespans(player) {

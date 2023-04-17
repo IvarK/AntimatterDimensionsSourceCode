@@ -507,6 +507,7 @@ window.player = {
       scripts: {
       },
       constants: {},
+      constantSortOrder: [],
       execTimer: 0,
       type: AUTOMATOR_TYPE.TEXT,
       forceUnlock: false,

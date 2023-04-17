@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     update() {
-      const existingValues = Object.keys(player.reality.automator.constants);
+      const existingValues = player.reality.automator.constantSortOrder;
       this.constants = existingValues.length < this.maxConstantCount ? [...existingValues, ""] : [...existingValues];
     },
     deleteAllConstants() {

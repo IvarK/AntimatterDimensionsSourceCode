@@ -462,6 +462,20 @@ export const AutomatorBackend = {
     return constants;
   },
 
+  // All modifications to constants should go these two methods in order to properly update both the constant prop and
+  // the sorting order prop while keeping them consistent with each other
+  modifyConstant(constantName, newValue) {
+    player.reality.automator.constants[constantName] = newValue;
+    if (!player.reality.automator.constantSortOrder.includes(constantName)) {
+      player.reality.automator.constantSortOrder.push(constantName);
+    }
+  },
+  deleteConstant(constantName) {
+    delete player.reality.automator.constants[constantName];
+    const index = player.reality.automator.constantSortOrder.indexOf(constantName);
+    if (index > -1) player.reality.automator.constantSortOrder.splice(index, 1);
+  },
+
   // We can't just concatenate different parts of script data together or use some kind of delimiting character string
   // due to the fact that comments can essentially contain character sequences with nearly arbitrary content and
   // length. Instead, we take the approach of concatenating all data together with their lengths prepended at the start
@@ -638,7 +652,7 @@ export const AutomatorBackend = {
         const canMakeNew = Object.keys(player.reality.automator.constants).length <
           AutomatorData.MAX_ALLOWED_CONSTANT_COUNT;
         if (alreadyExists || canMakeNew) {
-          player.reality.automator.constants[constant.key] = constant.value;
+          this.modifyConstant(constant.key, constant.value);
         }
       }
     }

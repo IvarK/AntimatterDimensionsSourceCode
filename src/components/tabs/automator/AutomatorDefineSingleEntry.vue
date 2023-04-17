@@ -76,9 +76,9 @@ export default {
     },
     handleFocus(focus) {
       if (focus) return;
-      if (this.oldAlias && !this.currentError()) delete player.reality.automator.constants[this.oldAlias];
+      if (this.oldAlias && !this.currentError()) AutomatorBackend.deleteConstant(this.oldAlias);
       if (this.currentError()) return;
-      if (this.aliasString) player.reality.automator.constants[this.aliasString] = this.valueString;
+      if (this.aliasString) AutomatorBackend.modifyConstant(this.aliasString, this.valueString);
       this.oldAlias = this.aliasString;
 
       // This makes scripts respond immediately to newly-defined constants if the player types them into the
@@ -87,7 +87,7 @@ export default {
       if (player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) BlockAutomator.parseTextFromBlocks();
     },
     deleteConstant() {
-      delete player.reality.automator.constants[this.aliasString];
+      AutomatorBackend.deleteConstant(this.aliasString);
       this.oldAlias = "";
       this.aliasString = "";
       this.valueString = "";

@@ -18,6 +18,7 @@ export default {
     },
     deleteConstants() {
       player.reality.automator.constants = {};
+      player.reality.automator.constantSortOrder = [];
     }
   }
 };

@@ -36,9 +36,12 @@ export default {
       const isValidName = this.aliasString.match(/^[a-zA-Z_][a-zA-Z_0-9]*$/u);
       const alreadyExists = Object.keys(player.reality.automator.constants).includes(this.aliasString) &&
         this.aliasString !== this.oldAlias;
+      // Use toLowerCase() in order to check against key words in a case-insensitive manner; all the stored regex
+      // patterns in forbiddenConstantPatterns which get meaningfully checked against are a mixture of lowercase
+      // letters and regex metacharacters
       const hasCommandConflict = forbiddenConstantPatterns.some(p => {
-        const matchObj = this.aliasString.match(p);
-        return matchObj ? matchObj[0] === this.aliasString : false;
+        const matchObj = this.aliasString.toLowerCase().match(p);
+        return matchObj ? matchObj[0] === this.aliasString.toLowerCase() : false;
       });
       const shadowsPrototype = ["constructor", "hasOwnProperty", "isPrototypeOf", "propertyIsEnumerable",
         "toLocaleString", "toString", "toValueOf"].some(p => this.aliasString.match(p));

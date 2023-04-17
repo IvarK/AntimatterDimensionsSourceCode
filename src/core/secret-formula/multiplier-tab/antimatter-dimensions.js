@@ -10,8 +10,11 @@ GameDatabase.multiplierTabValues.AD = {
   total: {
     name: dim => {
       if (dim) return `AD ${dim} Multiplier`;
-      if (!NormalChallenge(12).isRunning) return "Base AD Production";
-      return `Base AD Production from ${MultiplierTabHelper.isNC12ProducingEven() ? "Even" : "Odd"} Dimensions`;
+      if (NormalChallenge(12).isRunning) {
+        if (MultiplierTabHelper.actualNC12Production().eq(0)) return "Base AD Production from All Dimensions";
+        return `Base AD Production from ${MultiplierTabHelper.isNC12ProducingEven() ? "Even" : "Odd"} Dimensions`;
+      }
+      return "Base AD Production";
     },
     displayOverride: dim => {
       if (dim) {
@@ -30,7 +33,8 @@ GameDatabase.multiplierTabValues.AD = {
     },
     multValue: dim => {
       if (NormalChallenge(12).isRunning) {
-        if (!dim) return MultiplierTabHelper.actualNC12Production();
+        const nc12Prod = MultiplierTabHelper.actualNC12Production();
+        if (!dim) return nc12Prod.eq(0) ? 1 : nc12Prod;
         return (MultiplierTabHelper.isNC12ProducingEven() ? dim % 2 === 0 : dim % 2 === 1)
           ? MultiplierTabHelper.multInNC12(dim)
           : DC.D1;
@@ -400,10 +404,22 @@ GameDatabase.multiplierTabValues.AD = {
         dimMults[1] = dimMults[1].times(player.chall3Pow);
       }
 
+      // Legacy behavior for NC12 we're preserving dictates that it boosts production based on dimension amount
+      // without actually increasing the multiplier itself, so this effectively turns the powers in the production
+      // code info effective multipliers raised to pow-1
       if (NormalChallenge(12).isRunning) {
         dimMults[2] = AntimatterDimension(2).totalAmount.pow(0.6);
         dimMults[4] = AntimatterDimension(4).totalAmount.pow(0.4);
         dimMults[6] = AntimatterDimension(6).totalAmount.pow(0.2);
+
+        // We have to hide this when producing odd or when referencing a dimension which has no amount, but then we
+        // also need to total up the multipliers when on the grouped layout. No amount evaluates to zero, so in all
+        // those cases we use 1 instead in order to calculate properly
+        if (!MultiplierTabHelper.isNC12ProducingEven()) return DC.D1;
+        if (dim) return dimMults[dim].neq(0) ? dimMults[dim] : DC.D1;
+        let totalNC12 = DC.D1;
+        for (let d = 2; d <= 6; d += 2) totalNC12 = totalNC12.times(dimMults[d].clampMin(1));
+        return totalNC12;
       }
 
       if (dim) return dimMults[dim];

@@ -36,7 +36,7 @@ GameDatabase.multiplierTabValues.EP = {
     icon: MultiplierTabIcons.SPECIFIC_GLYPH("infinity"),
   },
   divisor: {
-    name: "Formula Improvement",
+    name: "Pelle - EP Formula Improvement",
     displayOverride: () => {
       const div = 308 - PelleRifts.recursion.effectValue.toNumber();
       return `log(IP)/${formatInt(308)} ➜ log(IP)/${format(div, 2, 2)}`;
@@ -46,7 +46,7 @@ GameDatabase.multiplierTabValues.EP = {
     icon: MultiplierTabIcons.DIVISOR("EP"),
   },
   eternityUpgrade: {
-    name: () => `Repeatable ${formatX(5)} Eternity Upgrade`,
+    name: () => `Eternity Upgrade - Repeatable ${formatX(5)} EP`,
     multValue: () => EternityUpgrade.epMult.effectOrDefault(1),
     isActive: () => PlayerProgress.eternityUnlocked() && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("eternity"),
@@ -64,19 +64,21 @@ GameDatabase.multiplierTabValues.EP = {
   },
   glyph: {
     name: "Equipped Glyphs",
-    multValue: () => DC.D1.timesEffectsOf(GlyphEffect.epMult).times(Pelle.specialGlyphEffect.time),
+    multValue: () => DC.D1
+      .timesEffectsOf(Pelle.isDoomed ? null : GlyphEffect.epMult)
+      .times(Pelle.specialGlyphEffect.time),
     powValue: () => (GlyphAlteration.isAdded("time") ? getSecondaryGlyphEffect("timeEP") : 1),
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
   realityUpgrade: {
-    name: "The Knowing Existence",
+    name: "Reality Upgrade - The Knowing Existence",
     multValue: () => RealityUpgrade(12).effectOrDefault(1),
     isActive: () => RealityUpgrade(12).canBeApplied && !Pelle.isDoomed,
     icon: MultiplierTabIcons.UPGRADE("reality"),
   },
   pelle: {
-    name: "Pelle Rift Effects",
+    name: "Pelle Strike - Vacuum Rift",
     multValue: () => PelleRifts.vacuum.milestones[2].effectOrDefault(1),
     isActive: () => PelleRifts.vacuum.milestones[2].canBeApplied,
     icon: MultiplierTabIcons.PELLE,

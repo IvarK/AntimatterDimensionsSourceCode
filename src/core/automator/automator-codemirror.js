@@ -65,6 +65,11 @@ import { AutomatorLexer } from "./lexer";
         next: "commandArgs"
       },
       {
+        regex: /stop/ui,
+        token: "keyword",
+        next: "commandDone"
+      },
+      {
         regex: /start\s|unlock\s/ui,
         token: "keyword",
         next: "startUnlock"

@@ -29,6 +29,7 @@ export default {
         // AutomatorBackend.deleteScript will create an empty script if necessary
         player.reality.automator.state.editorScript = scriptList[0].id;
       }
+      AutomatorData.clearUndoData();
       EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
     },
   },

@@ -124,13 +124,25 @@ export const shortcuts = [
     keys: ["u"],
     type: "bindHotkey",
     function: () => keyboardAutomatorToggle(),
-    visible: () => PlayerProgress.realityUnlocked()
+    visible: () => Player.automatorUnlocked
   }, {
     name: "Restart Automator",
     keys: ["shift", "u"],
     type: "bindHotkey",
     function: () => keyboardAutomatorRestart(),
-    visible: () => PlayerProgress.realityUnlocked()
+    visible: () => Player.automatorUnlocked
+  }, {
+    name: "Undo Edit (Automator)",
+    keys: ["mod", "z"],
+    type: "bind",
+    function: () => AutomatorData.undoScriptEdit(),
+    visible: () => Player.automatorUnlocked
+  }, {
+    name: "Redo Edit (Automator)",
+    keys: ["mod", "y"],
+    type: "bind",
+    function: () => AutomatorData.redoScriptEdit(),
+    visible: () => Player.automatorUnlocked
   }, {
     name: "Toggle Black Hole",
     keys: ["b"],

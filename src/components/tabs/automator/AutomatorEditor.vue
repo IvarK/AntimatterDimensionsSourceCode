@@ -59,6 +59,7 @@ export default {
       if (storedScripts[this.currentScriptID] === undefined) {
         this.currentScriptID = Number(Object.keys(storedScripts)[0]);
         player.reality.automator.state.editorScript = this.currentScriptID;
+        AutomatorData.clearUndoData();
       }
       // This may happen if the player has errored textmato scripts and switches to them while in blockmato mode
       if (BlockAutomator.hasUnparsableCommands(this.currentScript) &&

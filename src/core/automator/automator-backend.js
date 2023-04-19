@@ -180,6 +180,9 @@ export const AutomatorData = {
   cachedErrors: 0,
   // This is to hold finished script templates as text in order to make the custom blocks for blockmato
   blockTemplates: [],
+  undoBuffer: [],
+  redoBuffer: [],
+  charsSinceLastUndoState: 0,
 
   MAX_ALLOWED_SCRIPT_CHARACTERS: 10000,
   MAX_ALLOWED_TOTAL_CHARACTERS: 60000,
@@ -189,6 +192,8 @@ export const AutomatorData = {
   // Note that a study string with ALL studies in unshortened form without duplicated studies is ~230 characters
   MAX_ALLOWED_CONSTANT_VALUE_LENGTH: 250,
   MAX_ALLOWED_CONSTANT_COUNT: 30,
+  MIN_CHARS_BETWEEN_UNDOS: 10,
+  MAX_UNDO_ENTRIES: 30,
 
   scriptIndex() {
     return player.reality.automator.state.editorScript;
@@ -204,6 +209,7 @@ export const AutomatorData = {
     const newScript = AutomatorScript.create(name, content);
     GameUI.notify.automator(`Imported Script "${name}"`);
     player.reality.automator.state.editorScript = newScript.id;
+    AutomatorData.clearUndoData();
     EventHub.dispatch(GAME_EVENT.AUTOMATOR_SAVE_CHANGED);
   },
   recalculateErrors() {
@@ -255,6 +261,51 @@ export const AutomatorData = {
     return this.singleScriptCharacters() <= this.MAX_ALLOWED_SCRIPT_CHARACTERS &&
       this.totalScriptCharacters() <= this.MAX_ALLOWED_TOTAL_CHARACTERS;
   },
+
+  // This must be called every time the current script or editor mode are changed
+  clearUndoData() {
+    this.undoBuffer = [];
+    this.redoBuffer = [];
+    this.charsSinceLastUndoState = 0;
+  },
+  // We only save an undo state every so often based on the number of characters that have been modified
+  // since the last state. This gets passed in as a parameter and gets called every time any typing is done,
+  // but only actually does something when that threshold is reached.
+  pushUndoData(data, newChars) {
+    this.charsSinceLastUndoState += newChars;
+    if (this.charsSinceLastUndoState <= this.MIN_CHARS_BETWEEN_UNDOS) return;
+    if (this.undoBuffer[this.undoBuffer.length - 1] !== data) this.undoBuffer.push(data);
+    if (this.undoBuffer.length > this.MAX_UNDO_ENTRIES) this.undoBuffer.shift();
+    this.charsSinceLastUndoState = 0;
+  },
+  pushRedoData(data) {
+    if (this.redoBuffer[this.redoBuffer.length - 1] !== data) this.redoBuffer.push(data);
+  },
+  // These following two methods pop the top entry off of the undo/redo stack and then push it
+  // onto the *other* stack before modifying all the relevant UI elements and player props. These
+  // could in principle be combined into one function to reduce boilerplace, but keeping them
+  // separate is probably more readable externally
+  undoScriptEdit() {
+    if (this.undoBuffer.length === 0) return;
+
+    const undoContent = this.undoBuffer.pop();
+    this.pushRedoData(this.currentScriptText());
+    player.reality.automator.scripts[this.scriptIndex()].content = undoContent;
+
+    if (AutomatorTextUI.editor) AutomatorTextUI.editor.setValue(undoContent);
+    AutomatorBackend.saveScript(this.scriptIndex(), undoContent);
+  },
+  redoScriptEdit() {
+    if (this.redoBuffer.length === 0) return;
+
+    const redoContent = this.redoBuffer.pop();
+    // We call this with a value which is always higher than said threshold, forcing the current text to be pushed
+    this.pushUndoData(this.currentScriptText(), 2 * this.MIN_CHARS_BETWEEN_UNDOS);
+    player.reality.automator.scripts[this.scriptIndex()].content = redoContent;
+
+    if (AutomatorTextUI.editor) AutomatorTextUI.editor.setValue(redoContent);
+    AutomatorBackend.saveScript(this.scriptIndex(), redoContent);
+  }
 };
 
 export const LineEnum = { Active: "active", Event: "event", Error: "error" };
@@ -806,9 +857,20 @@ export const AutomatorBackend = {
     }
   },
 
+  // Note: This gets run every time any edit or mode conversion is done
   saveScript(id, data) {
-    if (!this.findScript(id)) return;
-    this.findScript(id).save(data);
+    const script = this.findScript(id);
+    if (!script) return;
+
+    // Add the old data to the undo buffer; there are internal checks which prevent it from saving too often.
+    // For performance, the contents of the script aren't actually checked (this would be an unavoidable O(n) cost).
+    // Instead we naively assume length changes are pure insertions and deletions, which does mean we're ignoring
+    // a few edge cases when changes are really substitutions that massively change the content
+    const oldData = script.persistent.content;
+    const lenChange = Math.abs(oldData.length - data.length);
+    AutomatorData.pushUndoData(oldData, lenChange);
+
+    script.save(data);
     if (id === this.state.topLevelScript) this.stop();
   },
 

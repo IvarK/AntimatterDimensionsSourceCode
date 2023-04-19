@@ -7,7 +7,7 @@ import { MultiplierTabIcons } from "./icons";
 GameDatabase.multiplierTabValues.replicanti = {
   total: {
     name: "Replicanti Speed",
-    multValue: () => totalReplicantiSpeedMult(Replicanti.amount.gte(replicantiCap())),
+    multValue: () => totalReplicantiSpeedMult(Replicanti.amount.gt(replicantiCap())),
     isActive: () => PlayerProgress.eternityUnlocked(),
     overlay: ["Ξ"],
   },
@@ -15,7 +15,7 @@ GameDatabase.multiplierTabValues.replicanti = {
     name: "Achievement 134",
     // This is explicitly 2 in the replicanti code as well, inside of a replicanti amount check
     multValue: 2,
-    isActive: () => Achievement(134).canBeApplied && Replicanti.amount.lt(replicantiCap()) && !Pelle.isDoomed,
+    isActive: () => Achievement(134).canBeApplied && Replicanti.amount.lte(replicantiCap()) && !Pelle.isDoomed,
     icon: MultiplierTabIcons.ACHIEVEMENT,
   },
   timeStudy: {

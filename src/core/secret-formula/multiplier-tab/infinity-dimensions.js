@@ -77,8 +77,7 @@ GameDatabase.multiplierTabValues.ID = {
         .map(id => getMult(id.tier))
         .reduce((x, y) => x.times(y), DC.D1);
     },
-    isActive: dim => ImaginaryUpgrade(14).canBeApplied ||
-        (dim === 8 ? GlyphSacrifice.infinity.effectValue > 1 : Tesseracts.bought > 0),
+    isActive: true,
     icon: MultiplierTabIcons.PURCHASE("baseID"),
   },
   tesseractPurchase: {

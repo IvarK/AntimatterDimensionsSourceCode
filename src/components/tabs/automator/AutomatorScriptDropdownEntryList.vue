@@ -67,6 +67,7 @@ export default {
       }
       if (this.isBlock) this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
       this.$parent.openRequest = false;
+      AutomatorData.clearUndoData();
     },
     dropdownLabel(script) {
       const labels = [];

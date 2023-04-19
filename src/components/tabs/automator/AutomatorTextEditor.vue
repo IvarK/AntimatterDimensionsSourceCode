@@ -127,16 +127,33 @@ export const AutomatorTextUI = {
   },
   setUpEditor() {
     this.editor = CodeMirror.fromTextArea(this.textArea, this.mode);
+    // CodeMirror has a built-in undo/redo functionality bound to ctrl-z/ctrl-y which doesn't have an
+    // easily-configured history buffer; we need to specifically cancel this event since we have our own undo
+    this.editor.on("beforeChange", (_, event) => {
+      if (event.origin === "undo") event.cancel();
+    });
     this.editor.on("keydown", (editor, event) => {
-      if (editor.state.completionActive) return;
       const key = event.key;
+      if (event.ctrlKey && ["z", "y"].includes(key)) {
+        if (key === "z") AutomatorData.undoScriptEdit();
+        if (key === "y") AutomatorData.redoScriptEdit();
+        return;
+      }
+      // This check is related to the drop-down command suggestion menu, but must come after the undo/redo check
+      // as it often evaluates to innocuous false positives which eat the keybinds
+      if (editor.state.completionActive) return;
       if (event.ctrlKey || event.altKey || event.metaKey || !/^[a-zA-Z0-9 \t]$/u.test(key)) return;
       CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
     });
-    this.editor.on("change", editor => {
+    this.editor.on("change", (editor, event) => {
       const scriptID = ui.view.tabs.reality.automator.editorScriptID;
       const scriptText = editor.getDoc().getValue();
-      AutomatorBackend.saveScript(scriptID, scriptText);
+      // Undo/redo directly changes the editor contents, which also causes this event to be fired; we have a few
+      // things which we specifically only want to do on manual typing changes
+      if (event.origin !== "setValue") {
+        AutomatorBackend.saveScript(scriptID, scriptText);
+        AutomatorData.redoBuffer = [];
+      }
 
       AutomatorData.recalculateErrors();
       const errors = AutomatorData.currentErrors().length;

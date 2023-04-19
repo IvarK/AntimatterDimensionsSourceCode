@@ -53,6 +53,7 @@ export default {
       if (storedScripts[this.currentScriptID] === undefined) {
         this.currentScriptID = Object.keys(storedScripts)[0];
         player.reality.automator.state.editorScript = this.currentScriptID;
+        AutomatorData.clearUndoData();
       }
       if (BlockAutomator.hasUnparsableCommands(this.currentScript) &&
         player.reality.automator.type === AUTOMATOR_TYPE.BLOCK) {
@@ -81,6 +82,7 @@ export default {
       } else {
         AutomatorBackend.changeModes(this.currentScriptID);
       }
+      AutomatorData.clearUndoData();
     }
   }
 };

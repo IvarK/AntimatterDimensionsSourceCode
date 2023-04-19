@@ -169,6 +169,7 @@ export default {
       if (storedScripts[this.currentScriptID] === undefined) {
         this.currentScriptID = Number(Object.keys(storedScripts)[0]);
         player.reality.automator.state.editorScript = this.currentScriptID;
+        AutomatorData.clearUndoData();
       }
 
       // This gets checked whenever the editor pane is foricibly changed to a different script, which may or may not

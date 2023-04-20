@@ -21,7 +21,9 @@ export default {
       statusName: "",
       editingName: "",
       editingDifferentScript: false,
-      currentChars: 0
+      currentChars: 0,
+      hasUndo: false,
+      hasRedo: false,
     };
   },
   computed: {
@@ -80,8 +82,9 @@ export default {
       this.editingDifferentScript = (this.isRunning || this.isPaused) &&
         AutomatorBackend.currentEditingScript.id !== AutomatorBackend.currentRunningScript.id;
 
-
       this.currentChars = AutomatorData.singleScriptCharacters();
+      this.hasUndo = AutomatorData.undoBuffer.length > 0;
+      this.hasRedo = AutomatorData.redoBuffer.length > 0;
     },
     rewind: () => AutomatorBackend.restart(),
     play() {
@@ -107,62 +110,80 @@ export default {
     repeat: () => AutomatorBackend.toggleRepeat(),
     restart: () => AutomatorBackend.toggleForceRestart(),
     follow: () => AutomatorBackend.toggleFollowExecution(),
+    undo: () => AutomatorData.undoScriptEdit(),
+    redo: () => AutomatorData.redoScriptEdit(),
   }
 };
 </script>
 
 <template>
   <div class="c-automator__controls l-automator__controls">
-    <div class="l-automator-button-row">
-      <AutomatorButton
-        v-tooltip="'Rewind Automator to the first command'"
-        class="fa-fast-backward"
-        @click="rewind"
-      />
-      <AutomatorButton
-        v-tooltip="{
-          content: playTooltip,
-          hideOnTargetClick: false
-        }"
-        :class="playButtonClass"
-        @click="play"
-      />
-      <AutomatorButton
-        v-tooltip="'Stop Automator and reset position'"
-        class="fa-stop"
-        @click="stop"
-      />
-      <AutomatorButton
-        v-tooltip="'Step forward one line'"
-        class="fa-step-forward"
-        @click="step"
-      />
-      <AutomatorButton
-        v-tooltip="'Restart script automatically when it reaches the end'"
-        class="fa-sync-alt"
-        :class="{ 'c-automator__button--active' : repeatOn }"
-        @click="repeat"
-      />
-      <AutomatorButton
-        v-tooltip="'Automatically restart the active script when finishing or restarting a Reality'"
-        class="fa-reply"
-        :class="{ 'c-automator__button--active' : forceRestartOn }"
-        @click="restart"
-      />
-      <AutomatorButton
-        v-tooltip="'Scroll Automator to follow current line'"
-        class="fa-indent"
-        :class="{ 'c-automator__button--active' : followExecution }"
-        @click="follow"
-      />
-      <span
-        v-if="fullScreen"
-        class="c-automator__status-text c-automator__status-text--small"
-        :class="{ 'c-automator__status-text--error' : currentChars > maxScriptChars }"
-      >
-        This script: {{ formatInt(currentChars) }}/{{ formatInt(maxScriptChars) }}
-      </span>
-      <AutomatorModeSwitch />
+    <div class="c-automator-control-row l-automator-button-row">
+      <div class="c-button-group">
+        <AutomatorButton
+          v-tooltip="'Rewind Automator to the first command'"
+          class="fa-fast-backward"
+          @click="rewind"
+        />
+        <AutomatorButton
+          v-tooltip="{
+            content: playTooltip,
+            hideOnTargetClick: false
+          }"
+          :class="playButtonClass"
+          @click="play"
+        />
+        <AutomatorButton
+          v-tooltip="'Stop Automator and reset position'"
+          class="fa-stop"
+          @click="stop"
+        />
+        <AutomatorButton
+          v-tooltip="'Step forward one line'"
+          class="fa-step-forward"
+          @click="step"
+        />
+        <AutomatorButton
+          v-tooltip="'Restart script automatically when it reaches the end'"
+          class="fa-sync-alt"
+          :class="{ 'c-automator__button--active' : repeatOn }"
+          @click="repeat"
+        />
+        <AutomatorButton
+          v-tooltip="'Automatically restart the active script when finishing or restarting a Reality'"
+          class="fa-reply"
+          :class="{ 'c-automator__button--active' : forceRestartOn }"
+          @click="restart"
+        />
+        <AutomatorButton
+          v-tooltip="'Scroll Automator to follow current line'"
+          class="fa-indent"
+          :class="{ 'c-automator__button--active' : followExecution }"
+          @click="follow"
+        />
+        <span
+          v-if="fullScreen"
+          class="c-automator__status-text c-automator__status-text--small"
+          :class="{ 'c-automator__status-text--error' : currentChars > maxScriptChars }"
+        >
+          This script: {{ formatInt(currentChars) }}/{{ formatInt(maxScriptChars) }}
+        </span>
+      </div>
+      <div class="c-button-group">
+        <AutomatorButton
+          v-tooltip="'Undo'"
+          class="fa-arrow-rotate-left"
+          :class="{ 'c-automator__button--inactive' : !hasUndo }"
+          @click="undo"
+        />
+        <AutomatorButton
+          v-tooltip="'Redo'"
+          class="fa-arrow-rotate-right"
+          :class="{ 'c-automator__button--inactive' : !hasRedo }"
+          @click="redo"
+        />
+        <AutomatorModeSwitch />
+      </div>
     </div>
     <div class="l-automator-button-row">
       <span
@@ -191,6 +212,15 @@ export default {
 </template>
 
 <style scoped>
+.c-automator-control-row {
+  justify-content: space-between;
+}
+
+.c-button-group {
+  display: flex;
+  flex-direction: row;
+}
+
 .c-automator__status-text {
   font-size: 1.3rem;
   font-weight: bold;
@@ -212,6 +242,11 @@ export default {
 
 .c-automator__button--active {
   background-color: var(--color-automator-controls-active);
+  border-color: var(--color-reality-light);
+}
+
+.c-automator__button--inactive {
+  background-color: var(--color-automator-controls-border);
   border-color: var(--color-reality-light);
 }
 

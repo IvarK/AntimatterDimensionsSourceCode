@@ -65,7 +65,7 @@ export default {
         this.currentScriptID = Number(Object.keys(storedScripts)[0]);
         player.reality.automator.state.editorScript = this.currentScriptID;
       }
-      if (this.isBlock) this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
+      if (this.isBlock) this.$nextTick(() => BlockAutomator.updateEditor(this.currentScript));
       this.$parent.openRequest = false;
       AutomatorData.clearUndoData();
     },

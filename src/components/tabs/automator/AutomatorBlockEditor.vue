@@ -103,7 +103,7 @@ export const BlockAutomator = {
     AutomatorBackend.saveScript(automatorID, content);
   },
 
-  fromText(scriptText) {
+  updateEditor(scriptText) {
     const lines = AutomatorGrammar.blockifyTextAutomator(scriptText).blocks;
     this.lines = lines;
     return lines;

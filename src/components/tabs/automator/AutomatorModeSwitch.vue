@@ -60,7 +60,7 @@ export default {
         Modal.message.show(`Some script commands were unrecognizable - defaulting to text editor.`);
         AutomatorBackend.changeModes(this.currentScriptID);
       }
-      this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
+      this.$nextTick(() => BlockAutomator.updateEditor(this.currentScript));
     },
     toggleAutomatorMode() {
       const currScript = player.reality.automator.scripts[this.currentScriptID].content;
@@ -116,7 +116,7 @@ export default {
   background-color: #626262;
   border: var(--var-border-width, 0.2rem) solid #767676;
   border-radius: var(--var-border-radius, 0.3rem);
-  margin: 0.2rem 0.4rem 0.2rem auto;
+  margin: 0.3rem 0.4rem 0.3rem auto;
   padding: 0.3rem 0;
   cursor: pointer;
 }

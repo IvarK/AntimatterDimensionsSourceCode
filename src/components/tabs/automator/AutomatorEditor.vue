@@ -67,7 +67,7 @@ export default {
         Modal.message.show(`Some script commands were unrecognizable - defaulting to text editor.`);
         AutomatorBackend.changeModes(this.currentScriptID);
       }
-      this.$nextTick(() => BlockAutomator.fromText(this.currentScript));
+      this.$nextTick(() => BlockAutomator.updateEditor(this.currentScript));
     },
   }
 };

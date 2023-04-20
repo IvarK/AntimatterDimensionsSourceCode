@@ -41,7 +41,10 @@ export default {
     <b>Writing Scripts:</b> Scripts in the block editor are made by going to the block tab
     <div class="fas fa-cubes c-automator-button-icon" />, while scripts in the text editor are made by typing into
     the left half as a text box. In either editor mode, you can also use some smaller premade scripts from the
-    template generator <div class="fas fa-file-code c-automator-button-icon" />.
+    template generator <div class="fas fa-file-code c-automator-button-icon" />. You can undo or redo a limited
+    number of edits using <div class="fas fa-arrow-rotate-left c-automator-button-icon" /> or
+    <div class="fas fa-arrow-rotate-right c-automator-button-icon" />, or by using the respective hotkeys. Edit history
+    is cleared upon switching or converting scripts.
     <br>
     <br>
     <b>Debugging:</b> The two main tools you have for fixing your scripts are the Error Log

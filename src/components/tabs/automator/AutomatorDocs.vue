@@ -181,7 +181,7 @@ export default {
       }
 
       this.$nextTick(() => {
-        BlockAutomator.fromText(this.currentScript);
+        BlockAutomator.updateEditor(this.currentScript);
         if (!this.isBlock) AutomatorTextUI.editor.performLint();
       });
     },

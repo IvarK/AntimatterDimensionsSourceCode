@@ -292,8 +292,9 @@ export const AutomatorData = {
     this.pushRedoData(this.currentScriptText());
     player.reality.automator.scripts[this.scriptIndex()].content = undoContent;
 
-    if (AutomatorTextUI.editor) AutomatorTextUI.editor.setValue(undoContent);
     AutomatorBackend.saveScript(this.scriptIndex(), undoContent);
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) AutomatorTextUI.editor.setValue(undoContent);
+    else BlockAutomator.updateEditor(undoContent);
   },
   redoScriptEdit() {
     if (this.redoBuffer.length === 0) return;
@@ -303,8 +304,9 @@ export const AutomatorData = {
     this.pushUndoData(this.currentScriptText(), 2 * this.MIN_CHARS_BETWEEN_UNDOS);
     player.reality.automator.scripts[this.scriptIndex()].content = redoContent;
 
-    if (AutomatorTextUI.editor) AutomatorTextUI.editor.setValue(redoContent);
     AutomatorBackend.saveScript(this.scriptIndex(), redoContent);
+    if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT) AutomatorTextUI.editor.setValue(redoContent);
+    else BlockAutomator.updateEditor(redoContent);
   }
 };
 
@@ -982,7 +984,7 @@ export const AutomatorBackend = {
     } else {
       const toConvert = AutomatorTextUI.editor.getDoc().getValue();
       // Needs to be called to update the lines prop in the BlockAutomator object
-      BlockAutomator.fromText(toConvert);
+      BlockAutomator.updateEditor(toConvert);
       AutomatorBackend.saveScript(scriptID, toConvert);
       player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
       player.reality.automator.currentInfoPane = AutomatorPanels.BLOCKS;

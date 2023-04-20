@@ -1,5 +1,8 @@
 name: Deploy master
 
+env:
+  FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+
 on:
   push:
     branches:

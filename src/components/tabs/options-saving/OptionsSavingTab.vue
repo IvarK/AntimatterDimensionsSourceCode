@@ -18,6 +18,7 @@ export default {
   },
   data() {
     return {
+      cloudAvailable: false,
       cloudEnabled: false,
       forceCloudOverwrite: false,
       showCloudModal: false,
@@ -70,6 +71,7 @@ export default {
   methods: {
     update() {
       const options = player.options;
+      this.cloudAvailable = Cloud.isAvailable;
       this.cloudEnabled = options.cloudEnabled;
       this.forceCloudOverwrite = options.forceCloudOverwrite;
       this.showCloudModal = options.showCloudModal;
@@ -209,7 +211,10 @@ export default {
       </div>
       <OpenModalHotkeysButton />
     </div>
-    <h2 class="c-cloud-options-header">
+    <h2
+      v-if="cloudAvailable"
+      class="c-cloud-options-header"
+    >
       <span v-if="hideGoogleName">Logged in to Google <i>(name hidden)</i></span>
       <span v-else-if="loggedIn">Logged in as {{ userName }}</span>
       <span v-else>Not logged in</span>
@@ -218,7 +223,10 @@ export default {
       <span v-if="cloudEnabled">Cloud Saving will occur automatically every 10 minutes.</span>
       <span v-else>Cloud Saving has been disabled on this save.</span>
     </div>
-    <div class="l-options-grid">
+    <div
+      v-if="cloudAvailable"
+      class="l-options-grid"
+    >
       <div
         v-if="!STEAM"
         class="l-options-grid__row"

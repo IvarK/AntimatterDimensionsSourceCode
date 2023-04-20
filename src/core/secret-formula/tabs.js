@@ -485,6 +485,7 @@ GameDatabase.tabs = [
     name: "Shop",
     newUIClass: "shop",
     hideAt: 1.5,
+    condition: () => Cloud.isAvailable,
     id: 10,
     hidable: true,
     subtabs: [

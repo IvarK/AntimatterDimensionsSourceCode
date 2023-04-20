@@ -17,27 +17,25 @@ import { sha512_256 } from "js-sha512";
 import { STEAM } from "@/env";
 
 import { decodeBase64Binary } from "./base64-binary";
+import { firebaseConfig } from "./firebase-config";
 import { ProgressChecker } from "./progress-checker";
 import { SteamRuntime } from "@/steam";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDuRTTluAFufmvw1zxGH6fsyEHmmbu8IHI",
-  authDomain: "antimatter-dimensions-a00f2.firebaseapp.com",
-  databaseURL: "https://antimatter-dimensions-a00f2.firebaseio.com",
-  projectId: "antimatter-dimensions-a00f2",
-  storageBucket: "antimatter-dimensions-a00f2.appspot.com",
-  messagingSenderId: "904798020003",
-  appId: "1:904798020003:web:d1448dcb2dedd8b5",
-};
-
-initializeApp(firebaseConfig);
+const hasFirebaseConfig = firebaseConfig.apiKey !== null;
+if (hasFirebaseConfig) {
+  initializeApp(firebaseConfig);
+}
 
 export const Cloud = {
-  provider: new GoogleAuthProvider(),
-  auth: getAuth(),
-  db: getDatabase(),
+  provider: hasFirebaseConfig ? new GoogleAuthProvider() : null,
+  auth: hasFirebaseConfig ? getAuth() : null,
+  db: hasFirebaseConfig ? getDatabase() : null,
   user: null,
   lastCloudHash: null,
+
+  get isAvailable() {
+    return hasFirebaseConfig;
+  },
 
   resetTempState() {
     this.lastCloudHash = null;
@@ -50,6 +48,10 @@ export const Cloud = {
   },
 
   async login() {
+    if (!this.isAvailable) {
+      return;
+    }
+
     try {
       await signInWithPopup(this.auth, this.provider);
       ShopPurchaseData.syncSTD();
@@ -61,6 +63,10 @@ export const Cloud = {
   },
 
   async loginWithSteam(accountId, staticAccountId, screenName) {
+    if (!this.isAvailable) {
+      return;
+    }
+
     if (this.loggedIn) {
       Cloud.user.displayName = screenName;
       return;
@@ -115,6 +121,10 @@ export const Cloud = {
   },
 
   async saveCheck(forceModal = false) {
+    if (!this.isAvailable) {
+      return;
+    }
+
     const saveId = GameStorage.currentSlot;
     const cloudSave = await this.load();
     if (cloudSave === null) {
@@ -173,6 +183,10 @@ export const Cloud = {
   },
 
   async loadCheck() {
+    if (!this.isAvailable) {
+      return;
+    }
+
     const save = await this.load();
     if (save === null) {
       if (player.options.hideGoogleName) GameUI.notify.info(`No cloud save for current Google Account`);
@@ -258,11 +272,19 @@ export const Cloud = {
   },
 
   logout() {
+    if (!this.isAvailable) {
+      return;
+    }
+
     signOut(this.auth);
     ShopPurchaseData.clearLocalSTD();
   },
 
   init() {
+    if (!this.isAvailable) {
+      return;
+    }
+
     getAuth().onAuthStateChanged(user => {
       if (user) {
         this.user = {

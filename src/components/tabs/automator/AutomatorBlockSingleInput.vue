@@ -160,8 +160,8 @@ export default {
       return;
     }
 
-    // Only wipe later inputs if they're in an indeterminate state due to earlier ones not being specified yet
-    if (this.blockTarget && (this.key === " " || !this.key)) {
+    // Wipe later inputs if the current one is unspecified (their state is ambiguous until the current one is specified)
+    if (this.blockTarget && !(this.constant || this.dropdownSelection || this.textContents)) {
       // eslint-disable-next-line vue/no-mutating-props
       this.block[this.blockTarget] = undefined;
       this.recalculateErrorCount();

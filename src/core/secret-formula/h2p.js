@@ -1290,7 +1290,8 @@ will let you forbid entire types like Specified Effect Mode as well
 The Glyph Filter mode is a global setting which applies to all Glyph types at once; for example, you cannot filter
 power Glyphs with "Rarity Threshold" and time Glyphs with "Specified Effect". Selecting one mode will require
 you to configure every Glyph type within its settings for proper filtering. Each filter mode has its own settings
-which will be kept if you switch to another mode.
+which will be kept if you switch to another mode. Additionally, you can now use the highest Glyph score amongst your
+upcoming choices as a comparable Currency in the Automator.
 <br>
 <br>
 Glyph Presets are purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic

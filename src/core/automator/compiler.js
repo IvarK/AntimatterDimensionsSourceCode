@@ -443,6 +443,15 @@ import { AutomatorLexer } from "./lexer";
         if (typeof val === "string") return () => player.reality.automator.constants[val];
         return () => val;
       });
+      const isLockedCurrency = ctx.compareValue.map(cv => {
+        if (cv.children.AutomatorCurrency) {
+          const unlockedFn = cv.children.AutomatorCurrency[0].tokenType.$unlocked;
+          return unlockedFn ? unlockedFn() : true;
+        }
+        return false;
+      });
+
+      if (isLockedCurrency[0] || isLockedCurrency[1]) return false;
       const compareFun = ctx.ComparisonOperator[0].tokenType.$compare;
       return () => compareFun(getters[0](), getters[1]());
     }

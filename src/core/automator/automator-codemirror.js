@@ -153,6 +153,7 @@ import { AutomatorLexer } from "./lexer";
       { regex: /x[\t ]+highest(\s|$)/ui, token: "variable-2" },
       { regex: /pending[\t ]+(completions|ip|ep|tp|rm|glyph[\t ]+level)(\s|$)/ui, token: "variable-2" },
       { regex: /total[\t ]+(completions|tt)(\s|$)/ui, token: "variable-2" },
+      { regex: /filter[ \t]+score/ui, token: "variable-2" },
       { regex: /ec(1[0-2]|[1-9])[\t ]+completions(\s|$)/ui, token: "variable-2" },
       { regex: /(am|ip|ep|all)(\s|$)/ui, token: "variable-2" },
       {

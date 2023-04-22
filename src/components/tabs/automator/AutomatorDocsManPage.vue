@@ -6,6 +6,12 @@ export default {
       type: Object,
       required: true
     }
+  },
+  computed: {
+    description() {
+      const desc = this.command.description;
+      return typeof desc === "function" ? desc() : desc;
+    }
   }
 };
 </script>
@@ -26,7 +32,7 @@ export default {
       <b>DESCRIPTION</b>
       <div
         class="c-automator-docs-page__indented"
-        v-html="command.description"
+        v-html="description"
       />
     </template>
     <template v-for="section in command.sections">

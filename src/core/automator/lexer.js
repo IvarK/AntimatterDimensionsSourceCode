@@ -111,18 +111,9 @@ export const AutomatorLexer = (() => {
   });
   EqualSign.$compare = (a, b) => Decimal.eq(a, b);
 
-  createInCategory(AutomatorCurrency, "EP", /ep/i, {
-    $buyTT: () => TimeTheorems.buyOne(true, "ep"),
-    $getter: () => Currency.eternityPoints.value
-  });
-  createInCategory(AutomatorCurrency, "IP", /ip/i, {
-    $buyTT: () => TimeTheorems.buyOne(true, "ip"),
-    $getter: () => Currency.infinityPoints.value
-  });
-  createInCategory(AutomatorCurrency, "AM", /am/i, {
-    $buyTT: () => TimeTheorems.buyOne(true, "am"),
-    $getter: () => Currency.antimatter.value
-  });
+  createInCategory(AutomatorCurrency, "EP", /ep/i, { $getter: () => Currency.eternityPoints.value });
+  createInCategory(AutomatorCurrency, "IP", /ip/i, { $getter: () => Currency.infinityPoints.value });
+  createInCategory(AutomatorCurrency, "AM", /am/i, { $getter: () => Currency.antimatter.value });
   createInCategory(AutomatorCurrency, "DT", /dt/i, { $getter: () => Currency.dilatedTime.value });
   createInCategory(AutomatorCurrency, "TP", /tp/i, { $getter: () => Currency.tachyonParticles.value });
   createInCategory(AutomatorCurrency, "RG", /rg/i, { $getter: () => new Decimal(Replicanti.galaxies.total) });
@@ -184,6 +175,20 @@ export const AutomatorLexer = (() => {
       return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
     }
   });
+
+  createInCategory(AutomatorCurrency, "FilterScore", /filter[ \t]+score/i, {
+    $autocomplete: "filter score",
+    $getter: () => {
+      // If the filter isn't unlocked somehow, return the most negative number in order to ensure it's nonblocking
+      if (!EffarigUnlock.glyphFilter.isUnlocked) return -Number.MAX_VALUE;
+      const choices = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(),
+        { isChoosingGlyph: false });
+      const bestGlyph = AutoGlyphProcessor.pick(choices);
+      return AutoGlyphProcessor.filterValue(bestGlyph);
+    },
+    $unlocked: () => EffarigUnlock.glyphFilter.isUnlocked,
+  });
+
   for (let i = 1; i <= 12; ++i) {
     const id = i;
     createInCategory(AutomatorCurrency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {

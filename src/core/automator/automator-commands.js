@@ -996,6 +996,48 @@ export const AutomatorCommands = ((() => {
       })
     },
     {
+      id: "waitBlackHole",
+      rule: $ => () => {
+        $.CONSUME(T.Wait);
+        $.CONSUME(T.BlackHole);
+        $.OR([
+          { ALT: () => $.CONSUME(T.Off) },
+          { ALT: () => $.CONSUME(T.BlackHoleStr) },
+        ]);
+      },
+      validate: ctx => {
+        ctx.startLine = ctx.Wait[0].startLine;
+        return true;
+      },
+      compile: ctx => () => {
+        const off = Boolean(ctx.Off);
+        // This input has the format "bh#"
+        const holeID = ctx.BlackHoleStr ? Number(ctx.BlackHoleStr[0].image.charAt(2)) : 0;
+        const bhCond = off ? !BlackHole(1).isActive : BlackHole(holeID).isActive;
+        const bhStr = off ? "inactive Black Holes" : `active Black Hole ${holeID}`;
+        if (bhCond) {
+          const timeWaited = TimeSpan.fromMilliseconds(Date.now() - AutomatorData.waitStart).toStringShort();
+          AutomatorData.logCommandEvent(`Continuing after WAIT (waited ${timeWaited} for ${bhStr})`,
+            ctx.startLine);
+          AutomatorData.isWaiting = false;
+          return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
+        }
+        if (!AutomatorData.isWaiting) {
+          AutomatorData.logCommandEvent(`Started WAIT for ${bhStr}`, ctx.startLine);
+          AutomatorData.waitStart = Date.now();
+        }
+        AutomatorData.isWaiting = true;
+        return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
+      },
+      blockify: ctx => ({
+        genericInput1: "BLACK HOLE",
+        // Note: In this particular case we aren't actually storing a comparison operator. This is still okay
+        // because internally this is just the variable for the second slot and has no special treatment beyond that
+        compOperator: ctx.BlackHoleStr ? ctx.BlackHoleStr[0].image.toUpperCase() : "OFF",
+        ...automatorBlocksMap.WAIT
+      })
+    },
+    {
       id: "whileLoop",
       rule: $ => () => {
         $.CONSUME(T.While);

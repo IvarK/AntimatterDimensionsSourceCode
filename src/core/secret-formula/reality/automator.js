@@ -340,7 +340,7 @@ GameDatabase.reality.automator = {
         use the PAUSE command instead.`,
       sections: [
         {
-          name: "CONDITIONS",
+          name: "POSSIBLE CONDITIONS",
           items: [
             {
               header: "<i>comparison</i>",
@@ -356,6 +356,14 @@ GameDatabase.reality.automator = {
                 Autobuyer. This must happen <i>after</i> this command is reached; if the Autobuyer triggers
                 <i>before</i> the command is reached, your script may get stuck.
               `
+            },
+            {
+              header: "<i>black hole (state)</i>",
+              description: `
+                Wait until the Black Hole(s) are in the specified state. Valid inputs for state are
+                "off", "bh1", and "bh2", corresponding to no active Black Hole(s), at least the first Black Hole active,
+                and both Black Holes active.
+              `
             }
           ]
         }
@@ -365,6 +373,7 @@ GameDatabase.reality.automator = {
         "wait pending completions >= 5",
         "wait ec9 completions >= 4",
         "wait infinity",
+        "wait black hole bh1",
       ]
     },
     {

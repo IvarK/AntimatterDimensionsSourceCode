@@ -139,10 +139,12 @@ export const automatorBlocks = [
   }, {
     cmd: "WAIT",
     alias: "PAUSE AUTOMATOR UNTIL",
-    allowedPatterns: ["A", "BCB"],
+    allowedPatterns: ["A", "DE", "BCB"],
     A: AUTOMATOR_BLOCKS_RESETS,
     B: [...AUTOMATOR_BLOCKS_COMPARISON_CURRENCIES, "* SPECIFIED CONSTANT"],
     C: AUTOMATOR_BLOCKS_COMPARISON_OPERATORS,
+    D: ["BLACK HOLE"],
+    E: ["OFF", "BH1", "BH2"],
     targets: ["genericInput1", "compOperator", "genericInput2"]
   }, {
     cmd: "PAUSE",

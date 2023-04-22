@@ -57,6 +57,11 @@ export const AutomatorLexer = (() => {
     pattern: /-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/,
   });
 
+  const BlackHoleStr = createToken({
+    name: "BlackHoleStr",
+    pattern: /[Bb][Hh][12]/,
+  });
+
   const Identifier = createToken({
     name: "Identifier",
     pattern: /[a-zA-Z_][a-zA-Z_0-9]*/,
@@ -332,7 +337,7 @@ export const AutomatorLexer = (() => {
     HSpace, StringLiteral, Comment, EOL,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
-    NumberLiteral,
+    BlackHoleStr, NumberLiteral,
     AutomatorCurrency, ...tokenLists.AutomatorCurrency,
     ECLiteral,
     Keyword, ...keywordTokens,

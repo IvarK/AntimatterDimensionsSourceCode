@@ -55,7 +55,7 @@ export default {
       pathRef: {},
       currentNodeOnPath: "",
       unknownNext: false,
-      nextNodeCount: false,
+      nextNodeCount: 0,
       lineNumber: 0,
       // This is tracked here because switching scripts causes events to be fired in a weird order, often seemingly
       // starting the creation of the new component before the UI's visible script ID is properly updated
@@ -161,7 +161,10 @@ export default {
     }
 
     // Wipe later inputs if the current one is unspecified (their state is ambiguous until the current one is specified)
-    if (this.blockTarget && !(this.constant || this.dropdownSelection || this.textContents)) {
+    // or the current node is the last input (this clears extra "invisible" inputs which become unmodifiable due to
+    // changing command structure, eg. the "5" when changing "unlock EC 5" to "unlock dilation")
+    const hasContent = this.constant || this.dropdownSelection || this.textContents;
+    if (this.nextNodeCount === 0 || (this.blockTarget && !hasContent)) {
       // eslint-disable-next-line vue/no-mutating-props
       this.block[this.blockTarget] = undefined;
       this.recalculateErrorCount();

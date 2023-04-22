@@ -334,14 +334,17 @@ export const AutomatorCommands = ((() => {
       id: "notify",
       rule: $ => () => {
         $.CONSUME(T.Notify);
-        $.CONSUME(T.StringLiteral);
+        $.OR([
+          { ALT: () => $.CONSUME(T.StringLiteral) },
+          { ALT: () => $.CONSUME(T.StringLiteralSingleQuote) },
+        ]);
       },
       validate: ctx => {
         ctx.startLine = ctx.Notify[0].startLine;
         return true;
       },
       compile: ctx => {
-        const notifyText = ctx.StringLiteral;
+        const notifyText = ctx.StringLiteral || ctx.StringLiteralSingleQuote;
         return () => {
           GameUI.notify.automator(`Automator: ${notifyText[0].image}`);
           AutomatorData.logCommandEvent(`NOTIFY call: ${notifyText[0].image}`, ctx.startLine);
@@ -350,7 +353,7 @@ export const AutomatorCommands = ((() => {
       },
       blockify: ctx => ({
         ...automatorBlocksMap.NOTIFY,
-        singleTextInput: ctx.StringLiteral[0].image,
+        singleTextInput: (ctx.StringLiteral || ctx.StringLiteralSingleQuote)[0].image,
       })
     },
     {

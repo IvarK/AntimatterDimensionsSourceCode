@@ -47,6 +47,11 @@ export const AutomatorLexer = (() => {
     pattern: /".*"/,
   });
 
+  const StringLiteralSingleQuote = createToken({
+    name: "StringLiteralSingleQuote",
+    pattern: /'.*'/,
+  });
+
   const Comment = createToken({
     name: "Comment",
     pattern: /(#|\/\/)[^\n]*/,
@@ -334,7 +339,7 @@ export const AutomatorLexer = (() => {
 
   // The order here is the order the lexer looks for tokens in.
   const automatorTokens = [
-    HSpace, StringLiteral, Comment, EOL,
+    HSpace, StringLiteral, StringLiteralSingleQuote, Comment, EOL,
     ComparisonOperator, ...tokenLists.ComparisonOperator,
     LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
     BlackHoleStr, NumberLiteral,

@@ -144,6 +144,7 @@ import { AutomatorLexer } from "./lexer";
       { regex: /<=|>=|<|>/ui, token: "operator" },
       { regex: /nowait(\s|$)/ui, token: "property" },
       { regex: /".*"/ui, token: "string", next: "commandDone" },
+      { regex: /'.*'/ui, token: "string", next: "commandDone" },
       { regex: /(on|off|bh1|bh2|dilation|load|respec)(\s|$)/ui, token: "variable-2" },
       { regex: /(eternity|reality|use)(\s|$)/ui, token: "variable-2" },
       { regex: /(antimatter|infinity|time)(\s|$|(?=,))/ui, token: "variable-2" },

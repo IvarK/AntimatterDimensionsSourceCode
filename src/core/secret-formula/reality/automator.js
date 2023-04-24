@@ -459,7 +459,7 @@ GameDatabase.reality.automator = {
           <blockquote>commands</blockquote>
         }`,
       description: `Defines an inner block of the script where commands are repeated; the comparison is checked at the
-        start and every time the loop repeats. If the condition is false when the UNTIL statement is first reached, the
+        start and every time the loop repeats. If the condition is true when the UNTIL statement is first reached, the
         inner block of commands will be skipped entirely.
         <br><br>
         If an prestige event (ie. Infinity, Eternity, or Reality) is specified instead of a condition, then the block
@@ -480,7 +480,7 @@ GameDatabase.reality.automator = {
         <blockquote>commands</blockquote>
       }`,
       description: `Defines an inner block of the script where commands are repeated; the comparison is checked at the
-        start and every time the loop repeats. If the condition is false when the WHILE statement is first reached, the
+        start and every time the loop repeats. If the condition is true when the WHILE statement is first reached, the
         inner block of commands will be skipped entirely.`,
       examples: [
         `while ep < 1e500`,

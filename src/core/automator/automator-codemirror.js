@@ -49,9 +49,13 @@ import { AutomatorLexer } from "./lexer";
 
   const commentRule = { regex: /(\/\/|#).*/u, token: "comment", next: "start" };
 
-  // Note: This is a state machine which determines the syntax highlighting for the automator. It has no bearing on the
-  // actual functionality and behavior of the automator itself. Matches to the supplied regexes will color the matched
-  // text according to the specified color of cm-[token] in liquibyte.css
+  // This is a state machine which determines the syntax highlighting for the automator. Top-level props define
+  // the states, the array entries define the transition rules which are checked in order of appearance, and next
+  // specifies which state to transition to after consuming the given regex. Without an entry for "next" the state
+  // machine will remain in the same state and run the transition check after consuming the regex. The "next" prop
+  // in the line with "sol" is a fallback transition which will be followed if none of the rules are matched.
+  // Matches to the regexes will color the matched text according to the specified color of cm-[token] in liquibyte.css
+  // Note: This has no bearing on the actual functionality and behavior of the automator itself and is purely visual.
   CodeMirror.defineSimpleMode("automato", {
     // The start state contains the rules that are intially used
     start: [
@@ -91,12 +95,12 @@ import { AutomatorLexer } from "./lexer";
     studiesList: [
       commentRule,
       { sol: true, next: "start" },
-      { regex: /t[1-4]/ui, token: "number" },
-      { regex: /(antimatter|infinity|time)(?=[\s,]|$)/ui, token: "variable-2" },
-      { regex: /(active|passive|idle)(?=[\s,]|$)/ui, token: "variable-2" },
-      { regex: /(light|dark)(?=[\s,]|$)/ui, token: "variable-2" },
+      { regex: /(antimatter|infinity|time)(?=[\s,|]|$)/ui, token: "number" },
+      { regex: /(active|passive|idle)(?=[\s,|]|$)/ui, token: "number" },
+      { regex: /(light|dark)(?=[\s,|]|$)/ui, token: "number" },
+      { regex: /[1-9][0-9]+(?=[\s,|])/ui, token: "number" },
       { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandDone" },
-      { regex: /[1-9][0-9]+/ui, token: "number" },
+      { regex: /([1-9]|1[0-2])$/ui, token: "number" },
     ],
     studiesLoad: [
       commentRule,

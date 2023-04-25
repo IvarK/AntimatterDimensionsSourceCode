@@ -66,7 +66,7 @@ export default {
     class="c-automator-tab l-automator-tab"
   >
     <div v-if="automatorUnlocked">
-      <div class="c-automator-tab__interval-info">
+      <div>
         {{ intervalText }}
       </div>
       <span :class="{ 'c-overlimit': currentChars > maxScriptChars }">
@@ -106,5 +106,37 @@ export default {
 .c-overlimit {
   font-weight: bold;
   color: var(--color-bad);
+}
+
+.c-automator-tab {
+  width: 80%;
+  min-width: 100rem;
+}
+
+.l-automator-tab {
+  position: relative;
+  align-self: center;
+  margin-top: 0.5rem;
+}
+
+.c-automator-split-pane {
+  width: 100%;
+  height: 57rem;
+  background-color: #bbbbbb;
+}
+
+.s-base--dark .c-automator-split-pane {
+  width: 100%;
+  background-color: #474747;
+}
+
+.c-automator-tab--full-screen .c-automator-split-pane {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: 6;
+  margin-top: 0;
+  padding-bottom: 0;
 }
 </style>

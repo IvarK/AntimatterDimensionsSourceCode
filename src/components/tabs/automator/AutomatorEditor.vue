@@ -16,9 +16,6 @@ export default {
     };
   },
   computed: {
-    fullScreen() {
-      return this.$viewModel.tabs.reality.automator.fullScreen;
-    },
     currentScriptID: {
       get() {
         return this.$viewModel.tabs.reality.automator.editorScriptID;

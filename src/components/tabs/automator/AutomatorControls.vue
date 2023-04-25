@@ -219,6 +219,7 @@ export default {
 .c-button-group {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .c-automator__status-text {

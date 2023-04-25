@@ -37,38 +37,6 @@
   --color-blockmator-editor-background: black;
 }
 
-.c-automator-tab {
-  width: 80%;
-  min-width: 100rem;
-}
-
-.c-automator-split-pane {
-  width: 100%;
-  height: 57rem;
-  background-color: #bbbbbb;
-}
-
-.s-base--dark .c-automator-split-pane {
-  width: 100%;
-  background-color: #474747;
-}
-
-.c-automator-tab--full-screen .c-automator-split-pane {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  inset: 0;
-  z-index: 4;
-  margin-top: 0;
-  padding-bottom: 0;
-}
-
-.l-automator-tab {
-  position: relative;
-  align-self: center;
-  margin-top: 0.5rem;
-}
-
 .l-automator-points-list-container {
   display: flex;
   flex-direction: row;

@@ -60,6 +60,7 @@ import GlyphShowcasePanelModal from "@/components/modals/GlyphShowcasePanelModal
 import H2PModal from "@/components/modals/H2PModal";
 import ImportAutomatorDataModal from "@/components/modals/ImportAutomatorDataModal";
 import ImportSaveModal from "@/components/modals/ImportSaveModal";
+import ImportTimeStudyConstants from "@/components/modals/ImportTimeStudyConstants";
 import InformationModal from "@/components/modals/InformationModal";
 import LoadGameModal from "@/components/modals/LoadGameModal";
 import PelleEffectsModal from "@/components/modals/PelleEffectsModal";
@@ -252,6 +253,7 @@ Modal.automatorScriptDelete = new Modal(DeleteAutomatorScriptModal);
 Modal.automatorScriptTemplate = new Modal(AutomatorScriptTemplate);
 Modal.switchAutomatorEditorMode = new Modal(SwitchAutomatorEditorModal);
 Modal.clearAutomatorConstants = new Modal(ClearConstantsModal);
+Modal.importTSConstants = new Modal(ImportTimeStudyConstants);
 Modal.autobuyerEditModal = new Modal(AutobuyerEditModal);
 Modal.shop = new Modal(StdStoreModal);
 Modal.studyString = new Modal(StudyStringModal);

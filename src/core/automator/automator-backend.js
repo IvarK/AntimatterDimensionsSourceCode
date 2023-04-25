@@ -520,6 +520,7 @@ export const AutomatorBackend = {
   // All modifications to constants should go these two methods in order to properly update both the constant prop and
   // the sorting order prop while keeping them consistent with each other
   modifyConstant(constantName, newValue) {
+    if (Object.keys(player.reality.automator.constants).length >= AutomatorData.MAX_ALLOWED_CONSTANT_COUNT) return;
     player.reality.automator.constants[constantName] = newValue;
     if (!player.reality.automator.constantSortOrder.includes(constantName)) {
       player.reality.automator.constantSortOrder.push(constantName);
@@ -704,11 +705,7 @@ export const AutomatorBackend = {
     if (!ignore.constants) {
       for (const constant of parsed.constants) {
         const alreadyExists = player.reality.automator.constants[constant.key];
-        const canMakeNew = Object.keys(player.reality.automator.constants).length <
-          AutomatorData.MAX_ALLOWED_CONSTANT_COUNT;
-        if (alreadyExists || canMakeNew) {
-          this.modifyConstant(constant.key, constant.value);
-        }
+        if (alreadyExists) this.modifyConstant(constant.key, constant.value);
       }
     }
 

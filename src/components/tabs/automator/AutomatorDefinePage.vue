@@ -32,6 +32,9 @@ export default {
     deleteAllConstants() {
       if (this.constants.length > 0) Modal.clearAutomatorConstants.show();
     },
+    importPresets() {
+      Modal.importTSConstants.show();
+    },
   }
 };
 </script>
@@ -57,6 +60,14 @@ export default {
       @click="deleteAllConstants"
     >
       Delete all constants
+    </PrimaryButton>
+    <br>
+    <br>
+    <PrimaryButton
+      class="c-delete-margin o-primary-btn--subtab-option"
+      @click="importPresets"
+    >
+      Import Time Study Presets
     </PrimaryButton>
     <div
       :key="constants.length"

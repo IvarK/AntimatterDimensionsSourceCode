@@ -25,6 +25,7 @@ export const AUTOMATOR_COMMAND_STATUS = Object.freeze({
   SAME_INSTRUCTION: 3,
   SKIP_INSTRUCTION: 4,
   HALT: 5,
+  RESTART: 6,
 });
 
 export const AUTOMATOR_MODE = Object.freeze({
@@ -765,6 +766,9 @@ export const AutomatorBackend = {
         case AUTOMATOR_COMMAND_STATUS.HALT:
           this.stop();
           return false;
+        case AUTOMATOR_COMMAND_STATUS.RESTART:
+          this.restart();
+          return false;
       }
 
       // We need to break out of the loop if the last commands are all SKIP_INSTRUCTION, or else it'll start
@@ -791,8 +795,20 @@ export const AutomatorBackend = {
     // SAME_INSTRUCTION is used to enter blocks; this means we've successfully
     // advanced a line. Otherwise, we always advance a line, regardless of return
     // state.
-    if (this.runCurrentCommand() !== AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION) {
-      this.nextCommand();
+    // HALT and RESTART are exceptions, as these are called by commands which force
+    // program flow to do something else other than simply advancing to the next line
+    switch (this.runCurrentCommand()) {
+      case AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION:
+        break;
+      case AUTOMATOR_COMMAND_STATUS.HALT:
+        this.stop();
+        break;
+      case AUTOMATOR_COMMAND_STATUS.RESTART:
+        this.restart();
+        break;
+      default:
+        this.nextCommand();
+        break;
     }
   },
 
@@ -953,6 +969,7 @@ export const AutomatorBackend = {
     if (!Player.automatorUnlocked) return;
     this.hasJustCompleted = false;
     this.state.topLevelScript = scriptID;
+    player.reality.automator.execTimer = 0;
     const scriptObject = this.findScript(scriptID);
     if (!scriptObject) return;
     if (compile) scriptObject.compile();

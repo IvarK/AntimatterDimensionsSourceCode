@@ -470,7 +470,12 @@ export const AutomatorCommands = ((() => {
           const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
           AutomatorData.logCommandEvent(`${prestigeName} triggered (${findLastPrestigeRecord(prestigeName)})`,
             ctx.startLine);
-          return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
+          // In the prestigeToken.$prestige() line above, performing a reality reset has code internal to the call
+          // which makes the automator restart. However, in that case we also need to update the execution state here,
+          // or else the restarted automator will immediately advance lines and always skip the first command
+          return (prestigeName === "REALITY" && AutomatorBackend.state.forceRestart)
+            ? AUTOMATOR_COMMAND_STATUS.RESTART
+            : AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         };
       },
       blockify: ctx => ({

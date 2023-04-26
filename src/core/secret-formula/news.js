@@ -327,7 +327,7 @@ GameDatabase.news = [
   },
   {
     id: "a72",
-    text: `"Most quotes found online are falsely atributed." -Abraham Lincoln`
+    text: `"Most quotes found online are falsely attributed." -Abraham Lincoln`
   },
   {
     id: "a73",
@@ -571,7 +571,7 @@ GameDatabase.news = [
       IP is being traced right now so you better prepare for the Big Crunch, maggot. The Big Crunch that wipes out
       the pathetic little thing you call your life. You're f*cking dead, kid. I can be anywhere, anytime, and I can
       kill you in over seven 😠💩 different ways, and that's just with my mouse. Not only am I extensively trained
-      in dimension shift combat, but I have access to the entire arsenal of the Antimatter Marine Corps and I will
+      in dimension boost combat, but I have access to the entire arsenal of the Antimatter Marine Corps and I will
       use it to its full extent to wipe your miserable ass off the face of the universe, you little shit. If only
       you could have known what unhevi retribution your little “clever” comment was about to bring down upon you,
       maybe you would have held your f*cking tongue. But you couldn't, you didn't, and now you're buying until 10,
@@ -1269,7 +1269,7 @@ GameDatabase.news = [
       slipping into our memory by using the world-wide memory manipulator located in this room to keep making
       everyone think that 9 comes after 8 with a side effect that makes everyone think that 9 is evil, but this
       won't last forever, as the number will keep getting stronger, and will eventually overpower the memory
-      manipulator. That's why you're here, you're one of the most intelligent person here, and we hope you can
+      manipulator. That's why you're here, you're one of the most intelligent people here, and we hope you can
       help us on our journey to defeat that number. Our enemy is not 9, it is the hidden number between 8 and 9,
       the missing number.`
   },
@@ -1583,7 +1583,7 @@ GameDatabase.news = [
       required M to be held, not actually pressed, so in this fashion, Challenge 2 only adds on an additional two M
       presses to the run, since the first M press just leeches off the previous M press. So to capture this
       phenomenon, we call it 2.5 M presses. On a single Eternity basis, you'd round up that up to three, but in
-      a full game run, you'd round it down to two. So, in conclusion, since that first M press counts in other
+      a full game run, you'd round it down to two. So, in conclusion, since that first M press counts in some
       contexts, but adds no additional presses in other contexts, we refer to it as a "Half M Press".`
   },
   {
@@ -2397,7 +2397,7 @@ GameDatabase.news = [
     id: "a366",
     text:
       `Stage magic, such as illusions, has an interesting history. A mix of charlatans attempting to scam people,
-      and actors acting out performances using illusions or slight of hand. Altering styles of magic, and continued
+      and actors acting out performances using illusions or sleight of hand. Altering styles of magic, and continued
       discourse and disagreements over whether it should be stated that it is an illusion, and whether people will
       magically realise that it is fake and that it does not need to be stated. A schism a century ago split magic
       into 2 types - gentle, simplistic utilitarian tricks and grand spectacles involving the flashy machinery and

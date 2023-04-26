@@ -112,9 +112,9 @@ export default {
     <div class="c-ra-memory-header">
       <CelestialQuoteHistory celestial="ra" />
       <div v-if="!isRaCapped">
-        Each Memory Chunk generates a base of one Memory per second, which has been increased to
-        {{ quantify("Memory", memoriesPerChunk, 2, 3) }}
-        per second.
+        Each Memory Chunk generates a base of one Memory per second<span v-if="memoriesPerChunk > 1">,
+          which has been increased to {{ quantify("Memory", memoriesPerChunk, 2, 3) }} per second.
+        </span>
         <br>
         Storing real time prevents Memory Chunk generation, but Memories will still be gained normally.
         <span v-if="memoriesPerChunk > 1">

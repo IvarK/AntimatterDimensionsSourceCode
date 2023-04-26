@@ -135,7 +135,7 @@ export default {
   height: 100%;
   position: fixed;
   inset: 0;
-  z-index: 6;
+  z-index: 5;
   margin-top: 0;
   padding-bottom: 0;
 }

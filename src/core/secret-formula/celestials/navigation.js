@@ -15,10 +15,7 @@ export function vUnlockProgress(index) {
 export function vUnlockLegendLabel(complete, index) {
   const db = Object.values(GameDatabase.celestials.v.mainUnlock).find(e => e.id === index);
   if (complete >= 1) return `${db.name} condition for V`;
-  return [
-    "V",
-    `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`
-  ];
+  return `Reach ${db.format(db.resource())} / ${db.format(db.requirement)} ${db.name}.`;
 }
 
 // Angle is defined/rescaled so that 0 is the first rift, 4 is the last one, and all 5 are equally spaced around
@@ -303,11 +300,11 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => {
-          if (complete >= 1) return "Perk Point Shop";
+          if (complete >= 1) return "Teresa's Perk Point Shop";
           const rm = Teresa.pouredAmount;
           const cost = TeresaUnlocks.shop.price;
           return [
-            "Perk Point Shop",
+            "Teresa's Perk Point Shop",
             `Pour ${format(rm, 2)} / ${format(cost, 2)} Reality Machines`
           ];
         },
@@ -756,7 +753,7 @@ GameDatabase.celestials.navigation = {
       legend: {
         text: complete => vUnlockLegendLabel(complete, 1),
         angle: -135,
-        diagonal: 16,
+        diagonal: 50,
         horizontal: 16,
       },
     },
@@ -783,7 +780,7 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => vUnlockLegendLabel(complete, 2),
-        angle: -135,
+        angle: -45,
         diagonal: 30,
         horizontal: 16,
       },
@@ -797,7 +794,6 @@ GameDatabase.celestials.navigation = {
       incompleteWidth: 4,
     }
   },
-
   "v-unlock-3": {
     visible: () => Achievement(151).isUnlocked || VUnlocks.vAchievementUnlock.isUnlocked,
     complete: () => vUnlockProgress(3),
@@ -812,8 +808,8 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => vUnlockLegendLabel(complete, 3),
-        angle: -135,
-        diagonal: 45,
+        angle: 45,
+        diagonal: 30,
         horizontal: 16,
       },
     },
@@ -840,8 +836,8 @@ GameDatabase.celestials.navigation = {
       },
       legend: {
         text: complete => vUnlockLegendLabel(complete, 4),
-        angle: -135,
-        diagonal: 60,
+        angle: 135,
+        diagonal: 30,
         horizontal: 16,
       },
     },
@@ -869,7 +865,7 @@ GameDatabase.celestials.navigation = {
       legend: {
         text: complete => vUnlockLegendLabel(complete, 5),
         angle: -135,
-        diagonal: 75,
+        diagonal: 30,
         horizontal: 16,
       },
     },
@@ -897,7 +893,7 @@ GameDatabase.celestials.navigation = {
       legend: {
         text: complete => vUnlockLegendLabel(complete, 6),
         angle: -135,
-        diagonal: 90,
+        diagonal: 30,
         horizontal: 16,
       },
     },
@@ -1697,8 +1693,8 @@ GameDatabase.celestials.navigation = {
           if (upgrade.isAvailableForPurchase) return [
             dmdText,
             `Imaginary Machines
-            ${format(Math.min(upgrade.currency.value, upgrade.cost), upgrade.canBeBought ? 0 : 2)}
-            / ${format(upgrade.cost)}`
+            ${format(Math.min(upgrade.currency.value, upgrade.cost), upgrade.canBeBought ? 1 : 2)}
+            / ${format(upgrade.cost, 1)}`
           ];
 
           const allGalaxies = Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies;

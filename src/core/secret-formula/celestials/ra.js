@@ -87,7 +87,7 @@ GameDatabase.celestials.ra = {
     },
     perkShopIncrease: {
       id: 5,
-      reward: "Perk shop caps are raised",
+      reward: "Purchase caps are raised in Teresa's Perk Point Shop",
       pet: "teresa",
       level: 15,
       displayIcon: `<span class="fas fa-project-diagram"></span>`

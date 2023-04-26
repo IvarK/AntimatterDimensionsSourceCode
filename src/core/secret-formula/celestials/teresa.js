@@ -23,7 +23,7 @@ GameDatabase.celestials.teresa = {
     shop: {
       id: 3,
       price: 1e24,
-      description: "Unlock the Perk Point Shop.",
+      description: "Unlock Teresa's Perk Point Shop.",
     },
     undo: {
       id: 4,

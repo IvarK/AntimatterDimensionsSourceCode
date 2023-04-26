@@ -352,7 +352,7 @@ function roundPreservingSum(data) {
         :style="rowStyle('perk shop')"
         class="l-glyph-levels-and-weights__factor"
       >
-        Perk shop
+        Teresa's Perk shop
       </div>
       <div
         :style="rowStyle('perk shop')"

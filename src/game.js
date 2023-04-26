@@ -747,7 +747,7 @@ function laitelaRealityTick(realDiff) {
       } else if (Time.thisRealityRealTime.totalSeconds < 30) {
         // Second+ attempt - destabilising
         completionText += `<br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
-          ➜ Destablized
+          ➜ Destabilized
           <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)} ➜
           ${formatInt(8 - laitelaInfo.difficultyTier)}`;
       } else {

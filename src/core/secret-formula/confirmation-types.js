@@ -66,10 +66,6 @@ GameDatabase.confirmationTypes = [
     option: "switchAutomatorMode",
     isUnlocked: () => Player.automatorUnlocked,
   }, {
-    name: "Reset Celestial",
-    option: "resetCelestial",
-    isUnlocked: () => TeresaUnlocks.run.canBeApplied,
-  }, {
     name: "Delete Glyph Preset",
     option: "deleteGlyphSetSave",
     isUnlocked: () => EffarigUnlock.setSaves.isUnlocked,

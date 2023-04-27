@@ -28,7 +28,12 @@ export default {
       const confirms = player.options.confirmations;
       if (GameEnd.creditsClosed) return;
       if (this.isInCelestialReality) {
-        if (confirms.resetCelestial) Modal.exitCelestialReality.show();
+        if (confirms.exitChallenge) Modal.exitChallenge.show({
+          challengeName: "a Celestial Reality",
+          normalName: "Reality",
+          hasHigherLayers: false,
+          exitFn: () => beginProcessReality(getRealityProps(true))
+        });
         else beginProcessReality(getRealityProps(true));
       } else if (confirms.resetReality) Modal.resetReality.show();
       else beginProcessReality(getRealityProps(true));

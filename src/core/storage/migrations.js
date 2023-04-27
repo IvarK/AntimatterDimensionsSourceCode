@@ -269,7 +269,12 @@ GameStorage.migrations = {
       // to ensure a consistent UI sort order. However, before this version the sort order didn't exist, so we have
       // to immediately fill it
       player.reality.automator.constantSortOrder = Object.keys(player.reality.automator.constants);
-    }
+    },
+    19: player => {
+      // This was removed in favor of the more generic "Exit challenge" modal, but a few references were missing and
+      // this prop was left in the save file instead of being cleaned up
+      delete player.options.confirmations.resetCelestial;
+    },
   },
 
   normalizeTimespans(player) {

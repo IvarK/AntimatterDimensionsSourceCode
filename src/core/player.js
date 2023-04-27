@@ -358,7 +358,7 @@ window.player = {
     previousRuns: {}
   },
   IPMultPurchases: 0,
-  version: 17,
+  version: 19,
   infinityPower: DC.D1,
   postC4Tier: 0,
   eternityPoints: DC.D0,
@@ -834,7 +834,6 @@ window.player = {
       autoClean: true,
       glyphSelection: true,
       glyphUndo: true,
-      resetCelestial: true,
       deleteGlyphSetSave: true,
       glyphRefine: true,
       bigCrunch: true,

@@ -67,11 +67,18 @@ export const Pelle = {
 
     Glyphs.harshAutoClean();
     if (!Glyphs.unequipAll()) {
+      Modal.hideAll();
       Modal.message.show(`Dooming your Reality will unequip your Glyphs. Some of your
         Glyphs could not be unequipped due to lack of inventory space.`, 1);
       return;
     }
     Glyphs.harshAutoClean();
+    if (Glyphs.freeInventorySpace < 5) {
+      Modal.hideAll();
+      Modal.message.show(`You must have enough empty unprotected Glyph slots for
+        5 additional Glyphs in order to Doom your Reality.`, 1);
+      return;
+    }
     for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
     Glyphs.refreshActive();
     player.options.confirmations.glyphReplace = true;

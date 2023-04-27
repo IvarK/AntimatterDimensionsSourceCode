@@ -555,11 +555,6 @@ export function beginProcessReality(realityProps) {
             }
           }
         }
-
-        // Note: clicking either of speedup buttons technically doesn't preserve the RNG seed; the state of the seed
-        // will depend on when exactly the player clicked. This is acceptable because if this modal shows up at all
-        // then a large enough number of glyph selections are happening that seed-scumming isn't worth it at all
-        rng.finalize();
       },
       progress
     });

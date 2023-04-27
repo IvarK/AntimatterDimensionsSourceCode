@@ -24,6 +24,7 @@ export default {
       isPermanent: false,
       hasBH2: false,
       blackHoleUptime: [],
+      stateChange: "",
     };
   },
   computed: {
@@ -64,6 +65,9 @@ export default {
       this.blackHoleUptime = [BlackHole(1).duration / BlackHole(1).cycleLength,
         BlackHole(2).duration / BlackHole(2).cycleLength];
       this.detailedBH2 = this.bh2Status();
+
+      if (player.blackHoleNegative < 1) this.stateChange = this.isPaused ? "Uninvert" : "Invert";
+      else this.stateChange = this.isPaused ? "Unpause" : "Pause";
     },
     bh2Status() {
       const bh1Remaining = BlackHole(1).timeWithPreviousActiveToNextStateChange;
@@ -171,7 +175,7 @@ export default {
           class="o-primary-btn o-primary-btn--subtab-option"
           @click="togglePause"
         >
-          {{ isPaused ? "Resume" : "Pause" }} Black Hole
+          {{ stateChange }} Black Hole
         </button>
         <button
           v-if="!isPermanent"

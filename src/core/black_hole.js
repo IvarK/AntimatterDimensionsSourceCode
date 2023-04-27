@@ -53,6 +53,10 @@ class BlackHoleUpgradeState {
     const stateTime = bh.isCharged ? bh.duration : bh.interval;
     bh.updatePhase(stateTime * beforeProg - bh.phase);
 
+    // Prevents a rare edge case where the player makes an inactive black hole permanent, locking themselves into
+    // a permanently inactive black hole
+    if (bh.isPermanent) player.blackHole[this.id - 1].active = true;
+
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT);
   }
 }

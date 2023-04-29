@@ -57,6 +57,7 @@ export const Cloud = {
       ShopPurchaseData.syncSTD();
       if (player.options.hideGoogleName) GameUI.notify.success(`Successfully logged in to Google Account`);
       else GameUI.notify.success(`Successfully logged in as ${this.user.displayName}`);
+      if (ShopPurchaseData.isIAPEnabled) Speedrun.setSTDUse(true);
     } catch (e) {
       GameUI.notify.error("Google Account login failed");
     }

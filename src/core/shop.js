@@ -1,5 +1,5 @@
-import { SteamRuntime } from "@/steam";
 import { RebuyableMechanicState } from "./game-mechanics";
+import { SteamRuntime } from "@/steam";
 
 import Payments from "./payments";
 
@@ -38,6 +38,7 @@ export const ShopPurchaseData = {
     this.unlockedCosmetics = [...(newData.unlockedCosmetics ?? [])];
     for (const key of Object.keys(GameDatabase.shopPurchases)) this[key] = newData[key] ?? 0;
     if (this.allCosmeticSets > 0) this.unlockedCosmetics = Object.keys(GameDatabase.reality.glyphCosmeticSets);
+    if (ShopPurchaseData.isIAPEnabled) Speedrun.setSTDUse(true);
     GameStorage.save();
   },
 

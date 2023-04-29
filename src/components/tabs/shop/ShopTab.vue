@@ -80,8 +80,8 @@ export default {
     },
     toggleEnable() {
       if (ShopPurchaseData.availableSTD < 0) return;
-      if (!player.IAP.enabled && this.spentSTD > 0) Speedrun.setSTDUse(true);
       player.IAP.enabled = !player.IAP.enabled;
+      if (ShopPurchaseData.isIAPEnabled) Speedrun.setSTDUse(true);
     },
     respecClass() {
       return {

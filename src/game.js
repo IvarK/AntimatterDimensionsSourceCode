@@ -877,6 +877,7 @@ export function simulateTime(seconds, real, fast) {
   // - Calling with fast === true will only simulate it with a max of 50 ticks
   // - Otherwise, tick count will be limited to the offline tick count (which may be set externally during save import)
   // Tick count is never *increased*, and only ever decreased if needed.
+  if (seconds < 0) return;
   let ticks = Math.floor(seconds * 20);
   GameUI.notify.showBlackHoles = false;
 

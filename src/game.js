@@ -386,9 +386,9 @@ export function getGameSpeedupForDisplay() {
   return speedFactor;
 }
 
-// "diff" is in ms.  It is only unspecified when it's being called normally and not due to simulating time, in which
-// case it uses the gap between now and the last time the function was called.  This is on average equal to the update
-// rate.
+// "passDiff" is in ms. It is only unspecified when it's being called normally and not due to simulating time, in which
+// case it uses the gap between now and the last time the function was called (capped at a day). This is on average
+// equal to the update rate, but may be much larger if the game was unfocused or the device went to sleep for some time.
 // eslint-disable-next-line complexity
 export function gameLoop(passDiff, options = {}) {
   PerformanceStats.start("Frame Time");
@@ -399,8 +399,17 @@ export function gameLoop(passDiff, options = {}) {
   let diff = passDiff;
   const thisUpdate = Date.now();
   const realDiff = diff === undefined
-    ? Math.clamp(thisUpdate - player.lastUpdate, 1, 21600000)
+    ? Math.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7)
     : diff;
+
+  // For single ticks longer than 10 seconds from the GameInterval loop, we assume that the device has gone to sleep or
+  // hibernation - in those cases we stop the interval and simulate time instead. The gameLoop interval automatically
+  // restarts itself at the end of the simulateTime call. This will not trigger for an unfocused game, as this seems to
+  // result in a ~1 second tick rate for browsers.
+  if (passDiff === undefined && realDiff > 1e4) {
+    GameIntervals.gameLoop.stop();
+    simulateTime(realDiff / 1000, true);
+  }
 
   if (GameEnd.creditsEverClosed) {
     GameUI.update();

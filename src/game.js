@@ -440,6 +440,9 @@ export function gameLoop(passDiff, options = {}) {
     player.records.thisEternity.realTime += realDiff;
     player.records.thisReality.realTime += realDiff;
     Enslaved.storeRealTime();
+    // Most autobuyers will only tick usefully on the very first tick, but this needs to be here in order to allow
+    // the autobuyers unaffected by time storage to tick as well
+    Autobuyers.tick();
     GameUI.update();
     return;
   }

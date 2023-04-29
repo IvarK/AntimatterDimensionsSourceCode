@@ -57,8 +57,14 @@ export default {
     inputIsSecret() {
       return isSecretImport(this.input) || Theme.isSecretTheme(this.input);
     },
-    timeSinceSave() {
-      return TimeSpan.fromMilliseconds(Date.now() - this.player.lastUpdate).toString();
+    isFromFuture() {
+      return this.player.lastUpdate > Date.now();
+    },
+    lastOpened() {
+      const ms = Date.now() - this.player.lastUpdate;
+      return this.isFromFuture
+        ? `This save is from ${TimeSpan.fromMilliseconds(-ms).toString()} in the future.`
+        : `This save was last opened ${TimeSpan.fromMilliseconds(ms).toString()} ago.`;
     },
     offlineType() {
       // We update here in the computed method instead of elsewhere because otherwise it initializes the text
@@ -80,12 +86,13 @@ export default {
       if (this.offlineImport === OFFLINE_PROGRESS_TYPE.IGNORED) {
         return `Save will be imported without offline progress.`;
       }
+      if (!GameStorage.offlineEnabled) return "This setting will not apply any offline progress after importing.";
+      if (this.isFromFuture) return "Offline progress cannot be simulated due to an inconsistent system clock time.";
+
       const durationInMs = Date.now() - this.player.lastUpdate;
       const ticks = GameStorage.maxOfflineTicks(durationInMs);
-      return GameStorage.offlineEnabled
-        ? `After importing, will simulate ${formatInt(ticks)} ticks of duration
-          ${TimeSpan.fromMilliseconds(durationInMs / ticks).toStringShort()} each.`
-        : "This setting will not apply any offline progress after importing.";
+      return `After importing, will simulate ${formatInt(ticks)} ticks of duration
+        ${TimeSpan.fromMilliseconds(durationInMs / ticks).toStringShort()} each.`;
     },
     willLoseCosmetics() {
       const currSets = player.reality.glyphs.cosmetics.unlockedFromNG;
@@ -114,7 +121,7 @@ export default {
         case OFFLINE_PROGRESS_TYPE.IMPORTED:
           // These are default values from a new save, used if importing from pre-reality where these props don't exist
           GameStorage.offlineEnabled = this.player.options.offlineProgress ?? true;
-          GameStorage.offlineTicks = this.player.options.offlineTicks ?? 1000;
+          GameStorage.offlineTicks = this.player.options.offlineTicks ?? 1e5;
           break;
         case OFFLINE_PROGRESS_TYPE.LOCAL:
           GameStorage.offlineEnabled = player.options.offlineProgress;
@@ -176,7 +183,7 @@ export default {
         </div>
         <br>
         <div>
-          This save was last opened {{ timeSinceSave }} ago.
+          {{ lastOpened }}
           <div
             class="o-primary-btn"
             @click="changeOfflineSetting"

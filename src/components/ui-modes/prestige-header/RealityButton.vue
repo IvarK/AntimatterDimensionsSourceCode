@@ -90,7 +90,8 @@ export default {
       }
 
       const multiplier = simulatedRealityCount(false) + 1;
-      this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier);
+      this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier)
+        .clampMax(MachineHandler.hardcapRM);
       this.newIMCap = MachineHandler.projectedIMCap;
       this.machinesGained = this.projectedRM.clampMax(MachineHandler.distanceToRMCap);
       this.realityTime = Time.thisRealityRealTime.totalMinutes;

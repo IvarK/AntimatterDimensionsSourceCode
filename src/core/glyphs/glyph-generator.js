@@ -349,7 +349,7 @@ export const GlyphGenerator = {
           .filter(eff => eff.isGenerated)
           .map(eff => eff.bitmaskIndex)
           .filter(eff => ![0, 12, 16].includes(eff));
-        const toRemove = replacable[(initSeed + realityCount) % replacable.length];
+        const toRemove = replacable[Math.abs(initSeed + realityCount) % replacable.length];
         newGlyph.effects = newMask & ~(1 << toRemove);
       } else {
         newGlyph.effects = newMask;

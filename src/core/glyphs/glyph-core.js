@@ -31,6 +31,7 @@ export const Glyphs = {
   unseen: [],
   levelBoost: 0,
   factorsOpen: false,
+  bestUndoGlyphCount: 0,
   get inventoryList() {
     return player.reality.glyphs.inventory;
   },
@@ -601,6 +602,9 @@ export const Glyphs = {
     const inventorySlot = Glyphs.findFreeIndex(player.options.respecIntoProtected);
     if (inventorySlot === -1 || player.reality.glyphs.undo.length === 0) return;
     const undoData = player.reality.glyphs.undo.pop();
+    // We store this value here so that we can restore it later on in the reality reset code, since we immediately
+    // change equipped glyph status here but only update requirement checks within finishProcessReality()
+    this.bestUndoGlyphCount = player.requirementChecks.reality.maxGlyphs;
     this.unequip(undoData.targetSlot, inventorySlot);
     finishProcessReality({
       reset: true,

@@ -8,8 +8,6 @@ export default {
   },
   data() {
     return {
-      glyphsTotal: 0,
-      glyphsDeleted: 0,
       isRefining: false,
     };
   },
@@ -33,12 +31,18 @@ export default {
       if (this.glyphsDeleted === 0) return `This will remove no Glyphs.`;
       if (this.glyphsDeleted === this.glyphsTotal) return `This will remove all your Glyphs.`;
       return `This process will remove ${this.glyphsDeleted}/${this.glyphsTotal} Glyphs.`;
-    }
+    },
+
+    // These two don't need to be reactive since the modal force-closes itself whenever glyphs change
+    glyphsTotal() {
+      return Glyphs.inventory.filter(slot => slot !== null).length;
+    },
+    glyphsDeleted() {
+      return Glyphs.deleteAllRejected(false);
+    },
   },
   methods: {
     update() {
-      this.glyphsTotal = Glyphs.inventory.filter(slot => slot !== null).length;
-      this.glyphsDeleted = Glyphs.deleteAllRejected(false);
       this.isRefining = GlyphSacrificeHandler.isRefining;
     },
     handleYesClick() {
@@ -49,13 +53,17 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperChoice @confirm="handleYesClick">
+  <ModalWrapperChoice
+    option="sacrificeAll"
+    @confirm="handleYesClick"
+  >
     <template #header>
       {{ topLabel }}
     </template>
     <div class="c-modal-message__text">
       {{ message }}
     </div>
+    <br>
     <div class="c-modal-hard-reset-danger">
       {{ extraMessage }}
     </div>

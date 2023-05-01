@@ -468,7 +468,7 @@ export const Glyphs = {
   },
   // If there are enough glyphs that are better than the specified glyph, in every way, then
   // the glyph is objectively a useless piece of garbage.
-  isObjectivelyUseless(glyph, threshold) {
+  isObjectivelyUseless(glyph, threshold, inventoryIn) {
     if (player.reality.applyFilterToPurge && AutoGlyphProcessor.wouldKeep(glyph)) return false;
     function hasSomeBetterEffects(glyphA, glyphB, comparedEffects) {
       for (const effect of comparedEffects) {
@@ -480,7 +480,7 @@ export const Glyphs = {
       }
       return false;
     }
-    const toCompare = this.inventory.concat(this.active)
+    const toCompare = (inventoryIn ?? this.inventory).concat(this.active)
       .filter(g => g !== null &&
         g.type === glyph.type &&
         g.id !== glyph.id &&
@@ -494,14 +494,18 @@ export const Glyphs = {
     return betterCount >= compareThreshold;
   },
   // Note that this same function is called with different parameters for purge (5), harsh purge (1), and sac all (0)
+  // If deleteGlyphs === false, we are running this from the modal and are doing so purely to *count* the number of
+  // removed glyphs. In this case, we copy the inventory and run the purge on the copy - we need to be able to remove
+  // glyphs as we go, or else the purge logic will be wrong (eg. 7 identical glyphs will all be "worse than 5 others")
   autoClean(threshold = 5, deleteGlyphs = true) {
     const isHarsh = threshold < 5;
     let toBeDeleted = 0;
+    const inventoryCopy = deleteGlyphs ? undefined : this.fakePurgeIngentory();
     // If the player hasn't unlocked sacrifice yet, prevent them from removing any glyphs.
     if (!GlyphSacrificeHandler.canSacrifice) return toBeDeleted;
     // We look in backwards order so that later glyphs get cleaned up first
     for (let inventoryIndex = this.totalSlots - 1; inventoryIndex >= this.protectedSlots; --inventoryIndex) {
-      const glyph = this.inventory[inventoryIndex];
+      const glyph = (inventoryCopy ?? this.inventory)[inventoryIndex];
       // Never clean companion, and only clean cursed if we choose to sacrifice all
       if (glyph === null || glyph.type === "companion" || (glyph.type === "cursed" && threshold !== 0)) continue;
       // Don't auto-clean custom glyphs (eg. music glyphs) unless it's harsh or delete all
@@ -509,13 +513,29 @@ export const Glyphs = {
       if (isCustomGlyph && !isHarsh) continue;
       // If the threshold for better glyphs needed is zero, the glyph is definitely getting deleted
       // no matter what (well, unless it can't be gotten rid of in current glyph removal mode).
-      if (threshold === 0 || this.isObjectivelyUseless(glyph, threshold)) {
+      if (threshold === 0 || this.isObjectivelyUseless(glyph, threshold, inventoryCopy)) {
         if (deleteGlyphs) AutoGlyphProcessor.getRidOfGlyph(glyph);
+        else inventoryCopy.splice(inventoryCopy.indexOf(glyph), 1);
         toBeDeleted++;
       }
     }
     if (player.reality.autoCollapse) this.collapseEmptySlots();
     return toBeDeleted;
+  },
+  // Similar to copyForRecords, except that it also preserves null entries, passes on the IDs, and doesn't
+  // sort the glyphs; these are all necessary for the purge logic to work correctly
+  fakePurgeIngentory() {
+    return this.inventory.map(g => (g === null
+      ? null
+      : {
+        id: g.id,
+        type: g.type,
+        level: g.level,
+        strength: g.strength,
+        effects: g.effects,
+        color: g.color,
+        symbol: g.symbol
+      }));
   },
   harshAutoClean() {
     this.autoClean(1);

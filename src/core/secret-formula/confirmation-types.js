@@ -54,6 +54,10 @@ GameDatabase.confirmationTypes = [
     option: "autoClean",
     isUnlocked: () => GlyphSacrificeHandler.canSacrifice,
   }, {
+    name: "Sacrifice All Glyphs",
+    option: "sacrificeAll",
+    isUnlocked: () => GlyphSacrificeHandler.canSacrifice,
+  }, {
     name: "Glyph Selection",
     option: "glyphSelection",
     isUnlocked: () => Autobuyer.reality.isUnlocked,

@@ -832,6 +832,7 @@ window.player = {
       glyphReplace: true,
       glyphSacrifice: true,
       autoClean: true,
+      sacrificeAll: true,
       glyphSelection: true,
       glyphUndo: true,
       deleteGlyphSetSave: true,

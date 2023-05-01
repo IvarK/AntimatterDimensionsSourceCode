@@ -61,10 +61,18 @@ export default {
       }
     },
     deleteAllUnprotected() {
-      Modal.deleteAllUnprotectedGlyphs.show();
+      if (player.options.confirmations.sacrificeAll) {
+        Modal.deleteAllUnprotectedGlyphs.show();
+      } else {
+        Glyphs.autoClean(0);
+      }
     },
     deleteAllRejected() {
-      Modal.deleteAllRejectedGlyphs.show();
+      if (player.options.confirmations.sacrificeAll) {
+        Modal.deleteAllRejectedGlyphs.show();
+      } else {
+        Glyphs.deleteAllRejected(true);
+      }
     },
     slotClass(index) {
       return index < Glyphs.protectedSlots ? "c-glyph-inventory__protected-slot" : "c-glyph-inventory__slot";

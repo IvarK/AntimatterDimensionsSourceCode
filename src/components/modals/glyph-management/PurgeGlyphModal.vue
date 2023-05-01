@@ -12,12 +12,6 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      glyphsTotal: 0,
-      glyphsDeleted: 0,
-    };
-  },
   computed: {
     threshold() {
       return this.harsh ? 1 : 5;
@@ -40,12 +34,16 @@ export default {
     topLabel() {
       return `You are about to ${this.harsh ? `Harsh Purge` : `Purge`} your Glyphs`;
     },
+
+    // These two don't need to be reactive since the modal force-closes itself whenever glyphs change
+    glyphsTotal() {
+      return Glyphs.inventory.filter(slot => slot !== null).length;
+    },
+    glyphsDeleted() {
+      return Glyphs.autoClean(this.threshold, false);
+    },
   },
   methods: {
-    update() {
-      this.glyphsTotal = Glyphs.inventory.filter(slot => slot !== null).length;
-      this.glyphsDeleted = Glyphs.autoClean(this.threshold, false);
-    },
     handleYesClick() {
       Glyphs.autoClean(this.threshold, true);
     },

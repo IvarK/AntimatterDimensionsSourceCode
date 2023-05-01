@@ -11,6 +11,83 @@ GameDatabase.changelog = [
    * }
    */
   {
+    // TODO Change this once patch date is finalized
+    date: [2023, 5, 0],
+    name: "Multiplier Tab, Automator, and Major mechanics fixes",
+    info: `
+<b>Multiplier Tab:</b><br>
+<ul>
+<li>Added a tab for Replicanti speed multipliers</li>
+<li>Power effects can now also be shown as an equivalent-value multiplier</li>
+<li>AD tab now has special behavior within NC12</li>
+<li>Made general categories (ie. "Achievements" or "Time Studies") still openable even with single entries</li>
+<li>DT nerfs no longer apply to game speed within the multiplier tab</li>
+<li>Entries referring to individual upgrades are now worded more consistently</li>
+<li>Filled in a bunch of miscellaneous missing effects and fixed a few mislabeled effects</li>
+</ul>
+<br>
+
+<b>Automator Features:</b><br>
+<ul>
+<li>Automator-related notifications in the top-right now have their own coloring</li>
+<li>Constants now stay in a consistent order when refreshing the page</li>
+<li>New scripts now have enforced unique names by default</li>
+<li>NOTIFY command now also supports single-quotes, as well as mixtures of single/double quotes</li>
+<li>Added buttons for deleting individual constants, and another button to delete all of them</li>
+<li>Added undo/redo functionality</li>
+<li>You can now import all your study presets into the automator as constants</li>
+<li>Added WAIT functionality for next BH1/BH2 activation</li>
+<li>Added STOP command to immediately halt script execution</li>
+<li>You can now use the highest filter score out of your available Glyph options as a variable for
+  comparisons</li>
+</ul>
+<br>
+
+<b>Automator Bugfixes:</b><br>
+<ul>
+<li>Block-to-text conversion should be less aggressive on deleting errored lines</li>
+<li>Fixed block editor wiping internal contents of all later blocks whenever block nesting changes</li>
+<li>Fixed a bug which sometimes caused the automator to attempt to run errored scripts and crash the game</li>
+<li>Fixed automator constants not being compared to built-in keywords correctly</li>
+<li>Fixed execution skipping the first line whenever scripts restart due to a REALITY command</li>
+<li>Fixed a few syntax coloring bugs in the Automator text editor</li>
+</ul>
+<br>
+
+<b>Game Mechanic fixes:</b><br>
+<ul>
+<li>Dark Energy no longer resets after Annihilation</li>
+<li>Dooming is now prevented if you have less than 5 empty inventory slots</li>
+<li>"Refine to cap, then sacrifice" mode now sacrifices when the related resource is still locked</li>
+<li>Secret achievement 46 is now properly awarded if the condition is met while offline</li>
+<li>Storing real time no longer prevents autobuyers from ticking</li>
+<li>Fixed bugged modal and game crash when attempting to exit a Celestial Reality from the Glyph tab</li>
+<li>IAP flag in speedruns is now updated more consistently</li>
+<li>Fixed Realty button sometimes showing an incorrect projected RM value due to amplification</li>
+<li>Fixed Black Holes getting stuck as permanently inactive in some cases</li>
+<li>Fixed negative Glyph counts not being properly updated when using Glyph undo</li>
+<li>Glyph purge modals now count identical Glyphs properly</li>
+<li>Fixed a poor interaction between the new Glyph RNG and negative seed values</li>
+<li>Fixed Glyph RNG seed not advancing after amplified realities</li>
+</ul>
+
+<br><b>Other changes:</b><br>
+<ul>
+<li>Added confirmation option to hide Glyph purge modals which mass-sacrifice</li>
+<li>Improved UI behavior when importing saves in certain conditions</li>
+<li>Teresa's EU-start upgrade now applies retroactively</li>
+<li>Offline ticks are now limited to a minimum of 33ms instead of 50ms</li>
+<li>"Offline" progress due to device hibernation or game unfocusing now gets simulated as if it were offline time
+  instead of being applied as a single large tick</li>
+<li>Offline/hibernation maximum time has been increased from 6 hours to 24 hours</li>
+<li>Text references to Teresa's Perk Shop have been more standardized</li>
+<li>Positioning for V's entries in navigation was adjusted to prevent text overlap</li>
+<li>A handful of more minor text and typo fixes</li>
+</ul>
+<br>
+`
+  },
+  {
     date: [2023, 4, 7],
     name: "Speedrunner and Glyph RNG",
     info: `

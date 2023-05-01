@@ -1419,10 +1419,10 @@ GameDatabase.news = [
         InvertedMetro:
           `it gives off this very stern vibe, with these highly contrasting colors clashing with a
           professional modern sort of design.`,
-        AMOLED: "it saves 10% more energy compared to using light theme. Doesn't everyone love saving energy?",
+        AMOLED: "it saves 10% more energy compared to using a light theme. Doesn't everyone love saving energy?",
         AMOLEDMetro:
           `it has a nice look to it that resembles the control panel of a sci-fi spaceship. ...No, you can't
-          actually fly a spceship, unfortunately.`,
+          actually fly a spaceship, unfortunately.`,
         S1: "it really gets me in the holiday spirit. I can just feel the magic in the air!",
         S2: "it makes me proud to be Finnish, and proud to celebrate all that we have accomplished as a people.",
         S3: "it's a beautiful analogue for life, in that it's ever changing and never quite right.",

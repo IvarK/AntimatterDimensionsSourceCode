@@ -226,7 +226,8 @@ export class TimeStudyTree {
         return reqSatisfied && !hasForbiddenStudies;
       }
       const hasEnoughTT = Currency.timeTheorems.value.subtract(this.spentTheorems[0]).gte(study.cost);
-      return reqSatisfied && !hasForbiddenStudies && (study.isBought || (study.isEntryGoalMet && hasEnoughTT));
+      const secondaryGoal = Perk.studyECRequirement.isBought || study.isEntryGoalMet;
+      return reqSatisfied && !hasForbiddenStudies && (study.isBought || (secondaryGoal && hasEnoughTT));
     }
     return reqSatisfied;
   }
@@ -239,7 +240,7 @@ export class TimeStudyTree {
       ? Math.clampMin(config.STCost - stDiscount, 0)
       : 0;
     // Took these out of the checkCosts check as these aren't available early game
-    const maxST = V.spaceTheorems;
+    const maxST = Pelle.isDoomed ? 0 : V.spaceTheorems;
     const hasST = this.spentTheorems[1] + stNeeded <= maxST;
     if (checkCosts) {
       const maxTT = Currency.timeTheorems.value.add(GameCache.currentStudyTree.value.spentTheorems[0])

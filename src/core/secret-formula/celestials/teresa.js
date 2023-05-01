@@ -35,7 +35,10 @@ GameDatabase.celestials.teresa = {
       id: 5,
       price: 1e6,
       description: "You start Reality with all Eternity Upgrades unlocked.",
-      isDisabledInDoomed: true
+      isDisabledInDoomed: true,
+      onUnlock: () => {
+        for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
+      },
     }
   }
 };

@@ -67,6 +67,7 @@ GameDatabase.changelog = [
 <li>Fixed Black Holes getting stuck as permanently inactive in some cases</li>
 <li>Fixed negative Glyph counts not being properly updated when using Glyph undo</li>
 <li>Glyph purge modals now count identical Glyphs properly</li>
+<li>Fixed Glyph purge modals sometimes not appearing</li>
 <li>Fixed a poor interaction between the new Glyph RNG and negative seed values</li>
 <li>Fixed Glyph RNG seed not advancing after amplified realities</li>
 </ul>
@@ -82,6 +83,7 @@ GameDatabase.changelog = [
 <li>Offline/hibernation maximum time has been increased from 6 hours to 24 hours</li>
 <li>Text references to Teresa's Perk Shop have been more standardized</li>
 <li>Positioning for V's entries in navigation was adjusted to prevent text overlap</li>
+<li>AMOLED themes now have proper theming on credits scroll</li>
 <li>A handful of more minor text and typo fixes</li>
 </ul>
 <br>

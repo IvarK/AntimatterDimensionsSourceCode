@@ -519,7 +519,7 @@ export const Glyphs = {
         toBeDeleted++;
       }
     }
-    if (player.reality.autoCollapse) this.collapseEmptySlots();
+    if (player.reality.autoCollapse && deleteGlyphs) this.collapseEmptySlots();
     return toBeDeleted;
   },
   // Similar to copyForRecords, except that it also preserves null entries, passes on the IDs, and doesn't

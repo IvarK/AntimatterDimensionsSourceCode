@@ -15,8 +15,9 @@ export default {
     presets: () => player.timestudy.presets.filter(p => p.studies !== ""),
     names() {
       // Study presets can contain non-alphanumeric characters, which aren't allowed in constants,
-      // so we replace all of those with underscores
-      return this.presets.map(p => `TSPreset__${p.name.replaceAll(/[^a-zA-Z_0-9]/gu, "_")}`);
+      // so we replace all of those with underscores. This alone can however result in duplicate names due
+      // to multiple different characters being mapped to underscores, so we also include the preset index
+      return this.presets.map((p, index) => `TSPreset${index + 1}__${p.name.replaceAll(/[^a-zA-Z_0-9]/gu, "_")}`);
     }
   },
   methods: {

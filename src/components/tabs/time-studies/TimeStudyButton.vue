@@ -108,7 +108,24 @@ export default {
     },
     config() {
       return { ...this.study.config, formatCost: value => (value >= 1e6 ? format(value) : formatInt(value)) };
-    }
+    },
+    showDefaultCostDisplay() {
+      const costCond = (this.showCost && !this.showStCost) || this.STCost === 0;
+      return !this.setup.isSmall && !this.doomedRealityStudy && costCond;
+    },
+    customCostStr() {
+      const ttStr = this.setup.isSmall
+        ? `${formatInt(this.config.cost)} TT`
+        : quantifyInt("Time Theorem", this.config.cost);
+      const stStr = this.setup.isSmall
+        ? `${formatInt(this.STCost)} ST`
+        : quantifyInt("Space Theorem", this.STCost);
+
+      const costs = [];
+      if (this.config.cost) costs.push(ttStr);
+      if (this.STCost && this.showStCost) costs.push(stStr);
+      return costs.join(" + ");
+    },
   },
   methods: {
     update() {
@@ -164,17 +181,13 @@ export class TimeStudySetup {
   >
     <slot />
     <CostDisplay
-      v-if="!doomedRealityStudy && ((showCost && !showStCost) || STCost === 0)"
+      v-if="showDefaultCostDisplay"
       br
       :config="config"
       name="Time Theorem"
     />
-    <div v-else-if="showStCost">
-      Cost:
-      <span v-if="config.cost">
-        {{ quantifyInt("Time Theorem", config.cost) }} and
-      </span>
-      {{ quantifyInt("Space Theorem", STCost) }}
+    <div v-else-if="!isBought">
+      Cost: {{ customCostStr }}
     </div>
   </button>
 </template>

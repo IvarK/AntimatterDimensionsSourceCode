@@ -500,7 +500,7 @@ export const Glyphs = {
   autoClean(threshold = 5, deleteGlyphs = true) {
     const isHarsh = threshold < 5;
     let toBeDeleted = 0;
-    const inventoryCopy = deleteGlyphs ? undefined : this.fakePurgeIngentory();
+    const inventoryCopy = deleteGlyphs ? undefined : this.fakePurgeInventory();
     // If the player hasn't unlocked sacrifice yet, prevent them from removing any glyphs.
     if (!GlyphSacrificeHandler.canSacrifice) return toBeDeleted;
     // We look in backwards order so that later glyphs get cleaned up first
@@ -524,7 +524,7 @@ export const Glyphs = {
   },
   // Similar to copyForRecords, except that it also preserves null entries, passes on the IDs, and doesn't
   // sort the glyphs; these are all necessary for the purge logic to work correctly
-  fakePurgeIngentory() {
+  fakePurgeInventory() {
     return this.inventory.map(g => (g === null
       ? null
       : {

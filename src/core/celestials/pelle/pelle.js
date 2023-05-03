@@ -76,7 +76,7 @@ export const Pelle = {
     if (Glyphs.freeInventorySpace < 5) {
       Modal.hideAll();
       Modal.message.show(`You must have enough empty unprotected Glyph slots for
-        5 additional Glyphs in order to Doom your Reality.`, 1);
+        ${formatInt(5)} additional Glyphs in order to Doom your Reality.`, 1);
       return;
     }
     for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));

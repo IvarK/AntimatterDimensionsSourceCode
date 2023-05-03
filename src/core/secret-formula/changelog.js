@@ -78,7 +78,7 @@ GameDatabase.changelog = [
 <li>Improved UI behavior when importing saves in certain conditions</li>
 <li>Teresa's EU-start upgrade now applies retroactively</li>
 <li>Offline ticks are now limited to a minimum of 33ms instead of 50ms</li>
-<li>"Offline" progress due to device hibernation or game unfocusing now gets simulated as if it were offline time
+<li>"Offline" progress due to device hibernation now gets simulated as if it were offline time
   instead of being applied as a single large tick</li>
 <li>Offline/hibernation maximum time has been increased from 6 hours to 24 hours</li>
 <li>Text references to Teresa's Perk Shop have been more standardized</li>

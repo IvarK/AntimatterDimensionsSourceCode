@@ -290,6 +290,8 @@ GameStorage.migrations = {
       // old filter data into the new prop
       const reducedFilter = {};
       const effectDB = Object.values(GameDatabase.reality.glyphEffects);
+      // The in-dev filter had entries for companion/reality/cursed glyphs, which have been removed and any other errors
+      // which show up elsewhere have been resolved
       for (const type of ALCHEMY_BASIC_GLYPH_TYPES) {
         const oldData = player.celestials.effarig.glyphScoreSettings.types[type];
         const typeEffects = effectDB.filter(t => t.glyphTypes.includes(type)).map(t => t.id);

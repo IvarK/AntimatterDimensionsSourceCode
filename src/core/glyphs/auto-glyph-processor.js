@@ -19,7 +19,7 @@ export const AutoGlyphProcessor = {
   // on only the glyph itself and not external factors.
   filterValue(glyph) {
     const typeCfg = this.types[glyph.type];
-    if (glyph.type === "companion") return Infinity;
+    if (["companion", "reality"].includes(glyph.type)) return Infinity;
     if (glyph.type === "cursed") return -Infinity;
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
@@ -79,6 +79,9 @@ export const AutoGlyphProcessor = {
   },
   // This is a mode-specific threshold which determines if selected glyphs are "good enough" to keep
   thresholdValue(glyph) {
+    // Glyph filter settings are undefined for companion/cursed/reality glyphs, so we return the lowest possible
+    // value on the basis that we never want to automatically get rid of them
+    if (this.types[glyph.type] === undefined) return -Number.MAX_VALUE;
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.EFFECT_COUNT:
         return player.reality.glyphs.filter.simple;

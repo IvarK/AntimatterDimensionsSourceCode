@@ -450,7 +450,7 @@ window.player = {
             rarity: 0,
             score: 0,
             effectCount: 0,
-            effectChoices: t.effects.mapToObject(e => e.id, () => false),
+            specifiedMask: 0,
             effectScores: t.effects.mapToObject(e => e.id, () => 0),
           })),
       },

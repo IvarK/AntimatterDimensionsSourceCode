@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      isActive: AutoGlyphProcessor.types[this.glyphType].effectChoices[this.effect.id],
+      isActive: false,
       noExclude: false,
       effarigSettings: {
         effarigrm: false,
@@ -37,32 +37,41 @@ export default {
       if (this.noExclude) return "";
 
       const effarigSettings = this.effarigSettings;
-      if (effarigSettings.effarigrm && effarigSettings.effarigglyph &&
+      if (effarigSettings.RM && effarigSettings.glyph &&
         (this.effect.id === "effarigrm" || this.effect.id === "effarigglyph")) {
         return "RM multiplier and Glyph instability cannot occur together on the same Glyph!";
       }
-      if (this.effect.id === "effarigrm" && effarigSettings.effarigglyph) {
+      if (this.effect.id === "effarigrm" && effarigSettings.glyph) {
         return "This effect is mutually exclusive with Glyph instability!";
       }
-      if (this.effect.id === "effarigglyph" && effarigSettings.effarigrm) {
+      if (this.effect.id === "effarigglyph" && effarigSettings.RM) {
         return "This effect is mutually exclusive with RM multiplier!";
       }
       return "";
     },
     isExcluded() {
       return this.exclusionTooltip !== "";
+    },
+    effarigBits() {
+      const effectDB = GameDatabase.reality.glyphEffects;
+      return {
+        RM: effectDB.effarigrm.bitmaskIndex,
+        glyph: effectDB.effarigglyph.bitmaskIndex,
+      };
     }
   },
   methods: {
     update() {
-      const effarigSettings = AutoGlyphProcessor.types.effarig.effectChoices;
-      this.effarigSettings.effarigrm = effarigSettings.effarigrm;
-      this.effarigSettings.effarigglyph = effarigSettings.effarigglyph;
+      this.isActive = (AutoGlyphProcessor.types[this.glyphType].specifiedMask & (1 << this.effect.bitmaskIndex)) !== 0;
+      const effarigMask = AutoGlyphProcessor.types.effarig.specifiedMask;
+      this.effarigSettings = {
+        RM: (effarigMask & (1 << this.effarigBits.RM)) !== 0,
+        glyph: (effarigMask & (1 << this.effarigBits.glyph)) !== 0
+      };
       this.noExclude = Ra.unlocks.glyphEffectCount.canBeApplied;
     },
     toggleSelection() {
-      this.isActive = !AutoGlyphProcessor.types[this.glyphType].effectChoices[this.effect.id];
-      AutoGlyphProcessor.types[this.glyphType].effectChoices[this.effect.id] = this.isActive;
+      AutoGlyphProcessor.types[this.glyphType].specifiedMask ^= 1 << this.effect.bitmaskIndex;
     },
     setEffectCount(event) {
       const inputValue = event.target.value;

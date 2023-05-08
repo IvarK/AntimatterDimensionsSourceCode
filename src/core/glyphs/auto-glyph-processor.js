@@ -38,16 +38,13 @@ export const AutoGlyphProcessor = {
         // Value is equal to rarity but minus 200 for each missing effect. This makes all glyphs which don't
         // satisfy the requirements have a negative score and generally the worse a glyph misses the requirements,
         // the more negative of a score it will have
-        const glyphEffectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
-          .filter(effect => effect.isGenerated)
-          .map(effect => effect.id);
-        if (glyphEffectList.length < typeCfg.effectCount) {
-          return strengthToRarity(glyph.strength) - 200 * (typeCfg.effectCount - glyphEffectList.length);
+        const glyphEffectCount = countValuesFromBitmask(glyph.effects);
+        if (glyphEffectCount < typeCfg.effectCount) {
+          return strengthToRarity(glyph.strength) - 200 * (typeCfg.effectCount - glyphEffectCount);
         }
-        let missingEffects = 0;
-        for (const effect of Object.keys(typeCfg.effectChoices)) {
-          if (typeCfg.effectChoices[effect] && !glyphEffectList.includes(effect)) missingEffects++;
-        }
+        // The missing effect count can be gotten by taking the full filter bitmask, removing only the bits which are
+        // present on both the filter and the glyph, and then counting the bits up
+        const missingEffects = countValuesFromBitmask(typeCfg.specifiedMask - (typeCfg.specifiedMask & glyph.effects));
         return strengthToRarity(glyph.strength) - 200 * missingEffects;
       }
       case AUTO_GLYPH_SCORE.EFFECT_SCORE: {

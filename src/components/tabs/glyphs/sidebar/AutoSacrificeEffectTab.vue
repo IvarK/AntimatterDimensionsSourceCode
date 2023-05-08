@@ -15,7 +15,6 @@ export default {
   data() {
     return {
       effectCount: 0,
-      effectChoices: {},
     };
   },
   computed: {
@@ -40,15 +39,9 @@ export default {
         beyond ones specified will not increase Glyph score.`;
     }
   },
-  created() {
-    this.effectChoices = Object.assign({}, AutoGlyphProcessor.types[this.glyphType].effectChoices);
-  },
   methods: {
     update() {
       this.effectCount = this.autoSacrificeSettings.effectCount;
-      for (const e of this.effects) {
-        this.effectChoices[e.id] = this.autoSacrificeSettings.effectChoices[e.id];
-      }
     },
     setEffectCount(event) {
       const inputValue = event.target.value;

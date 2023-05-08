@@ -134,6 +134,10 @@ export default {
     // we also want to hide tooltips because this causes poor UI if there are a lot of nearby errors upon conversion
     this.recalculateErrorCount();
     this.suppressTooltip = true;
+
+    // Force the editor to parse the script again after all the values have been filled in above, or else it'll create
+    // blocks which always have errors due to undefined props
+    BlockAutomator.parseTextFromBlocks();
   },
   // Destroying single inputs need to be handled carefully because there are three situations under which they will
   // be removed, and they all require different behavior:

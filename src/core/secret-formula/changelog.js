@@ -63,7 +63,7 @@ GameDatabase.changelog = [
 <li>Storing real time no longer prevents autobuyers from ticking</li>
 <li>Fixed bugged modal and game crash when attempting to exit a Celestial Reality from the Glyph tab</li>
 <li>IAP flag in speedruns is now updated more consistently</li>
-<li>Fixed Realty button sometimes showing an incorrect projected RM value due to amplification</li>
+<li>Fixed Reality button sometimes showing an incorrect projected RM value due to amplification</li>
 <li>Fixed Black Holes getting stuck as permanently inactive in some cases</li>
 <li>Fixed negative Glyph counts not being properly updated when using Glyph undo</li>
 <li>Glyph purge modals now count identical Glyphs properly</li>

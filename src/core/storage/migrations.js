@@ -293,7 +293,9 @@ GameStorage.migrations = {
       // which show up elsewhere have been resolved
       for (const type of ALCHEMY_BASIC_GLYPH_TYPES) {
         const oldData = player.celestials.effarig.glyphScoreSettings.types[type];
-        const typeEffects = effectDB.filter(t => t.glyphTypes.includes(type));
+        const typeEffects = effectDB
+          .filter(t => t.glyphTypes.includes(type))
+          .sort((a, b) => a.bitmaskIndex - b.bitmaskIndex);
 
         // Two of these effects were renamed to be shorter
         reducedFilter[type] = {
@@ -302,13 +304,15 @@ GameStorage.migrations = {
           effectCount: oldData.effectCount,
         };
 
-        // These all stored as { effectKey: value } where effectKey is the ID string "powerpow" or similar
+        // These all used to stored as { effectKey: value } where effectKey is the ID string "powerpow" or similar,
+        // but have now been refactored to be stored as a bitmask and Number array instead
         reducedFilter[type].specifiedMask = 0;
-        reducedFilter[type].effectScores = {};
+        reducedFilter[type].effectScores = [];
         for (const effect of typeEffects) {
+          // The way we filter to generate typeEffects also gives an undefined entry which needs to be ignored
           if (!effect) continue;
           reducedFilter[type].specifiedMask |= oldData.effectChoices[effect.id] ? 1 << effect.bitmaskIndex : 0;
-          reducedFilter[type].effectScores[effect.id] = oldData.effectScores[effect.id];
+          reducedFilter[type].effectScores.push(oldData.effectScores[effect.id]);
         }
       }
       player.reality.glyphs.filter.types = reducedFilter;

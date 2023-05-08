@@ -42,16 +42,20 @@ export default {
     // This is an absolute value limit (ie. it's allowed to go negative down to negative this value)
     weightInputLimit() {
       return 999;
+    },
+    indexOffset() {
+      return AutoGlyphProcessor.bitmaskIndexOffset(this.glyphType);
     }
   },
   created() {
-    this.effectScores = Object.assign({}, AutoGlyphProcessor.types[this.glyphType].effectScores);
+    this.effectScores = [...AutoGlyphProcessor.types[this.glyphType].effectScores];
   },
   methods: {
     update() {
       this.scoreThreshold = this.autoSacrificeSettings.score;
       for (const e of this.effects) {
-        this.effectScores[e.id] = this.autoSacrificeSettings.effectScores[e.id];
+        const shiftedIndex = e.bitmaskIndex - this.indexOffset;
+        this.effectScores[shiftedIndex] = this.autoSacrificeSettings.effectScores[shiftedIndex];
       }
     },
     limitedInput(input) {
@@ -63,10 +67,10 @@ export default {
         this.autoSacrificeSettings.score = this.limitedInput(inputValue);
       }
     },
-    setEffectScore(id, event) {
+    setEffectScore(index, event) {
       const inputValue = event.target.value;
       if (!isNaN(inputValue)) {
-        this.autoSacrificeSettings.effectScores[id] = this.limitedInput(inputValue);
+        this.autoSacrificeSettings.effectScores[index] = this.limitedInput(inputValue);
       }
     },
   }
@@ -112,8 +116,8 @@ export default {
         :min="-weightInputLimit"
         :max="weightInputLimit"
         class="c-auto-sac-type-tab__input"
-        :value="effectScores[effect.id]"
-        @blur="setEffectScore(effect.id, $event)"
+        :value="effectScores[effect.bitmaskIndex - indexOffset]"
+        @blur="setEffectScore(effect.bitmaskIndex - indexOffset, $event)"
       >
     </div>
   </div>

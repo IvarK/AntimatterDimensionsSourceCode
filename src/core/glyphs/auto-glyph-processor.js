@@ -14,6 +14,25 @@ export const AutoGlyphProcessor = {
   get types() {
     return player.reality.glyphs.filter.types;
   },
+  // This exists to avoid unnecessary repeated object initialization in the filtering code
+  bitmaskIndexOffset(type) {
+    switch (type) {
+      case "time":
+        return 0;
+      case "dilation":
+        return 4;
+      case "replication":
+        return 8;
+      case "infinity":
+        return 12;
+      case "power":
+        return 16;
+      case "effarig":
+        return 20;
+      default:
+        throw new Error("Unknown glyph type mode in bitmaskIndexOffset");
+    }
+  },
   // This function is meant to be something which assigns a value to every glyph, with the assumption that
   // higher numbers correspond to better glyphs. This value is also displayed on tooltips when it depends
   // on only the glyph itself and not external factors.
@@ -50,10 +69,14 @@ export const AutoGlyphProcessor = {
       case AUTO_GLYPH_SCORE.EFFECT_SCORE: {
         const effectList = getGlyphEffectsFromBitmask(glyph.effects, 0, 0)
           .filter(effect => effect.isGenerated)
-          .map(effect => effect.id);
-        // This ternary check is required to filter out the additional effects given by Ra-Nameless 25, which don't
-        // exist in the glyph filter settings. It can be safely ignored since the effect is always given.
-        const effectScore = effectList.map(e => (typeCfg.effectScores[e] ? typeCfg.effectScores[e] : 0)).sum();
+          .map(effect => effect.bitmaskIndex);
+        const offset = this.bitmaskIndexOffset(glyph.type);
+        // This ternary check is required to filter out any effects which may appear on the glyph which aren't normally
+        // there in typical glyph generation. Ra-Nameless 25 is the only case where this happens, but this also has the
+        // side-effect of making altered glyph generation in mods less likely to crash the game as well
+        const effectScore = effectList
+          .map(e => (typeCfg.effectScores[e - offset] ? typeCfg.effectScores[e - offset] : 0))
+          .sum();
         return strengthToRarity(glyph.strength) + effectScore;
       }
       // Picked glyphs are never kept in Alchemy modes.
@@ -132,7 +155,7 @@ export const AutoGlyphProcessor = {
   // some glyphs they otherwise want to keep
   hasNegativeEffectScore() {
     return this.scoreMode === AUTO_GLYPH_SCORE.EFFECT_SCORE &&
-      Object.values(this.types).map(t => Object.values(t.effectScores)).flat().some(v => v < 0);
+      Object.values(this.types).map(t => t.effectScores.min()).min() < 0;
   }
 };
 

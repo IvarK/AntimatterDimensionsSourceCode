@@ -275,6 +275,47 @@ GameStorage.migrations = {
       // this prop was left in the save file instead of being cleaned up
       delete player.options.confirmations.resetCelestial;
     },
+    20: player => {
+      // Glyph filter internal format refactor and consolidation
+
+      // Move all the filter props out of celestial/effarig scope and into reality/glyph scope, renaming a few of them
+      player.reality.glyphs.filter = player.celestials.effarig.glyphScoreSettings;
+      player.reality.glyphs.filter.trash = player.celestials.effarig.glyphTrashMode;
+      player.reality.glyphs.filter.select = player.reality.glyphs.filter.mode;
+      delete player.reality.glyphs.filter.mode;
+      player.reality.glyphs.filter.simple = player.reality.glyphs.filter.simpleEffectCount;
+      delete player.reality.glyphs.filter.simpleEffectCount;
+
+      // There are a few big things going on in this loop which are annotated within, but it largely transfers all the
+      // old filter data into the new prop
+      const reducedFilter = {};
+      const effectDB = Object.values(GameDatabase.reality.glyphEffects);
+      for (const type of ALCHEMY_BASIC_GLYPH_TYPES) {
+        const oldData = player.celestials.effarig.glyphScoreSettings.types[type];
+        const typeEffects = effectDB.filter(t => t.glyphTypes.includes(type)).map(t => t.id);
+
+        // Two of these effects were renamed to be shorter
+        reducedFilter[type] = {
+          rarity: oldData.rarityThreshold,
+          score: oldData.scoreThreshold,
+          effectCount: oldData.effectCount,
+        };
+
+        // These all stored as { effectKey: value } where effectKey is the ID string "powerpow" or similar
+        reducedFilter[type].effectChoices = {};
+        reducedFilter[type].effectScores = {};
+        for (const effect of typeEffects) {
+          if (!effect) continue;
+          reducedFilter[type].effectChoices[effect] = oldData.effectChoices[effect];
+          reducedFilter[type].effectScores[effect] = oldData.effectScores[effect];
+        }
+      }
+      player.reality.glyphs.filter.types = reducedFilter;
+
+      // Remove the old data after copying it all over
+      delete player.celestials.effarig.glyphScoreSettings;
+      delete player.celestials.effarig.glyphTrashMode;
+    },
   },
 
   normalizeTimespans(player) {

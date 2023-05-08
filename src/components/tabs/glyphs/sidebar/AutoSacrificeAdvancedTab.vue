@@ -49,7 +49,7 @@ export default {
   },
   methods: {
     update() {
-      this.scoreThreshold = this.autoSacrificeSettings.scoreThreshold;
+      this.scoreThreshold = this.autoSacrificeSettings.score;
       for (const e of this.effects) {
         this.effectScores[e.id] = this.autoSacrificeSettings.effectScores[e.id];
       }
@@ -60,7 +60,7 @@ export default {
     setScoreThreshold(event) {
       const inputValue = event.target.value;
       if (!isNaN(inputValue)) {
-        this.autoSacrificeSettings.scoreThreshold = this.limitedInput(inputValue);
+        this.autoSacrificeSettings.score = this.limitedInput(inputValue);
       }
     },
     setEffectScore(id, event) {

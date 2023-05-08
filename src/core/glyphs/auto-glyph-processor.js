@@ -1,18 +1,18 @@
 export const AutoGlyphProcessor = {
   get scoreMode() {
-    return player.celestials.effarig.glyphScoreSettings.mode;
+    return player.reality.glyphs.filter.select;
   },
   set scoreMode(value) {
-    player.celestials.effarig.glyphScoreSettings.mode = value;
+    player.reality.glyphs.filter.select = value;
   },
   get sacMode() {
-    return player.celestials.effarig.glyphTrashMode;
+    return player.reality.glyphs.filter.trash;
   },
   set sacMode(value) {
-    player.celestials.effarig.glyphTrashMode = value;
+    player.reality.glyphs.filter.trash = value;
   },
   get types() {
-    return player.celestials.effarig.glyphScoreSettings.types;
+    return player.reality.glyphs.filter.types;
   },
   // This function is meant to be something which assigns a value to every glyph, with the assumption that
   // higher numbers correspond to better glyphs. This value is also displayed on tooltips when it depends
@@ -81,12 +81,12 @@ export const AutoGlyphProcessor = {
   thresholdValue(glyph) {
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.EFFECT_COUNT:
-        return player.celestials.effarig.glyphScoreSettings.simpleEffectCount;
+        return player.reality.glyphs.filter.simple;
       case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
       case AUTO_GLYPH_SCORE.SPECIFIED_EFFECT:
-        return this.types[glyph.type].rarityThreshold;
+        return this.types[glyph.type].rarity;
       case AUTO_GLYPH_SCORE.EFFECT_SCORE:
-        return this.types[glyph.type].scoreThreshold;
+        return this.types[glyph.type].score;
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:

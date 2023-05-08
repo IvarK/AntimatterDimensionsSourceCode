@@ -66,10 +66,10 @@ export default {
   },
   methods: {
     update() {
-      this.effectCount = player.celestials.effarig.glyphScoreSettings.simpleEffectCount;
+      this.effectCount = player.reality.glyphs.filter.simple;
       this.mode = AutoGlyphProcessor.scoreMode;
       for (const type of generatedTypes) {
-        this.rarityThresholds[type] = AutoGlyphProcessor.types[type].rarityThreshold;
+        this.rarityThresholds[type] = AutoGlyphProcessor.types[type].rarity;
       }
       this.lockedTypes = GlyphTypes.locked.map(e => e.id);
       this.alchemyUnlocked = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
@@ -118,13 +118,13 @@ export default {
       AutoGlyphProcessor.scoreMode = m;
     },
     setRarityThreshold(id, value) {
-      AutoGlyphProcessor.types[id].rarityThreshold = value;
+      AutoGlyphProcessor.types[id].rarity = value;
     },
     setEffectCount(event) {
       const inputValue = event.target.value;
       if (!isNaN(inputValue)) {
         this.effectCount = Math.clamp(inputValue, 0, 8);
-        player.celestials.effarig.glyphScoreSettings.simpleEffectCount = this.effectCount;
+        player.reality.glyphs.filter.simple = this.effectCount;
       }
     },
     filterMode(index) {

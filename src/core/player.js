@@ -440,6 +440,20 @@ window.player = {
         glyphs: [],
       }),
       protectedRows: 2,
+      filter: {
+        select: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
+        trash: AUTO_GLYPH_REJECT.SACRIFICE,
+        simple: 0,
+        types: GlyphTypes.list
+          .filter(t => ALCHEMY_BASIC_GLYPH_TYPES.includes(t.id))
+          .mapToObject(t => t.id, t => ({
+            rarity: 0,
+            score: 0,
+            effectCount: 0,
+            effectChoices: t.effects.mapToObject(e => e.id, () => false),
+            effectScores: t.effects.mapToObject(e => e.id, () => 0),
+          })),
+      },
       createdRealityGlyph: false,
       cosmetics: {
         active: false,
@@ -552,18 +566,6 @@ window.player = {
         eternities: 25
       },
       autoAdjustGlyphWeights: false,
-      glyphScoreSettings: {
-        mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
-        simpleEffectCount: 0,
-        types: GlyphTypes.list.mapToObject(t => t.id, t => ({
-          rarityThreshold: 0,
-          scoreThreshold: 0,
-          effectCount: 0,
-          effectChoices: t.effects.mapToObject(e => e.id, () => false),
-          effectScores: t.effects.mapToObject(e => e.id, () => 0),
-        })),
-      },
-      glyphTrashMode: AUTO_GLYPH_REJECT.SACRIFICE,
     },
     enslaved: {
       isStoring: false,

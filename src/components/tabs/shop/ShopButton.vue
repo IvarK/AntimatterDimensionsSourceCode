@@ -26,6 +26,7 @@ export default {
     isAllCosmeticSets() {
       return this.purchase.config.key === "allCosmeticSets";
     },
+    // Note: This will always be false on non-cosmetic buttons and thus will never disable them in purchaseButtonObject
     allSetsUnlocked() {
       return (this.isSingleCosmeticSet || this.isAllCosmeticSets) && !this.lockedCount;
     }
@@ -51,9 +52,10 @@ export default {
       this.purchase.purchase();
     },
     purchaseButtonObject() {
+      const lockCosmetics = (this.isSingleCosmeticSet && !this.hasChosen) || this.allSetsUnlocked;
       return {
         "o-shop-button-button": true,
-        "o-shop-button-button--disabled": !this.canAfford || (this.isSingleCosmeticSet && !this.hasChosen)
+        "o-shop-button-button--disabled": !this.canAfford || lockCosmetics
       };
     }
   },

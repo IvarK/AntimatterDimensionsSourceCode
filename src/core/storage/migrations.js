@@ -276,8 +276,7 @@ GameStorage.migrations = {
       delete player.options.confirmations.resetCelestial;
     },
     20: player => {
-      // Glyph filter internal format refactor and consolidation
-
+      // GLYPH FILTER INTERNAL FORMAT REFACTOR
       // Move all the filter props out of celestial/effarig scope and into reality/glyph scope, renaming a few of them
       player.reality.glyphs.filter = player.celestials.effarig.glyphScoreSettings;
       player.reality.glyphs.filter.trash = player.celestials.effarig.glyphTrashMode;
@@ -294,7 +293,7 @@ GameStorage.migrations = {
       // which show up elsewhere have been resolved
       for (const type of ALCHEMY_BASIC_GLYPH_TYPES) {
         const oldData = player.celestials.effarig.glyphScoreSettings.types[type];
-        const typeEffects = effectDB.filter(t => t.glyphTypes.includes(type)).map(t => t.id);
+        const typeEffects = effectDB.filter(t => t.glyphTypes.includes(type));
 
         // Two of these effects were renamed to be shorter
         reducedFilter[type] = {
@@ -304,12 +303,12 @@ GameStorage.migrations = {
         };
 
         // These all stored as { effectKey: value } where effectKey is the ID string "powerpow" or similar
-        reducedFilter[type].effectChoices = {};
+        reducedFilter[type].specifiedMask = 0;
         reducedFilter[type].effectScores = {};
         for (const effect of typeEffects) {
           if (!effect) continue;
-          reducedFilter[type].effectChoices[effect] = oldData.effectChoices[effect];
-          reducedFilter[type].effectScores[effect] = oldData.effectScores[effect];
+          reducedFilter[type].specifiedMask |= oldData.effectChoices[effect.id] ? 1 << effect.bitmaskIndex : 0;
+          reducedFilter[type].effectScores[effect.id] = oldData.effectScores[effect.id];
         }
       }
       player.reality.glyphs.filter.types = reducedFilter;

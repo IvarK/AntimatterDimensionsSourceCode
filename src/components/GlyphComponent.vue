@@ -151,7 +151,7 @@ export default {
       }
 
       let symbolColor;
-      if (this.isRealityGlyph) symbolColor = this.realityColor;
+      if (this.isRealityGlyph && this.realityColor) symbolColor = this.realityColor;
       else {
         symbolColor = this.cosmeticConfig.ignoreRarityColor
           ? GlyphAppearanceHandler.getBorderColor(this.glyph.type)

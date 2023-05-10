@@ -87,10 +87,14 @@ export default {
       return InfinityChallenge(4).isCompleted || PlayerProgress.eternityUnlocked();
     },
     // While infinity power is a power-based effect, we want to disallow showing that as an equivalent multiplier
-    // since that it doesn't make a whole lot of sense to do that. Uses startsWith instead of String equality since
-    // it has to match both the top-level entry and the individual dimension entries
+    // since that it doesn't make a whole lot of sense to do that. We also want to hide this for entries related
+    // to tickspeed/galaxies because we already mostly hack those with fake values and should thus not allow those
+    // to be changed either.
     allowPowerToggle() {
-      return !this.resource.key.startsWith("AD_infinityPower");
+      const forbiddenEntries = ["AD_infinityPower", "galaxies", "tickspeed"];
+      // Uses startsWith instead of String equality since it has to match both the top-level entry and any
+      // related children entries further down the tree.
+      return !forbiddenEntries.some(key => this.resource.key.startsWith(key));
     },
   },
   watch: {

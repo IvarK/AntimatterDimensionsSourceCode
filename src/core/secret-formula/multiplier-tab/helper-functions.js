@@ -31,7 +31,7 @@ export const MultiplierTabHelper = {
       InfinityChallenge(5).reward,
       PelleUpgrade.galaxyPower,
       PelleRifts.decay.milestones[1]
-    );
+    ) * Pelle.specialGlyphEffect.power;
   },
 
   // Helper method for galaxies and tickspeed, broken up as contributions of tickspeed*log(perGalaxy) and galaxyCount to

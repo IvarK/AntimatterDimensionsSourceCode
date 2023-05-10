@@ -1028,7 +1028,7 @@ GameDatabase.achievements.normal = [
     description: "Unlock the automator.",
     checkRequirement: () => Player.automatorUnlocked,
     checkEvent: [GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.REALITY_UPGRADE_BOUGHT, GAME_EVENT.PERK_BOUGHT,
-      GAME_EVENT.BLACK_HOLE_BOUGHT],
+      GAME_EVENT.BLACK_HOLE_UNLOCKED],
     get reward() { return `Dimension Boosts are ${formatPercents(0.5)} stronger.`; },
     effect: 1.5,
   },
@@ -1053,7 +1053,9 @@ GameDatabase.achievements.normal = [
   {
     id: 144,
     name: "Is this an Interstellar reference?",
-    description: "Unlock the Black Hole."
+    description: "Unlock the Black Hole.",
+    checkRequirement: () => BlackHole(1).isUnlocked,
+    checkEvent: GAME_EVENT.BLACK_HOLE_UNLOCKED,
   },
   {
     id: 145,

@@ -135,7 +135,7 @@ GameDatabase.speedrunMilestones = [
     name: "Black Hole",
     description: "Unlock the Black Hole",
     checkRequirement: () => true,
-    // This is called directly within BlackHoles.unlock
+    checkEvent: GAME_EVENT.BLACK_HOLE_UNLOCKED,
   },
   {
     id: 18,

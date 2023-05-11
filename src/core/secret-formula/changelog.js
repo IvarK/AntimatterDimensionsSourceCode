@@ -51,6 +51,7 @@ GameDatabase.changelog = [
 <li>Fixed automator constants not being compared to built-in keywords correctly</li>
 <li>Fixed execution skipping the first line whenever scripts restart due to a REALITY command</li>
 <li>Fixed a few syntax coloring bugs in the Automator text editor</li>
+<li>Fixed a bug which caused the automator to prevent some resources from being reset after full completions</li>
 </ul>
 <br>
 
@@ -84,6 +85,9 @@ GameDatabase.changelog = [
 <li>Text references to Teresa's Perk Shop have been more standardized</li>
 <li>Positioning for V's entries in navigation was adjusted to prevent text overlap</li>
 <li>AMOLED themes now have proper theming on credits scroll</li>
+<li>Fixed Achievement 142 not unlocking when unlocking the Black Hole</li>
+<li>Fixed Reality Glyph cosmetics not handling colors properly</li>
+<li>Exit Dilation modal no longer erroneously appears outside of Dilation</li>
 <li>A handful of more minor text and typo fixes</li>
 </ul>
 <br>

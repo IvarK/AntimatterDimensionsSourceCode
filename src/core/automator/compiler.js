@@ -121,6 +121,12 @@ import { AutomatorLexer } from "./lexer";
     // filtered out in other parts of the code. This isn't necessarily comprehensive, but should hopefully cover the
     // most common cases.
     modifyErrorMessages() {
+      // This function also gets called during loading the savefile, and if it somehow fails to execute properly then
+      // the game cache is never invalidated. This only seems to happen on re-initialization after full completions,
+      // but that means that in many cases a lot of endgame values are never cleared. Therefore we shortcut the whole
+      // function if the automator isn't unlocked or it attempts to error-check an empty script
+      if (!Player.automatorUnlocked || AutomatorData.currentScriptText() === undefined) return;
+
       const modifiedErrors = [];
       let lastLine = 0;
       for (const err of this.errors.sort((a, b) => a.startLine - b.startLine)) {

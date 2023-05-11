@@ -25,6 +25,7 @@ export default {
   },
   methods: {
     update() {
+      if (!player.dilation.active) this.emitClose();
       this.tachyonGain.copyFrom(getTachyonGain(true));
       this.isDoomed = Pelle.isDoomed;
     },

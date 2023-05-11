@@ -804,7 +804,8 @@ also increase. The Time Theorem cost does not increase.
 Completing an Eternity Challenge's secondary requirements will remove them from the study requirement until you complete
 that particular Eternity Challenge, meaning you only need to complete the secondary requirement <i>once</i>.
 As a result, you can unlock an Eternity Challenge with one set of studies, and then respec into a different set of
-studies to beat the challenge.
+studies to beat the challenge. EC11 and EC12 are exceptions to this rule - the Dimension path restrictions remain even
+if you respec your time studies.
 `,
       isUnlocked: () => PlayerProgress.eternityUnlocked(),
       tags: ["ec", "study", "time", "rewards", "completions", "midgame"],

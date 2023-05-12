@@ -42,13 +42,15 @@ export const GameSaveSerializer = {
   startingString: {
     savefile: "AntimatterDimensionsSavefileFormat",
     "automator script": "AntimatterDimensionsAutomatorScriptFormat",
-    "automator data": "AntimatterDimensionsAutomatorDataFormat"
+    "automator data": "AntimatterDimensionsAutomatorDataFormat",
+    "glyph filter": "AntimatterDimensionsGlyphFilterFormat",
   },
   // The ending strings aren't as verbose so that we can save a little space.
   endingString: {
     savefile: "EndOfSavefile",
     "automator script": "EndOfAutomatorScript",
-    "automator data": "EndOfAutomatorData"
+    "automator data": "EndOfAutomatorData",
+    "glyph filter": "EndOfGlyphFilter",
   },
   // This should always be three characters long, and should ideally go AAA, AAB, AAC, etc.
   // so that we can do inequality tests on it to compare versions (though skipping a version

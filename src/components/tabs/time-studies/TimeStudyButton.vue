@@ -126,6 +126,10 @@ export default {
       if (this.STCost && this.showStCost) costs.push(stStr);
       return costs.join(" + ");
     },
+    // This is a special case to hide the 1 TT cost on the reality study when Doomed
+    hideCostStr() {
+      return Pelle.isDoomed && this.config.id === 6;
+    }
   },
   methods: {
     update() {
@@ -186,7 +190,7 @@ export class TimeStudySetup {
       :config="config"
       name="Time Theorem"
     />
-    <div v-else-if="!isBought">
+    <div v-else-if="!isBought && !hideCostStr">
       Cost: {{ customCostStr }}
     </div>
   </button>

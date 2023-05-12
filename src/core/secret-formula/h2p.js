@@ -192,7 +192,7 @@ ${PlayerProgress.realityUnlocked()
       name: "Common Abbreviations",
       info: () => `
 Many resources within the game may appear in an abbreviated format as text in order to save space. This How to
-Play entry will update itself with additional entries for new resources as you encounter them for the first time
+Play entry will update itself with additional entries for new resources as you encounter them for the first time.
 <br>
 - <b>AM</b>: Antimatter<br>
 - <b>AD</b>: Antimatter Dimension<br>
@@ -1296,7 +1296,7 @@ upcoming choices as a comparable Currency in the Automator.
 <br>
 <br>
 Glyph Presets are purchasable for ${format(GameDatabase.celestials.effarig.unlocks.setSaves.cost)} Relic
-Shards. This unlocks ${formatInt(5)} slots that allow you to save your currently equipped Glyphs into sets.
+Shards. This unlocks ${formatInt(7)} slots that allow you to save your currently equipped Glyphs into sets.
 You can't overwrite a set, you must delete it first. When you load a set, each Glyph in it is found and equipped.
 If any are not found, it will display a warning, but equip all the rest regardless.
 When loading a set, you can be Level and/or Rarity sensitive. The best Glyph from the possible Glyphs

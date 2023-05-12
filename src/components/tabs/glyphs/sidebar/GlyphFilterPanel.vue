@@ -182,6 +182,18 @@ export default {
     },
     getSymbol(type) {
       return CosmeticGlyphTypes[type].currentSymbol.symbol;
+    },
+    exportFilterSettings() {
+      const filter = player.reality.glyphs.filter;
+      const serializeType = settings => [settings.rarity, settings.score, settings.effectCount,
+        settings.specifiedMask, settings.effectScores.join(".")].join(",");
+      const simpleData = [filter.select, filter.simple, filter.trash].join("|");
+      const typeData = ALCHEMY_BASIC_GLYPH_TYPES.map(t => serializeType(filter.types[t])).join("|");
+      copyToClipboard(GameSaveSerializer.encodeText(`${simpleData}|${typeData}`, "glyph filter"));
+      GameUI.notify.info("Filter settings copied to clipboard");
+    },
+    importFilterSettings() {
+      Modal.importFilter.show();
     }
   }
 };
@@ -198,6 +210,18 @@ export default {
         >
           ?
         </div>
+      </div>
+      <div class="c-glyph-filter-export">
+        <i
+          v-tooltip="'Export filter settings'"
+          class="fas fa-file-export o-clickable l-glyph-filter-export-btn"
+          @click="exportFilterSettings"
+        />
+        <i
+          v-tooltip="'Import filter settings'"
+          class="fas fa-file-import o-clickable l-glyph-filter-export-btn"
+          @click="importFilterSettings"
+        />
       </div>
       Current Filter Mode:
       <br>
@@ -367,5 +391,23 @@ export default {
 <style scoped>
 .o-clickable {
   cursor: pointer;
+}
+
+.c-glyph-filter-export {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  top: 0;
+  right: calc(100% - 8rem);
+  z-index: 2;
+  font-size: 1.3rem;
+  color: var(--color-reality-dark);
+}
+
+.l-glyph-filter-export-btn {
+  border: solid 0.1rem;
+  width: 3rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
 }
 </style>

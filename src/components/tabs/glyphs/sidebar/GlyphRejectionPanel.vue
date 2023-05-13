@@ -10,6 +10,9 @@ export default {
     modes() {
       return AUTO_GLYPH_REJECT;
     },
+    availableModes() {
+      return Object.values(this.modes);
+    }
   },
   methods: {
     optionClass(idx) {
@@ -26,6 +29,9 @@ export default {
     setMode(m) {
       AutoGlyphProcessor.sacMode = m;
     },
+    modeDesc(id) {
+      return AutoGlyphProcessor.trashModeDesc(id);
+    }
   }
 };
 </script>
@@ -38,27 +44,21 @@ export default {
     <br>
     <div class="l-glyph-auto-pick-options__container">
       <div
-        :class="optionClass(modes.SACRIFICE)"
-        @click="setMode(modes.SACRIFICE)"
+        v-for="modeID in availableModes"
+        :key="modeID"
+        :class="optionClass(modeID)"
+        @click="setMode(modeID)"
       >
-        Always sacrifice
-      </div>
-      <div
-        :class="optionClass(modes.REFINE)"
-        @click="setMode(modes.REFINE)"
-      >
-        Always refine
-      </div>
-      <div
-        :class="optionClass(modes.REFINE_TO_CAP)"
-        @click="setMode(modes.REFINE_TO_CAP)"
-      >
-        Refine to cap, then sacrifice
+        {{ modeDesc(modeID) }}
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-
+.l-glyph-auto-pick-options__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 </style>

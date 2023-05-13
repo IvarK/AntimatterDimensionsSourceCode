@@ -479,12 +479,6 @@
   background: black;
 }
 
-.l-glyph-auto-pick-options__container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
 .c-glyph-auto-pick-options__option {
   display: flex;
   flex-direction: column;

@@ -1,4 +1,5 @@
 <script>
+import ImportFilterSingleType from "./ImportFilterSingleType";
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 import PrimaryButton from "@/components/PrimaryButton";
 
@@ -6,10 +7,12 @@ export default {
   name: "ImportFilterModal",
   components: {
     ModalWrapperChoice,
-    PrimaryButton
+    PrimaryButton,
+    ImportFilterSingleType
   },
   data() {
     return {
+      currentSettings: {},
       input: "",
     };
   },
@@ -23,21 +26,11 @@ export default {
         return false;
       }
     },
-  },
-  mounted() {
-    this.$refs.input.select();
-  },
-  methods: {
-    importFilter() {
-      if (!this.inputIsValid) return;
-      this.emitClose();
+    parsedSettings() {
+      if (!this.inputIsValid) return null;
 
       const decoded = GameSaveSerializer.decodeText(this.input, "glyph filter");
       const parts = decoded.split("|");
-      player.reality.glyphs.filter.select = Number(parts[0]);
-      player.reality.glyphs.filter.simple = Number(parts[1]);
-      player.reality.glyphs.filter.trash = Number(parts[2]);
-
       const typeInfo = {};
       let partIndex = 3;
       for (const type of ALCHEMY_BASIC_GLYPH_TYPES) {
@@ -52,7 +45,45 @@ export default {
         };
         partIndex++;
       }
-      player.reality.glyphs.filter.types = typeInfo;
+
+      return {
+        select: Number(parts[0]),
+        simple: Number(parts[1]),
+        trash: Number(parts[2]),
+        types: typeInfo,
+      };
+    },
+    selectStr() {
+      return this.changedValue(this.parsedSettings.select, this.currentSettings.select,
+        x => AutoGlyphProcessor.filterModeName(x));
+    },
+    basicCountStr() {
+      return this.changedValue(this.parsedSettings.simple, this.currentSettings.simple, formatInt);
+    },
+    trashStr() {
+      return this.changedValue(this.parsedSettings.trash, this.currentSettings.trash,
+        x => AutoGlyphProcessor.trashModeDesc(x));
+    },
+    // Hide effarig if it hasn't been unlocked yet
+    availableTypes() {
+      return ALCHEMY_BASIC_GLYPH_TYPES.filter(t => !GlyphTypes.locked.map(e => e.id).includes(t));
+    }
+  },
+  mounted() {
+    this.$refs.input.select();
+  },
+  methods: {
+    update() {
+      this.currentSettings = JSON.parse(JSON.stringify(player.reality.glyphs.filter));
+    },
+    changedValue(oldVal, newVal, applyFn) {
+      if (oldVal === newVal) return "(No change)";
+      return `${applyFn(oldVal)} ➜ ${applyFn(newVal)}`;
+    },
+    importFilter() {
+      if (this.parsedSettings === null) return;
+      this.emitClose();
+      player.reality.glyphs.filter = this.parsedSettings;
     },
   },
 };
@@ -80,7 +111,22 @@ export default {
     <div class="c-modal-import__save-info">
       <div v-if="!input" />
       <div v-else-if="inputIsValid">
-        PLACEHOLDER FOR BEFORE/AFTER FILTER INFO
+        <b>Selection mode:</b> {{ selectStr }}
+        <br>
+        <b>Effect Count ("Number of Effects"):</b> {{ basicCountStr }}
+        <br>
+        <b>Rejected Glyphs:</b> {{ trashStr }}
+        <br>
+        <u><b>Type-specific Settings</b></u>
+        <br>
+        <ImportFilterSingleType
+          v-for="type in availableTypes"
+          :key="type"
+          class="c-single-type"
+          :type="type"
+          :curr-settings="currentSettings.types[type]"
+          :new-settings="parsedSettings.types[type]"
+        />
       </div>
       <div v-else>
         Not a valid Glyph filter string
@@ -96,3 +142,10 @@ export default {
     </PrimaryButton>
   </ModalWrapperChoice>
 </template>
+
+<style scoped>
+.c-single-type {
+  left: 0;
+  text-align: left;
+}
+</style>

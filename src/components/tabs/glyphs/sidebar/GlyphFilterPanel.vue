@@ -128,24 +128,7 @@ export default {
       }
     },
     filterMode(index) {
-      switch (index) {
-        case this.modes.LOWEST_SACRIFICE:
-          return "Lowest Total Glyph Sacrifice";
-        case this.modes.EFFECT_COUNT:
-          return "Number of Effects";
-        case this.modes.RARITY_THRESHOLD:
-          return "Rarity Threshold";
-        case this.modes.SPECIFIED_EFFECT:
-          return "Specified Effect";
-        case this.modes.EFFECT_SCORE:
-          return "Effect Score";
-        case this.modes.LOWEST_ALCHEMY:
-          return "Lowest Alchemy Resource";
-        case this.modes.ALCHEMY_VALUE:
-          return "Refinement Value";
-        default:
-          throw Error("Unrecognized glyph filter mode");
-      }
+      return AutoGlyphProcessor.filterModeName(index);
     },
     isUnlocked(index) {
       switch (index) {
@@ -405,7 +388,7 @@ export default {
 }
 
 .l-glyph-filter-export-btn {
-  border: solid 0.1rem;
+  border: var(--var-border-width, 0.2rem) solid;
   width: 3rem;
   margin: 0.5rem;
   padding: 0.5rem;

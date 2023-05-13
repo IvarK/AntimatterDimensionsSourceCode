@@ -156,6 +156,40 @@ export const AutoGlyphProcessor = {
   hasNegativeEffectScore() {
     return this.scoreMode === AUTO_GLYPH_SCORE.EFFECT_SCORE &&
       Object.values(this.types).map(t => t.effectScores.min()).min() < 0;
+  },
+
+  // These are here because they're used in multiple UI components
+  filterModeName(id) {
+    switch (id) {
+      case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
+        return "Lowest Total Glyph Sacrifice";
+      case AUTO_GLYPH_SCORE.EFFECT_COUNT:
+        return "Number of Effects";
+      case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
+        return "Rarity Threshold";
+      case AUTO_GLYPH_SCORE.SPECIFIED_EFFECT:
+        return "Specified Effect";
+      case AUTO_GLYPH_SCORE.EFFECT_SCORE:
+        return "Effect Score";
+      case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
+        return "Lowest Alchemy Resource";
+      case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
+        return "Refinement Value";
+      default:
+        return "Invalid Glyph filter mode";
+    }
+  },
+  trashModeDesc(id) {
+    switch (id) {
+      case AUTO_GLYPH_REJECT.SACRIFICE:
+        return "Always sacrifice";
+      case AUTO_GLYPH_REJECT.REFINE:
+        return "Always refine";
+      case AUTO_GLYPH_REJECT.REFINE_TO_CAP:
+        return "Refine to cap, then sacrifice";
+      default:
+        return "Invalid Glyph trash mode";
+    }
   }
 };
 

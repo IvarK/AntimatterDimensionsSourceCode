@@ -67,6 +67,10 @@ export default {
     // Hide effarig if it hasn't been unlocked yet
     availableTypes() {
       return ALCHEMY_BASIC_GLYPH_TYPES.filter(t => !GlyphTypes.locked.map(e => e.id).includes(t));
+    },
+    settingTooltipText() {
+      return `Mouseover each box for more details. ✔ and ✘ symbols denote an effect
+        selected/unselected for Specified Effect mode.`;
     }
   },
   mounted() {
@@ -117,7 +121,9 @@ export default {
         <br>
         <b>Rejected Glyphs:</b> {{ trashStr }}
         <br>
-        <u><b>Type-specific Settings</b></u>
+        <u><b>Type-specific Settings</b></u> <span :ach-tooltip="settingTooltipText">
+          <i class="fas fa-question-circle" />
+        </span>
         <br>
         <ImportFilterSingleType
           v-for="type in availableTypes"
@@ -147,5 +153,6 @@ export default {
 .c-single-type {
   left: 0;
   text-align: left;
+  padding: 0.5rem;
 }
 </style>

@@ -54,14 +54,16 @@ export default {
       if (oldVal === newVal) return applyFn(oldVal);
       return `${applyFn(oldVal)}➜${applyFn(newVal)}`;
     },
-    effectBox(effectEntry) {
-      if (effectEntry.oldReq && effectEntry.newReq) return "☑";
-      if (!effectEntry.oldReq && effectEntry.newReq) return "⊕";
-      if (effectEntry.oldReq && !effectEntry.newReq) return "⊖";
-      return "☒";
-    },
     effectScoreStr(effectEntry) {
-      return this.changedValue(effectEntry.oldScore, effectEntry.newScore, formatInt);
+      const fullStr = (isSelected, value) => {
+        const check = isSelected ? "✔" : "✘";
+        return `${check}${formatInt(value)}`;
+      };
+      const oldStr = fullStr(effectEntry.oldReq, effectEntry.oldScore);
+      const newStr = fullStr(effectEntry.neReq, effectEntry.newScore);
+
+      if (effectEntry.oldScore === effectEntry.newScore) return oldStr;
+      return `${oldStr}➜${newStr}`;
     },
     topLevelClassObject(key) {
       return {
@@ -74,6 +76,9 @@ export default {
         "o-cell": true,
         "o-cell--changed": effectEntry.oldReq !== effectEntry.newReq || effectEntry.oldScore !== effectEntry.newScore,
       };
+    },
+    getEffectDesc(effectEntry) {
+      return GlyphEffects.all.find(e => e.bitmaskIndex === effectEntry.bitmaskIndex && e.isGenerated).genericDesc;
     }
   },
 };
@@ -87,18 +92,21 @@ export default {
         <span
           class="c-rarity"
           :class="topLevelClassObject('rarity')"
+          ach-tooltip="Setting for Rarity Threshold and Specified Effect"
         >
           {{ rarityStr }}
         </span>
         <span
           class="c-effects-count"
           :class="topLevelClassObject('effectCount')"
+          ach-tooltip="Number of effects in Specified Effect"
         >
-          Specified Effects: {{ effectStr }}
+          Minimum Effects: {{ effectStr }}
         </span>
         <span
           class="c-target-score"
           :class="topLevelClassObject('score')"
+          ach-tooltip="Threshold for Effect Score"
         >
           Score: {{ scoreStr }}
         </span>
@@ -110,22 +118,24 @@ export default {
           :key="effect.bitmaskIndex"
           class="c-single-score"
           :class="effectClassObject(effect)"
+          :ach-tooltip="getEffectDesc(effect)"
         >
-          {{ effectBox(effect) }} {{ effectScoreStr(effect) }}
+          {{ effectScoreStr(effect) }}
         </span>
       </span>
-      <br>
       <span
         v-if="effectData.length > 4"
-        class="c-single-row"
+        class="c-single-row c-second-row"
       >
+        <br>
         <span
           v-for="effect in effectData.slice(4)"
           :key="effect.bitmaskIndex"
           class="c-single-score o-cell"
           :class="effectClassObject(effect)"
+          :ach-tooltip="getEffectDesc(effect)"
         >
-          {{ effectBox(effect) }} {{ effectScoreStr(effect) }}
+          {{ effectScoreStr(effect) }}
         </span>
       </span>
     </span>
@@ -140,7 +150,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: -2rem 0 0 3rem;
+  margin: -2.15rem 0 0 3rem;
+}
+
+.c-second-row {
+  margin: 0 0 0 -9rem;
 }
 
 .o-cell {
@@ -152,22 +166,22 @@ export default {
 }
 
 .o-cell--changed {
-  background-color: var(--color-good);
+  background-color: var(--color-accent);
 }
 
 .c-rarity {
-  width: 8rem;
+  width: 10rem;
 }
 
 .c-effects-count {
-  width: 22rem;
+  width: 20rem;
 }
 
 .c-target-score {
-  width: 15rem;
+  width: 18rem;
 }
 
 .c-single-score {
-  width: 10rem;
+  width: 12rem;
 }
 </style>

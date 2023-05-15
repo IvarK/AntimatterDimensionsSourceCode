@@ -21,6 +21,7 @@ export default {
       alchemyUnlocked: false,
       // Note: there are two units at play: strength is from 1..3.5+; rarity is 0..100
       rarityThresholds: GLYPH_TYPES.mapToObject(e => e, () => 0),
+      autoRealityForFilter: player.options.autoRealityForFilter,
     };
   },
   computed: {
@@ -116,6 +117,7 @@ export default {
     },
     setMode(m) {
       AutoGlyphProcessor.scoreMode = m;
+      player.reality.hasCheckedFilter = false;
     },
     setRarityThreshold(id, value) {
       AutoGlyphProcessor.types[id].rarity = value;
@@ -166,6 +168,11 @@ export default {
     getSymbol(type) {
       return CosmeticGlyphTypes[type].currentSymbol.symbol;
     },
+    toggleAutoReality() {
+      player.options.autoRealityForFilter = !player.options.autoRealityForFilter;
+      this.autoRealityForFilter = player.options.autoRealityForFilter;
+      player.reality.hasCheckedFilter = false;
+    },
     exportFilterSettings() {
       const filter = player.reality.glyphs.filter;
       const serializeType = settings => [settings.rarity, settings.score, settings.effectCount,
@@ -177,7 +184,7 @@ export default {
     },
     importFilterSettings() {
       Modal.importFilter.show();
-    }
+    },
   }
 };
 </script>
@@ -185,25 +192,29 @@ export default {
 <template>
   <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
     <div class="c-glyph-sacrifice-options c-glyph-sacrifice-options-container">
-      <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
-        <div
-          v-tooltip="questionmarkTooltip"
-          class="o-questionmark o-clickable"
-          @click="showFilterHowTo"
-        >
-          ?
-        </div>
-      </div>
-      <div class="c-glyph-filter-export">
+      <div class="c-filter-extra-btns c-top-left">
         <i
           v-tooltip="'Export filter settings'"
-          class="fas fa-file-export o-clickable l-glyph-filter-export-btn"
+          class="fas fa-file-export l-top-left-btn"
           @click="exportFilterSettings"
         />
         <i
           v-tooltip="'Import filter settings'"
-          class="fas fa-file-import o-clickable l-glyph-filter-export-btn"
+          class="fas fa-file-import l-top-left-btn"
           @click="importFilterSettings"
+        />
+      </div>
+      <div class="c-filter-extra-btns c-top-right">
+        <i
+          v-tooltip="'Immediately Reality if no choices pass filter, ignoring all other Auto-Reality settings'"
+          class="fas fa-recycle l-top-right-btn"
+          :class="{ 'o-quick-reality' : autoRealityForFilter }"
+          @click="toggleAutoReality"
+        />
+        <i
+          v-tooltip="questionmarkTooltip"
+          class="fas fa-question-circle l-top-right-btn o-borderless"
+          @click="showFilterHowTo"
         />
       </div>
       Current Filter Mode:
@@ -376,21 +387,49 @@ export default {
   cursor: pointer;
 }
 
-.c-glyph-filter-export {
+.c-filter-extra-btns {
   position: absolute;
   display: flex;
   flex-direction: row;
   top: 0;
-  right: calc(100% - 8rem);
   z-index: 2;
   font-size: 1.3rem;
+}
+
+.c-top-left {
+  right: calc(100% - 6rem);
   color: var(--color-reality-dark);
 }
 
-.l-glyph-filter-export-btn {
+.c-top-right {
+  left: calc(100% - 5rem);
+}
+
+.l-top-left-btn {
+  cursor: pointer;
   border: var(--var-border-width, 0.2rem) solid;
-  width: 3rem;
-  margin: 0.5rem;
+  width: 2.5rem;
+  margin: 0.5rem 0 0 0.5rem;
   padding: 0.5rem;
+}
+
+.l-top-right-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: var(--var-border-width, 0.2rem) solid;
+  width: 2rem;
+  height: 2rem;
+  margin: 0.5rem 0.5rem 0 0;
+  padding: 0.2rem;
+}
+
+.o-borderless {
+  border: none;
+}
+
+.o-quick-reality {
+  background: var(--color-accent);
 }
 </style>

@@ -528,6 +528,7 @@ window.player = {
       currentInfoPane: AutomatorPanels.INTRO_PAGE,
     },
     achTimer: 0,
+    hasCheckedFilter: false,
   },
   blackHole: Array.range(0, 2).map(id => ({
     id,
@@ -886,6 +887,7 @@ window.player = {
       clearOnRestart: true,
     },
     invertTTgenDisplay: false,
+    autoRealityForFilter: false,
   },
   IAP: {
     enabled: false,

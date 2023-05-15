@@ -720,6 +720,7 @@ export function finishProcessReality(realityProps) {
   if (!isReset) Ra.applyAlchemyReactions(realityRealTime);
 
   player.reality.gainedAutoAchievements = false;
+  player.reality.hasCheckedFilter = false;
 
   if (realityProps.restoreCelestialState || player.options.retryCelestial) restoreCelestialRuns(celestialRunState);
 

@@ -254,4 +254,20 @@ export default {
 .c-glyph-set-preview-area {
   width: 18rem;
 }
+
+.l-glyph-sacrifice-options__help {
+  position: absolute;
+  top: 0;
+  left: calc(100% - 1.8rem);
+  z-index: 2;
+}
+
+.c-glyph-sacrifice-options__help {
+  font-size: 1.2rem;
+  color: var(--color-reality-dark);
+}
+
+.s-base--dark .c-glyph-sacrifice-options__help {
+  color: var(--color-reality-light);
+}
 </style>

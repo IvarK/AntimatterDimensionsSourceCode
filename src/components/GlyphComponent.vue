@@ -369,12 +369,23 @@ export default {
         this.displayLevel = 0;
         return;
       }
-      const levelBoost = BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0;
-      let adjustedLevel = this.isActiveGlyph
-        ? getAdjustedGlyphLevel(this.glyph)
-        : this.glyph.level + levelBoost;
-      if (Pelle.isDoomed && this.isInventoryGlyph) adjustedLevel = Math.min(adjustedLevel, Pelle.glyphMaxLevel);
-      this.displayLevel = adjustedLevel;
+      // We have to consider some odd interactions in order to properly show level. The getAdjustedGlyphLevel() function
+      // returns a modified level using celestial effects and reality glyphs based on the CURRENT game state, meaning
+      // that applying this globally will cause lots of glyphs to show altered levels even if they shouldn't. So:
+      // - Active glyphs should apply ALL adjusted effects based on the current game state, since they are guaranteed
+      //   to always be affected by them and this is exactly the purpose of getAdjustedGlyphLevel() as-is
+      // - Inventory glyphs should show the same current-state effects as active, but it should NEVER apply reality
+      //   glyph boosts. This allows for easier comparison when celestial effects are changing both active and
+      //   inventory glyphs, even though strictly speaking the inventory ones shouldn't be affected until equipped
+      // - All other glyphs should never apply effects from the current game state, and should in fact only apply the
+      //   reality glyph boost based on the rest of its existing set (which is passed in via realityGlyphBoost) and
+      //   nothing else. This case applies to glyphs appearing in presets, records, and previews.
+      if (this.isActiveGlyph) this.displayLevel = getAdjustedGlyphLevel(this.glyph);
+      else if (this.isInventoryGlyph) this.displayLevel = getAdjustedGlyphLevel(this.glyph, 0);
+      else {
+        this.displayLevel = this.glyph.level +
+          (BASIC_GLYPH_TYPES.includes(this.glyph.type) ? this.realityGlyphBoost : 0);
+      }
     },
     hideTooltip() {
       this.tooltipLoaded = false;

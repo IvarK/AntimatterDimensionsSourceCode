@@ -76,6 +76,22 @@ Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
   }
 
   tick() {
+    // Checking if auto-reality should trigger immediately due to bad glyph options happens at a higher priority
+    // than everything else, preempting other settings and only checking them if it fails
+    // In order to reduce excessive computational load, this only ever gets checked once per reality unless filter
+    // settings are changed (in which case it checks once more); otherwise, glyph choices would be generated every tick
+    const shouldCheckFilter = EffarigUnlock.glyphFilter.isUnlocked && !player.reality.hasCheckedFilter;
+    if (isRealityAvailable() && player.options.autoRealityForFilter && shouldCheckFilter) {
+      const choices = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(),
+        { isChoosingGlyph: false });
+      const bestGlyph = AutoGlyphProcessor.pick(choices);
+      player.reality.hasCheckedFilter = true;
+      if (!AutoGlyphProcessor.wouldKeep(bestGlyph)) {
+        autoReality();
+        return;
+      }
+    }
+
     let proc = false;
     // The game generally displays amplified values, so we want to adjust the thresholds to
     // account for that and make the automation trigger based on the actual displayed values

@@ -7,7 +7,7 @@ GameDatabase.celestials.ra = {
       name: "Teresa",
       color: "#8596ea",
       chunkGain: "Eternity Points",
-      memoryGain: "current Reality Machines",
+      memoryGain: "current RM",
       requiredUnlock: () => undefined,
       rawMemoryChunksPerSecond: () => 4 * Math.pow(Currency.eternityPoints.value.pLog10() / 1e4, 3),
       memoryProductionMultiplier: () => Ra.unlocks.teresaXP.effectOrDefault(1)

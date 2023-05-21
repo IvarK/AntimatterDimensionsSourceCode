@@ -30,7 +30,6 @@ export default {
   data() {
     return {
       isUseless: false,
-      doomedRealityStudy: false,
       isBought: false,
       isAvailableForPurchase: false,
       STCost: 0,
@@ -126,9 +125,8 @@ export default {
       if (this.STCost && this.showStCost) costs.push(stStr);
       return costs.join(" + ");
     },
-    // This is a special case to hide the 1 TT cost on the reality study when Doomed
-    hideCostStr() {
-      return Pelle.isDoomed && this.config.id === 6;
+    doomedRealityStudy() {
+      return this.study.type === TIME_STUDY_TYPE.DILATION && this.study.id === 6 && Pelle.isDoomed;
     }
   },
   methods: {
@@ -141,8 +139,6 @@ export default {
       if (!this.isBought) {
         this.isAvailableForPurchase = study.canBeBought && study.isAffordable;
       }
-      this.doomedRealityStudy = study.type === TIME_STUDY_TYPE.DILATION && study.id === 6 && Pelle.isDoomed;
-
       this.STCost = this.study.STCost;
     },
     handleClick() {
@@ -190,7 +186,7 @@ export class TimeStudySetup {
       :config="config"
       name="Time Theorem"
     />
-    <div v-else-if="!isBought && !hideCostStr">
+    <div v-else-if="!doomedRealityStudy">
       Cost: {{ customCostStr }}
     </div>
   </button>

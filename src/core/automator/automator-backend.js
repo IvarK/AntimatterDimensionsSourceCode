@@ -273,8 +273,12 @@ export const AutomatorData = {
   // since the last state. This gets passed in as a parameter and gets called every time any typing is done,
   // but only actually does something when that threshold is reached.
   pushUndoData(data, newChars) {
+    // If the buffer is empty, then we need to immediately write to the buffer (ignoring character changes)
+    // because otherwise edits can't be fully undone back to the very first change
     this.charsSinceLastUndoState += newChars;
-    if (this.charsSinceLastUndoState <= this.MIN_CHARS_BETWEEN_UNDOS) return;
+    const pastGap = this.charsSinceLastUndoState <= this.MIN_CHARS_BETWEEN_UNDOS;
+    if (pastGap && this.undoBuffer.length !== 0) return;
+
     if (this.undoBuffer[this.undoBuffer.length - 1] !== data) this.undoBuffer.push(data);
     if (this.undoBuffer.length > this.MAX_UNDO_ENTRIES) this.undoBuffer.shift();
     this.charsSinceLastUndoState = 0;
@@ -517,7 +521,7 @@ export const AutomatorBackend = {
     return constants;
   },
 
-  // All modifications to constants should go these two methods in order to properly update both the constant prop and
+  // All modifications to constants should go these three methods in order to properly update both the constant prop and
   // the sorting order prop while keeping them consistent with each other
   modifyConstant(constantName, newValue) {
     if (Object.keys(player.reality.automator.constants).length >= AutomatorData.MAX_ALLOWED_CONSTANT_COUNT) return;
@@ -525,6 +529,14 @@ export const AutomatorBackend = {
     if (!player.reality.automator.constantSortOrder.includes(constantName)) {
       player.reality.automator.constantSortOrder.push(constantName);
     }
+  },
+  renameConstant(oldName, newName) {
+    const data = player.reality.automator.constants[oldName];
+    player.reality.automator.constants[newName] = data;
+    delete player.reality.automator.constants[oldName];
+
+    const index = player.reality.automator.constantSortOrder.indexOf(oldName);
+    if (index !== -1) player.reality.automator.constantSortOrder[index] = newName;
   },
   deleteConstant(constantName) {
     delete player.reality.automator.constants[constantName];

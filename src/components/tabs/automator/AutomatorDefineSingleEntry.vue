@@ -75,10 +75,10 @@ export default {
       };
     },
     handleFocus(focus) {
-      if (focus) return;
-      if (this.oldAlias && !this.currentError()) AutomatorBackend.deleteConstant(this.oldAlias);
-      if (this.currentError()) return;
-      if (this.aliasString) AutomatorBackend.modifyConstant(this.aliasString, this.valueString);
+      if (focus || this.currentError()) return;
+      if (!this.aliasString) AutomatorBackend.deleteConstant(this.oldAlias);
+      else if (this.oldAlias === this.aliasString) AutomatorBackend.modifyConstant(this.aliasString, this.valueString);
+      else AutomatorBackend.renameConstant(this.oldAlias, this.aliasString);
       this.oldAlias = this.aliasString;
 
       // This makes scripts respond immediately to newly-defined constants if the player types them into the

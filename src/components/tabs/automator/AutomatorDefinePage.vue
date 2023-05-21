@@ -23,6 +23,9 @@ export default {
     maxValueLength() {
       return AutomatorData.MAX_ALLOWED_CONSTANT_VALUE_LENGTH;
     },
+    hasConstants() {
+      return this.constants.length > 1 || this.constants[0] !== "";
+    }
   },
   methods: {
     update() {
@@ -30,7 +33,7 @@ export default {
       this.constants = existingValues.length < this.maxConstantCount ? [...existingValues, ""] : [...existingValues];
     },
     deleteAllConstants() {
-      if (this.constants.length > 0) Modal.clearAutomatorConstants.show();
+      if (this.hasConstants) Modal.clearAutomatorConstants.show();
     },
     importPresets() {
       Modal.importTSConstants.show();
@@ -56,7 +59,9 @@ export default {
     <br>
     <br>
     <PrimaryButton
+      v-tooltip="hasConstants ? null : 'You have no valid constants to delete!'"
       class="c-delete-margin o-primary-btn--subtab-option"
+      :class="{ 'o-primary-btn--disabled' : !hasConstants }"
       @click="deleteAllConstants"
     >
       Delete all constants

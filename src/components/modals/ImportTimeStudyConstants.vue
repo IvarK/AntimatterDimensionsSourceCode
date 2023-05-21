@@ -39,6 +39,9 @@ export default {
       }
       return Math.clampMin(this.constantNames.length + newCount - AutomatorData.MAX_ALLOWED_CONSTANT_COUNT, 0);
     },
+    willNotImport(index) {
+      return this.presets.length - index < this.missedImports();
+    },
     // Shorten the string to less than 55 characters for UI purposes - but we shorten the middle since the
     // beginning and end are both potentially useful to see
     shortenString(str) {
@@ -65,6 +68,7 @@ export default {
       <div
         v-for="i in presets.length"
         :key="i"
+        :class="{ 'l-not-imported' : willNotImport(i) }"
       >
         Name: {{ presets[i-1].name }} ➜ <b>{{ names[i-1] }}</b>
         <br>
@@ -83,7 +87,8 @@ export default {
         v-if="missedImports() > 0"
         class="l-warn-text"
       >
-        Due to the limit on constant count, {{ quantify("constant", missedImports()) }} will not be imported!
+        {{ quantify("preset", missedImports()) }} in this list cannot be imported as new constants
+        due to the limit on constant count.
       </div>
     </div>
     <template #confirm-text>
@@ -94,6 +99,11 @@ export default {
 
 <style scoped>
 .l-warn-text {
+  font-weight: bold;
   color: var(--color-bad);
+}
+
+.l-not-imported {
+  color: var(--color-disabled);
 }
 </style>

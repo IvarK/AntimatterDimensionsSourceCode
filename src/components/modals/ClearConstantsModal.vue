@@ -46,6 +46,7 @@ export default {
 
 <style scoped>
 .l-lost-text {
+  font-weight: bold;
   color: var(--color-bad);
 }
 </style>

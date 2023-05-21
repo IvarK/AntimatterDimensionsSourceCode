@@ -264,7 +264,8 @@ export const Ra = {
     for (const pet of Ra.pets.all) {
       if (pet.memoryProductionMultiplier !== 1) boostList.push(pet.memoryGain);
     }
-    if (Ra.unlocks.continuousTTBoost.canBeApplied) boostList.push("current Time Theorems");
+    if (Achievement(168).isUnlocked) boostList.push("Achievement 168");
+    if (Ra.unlocks.continuousTTBoost.canBeApplied) boostList.push("current TT");
 
     if (boostList.length === 1) return `${boostList[0]}`;
     if (boostList.length === 2) return `${boostList[0]} and ${boostList[1]}`;

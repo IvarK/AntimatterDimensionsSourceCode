@@ -551,7 +551,7 @@ export const Glyphs = {
         toBeDeleted++;
       }
     }
-    if (player.reality.autoCollapse) this.collapseEmptySlots();
+    if (player.reality.autoCollapse && deleteGlyphs) this.collapseEmptySlots();
     return toBeDeleted;
   },
   collapseEmptySlots() {

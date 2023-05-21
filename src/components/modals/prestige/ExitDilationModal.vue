@@ -25,6 +25,8 @@ export default {
   },
   methods: {
     update() {
+      // We force-close the modal if dilation is inactive because there are a few edge cases which allow it to be
+      // opened while switching between dilated/regular. The only thing this results in is an incorrect TP gain value
       if (!player.dilation.active) this.emitClose();
       this.tachyonGain.copyFrom(getTachyonGain(true));
       this.isDoomed = Pelle.isDoomed;

@@ -62,7 +62,7 @@ export default {
     <template #header>
       {{ topLabel }}
     </template>
-    <div class="c-modal-hard-reset-danger">
+    <div class="c-modal-message__text">
       {{ message }}
     </div>
     <br>

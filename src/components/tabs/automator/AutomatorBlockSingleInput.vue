@@ -141,11 +141,13 @@ export default {
   },
   // Destroying single inputs need to be handled carefully because there are three situations under which they will
   // be removed, and they all require different behavior:
-  // * An earlier input in the command chain makes this input unnecessary (eg. changing "unlock ec 8" to
-  //   "unlock dilation" makes the 8 unnecessary) - in that case we also need to blank out the block prop
+  // * The player changes to the text editor or switches tabs/scripts, wiping the entire script (we do nothing here)
   // * Blocks are dragged and reordered, causing a parent component to key-swap and force a rerender on this
   //   component - in that case we need to remove the errors corresponding to the old line number
-  // * The player changes to the text editor or switches tabs/scripts, wiping the entire script - we do nothing here
+  // * An earlier input in the command chain makes this input unnecessary (eg. changing "unlock ec 8" to
+  //   "unlock dilation" makes the 8 unnecessary) - this case is handled when the parent block calls changeBlock(),
+  //   but we still need to verify error count and parse the script again since we avoid doing that within
+  //   changeBlock() for performance reasons
   destroyed() {
     if (player.reality.automator.type === AUTOMATOR_TYPE.TEXT || Tabs.current._currentSubtab.key !== "automator" ||
       this.scriptID !== player.reality.automator.state.editorScript) {
@@ -164,15 +166,7 @@ export default {
       return;
     }
 
-    // Wipe later inputs if the current one is unspecified (their state is ambiguous until the current one is specified)
-    // or the current node is the last input (this clears extra "invisible" inputs which become unmodifiable due to
-    // changing command structure, eg. the "5" when changing "unlock EC 5" to "unlock dilation")
-    const hasContent = this.constant || this.dropdownSelection || this.textContents;
-    if (this.nextNodeCount === 0 || (this.blockTarget && !hasContent)) {
-      // eslint-disable-next-line vue/no-mutating-props
-      this.block[this.blockTarget] = undefined;
-      this.recalculateErrorCount();
-    }
+    this.recalculateErrorCount();
     BlockAutomator.parseTextFromBlocks();
   },
   methods: {
@@ -233,7 +227,6 @@ export default {
     handleFocus(focusState) {
       this.suppressTooltip = !focusState;
       this.changeBlock();
-      this.recalculateErrorCount();
     },
     changeBlock() {
       this.updateFunction(this.block, this.block.id);
@@ -245,6 +238,17 @@ export default {
 
         // eslint-disable-next-line vue/no-mutating-props
         this.block[this.blockTarget] = newValue;
+
+        // Sometimes changing a block value causes later blocks on the line to no longer exist due to a different
+        // command structure; we wipe the props related to those blocks here so that they don't cause parsing errors
+        this.calculatePath();
+        if (this.nextNodeCount === 0) {
+          const currIndex = this.block.targets.indexOf(this.blockTarget);
+          for (let toClear = currIndex + 1; toClear < this.block.targets.length; toClear++) {
+            // eslint-disable-next-line vue/no-mutating-props
+            this.block[this.block.targets[toClear]] = undefined;
+          }
+        }
       }
       this.recalculateErrorCount();
     },

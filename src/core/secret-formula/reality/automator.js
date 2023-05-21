@@ -511,8 +511,7 @@ GameDatabase.reality.automator = {
       syntax: "<i>You can use these in any IF, WHILE, UNTIL, or WAIT command</i>",
       description: () => {
         const filterText = EffarigUnlock.glyphFilter.isUnlocked
-          ? `<b>filter score</b> - Glyph filter score for the best choice
-            amongst your available options for this Reality<br>`
+          ? `<b>filter score</b> - Glyph filter score of the Glyph which your filter will select this Reality<br>`
           : "";
         return `This is a list of "currencies" or numbers that you can use within the Automator.<br>
           Note that when used, most currencies will need to be in scientific notation.<br>

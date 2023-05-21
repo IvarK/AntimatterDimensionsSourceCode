@@ -21,18 +21,22 @@ export const AutomatorCommands = ((() => {
   EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => prestigeNotify(T.Eternity.$prestigeLevel));
   EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => prestigeNotify(T.Reality.$prestigeLevel));
 
-  // Used by while and until
-  function compileConditionLoop(evalComparison, commands, ctx) {
+  // Used by while and until - in order to get the text corrext, we need to invert the boolean if it's an until
+  // eslint-disable-next-line max-params
+  function compileConditionLoop(evalComparison, commands, ctx, isUntil) {
     return {
       run: () => {
+        const loopStr = isUntil ? "UNTIL" : "WHILE";
         if (!evalComparison()) {
-          AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (false), exiting loop at
-            line ${AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1)} (end of loop)`, ctx.startLine);
+          AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (${isUntil}),
+            exiting loop at line ${AutomatorBackend.translateLineNumber(ctx.RCurly[0].startLine + 1) - 1}
+            (end of ${loopStr} loop)`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_NEXT_INSTRUCTION;
         }
         AutomatorBackend.push(commands);
-        AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (true), moving to
-          line ${AutomatorBackend.translateLineNumber(ctx.LCurly[0].startLine + 1)} (start of loop)`, ctx.startLine);
+        AutomatorData.logCommandEvent(`Checked ${parseConditionalIntoText(ctx)} (${!isUntil}),
+          moving to line ${AutomatorBackend.translateLineNumber(ctx.LCurly[0].startLine + 1) - 1}
+          (start of ${loopStr} loop)`, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION;
       },
       blockCommands: commands,
@@ -864,7 +868,7 @@ export const AutomatorCommands = ((() => {
         const commands = C.visit(ctx.block);
         if (ctx.comparison) {
           const evalComparison = C.visit(ctx.comparison);
-          return compileConditionLoop(() => !evalComparison(), commands, ctx);
+          return compileConditionLoop(() => !evalComparison(), commands, ctx, true);
         }
         const prestigeLevel = ctx.PrestigeEvent[0].tokenType.$prestigeLevel;
         let prestigeName;
@@ -1059,7 +1063,7 @@ export const AutomatorCommands = ((() => {
         ctx.startLine = ctx.While[0].startLine;
         return V.checkBlock(ctx, ctx.While);
       },
-      compile: (ctx, C) => compileConditionLoop(C.visit(ctx.comparison), C.visit(ctx.block), ctx),
+      compile: (ctx, C) => compileConditionLoop(C.visit(ctx.comparison), C.visit(ctx.block), ctx, false),
       blockify: (ctx, B) => {
         const commands = [];
         B.visit(ctx.block, commands);

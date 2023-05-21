@@ -116,7 +116,7 @@ export default {
   background-color: #626262;
   border: var(--var-border-width, 0.2rem) solid #767676;
   border-radius: var(--var-border-radius, 0.3rem);
-  margin: 0.3rem 0.4rem 0.3rem auto;
+  margin: 0.3rem 0.4rem 0.3rem 0.5rem;
   padding: 0.3rem 0;
   cursor: pointer;
 }

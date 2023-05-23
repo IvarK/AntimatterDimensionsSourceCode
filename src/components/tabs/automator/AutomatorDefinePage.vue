@@ -11,6 +11,8 @@ export default {
   data() {
     return {
       constants: [],
+      count: 0,
+      refreshConstants: false,
     };
   },
   computed: {
@@ -27,10 +29,18 @@ export default {
       return this.constants.length > 1 || this.constants[0] !== "";
     }
   },
+  created() {
+    // This key-swaps the container for all the constants in order to force a re-render when externally changed
+    this.on$(GAME_EVENT.AUTOMATOR_CONSTANT_CHANGED, () => {
+      this.refreshConstants = true;
+      this.$nextTick(() => this.refreshConstants = false);
+    });
+  },
   methods: {
     update() {
       const existingValues = player.reality.automator.constantSortOrder;
-      this.constants = existingValues.length < this.maxConstantCount ? [...existingValues, ""] : [...existingValues];
+      this.count = existingValues.length;
+      this.constants = this.count < this.maxConstantCount ? [...existingValues, ""] : [...existingValues];
     },
     deleteAllConstants() {
       if (this.hasConstants) Modal.clearAutomatorConstants.show();
@@ -75,7 +85,7 @@ export default {
       Import Time Study Presets
     </PrimaryButton>
     <div
-      :key="constants.length"
+      :key="count + refreshConstants"
       class="l-definition-container"
     >
       <AutomatorDefineSingleEntry

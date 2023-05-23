@@ -77,6 +77,7 @@ export default {
     handleFocus(focus) {
       if (focus || this.currentError()) return;
       if (!this.aliasString) AutomatorBackend.deleteConstant(this.oldAlias);
+      else if (!this.oldAlias) AutomatorBackend.addConstant(this.aliasString, this.valueString);
       else if (this.oldAlias === this.aliasString) AutomatorBackend.modifyConstant(this.aliasString, this.valueString);
       else AutomatorBackend.renameConstant(this.oldAlias, this.aliasString);
       this.oldAlias = this.aliasString;

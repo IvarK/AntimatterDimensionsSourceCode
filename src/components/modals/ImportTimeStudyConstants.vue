@@ -9,6 +9,7 @@ export default {
   data() {
     return {
       constantNames: [],
+      willImport: [],
     };
   },
   computed: {
@@ -23,6 +24,7 @@ export default {
   methods: {
     update() {
       this.constantNames = [...player.reality.automator.constantSortOrder];
+      this.updateImportStatus();
     },
     importConstants() {
       for (let index = 0; index < this.presets.length; index++) {
@@ -32,15 +34,20 @@ export default {
     hasConflict(constantName) {
       return this.constantNames.includes(constantName);
     },
-    missedImports() {
-      let newCount = 0;
-      for (const name of this.names) {
-        if (!this.hasConflict(name)) newCount++;
+    updateImportStatus() {
+      let availableSlots = AutomatorData.MAX_ALLOWED_CONSTANT_COUNT - this.constantNames.length;
+      this.willImport = [];
+      for (let index = 0; index < this.names.length; index++) {
+        if (this.hasConflict(this.names[index])) {
+          this.willImport.push(true);
+        } else if (availableSlots > 0) {
+          this.willImport.push(true);
+          availableSlots--;
+        } else this.willImport.push(false);
       }
-      return Math.clampMin(this.constantNames.length + newCount - AutomatorData.MAX_ALLOWED_CONSTANT_COUNT, 0);
     },
-    willNotImport(index) {
-      return this.presets.length - index < this.missedImports();
+    missedImports() {
+      return this.willImport.countWhere(x => !x);
     },
     // Shorten the string to less than 55 characters for UI purposes - but we shorten the middle since the
     // beginning and end are both potentially useful to see
@@ -68,7 +75,7 @@ export default {
       <div
         v-for="i in presets.length"
         :key="i"
-        :class="{ 'l-not-imported' : willNotImport(i) }"
+        :class="{ 'l-not-imported' : !willImport[i-1] }"
       >
         Name: {{ presets[i-1].name }} ➜ <b>{{ names[i-1] }}</b>
         <br>
@@ -87,7 +94,7 @@ export default {
         v-if="missedImports() > 0"
         class="l-warn-text"
       >
-        {{ quantify("preset", missedImports()) }} in this list cannot be imported as new constants
+        {{ quantify("preset", missedImports()) }} in this list cannot be imported
         due to the limit on constant count.
       </div>
     </div>

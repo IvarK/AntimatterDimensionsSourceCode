@@ -521,13 +521,20 @@ export const AutomatorBackend = {
     return constants;
   },
 
-  // All modifications to constants should go these three methods in order to properly update both the constant prop and
+  // All modifications to constants should go these four methods in order to properly update both the constant prop and
   // the sorting order prop while keeping them consistent with each other
-  modifyConstant(constantName, newValue) {
+  addConstant(constantName, value) {
     if (Object.keys(player.reality.automator.constants).length >= AutomatorData.MAX_ALLOWED_CONSTANT_COUNT) return;
-    player.reality.automator.constants[constantName] = newValue;
-    if (!player.reality.automator.constantSortOrder.includes(constantName)) {
-      player.reality.automator.constantSortOrder.push(constantName);
+    player.reality.automator.constants[constantName] = value;
+    player.reality.automator.constantSortOrder.push(constantName);
+    EventHub.dispatch(GAME_EVENT.AUTOMATOR_CONSTANT_CHANGED);
+  },
+  modifyConstant(constantName, newValue) {
+    if (Object.keys(player.reality.automator.constants).includes(constantName)) {
+      player.reality.automator.constants[constantName] = newValue;
+      EventHub.dispatch(GAME_EVENT.AUTOMATOR_CONSTANT_CHANGED);
+    } else {
+      this.addConstant(constantName, newValue);
     }
   },
   renameConstant(oldName, newName) {
@@ -537,11 +544,13 @@ export const AutomatorBackend = {
 
     const index = player.reality.automator.constantSortOrder.indexOf(oldName);
     if (index !== -1) player.reality.automator.constantSortOrder[index] = newName;
+    EventHub.dispatch(GAME_EVENT.AUTOMATOR_CONSTANT_CHANGED);
   },
   deleteConstant(constantName) {
     delete player.reality.automator.constants[constantName];
     const index = player.reality.automator.constantSortOrder.indexOf(constantName);
     if (index > -1) player.reality.automator.constantSortOrder.splice(index, 1);
+    EventHub.dispatch(GAME_EVENT.AUTOMATOR_CONSTANT_CHANGED);
   },
 
   // We can't just concatenate different parts of script data together or use some kind of delimiting character string
@@ -716,8 +725,7 @@ export const AutomatorBackend = {
 
     if (!ignore.constants) {
       for (const constant of parsed.constants) {
-        const alreadyExists = player.reality.automator.constants[constant.key];
-        if (alreadyExists) this.modifyConstant(constant.key, constant.value);
+        this.modifyConstant(constant.key, constant.value);
       }
     }
 

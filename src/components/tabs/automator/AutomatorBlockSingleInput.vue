@@ -242,7 +242,7 @@ export default {
         // Sometimes changing a block value causes later blocks on the line to no longer exist due to a different
         // command structure; we wipe the props related to those blocks here so that they don't cause parsing errors
         this.calculatePath();
-        if (this.nextNodeCount === 0) {
+        if (this.nextNodeCount === 0 && !this.isBoolTarget) {
           const currIndex = this.block.targets.indexOf(this.blockTarget);
           for (let toClear = currIndex + 1; toClear < this.block.targets.length; toClear++) {
             // eslint-disable-next-line vue/no-mutating-props

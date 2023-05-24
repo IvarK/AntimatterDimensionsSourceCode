@@ -11,8 +11,7 @@ GameDatabase.changelog = [
    * }
    */
   {
-    // TODO Change this once patch date is finalized
-    date: [2023, 5, 0],
+    date: [2023, 5, 25],
     name: "Multiplier Tab, Automator, and Major mechanics fixes",
     info: `
 <b>Multiplier Tab:</b><br>

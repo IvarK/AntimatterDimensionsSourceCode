@@ -396,6 +396,14 @@ export function gameLoop(passDiff, options = {}) {
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
 
+  // In certain cases we want to allow the player to interact with the game's settings and tabs, but prevent any actual
+  // resource generation from happening - in these cases, we have to make sure this all comes before the hibernation
+  // check or else it'll attempt to run the game anyway
+  if (Speedrun.isPausedAtStart() || GameEnd.creditsEverClosed) {
+    GameUI.update();
+    return;
+  }
+
   let diff = passDiff;
   const thisUpdate = Date.now();
   const realDiff = diff === undefined
@@ -409,18 +417,6 @@ export function gameLoop(passDiff, options = {}) {
   if (passDiff === undefined && realDiff > 1e4) {
     GameIntervals.gameLoop.stop();
     simulateTime(realDiff / 1000, true);
-  }
-
-  if (GameEnd.creditsEverClosed) {
-    GameUI.update();
-    return;
-  }
-
-  // We want to allow for a speedrunner to be able to adjust their visual settings before actually starting the run,
-  // which means that we need to effectively halt the game loop until the official start
-  if (Speedrun.isPausedAtStart()) {
-    GameUI.update();
-    return;
   }
 
   // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.

@@ -288,6 +288,7 @@ export const Glyphs = {
     this.removeVisualFlag("unseen", glyph);
     this.removeVisualFlag("unequipped", glyph);
   },
+  // We only ever force when draining rifts causes the single slot to be lost (which will never show the modal)
   unequipAll(forceToUnprotected = false) {
     const targetRegion = forceToUnprotected ? false : player.options.respecIntoProtected;
     while (player.reality.glyphs.active.length) {
@@ -299,6 +300,23 @@ export const Glyphs = {
     }
     this.updateRealityGlyphEffects();
     this.updateMaxGlyphCount(true);
+
+    // We need to add a slight delay as a setTimeout in order to make sure that the EventHub calls following this
+    // don't immediately close this modal after it's shown. Additionally, we want to prevent the modal from appearing
+    // for realities shorter than a few seconds in order to stop a UI-based softlock; however at this point the time
+    // has already been reset, so we just use the most recent real time record (this leads to some inconsistent behavior
+    // when restarting, but that's not easily avoidable)
+    const stillEquipped = player.reality.glyphs.active.length;
+    const fastReality = player.records.recentRealities[0][1] < 3000;
+    if (stillEquipped && !fastReality) {
+      const target = player.options.respecIntoProtected ? "Protected slots" : "Main Inventory";
+      const hasOther = this.findFreeIndex(!player.options.respecIntoProtected) !== -1;
+      setTimeout(() => Modal.message.show(`${quantifyInt("Glyph", stillEquipped)} could not be unequipped due to lack
+        of space. Free up some space in your ${target}${hasOther ? " or switch where you are unequipping to" : ""}
+        in order to unequip ${stillEquipped === 1 ? "it" : "them"}.`, { closeEvent: GAME_EVENT.GLYPHS_CHANGED }),
+      50);
+    }
+
     EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     return !player.reality.glyphs.active.length;

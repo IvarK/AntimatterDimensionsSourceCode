@@ -277,37 +277,43 @@ GameStorage.migrations = {
     },
     20: player => {
       // GLYPH FILTER INTERNAL FORMAT REFACTOR
-      // Move all the filter props out of celestial/effarig scope and into reality/glyph scope, renaming a few of them
-      player.reality.glyphs.filter = player.celestials.effarig.glyphScoreSettings;
-      player.reality.glyphs.filter.trash = player.celestials.effarig.glyphTrashMode;
-      player.reality.glyphs.filter.select = player.reality.glyphs.filter.mode;
-      delete player.reality.glyphs.filter.mode;
-      player.reality.glyphs.filter.simple = player.reality.glyphs.filter.simpleEffectCount;
-      delete player.reality.glyphs.filter.simpleEffectCount;
+      // For the case of importing a save created before the reality update, many of these props are undefined due to
+      // having never been in the player object in the first place. In this case we fill with defaults, which are mostly
+      // zeroes. Otherwise we do our best to transfer over all the data we can
 
-      // There are a few big things going on in this loop which are annotated within, but it largely transfers all the
+      // Move all the filter props out of celestial/effarig scope and into reality/glyph scope, renaming a few of them.
+      const effarig = player.celestials.effarig;
+      player.reality.glyphs.filter = {
+        select: effarig?.mode ?? 0,
+        trash: effarig?.glyphTrashMode ?? 0,
+        simple: effarig?.simpleEffectCount ?? 0
+      };
+
+      // There are a few big things going on in this loop which are annotated within, but this largely transfers all the
       // old filter data into the new prop
       const reducedFilter = {};
       const effectDB = Object.values(GameDatabase.reality.glyphEffects);
-      // The in-dev filter had entries for companion/reality/cursed glyphs, which have been removed and any other errors
-      // which show up elsewhere have been resolved
+      // The previous filter format had entries for companion/reality/cursed glyphs, which are removed by only copying
+      // the types in ALCHEMY_BASIC_GLYPH_TYPES. Any errors which show up elsewhere for have also been resolved
       for (const type of ALCHEMY_BASIC_GLYPH_TYPES) {
-        const oldData = player.celestials.effarig.glyphScoreSettings.types[type];
+        const oldData = effarig.glyphScoreSettings?.types[type];
         const typeEffects = effectDB
           .filter(t => t.glyphTypes.includes(type))
           .sort((a, b) => a.bitmaskIndex - b.bitmaskIndex);
 
         // Two of these effects were renamed to be shorter
         reducedFilter[type] = {
-          rarity: oldData.rarityThreshold,
-          score: oldData.scoreThreshold,
-          effectCount: oldData.effectCount,
+          rarity: oldData?.rarityThreshold ?? 0,
+          score: oldData?.scoreThreshold ?? 0,
+          effectCount: oldData?.effectCount ?? 0,
         };
 
         // These all used to stored as { effectKey: value } where effectKey is the ID string "powerpow" or similar,
-        // but have now been refactored to be stored as a bitmask and Number array instead
+        // but have now been refactored to be stored as a bitmask and Number array instead. This significantly shortens
+        // filter data for serialization into glyph filter export strings
         reducedFilter[type].specifiedMask = 0;
         reducedFilter[type].effectScores = [];
+        if (!oldData) continue;
         for (const effect of typeEffects) {
           // The way we filter to generate typeEffects also gives an undefined entry which needs to be ignored
           if (!effect) continue;

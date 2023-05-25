@@ -37,17 +37,6 @@
   background: var(--color-background);
 }
 
-.l-new-glyph {
-  position: absolute;
-  top: -0.8rem;
-  left: -0.8rem;
-  z-index: 5;
-  color: black;
-  background-color: #ffff00;
-  border-radius: var(--var-border-radius, 0.2rem);
-  padding: 0.2rem;
-}
-
 .l-glyph-info {
   position: absolute;
   right: -0.5rem;

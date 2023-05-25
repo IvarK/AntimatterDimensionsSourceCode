@@ -119,7 +119,7 @@ export default {
       <ModalOptionsToggleButton
         v-if="realityUnlocked"
         v-model="newGlyphs"
-        text="New Glyph identifier:"
+        text="New/Unequipped Glyph icons:"
       />
       <ModalOptionsToggleButton
         v-if="realityUnlocked"

@@ -269,6 +269,7 @@ export const GameStorage = {
     GameEnd.additionalEnd = 0;
     Theme.set(Theme.currentName());
     Glyphs.unseen = [];
+    Glyphs.unequipped = [];
     Notations.find(player.options.notation).setAsCurrent(true);
     ADNotations.Settings.exponentCommas.show = player.options.commas;
 

@@ -23,6 +23,11 @@ export default {
       required: false,
       default: false
     },
+    isUnequipped: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     showSacrifice: {
       type: Boolean,
       required: false,
@@ -395,7 +400,8 @@ export default {
     },
     showTooltip() {
       if (!this.tooltipEnabled) return;
-      Glyphs.removeNewFlag(this.glyph);
+      Glyphs.removeVisualFlag("unseen", this.glyph);
+      Glyphs.removeVisualFlag("unequipped", this.glyph);
       this.tooltipLoaded = true;
       this.$viewModel.tabs.reality.mouseoverGlyphInfo.inInventory = !this.circular;
       const glyphInfo = this.$viewModel.tabs.reality.mouseoverGlyphInfo;
@@ -587,10 +593,14 @@ export default {
     />
     <div
       v-if="isNew"
-      class="l-new-glyph"
+      class="l-corner-icon l-new-glyph"
     >
       New!
     </div>
+    <div
+      v-else-if="isUnequipped"
+      class="l-corner-icon l-unequipped-glyph fas fa-arrow-up-from-bracket"
+    />
     <div
       v-if="displayedInfo"
       class="l-glyph-info"
@@ -608,3 +618,27 @@ export default {
     />
   </div>
 </template>
+
+<style scoped>
+.l-corner-icon {
+  position: absolute;
+  z-index: 5;
+  color: black;
+  border-radius: var(--var-border-radius, 0.2rem);
+  padding: 0.2rem;
+}
+
+.l-new-glyph {
+  top: -0.7rem;
+  left: -0.7rem;
+  font-size: 1rem;
+  background-color: yellow;
+}
+
+.l-unequipped-glyph {
+  top: -0.5rem;
+  left: -0.5rem;
+  font-size: 1.2rem;
+  background-color: orange;
+}
+</style>

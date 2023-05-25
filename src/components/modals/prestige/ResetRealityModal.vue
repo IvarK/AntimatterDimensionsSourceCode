@@ -8,7 +8,8 @@ export default {
   },
   data() {
     return {
-      isDoomed: false
+      isDoomed: false,
+      canReality: false,
     };
   },
   computed: {
@@ -17,6 +18,7 @@ export default {
   methods: {
     update() {
       this.isDoomed = Pelle.isDoomed;
+      this.canReality = isRealityAvailable();
     },
     handleYesClick() {
       beginProcessReality(getRealityProps(true));
@@ -40,9 +42,26 @@ export default {
       <br>
       <br>
       Are you sure you want to do this?
+      <div
+        v-if="canReality"
+        class="c-has-rewards"
+      >
+        <br>
+        You can currently complete a Reality for all its normal rewards, which you will not receive if you
+        Reset here. To get rewards, use the "Make a new Reality" button.
+      </div>
+      <br>
     </div>
     <template #confirm-text>
       Reset
     </template>
   </ModalWrapperChoice>
 </template>
+
+<style scoped>
+.c-has-rewards {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--color-bad);
+}
+</style>

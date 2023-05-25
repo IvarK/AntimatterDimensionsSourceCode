@@ -29,6 +29,7 @@ export const Glyphs = {
   inventory: [],
   active: [],
   unseen: [],
+  unequipped: [],
   levelBoost: 0,
   factorsOpen: false,
   bestUndoGlyphCount: 0,
@@ -283,8 +284,9 @@ export const Glyphs = {
       }
       Modal.glyphReplace.show({ targetSlot, inventoryIndex: glyph.idx });
     }
-    // Loading glyph sets might choose NEW! glyphs, in which case the hover-over flag clearing never got triggered
-    this.removeNewFlag(glyph);
+    // Loading glyph sets might directly choose glyphs, bypassing the hover-over flag-clearing code
+    this.removeVisualFlag("unseen", glyph);
+    this.removeVisualFlag("unequipped", glyph);
   },
   unequipAll(forceToUnprotected = false) {
     const targetRegion = forceToUnprotected ? false : player.options.respecIntoProtected;
@@ -377,16 +379,18 @@ export const Glyphs = {
     player.records.bestReality.glyphStrength = Math.clampMin(player.records.bestReality.glyphStrength, glyph.strength);
 
     player.reality.glyphs.inventory.push(glyph);
-    if (requestedInventoryIndex === undefined && !isExistingGlyph) this.addNewFlag(glyph);
+    if (requestedInventoryIndex === undefined && !isExistingGlyph) this.addVisualFlag("unseen", glyph);
+    if (isExistingGlyph) this.addVisualFlag("unequipped", glyph);
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
     this.validate();
   },
-  addNewFlag(glyph) {
-    if (!this.unseen.includes(glyph.id)) this.unseen.push(glyph.id);
+  // These two visual flag functions update the corner tooltips for "New!" and unequipped glyphs
+  addVisualFlag(target, glyph) {
+    if (!this[target].includes(glyph.id)) this[target].push(glyph.id);
   },
-  removeNewFlag(glyph) {
-    const index = Glyphs.unseen.indexOf(glyph.id);
-    if (index > -1) Glyphs.unseen.splice(index, 1);
+  removeVisualFlag(target, glyph) {
+    const index = Glyphs[target].indexOf(glyph.id);
+    if (index > -1) Glyphs[target].splice(index, 1);
   },
   isMusicGlyph(glyph) {
     return glyph?.cosmetic === "music";

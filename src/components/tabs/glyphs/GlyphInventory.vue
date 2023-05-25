@@ -10,6 +10,7 @@ export default {
     return {
       inventory: [],
       newGlyphs: [],
+      unequippedGlyphs: [],
       doubleClickTimeOut: null,
       clickedGlyphId: null,
       glyphSacrificeUnlocked: false,
@@ -30,6 +31,7 @@ export default {
       this.glyphSacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.protectedRows = player.reality.glyphs.protectedRows;
       this.newGlyphs = Glyphs.unseen;
+      this.unequippedGlyphs = Glyphs.unequipped;
     },
     toIndex(row, col) {
       return (row - 1) * this.colCount + (col - 1);
@@ -76,6 +78,9 @@ export default {
     },
     isNew(index) {
       return player.options.showNewGlyphIcon && this.newGlyphs.includes(this.inventory[index].id);
+    },
+    isUnequipped(index) {
+      return player.options.showNewGlyphIcon && this.unequippedGlyphs.includes(this.inventory[index].id);
     }
   }
 };
@@ -101,6 +106,7 @@ export default {
           v-if="inventory[toIndex(row, col)]"
           :glyph="inventory[toIndex(row, col)]"
           :is-new="isNew(toIndex(row, col))"
+          :is-unequipped="isUnequipped(toIndex(row, col))"
           :is-inventory-glyph="true"
           :show-sacrifice="glyphSacrificeUnlocked"
           :draggable="true"

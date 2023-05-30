@@ -214,12 +214,6 @@ export function getGlyphIDsFromBitmask(bitmask) {
   return getGlyphEffectsFromBitmask(bitmask).map(x => x.id);
 }
 
-export function hasAtLeastGlyphEffects(needleBitmask, haystackBitmask) {
-  const needle = getGlyphIDsFromBitmask(needleBitmask);
-  const haystack = getGlyphIDsFromBitmask(haystackBitmask);
-  return haystack.every(x => needle.includes(x));
-}
-
 class FunctionalGlyphType {
   /**
    * @param {Object} setup

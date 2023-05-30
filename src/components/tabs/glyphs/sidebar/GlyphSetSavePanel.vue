@@ -184,14 +184,12 @@ export default {
 
 <template>
   <div class="l-glyph-sacrifice-options c-glyph-sacrifice-options l-glyph-sidebar-panel-size">
-    <div class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help">
-      <div
-        v-tooltip="questionmarkTooltip"
-        class="o-questionmark"
-      >
-        ?
-      </div>
-    </div>
+    <span
+      v-tooltip="questionmarkTooltip"
+      class="l-glyph-sacrifice-options__help c-glyph-sacrifice-options__help o-questionmark"
+    >
+      ?
+    </span>
     <div class="l-glyph-set-save__header">
       When loading a preset, try to match the following attributes. "Exact" will only equip Glyphs
       identical to the ones in the preset. The other settings will, loosely speaking, allow "better" Glyphs to be
@@ -278,6 +276,10 @@ export default {
 </template>
 
 <style scoped>
+.l-glyph-set-save__header {
+  margin: -1.5rem 2rem 0;
+}
+
 .c-glyph-set-save-container {
   display: flex;
   flex-wrap: wrap;

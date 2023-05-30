@@ -316,6 +316,7 @@ export const Glyphs = {
   },
   // We only ever force when draining rifts causes the single slot to be lost (which will never show the modal)
   unequipAll(forceToUnprotected = false) {
+    this.unequipped = [];
     const targetRegion = forceToUnprotected ? false : player.options.respecIntoProtected;
     while (player.reality.glyphs.active.length) {
       const freeIndex = this.findFreeIndex(targetRegion);

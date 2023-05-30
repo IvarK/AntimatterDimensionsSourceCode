@@ -192,40 +192,66 @@ export const Glyphs = {
     this.validate();
     EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
   },
+  // This compares targetGlyph to all the glyphs in searchList, returning a subset of them which fulfills the comparison
+  // direction specified by the parameters in fuzzyMatch:
+  //  -1: Will find glyphs which are equal to or worse than targetGlyph
+  //   0: Will only return glyphs which have identical values
+  //  +1: Will find glyphs which are equal to or better than targetGlyph
   findByValues(targetGlyph, searchList, fuzzyMatch = { level, strength, effects }) {
     // We need comparison to go both ways for normal matching and subset matching for partially-equipped sets
     const compFn = (op, comp1, comp2) => {
       switch (op) {
         case -1:
-          return comp1 <= comp2;
+          return comp2 - comp1;
         case 0:
-          return comp1 === comp2;
+          return comp1 === comp2 ? 0 : -1;
         case 1:
-          return comp1 >= comp2;
+          return comp1 - comp2;
       }
       return false;
     };
 
+    // Returns a number based on how much the small mask is found inside of the large mask. Returns a non-negative
+    // number if small contains all of large, with a value equal to the number of extra bits. Otherwise, returns a
+    // negative number equal to the negative of the number of bits that large has which small doesn't.
+    const matchedEffects = (large, small) => {
+      if ((large & small) === large) return countValuesFromBitmask(small - large);
+      return -countValuesFromBitmask(large - (large & small));
+    };
+
+    // Make an array containing all glyphs which match the given criteria, with an additional "quality" prop in order
+    // to determine roughly how good the glyph itself is relative to other matches
+    const allMatches = [];
     for (const glyph of searchList) {
       const type = glyph.type === targetGlyph.type;
-      let eff = false;
+      let eff;
       switch (fuzzyMatch.effects) {
         case -1:
-          eff = hasAtLeastGlyphEffects(targetGlyph.effects, glyph.effects);
+          eff = matchedEffects(targetGlyph.effects, glyph.effects);
           break;
         case 0:
-          eff = glyph.effects === targetGlyph.effects;
+          eff = glyph.effects === targetGlyph.effects ? 0 : -1;
           break;
         case 1:
-          eff = hasAtLeastGlyphEffects(glyph.effects, targetGlyph.effects);
+          eff = matchedEffects(glyph.effects, targetGlyph.effects);
           break;
       }
-      const str = compFn(fuzzyMatch.strength, glyph.strength, targetGlyph.strength);
-      const lvl = compFn(fuzzyMatch.level, glyph.level, targetGlyph.level);
+      const str = compFn(fuzzyMatch.strength, glyph.strength, targetGlyph.strength) / 2.5;
+      const lvl = compFn(fuzzyMatch.level, glyph.level, targetGlyph.level) / 5000;
       const sym = glyph.symbol === targetGlyph.symbol;
-      if (type && eff && str && lvl && sym) return glyph;
+      if (type && eff >= 0 && str >= 0 && lvl >= 0 && sym) {
+        allMatches.push({
+          glyph,
+          // Flatten glyph qualities, with 10% rarity, 500 levels, and an extra effect all being equal value. This
+          // is used to sort the options by some rough measure of distance from the target glyph
+          gap: str + lvl + eff / 10
+        });
+      }
     }
-    return undefined;
+
+    // Sort by increasing gap, then discard the value as it's not directly used anywhere else
+    allMatches.sort((a, b) => a.gap - b.gap);
+    return allMatches.map(m => m.glyph);
   },
   findById(id) {
     return player.reality.glyphs.inventory.find(glyph => glyph.id === id);

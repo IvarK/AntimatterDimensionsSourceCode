@@ -3,6 +3,10 @@ import { RebuyableMechanicState } from "../../game-mechanics/rebuyable";
 import { PelleRifts } from "./rifts";
 
 export const GalaxyGenerator = {
+  // This is used for a slightly annoying workaround in order to visually update the glyph tab when the rifts
+  // are refilling and the single glyph slot (which was lost during the drain) becomes available again
+  hasReturnedGlyphSlot: false,
+
   get generationCaps() {
     return PelleRifts.all
       .map(x => ({ rift: x.config.key, cap: x.config.galaxyGeneratorThreshold }))
@@ -96,6 +100,11 @@ export const GalaxyGenerator = {
 
     if (!this.capRift) {
       PelleRifts.all.forEach(r => r.reducedTo = Math.min(r.reducedTo + 0.03 * diff / 1000, 2));
+      if (PelleRifts.vacuum.milestones[0].canBeApplied && !this.hasReturnedGlyphSlot) {
+        Glyphs.refreshActive();
+        EventHub.dispatch(GAME_EVENT.GLYPHS_EQUIPPED_CHANGED);
+        this.hasReturnedGlyphSlot = true;
+      }
     }
   }
 };

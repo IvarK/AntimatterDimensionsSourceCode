@@ -25,7 +25,7 @@ export default {
   methods: {
     update() {
       const newGlyph = Glyphs.findByInventoryIndex(this.idx);
-      if (this.glyph !== newGlyph && this.confirmedDelete) {
+      if (this.glyph !== newGlyph && !this.confirmedDelete) {
 
         // Why is confirmedDelete here: refer to SacrificeGlyphModal.vue
 

@@ -21,7 +21,9 @@ export default {
       alchemyCap: 0,
       capFactor: 0,
       createdRealityGlyph: false,
-      allReactionsDisabled: false
+      allReactionsDisabled: false,
+      // Used to force a re-render of reaction lines when reality glyphs are created
+      realityAmount: 0,
     };
   },
   computed: {
@@ -67,6 +69,7 @@ export default {
       this.capFactor = 1 / GlyphSacrificeHandler.glyphRefinementEfficiency;
       this.createdRealityGlyph = player.reality.glyphs.createdRealityGlyph;
       this.allReactionsDisabled = this.reactions.every(reaction => !reaction.isActive);
+      this.realityAmount = AlchemyResource.reality.amount;
     },
     orbitSize(orbit) {
       const maxRadius = this.layout.orbits.map(o => o.radius).max();
@@ -258,13 +261,13 @@ export default {
       <svg class="l-alchemy-arrow-canvas">
         <line
           v-for="(reactionArrow, idx) in layout.reactionArrows"
-          :key="'arrow-' + idx"
+          :key="'arrow-' + idx + realityAmount"
           v-bind="reactionArrowPaths(reactionArrow)"
           :class="reactionPathClass(reactionArrow)"
         />
         <line
           v-for="(reactionArrow, idx) in layout.reactionArrows"
-          :key="'arrow2-' + idx"
+          :key="'arrow2-' + idx + realityAmount"
           v-bind="reactionArrowPositions(reactionArrow)"
           :class="reactionArrowClass(reactionArrow)"
         />

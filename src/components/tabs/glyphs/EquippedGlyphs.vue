@@ -119,6 +119,7 @@ export default {
     },
     glyphsChanged() {
       this.glyphs = Glyphs.active.map(GlyphGenerator.copy);
+      this.$recompute("slotCount");
     },
     undo() {
       if (!this.undoAvailable || Pelle.isDoomed) return;

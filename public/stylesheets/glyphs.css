@@ -655,10 +655,6 @@
   align-items: center;
 }
 
-.l-glyph-set-save__header {
-  margin-top: 1rem;
-}
-
 .c-glyph-single-set-save {
   display: flex;
   flex-wrap: wrap;

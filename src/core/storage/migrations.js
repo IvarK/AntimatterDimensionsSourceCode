@@ -326,6 +326,25 @@ GameStorage.migrations = {
       // Remove the old data after copying it all over
       delete player.celestials.effarig.glyphScoreSettings;
       delete player.celestials.effarig.glyphTrashMode;
+
+      // EFFARIG GLYPH INTERNAL CHANGE
+      // In order to display all effarig glyph effects in "celestial order" we needed to either special-case a ton
+      // of UI code, or migrate all existing saves - the latter option seems safer and less likely to lead to repeated
+      // bug reports related to Vue reactivity. Worst case scenario if something is incorrect here is that some people
+      // will have some slightly weird saves. We don't need to modify the glyph filter settings here because these are
+      // migrated above by their effect keys; this properly places them into the correct bit positions automatically
+      const updateBitmask = bitmask => {
+        const modifiedBits = [20, 21, 22].map(b => 1 << b).sum();
+        const foundBits = [20, 21, 22].map(b => (bitmask & (1 << b)) !== 0);
+        foundBits.push(foundBits.shift());
+        let newSubmask = 0;
+        for (let bit = 20; bit <= 22; bit++) {
+          if (foundBits[bit - 20]) newSubmask |= 1 << bit;
+        }
+        return (bitmask & ~modifiedBits) | newSubmask;
+      };
+      const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
+      for (const glyph of allGlyphs) glyph.effects = updateBitmask(glyph.effects);
     },
   },
 

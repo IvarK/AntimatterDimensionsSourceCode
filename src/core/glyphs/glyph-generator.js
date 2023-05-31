@@ -265,7 +265,7 @@ export const GlyphGenerator = {
     Array.range(0, 7 - GlyphTypes[type].effects.length).forEach(() => rng.uniform());
     if (type === "effarig") {
       // This is effarigrm/effarigglyph
-      const unincluded = effectValues[21] < effectValues[22] ? 21 : 22;
+      const unincluded = effectValues[20] < effectValues[21] ? 20 : 21;
       effectValues[unincluded] = -1;
     }
     // This is timepow/infinitypow/powerpow

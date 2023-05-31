@@ -8,7 +8,7 @@ const glyphEffectsOrder =
     "replicationpow", "replicationdtgain", "replicationspeed", "replicationglyphlevel",
     "timepow", "timeshardpow", "timeEP", "timespeed", "timeetermult",
     "dilationpow", "dilationTTgen", "dilationDT", "dilationgalaxyThreshold",
-    "effarigblackhole", "effarigrm", "effarigglyph", "effarigachievement",
+    "effarigrm", "effarigglyph", "effarigblackhole", "effarigachievement",
     "effarigforgotten", "effarigdimensions", "effarigantimatter",
     "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
     "realityglyphlevel", "realitygalaxies", "realityrow1pow", "realityDTglyph",

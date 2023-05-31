@@ -26,7 +26,7 @@ class CosmeticGlyphType {
 
   get defaultColor() {
     const color = this.id === "reality" ? GlyphAppearanceHandler.realityColor : this._defaultColor;
-    const isNormallyDark = !player.options.lightGlyphs;
+    const isNormallyDark = !GlyphAppearanceHandler.isLightBG;
     return {
       border: color,
       bg: (isNormallyDark === (this.id === "cursed")) ? "white" : "black",
@@ -153,14 +153,25 @@ export const GlyphAppearanceHandler = {
     return ShopPurchaseData.singleCosmeticSet + player.records.fullGameCompletions;
   },
 
+  // Returns true for "light" BG glyphs and false for "dark" BG glyphs
+  get isLightBG() {
+    switch (player.options.glyphBG) {
+      case GLYPH_BG_SETTING.AUTO:
+        return !Theme.current().isDark();
+      case GLYPH_BG_SETTING.LIGHT:
+        return true;
+      case GLYPH_BG_SETTING.DARK:
+        return false;
+      default:
+        throw new Error("Unrecognized Glyph BG setting");
+    }
+  },
   getBorderColor(type) {
-    if (type === "cursed" && !CosmeticGlyphTypes.cursed.currentColor.str)
-      return player.options.lightGlyphs ? "white" : "black";
+    if (type === "cursed" && !CosmeticGlyphTypes.cursed.currentColor.str) return this.isLightBG ? "white" : "black";
     return CosmeticGlyphTypes[type].currentColor.border;
   },
   getRarityColor(strength) {
-    const isDarkBG = !player.options.lightGlyphs;
-    return getRarity(strength)[isDarkBG ? "darkColor" : "lightColor"];
+    return getRarity(strength)[this.isLightBG ? "lightColor" : "darkColor"];
   },
   getColorProps(colorStr) {
     // This condition is a bit odd - this specifically selects out the hybrid custom colors which have both a BG color
@@ -168,7 +179,7 @@ export const GlyphAppearanceHandler = {
     if (colorStr?.charAt(1) !== "#") {
       return {
         border: colorStr,
-        bg: player.options.lightGlyphs ? "white" : "black",
+        bg: this.isLightBG ? "white" : "black",
       };
     }
     return {
@@ -178,7 +189,7 @@ export const GlyphAppearanceHandler = {
   },
   // Only used to ensure readable glyph tooltips
   getBaseColor(isInverted) {
-    const isNormallyDark = !player.options.lightGlyphs;
+    const isNormallyDark = !this.isLightBG;
     if (isInverted) return isNormallyDark ? "white" : "black";
     return isNormallyDark ? "black" : "white";
   },

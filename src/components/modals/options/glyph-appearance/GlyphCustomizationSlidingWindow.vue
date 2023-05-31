@@ -68,7 +68,7 @@ export default {
         this.isActive = player.reality.glyphs.cosmetics.active;
       }
       if (this.type === "reality" && !this.isSymbol) this.realityColor = GlyphAppearanceHandler.realityColor;
-      this.darkKeySwap = !player.options.lightGlyphs;
+      this.darkKeySwap = player.options.glyphBG;
     },
     select(option) {
       if (!this.isSingleGlyph && !this.isActive) return;

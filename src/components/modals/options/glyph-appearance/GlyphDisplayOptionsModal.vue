@@ -19,7 +19,7 @@ export default {
     return {
       newGlyphs: false,
       glyphEffectDots: false,
-      lightGlyphs: false,
+      glyphBG: 0,
       glyphInfoType: 0,
       showGlyphInfoByDefault: false,
     };
@@ -28,6 +28,18 @@ export default {
     infoLabel() {
       return GlyphInfo.labels[this.glyphInfoType];
     },
+    glyphBGStr() {
+      switch (this.glyphBG) {
+        case GLYPH_BG_SETTING.AUTO:
+          return "AUTO";
+        case GLYPH_BG_SETTING.LIGHT:
+          return "Light";
+        case GLYPH_BG_SETTING.DARK:
+          return "Dark";
+        default:
+          throw new Error("Unrecognized Glyph BG setting");
+      }
+    }
   },
   watch: {
     newGlyphs(newValue) {
@@ -36,10 +48,6 @@ export default {
     },
     glyphEffectDots(newValue) {
       player.options.showHintText.glyphEffectDots = newValue;
-      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
-    },
-    lightGlyphs(newValue) {
-      player.options.lightGlyphs = newValue;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
     showGlyphInfoByDefault(newValue) {
@@ -52,7 +60,7 @@ export default {
       const options = player.options;
       this.newGlyphs = options.showNewGlyphIcon;
       this.glyphEffectDots = options.showHintText.glyphEffectDots;
-      this.lightGlyphs = options.lightGlyphs;
+      this.glyphBG = player.options.glyphBG;
       this.glyphInfoType = options.showHintText.glyphInfoType;
       this.showGlyphInfoByDefault = options.showHintText.showGlyphInfoByDefault;
     },
@@ -61,6 +69,10 @@ export default {
       return {
         "background-color": "var(--color-disabled)",
       };
+    },
+    cycleBG() {
+      player.options.glyphBG = (player.options.glyphBG + 1) % Object.keys(GLYPH_BG_SETTING).length;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
   },
 };
@@ -80,10 +92,12 @@ export default {
         v-model="glyphEffectDots"
         text="Always show Glyph effect dots:"
       />
-      <ModalOptionsToggleButton
-        v-model="lightGlyphs"
-        text="Light Glyph backgrounds:"
-      />
+      <button
+        class="o-primary-btn o-primary-btn--modal-option"
+        @click="cycleBG()"
+      >
+        Glyph BG color: {{ glyphBGStr }}
+      </button>
       <ExpandingControlBox
         class="o-primary-btn c-dropdown-btn"
       >

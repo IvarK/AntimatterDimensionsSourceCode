@@ -76,7 +76,7 @@ export default {
         .replace("\n", "<br>")
         .replace("]", "</span>")
         .replace(
-          "[", `<span style="${player.options.lightGlyphs
+          "[", `<span style="${GlyphAppearanceHandler.isLightBG
             ? ""
             : "text-shadow: white 0 0 0.6rem;"}
             font-weight: bold;">`

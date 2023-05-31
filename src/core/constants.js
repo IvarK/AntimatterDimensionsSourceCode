@@ -226,7 +226,8 @@ window.TS171_MULTIPLIER = 1.25;
 // Used as drag and drop data type
 window.GLYPH_MIME_TYPE = "text/x-ivark-glyph";
 
-// These need to be in descending order for searching over them to work trivially
+// These need to be in descending order for searching over them to work trivially, and all need to be hex codes
+// in order for reality glyph color parsing to work properly in the cosmetic handler
 window.GlyphRarities = [
   {
     minStrength: 3.5,
@@ -266,10 +267,16 @@ window.GlyphRarities = [
   }, {
     minStrength: 1,
     name: "Common",
-    darkColor: "white",
-    lightColor: "black"
+    darkColor: "#ffffff",
+    lightColor: "#000000"
   },
 ];
+
+window.GLYPH_BG_SETTING = {
+  AUTO: 0,
+  LIGHT: 1,
+  DARK: 2,
+};
 
 window.GLYPH_TYPES = [
   "power",

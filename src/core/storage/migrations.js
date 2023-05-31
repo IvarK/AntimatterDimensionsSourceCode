@@ -345,6 +345,10 @@ GameStorage.migrations = {
       };
       const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
       for (const glyph of allGlyphs) glyph.effects = updateBitmask(glyph.effects);
+
+      // Glyph light/dark formatting was refactored as well; these values are in reference to the GLYPH_BG_SETTING enum
+      player.options.glyphBG = player.options.lightGlyphs ? 1 : 2;
+      delete player.options.lightGlyphs;
     },
   },
 

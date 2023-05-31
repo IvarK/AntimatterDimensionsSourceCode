@@ -98,7 +98,7 @@ export default {
     },
     descriptionStyle() {
       const color = GlyphAppearanceHandler.getRarityColor(this.strength);
-      const cursedColor = player.options.lightGlyphs ? "white" : "black";
+      const cursedColor = GlyphAppearanceHandler.isLightBG ? "white" : "black";
       return {
         color: this.type === "cursed" ? cursedColor : color,
         animation: this.type === "reality" ? "a-reality-glyph-name-cycle 10s infinite" : undefined
@@ -167,7 +167,7 @@ export default {
       const isCursed = this.type === "cursed";
       const isReality = this.type === "reality";
 
-      let color = Theme.current().isDark() ? this.rarityInfo.darkColor : this.rarityInfo.lightColor;
+      let color = GlyphAppearanceHandler.getRarityColor(this.strength);
       if (isCursed) color = this.textColor;
       if (this.type === "companion") color = GlyphAppearanceHandler.getBorderColor(this.type);
       return {

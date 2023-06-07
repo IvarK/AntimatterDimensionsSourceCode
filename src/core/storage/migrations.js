@@ -346,6 +346,13 @@ GameStorage.migrations = {
       const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
       for (const glyph of allGlyphs) glyph.effects = updateBitmask(glyph.effects);
 
+      // We also need to update glyphs that appear in the statistics tab records too
+      const glyphSetProps = ["RMSet", "RMminSet", "glyphLevelSet", "bestEPSet", "speedSet", "iMCapSet", "laitelaSet"];
+      for (const prop of glyphSetProps) {
+        const glyphSet = player.records.bestReality[prop];
+        for (const glyph of glyphSet) glyph.effects = updateBitmask(glyph.effects);
+      }
+
       // Glyph light/dark formatting was refactored as well; these values are in reference to the GLYPH_BG_SETTING enum
       player.options.glyphBG = player.options.lightGlyphs ? 1 : 2;
       delete player.options.lightGlyphs;

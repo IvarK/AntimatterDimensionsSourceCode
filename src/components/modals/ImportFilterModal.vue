@@ -21,7 +21,7 @@ export default {
       let decoded;
       try {
         decoded = GameSaveSerializer.decodeText(this.input, "glyph filter");
-        return decoded.length > 0 && decoded.match(/^[0-9,.|]*$/u) !== null;
+        return decoded.length > 0 && decoded.match(/^[0-9,.|/-]*$/u) !== null;
       } catch {
         return false;
       }
@@ -41,7 +41,7 @@ export default {
           score: Number(subparts[1]),
           effectCount: Number(subparts[2]),
           specifiedMask: Number(subparts[3]),
-          effectScores: subparts[4].split(".").map(s => Number(s)),
+          effectScores: subparts[4].split("/").map(s => Number(s)),
         };
         partIndex++;
       }

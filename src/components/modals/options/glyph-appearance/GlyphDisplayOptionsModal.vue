@@ -31,7 +31,7 @@ export default {
     glyphBGStr() {
       switch (this.glyphBG) {
         case GLYPH_BG_SETTING.AUTO:
-          return "AUTO";
+          return "Auto";
         case GLYPH_BG_SETTING.LIGHT:
           return "Light";
         case GLYPH_BG_SETTING.DARK:

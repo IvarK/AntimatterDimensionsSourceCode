@@ -176,7 +176,7 @@ export default {
     exportFilterSettings() {
       const filter = player.reality.glyphs.filter;
       const serializeType = settings => [settings.rarity, settings.score, settings.effectCount,
-        settings.specifiedMask, settings.effectScores.join(".")].join(",");
+        settings.specifiedMask, settings.effectScores.join("/")].join(",");
       const simpleData = [filter.select, filter.simple, filter.trash].join("|");
       const typeData = ALCHEMY_BASIC_GLYPH_TYPES.map(t => serializeType(filter.types[t])).join("|");
       copyToClipboard(GameSaveSerializer.encodeText(`${simpleData}|${typeData}`, "glyph filter"));

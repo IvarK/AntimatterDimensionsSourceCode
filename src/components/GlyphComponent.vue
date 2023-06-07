@@ -3,6 +3,96 @@ import { GlyphInfo } from "../../src/components/modals/options/SelectGlyphInfoDr
 
 import GlyphTooltip from "@/components/GlyphTooltip";
 
+// We generate the border effects with CSS gradients; for the sake of flexibility and for dynamically using
+// the glyph color instead of the fixed rarity color, the border patterns are stored below and then parsed
+// into the relevant CSS on a per-glyph basis
+const rarityBorderStyles = {
+  common: [],
+  uncommon: [
+    {
+      lineType: "linear",
+      angles: [45],
+      colorSplit: [14, 16, 84, 86],
+    }
+  ],
+  rare: [
+    {
+      lineType: "linear",
+      angles: [45, 135],
+      colorSplit: [14, 16, 84, 86],
+    }
+  ],
+  epic: [
+    {
+      lineType: "linear",
+      angles: [45, 135],
+      colorSplit: [12, 14, 16, 18, 82, 84, 86, 88],
+    }
+  ],
+  legendary: [
+    {
+      lineType: "spoke",
+      colorSplit: [15, 30],
+    }
+  ],
+  mythical: [
+    {
+      lineType: "spoke",
+      colorSplit: [15, 30],
+    },
+    {
+      lineType: "linear",
+      angles: [45, 135],
+      colorSplit: [10, 13, 87, 90],
+    }
+  ],
+  transcendent: [
+    {
+      lineType: "spoke",
+      colorSplit: [20, 25],
+    },
+    {
+      lineType: "linear",
+      angles: [45, 135],
+      colorSplit: [10, 12, 14, 16, 84, 86, 88, 90],
+    }
+  ],
+  celestial: [
+    {
+      lineType: "spoke",
+      colorSplit: [20, 25],
+    },
+    {
+      lineType: "linear",
+      angles: [35, 55, 125, 145],
+      colorSplit: [10, 12, 88, 90],
+    }
+  ]
+};
+
+// Produces stripes at the specified angle, where color sharply switches between the specified color and transparent
+// at each percentage in lines
+function linearGrad(angle, lines, color) {
+  let isColor = false;
+  const entries = [];
+  const borders = [0, ...lines, 100];
+  for (let i = 0; i < borders.length - 1; i++) {
+    entries.push(`${isColor ? color : "transparent"} ${borders[i]}% ${borders[i + 1]}%`);
+    isColor = !isColor;
+  }
+  return `repeating-linear-gradient(${angle}deg, ${entries.join(",")})`;
+}
+
+// Produces four bumps on the cardinal directions of the glyph border
+function centerBorderGrad(splits, color) {
+  const entries = [];
+  const centers = ["50% -25%", "50% 125%", "-25% 50%", "125% 50%"];
+  for (let i = 0; i < 4; i++) {
+    entries.push(`radial-gradient(at ${centers[i]}, transparent, ${color} ${splits[0]}%, transparent ${splits[1]}%)`);
+  }
+  return entries.join(",");
+}
+
 export default {
   name: "GlyphComponent",
   components: {
@@ -545,6 +635,30 @@ export default {
         opacity: Theme.current().name === "S9" ? 0 : 0.8
       };
     },
+    glyphBorderStyle() {
+      const rarityName = getRarity(this.glyph.strength).name.toLowerCase();
+      const borderAttrs = rarityBorderStyles[rarityName];
+
+      const lines = [];
+      for (const line of borderAttrs) {
+        switch (line.lineType) {
+          case "linear":
+            lines.push(line.angles.map(a => linearGrad(a, line.colorSplit, this.borderColor)).join(","));
+            break;
+          case "spoke":
+            lines.push(centerBorderGrad(line.colorSplit, this.borderColor));
+            break;
+        }
+      }
+
+      return {
+        position: "absolute",
+        left: "2.5%",
+        width: "95%",
+        height: "95%",
+        background: lines.join(",")
+      };
+    }
   }
 };
 </script>
@@ -574,6 +688,7 @@ export default {
         />
       </template>
     </div>
+    <div :style="glyphBorderStyle()" />
     <GlyphTooltip
       v-if="hasTooltip && tooltipLoaded"
       v-show="isCurrentTooltip"

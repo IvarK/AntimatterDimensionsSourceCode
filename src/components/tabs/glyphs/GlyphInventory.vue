@@ -80,7 +80,7 @@ export default {
       return player.options.showNewGlyphIcon && this.newGlyphs.includes(this.inventory[index].id);
     },
     isUnequipped(index) {
-      return player.options.showNewGlyphIcon && this.unequippedGlyphs.includes(this.inventory[index].id);
+      return player.options.showUnequippedGlyphIcon && this.unequippedGlyphs.includes(this.inventory[index].id);
     }
   }
 };

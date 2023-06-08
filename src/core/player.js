@@ -797,11 +797,13 @@ window.player = {
     glyphTextColors: true,
     headerTextColored: false,
     showNewGlyphIcon: true,
+    showUnequippedGlyphIcon: true,
     hideAlterationEffects: false,
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,
     ignoreGlyphRarity: false,
     glyphBG: GLYPH_BG_SETTING.AUTO,
+    glyphBorders: true,
     showHintText: {
       showPercentage: true,
       achievements: true,

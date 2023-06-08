@@ -18,10 +18,12 @@ export default {
   data() {
     return {
       newGlyphs: false,
+      showUnequippedGlyphIcon: false,
       glyphEffectDots: false,
       glyphBG: 0,
       glyphInfoType: 0,
       showGlyphInfoByDefault: false,
+      glyphBorders: false,
     };
   },
   computed: {
@@ -46,6 +48,10 @@ export default {
       player.options.showNewGlyphIcon = newValue;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
+    showUnequippedGlyphIcon(newValue) {
+      player.options.showUnequippedGlyphIcon = newValue;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
     glyphEffectDots(newValue) {
       player.options.showHintText.glyphEffectDots = newValue;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
@@ -54,15 +60,21 @@ export default {
       player.options.showHintText.showGlyphInfoByDefault = newValue;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
+    glyphBorders(newValue) {
+      player.options.glyphBorders = newValue;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
   },
   methods: {
     update() {
       const options = player.options;
       this.newGlyphs = options.showNewGlyphIcon;
+      this.showUnequippedGlyphIcon = options.showUnequippedGlyphIcon;
       this.glyphEffectDots = options.showHintText.glyphEffectDots;
       this.glyphBG = player.options.glyphBG;
       this.glyphInfoType = options.showHintText.glyphInfoType;
       this.showGlyphInfoByDefault = options.showHintText.showGlyphInfoByDefault;
+      this.glyphBorders = options.glyphBorders;
     },
     noEffectStyle() {
       if (this.glyphInfoType !== 0) return null;
@@ -89,8 +101,16 @@ export default {
         text="New Glyph identifier:"
       />
       <ModalOptionsToggleButton
+        v-model="showUnequippedGlyphIcon"
+        text="Unequipped Glyph identifier:"
+      />
+      <ModalOptionsToggleButton
         v-model="glyphEffectDots"
         text="Always show Glyph effect dots:"
+      />
+      <ModalOptionsToggleButton
+        v-model="glyphBorders"
+        text="Fancy Glyph borders:"
       />
       <button
         class="o-primary-btn o-primary-btn--modal-option"
@@ -98,6 +118,11 @@ export default {
       >
         Glyph BG color: {{ glyphBGStr }}
       </button>
+      <ModalOptionsToggleButton
+        v-model="showGlyphInfoByDefault"
+        :style="noEffectStyle()"
+        text="Always show Glyph Info:"
+      />
       <ExpandingControlBox
         class="o-primary-btn c-dropdown-btn"
       >
@@ -112,11 +137,6 @@ export default {
           <SelectGlyphInfoDropdown />
         </template>
       </ExpandingControlBox>
-      <ModalOptionsToggleButton
-        v-model="showGlyphInfoByDefault"
-        :style="noEffectStyle()"
-        text="Always show Glyph Info:"
-      />
     </div>
     <GlyphCustomization />
   </ModalWrapperOptions>

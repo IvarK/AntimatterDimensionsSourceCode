@@ -227,13 +227,13 @@ export const Glyphs = {
       let eff;
       switch (fuzzyMatch.effects) {
         case -1:
-          eff = matchedEffects(targetGlyph.effects, glyph.effects);
+          eff = matchedEffects(glyph.effects, targetGlyph.effects);
           break;
         case 0:
           eff = glyph.effects === targetGlyph.effects ? 0 : -1;
           break;
         case 1:
-          eff = matchedEffects(glyph.effects, targetGlyph.effects);
+          eff = matchedEffects(targetGlyph.effects, glyph.effects);
           break;
       }
       const str = compFn(fuzzyMatch.strength, glyph.strength, targetGlyph.strength) / 2.5;

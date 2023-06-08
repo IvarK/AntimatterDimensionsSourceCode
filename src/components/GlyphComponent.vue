@@ -413,6 +413,9 @@ export default {
         default:
           throw new Error("Unrecognized Glyph info type in info text");
       }
+    },
+    showBorders() {
+      return player.options.glyphBorders;
     }
   },
   watch: {
@@ -429,6 +432,7 @@ export default {
       this.$recompute("overrideColor");
       this.$recompute("showGlyphEffectDots");
       this.$recompute("displayedInfo");
+      this.$recompute("showBorders");
     });
     this.on$("tooltip-touched", () => this.hideTooltip());
     this.on$(GAME_EVENT.TAB_CHANGED, () => this.hideTooltip());
@@ -638,6 +642,7 @@ export default {
       };
     },
     glyphBorderStyle() {
+      if (!this.showBorders) return null;
       const rarityName = getRarity(this.glyph.strength).name.toLowerCase();
       const borderAttrs = rarityBorderStyles[rarityName];
 

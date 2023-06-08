@@ -97,9 +97,9 @@ export default {
       for (let index = 0; index < glyphsToLoad.length; index++) {
         const glyph = glyphsToLoad[index];
         const options = Glyphs.findByValues(glyph, Glyphs.sortedInventoryList, {
-          level: this.level ? -1 : 0,
-          strength: this.rarity ? -1 : 0,
-          effects: this.effects ? -1 : 0
+          level: this.level ? 1 : 0,
+          strength: this.rarity ? 1 : 0,
+          effects: this.effects ? 1 : 0
         });
         remainingOptions[index] = { glyph, options };
       }
@@ -133,11 +133,12 @@ export default {
     // The compromise solution here is to check how many choices the next-strictest option list has - if it only has
     // one choice then we pick conservatively (the weakest glyph) - otherwise we pick greedily (the strongest glyph).
     findSelectedGlyphs(optionList, maxGlyphs) {
-      // We do a weird composite sorting function here in order to make sure that glyphs get treated by type first, and
-      // with in type are generally ordered in strictest to most lenient in terms of matches. Note that the options
+      // We do a weird composite function here in order to make sure that glyphs get treated by type individually; then
+      // within type they are generally ordered in strictest to most lenient in terms of matches. Note that the options
       // are sorted internally starting with the strictest match first
-      optionList.sort((a, b) => 100 * (a.glyph.type.charCodeAt(0) - b.glyph.type.charCodeAt(0)) +
-        (a.options.length - b.options.length));
+      const compFn = o => 1000 * (10 * o.glyph.type.length + o.glyph.type.codePointAt(0)) + o.options.length;
+      optionList.sort((a, b) => compFn(a) - compFn(b));
+
       const toLoad = [];
       let slotsLeft = maxGlyphs;
       for (let index = 0; index < optionList.length; index++) {

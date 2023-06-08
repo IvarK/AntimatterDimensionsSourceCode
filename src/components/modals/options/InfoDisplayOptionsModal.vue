@@ -20,7 +20,6 @@ export default {
       achievementUnlockStates: false,
       challenges: false,
       studies: false,
-      newGlyphs: false,
       glyphEffectDots: false,
       realityUpgrades: false,
       perks: false,
@@ -47,9 +46,6 @@ export default {
     },
     studies(newValue) {
       player.options.showHintText.studies = newValue;
-    },
-    newGlyphs(newValue) {
-      player.options.showNewGlyphIcon = newValue;
     },
     glyphEffectDots(newValue) {
       player.options.showHintText.glyphEffectDots = newValue;
@@ -78,7 +74,6 @@ export default {
       this.achievementUnlockStates = options.achievementUnlockStates;
       this.challenges = options.challenges;
       this.studies = options.studies;
-      this.newGlyphs = player.options.showNewGlyphIcon;
       this.glyphEffectDots = options.glyphEffectDots;
       this.realityUpgrades = options.realityUpgrades;
       this.perks = options.perks;
@@ -115,11 +110,6 @@ export default {
         v-if="eternityUnlocked"
         v-model="studies"
         text="Time Study IDs:"
-      />
-      <ModalOptionsToggleButton
-        v-if="realityUnlocked"
-        v-model="newGlyphs"
-        text="New/Unequipped Glyph icons:"
       />
       <ModalOptionsToggleButton
         v-if="realityUnlocked"

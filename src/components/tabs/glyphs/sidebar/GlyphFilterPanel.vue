@@ -61,6 +61,10 @@ export default {
         The Glyph with the highest score is picked, but will still be Sacrificed if below the threshold.
         (click for more detail)`;
     },
+    autoRealityTooltip() {
+      return `If Auto-Reality is on, ignore all other settings and immediately Reality if no upcoming
+        Glyphs would be kept`;
+    },
     unlockedModes() {
       return Object.values(this.modes).filter(idx => this.isUnlocked(idx));
     }
@@ -206,7 +210,7 @@ export default {
       </div>
       <div class="c-filter-extra-btns c-top-right">
         <i
-          v-tooltip="'Immediately Reality if no choices pass filter, ignoring all other Auto-Reality settings'"
+          v-tooltip="autoRealityTooltip"
           class="fas fa-recycle l-top-right-btn"
           :class="{ 'o-quick-reality' : autoRealityForFilter }"
           @click="toggleAutoReality"
@@ -430,6 +434,6 @@ export default {
 }
 
 .o-quick-reality {
-  background: var(--color-accent);
+  background: var(--color-good);
 }
 </style>

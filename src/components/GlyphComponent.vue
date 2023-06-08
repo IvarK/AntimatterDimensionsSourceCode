@@ -71,13 +71,15 @@ const rarityBorderStyles = {
 };
 
 // Produces stripes at the specified angle, where color sharply switches between the specified color and transparent
-// at each percentage in lines
-function linearGrad(angle, lines, color) {
+// at each percentage in lines. For circular glyphs, we squash the boundaries inward so that remain visible
+// eslint-disable-next-line max-params
+function linearGrad(angle, lines, color, isCircular) {
   let isColor = false;
   const entries = [];
   const borders = [0, ...lines, 100];
+  const scaleFn = perc => (isCircular ? 50 + 0.8 * (perc - 50) : perc);
   for (let i = 0; i < borders.length - 1; i++) {
-    entries.push(`${isColor ? color : "transparent"} ${borders[i]}% ${borders[i + 1]}%`);
+    entries.push(`${isColor ? color : "transparent"} ${scaleFn(borders[i])}% ${scaleFn(borders[i + 1])}%`);
     isColor = !isColor;
   }
   return `repeating-linear-gradient(${angle}deg, ${entries.join(",")})`;
@@ -616,7 +618,7 @@ export default {
       const angle = this.glyph.type === "effarig"
         ? (Math.PI / 4) * (id + 1)
         : (Math.PI / 2) * (id + 0.5);
-      const scale = 0.3 * this.size.replace("rem", "");
+      const scale = 0.28 * this.size.replace("rem", "");
       const dx = -scale * Math.sin(angle);
       const dy = scale * (Math.cos(angle) + 0.15);
       return { dx, dy };
@@ -643,7 +645,9 @@ export default {
       for (const line of borderAttrs) {
         switch (line.lineType) {
           case "linear":
-            lines.push(line.angles.map(a => linearGrad(a, line.colorSplit, this.borderColor)).join(","));
+            lines.push(
+              line.angles.map(a => linearGrad(a, line.colorSplit, this.borderColor, this.circular)).join(",")
+            );
             break;
           case "spoke":
             lines.push(centerBorderGrad(line.colorSplit, this.borderColor));
@@ -653,9 +657,10 @@ export default {
 
       return {
         position: "absolute",
-        left: "2.5%",
-        width: "95%",
-        height: "95%",
+        left: "2%",
+        width: "96%",
+        height: "96%",
+        "border-radius": this.circular ? "50%" : "0",
         background: lines.join(",")
       };
     }

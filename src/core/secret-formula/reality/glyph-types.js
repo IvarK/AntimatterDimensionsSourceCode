@@ -66,7 +66,7 @@ GameDatabase.reality.glyphTypes = {
   cursed: {
     id: "cursed",
     symbol: GLYPH_SYMBOLS.cursed,
-    color: "black",
+    color: "#000000",
     fixedSymbolColor: true,
     isUnlocked: () => false,
     canCustomize: () => V.isFlipped,

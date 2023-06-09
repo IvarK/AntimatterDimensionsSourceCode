@@ -31,14 +31,14 @@ const rarityBorderStyles = {
   ],
   legendary: [
     {
-      lineType: "spoke",
-      colorSplit: [15, 30],
+      lineType: "bump",
+      colorSplit: [15, 25],
     }
   ],
   mythical: [
     {
-      lineType: "spoke",
-      colorSplit: [15, 30],
+      lineType: "bump",
+      colorSplit: [15, 25],
     },
     {
       lineType: "linear",
@@ -48,8 +48,8 @@ const rarityBorderStyles = {
   ],
   transcendent: [
     {
-      lineType: "spoke",
-      colorSplit: [20, 25],
+      lineType: "bump",
+      colorSplit: [15, 35],
     },
     {
       lineType: "linear",
@@ -59,40 +59,84 @@ const rarityBorderStyles = {
   ],
   celestial: [
     {
-      lineType: "spoke",
-      colorSplit: [20, 25],
+      lineType: "bump",
+      colorSplit: [15, 35],
+    },
+    {
+      lineType: "radial",
+      colorSplit: [65, 85],
+    },
+  ],
+  cursed: [
+    {
+      lineType: "conic",
+      colorSplit: [45, 90, 135, 180, 225, 270, 315],
+    }
+  ],
+  companion: [
+    {
+      lineType: "conic",
+      colorSplit: [45, 135, 180, 225, 315],
     },
     {
       lineType: "linear",
-      angles: [35, 55, 125, 145],
-      colorSplit: [10, 12, 88, 90],
+      angles: [45, 315],
+      colorSplit: [18, 20],
     }
   ]
 };
 
-// Produces stripes at the specified angle, where color sharply switches between the specified color and transparent
-// at each percentage in lines. For circular glyphs, we squash the boundaries inward so that remain visible
-// eslint-disable-next-line max-params
-function linearGrad(angle, lines, color, isCircular) {
-  let isColor = false;
-  const entries = [];
-  const borders = [0, ...lines, 100];
-  const scaleFn = perc => (isCircular ? 50 + 0.8 * (perc - 50) : perc);
-  for (let i = 0; i < borders.length - 1; i++) {
-    entries.push(`${isColor ? color : "transparent"} ${scaleFn(borders[i])}% ${scaleFn(borders[i + 1])}%`);
-    isColor = !isColor;
+// This function does all the parsing of the above gradient specifications
+function generateGradient(data, color, isCircular) {
+  // The undefined declarations here are mostly to make ESLint happy, and aren't necessarily used in all cases
+  let borders, scaleFn, centers, isColor = false;
+  const entries = [], elements = [];
+  switch (data.lineType) {
+    case "linear":
+      // Produces stripes at the specified angle, where color sharply switches between the specified color and
+      // transparent at each percentage in lines
+      borders = [0, ...data.colorSplit, 100];
+      scaleFn = perc => (isCircular ? 50 + 0.8 * (perc - 50) : perc);
+      for (const angle of data.angles) {
+        for (let i = 0; i < borders.length - 1; i++) {
+          entries.push(`${isColor ? color : "transparent"} ${scaleFn(borders[i])}% ${scaleFn(borders[i + 1])}%`);
+          isColor = !isColor;
+        }
+        elements.push(`repeating-linear-gradient(${angle}deg, ${entries.join(",")})`);
+      }
+      return elements.join(",");
+    case "bump":
+      // Produces four bumps on the cardinal directions of the glyph border, with specified color fade distances
+      centers = ["50% -25%", "50% 125%", "-25% 50%", "125% 50%"];
+      scaleFn = perc => (isCircular ? perc : 0.9 * perc);
+      for (let i = 0; i < 4; i++) {
+        entries.push(`radial-gradient(at ${centers[i]}, transparent, ${color} ${scaleFn(data.colorSplit[0])}%,
+          transparent ${scaleFn(data.colorSplit[1])}%)`);
+      }
+      return entries.join(",");
+    case "radial":
+      // Produces a centered circle that only shades within a certain radial distance
+      borders = [50, ...data.colorSplit, 100];
+      scaleFn = perc => (isCircular ? perc : 100 - (100 - perc) / 2);
+      for (const border of borders) {
+        entries.push(`${isColor ? color : "transparent"} ${scaleFn(border)}%`);
+        isColor = !isColor;
+      }
+      return `radial-gradient(${entries.join(",")})`;
+    case "conic":
+      // Produces a radial sweep, starting with the border color at angle zero ("12 o'clock" with positive angles
+      // going clockwise) and smoothly transitioning between it and transparent, hitting min/max color at each
+      // specified angle in degrees. The border color is modified to be slightly transparent
+      borders = [0, ...data.colorSplit, 360];
+      isColor = true;
+      for (const border of borders) {
+        entries.push(`${isColor ? `${color}b0` : "transparent"} ${border}deg`);
+        isColor = !isColor;
+      }
+      return `conic-gradient(${entries.join(",")})`;
+    default:
+      throw new Error("Unrecognized glyph border data");
   }
-  return `repeating-linear-gradient(${angle}deg, ${entries.join(",")})`;
-}
-
-// Produces four bumps on the cardinal directions of the glyph border
-function centerBorderGrad(splits, color) {
-  const entries = [];
-  const centers = ["50% -25%", "50% 125%", "-25% 50%", "125% 50%"];
-  for (let i = 0; i < 4; i++) {
-    entries.push(`radial-gradient(at ${centers[i]}, transparent, ${color} ${splits[0]}%, transparent ${splits[1]}%)`);
-  }
-  return entries.join(",");
 }
 
 export default {
@@ -643,22 +687,11 @@ export default {
     },
     glyphBorderStyle() {
       if (!this.showBorders) return null;
-      const rarityName = getRarity(this.glyph.strength).name.toLowerCase();
-      const borderAttrs = rarityBorderStyles[rarityName];
-
-      const lines = [];
-      for (const line of borderAttrs) {
-        switch (line.lineType) {
-          case "linear":
-            lines.push(
-              line.angles.map(a => linearGrad(a, line.colorSplit, this.borderColor, this.circular)).join(",")
-            );
-            break;
-          case "spoke":
-            lines.push(centerBorderGrad(line.colorSplit, this.borderColor));
-            break;
-        }
-      }
+      let borderAttrs;
+      if (this.isCursedGlyph) borderAttrs = rarityBorderStyles.cursed;
+      else if (this.isCompanionGlyph) borderAttrs = rarityBorderStyles.companion;
+      else borderAttrs = rarityBorderStyles[getRarity(this.glyph.strength).name.toLowerCase()];
+      const lines = borderAttrs.map(attr => generateGradient(attr, this.borderColor, this.circular));
 
       return {
         position: "absolute",

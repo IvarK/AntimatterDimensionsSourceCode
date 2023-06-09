@@ -167,7 +167,7 @@ export const GlyphAppearanceHandler = {
     }
   },
   getBorderColor(type) {
-    if (type === "cursed" && !CosmeticGlyphTypes.cursed.currentColor.str) return this.isLightBG ? "white" : "black";
+    if (type === "cursed" && !CosmeticGlyphTypes.cursed.currentColor.str) return this.isLightBG ? "#ffffff" : "#000000";
     return CosmeticGlyphTypes[type].currentColor.border;
   },
   getRarityColor(strength) {

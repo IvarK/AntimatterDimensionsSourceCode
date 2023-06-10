@@ -1,6 +1,6 @@
 import { DC } from "../../constants";
 import { GameDatabase } from "../game-database";
-import { PlayerProgress } from "../../app/player-progress";
+import { PlayerProgress } from "../../player-progress";
 
 import { MultiplierTabHelper } from "./helper-functions";
 import { MultiplierTabIcons } from "./icons";

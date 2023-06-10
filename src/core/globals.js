@@ -40,11 +40,11 @@ export * from "./celestials/celestials";
 export * from "./automator";
 export * from "./automator/automator-points";
 
-export * from "./app/player-progress";
-export * from "./app/modal";
-export * from "./app/themes";
-export * from "./app/options";
-export * from "./app/ui";
+export * from "./player-progress";
+export * from "./modal";
+export * from "./themes";
+export * from "./options";
+export * from "./ui";
 
 export * from "./achievements/normal-achievement";
 export * from "./achievements/secret-achievement";
@@ -87,8 +87,8 @@ export * from "./machines";
 export * from "./devtools";
 export * from "./news-ticker";
 export * from "./shop";
-export * from "./ui/tabs";
-export * from "./ui/tab-notifications";
+export * from "./tabs";
+export * from "./tab-notifications";
 export * from "./speedrun";
 
 export * from "./automator/script-templates";

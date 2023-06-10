@@ -1,4 +1,4 @@
-import { ProgressChecker } from "../storage/progress-checker";
+import { ProgressChecker } from "./storage/progress-checker";
 
 import CloudInvalidDataModal from "@/components/modals/cloud/CloudInvalidDataModal";
 import CloudLoadConflictModal from "@/components/modals/cloud/CloudLoadConflictModal";

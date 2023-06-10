@@ -3,7 +3,7 @@ import { sha512_256 } from "js-sha512";
 
 import { DEV } from "@/env";
 
-import FullScreenAnimationHandler from "../full-screen-animation-handler";
+import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
 export class GameOptions {
 

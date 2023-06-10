@@ -1,6 +1,6 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
+import { UpgradeableAutobuyerState } from "./autobuyer";
 
-Autobuyer.galaxy = new class GalaxyAutobuyerState extends UpgradeableAutobuyerState {
+export class GalaxyAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
     return player.auto.galaxy;
   }
@@ -69,4 +69,4 @@ Autobuyer.galaxy = new class GalaxyAutobuyerState extends UpgradeableAutobuyerSt
     const limit = this.limitGalaxies ? this.maxGalaxies : Number.MAX_VALUE;
     requestGalaxyReset(this.isBuyMaxUnlocked, limit);
   }
-}();
+}

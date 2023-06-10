@@ -1,6 +1,6 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
+import { UpgradeableAutobuyerState } from "./autobuyer";
 
-Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
+export class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
     return player.auto.bigCrunch;
   }
@@ -123,4 +123,4 @@ Autobuyer.bigCrunch = new class BigCrunchAutobuyerState extends UpgradeableAutob
     if (EternityMilestone.bigCrunchModes.isReached) return;
     this.mode = AUTO_CRUNCH_MODE.AMOUNT;
   }
-}();
+}

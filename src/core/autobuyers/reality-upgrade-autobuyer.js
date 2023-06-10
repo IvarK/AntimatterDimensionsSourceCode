@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-class RealityUpgradeAutobuyerState extends AutobuyerState {
+export class RealityUpgradeAutobuyerState extends AutobuyerState {
   get name() {
     return RealityUpgrade(this.id).config.name;
   }
@@ -27,5 +27,3 @@ class RealityUpgradeAutobuyerState extends AutobuyerState {
   static get isActive() { return player.auto.realityUpgrades.isActive; }
   static set isActive(value) { player.auto.realityUpgrades.isActive = value; }
 }
-
-Autobuyer.realityUpgrade = RealityUpgradeAutobuyerState.createAccessor();

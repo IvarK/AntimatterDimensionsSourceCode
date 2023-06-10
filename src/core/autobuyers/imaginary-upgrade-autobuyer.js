@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
+export class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
   get name() {
     return ImaginaryUpgrade(this.id).config.name;
   }
@@ -27,5 +27,3 @@ class ImaginaryUpgradeAutobuyerState extends AutobuyerState {
   static get isActive() { return player.auto.imaginaryUpgrades.isActive; }
   static set isActive(value) { player.auto.imaginaryUpgrades.isActive = value; }
 }
-
-Autobuyer.imaginaryUpgrade = ImaginaryUpgradeAutobuyerState.createAccessor();

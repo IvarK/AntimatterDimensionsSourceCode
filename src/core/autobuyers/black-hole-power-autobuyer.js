@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-class BlackHolePowerAutobuyerState extends AutobuyerState {
+export class BlackHolePowerAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.blackHolePower.all[this.id - 1];
   }
@@ -27,5 +27,3 @@ class BlackHolePowerAutobuyerState extends AutobuyerState {
   static get isActive() { return player.auto.blackHolePower.isActive; }
   static set isActive(value) { player.auto.blackHolePower.isActive = value; }
 }
-
-Autobuyer.blackHolePower = BlackHolePowerAutobuyerState.createAccessor();

@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-Autobuyer.annihilation = new class AnnihilationAutobuyerState extends AutobuyerState {
+export class AnnihilationAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.annihilation;
   }
@@ -42,4 +42,4 @@ Autobuyer.annihilation = new class AnnihilationAutobuyerState extends AutobuyerS
       Laitela.annihilate();
     }
   }
-}();
+}

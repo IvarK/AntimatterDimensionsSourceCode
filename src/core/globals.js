@@ -12,7 +12,7 @@ export * from "./galaxy";
 export * from "./away-progress";
 export * from "./confirmations";
 
-export * from "./autobuyers";
+export * from "./autobuyers/autobuyers";
 export * from "./storage";
 
 export * from "./notations";

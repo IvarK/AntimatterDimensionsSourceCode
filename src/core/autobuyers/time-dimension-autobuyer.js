@@ -1,6 +1,6 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
+import { IntervaledAutobuyerState } from "./autobuyer";
 
-class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
+export class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   get tier() {
     return this.id;
   }
@@ -55,5 +55,3 @@ class TimeDimensionAutobuyerState extends IntervaledAutobuyerState {
   static get isActive() { return player.auto.timeDims.isActive; }
   static set isActive(value) { player.auto.timeDims.isActive = value; }
 }
-
-Autobuyer.timeDimension = TimeDimensionAutobuyerState.createAccessor();

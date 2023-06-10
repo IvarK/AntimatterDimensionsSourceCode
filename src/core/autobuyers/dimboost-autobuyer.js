@@ -1,6 +1,6 @@
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
+import { UpgradeableAutobuyerState } from "./autobuyer";
 
-Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
+export class DimBoostAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
     return player.auto.dimBoost;
   }
@@ -113,4 +113,4 @@ Autobuyer.dimboost = new class DimBoostAutobuyerState extends UpgradeableAutobuy
       super.tick();
     }
   }
-}();
+}

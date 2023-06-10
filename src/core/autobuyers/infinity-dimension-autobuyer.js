@@ -1,8 +1,6 @@
-import { InfinityDimensions } from "../globals";
+import { IntervaledAutobuyerState } from "./autobuyer";
 
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
-
-class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
+export class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   get tier() {
     return this.id;
   }
@@ -53,5 +51,3 @@ class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
   static get isActive() { return player.auto.infinityDims.isActive; }
   static set isActive(value) { player.auto.infinityDims.isActive = value; }
 }
-
-Autobuyer.infinityDimension = InfinityDimensionAutobuyerState.createAccessor();

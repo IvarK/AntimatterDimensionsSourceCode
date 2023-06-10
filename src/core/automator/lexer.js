@@ -202,7 +202,7 @@ export const AutomatorLexer = (() => {
   // eternity will be triggered by something waiting for reality, for example.
   createInCategory(PrestigeEvent, "Infinity", /infinity/i, {
     extraCategories: [StudyPath],
-    $autobuyer: Autobuyer.bigCrunch,
+    $autobuyer: () => Autobuyer.bigCrunch,
     $autobuyerDurationMode: AUTO_CRUNCH_MODE.TIME,
     $autobuyerXHighestMode: AUTO_CRUNCH_MODE.X_HIGHEST,
     $autobuyerCurrencyMode: AUTO_CRUNCH_MODE.AMOUNT,
@@ -213,7 +213,7 @@ export const AutomatorLexer = (() => {
     $studyPath: TIME_STUDY_PATH.INFINITY_DIM,
   });
   createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
-    $autobuyer: Autobuyer.eternity,
+    $autobuyer: () => Autobuyer.eternity,
     $autobuyerDurationMode: AUTO_ETERNITY_MODE.TIME,
     $autobuyerXHighestMode: AUTO_ETERNITY_MODE.X_HIGHEST,
     $autobuyerCurrencyMode: AUTO_ETERNITY_MODE.AMOUNT,
@@ -226,7 +226,7 @@ export const AutomatorLexer = (() => {
     },
   });
   createInCategory(PrestigeEvent, "Reality", /reality/i, {
-    $autobuyer: Autobuyer.reality,
+    $autobuyer: () => Autobuyer.reality,
     $autobuyerCurrencyMode: AUTO_REALITY_MODE.RM,
     $prestigeAvailable: () => isRealityAvailable(),
     $prestigeLevel: 3,

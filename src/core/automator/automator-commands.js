@@ -160,7 +160,7 @@ export const AutomatorCommands = ((() => {
         const durationMode = ctx.PrestigeEvent[0].tokenType.$autobuyerDurationMode;
         const xHighestMode = ctx.PrestigeEvent[0].tokenType.$autobuyerXHighestMode;
         const fixedMode = ctx.PrestigeEvent[0].tokenType.$autobuyerCurrencyMode;
-        const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer;
+        const autobuyer = ctx.PrestigeEvent[0].tokenType.$autobuyer();
         return () => {
           autobuyer.isActive = on;
           let currSetting = "";

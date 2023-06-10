@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-Autobuyer.ipMult = new class IPMultAutobuyerState extends AutobuyerState {
+export class IPMultAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.ipMultBuyer;
   }
@@ -20,9 +20,9 @@ Autobuyer.ipMult = new class IPMultAutobuyerState extends AutobuyerState {
   tick() {
     InfinityUpgrade.ipMult.buyMax();
   }
-}();
+}
 
-Autobuyer.epMult = new class EPMultAutobuyerState extends AutobuyerState {
+export class EPMultAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.epMultBuyer;
   }
@@ -48,4 +48,4 @@ Autobuyer.epMult = new class EPMultAutobuyerState extends AutobuyerState {
     applyEU2();
     EternityUpgrade.epMult.buyMax();
   }
-}();
+}

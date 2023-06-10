@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
+export class SacrificeAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.sacrifice;
   }
@@ -41,4 +41,4 @@ Autobuyer.sacrifice = new class SacrificeAutobuyerState extends AutobuyerState {
     if (Sacrifice.nextBoost.lt(Decimal.max(this.multiplier, 1.01))) return;
     sacrificeReset();
   }
-}();
+}

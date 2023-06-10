@@ -1,8 +1,8 @@
 import { DC } from "../constants";
 
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
+import { UpgradeableAutobuyerState } from "./autobuyer";
 
-class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
+export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
   get tier() {
     return this.id;
   }
@@ -169,5 +169,3 @@ class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState {
     return accessor;
   }
 }
-
-Autobuyer.antimatterDimension = AntimatterDimensionAutobuyerState.createAccessor();

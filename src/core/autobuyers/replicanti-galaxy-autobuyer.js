@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-Autobuyer.replicantiGalaxy = new class ReplicantiGalaxyAutobuyerState extends AutobuyerState {
+export class ReplicantiGalaxyAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.replicantiGalaxies;
   }
@@ -25,4 +25,4 @@ Autobuyer.replicantiGalaxy = new class ReplicantiGalaxyAutobuyerState extends Au
     if (!this.isEnabled) return;
     replicantiGalaxy();
   }
-}();
+}

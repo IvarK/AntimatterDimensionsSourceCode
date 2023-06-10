@@ -1,8 +1,8 @@
 import { DC } from "../constants";
 
-import { Autobuyer, UpgradeableAutobuyerState } from "./autobuyer";
+import { UpgradeableAutobuyerState } from "./autobuyer";
 
-Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
+export class TickspeedAutobuyerState extends UpgradeableAutobuyerState {
   get data() {
     return player.auto.tickspeed;
   }
@@ -97,4 +97,4 @@ Autobuyer.tickspeed = new class TickspeedAutobuyerState extends UpgradeableAutob
     this.data.isBought = false;
     TabNotification.newAutobuyer.clearTrigger();
   }
-}();
+}

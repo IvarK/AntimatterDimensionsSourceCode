@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-Autobuyer.singularity = new class SingularityAutobuyerState extends AutobuyerState {
+export class SingularityAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.singularity;
   }
@@ -22,4 +22,4 @@ Autobuyer.singularity = new class SingularityAutobuyerState extends AutobuyerSta
       Singularity.perform();
     }
   }
-}();
+}

@@ -1,7 +1,6 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
+import { IntervaledAutobuyerState } from "./autobuyer";
 
-Autobuyer.darkMatterDimsAscension =
-new class DarkMatterDimensionAscensionAutobuyerState extends IntervaledAutobuyerState {
+export class DarkMatterDimensionAscensionAutobuyerState extends IntervaledAutobuyerState {
   get data() {
     return player.auto.ascension;
   }
@@ -28,4 +27,4 @@ new class DarkMatterDimensionAscensionAutobuyerState extends IntervaledAutobuyer
       DarkMatterDimension(i).ascend();
     }
   }
-}();
+}

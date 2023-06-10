@@ -2,8 +2,8 @@
  * @abstract
  */
 export class AutobuyerState {
-  constructor(id) {
-    this._id = id ?? null;
+  constructor(id = null) {
+    this._id = id;
   }
 
   /**
@@ -173,6 +173,3 @@ export class UpgradeableAutobuyerState extends IntervaledAutobuyerState {
     return accessor;
   }
 }
-
-export const Autobuyer = {};
-window.Autobuyer = Autobuyer;

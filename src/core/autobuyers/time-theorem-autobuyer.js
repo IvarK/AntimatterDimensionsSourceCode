@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends AutobuyerState {
+export class TimeTheoremAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.timeTheorems;
   }
@@ -21,4 +21,4 @@ Autobuyer.timeTheorem = new class TimeTheoremAutobuyerState extends AutobuyerSta
     if (this.hasUnlimitedBulk) TimeTheorems.buyMax(true);
     else TimeTheorems.buyOneOfEach();
   }
-}();
+}

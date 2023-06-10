@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
+export class EternityAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.eternity;
   }
@@ -99,4 +99,4 @@ Autobuyer.eternity = new class EternityAutobuyerState extends AutobuyerState {
       this.isActive = false;
     }
   }
-}();
+}

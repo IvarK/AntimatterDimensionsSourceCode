@@ -1,4 +1,51 @@
-import { Autobuyer } from "./autobuyer";
+import { AnnihilationAutobuyerState } from "./annihilation-autobuyer";
+import { AntimatterDimensionAutobuyerState } from "./antimatter-dimension-autobuyer";
+import { BigCrunchAutobuyerState } from "./big-crunch-autobuyer";
+import { BlackHolePowerAutobuyerState } from "./black-hole-power-autobuyer";
+import { DarkMatterDimensionAscensionAutobuyerState } from "./dark-matter-dimension-ascension-autobuyer";
+import { DarkMatterDimensionAutobuyerState } from "./dark-matter-dimension-autobuyer";
+import { DilationUpgradeAutobuyerState } from "./dilation-upgrade-autobuyer";
+import { DimBoostAutobuyerState } from "./dimboost-autobuyer";
+import { EternityAutobuyerState } from "./eternity-autobuyer";
+import { GalaxyAutobuyerState } from "./galaxy-autobuyer";
+import { ImaginaryUpgradeAutobuyerState } from "./imaginary-upgrade-autobuyer";
+import { InfinityDimensionAutobuyerState } from "./infinity-dimension-autobuyer";
+import { EPMultAutobuyerState, IPMultAutobuyerState } from "./prestige-currency-multiplier-autobuyer";
+import { RealityAutobuyerState } from "./reality-autobuyer";
+import { RealityUpgradeAutobuyerState } from "./reality-upgrade-autobuyer";
+import { ReplicantiGalaxyAutobuyerState } from "./replicanti-galaxy-autobuyer";
+import { ReplicantiUpgradeAutobuyerState } from "./replicanti-upgrade-autobuyer";
+import { SacrificeAutobuyerState } from "./sacrifice-autobuyer";
+import { SingularityAutobuyerState } from "./singularity-autobuyer";
+import { TickspeedAutobuyerState } from "./tickspeed-autobuyer";
+import { TimeDimensionAutobuyerState } from "./time-dimension-autobuyer";
+import { TimeTheoremAutobuyerState } from "./time-theorem-autobuyer";
+
+export const Autobuyer = {
+  annihilation: new AnnihilationAutobuyerState(),
+  antimatterDimension: AntimatterDimensionAutobuyerState.createAccessor(),
+  bigCrunch: new BigCrunchAutobuyerState(),
+  blackHolePower: BlackHolePowerAutobuyerState.createAccessor(),
+  darkMatterDimsAscension: new DarkMatterDimensionAscensionAutobuyerState(),
+  darkMatterDims: new DarkMatterDimensionAutobuyerState(),
+  dilationUpgrade: DilationUpgradeAutobuyerState.createAccessor(),
+  dimboost: new DimBoostAutobuyerState(),
+  eternity: new EternityAutobuyerState(),
+  galaxy: new GalaxyAutobuyerState(),
+  imaginaryUpgrade: ImaginaryUpgradeAutobuyerState.createAccessor(),
+  infinityDimension: InfinityDimensionAutobuyerState.createAccessor(),
+  ipMult: new IPMultAutobuyerState(),
+  epMult: new EPMultAutobuyerState(),
+  reality: new RealityAutobuyerState(),
+  realityUpgrade: RealityUpgradeAutobuyerState.createAccessor(),
+  replicantiGalaxy: new ReplicantiGalaxyAutobuyerState(),
+  replicantiUpgrade: ReplicantiUpgradeAutobuyerState.createAccessor(),
+  sacrifice: new SacrificeAutobuyerState(),
+  singularity: new SingularityAutobuyerState(),
+  tickspeed: new TickspeedAutobuyerState(),
+  timeDimension: TimeDimensionAutobuyerState.createAccessor(),
+  timeTheorem: new TimeTheoremAutobuyerState()
+};
 
 export const Autobuyers = (function() {
   const antimatterDimensions = Autobuyer.antimatterDimension.zeroIndexed;

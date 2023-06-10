@@ -1,6 +1,6 @@
-import { Autobuyer, IntervaledAutobuyerState } from "./autobuyer";
+import { IntervaledAutobuyerState } from "./autobuyer";
 
-class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
+export class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   get _upgradeName() { return ["dtGain", "galaxyThreshold", "tachyonGain"][this.id - 1]; }
 
   get data() {
@@ -38,5 +38,3 @@ class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   static get isActive() { return player.auto.dilationUpgrades.isActive; }
   static set isActive(value) { player.auto.dilationUpgrades.isActive = value; }
 }
-
-Autobuyer.dilationUpgrade = DilationUpgradeAutobuyerState.createAccessor();

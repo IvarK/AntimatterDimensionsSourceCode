@@ -1,6 +1,6 @@
-import { Autobuyer, AutobuyerState } from "./autobuyer";
+import { AutobuyerState } from "./autobuyer";
 
-Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
+export class RealityAutobuyerState extends AutobuyerState {
   get data() {
     return player.auto.reality;
   }
@@ -120,4 +120,4 @@ Autobuyer.reality = new class RealityAutobuyerState extends AutobuyerState {
     }
     if (proc) autoReality();
   }
-}();
+}

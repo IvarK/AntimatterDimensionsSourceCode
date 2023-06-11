@@ -1,5 +1,5 @@
 <script>
-import { AutomatorBackend } from "@/core/globals";
+import { hasCompilationErrors } from "@/core/automator";
 
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
 
@@ -108,7 +108,7 @@ export default {
       this.importedPresets = parsed.presets;
       this.importedConstants = parsed.constants;
       this.lineCount = this.scriptContent.split("\n").length;
-      this.hasErrors = AutomatorGrammar.compile(this.scriptContent).errors.length !== 0;
+      this.hasErrors = hasCompilationErrors(this.scriptContent);
       this.isValid = true;
     },
     importSave() {

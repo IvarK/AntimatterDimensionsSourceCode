@@ -1,6 +1,6 @@
-import { AutomatorGrammar } from "./parser";
-import { AutomatorLexer } from "./lexer";
-
+import { lexer, tokenIds } from "./lexer";
+import { compile } from "./compiler";
+import { parser } from "./parser";
 
 function walkSuggestion(suggestion, prefix, output) {
   const hasAutocomplete = suggestion.$autocomplete &&
@@ -8,14 +8,14 @@ function walkSuggestion(suggestion, prefix, output) {
   const isUnlocked = suggestion.$unlocked ? suggestion.$unlocked() : true;
   if (hasAutocomplete && isUnlocked) output.add(suggestion.$autocomplete);
   for (const s of suggestion.categoryMatches) {
-    walkSuggestion(AutomatorLexer.tokenIds[s], prefix, output);
+    walkSuggestion(tokenIds[s], prefix, output);
   }
 }
 
 // eslint-disable-next-line no-unused-vars
 CodeMirror.registerHelper("lint", "automato", (contents, _, editor) => {
   const doc = editor.getDoc();
-  const errors = AutomatorGrammar.compile(contents, true).errors;
+  const errors = compile(contents, true).errors;
   return errors.map(e => ({
     message: e.info,
     severity: "error",
@@ -32,9 +32,9 @@ CodeMirror.registerHelper("hint", "anyword", editor => {
   while (start && /\w/u.test(line.charAt(start - 1)))--start;
   const lineStart = line.slice(0, start);
   const currentPrefix = line.slice(start, end);
-  const lineLex = AutomatorLexer.lexer.tokenize(lineStart);
+  const lineLex = lexer.tokenize(lineStart);
   if (lineLex.errors.length > 0) return undefined;
-  const rawSuggestions = AutomatorGrammar.parser.computeContentAssist("command", lineLex.tokens);
+  const rawSuggestions = parser.computeContentAssist("command", lineLex.tokens);
   const suggestions = new Set();
   for (const s of rawSuggestions) {
     if (s.ruleStack[1] === "badCommand") continue;

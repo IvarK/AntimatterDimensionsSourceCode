@@ -342,7 +342,7 @@ const Pipe = createToken({ name: "Pipe", pattern: /\|/, label: "|" });
 const Dash = createToken({ name: "Dash", pattern: /-/, label: "-" });
 
 // The order here is the order the lexer looks for tokens in.
-const automatorTokens = [
+export const automatorTokens = [
   HSpace, StringLiteral, StringLiteralSingleQuote, Comment, EOL,
   ComparisonOperator, ...tokenLists.ComparisonOperator,
   LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
@@ -362,19 +362,19 @@ RCurly.LABEL = "'}'";
 NumberLiteral.LABEL = "Number";
 Comma.LABEL = "❟";
 
-const lexer = new Lexer(automatorTokens, {
+export const lexer = new Lexer(automatorTokens, {
   positionTracking: "full",
   ensureOptimizations: true
 });
 
 // The lexer uses an ID system that's separate from indices into the token array
-const tokenIds = [];
+export const tokenIds = [];
 for (const token of lexer.lexerDefinition) {
   tokenIds[token.tokenTypeIdx] = token;
 }
 
 // We use this while building up the grammar
-const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
+export const tokenMap = automatorTokens.mapToObject(e => e.name, e => e);
 
 const automatorCurrencyNames = tokenLists.AutomatorCurrency.map(i => i.$autocomplete.toUpperCase());
 
@@ -405,12 +405,3 @@ export const forbiddenConstantPatterns = lexer.lexerDefinition
   .filter(p => !ignoredPatterns.includes(p.name))
   .map(p => p.PATTERN.source)
   .flatMap(p => ((p.includes("(") || p.includes(")")) ? p : p.split("[ \\t]+")));
-
-export const AutomatorLexer = {
-  lexer,
-  tokens: automatorTokens,
-  tokenIds,
-  tokenMap,
-  standardizeAutomatorValues,
-  forbiddenConstantPatterns,
-};

@@ -2,6 +2,7 @@
 import draggable from "vuedraggable";
 
 import AutomatorBlockSingleRow from "./AutomatorBlockSingleRow";
+import { blockifyTextAutomator } from "@/core/automator";
 
 export default {
   name: "AutomatorBlockEditor",
@@ -104,13 +105,13 @@ export const BlockAutomator = {
   },
 
   updateEditor(scriptText) {
-    const lines = AutomatorGrammar.blockifyTextAutomator(scriptText).blocks;
+    const lines = blockifyTextAutomator(scriptText).blocks;
     this.lines = lines;
     return lines;
   },
 
   hasUnparsableCommands(text) {
-    const blockified = AutomatorGrammar.blockifyTextAutomator(text);
+    const blockified = blockifyTextAutomator(text);
     return blockified.validatedBlocks !== blockified.visitedBlocks;
   },
 

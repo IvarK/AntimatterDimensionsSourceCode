@@ -1,4 +1,6 @@
 <script>
+import { blockifyTextAutomator } from "@/core/automator";
+
 export default {
   name: "AutomatorModeSwitch",
   data() {
@@ -68,7 +70,7 @@ export default {
         (BlockAutomator.hasUnparsableCommands(currScript) || AutomatorData.currentErrors().length !== 0);
 
       if (player.options.confirmations.switchAutomatorMode && (hasTextErrors || AutomatorBackend.isRunning)) {
-        const blockified = AutomatorGrammar.blockifyTextAutomator(currScript);
+        const blockified = blockifyTextAutomator(currScript);
 
         // We explicitly pass in 0 for lostBlocks if converting from block to text since nothing is ever lost in that
         // conversion direction

@@ -1,10 +1,9 @@
-import { AutomatorLexer } from "./lexer";
+import { standardizeAutomatorValues, tokenMap as T } from "./lexer";
 
 /**
  * Note: the $ shorthand for the parser object is required by Chevrotain. Don't mess with it.
  */
 
-const T = AutomatorLexer.tokenMap;
 const presetSplitter = /name[ \t]+(.+$)/ui;
 const idSplitter = /id[ \t]+(\d)/ui;
 

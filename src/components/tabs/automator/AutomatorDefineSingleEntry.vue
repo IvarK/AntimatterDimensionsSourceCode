@@ -1,4 +1,6 @@
 <script>
+import { forbiddenConstantPatterns } from "@/core/automator";
+
 export default {
   name: "AutomatorDefineSingleEntry",
   props: {

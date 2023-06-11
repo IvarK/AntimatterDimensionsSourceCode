@@ -1,4 +1,4 @@
-import { GameStorage } from "./storage";
+import { migrations } from "./migrations";
 
 function arrayToBits(array) {
   let bits = 0;
@@ -7,10 +7,10 @@ function arrayToBits(array) {
 }
 
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
-GameStorage.devMigrations = {
+export const devMigrations = {
   patches: [
     player => {
-      GameStorage.migrations.normalizeTimespans(player);
+      migrations.normalizeTimespans(player);
       player.bestReality = player.bestReality === 9999999999
         ? 999999999999
         : player.bestReality * 100;
@@ -143,7 +143,7 @@ GameStorage.devMigrations = {
         player.autoRealityMode = "rm";
       }
     },
-    GameStorage.migrations.convertAutobuyerMode,
+    migrations.convertAutobuyerMode,
     player => {
       for (const key in player.celestials.effarig.glyphWeights) {
         player.celestials.effarig.glyphWeights[key] *= 100;
@@ -175,8 +175,8 @@ GameStorage.devMigrations = {
       // For anyone who is looking at this part of the code for debugging purposes, note that GAME_SPEED_EFFECT.EC12
       // has been replaced by GAME_SPEED_EFFECT.FIXED_SPEED since EC12 is no longer the only fixed-speed effect
     },
-    GameStorage.migrations.fixChallengeIds,
-    GameStorage.migrations.adjustMultCosts,
+    migrations.fixChallengeIds,
+    migrations.adjustMultCosts,
     player => {
       const teresa = player.celestials.effarig;
       player.celestials.effarig = player.celestials.teresa;
@@ -286,9 +286,9 @@ GameStorage.devMigrations = {
     () => {
       // This migration was created by a mistake
     },
-    GameStorage.migrations.convertAchivementsToNumbers,
-    GameStorage.migrations.adjustGameCreatedTime,
-    GameStorage.migrations.moveSavedStudyTrees,
+    migrations.convertAchivementsToNumbers,
+    migrations.adjustGameCreatedTime,
+    migrations.moveSavedStudyTrees,
     player => {
       // Leftover stuff from dev.updateTestSave
       if (player.celestials.teresa.rmStore > Teresa.rmStoreMax) {
@@ -317,15 +317,15 @@ GameStorage.devMigrations = {
         }
       }
     },
-    GameStorage.migrations.convertEPMult,
-    GameStorage.migrations.moveChallengeInfo,
-    GameStorage.migrations.adjustWhy,
-    GameStorage.migrations.adjustThemes,
-    GameStorage.migrations.removeAchPow,
-    GameStorage.migrations.adjustSacrificeConfirmation,
-    GameStorage.migrations.migrateNotation,
-    GameStorage.migrations.fixAutobuyers,
-    GameStorage.migrations.removeAutoIPProperties,
+    migrations.convertEPMult,
+    migrations.moveChallengeInfo,
+    migrations.adjustWhy,
+    migrations.adjustThemes,
+    migrations.removeAchPow,
+    migrations.adjustSacrificeConfirmation,
+    migrations.migrateNotation,
+    migrations.fixAutobuyers,
+    migrations.removeAutoIPProperties,
     player => {
       // Swapping glyph level with reality real time
       player.lastTenRealities = player.lastTenRealities
@@ -337,11 +337,11 @@ GameStorage.devMigrations = {
       player.achievements.delete(155);
       player.achievements.delete(153);
       // Have to call this a second time, as player.why wasn't removed from the player.js the first time
-      GameStorage.migrations.adjustWhy(player);
-      GameStorage.migrations.adjustAchievementVars(player);
+      migrations.adjustWhy(player);
+      migrations.adjustAchievementVars(player);
     },
-    GameStorage.migrations.uniformDimensions,
-    GameStorage.migrations.removeEternityChallGoal,
+    migrations.uniformDimensions,
+    migrations.removeEternityChallGoal,
     player => {
       // There were 3 black holes in player object
       delete player.blackHole.pop();
@@ -359,8 +359,8 @@ GameStorage.devMigrations = {
       // a no-op because otherwise save conversion will have an off-by-one error and generally break entirely.
     },
     player => {
-      GameStorage.migrations.removeTickspeed(player);
-      GameStorage.migrations.removePostC3Reward(player);
+      migrations.removeTickspeed(player);
+      migrations.removePostC3Reward(player);
     },
     player => {
       const allGlyphs = player.reality.glyphs.active.concat(player.reality.glyphs.inventory);
@@ -404,9 +404,9 @@ GameStorage.devMigrations = {
       }
       player.celestials.ra.unlocks = [];
     },
-    GameStorage.migrations.renameMoney,
+    migrations.renameMoney,
     player => {
-      GameStorage.migrations.moveAutobuyers(player);
+      migrations.moveAutobuyers(player);
       const old = player.realityBuyer;
       const realityAutobuyer = player.auto.reality;
       realityAutobuyer.mode = ["rm", "glyph", "either", "both"].indexOf(player.autoRealityMode);
@@ -435,9 +435,9 @@ GameStorage.devMigrations = {
       delete player.autoRealityMode;
       delete player.autoEternityMode;
     },
-    GameStorage.migrations.convertNews,
-    GameStorage.migrations.convertEternityCountToDecimal,
-    GameStorage.migrations.renameDimboosts,
+    migrations.convertNews,
+    migrations.convertEternityCountToDecimal,
+    migrations.renameDimboosts,
     player => {
       // Reset reality autobuyer mode, since AUTO_REALITY_MODE was incorrectly starting from 1 and not from 0.
       // Disable it also to not wreck people's long runs or smth
@@ -455,16 +455,16 @@ GameStorage.devMigrations = {
       delete player.celestials.teresa.rmMult;
       delete player.celestials.teresa.dtBulk;
     },
-    GameStorage.migrations.migrateConfirmations,
-    GameStorage.migrations.removeOtherTickspeedProps,
+    migrations.migrateConfirmations,
+    migrations.removeOtherTickspeedProps,
     player => {
       // These were accidentally added back in due to a bad merge conflict resolution
       delete player.resets;
       delete player.tickDecrease;
     },
-    GameStorage.migrations.renameNewsOption,
-    GameStorage.migrations.removeDimensionCosts,
-    GameStorage.migrations.renameTickspeedPurchaseBumps,
+    migrations.renameNewsOption,
+    migrations.removeDimensionCosts,
+    migrations.renameTickspeedPurchaseBumps,
     player => {
       const safeArrayToBits = x => ((x === undefined) ? 0 : arrayToBits(x));
       player.celestials.teresa.unlockBits = safeArrayToBits(player.celestials.teresa.unlocks);
@@ -484,7 +484,7 @@ GameStorage.devMigrations = {
     player => {
       player.auto.sacrifice.multiplier = new Decimal(player.auto.sacrifice.multiplier);
     },
-    GameStorage.migrations.changeC8Handling,
+    migrations.changeC8Handling,
     player => {
       while (player.celestials.teresa.perkShop.length < 5) player.celestials.teresa.perkShop.push(0);
     },
@@ -501,7 +501,7 @@ GameStorage.devMigrations = {
       player.celestials.teresa.perkShop[3] = tempAuto;
       player.celestials.teresa.perkShop[4] = tempMusic;
     },
-    GameStorage.migrations.convertAchievementsToBits,
+    migrations.convertAchievementsToBits,
     player => {
       for (const dimension of player.dimensions.antimatter) {
         delete dimension.power;
@@ -669,10 +669,10 @@ GameStorage.devMigrations = {
       player.thisEternityMaxAM = new Decimal(0);
     },
     player => {
-      GameStorage.migrations.migrateLastTenRuns(player);
+      migrations.migrateLastTenRuns(player);
       //  Put in a default value of 1 for realities.
       player.lastTenRealities = player.lastTenRealities.map(x => [x[0], x[1], 1, Number(x[2]), x[3]]);
-      GameStorage.migrations.migrateIPGen(player);
+      migrations.migrateIPGen(player);
     },
     player => {
       player.noReplicantiGalaxies = player.reality.upgReqChecks[0];
@@ -685,7 +685,7 @@ GameStorage.devMigrations = {
     player => {
       player.options.showHintText.glyphEffectDots = player.options.showGlyphEffectDots;
       delete player.options.showGlyphEffectDots;
-      GameStorage.migrations.renameCloudVariable(player);
+      migrations.renameCloudVariable(player);
     },
     player => {
       const newPerks = new Set([...player.reality.perks].filter(x => x < 20 || x > 25));
@@ -751,7 +751,7 @@ GameStorage.devMigrations = {
       delete player.options.confirmations.glyphTrash;
     },
     player => {
-      GameStorage.migrations.standardizeUncompletedTimes(player);
+      migrations.standardizeUncompletedTimes(player);
       if (player.bestReality === 999999999999) player.bestReality = Number.MAX_VALUE;
       if (player.bestRealityRealTime === 999999999999) player.bestRealityRealTime = Number.MAX_VALUE;
       for (let i = 0; i < 10; i++) {
@@ -988,8 +988,8 @@ GameStorage.devMigrations = {
       delete player.options.autobuyerOn;
       delete player.options.disableContinuum;
     },
-    GameStorage.migrations.convertTimeTheoremPurchases,
-    GameStorage.migrations.infinitiedConversion,
+    migrations.convertTimeTheoremPurchases,
+    migrations.infinitiedConversion,
     player => {
       delete player.saveOverThresholdFlag;
       delete player.saveOverThresholdFlagModalDisplayed;
@@ -1039,12 +1039,12 @@ GameStorage.devMigrations = {
 
       delete player.reality.automator.lastID;
     },
-    GameStorage.migrations.deleteDimboostBulk,
-    GameStorage.migrations.removePriority,
+    migrations.deleteDimboostBulk,
+    migrations.removePriority,
     player => {
       player.reality.realityMachines = player.reality.realityMachines.floor();
     },
-    GameStorage.migrations.deleteFloatingTextOption,
+    migrations.deleteFloatingTextOption,
     player => {
       // Delete ACH5
       if (player.reality.perks.has(206)) {
@@ -1143,7 +1143,7 @@ GameStorage.devMigrations = {
       delete player.secretUnlocks.newsQueuePosition;
       delete player.secretUnlocks.eiffelTowerChapter;
     },
-    GameStorage.migrations.refactorDoubleIPRebuyable,
+    migrations.refactorDoubleIPRebuyable,
     player => {
       if (player.requirementChecks.reality.slowestBH === 0) player.requirementChecks.reality.slowestBH = 1;
     },
@@ -1168,7 +1168,7 @@ GameStorage.devMigrations = {
         player.celestials.ra.highestRefinementValue[resource.name] = player.celestials.ra.alchemy[resource.id].amount;
       }
     },
-    GameStorage.migrations.deletePostChallUnlocked,
+    migrations.deletePostChallUnlocked,
     player => {
       // Delete PEC4 (id 63)
       if (player.reality.perks.has(63)) {
@@ -1285,7 +1285,7 @@ GameStorage.devMigrations = {
       delete player.celestials.collapsed;
       delete player.celestials.showBought;
     },
-    GameStorage.migrations.infMultNameConversion,
+    migrations.infMultNameConversion,
     player => {
       if (player.celestials.pelle.collapsed === undefined) {
         player.celestials.pelle.collapsed = {
@@ -1317,7 +1317,7 @@ GameStorage.devMigrations = {
       delete player.celestials.laitela.darkAutobuyerTimer;
       delete player.celestials.laitela.autoAnnihilationSetting;
     },
-    GameStorage.migrations.etercreqConversion,
+    migrations.etercreqConversion,
     player => {
       delete player.options.confirmations.reality;
     },
@@ -1426,7 +1426,7 @@ GameStorage.devMigrations = {
     player => {
       delete player.newGame;
     },
-    GameStorage.migrations.moveTS33,
+    migrations.moveTS33,
     player => {
       const toMove = ["antimatterDims", "infinityDims", "timeDims", "replicantiUpgrades", "dilationUpgrades",
         "blackHolePower", "realityUpgrades", "imaginaryUpgrades"];

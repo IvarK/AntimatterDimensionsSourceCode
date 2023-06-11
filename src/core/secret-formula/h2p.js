@@ -1,8 +1,8 @@
 import { DC } from "../constants";
 
-import { GameDatabase } from "./game-database";
+import { credits } from "@/core/secret-formula/credits";
 
-GameDatabase.h2p = {
+export const h2p = {
   /**
    * @template
    * {
@@ -1362,7 +1362,7 @@ The Nameless Ones won't directly unlock the next Celestial.
 `,
       isUnlocked: () => EffarigUnlock.eternity.isUnlocked,
       tags: ["reality", "time", "blackhole", "lategame", "endgame", "testers", "celestial",
-        ...GameDatabase.credits.people.map(p => p.name)
+        ...credits.people.map(p => p.name)
       ],
       tab: "celestials/enslaved"
     }, {
@@ -1500,7 +1500,7 @@ Ra won't directly unlock the next Celestial.`,
       name: "Glyph Alchemy",
       info: () => `
 Glyph Alchemy is a mechanic unlocked by reaching Effarig level ${formatInt(2)} in Ra. It unlocks the ability to
-use up your Glyphs by refining them into Alchemy Resources associated with their type. You can refine Glyphs by 
+use up your Glyphs by refining them into Alchemy Resources associated with their type. You can refine Glyphs by
 setting your Sacrifice Type to something other than "Always Sacrifice" in the Glyphs tab, and doing the normal
 procedure for a sacrifice.
 Each Alchemy Resource has a unique effect, which you can view on the Alchemy tab.
@@ -1748,8 +1748,8 @@ In addition, each Rift offers three milestone rewards for filling them up to a c
     }, {
       name: "The Galaxy Generator",
       info: () => `
-When you reach ${formatInt(100)}% Recursion/Dispersion/Destruction, you unlock the <b>Galaxy Generator</b>, which can 
-passively generate Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect 
+When you reach ${formatInt(100)}% Recursion/Dispersion/Destruction, you unlock the <b>Galaxy Generator</b>, which can
+passively generate Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect
 tickspeed as if they were Antimatter Galaxies, but they don't increase the cost of your next Antimatter Galaxy. You
 also unlock five new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four
 upgrades then give a multiplier to this base amount. The first two upgrades can be bought by spending antimatter and
@@ -1767,8 +1767,8 @@ Rifts once the current cap has been reached.`,
 };
 
 (function() {
-  for (let i = 0; i < GameDatabase.h2p.tabs.length; i++) {
-    const tab = GameDatabase.h2p.tabs[i];
+  for (let i = 0; i < h2p.tabs.length; i++) {
+    const tab = h2p.tabs[i];
     tab.id = i;
     if (tab.alias === undefined) tab.alias = tab.name;
 
@@ -1807,15 +1807,15 @@ Rifts once the current cap has been reached.`,
     }
   };
 
-  for (const tab of GameDatabase.h2p.tabs) {
+  for (const tab of h2p.tabs) {
     addPhrase(tab.name, tab);
   }
-  for (const tab of GameDatabase.h2p.tabs) {
+  for (const tab of h2p.tabs) {
     for (const tag of tab.tags) {
       addPhrase(tag, tab);
     }
   }
-  for (const tab of GameDatabase.h2p.tabs) {
+  for (const tab of h2p.tabs) {
     addPhrase(tab.alias, tab);
   }
 
@@ -1907,13 +1907,13 @@ Rifts once the current cap has been reached.`,
   // There are a LOT of magic numbers in this code, mostly from arbitrary choices for "What number is large enough to
   // act as a placeholder for 'basically not found'?"
   // This will need some cleanup if possible.
-  GameDatabase.h2p.search = query => {
+  h2p.search = query => {
     const truncatedQuery = replaceSpecialChars(query);
-    if (truncatedQuery === "") return GameDatabase.h2p.tabs.map(x => ({ tab: x, relevance: 1.5 }));
+    if (truncatedQuery === "") return h2p.tabs.map(x => ({ tab: x, relevance: 1.5 }));
     const searchTerms = truncatedQuery.toLowerCase().split(" ").filter(str => str !== "");
 
     // A higher "Relevance" value actually means it's further away from the search, important to keep in mind
-    const relevances = Array.repeat(1e4, GameDatabase.h2p.tabs.length);
+    const relevances = Array.repeat(1e4, h2p.tabs.length);
     for (const searchWord of searchTerms) {
       const minimumRequirement = Math.min(searchWord.length - 0.9, 3) * 0.5;
       for (const searchIndexStr in searchIndex) {
@@ -1927,7 +1927,7 @@ Rifts once the current cap has been reached.`,
         }
       }
     }
-    const results = GameDatabase.h2p.tabs.filter(x => relevances[x.id] < 0.9)
+    const results = h2p.tabs.filter(x => relevances[x.id] < 0.9)
       .map(x => ({ tab: x, relevance: relevances[x.id] }));
     // Provide both the relevance and the tab itself
 

@@ -1,5 +1,4 @@
 import { DC } from "../../../constants";
-import { GameDatabase } from "../../game-database";
 
 const thisInfinityMult = thisInfinity => {
   // All "this inf time" or "best inf time" mults are * 10
@@ -32,7 +31,7 @@ const passiveIPMult = () => {
  *  @property {String} formatEffect   Formatting function for effects, if the default formatting isn't appropriate
  * }
  */
-GameDatabase.eternity.timeStudies.normal = [
+export const normalTimeStudies = [
   {
     id: 11,
     cost: 1,

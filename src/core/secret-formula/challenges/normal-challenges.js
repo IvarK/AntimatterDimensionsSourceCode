@@ -1,12 +1,11 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 // I tried to make it relatively simple to add more locks; the idea is that you give it a value here
 // and then it's all handled in the backend
 // If you need to lock a challenge, set lockedAt to a new Decimal variable reflective of a desired number of Infinities
 // They will always be unlocked post-eternity
 
-GameDatabase.challenges.normal = [
+export const normalChallenges = [
   {
     id: 1,
     legacyId: 1,
@@ -127,7 +126,7 @@ GameDatabase.challenges.normal = [
     id: 12,
     legacyId: 7,
     isQuickResettable: false,
-    description: () => `each Antimatter Dimension produces the Dimension ${formatInt(2)} tiers below it 
+    description: () => `each Antimatter Dimension produces the Dimension ${formatInt(2)} tiers below it
       instead of ${formatInt(1)}. Both 1st and 2nd Dimensions produce antimatter.
       The 2nd, 4th, and 6th Dimensions are made stronger to compensate.`,
     name: "Automated Big Crunches",

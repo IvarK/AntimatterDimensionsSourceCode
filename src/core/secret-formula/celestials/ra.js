@@ -1,6 +1,4 @@
-import { GameDatabase } from "../game-database";
-
-GameDatabase.celestials.ra = {
+export const ra = {
   pets: {
     teresa: {
       id: "teresa",

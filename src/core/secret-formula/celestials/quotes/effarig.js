@@ -1,6 +1,4 @@
-import { GameDatabase } from "../../game-database";
-
-GameDatabase.celestials.quotes.effarig = {
+export const effarigQuotes = {
   initial: {
     id: 0,
     lines: [

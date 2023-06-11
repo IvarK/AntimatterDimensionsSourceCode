@@ -1,6 +1,4 @@
-import { GameDatabase } from "../game-database";
-
-GameDatabase.reality.glyphSacrifice = {
+export const glyphSacrifice = {
   "power": {
     id: "power",
     effect: added => {

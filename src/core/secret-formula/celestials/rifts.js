@@ -1,8 +1,7 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 import wordShift from "../../word-shift";
 
-GameDatabase.celestials.pelle.rifts = {
+export const pelleRifts = {
   vacuum: {
     id: 1,
     key: "vacuum",

@@ -1,11 +1,10 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../player-progress";
 
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.EP = {
+export const EP = {
   total: {
     name: "Total EP Gained on Eternity",
     displayOverride: () => (Player.canEternity

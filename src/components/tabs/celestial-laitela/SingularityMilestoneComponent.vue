@@ -1,4 +1,6 @@
 <script>
+import { LAITELA_UPGRADE_DIRECTION } from "@/core/secret-formula";
+
 export default {
   name: "SingularityMilestoneComponent",
   props: {

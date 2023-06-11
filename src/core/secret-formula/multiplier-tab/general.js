@@ -1,11 +1,10 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 import { MultiplierTabHelper } from "./helper-functions";
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.general = {
+export const general = {
   achievement: {
     name: (ach, dim) => (dim?.length === 2
       ? `Achievement ${ach} (${dim})`

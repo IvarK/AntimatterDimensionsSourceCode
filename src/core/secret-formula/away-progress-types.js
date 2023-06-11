@@ -1,6 +1,4 @@
-import { GameDatabase } from "./game-database";
-
-GameDatabase.awayProgressTypes = [
+export const awayProgressTypes = [
   {
     name: "antimatter",
     isUnlocked: () => true,

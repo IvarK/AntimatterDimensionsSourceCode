@@ -1,5 +1,4 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 export const PERK_FAMILY = {
   ANTIMATTER: "ANTIMATTER",
@@ -30,7 +29,7 @@ function vectorToNum(v) {
  * Note: This encoding/decoding only works properly for coordinates with values between -1000 and 1000, and will
  * be slightly off for vectors whose coordinates aren't divisible by 5
  */
-GameDatabase.reality.perks = {
+export const perks = {
   firstPerk: {
     id: 0,
     label: "START",
@@ -511,8 +510,8 @@ GameDatabase.reality.perks = {
   }
 };
 
-GameDatabase.reality.perkConnections = (function() {
-  const p = GameDatabase.reality.perks;
+export const perkConnections = (function() {
+  const p = perks;
   // First item is the start, other items are the ends
   const groups = [
     [p.firstPerk, p.achievementGroup1, p.startAM, p.autounlockEU1, p.bypassEC5Lock],
@@ -553,7 +552,7 @@ GameDatabase.reality.perkConnections = (function() {
     [p.achievementGroup4, p.achievementGroup5],
   ];
   const connections = {};
-  for (const perk of Object.values(GameDatabase.reality.perks)) {
+  for (const perk of Object.values(perks)) {
     const connectedPerks = [];
     const directConnections = groups.find(g => g[0] === perk);
     if (directConnections !== undefined) {

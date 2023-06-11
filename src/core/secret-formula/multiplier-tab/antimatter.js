@@ -1,9 +1,7 @@
-import { GameDatabase } from "../game-database";
-
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.AM = {
+export const AM = {
   total: {
     name: "Antimatter Production",
     displayOverride: () => `${format(Currency.antimatter.productionPerSecond, 2, 2)}/sec`,

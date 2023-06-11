@@ -1,5 +1,3 @@
-import { GameDatabase } from "../../game-database";
-
 // These entries describe the special flash-between-celestial effect on some quotes, with the numbers being
 // durations of each celestial in seconds
 const flashCelestial = [
@@ -45,7 +43,7 @@ const forgotten =    ["Forgotten",     "Deity",         "Monarch"];
 const paramount =    ["Paramount",     "Deity",         "Monarch"];
 /* eslint-enable no-multi-spaces */
 
-GameDatabase.celestials.quotes.pelle = {
+export const pelleQuotes = {
   initial: {
     id: 0,
     lines: [

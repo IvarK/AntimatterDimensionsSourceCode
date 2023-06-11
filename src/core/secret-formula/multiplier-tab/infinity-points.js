@@ -1,11 +1,10 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../player-progress";
 
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.IP = {
+export const IP = {
   total: {
     name: "Total IP Gained on Infinity",
     displayOverride: () => (Player.canCrunch

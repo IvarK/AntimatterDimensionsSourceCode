@@ -1,7 +1,6 @@
 import { AutobuyerInputFunctions } from "@/components/tabs/autobuyers/AutobuyerInput";
-import { GameDatabase } from "./game-database";
 
-GameDatabase.reality.automator.templates = {
+export const automatorTemplates = {
   /**
     * List of possible data types to dynamically generate in script templates, assumed to be only string or boolean
     * {

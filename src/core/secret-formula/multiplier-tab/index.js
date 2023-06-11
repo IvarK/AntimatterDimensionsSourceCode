@@ -1,6 +1,3 @@
-
-import "./helper-functions";
-
 /**
  * Most of the GameDB entries in this folder follow largely the same structure, but have been split into multiple
  * for purposes of organization and ease-of-use. All fields may also be functions which may or may not accept an input
@@ -29,21 +26,6 @@ import "./helper-functions";
  *    entry has in the Vue component
  * }
  */
-import "./general";
-import "./antimatter";
-import "./antimatter-dimensions";
-import "./infinity-dimensions";
-import "./time-dimensions";
-import "./infinity-points";
-import "./eternity-points";
-import "./tachyon-particles";
-import "./dilated-time";
-import "./tickspeed";
-import "./galaxies";
-import "./infinities";
-import "./eternities";
-import "./gamespeed";
-import "./replicanti";
 
-// Some props in the tree are dynamically generated from value structure in the GameDB
-import "./tree";
+export { multiplierTabValues } from "./values";
+export { multiplierTabTree } from "./tree";

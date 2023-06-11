@@ -1,6 +1,4 @@
-import { GameDatabase } from "../../game-database";
-
-GameDatabase.celestials.quotes.enslaved = {
+export const enslavedQuotes = {
   initial: {
     id: 0,
     lines: [

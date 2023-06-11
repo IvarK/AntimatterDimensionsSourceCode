@@ -1,5 +1,3 @@
-import { GameDatabase } from "../game-database";
-
 // Used for UI purposes to give different theming for different kinds of upgrades
 export const LAITELA_UPGRADE_DIRECTION = {
   SELF_BOOST: 0,
@@ -7,7 +5,7 @@ export const LAITELA_UPGRADE_DIRECTION = {
   BOOSTS_LAITELA: 2
 };
 
-GameDatabase.celestials.singularityMilestones = {
+export const singularityMilestones = {
   // Infinite
   continuumMult: {
     start: 1,

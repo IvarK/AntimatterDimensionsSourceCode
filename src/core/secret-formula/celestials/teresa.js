@@ -1,6 +1,4 @@
-import { GameDatabase } from "../game-database";
-
-GameDatabase.celestials.teresa = {
+export const teresa = {
   unlocks: {
     run: {
       id: 0,

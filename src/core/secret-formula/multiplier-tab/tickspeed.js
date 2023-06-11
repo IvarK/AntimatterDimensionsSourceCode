@@ -1,11 +1,10 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 import { MultiplierTabHelper } from "./helper-functions";
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.tickspeed = {
+export const tickspeed = {
   total: {
     name: "Total Tickspeed",
     displayOverride: () => {
@@ -68,7 +67,7 @@ GameDatabase.multiplierTabValues.tickspeed = {
   },
 };
 
-GameDatabase.multiplierTabValues.tickspeedUpgrades = {
+export const tickspeedUpgrades = {
   purchased: {
     name: "Purchased Tickspeed Upgrades",
     displayOverride: () => (Laitela.continuumActive

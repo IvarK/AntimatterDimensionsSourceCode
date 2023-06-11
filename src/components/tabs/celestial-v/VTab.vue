@@ -2,6 +2,7 @@
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
 import PrimaryButton from "@/components/PrimaryButton";
+import { V_REDUCTION_MODE } from "@/core/secret-formula";
 import VUnlockRequirement from "./VUnlockRequirement";
 
 export default {

@@ -1,5 +1,4 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 function rebuyableCost(initialCost, increment, id) {
   return Decimal.multiply(initialCost, Decimal.pow(increment, player.dilation.rebuyables[id]));
@@ -21,7 +20,7 @@ function rebuyable(config) {
   };
 }
 
-GameDatabase.eternity.dilation = {
+export const dilationUpgrades = {
   dtGain: rebuyable({
     id: 1,
     initialCost: 1e4,

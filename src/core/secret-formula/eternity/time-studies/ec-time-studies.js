@@ -1,7 +1,6 @@
 import { DC } from "../../../constants";
-import { GameDatabase } from "../../game-database";
 
-GameDatabase.eternity.timeStudies.ec = [
+export const ecTimeStudies = [
   {
     id: 1,
     cost: 30,

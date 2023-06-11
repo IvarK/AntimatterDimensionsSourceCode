@@ -1,7 +1,5 @@
 import { DC } from "../constants";
 
-import { GameDatabase } from "./game-database";
-
 // A = always there
 // L = locked
 // R = random chance condition
@@ -13,7 +11,7 @@ function newsAnimSpd(seconds) {
 }
 
 
-GameDatabase.news = [
+export const news = [
   {
     id: "a1",
     text: "The cookie is a lie.",

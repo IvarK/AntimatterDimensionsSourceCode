@@ -1,8 +1,7 @@
 /* eslint-disable max-depth */
 /* eslint-disable camelcase */
-import { GameDatabase } from "../game-database";
-
 import { MultiplierTabHelper } from "./helper-functions";
+import { multiplierTabValues } from "./values";
 
 const dynamicGenProps = ["TP", "DT", "infinities", "eternities", "gamespeed", "replicanti"];
 const propList = {
@@ -22,7 +21,7 @@ const propList = {
 // generate them dynamically instead
 for (const prop of dynamicGenProps) {
   propList[prop] = [];
-  for (const toCopy of Object.keys(GameDatabase.multiplierTabValues[prop])) {
+  for (const toCopy of Object.keys(multiplierTabValues[prop])) {
     if (toCopy !== "total") propList[prop].push(toCopy);
   }
 }
@@ -44,10 +43,10 @@ function getProps(resource, tier) {
   return newProps;
 }
 
-// Everything is multiplierTabTree is associated with values in GameDatabase.multiplierTabValues. The only explicitly
+// Everything is multiplierTabTree is associated with values in multiplierTabValues. The only explicitly
 // initialized props here are the "root" props which are viewable on the tab with full breakdowns. After the initial
 // specification, all children props are dynamically added based on the arrays in the helper functions above
-GameDatabase.multiplierTabTree = {
+export const multiplierTabTree = {
   AM_total: [
     ["AD_total", "tickspeed_total", "AM_effarigAM"]
   ],
@@ -106,12 +105,12 @@ GameDatabase.multiplierTabTree = {
 
 // Gamespeed's two alternate displays are current and average gamespeed, distinguished by which of two
 // mutually-exclusive entries appear in the list. We explicity modify props here as needed
-const allGamespeed = GameDatabase.multiplierTabTree.gamespeed_total[0];
-GameDatabase.multiplierTabTree.gamespeed_total[0] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleAvg");
-GameDatabase.multiplierTabTree.gamespeed_total[1] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleCurr");
+const allGamespeed = multiplierTabTree.gamespeed_total[0];
+multiplierTabTree.gamespeed_total[0] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleAvg");
+multiplierTabTree.gamespeed_total[1] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleCurr");
 
 // DT doesn't explicitly have an entry to TP, due to it being its own total entry, so we link them together
-GameDatabase.multiplierTabTree.DT_total[0].unshift("TP_total");
+multiplierTabTree.DT_total[0].unshift("TP_total");
 
 // Additional data specification for dynamically-generated props
 const dimTypes = ["AD", "ID", "TD"];
@@ -148,20 +147,20 @@ const targetedEffects = {
 
 // Highest actively-producing dimensions need a special case
 for (const dim of dimTypes) {
-  GameDatabase.multiplierTabTree[`${dim}_total`][0].push(`${dim}_highestDim`);
-  GameDatabase.multiplierTabTree[`${dim}_total`][1].push(`${dim}_highestDim`);
+  multiplierTabTree[`${dim}_total`][0].push(`${dim}_highestDim`);
+  multiplierTabTree[`${dim}_total`][1].push(`${dim}_highestDim`);
 }
 
 // EC7 also needs a special case for tickspeed, since it doesn't appear on the multipliers themselves
 for (const dim of ["ID", "TD"]) {
-  GameDatabase.multiplierTabTree[`${dim}_total`][0].push(`${dim}_tickspeed`);
-  GameDatabase.multiplierTabTree[`${dim}_total`][1].push(`${dim}_tickspeed`);
+  multiplierTabTree[`${dim}_total`][0].push(`${dim}_tickspeed`);
+  multiplierTabTree[`${dim}_total`][1].push(`${dim}_tickspeed`);
 }
 
 // Dynamically generate all values from existing values, but broken down by dimension
 for (const res of dimTypes) {
-  for (const prop of getProps(res)) GameDatabase.multiplierTabTree[prop] = [append8(prop)];
-  for (let dim = 1; dim <= 8; dim++) GameDatabase.multiplierTabTree[`${res}_total_${dim}`] = [getProps(res, dim)];
+  for (const prop of getProps(res)) multiplierTabTree[prop] = [append8(prop)];
+  for (let dim = 1; dim <= 8; dim++) multiplierTabTree[`${res}_total_${dim}`] = [getProps(res, dim)];
 }
 
 // A few dynamically-generated props are largely useless in terms of what they connect to, in that they have very few
@@ -172,50 +171,50 @@ const removedRegexes = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_nerfIC", 
   ".._achievementMult", ".._glyph", ".._alchemy", ".._imaginaryUpgrade", ".._iap",
   ".._nerfV", ".._nerfCursed", ".._nerfPelle", ".._pelle"
 ];
-const removedProps = Object.keys(GameDatabase.multiplierTabTree)
+const removedProps = Object.keys(multiplierTabTree)
   .filter(key => removedRegexes.some(regex => key.match(regex)));
 for (const prop of removedProps) {
-  GameDatabase.multiplierTabTree[prop] = undefined;
+  multiplierTabTree[prop] = undefined;
 }
 
 // We need to handle infinity power multiplier a bit differently; previous steps of dynamic generation fill it with
 // 8 identical AD multipliers, but we want to replace it with ID mults and the conversion rate
-GameDatabase.multiplierTabTree.AD_infinityPower = [["ID_total", "ID_powerConversion"]];
+multiplierTabTree.AD_infinityPower = [["ID_total", "ID_powerConversion"]];
 for (let dim = 1; dim <= 8; dim++) {
-  GameDatabase.multiplierTabTree[`AD_infinityPower_${dim}`] = [["ID_total", "ID_powerConversion"]];
+  multiplierTabTree[`AD_infinityPower_${dim}`] = [["ID_total", "ID_powerConversion"]];
 }
 
 // Tesseracts are added one layer deep, but we don't want to override the existing ID_purchase entry
-GameDatabase.multiplierTabTree.ID_purchase.unshift(["ID_basePurchase", "ID_tesseractPurchase",
+multiplierTabTree.ID_purchase.unshift(["ID_basePurchase", "ID_tesseractPurchase",
   "ID_infinityGlyphSacrifice", "ID_powPurchase"]);
 for (let dim = 1; dim <= 7; dim++) {
-  GameDatabase.multiplierTabTree[`ID_purchase_${dim}`] = [[`ID_basePurchase_${dim}`, `ID_tesseractPurchase_${dim}`,
+  multiplierTabTree[`ID_purchase_${dim}`] = [[`ID_basePurchase_${dim}`, `ID_tesseractPurchase_${dim}`,
     "ID_powPurchase"]];
 }
-GameDatabase.multiplierTabTree.ID_purchase_8 = [[`ID_basePurchase_8`, `ID_infinityGlyphSacrifice`, "ID_powPurchase"]];
+multiplierTabTree.ID_purchase_8 = [[`ID_basePurchase_8`, `ID_infinityGlyphSacrifice`, "ID_powPurchase"]];
 
 // These are also added one layer deep
 for (let dim = 1; dim <= 7; dim++) {
-  GameDatabase.multiplierTabTree[`TD_purchase_${dim}`] = [[`TD_basePurchase_${dim}`, `TD_powPurchase_${dim}`]];
+  multiplierTabTree[`TD_purchase_${dim}`] = [[`TD_basePurchase_${dim}`, `TD_powPurchase_${dim}`]];
 }
-GameDatabase.multiplierTabTree.TD_purchase.push(["TD_basePurchase", "TD_timeGlyphSacrifice", "TD_powPurchase"]);
-GameDatabase.multiplierTabTree.TD_purchase_8 = [["TD_basePurchase_8", "TD_timeGlyphSacrifice", "TD_powPurchase"]];
+multiplierTabTree.TD_purchase.push(["TD_basePurchase", "TD_timeGlyphSacrifice", "TD_powPurchase"]);
+multiplierTabTree.TD_purchase_8 = [["TD_basePurchase_8", "TD_timeGlyphSacrifice", "TD_powPurchase"]];
 
 // Dynamically fill effects which only affect certain dimensions, as noted in targetedEffects
 for (const res of dimTypes) {
   for (const eff of Object.keys(targetedEffects)) {
     if (!targetedEffects[eff][res]) continue;
-    GameDatabase.multiplierTabTree[`${res}_${eff}`] = [[]];
+    multiplierTabTree[`${res}_${eff}`] = [[]];
     for (const id of targetedEffects[eff][res]) {
       for (let dim = 1; dim <= 8; dim++) {
         const propStr = `${res}_${eff}_${dim}`;
         const dimStr = `${res}${dim}`;
         if (targetedEffects[eff].checkFn(id, dimStr)) {
-          if (!GameDatabase.multiplierTabTree[propStr]) GameDatabase.multiplierTabTree[propStr] = [[]];
-          GameDatabase.multiplierTabTree[propStr][0].push(`general_${eff}_${id}_${dimStr}`);
+          if (!multiplierTabTree[propStr]) multiplierTabTree[propStr] = [[]];
+          multiplierTabTree[propStr][0].push(`general_${eff}_${id}_${dimStr}`);
         }
       }
-      GameDatabase.multiplierTabTree[`${res}_${eff}`][0].push(`general_${eff}_${id}_${res}`);
+      multiplierTabTree[`${res}_${eff}`][0].push(`general_${eff}_${id}_${res}`);
     }
   }
 }
@@ -224,17 +223,17 @@ for (const res of dimTypes) {
 for (const res of singleRes) {
   for (const eff of Object.keys(targetedEffects)) {
     if (!targetedEffects[eff][res]) continue;
-    GameDatabase.multiplierTabTree[`${res}_${eff}`] = [[]];
+    multiplierTabTree[`${res}_${eff}`] = [[]];
     for (const ach of targetedEffects[eff][res]) {
-      GameDatabase.multiplierTabTree[`${res}_${eff}`][0].push(`general_${eff}_${ach}`);
+      multiplierTabTree[`${res}_${eff}`][0].push(`general_${eff}_${ach}`);
     }
   }
 }
 
 // Fill in eternity upgrade entries
-GameDatabase.multiplierTabTree.ID_eternityUpgrade = [[`ID_eu1`, `ID_eu2`, `ID_eu3`]];
-GameDatabase.multiplierTabTree.TD_eternityUpgrade = [[`TD_eu1`, `TD_eu2`]];
+multiplierTabTree.ID_eternityUpgrade = [[`ID_eu1`, `ID_eu2`, `ID_eu3`]];
+multiplierTabTree.TD_eternityUpgrade = [[`TD_eu1`, `TD_eu2`]];
 for (let dim = 1; dim <= 8; dim++) {
-  GameDatabase.multiplierTabTree[`ID_eternityUpgrade_${dim}`] = [[`ID_eu1_${dim}`, `ID_eu2_${dim}`, `ID_eu3_${dim}`]];
-  GameDatabase.multiplierTabTree[`TD_eternityUpgrade_${dim}`] = [[`TD_eu1_${dim}`, `TD_eu2_${dim}`]];
+  multiplierTabTree[`ID_eternityUpgrade_${dim}`] = [[`ID_eu1_${dim}`, `ID_eu2_${dim}`, `ID_eu3_${dim}`]];
+  multiplierTabTree[`TD_eternityUpgrade_${dim}`] = [[`TD_eu1_${dim}`, `TD_eu2_${dim}`]];
 }

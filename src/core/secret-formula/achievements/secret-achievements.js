@@ -1,6 +1,4 @@
-import { GameDatabase } from "../game-database";
-
-GameDatabase.achievements.secret = [
+export const secretAchievements = [
   {
     id: 11,
     name: "The first one's always free",

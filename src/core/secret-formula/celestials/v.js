@@ -1,5 +1,4 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 // This is supposed to be in ./navigation.js but importing doesn't work for some stupid reason
 function emphasizeEnd(fraction) {
@@ -11,7 +10,7 @@ export const V_REDUCTION_MODE = {
   DIVISION: 2
 };
 
-GameDatabase.celestials.v = {
+export const v = {
   // Note: mainUnlock IDs here are one-indexed to match with navigation indices
   mainUnlock: {
     realities: {

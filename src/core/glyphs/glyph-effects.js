@@ -1,5 +1,7 @@
 import { Pelle } from "../globals";
 
+import { GlyphCombiner } from "@/core/secret-formula";
+
 class GlyphEffectState {
   constructor(id, props) {
     this._id = id;

@@ -1,7 +1,6 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
-GameDatabase.celestials.alchemy.resources = {
+export const alchemyResources = {
   // T1 resources (Non-Effarig "base" resources)
   "power": {
     id: ALCHEMY_RESOURCE.POWER,

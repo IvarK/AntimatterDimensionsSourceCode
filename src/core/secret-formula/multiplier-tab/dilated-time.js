@@ -1,5 +1,4 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../player-progress";
 
 import { MultiplierTabIcons } from "./icons";
@@ -9,7 +8,7 @@ import { MultiplierTabIcons } from "./icons";
 // special case due to not being a prestige currency but still needing to be treated like one in the UI. This
 // is because it requires dilation to be unlocked, which isn't a given, and we want the tab continuously visible
 // after the first ever dilation unlock on the 0th reality
-GameDatabase.multiplierTabValues.DT = {
+export const DT = {
   total: {
     name: "Dilated Time gain",
     displayOverride: () => `${format(getDilationGainPerSecond().times(getGameSpeedupForDisplay()), 2, 2)}/sec`,

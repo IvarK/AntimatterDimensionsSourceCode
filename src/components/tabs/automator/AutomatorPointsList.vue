@@ -12,7 +12,7 @@ export default {
     fromUpgrades: () => AutomatorPoints.pointsFromUpgrades,
     perkSources: () => AutomatorPoints.perks,
     upgradeSources: () => AutomatorPoints.upgrades,
-    otherSources: () => GameDatabase.reality.otherAutomatorPoints,
+    otherSources: () => GameDatabase.reality.automator.otherAutomatorPoints,
     automatorInterval: () => AutomatorBackend.currentInterval,
   },
   methods: {

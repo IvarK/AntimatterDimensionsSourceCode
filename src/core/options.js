@@ -1,5 +1,6 @@
-import { ElectronRuntime } from "@/steam";
 import { sha512_256 } from "js-sha512";
+
+import { ElectronRuntime } from "@/steam";
 
 import { DEV } from "@/env";
 

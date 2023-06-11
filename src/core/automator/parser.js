@@ -1,14 +1,12 @@
 import { EOF, Parser } from "chevrotain";
 
+import { automatorTokens, tokenMap as T } from "./lexer";
 import { AutomatorCommands } from "./automator-commands";
-import { AutomatorLexer } from "./lexer";
-
-const T = AutomatorLexer.tokenMap;
 
 // ----------------- parser -----------------
 class AutomatorParser extends Parser {
   constructor() {
-    super(AutomatorLexer.tokens, {
+    super(automatorTokens, {
       recoveryEnabled: true,
       outputCst: true,
       nodeLocationTracking: "full",
@@ -130,10 +128,4 @@ class AutomatorParser extends Parser {
   }
 }
 
-const parser = new AutomatorParser();
-
-export const AutomatorGrammar = {
-  parser,
-  // This field is filled in by automator-validate.js
-  validate: null,
-};
+export const parser = new AutomatorParser();

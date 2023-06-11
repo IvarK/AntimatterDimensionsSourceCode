@@ -1,7 +1,6 @@
 export * from "./glyph-effects";
 export * from "./player";
 
-export * from "./automator/automator-backend";
 export * from "./performance-stats";
 export * from "./currency";
 export * from "./cache";
@@ -38,7 +37,6 @@ export * from "./celestials/pelle/game-end";
 export * from "./celestials/celestials";
 
 export * from "./automator";
-export * from "./automator/automator-points";
 
 export * from "./player-progress";
 export * from "./modal";

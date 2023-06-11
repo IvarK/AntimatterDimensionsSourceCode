@@ -1,8 +1,7 @@
+import { lexer, tokenMap as T } from "./lexer";
 import { AutomatorCommands } from "./automator-commands";
-import { AutomatorGrammar } from "./parser";
-import { AutomatorLexer } from "./lexer";
+import { parser } from "./parser";
 
-const parser = AutomatorGrammar.parser;
 const BaseVisitor = parser.getBaseCstVisitorConstructorWithDefaults();
 
 class Validator extends BaseVisitor {
@@ -20,7 +19,7 @@ class Validator extends BaseVisitor {
       };
     }
 
-    const lexResult = AutomatorLexer.lexer.tokenize(rawText);
+    const lexResult = lexer.tokenize(rawText);
     const tokens = lexResult.tokens;
     parser.input = tokens;
     this.parseResult = parser.script();
@@ -362,7 +361,6 @@ class Validator extends BaseVisitor {
       this.addError(ctx, "Missing comparison operator (<, >, <=, >=)", "Insert the appropriate comparison operator");
       return;
     }
-    const T = AutomatorLexer.tokenMap;
     if (ctx.ComparisonOperator[0].tokenType === T.OpEQ || ctx.ComparisonOperator[0].tokenType === T.EqualSign) {
       this.addError(ctx, "Please use an inequality comparison (>, <, >=, <=)",
         "Comparisons cannot be done with equality, only with inequality operators");
@@ -529,7 +527,7 @@ class Blockifier extends BaseVisitor {
   }
 }
 
-function compile(input, validateOnly = false) {
+export function compile(input, validateOnly = false) {
   // The lexer and codemirror choke on the last line of the script, so we pad it with an invisible newline
   const script = `${input}\n `;
   const validator = new Validator(script);
@@ -542,9 +540,12 @@ function compile(input, validateOnly = false) {
     compiled,
   };
 }
-AutomatorGrammar.compile = compile;
 
-function blockifyTextAutomator(input) {
+export function hasCompilationErrors(input) {
+  return compile(input, true).errors.length !== 0;
+}
+
+export function blockifyTextAutomator(input) {
   const validator = new Validator(input);
   const blockifier = new Blockifier();
   const blocks = blockifier.visit(validator.parseResult);
@@ -584,11 +585,8 @@ function blockifyTextAutomator(input) {
 
   return { blocks, validatedBlocks, visitedBlocks };
 }
-AutomatorGrammar.blockifyTextAutomator = blockifyTextAutomator;
 
-function validateLine(input) {
+export function validateLine(input) {
   const validator = new Validator(input);
   return validator;
 }
-
-AutomatorGrammar.validateLine = validateLine;

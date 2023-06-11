@@ -1,4 +1,5 @@
 <script>
+import { AUTOMATOR_TYPE } from "@/core/automator/automator-backend";
 import AutomatorBlocks from "./AutomatorBlocks";
 import AutomatorButton from "./AutomatorButton";
 import AutomatorDataTransferPage from "./AutomatorDataTransferPage";
@@ -121,8 +122,8 @@ export default {
   created() {
     this.on$(GAME_EVENT.GAME_LOAD, () => this.onGameLoad());
     this.on$(GAME_EVENT.AUTOMATOR_SAVE_CHANGED, () => this.onGameLoad());
-    this.updateCurrentScriptID();
-    this.updateScriptList();
+    this.on$(GAME_EVENT.AUTOMATOR_TYPE_CHANGED, () => this.openMatchingAutomatorTypeDocs());
+    this.onGameLoad();
   },
   destroyed() {
     this.fullScreen = false;
@@ -154,6 +155,7 @@ export default {
     onGameLoad() {
       this.updateCurrentScriptID();
       this.updateScriptList();
+      this.fixAutomatorTypeDocs();
     },
     updateScriptList() {
       this.scripts = Object.values(player.reality.automator.scripts).map(script => ({
@@ -184,6 +186,21 @@ export default {
         BlockAutomator.updateEditor(this.currentScript);
         if (!this.isBlock && AutomatorTextUI.editor) AutomatorTextUI.editor.performLint();
       });
+    },
+    fixAutomatorTypeDocs() {
+      const automator = player.reality.automator;
+      if (automator.currentInfoPane === AutomatorPanels.COMMANDS && automator.type === AUTOMATOR_TYPE.BLOCK) {
+        this.openMatchingAutomatorTypeDocs();
+      }
+      if (automator.currentInfoPane === AutomatorPanels.BLOCKS && automator.type === AUTOMATOR_TYPE.TEXT) {
+        this.openMatchingAutomatorTypeDocs();
+      }
+    },
+    openMatchingAutomatorTypeDocs() {
+      const automator = player.reality.automator;
+      automator.currentInfoPane = automator.type === AUTOMATOR_TYPE.BLOCK
+        ? AutomatorPanels.BLOCKS
+        : AutomatorPanels.COMMANDS;
     },
     rename() {
       this.editingName = true;

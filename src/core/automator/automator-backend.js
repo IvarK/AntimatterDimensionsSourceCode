@@ -1,21 +1,4 @@
-import { AutomatorPanels } from "@/components/tabs/automator/AutomatorDocs";
-
-/** @abstract */
-class AutomatorCommandInterface {
-  constructor(id) {
-    AutomatorCommandInterface.all[id] = this;
-  }
-
-  /** @abstract */
-  // eslint-disable-next-line no-unused-vars
-  run(command) { throw new NotImplementedError(); }
-}
-
-AutomatorCommandInterface.all = [];
-
-export function AutomatorCommand(id) {
-  return AutomatorCommandInterface.all[id];
-}
+import { compile } from "./compiler";
 
 export const AUTOMATOR_COMMAND_STATUS = Object.freeze({
   NEXT_INSTRUCTION: 0,
@@ -150,7 +133,7 @@ export class AutomatorScript {
   }
 
   compile() {
-    this._compiled = AutomatorGrammar.compile(this.text).compiled;
+    this._compiled = compile(this.text).compiled;
   }
 
   static create(name, content = "") {
@@ -215,7 +198,7 @@ export const AutomatorData = {
   },
   recalculateErrors() {
     const toCheck = this.currentScriptText();
-    this.cachedErrors = AutomatorGrammar.compile(toCheck).errors;
+    this.cachedErrors = compile(toCheck).errors;
     this.cachedErrors.sort((a, b) => a.startLine - b.startLine);
   },
   currentErrors() {
@@ -1012,18 +995,15 @@ export const AutomatorBackend = {
       // This saves the script after converting it.
       BlockAutomator.parseTextFromBlocks();
       player.reality.automator.type = AUTOMATOR_TYPE.TEXT;
-      if (player.reality.automator.currentInfoPane === AutomatorPanels.BLOCKS) {
-        player.reality.automator.currentInfoPane = AutomatorPanels.COMMANDS;
-      }
     } else {
       const toConvert = AutomatorTextUI.editor.getDoc().getValue();
       // Needs to be called to update the lines prop in the BlockAutomator object
       BlockAutomator.updateEditor(toConvert);
       AutomatorBackend.saveScript(scriptID, toConvert);
       player.reality.automator.type = AUTOMATOR_TYPE.BLOCK;
-      player.reality.automator.currentInfoPane = AutomatorPanels.BLOCKS;
     }
     AutomatorHighlighter.clearAllHighlightedLines();
+    EventHub.ui.dispatch(GAME_EVENT.AUTOMATOR_TYPE_CHANGED);
   },
 
   clearEditor() {

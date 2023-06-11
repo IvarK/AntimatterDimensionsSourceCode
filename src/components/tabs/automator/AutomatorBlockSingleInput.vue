@@ -1,4 +1,6 @@
 <script>
+import { validateLine } from "@/core/automator";
+
 export default {
   name: "AutomatorBlockSingleInput",
   props: {
@@ -194,10 +196,10 @@ export default {
         const clone = Object.assign({}, this.b);
         clone.nest = [];
         lines = BlockAutomator.parseLines([clone]);
-        validator = AutomatorGrammar.validateLine(lines.join("\n"));
+        validator = validateLine(lines.join("\n"));
       } else {
         lines = BlockAutomator.parseLines([this.b]);
-        validator = AutomatorGrammar.validateLine(lines[0]);
+        validator = validateLine(lines[0]);
       }
 
       // Yes, the odd structure of this check is intentional. Something odd happens within parseLines under certain

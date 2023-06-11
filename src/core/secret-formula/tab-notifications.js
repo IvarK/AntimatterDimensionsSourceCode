@@ -1,8 +1,6 @@
 import { DC } from "../constants";
 
-import { GameDatabase } from "./game-database";
-
-GameDatabase.tabNotifications = {
+export const tabNotifications = {
   firstInfinity: {
     id: 0,
     tabsToHighLight: [

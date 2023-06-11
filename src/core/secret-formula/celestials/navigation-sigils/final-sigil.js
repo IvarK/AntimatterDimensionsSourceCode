@@ -1,5 +1,3 @@
-import { GameDatabase } from "../../game-database";
-
 import { CELESTIAL_NAV_DRAW_ORDER } from "../navigation";
 
 function sigilProgress() {
@@ -200,7 +198,5 @@ for (let arcIndex = 0; arcIndex < arcSegments; arcIndex++) {
     "crimson");
 }
 
-GameDatabase.celestials.navSigils = {
-  ...GameDatabase.celestials.navSigils,
-  ...Object.values(Shapes).mapToObject((key, idx) => `final-sigil-${idx}`, val => val)
-};
+export const finalSigil = Object.values(Shapes)
+  .mapToObject((key, idx) => `final-sigil-${idx}`, val => val);

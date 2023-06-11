@@ -1,5 +1,4 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 function rebuyable(config) {
   const effectFunction = config.effect || (x => x);
@@ -27,7 +26,7 @@ function rebuyable(config) {
   };
 }
 
-GameDatabase.infinity.breakUpgrades = {
+export const breakInfinityUpgrades = {
   totalAMMult: {
     id: "totalMult",
     cost: 1e4,

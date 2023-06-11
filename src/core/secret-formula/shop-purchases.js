@@ -1,8 +1,7 @@
 import { STEAM } from "@/env";
-import { GameDatabase } from "./game-database";
 
 // NOTE: IF ANY COSTS ARE CHANGED HERE, THEY ALSO NEED TO BE CHANGED ON THE BACKEND TOO
-GameDatabase.shopPurchases = {
+export const shopPurchases = {
   dimPurchases: {
     key: "dimPurchases",
     cost: 30,
@@ -126,5 +125,5 @@ GameDatabase.shopPurchases = {
 };
 
 if (STEAM) {
-  delete GameDatabase.shopPurchases.allCosmeticSets;
+  delete shopPurchases.allCosmeticSets;
 }

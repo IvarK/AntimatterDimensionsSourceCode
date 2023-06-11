@@ -1,10 +1,9 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.infinities = {
+export const infinities = {
   total: {
     name: "Infinities gained per Crunch",
     isBase: true,

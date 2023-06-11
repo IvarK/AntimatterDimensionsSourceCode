@@ -1,10 +1,8 @@
-import { GameDatabase } from "../game-database";
-
 import { MultiplierTabHelper } from "./helper-functions";
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.galaxies = {
+export const galaxies = {
   // Note: none of the galaxy types use the global multiplier that applies to all of them within multValue, which
   // very slightly reduces performance impact and is okay because it's applied consistently
   antimatter: {

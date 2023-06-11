@@ -1,6 +1,4 @@
-import { GameDatabase } from "../../game-database";
-
-GameDatabase.eternity.timeStudies.dilation = [
+export const dilationTimeStudies = [
   {
     id: 1,
     description: "Unlock Time Dilation",

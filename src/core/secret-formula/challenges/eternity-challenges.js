@@ -1,11 +1,10 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 const specialInfinityGlyphDisabledEffectText = () => (PelleRifts.chaos.milestones[1].canBeApplied
   ? "The Pelle-Specific effect from Infinity Glyphs is also disabled."
   : "");
 
-GameDatabase.challenges.eternity = [
+export const eternityChallenges = [
   {
     id: 1,
     description: "Time Dimensions are disabled.",

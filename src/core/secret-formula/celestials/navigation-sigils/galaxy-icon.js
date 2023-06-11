@@ -1,5 +1,3 @@
-import { GameDatabase } from "../../game-database";
-
 import { CELESTIAL_NAV_DRAW_ORDER, pelleStarPosition } from "../navigation";
 
 // Determines styling, overall visibility, and placement/scaling of the sigil. Center and size are defined such that
@@ -92,7 +90,5 @@ for (let arcIndex = 0; arcIndex < arcSegments; arcIndex++) {
     "cyan");
 }
 
-GameDatabase.celestials.navSigils = {
-  ...GameDatabase.celestials.navSigils,
-  ...Object.values(Shapes).mapToObject((key, idx) => `galaxy-icon-${idx}`, val => val)
-};
+export const galaxyIcon = Object.values(Shapes)
+  .mapToObject((key, idx) => `galaxy-icon-${idx}`, val => val);

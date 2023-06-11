@@ -1,5 +1,3 @@
-import { GameDatabase } from "../game-database";
-
 const formatCost = c => format(c, 2);
 // eslint-disable-next-line max-params
 const expWithIncreasedScale = (base1, base2, incScale, coeff, x) =>
@@ -19,7 +17,7 @@ const rebuyable = config => {
   };
 };
 
-GameDatabase.celestials.pelle.upgrades = {
+export const pelleUpgrades = {
   antimatterDimensionMult: rebuyable({
     id: "antimatterDimensionMult",
     description: "Gain a multiplier to Antimatter Dimensions",

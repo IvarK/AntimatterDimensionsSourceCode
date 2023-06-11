@@ -1,6 +1,4 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
-
 
 function dimInfinityMult() {
   return Currency.infinitiesTotal.value.times(0.2).plus(1);
@@ -9,7 +7,7 @@ function chargedDimInfinityMult() {
   return 1 + Math.log10(Math.max(1, Currency.infinitiesTotal.value.pLog10())) * Math.sqrt(Ra.pets.teresa.level) / 150;
 }
 
-GameDatabase.infinity.upgrades = {
+export const infinityUpgrades = {
   totalTimeMult: {
     id: "timeMult",
     cost: 1,

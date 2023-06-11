@@ -1,6 +1,4 @@
-import { GameDatabase } from "./game-database";
-
-GameDatabase.confirmationTypes = [
+export const confirmationTypes = [
   {
     name: "Dimension Boost",
     option: "dimensionBoost",

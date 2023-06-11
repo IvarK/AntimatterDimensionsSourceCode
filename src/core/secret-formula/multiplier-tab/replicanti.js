@@ -1,10 +1,9 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.replicanti = {
+export const replicanti = {
   total: {
     name: "Replicanti Speed",
     multValue: () => totalReplicantiSpeedMult(Replicanti.amount.gt(replicantiCap())),

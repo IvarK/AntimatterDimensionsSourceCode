@@ -1,5 +1,3 @@
-import { GameDatabase } from "./game-database";
-
 // We define these in the local scope to override the player's notation setting; this is something we'll probably
 // expand upon later once we look more closely at support for extended Unicode in DRP
 function format(number, places, placesUnder1000) {
@@ -261,5 +259,3 @@ export const discordRichPresence = {
     },
   ]
 };
-
-GameDatabase.discordRichPresence = discordRichPresence;

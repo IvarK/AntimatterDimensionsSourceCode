@@ -1,9 +1,7 @@
-import { GameDatabase } from "../game-database";
-
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.eternities = {
+export const eternities = {
   total: {
     name: "Eternities gained per Eternity",
     isBase: true,

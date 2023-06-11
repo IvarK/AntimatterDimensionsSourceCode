@@ -1,6 +1,4 @@
-import { GameDatabase } from "./game-database";
-
-GameDatabase.tabs = [
+export const tabs = [
   {
     key: "dimensions",
     name: "Dimensions",

@@ -1,6 +1,4 @@
-import { GameDatabase } from "../game-database";
-
-GameDatabase.eternity.milestones = {
+export const eternityMilestones = {
   autobuyerIPMult: {
     eternities: 1,
     reward: "Unlock the Infinity Point multiplier autobuyer",

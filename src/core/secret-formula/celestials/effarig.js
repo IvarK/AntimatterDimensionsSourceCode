@@ -1,7 +1,6 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
-GameDatabase.celestials.effarig.unlocks = {
+export const effarigUnlocks = {
   adjuster: {
     id: 0,
     description: "Adjustable Glyph level factor weights",

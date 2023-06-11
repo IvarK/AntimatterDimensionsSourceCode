@@ -1,8 +1,7 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 import wordShift from "../../word-shift";
 
-GameDatabase.celestials.pelle.strikes = {
+export const pelleStrikes = {
   infinity: {
     id: 1,
     requirementDescription: "Reach Infinity",

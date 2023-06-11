@@ -1,6 +1,4 @@
-import { GameDatabase } from "../../game-database";
-
-GameDatabase.celestials.quotes.ra = {
+export const raQuotes = {
   unlock: {
     id: 0,
     lines: [

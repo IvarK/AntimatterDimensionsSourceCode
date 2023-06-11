@@ -1,7 +1,5 @@
-import { GameDatabase } from "../game-database";
-
 // Color prop is a combination of a B/W background and a border hex code
-GameDatabase.reality.glyphCosmeticSets = {
+export const glyphCosmeticSets = {
   cards: {
     id: "cards",
     name: "Playing Card Suits",

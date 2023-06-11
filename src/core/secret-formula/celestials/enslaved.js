@@ -1,6 +1,4 @@
-import { GameDatabase } from "../game-database";
-
-GameDatabase.celestials.enslaved = {
+export const enslaved = {
   // These entries will be unlocked in no particular order
   progress: {
     hintsUnlocked: {

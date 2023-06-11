@@ -1,6 +1,4 @@
-import { GameDatabase } from "../../game-database";
-
-GameDatabase.celestials.quotes.laitela = {
+export const laitelaQuotes = {
   unlock: {
     id: 0,
     lines: [

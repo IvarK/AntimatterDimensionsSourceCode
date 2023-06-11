@@ -1,6 +1,4 @@
-import { GameDatabase } from "./game-database";
-
-GameDatabase.credits = {
+export const credits = {
   // Must be placed in the order it is desired they appear in the credits
   roles: {
     1: "Creator",
@@ -441,4 +439,4 @@ GameDatabase.credits = {
   ]
 };
 
-GameDatabase.credits.roles.count = Object.keys(GameDatabase.credits.roles).length;
+credits.roles.count = Object.keys(credits.roles).length;

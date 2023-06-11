@@ -1,5 +1,3 @@
-import { GameDatabase } from "../game-database";
-
 const formatCost = c => format(c, 2);
 
 const rebuyable = config => {
@@ -16,7 +14,7 @@ const rebuyable = config => {
   };
 };
 
-GameDatabase.celestials.pelle.galaxyGeneratorUpgrades = {
+export const pelleGalaxyGeneratorUpgrades = {
   additive: rebuyable({
     id: "galaxyGeneratorAdditive",
     description: "Increase base Galaxy generation by 2",

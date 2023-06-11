@@ -1,6 +1,4 @@
-import { GameDatabase } from "./game-database";
-
-GameDatabase.speedrunMilestones = [
+export const speedrunMilestones = [
   {
     id: 1,
     key: "firstBoost",

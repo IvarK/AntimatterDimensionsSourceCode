@@ -1,6 +1,7 @@
 <script>
 import { DataSet, Network } from "vis-network";
 
+import { PERK_FAMILY } from "@/core/secret-formula";
 import PerkPointLabel from "./PerkPointLabel";
 
 export default {

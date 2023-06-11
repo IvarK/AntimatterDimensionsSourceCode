@@ -1,21 +1,47 @@
+import { multiplierTabTree, multiplierTabValues } from "./multiplier-tab";
+
+import { achievements } from "./achievements";
+import { awayProgressTypes } from "./away-progress-types";
+import { catchupResources } from "./catchup-resources";
+import { celestials } from "./celestials";
+import { challenges } from "./challenges";
+import { changelog } from "./changelog";
+import { confirmationTypes } from "./confirmation-types";
+import { credits } from "./credits";
+import { discordRichPresence } from "./discord-rich-presence";
+import { eternity } from "./eternity";
+import { h2p } from "./h2p";
+import { infinity } from "./infinity";
+import { news } from "./news";
+import { progressStages } from "./progress-checker";
+import { reality } from "./reality";
+import { shopPurchases } from "./shop-purchases";
+import { speedrunMilestones } from "./speedrun-milestones";
+import { tabNotifications } from "./tab-notifications";
+import { tabs } from "./tabs";
+
 export const GameDatabase = {
-  achievements: {},
-  challenges: {},
-  infinity: {},
-  eternity: {
-    timeStudies: {}
-  },
-  reality: {
-    glyphEffects: {},
-    glyphSacrifice: {},
-  },
-  celestials: {
-    effarig: {},
-    alchemy: {},
-    pelle: {},
-    descriptions: {},
-    quotes: {},
-  }
+  achievements,
+  awayProgressTypes,
+  catchupResources,
+  celestials,
+  challenges,
+  changelog,
+  confirmationTypes,
+  credits,
+  discordRichPresence,
+  eternity,
+  h2p,
+  infinity,
+  multiplierTabTree,
+  multiplierTabValues,
+  news,
+  progressStages,
+  reality,
+  shopPurchases,
+  speedrunMilestones,
+  tabNotifications,
+  tabs
 };
 
 window.GameDatabase = GameDatabase;

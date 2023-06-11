@@ -1,7 +1,6 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
-GameDatabase.eternity.upgrades = {
+export const eternityUpgrades = {
   idMultEP: {
     id: 1,
     cost: 5,

@@ -1,12 +1,11 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../player-progress";
 
 import { MultiplierTabHelper } from "./helper-functions";
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.AD = {
+export const AD = {
   total: {
     name: dim => {
       if (dim) return `AD ${dim} Multiplier`;

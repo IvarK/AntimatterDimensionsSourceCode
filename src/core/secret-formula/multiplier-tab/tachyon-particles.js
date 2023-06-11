@@ -1,11 +1,10 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 import { PlayerProgress } from "../../player-progress";
 
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.TP = {
+export const TP = {
   total: {
     name: "Total Tachyon Particles",
     displayOverride: () => {

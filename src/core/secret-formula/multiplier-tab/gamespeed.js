@@ -1,10 +1,8 @@
-import { GameDatabase } from "../game-database";
-
 import { MultiplierTabHelper } from "./helper-functions";
 import { MultiplierTabIcons } from "./icons";
 
 // See index.js for documentation
-GameDatabase.multiplierTabValues.gamespeed = {
+export const gamespeed = {
   total: {
     name: "Game speed",
     displayOverride: () => {

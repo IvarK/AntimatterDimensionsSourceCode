@@ -1,5 +1,3 @@
-import { GameDatabase } from "../game-database";
-
 function rebuyableCost(initialCost, increment, id) {
   return initialCost * Math.pow(increment, player.celestials.teresa.perkShop[id]);
 }
@@ -19,7 +17,7 @@ function rebuyable(config) {
   };
 }
 
-GameDatabase.celestials.perkShop = {
+export const perkShop = {
   glyphLevel: rebuyable({
     id: 0,
     initialCost: 1,

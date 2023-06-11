@@ -1,5 +1,4 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 import wordShift from "../../word-shift";
 
 export function emphasizeEnd(fraction) {
@@ -204,7 +203,7 @@ for (const fill of fillStates) {
   }
 }
 
-GameDatabase.celestials.navigation = {
+export const celestialNavigation = {
   "teresa-base": {
     visible: () => true,
     complete: () => 1,
@@ -1991,6 +1990,3 @@ GameDatabase.celestials.navigation = {
     }()),
   },
 };
-
-// This will get populated as needed in files within the navigation-sigils folder
-GameDatabase.celestials.navSigils = {};

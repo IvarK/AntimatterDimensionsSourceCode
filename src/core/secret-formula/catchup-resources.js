@@ -1,8 +1,6 @@
 import { DC } from "../constants";
 
-import { GameDatabase } from "./game-database";
-
-GameDatabase.catchupResources = [
+export const catchupResources = [
   {
     name: "Antimatter Dimensions",
     id: 0,

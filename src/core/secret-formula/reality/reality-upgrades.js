@@ -1,5 +1,4 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 const rebuyable = props => {
   props.cost = () => getHybridCostScaling(
@@ -26,7 +25,7 @@ const rebuyable = props => {
 };
 
 
-GameDatabase.reality.upgrades = [
+export const realityUpgrades = [
   rebuyable({
     name: "Temporal Amplifier",
     id: 1,

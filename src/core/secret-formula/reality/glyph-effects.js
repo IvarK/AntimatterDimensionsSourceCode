@@ -1,5 +1,4 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 export const GlyphCombiner = Object.freeze({
   /**
@@ -28,8 +27,7 @@ export const GlyphCombiner = Object.freeze({
   multiplyDecimal: x => x.reduce(Decimal.prodReducer, DC.D1)
 });
 
-
-GameDatabase.reality.glyphEffects = {
+export const glyphEffects = {
   timepow: {
     id: "timepow",
     bitmaskIndex: 0,

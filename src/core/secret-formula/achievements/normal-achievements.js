@@ -1,7 +1,6 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
-GameDatabase.achievements.normal = [
+export const normalAchievements = [
   {
     id: 11,
     name: "You gotta start somewhere",

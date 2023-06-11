@@ -1,5 +1,4 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
 const rebuyable = props => {
   props.cost = () => props.initialCost * Math.pow(props.costMult, player.reality.imaginaryRebuyables[props.id]);
@@ -11,7 +10,7 @@ const rebuyable = props => {
   return props;
 };
 
-GameDatabase.reality.imaginaryUpgrades = [
+export const imaginaryUpgrades = [
   rebuyable({
     name: "Temporal Intensifier",
     id: 1,

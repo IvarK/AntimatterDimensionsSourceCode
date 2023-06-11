@@ -1,7 +1,6 @@
 import { DC } from "../../constants";
-import { GameDatabase } from "../game-database";
 
-GameDatabase.challenges.infinity = [
+export const infinityChallenges = [
   {
     id: 1,
     description: `all Normal Challenge restrictions are active at once, with the exception of the

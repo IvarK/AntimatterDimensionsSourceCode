@@ -1,6 +1,4 @@
-import { GameDatabase } from "./game-database";
-
-GameDatabase.changelog = [
+export const changelog = [
   /**
    * @template
    * {
@@ -769,7 +767,7 @@ while they were locked.</li>
 <li>Added loot boxes.</li>
 <li>Removed loot boxes.</li>
 <li>Added various missing periods to achievement descriptions.</li>
-<li>Added a missing period to time spent in this eternity.</li>       
+<li>Added a missing period to time spent in this eternity.</li>
 Increased the price of creation count increases from 50 god power to 60.</li>
 <li>Added a missing space to the "Autobuyers work twice as fast." upgrade.</li>
 <li>Manually buying max dimension boosts no longer requires 10 eternities or more, and now only requires the bulk buy
@@ -1028,7 +1026,6 @@ gaining infinity points.</li>
 ];
 
 
-for (let i = 0; i < GameDatabase.changelog.length; i++) {
-  const entry = GameDatabase.changelog[i];
-  entry.id = i;
+for (let i = 0; i < changelog.length; i++) {
+  changelog[i].id = i;
 }

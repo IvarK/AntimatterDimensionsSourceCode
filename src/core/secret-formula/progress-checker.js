@@ -1,6 +1,4 @@
-import { GameDatabase } from "./game-database";
-
-GameDatabase.progressStages = [
+export const progressStages = [
   /**
    * This is used in both the catchup modal and for cloud save comparisons. Due to the fact that it's used for
    * cloud comparisons, there's a lot of processing that needs to be done on raw player-like objects that aren't

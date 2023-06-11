@@ -1,10 +1,7 @@
-import { DEV } from "@/env";
-
 import { deepmergeAll } from "@/utility/deepmerge";
-import { GameStorage } from "./storage";
 
 // WARNING: Don't use state accessors and functions from global scope here, that's not safe in long-term
-GameStorage.migrations = {
+export const migrations = {
   firstRealityMigration: 13,
   patches: {
     1: player => {
@@ -83,8 +80,6 @@ GameStorage.migrations = {
     13: player => {
       // 12.3 is currently on live, will be updated to 13 after release
 
-      if (DEV) GameStorage.devMigrations.setLatestTestVersion(player);
-
       // Last update version check, fix emoji/cancer issue,
       // change diff value from 1/10 of a second to 1/1000 of a second, delete pointless properties from player
       // And all other kinds of stuff
@@ -106,65 +101,65 @@ GameStorage.migrations = {
         }
       }, 1000);
 
-      GameStorage.migrations.normalizeTimespans(player);
-      GameStorage.migrations.convertAutobuyerMode(player);
-      GameStorage.migrations.fixChallengeIds(player);
-      GameStorage.migrations.adjustMultCosts(player);
-      GameStorage.migrations.convertAchivementsToNumbers(player);
-      GameStorage.migrations.adjustGameCreatedTime(player);
-      GameStorage.migrations.moveSavedStudyTrees(player);
-      GameStorage.migrations.convertEPMult(player);
-      GameStorage.migrations.moveChallengeInfo(player);
-      GameStorage.migrations.infinitiedConversion(player);
-      GameStorage.migrations.adjustWhy(player);
-      GameStorage.migrations.removeAchPow(player);
-      GameStorage.migrations.adjustSacrificeConfirmation(player);
-      GameStorage.migrations.migrateNotation(player);
-      GameStorage.migrations.fixAutobuyers(player);
-      GameStorage.migrations.removeAutoIPProperties(player);
-      GameStorage.migrations.adjustAchievementVars(player);
-      GameStorage.migrations.uniformDimensions(player);
-      GameStorage.migrations.removeEternityChallGoal(player);
-      GameStorage.migrations.removeTickspeed(player);
-      GameStorage.migrations.removePostC3Reward(player);
-      GameStorage.migrations.renameMoney(player);
-      GameStorage.migrations.moveAutobuyers(player);
-      GameStorage.migrations.convertEternityCountToDecimal(player);
-      GameStorage.migrations.renameDimboosts(player);
-      GameStorage.migrations.migrateConfirmations(player);
-      GameStorage.migrations.removeOtherTickspeedProps(player);
-      GameStorage.migrations.renameNewsOption(player);
-      GameStorage.migrations.removeDimensionCosts(player);
-      GameStorage.migrations.changeC8Handling(player);
-      GameStorage.migrations.convertAchievementsToBits(player);
-      GameStorage.migrations.setNoInfinitiesOrEternitiesThisReality(player);
-      GameStorage.migrations.setTutorialState(player);
-      GameStorage.migrations.migrateLastTenRuns(player);
-      GameStorage.migrations.migrateIPGen(player);
-      GameStorage.migrations.renameCloudVariable(player);
-      GameStorage.migrations.standardizeUncompletedTimes(player);
-      GameStorage.migrations.makeRecords(player);
-      GameStorage.migrations.deleteOldRecords(player);
-      GameStorage.migrations.migrateAutobuyers(player);
-      GameStorage.migrations.migratePlayerVars(player);
-      GameStorage.migrations.consolidateAuto(player);
-      GameStorage.migrations.convertTimeTheoremPurchases(player);
-      GameStorage.migrations.deleteDimboostBulk(player);
-      GameStorage.migrations.deleteFloatingTextOption(player);
-      GameStorage.migrations.refactorDoubleIPRebuyable(player);
-      GameStorage.migrations.infMultNameConversion(player);
-      GameStorage.migrations.convertNews(player);
-      GameStorage.migrations.etercreqConversion(player);
-      GameStorage.migrations.moveTS33(player);
-      GameStorage.migrations.addBestPrestigeCurrency(player);
-      GameStorage.migrations.migrateTheme(player);
+      migrations.normalizeTimespans(player);
+      migrations.convertAutobuyerMode(player);
+      migrations.fixChallengeIds(player);
+      migrations.adjustMultCosts(player);
+      migrations.convertAchivementsToNumbers(player);
+      migrations.adjustGameCreatedTime(player);
+      migrations.moveSavedStudyTrees(player);
+      migrations.convertEPMult(player);
+      migrations.moveChallengeInfo(player);
+      migrations.infinitiedConversion(player);
+      migrations.adjustWhy(player);
+      migrations.removeAchPow(player);
+      migrations.adjustSacrificeConfirmation(player);
+      migrations.migrateNotation(player);
+      migrations.fixAutobuyers(player);
+      migrations.removeAutoIPProperties(player);
+      migrations.adjustAchievementVars(player);
+      migrations.uniformDimensions(player);
+      migrations.removeEternityChallGoal(player);
+      migrations.removeTickspeed(player);
+      migrations.removePostC3Reward(player);
+      migrations.renameMoney(player);
+      migrations.moveAutobuyers(player);
+      migrations.convertEternityCountToDecimal(player);
+      migrations.renameDimboosts(player);
+      migrations.migrateConfirmations(player);
+      migrations.removeOtherTickspeedProps(player);
+      migrations.renameNewsOption(player);
+      migrations.removeDimensionCosts(player);
+      migrations.changeC8Handling(player);
+      migrations.convertAchievementsToBits(player);
+      migrations.setNoInfinitiesOrEternitiesThisReality(player);
+      migrations.setTutorialState(player);
+      migrations.migrateLastTenRuns(player);
+      migrations.migrateIPGen(player);
+      migrations.renameCloudVariable(player);
+      migrations.standardizeUncompletedTimes(player);
+      migrations.makeRecords(player);
+      migrations.deleteOldRecords(player);
+      migrations.migrateAutobuyers(player);
+      migrations.migratePlayerVars(player);
+      migrations.consolidateAuto(player);
+      migrations.convertTimeTheoremPurchases(player);
+      migrations.deleteDimboostBulk(player);
+      migrations.deleteFloatingTextOption(player);
+      migrations.refactorDoubleIPRebuyable(player);
+      migrations.infMultNameConversion(player);
+      migrations.convertNews(player);
+      migrations.etercreqConversion(player);
+      migrations.moveTS33(player);
+      migrations.addBestPrestigeCurrency(player);
+      migrations.migrateTheme(player);
     },
 
     // ALL MIGRATIONS BELOW THIS POINT ARE POST-RELEASE FOR THE REALITY UPDATE! THE PRECEEDING MIGRATION (13) IS
     // THE FIRST MIGRATION WHICH DOES THE MAJORITY OF DATA FORMAT CHANGES
 
     14: player => {
-      GameStorage.migrations.reworkBHPulsing(player);
+      migrations.reworkBHPulsing(player);
 
       // Added glyph auto-sort by level; in order to keep the button state cycling consistent with the sort buttons' UI
       // order, AUTO_SORT_MODE had to be changed to insert LEVEL mode at the top and shift the others down. This
@@ -1175,6 +1170,6 @@ GameStorage.migrations = {
 
   patchPostReality(saveData) {
     // Plus 1 because this the threshold is exclusive (it migrates up to but not including the maxVersion)
-    return this.patch(saveData, Object.keys(GameStorage.migrations.patches).map(k => Number(k)).max() + 1);
+    return this.patch(saveData, Object.keys(migrations.patches).map(k => Number(k)).max() + 1);
   }
 };

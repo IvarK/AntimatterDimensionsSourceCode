@@ -1,6 +1,8 @@
 import * as ADNotations from "@antimatter-dimensions/notations";
 
 import { DEV } from "@/env";
+import { devMigrations } from "./dev-migrations";
+import { migrations } from "./migrations";
 
 import { deepmergeAll } from "@/utility/deepmerge";
 
@@ -225,7 +227,7 @@ export const GameStorage = {
       player.records.gameCreatedTime = Date.now();
       player.lastUpdate = Date.now();
       if (DEV) {
-        this.devMigrations.setLatestTestVersion(player);
+        devMigrations.setLatestTestVersion(player);
       }
     } else {
       // We want to support importing from versions much older than the newest pre-reality version, but we also want
@@ -235,19 +237,22 @@ export const GameStorage = {
 
       // For pre-Reality versions, we additionally need to fire off an event to ensure certain achievements and
       // notifications trigger properly. Missing props are filled in at this step via deepmerge
-      const isPreviousVersionSave = playerObject.version < GameStorage.migrations.firstRealityMigration;
-      player = this.migrations.patchPreReality(playerObject);
-      if (isPreviousVersionSave) EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
+      const isPreviousVersionSave = playerObject.version < migrations.firstRealityMigration;
+      player = migrations.patchPreReality(playerObject);
+      if (isPreviousVersionSave) {
+        if (DEV) devMigrations.setLatestTestVersion(player);
+        EventHub.dispatch(GAME_EVENT.SAVE_CONVERTED_FROM_PREVIOUS_VERSION);
+      }
 
       // All dev migrations are applied in-place, mutating the player object. Note that since we only want to apply dev
       // migrations in a dev environment, this means that test saves may fail to migrate on the live version
       if (DEV && player.options.testVersion !== undefined) {
-        this.devMigrations.patch(player);
+        devMigrations.patch(player);
       }
 
       // Post-reality migrations are separated from pre-reality because they need to happen after any dev migrations,
       // which themselves must happen after the deepmerge
-      player = this.migrations.patchPostReality(player);
+      player = migrations.patchPostReality(player);
     }
 
     this.saves[this.currentSlot] = player;

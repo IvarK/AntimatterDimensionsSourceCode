@@ -40,7 +40,14 @@ const tutorialStates = [
 export const Tutorial = {
 
   isActive(atState) {
-    return ui.view.tutorialState === atState && ui.view.tutorialActive;
+    return player.records.fullGameCompletions === 0 && ui.view.tutorialState === atState && ui.view.tutorialActive;
+  },
+
+  // This will remain visible until the first dimboost is purchased. However, since the tutorial state generally
+  // only updates whenever the UI elements need changing, we need to explicitly check resources here
+  emphasizeH2P() {
+    const hasFirstBoost = Achievement(14).isUnlocked && player.dimensionBoosts > 0;
+    return player.records.fullGameCompletions === 0 && !hasFirstBoost;
   },
 
   // Turns off the visual effect

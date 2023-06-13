@@ -53,7 +53,7 @@ export default {
       return `${prefix} ${format(this.singleCost)} ${suffix}`;
     },
     until10Text() {
-      if (this.isCapped) return "Capped";
+      if (this.isCapped) return "Shattered by Nameless";
       if (this.isContinuumActive) return `Continuum: ${this.continuumString}`;
 
       const prefix = `Until ${formatInt(10)},${this.showCostTitle(this.until10Cost) ? " Cost" : ""}`;
@@ -74,6 +74,20 @@ export default {
     costUnit() {
       return `${AntimatterDimension(this.tier - 2).shortDisplayName} AD`;
     },
+    buySingleClass() {
+      return {
+        "o-primary-btn--buy-ad o-primary-btn--buy-single-ad tooltip-container": true,
+        "l-dim-row-small-text": this.isLongText(this.singleText) || !this.showCostTitle(this.singleCost),
+      };
+    },
+    buyTenClass() {
+      return {
+        "o-primary-btn--buy-ad o-primary-btn--buy-dim tooltip-container": true,
+        "o-primary-btn--buy-10-ad": !this.isContinuumActive,
+        "o-primary-btn--continuum-ad o-continuum": this.isContinuumActive,
+        "l-dim-row-small-text": this.isLongText(this.until10Text) && !this.isContinuumActive
+      };
+    }
   },
   methods: {
     update() {
@@ -117,11 +131,6 @@ export default {
     isLongText(str) {
       return str.length > 20;
     },
-    textClass() {
-      return {
-        "l-dim-row-small-text": this.isLongText(this.singleText) || !this.showCostTitle(this.singleCost),
-      };
-    },
     tutorialClass() {
       return {
         "l-glow-container": true,
@@ -148,14 +157,15 @@ export default {
     <div class="l-dim-row-multi-button-container">
       <PrimaryButton
         v-if="!isContinuumActive"
-        :ach-tooltip="boughtTooltip"
         :enabled="isAffordable && !isCapped && isUnlocked"
-        class="o-primary-btn--buy-ad o-primary-btn--buy-single-ad"
-        :class="textClass()"
+        :class="buySingleClass"
         @click="buySingle"
       >
         <div :class="tutorialClass()">
           {{ singleText }}
+        </div>
+        <div class="purchase-count-tooltip">
+          {{ boughtTooltip }}
         </div>
         <div
           v-if="hasTutorial"
@@ -164,16 +174,13 @@ export default {
       </PrimaryButton>
       <PrimaryButton
         :enabled="(isAffordableUntil10 || isContinuumActive) && !isCapped && isUnlocked"
-        class="o-primary-btn--buy-ad o-primary-btn--buy-dim"
-        :class="{
-          'o-primary-btn--buy-10-ad': !isContinuumActive,
-          'o-primary-btn--continuum-ad o-continuum': isContinuumActive,
-          'l-dim-row-small-text': isLongText(until10Text) && !isContinuumActive
-        }"
-        :ach-tooltip="boughtTooltip"
+        :class="buyTenClass"
         @click="buyUntil10"
       >
         {{ until10Text }}
+        <div class="purchase-count-tooltip">
+          {{ boughtTooltip }}
+        </div>
       </PrimaryButton>
     </div>
   </div>
@@ -190,6 +197,41 @@ export default {
   justify-content: center;
   align-items: center;
   border-radius: var(--var-border-radius, inherit);
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-container .purchase-count-tooltip {
+  position: absolute;
+  width: 20rem;
+  top: 50%;
+  font-size: 1.3rem;
+  line-height: 1.6rem;
+  color: white;
+  background: black;
+  border: 0.1rem solid var(--color-text);
+  border-radius: var(--var-border-width, 0.5rem);
+  transform: translate(calc(-100% - 1.5rem), -50%);
+  padding: 0.5rem;
+  visibility: hidden;
+}
+
+.tooltip-container:hover .purchase-count-tooltip {
+  visibility: visible;
+}
+
+.tooltip-container .purchase-count-tooltip::after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  border-top: 0.5rem solid transparent;
+  border-left: 0.5rem solid var(--color-text);
+  border-bottom: 0.5rem solid transparent;
+  transform: translateY(-50%);
 }
 
 .o-continuum {

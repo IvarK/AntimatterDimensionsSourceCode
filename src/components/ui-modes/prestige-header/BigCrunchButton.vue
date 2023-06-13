@@ -16,6 +16,7 @@ export default {
       hover: false,
       headerTextColored: true,
       creditsClosed: false,
+      showIPRate: false,
     };
   },
   computed: {
@@ -27,9 +28,6 @@ export default {
     },
     // Show IP/min below this threshold, color the IP number above it
     rateThreshold: () => 5e11,
-    showIPRate() {
-      return this.peakIPRate.lte(this.rateThreshold);
-    },
     amountStyle() {
       if (!this.headerTextColored || this.currentIP.lt(this.rateThreshold)) return {
         "transition-duration": "0s"
@@ -86,11 +84,10 @@ export default {
       const gainedIP = gainedInfinityPoints();
       this.currentIP.copyFrom(Currency.infinityPoints);
       this.gainedIP.copyFrom(gainedIP);
-      if (this.showIPRate) {
-        this.currentIPRate.copyFrom(gainedIP.dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes)));
-      }
+      this.currentIPRate.copyFrom(gainedIP.dividedBy(Math.clampMin(0.0005, Time.thisInfinityRealTime.totalMinutes)));
       this.peakIPRate.copyFrom(player.records.thisInfinity.bestIPmin);
       this.peakIPRateVal.copyFrom(player.records.thisInfinity.bestIPminVal);
+      this.showIPRate = this.peakIPRate.lte(this.rateThreshold);
     },
     switchToInfinity() {
       Tab.dimensions.infinity.show(true);

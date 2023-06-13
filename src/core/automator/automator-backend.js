@@ -274,7 +274,7 @@ export const AutomatorData = {
   // could in principle be combined into one function to reduce boilerplace, but keeping them
   // separate is probably more readable externally
   undoScriptEdit() {
-    if (this.undoBuffer.length === 0) return;
+    if (this.undoBuffer.length === 0 || Tabs.current._currentSubtab.name !== "Automator") return;
 
     const undoContent = this.undoBuffer.pop();
     this.pushRedoData(this.currentScriptText());
@@ -285,7 +285,7 @@ export const AutomatorData = {
     else BlockAutomator.updateEditor(undoContent);
   },
   redoScriptEdit() {
-    if (this.redoBuffer.length === 0) return;
+    if (this.redoBuffer.length === 0 || Tabs.current._currentSubtab.name !== "Automator") return;
 
     const redoContent = this.redoBuffer.pop();
     // We call this with a value which is always higher than said threshold, forcing the current text to be pushed

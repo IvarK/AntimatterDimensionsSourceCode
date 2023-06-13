@@ -51,6 +51,9 @@ export default {
     boostStyle() {
       return { color: GlyphAlteration.baseBoostColor() };
     },
+    hasSeenRealityGlyph() {
+      return player.reality.glyphs.createdRealityGlyph;
+    }
   },
   created() {
     this.on$(GAME_EVENT.GLYPH_VISUAL_CHANGE, () => {
@@ -160,6 +163,9 @@ export default {
       <div v-if="teresaMult > 1">
         Glyph sacrifice values are multiplied by {{ formatX(teresaMult, 2, 2) }};
         Teresa was last done at {{ lastMachines }}.
+        <span v-if="hasSeenRealityGlyph">
+          Reality Glyphs are unaffected by this multiplier and have no altered effects.
+        </span>
       </div>
       <template v-for="type in types">
         <TypeSacrifice

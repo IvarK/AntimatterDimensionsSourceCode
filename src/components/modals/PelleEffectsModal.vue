@@ -16,6 +16,7 @@ export default {
         "All pre-Doomed IP and EP multipliers are disabled",
         "IP generation based on fastest infinity speed is disabled",
         "All pre-Doomed Replicanti speed multipliers are disabled",
+        `Replicanti slows down more drastically above ${format(Number.MAX_VALUE, 2)}`,
         "Most Eternity Challenges are harder",
         `All Galaxies are only ${formatPercents(0.5)} as effective`,
         `Antimatter Dimension multiplier is divided by ${formatInt(10)}`,

@@ -29,6 +29,15 @@ export default {
   computed: {
     rift() {
       return this.strike.rift;
+    },
+    // We treat the 3rd rift slightly differently because it drains the 2nd rift, meaning it needs the word cycle
+    // and a bit of additional UI info
+    specialRift() {
+      return this.rift.id === 3;
+    },
+    infoTooltip() {
+      return `The Replicanti requirement for the 2nd Rift is based on the total amount you have ever filled, including
+        any amount drained to fill this Rift.`;
     }
   },
   methods: {
@@ -54,9 +63,9 @@ export default {
       return wordShift.wordCycle(this.rift.name, true);
     },
     drainResource() {
-      if (this.rift.id !== 3) return this.rift.drainResource;
-
-      return wordShift.wordCycle(this.rift.drainResource);
+      return this.specialRift
+        ? wordShift.wordCycle(this.rift.drainResource)
+        : this.rift.drainResource;
     }
   },
 };
@@ -89,6 +98,12 @@ export default {
           </h2>
           <div class="c-pelle-rift-rift-info-container">
             Drains {{ drainResource() }} to fill.
+            <span
+              v-if="specialRift"
+              :ach-tooltip="infoTooltip"
+            >
+              <i class="fas fa-question-circle" />
+            </span>
             <br>
             <template v-if="!isMaxed">
               Current Amount: {{ formatRift(resource) }}

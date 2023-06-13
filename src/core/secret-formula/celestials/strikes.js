@@ -20,15 +20,16 @@ export const pelleStrikes = {
   eternity: {
     id: 3,
     requirementDescription: "Reach Eternity",
-    penaltyDescription: () => `Replicanti speed scales harsher after ${format(DC.E2000)}`,
+    penaltyDescription: () => `Replicanti speed slows down even more above ${format(DC.E2000)}`,
     rewardDescription: () => `Unlock ${wordShift.wordCycle(PelleRifts.chaos.name)}`,
     rift: () => PelleRifts.chaos
   },
   ECs: {
     id: 4,
     requirementDescription: () => `Reach ${formatInt(115)} TT`,
-    penaltyDescription: () =>
-      `${wordShift.wordCycle(PelleRifts.vacuum.name)} IP multiplier is reduced in Eternity Challenges`,
+    penaltyDescription: () => `In Eternity Challenges, ${wordShift.wordCycle(PelleRifts.vacuum.name)}
+      IP multiplier is only ${formatPercents(0.3)} as strong and capped at ${formatPercents(0.15)}
+      of the goal`,
     rewardDescription: () => `Unlock ${wordShift.wordCycle(PelleRifts.recursion.name)}`,
     rift: () => PelleRifts.recursion
   },

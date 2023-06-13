@@ -17,6 +17,26 @@ export const h2p = {
    */
   tabs: [
     {
+      name: "This Modal",
+      info: () => `
+Welcome to the How to Play!
+<br>
+<br>
+This modal (pop-up window) contains in-depth explanations and additional details for everything you will encounter
+as you progress through the game. As you unlock new features and mechanics, you will also gain access to additional
+pages here. If you ever feel lost or confused about how something in the game works, you may find a helpful
+explanation within the related entry in here. 
+<br>
+<br>
+For now, opening the How to Play will always start you on this page. After you get your first Dimension Boost,
+opening this modal will instead place you on the How to Play entry most relevant to the game content on your currently
+visible tab and subtab, if such an entry exists.
+`,
+      isUnlocked: () => true,
+      tags: ["h2p", "how", "to", "play", "modal"],
+      tab: ""
+    },
+    {
       name: "Your savefile",
       info: () => `
 Your game's save data is stored on your computer's browser data if you are playing on a web browser, or in your Steam
@@ -381,14 +401,18 @@ ${formatX(8)} then ${formatX(5)}; in both cases you'll end up with a total sacri
       tab: "dimensions/antimatter"
     }, {
       name: "Achievements",
-      // This one could use some work!
       info: () => `
 Each Achievement has requirements to unlock. Once unlocked, some Achievements give a reward.
 Requirements and rewards vary in difficulty and benefit significantly.
 <br>
 <br>
-You will receive a ${formatX(1.03, 2, 2)} multiplier to all Antimatter Dimensions for each completed Achievement, as
-well as an additional ${formatX(1.25, 2, 2)} for each fully completed row.
+In addition to any specific rewards for individual Achievements, you will receive a ${formatX(1.03, 2, 2)} multiplier
+to all Antimatter Dimensions. Each fully completed row also gives another ${formatX(1.25, 2, 2)}. The total multiplier
+effect from all Achievements together is shown above all the Achievement images.
+<br>
+<br>
+Secret Achievements offer no gameplay benefits or advantages and are simply there for fun. Hovering over a Secret
+Achievement will give a hint on how to attain them.
 `,
       isUnlocked: () => true,
       tags: ["earlygame", "awards", "earlygame"],

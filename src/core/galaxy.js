@@ -166,5 +166,6 @@ function maxBuyGalaxies(limit = Number.MAX_VALUE) {
   player.galaxies = newGalaxies - 1;
   galaxyReset();
   if (Enslaved.isRunning && player.galaxies > 1) EnslavedProgress.c10.giveProgress();
+  Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
   return true;
 }

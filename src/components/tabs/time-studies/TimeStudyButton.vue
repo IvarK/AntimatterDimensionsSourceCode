@@ -34,6 +34,7 @@ export default {
       isAvailableForPurchase: false,
       STCost: 0,
       eternityChallengeRunning: false,
+      isCompleteEC: false,
     };
   },
   computed: {
@@ -96,8 +97,7 @@ export default {
       if (this.isBought) {
         pathClasses += `${this.pathClass}--bought`;
       }
-      if (this.study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE &&
-        EternityChallenge(this.study.id).remainingCompletions === 0) {
+      if (this.isCompleteEC) {
         pathClasses += ` ${this.pathClass}--complete`;
       }
       return pathClasses;
@@ -140,6 +140,8 @@ export default {
         this.isAvailableForPurchase = study.canBeBought && study.isAffordable;
       }
       this.STCost = this.study.STCost;
+      this.isCompleteEC = this.study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE &&
+        EternityChallenge(this.study.id).remainingCompletions === 0;
     },
     handleClick() {
       if (this.specialClick === null || !this.study.isBought) this.study.purchase();

@@ -23,6 +23,7 @@ export default {
       hover: false,
       headerTextColored: true,
       creditsClosed: false,
+      showEPRate: false,
     };
   },
   computed: {
@@ -36,9 +37,6 @@ export default {
     },
     // Show EP/min below this threshold, color the EP number above it (1e40 is roughly when TS181 is attainable)
     rateThreshold: () => 1e40,
-    showEPRate() {
-      return this.peakEPRate.lte(this.rateThreshold);
-    },
     isDilation() {
       return this.type === EP_BUTTON_DISPLAY_TYPE.DILATION ||
         this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
@@ -156,12 +154,11 @@ export default {
       this.type = hasNewContent
         ? EP_BUTTON_DISPLAY_TYPE.NORMAL_EXPLORE_NEW_CONTENT
         : EP_BUTTON_DISPLAY_TYPE.NORMAL;
-      if (this.showEPRate) {
-        this.currentEPRate.copyFrom(gainedEP.dividedBy(
-          TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes));
-        this.peakEPRateVal.copyFrom(player.records.thisEternity.bestEPminVal);
-        this.peakEPRate.copyFrom(player.records.thisEternity.bestEPmin);
-      }
+      this.currentEPRate.copyFrom(gainedEP.dividedBy(
+        TimeSpan.fromMilliseconds(player.records.thisEternity.realTime).totalMinutes));
+      this.peakEPRateVal.copyFrom(player.records.thisEternity.bestEPminVal);
+      this.peakEPRate.copyFrom(player.records.thisEternity.bestEPmin);
+      this.showEPRate = this.peakEPRate.lte(this.rateThreshold);
       this.creditsClosed = GameEnd.creditsEverClosed;
     },
     updateChallengeWithRUPG() {

@@ -105,7 +105,10 @@ export const shortcuts = [
     name: "Toggle Time Study respec",
     keys: ["shift", "e"],
     type: "bindHotkey",
-    function: () => player.respec = !player.respec,
+    function: () => {
+      player.respec = !player.respec;
+      GameUI.notify.info(`Time Study respec is now ${player.respec ? "active" : "inactive"}`);
+    },
     visible: () => PlayerProgress.eternityUnlocked()
   }, {
     name: "Reality",
@@ -117,7 +120,10 @@ export const shortcuts = [
     name: "Toggle Glyph unequip",
     keys: ["shift", "y"],
     type: "bindHotkey",
-    function: () => player.reality.respec = !player.reality.respec,
+    function: () => {
+      player.reality.respec = !player.reality.respec;
+      GameUI.notify.info(`Glyph respec is now ${player.reality.respec ? "active" : "inactive"}`);
+    },
     visible: () => PlayerProgress.realityUnlocked()
   }, {
     name: "Start/Pause Automator",
@@ -393,12 +399,10 @@ function toggleBuySingles(buyer) {
 }
 
 function keyboardToggleAutobuyers() {
-
   if (Tab.automation.isUnlocked) {
     Autobuyers.toggle();
-    GameUI.notify.info(`Autobuyers ${(player.auto.autobuyersOn) ? "resumed" : "paused"}`);
+    GameUI.notify.info(`Autobuyers ${player.auto.autobuyersOn ? "resumed" : "paused"}`);
   }
-
 }
 
 function keyboardToggleContinuum() {

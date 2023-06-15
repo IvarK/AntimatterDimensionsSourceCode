@@ -10,12 +10,13 @@ export default {
     return {
       milestones: [],
       hasNew: false,
+      shouldGlow: false,
     };
   },
   computed: {
     classObject() {
       return {
-        "o-dark-matter-dimension-button--ascend": this.hasNew
+        "o-dark-matter-dimension-button--ascend": this.hasNew && this.shouldGlow
       };
     },
   },
@@ -23,6 +24,7 @@ export default {
     update() {
       this.milestones = SingularityMilestones.nextMilestoneGroup;
       this.hasNew = SingularityMilestones.unseenMilestones.length !== 0;
+      this.shouldGlow = player.celestials.laitela.milestoneGlow;
     },
   }
 };

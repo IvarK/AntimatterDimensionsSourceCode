@@ -13,7 +13,9 @@ window.format = function format(value, places = 0, placesUnder1000 = 0) {
 
 window.formatInt = function formatInt(value) {
   if (isEND()) return "END";
-  if (Notations.current.isPainful) {
+  // Suppress painful formatting for Standard because it's the most commonly used and arguably "least painful"
+  // of the painful notations. Prevents numbers like 5004 from appearing imprecisely as "5.00 K" for example
+  if (Notations.current.isPainful && Notations.current.name !== "Standard") {
     return format(value, 2);
   }
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));

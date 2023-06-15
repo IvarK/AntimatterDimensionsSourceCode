@@ -14,7 +14,8 @@ export default {
       resourceVal: 0,
       sortVal: 0,
       completedVal: 0,
-      orderVal: 0
+      orderVal: 0,
+      milestoneGlow: false,
     };
   },
   computed: {
@@ -49,6 +50,9 @@ export default {
     orderVal(newValue) {
       player.celestials.laitela.singularitySorting.sortOrder = newValue;
     },
+    milestoneGlow(newValue) {
+      player.celestials.laitela.milestoneGlow = newValue;
+    },
   },
   beforeDestroy() {
     player.celestials.laitela.lastCheckedMilestones = Currency.singularities.value;
@@ -61,6 +65,7 @@ export default {
       this.sortVal = settings.sortResource;
       this.completedVal = settings.showCompleted;
       this.orderVal = settings.sortOrder;
+      this.milestoneGlow = player.celestials.laitela.milestoneGlow;
     },
     cycleButton(id) {
       const settings = player.celestials.laitela.singularitySorting;
@@ -86,6 +91,15 @@ export default {
           throw new Error("Unrecognized Singularity milestone sorting button");
       }
     },
+    glowOptionClass() {
+      return {
+        "c-modal__confirmation-toggle__checkbox": true,
+        "c-modal__confirmation-toggle__checkbox--active": this.milestoneGlow
+      };
+    },
+    toggleGlow() {
+      this.milestoneGlow = !this.milestoneGlow;
+    }
   },
 };
 </script>
@@ -95,6 +109,20 @@ export default {
     <template #header>
       Singularity Milestones
     </template>
+    <div
+      class="c-modal__confirmation-toggle"
+      @click="toggleGlow"
+    >
+      <div :class="glowOptionClass()">
+        <span
+          v-if="milestoneGlow"
+          class="fas fa-check"
+        />
+      </div>
+      <span class="c-modal__confirmation-toggle__text">
+        Make button glow when new milestones have been reached
+      </span>
+    </div>
     <div class="l-singularity-milestone-modal-container-outer">
       <div class="l-singularity-milestone-modal-container-inner">
         <SingularityMilestoneComponent

@@ -386,6 +386,34 @@ export function getGameSpeedupForDisplay() {
   return speedFactor;
 }
 
+// Separated out for organization; however this is also used in more than one spot in gameLoop() as well. Returns
+// true if the rest of the game loop should be skipped
+export function realTimeMechanics(realDiff) {
+  // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
+  // This is in order to prevent players from using time inside of Ra's reality for amplification as well
+  Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
+  if (AlchemyResource.momentum.isUnlocked) {
+    player.celestials.ra.momentumTime += realDiff * Achievement(175).effectOrDefault(1);
+  }
+
+  DarkMatterDimensions.tick(realDiff);
+
+  // When storing real time, skip everything else having to do with production once stats are updated
+  if (Enslaved.isStoringRealTime) {
+    player.records.realTimePlayed += realDiff;
+    player.records.thisInfinity.realTime += realDiff;
+    player.records.thisEternity.realTime += realDiff;
+    player.records.thisReality.realTime += realDiff;
+    Enslaved.storeRealTime();
+    // Most autobuyers will only tick usefully on the very first tick, but this needs to be here in order to allow
+    // the autobuyers unaffected by time storage to tick as well
+    Autobuyers.tick();
+    GameUI.update();
+    return true;
+  }
+  return false;
+}
+
 // "passDiff" is in ms. It is only unspecified when it's being called normally and not due to simulating time, in which
 // case it uses the gap between now and the last time the function was called (capped at a day). This is on average
 // equal to the update rate, but may be much larger if the game was unfocused or the device went to sleep for some time.
@@ -414,34 +442,17 @@ export function gameLoop(passDiff, options = {}) {
   // hibernation - in those cases we stop the interval and simulate time instead. The gameLoop interval automatically
   // restarts itself at the end of the simulateTime call. This will not trigger for an unfocused game, as this seems to
   // result in a ~1 second tick rate for browsers.
+  // Note that we have to explicitly call all the real-time mechanics with the existing value of realDiff, because
+  // simply letting it run through simulateTime seems to result in it using zero
   if (passDiff === undefined && realDiff > 1e4) {
     GameIntervals.gameLoop.stop();
     simulateTime(realDiff / 1000, true);
-  }
-
-  // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
-  // This is in order to prevent players from using time inside of Ra's reality for amplification as well
-  Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
-  if (AlchemyResource.momentum.isUnlocked) {
-    player.celestials.ra.momentumTime += realDiff * Achievement(175).effectOrDefault(1);
-  }
-
-  // Lai'tela mechanics should bypass stored real time entirely
-  DarkMatterDimensions.tick(realDiff);
-
-  // When storing real time, skip everything else having to do with production once stats are updated
-  if (Enslaved.isStoringRealTime) {
-    player.records.realTimePlayed += realDiff;
-    player.records.thisInfinity.realTime += realDiff;
-    player.records.thisEternity.realTime += realDiff;
-    player.records.thisReality.realTime += realDiff;
-    Enslaved.storeRealTime();
-    // Most autobuyers will only tick usefully on the very first tick, but this needs to be here in order to allow
-    // the autobuyers unaffected by time storage to tick as well
-    Autobuyers.tick();
-    GameUI.update();
+    realTimeMechanics(realDiff);
     return;
   }
+
+  // Run all the functions which only depend on real time and not game time, skipping the rest of the loop if needed
+  if (realTimeMechanics(realDiff)) return;
 
   // Ra-Nameless auto-release stored time (once every 5 ticks)
   if (Enslaved.isAutoReleasing) {
@@ -881,7 +892,8 @@ function afterSimulation(seconds, playerBefore) {
 
 export function simulateTime(seconds, real, fast) {
   // The game is simulated at a base 50ms update rate, with a maximum tick count based on the values of real and fast
-  // - Calling with real === true will always simulate at full accuracy with no tick count reduction
+  // - Calling with real === true will always simulate at full accuracy with no tick count reduction unless it would
+  //   otherwise simulate with more ticks than offline progress would allow
   // - Calling with fast === true will only simulate it with a max of 50 ticks
   // - Otherwise, tick count will be limited to the offline tick count (which may be set externally during save import)
   // Tick count is never *increased*, and only ever decreased if needed.
@@ -891,7 +903,7 @@ export function simulateTime(seconds, real, fast) {
 
   // Limit the tick count (this also applies if the black hole is unlocked)
   const maxTicks = GameStorage.maxOfflineTicks(1000 * seconds, GameStorage.offlineTicks ?? player.options.offlineTicks);
-  if (ticks > maxTicks && !real && !fast) {
+  if (ticks > maxTicks && !fast) {
     ticks = maxTicks;
   } else if (ticks > 50 && !real && fast) {
     ticks = 50;

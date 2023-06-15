@@ -682,7 +682,8 @@ window.player = {
       },
       singularities: 0,
       singularityCapIncreases: 0,
-      lastCheckedMilestones: 0
+      lastCheckedMilestones: 0,
+      milestoneGlow: true,
     },
     pelle: {
       doomed: false,

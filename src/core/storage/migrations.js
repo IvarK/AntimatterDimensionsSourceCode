@@ -352,6 +352,15 @@ export const migrations = {
       player.options.glyphBG = player.options.lightGlyphs ? 1 : 2;
       delete player.options.lightGlyphs;
     },
+    21: player => {
+      // Added tracking for unlocked ECs even after they re-lock - makes old save data consistent
+      for (let ec = 1; ec <= 12; ec++) {
+        if (player.eternityChalls[`eterc${ec}`] > 0) player.reality.unlockedEC |= 1 << ec;
+      }
+
+      // Added max RM tracking for cel1 records - also for data consistency (though not 100% accurate)
+      player.reality.maxRM = new Decimal(player.reality.realityMachines);
+    },
   },
 
   normalizeTimespans(player) {

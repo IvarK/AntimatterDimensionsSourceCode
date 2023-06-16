@@ -99,6 +99,7 @@ export default {
     :is-running="isRunning"
     :is-completed="isCompleted"
     :can-be-unlocked="canBeUnlocked"
+    :completion-count="completions"
     @start="start"
   >
     <template #top>

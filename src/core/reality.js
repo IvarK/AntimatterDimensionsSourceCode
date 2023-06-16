@@ -319,7 +319,7 @@ function giveRealityRewards(realityProps) {
 
       // Encode iM values into the RM variable as e10000 * iM in order to only require one prop
       let machineRecord;
-      if (Currency.imaginaryMachines.value === 0) machineRecord = Currency.realityMachines.value;
+      if (Currency.imaginaryMachines.value === 0) machineRecord = player.reality.maxRM;
       else machineRecord = DC.E10000.times(Currency.imaginaryMachines.value);
       player.celestials.teresa.lastRepeatedMachines = player.celestials.teresa.lastRepeatedMachines
         .clampMin(machineRecord);
@@ -628,6 +628,7 @@ export function finishProcessReality(realityProps) {
   if (!PelleUpgrade.keepEternityUpgrades.canBeApplied) player.eternityUpgrades.clear();
   player.totalTickGained = 0;
   if (!PelleUpgrade.keepEternityChallenges.canBeApplied) player.eternityChalls = {};
+  player.reality.unlockedEC = 0;
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) player.challenge.eternity.unlocked = 0;

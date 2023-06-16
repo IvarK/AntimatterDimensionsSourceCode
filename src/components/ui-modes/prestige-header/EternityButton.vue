@@ -24,6 +24,7 @@ export default {
       headerTextColored: true,
       creditsClosed: false,
       showEPRate: false,
+      isDilation: false,
     };
   },
   computed: {
@@ -31,16 +32,12 @@ export default {
       return {
         "o-eternity-button": !this.isDilation,
         "o-eternity-button--dilation": this.isDilation,
-        "o-eternity-button--unavailable": !this.isDilation && !this.canEternity,
+        "o-eternity-button--unavailable": !this.canEternity,
         "o-pelle-disabled-pointer": this.creditsClosed,
       };
     },
     // Show EP/min below this threshold, color the EP number above it (1e40 is roughly when TS181 is attainable)
     rateThreshold: () => 1e40,
-    isDilation() {
-      return this.type === EP_BUTTON_DISPLAY_TYPE.DILATION ||
-        this.type === EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT;
-    },
     amountStyle() {
       if (!this.headerTextColored || this.currentEP.lt(this.rateThreshold)) return {
         "transition-duration": "0s"
@@ -111,6 +108,7 @@ export default {
     update() {
       this.isVisible = Player.canEternity ||
         EternityMilestone.autoUnlockID.isReached || InfinityDimension(8).isUnlocked;
+      this.isDilation = player.dilation.active;
       if (!this.isVisible) return;
       this.canEternity = Player.canEternity;
       this.eternityGoal.copyFrom(Player.eternityGoal);
@@ -142,7 +140,7 @@ export default {
       const hasNewContent = !PlayerProgress.realityUnlocked() &&
         Currency.eternityPoints.exponent >= 4000 &&
         !TimeStudy.reality.isBought;
-      if (player.dilation.active) {
+      if (this.isDilation) {
         this.type = hasNewContent
           ? EP_BUTTON_DISPLAY_TYPE.DILATION_EXPLORE_NEW_CONTENT
           : EP_BUTTON_DISPLAY_TYPE.DILATION;

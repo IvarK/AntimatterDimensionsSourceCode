@@ -152,6 +152,9 @@ export default {
     },
     toggleFlipped() {
       player.celestials.v.wantsFlipped = !this.wantsFlipped;
+    },
+    createCursedGlyph() {
+      Glyphs.giveCursedGlyph();
     }
   }
 };
@@ -192,8 +195,14 @@ export default {
           <span v-else>Show</span>
           Hard V
         </PrimaryButton>
+        <PrimaryButton
+          class="o-primary-btn--subtab-option l-cursed-glyph-creation"
+          @click="createCursedGlyph"
+        >
+          Create a Cursed Glyph
+        </PrimaryButton>
         <br>
-        Cursed Glyphs can be created in the Effarig tab.
+        Cursed Glyphs can be created here or in the Effarig tab.
         <br>
         Cursed Glyphs count as {{ formatInt(-3) }} Glyphs for the purposes of all requirements related to Glyph count.
         <br>
@@ -337,5 +346,9 @@ export default {
 
 .l-v-goal-reduction-spacer {
   height: 0.8rem;
+}
+
+.l-cursed-glyph-creation {
+  background: var(--color-effarig--base);
 }
 </style>

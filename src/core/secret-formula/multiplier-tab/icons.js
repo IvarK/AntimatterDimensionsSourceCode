@@ -134,7 +134,7 @@ export const MultiplierTabIcons = {
     textColor: "black",
   },
   BREAK_INFINITY: {
-    symbol: `<i class="fab fa-skyatlas" />`,
+    symbol: `<b>∝</b>`,
     color: "var(--color-infinity)",
     textColor: "black",
   },

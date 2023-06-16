@@ -62,6 +62,14 @@ export class EternityChallengeState extends GameMechanicState {
     return this.isRunning;
   }
 
+  get hasUnlocked() {
+    return (player.reality.unlockedEC & (1 << this.id)) !== 0;
+  }
+
+  set hasUnlocked(value) {
+    if (value) player.reality.unlockedEC |= (1 << this.id);
+  }
+
   get completions() {
     const completions = player.eternityChalls[this.fullId];
     return completions === undefined ? 0 : completions;

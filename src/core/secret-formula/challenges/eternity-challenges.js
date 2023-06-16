@@ -57,7 +57,7 @@ export const eternityChallenges = [
       : `in ${quantifyInt("Infinity", restriction)} or less`),
     failedRestriction: "(Too many Infinities for more)",
     reward: {
-      description: "Infinity Dimension multiplier based on unspent Infinity Points",
+      description: "Infinity Dimension multiplier based on unspent IP",
       effect: completions => Currency.infinityPoints.value.pow(0.003 + completions * 0.002),
       cap: DC.E200,
       formatEffect: value => formatX(value, 2, 1)
@@ -73,7 +73,7 @@ export const eternityChallenges = [
     reward: {
       description: "Distant Galaxy cost scaling starts later",
       effect: completions => completions * 5,
-      formatEffect: value => `${quantifyInt("Antimatter Galaxy", value)} later`
+      formatEffect: value => `${formatInt(value)} AG later`
     }
   },
   {

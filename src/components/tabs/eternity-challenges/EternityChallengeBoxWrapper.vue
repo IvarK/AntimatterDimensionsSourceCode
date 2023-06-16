@@ -27,6 +27,10 @@ export default {
       type: Boolean,
       required: true
     },
+    completionCount: {
+      type: Number,
+      required: true
+    },
     overrideLabel: {
       type: String,
       required: false,
@@ -58,6 +62,16 @@ export default {
         "o-challenge-btn--unenterable": !challengeClickable,
       };
     },
+    // Width and height attributes are copied from o-challenge-btn
+    completionOverlay() {
+      return {
+        position: "absolute",
+        width: `${15 * Math.clampMax(this.completionCount / 5, 1)}rem`,
+        height: "3rem",
+        background: "var(--color-good)",
+        opacity: this.completionCount >= 5 ? 0 : 0.3,
+      };
+    },
     buttonText() {
       if (this.overrideLabel.length) return this.overrideLabel;
       if (this.isRunning) return "Running";
@@ -83,12 +97,15 @@ export default {
     </HintText>
     <slot name="top" />
     <div class="l-challenge-box__fill" />
-    <button
-      :class="buttonClassObject"
-      @click="$emit('start')"
-    >
-      {{ buttonText }}
-    </button>
+    <div>
+      <div :style="completionOverlay" />
+      <button
+        :class="buttonClassObject"
+        @click="$emit('start')"
+      >
+        {{ buttonText }}
+      </button>
+    </div>
     <slot name="bottom" />
   </div>
 </template>

@@ -420,6 +420,7 @@ window.player = {
   partSimulatedReality: 0,
   reality: {
     realityMachines: DC.D0,
+    maxRM: DC.D0,
     imaginaryMachines: 0,
     iMCap: 0,
     glyphs: {
@@ -503,6 +504,7 @@ window.player = {
     applyFilterToPurge: false,
     moveGlyphsOnProtection: false,
     perkPoints: 0,
+    unlockedEC: 0,
     autoEC: true,
     lastAutoEC: 0,
     partEternitied: DC.D0,

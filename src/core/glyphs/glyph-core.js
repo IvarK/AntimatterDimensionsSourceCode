@@ -763,6 +763,20 @@ export const Glyphs = {
       hash *= singleGlyphHash;
     }
     return hash;
+  },
+  giveCursedGlyph() {
+    if (GameCache.glyphInventorySpace.value === 0) {
+      Modal.message.show("No available inventory space; Sacrifice some Glyphs to free up space.",
+        { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
+      return;
+    }
+    const cursedCount = this.allGlyphs.filter(g => g !== null && g.type === "cursed").length;
+    if (cursedCount >= 5) {
+      GameUI.notify.error(`You don't need more than ${format(5)} Cursed Glyphs!`);
+    } else {
+      this.addToInventory(GlyphGenerator.cursedGlyph());
+      GameUI.notify.error("Created a Cursed Glyph");
+    }
   }
 };
 

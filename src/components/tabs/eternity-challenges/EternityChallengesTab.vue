@@ -56,8 +56,7 @@ export default {
       this.hasECR = Perk.studyECRequirement.isBought;
     },
     isChallengeVisible(challenge) {
-      return challenge.completions > 0 ||
-        challenge.isUnlocked ||
+      return challenge.completions > 0 || challenge.isUnlocked || challenge.hasUnlocked ||
         (this.showAllChallenges && PlayerProgress.realityUnlocked());
     }
   }

@@ -399,6 +399,7 @@ Currency.realityMachines = new class extends DecimalCurrency {
     const newValue = Decimal.min(value, MachineHandler.hardcapRM);
     const addedThisReality = newValue.minus(player.reality.realityMachines);
     player.reality.realityMachines = newValue;
+    player.reality.maxRM = Decimal.max(player.reality.maxRM, newValue);
     if (player.records.bestReality.RM.lt(addedThisReality)) {
       player.records.bestReality.RM = addedThisReality;
       player.records.bestReality.RMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));

@@ -265,7 +265,7 @@ export const tabs = [
       {
         key: "break",
         name: "Break Infinity",
-        symbol: "<i class='fab fa-skyatlas'></i>",
+        symbol: "∝",
         component: "BreakInfinityTab",
         condition: () =>
           PlayerProgress.realityUnlocked() ||

@@ -84,7 +84,11 @@ export default {
         for (let i = 0; i < LEN; i++) {
           SNOW.push(String.fromCharCode(START_HEX + i));
         }
-        return SNOW[Math.floor(Math.random() * SNOW.length)];
+        // \uE024 is :blobdead: and gets transitioned into as the game is ending, reaching
+        // 100% at the same time the final achievement and speedrun milestone is given
+        return Math.random() < GameEnd.endState ** 2
+          ? "\uE024"
+          : SNOW[Math.floor(Math.random() * SNOW.length)];
       }
     },
   }

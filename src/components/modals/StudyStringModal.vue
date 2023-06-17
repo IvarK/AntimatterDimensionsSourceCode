@@ -163,8 +163,8 @@ export default {
       } else if (this.isImporting) {
         if (this.respecAndLoad && Player.canEternity) {
           player.respec = true;
-          const studies = new TimeStudyTree(this.truncatedInput).purchasedStudies;
-          animateAndEternity(() => TimeStudyTree.commitToGameState(studies, false));
+          const tree = new TimeStudyTree(this.truncatedInput);
+          animateAndEternity(() => TimeStudyTree.commitToGameState(tree.purchasedStudies, false, tree.startEC));
           return;
         }
         this.importTree();
@@ -182,7 +182,7 @@ export default {
       this.emitClose();
       // We need to use a combined tree for committing to the game state, or else it won't buy studies in the imported
       // tree are only reachable if the current tree is already bought
-      TimeStudyTree.commitToGameState(this.combinedTreeObject.purchasedStudies, false);
+      TimeStudyTree.commitToGameState(this.combinedTreeObject.purchasedStudies, false, this.combinedTreeObject.startEC);
     },
     savePreset() {
       if (this.inputIsValid) {

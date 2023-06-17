@@ -640,14 +640,26 @@ export const AutomatorCommands = [
           }
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         }
-        if (!studies.ec || TimeStudy.eternityChallenge(studies.ec).isBought) {
+        const hasEC = TimeStudy.eternityChallenge(studies.ec).isBought;
+        if (!studies.ec || (hasEC && !studies.startEC)) {
           AutomatorData.logCommandEvent(`Purchased all specified Time Studies`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         const unlockedEC = TimeStudy.eternityChallenge(studies.ec).purchase(true);
-        if (unlockedEC) {
-          AutomatorData.logCommandEvent(`Purchased all specified Time Studies and unlocked Eternity Challenge
-            ${studies.ec}`, ctx.startLine);
+        if (hasEC || unlockedEC) {
+          if (studies.startEC) {
+            EternityChallenge(studies.ec).start(true);
+            if (EternityChallenge(studies.ec).isRunning) {
+              AutomatorData.logCommandEvent(`Purchased all specified Time Studies, then unlocked and started running
+                Eternity Challenge ${studies.ec}`, ctx.startLine);
+            } else {
+              AutomatorData.logCommandEvent(`Purchased all specified Time Studies and unlocked Eternity Challenge
+                ${studies.ec}, but failed to start it`, ctx.startLine);
+            }
+          } else {
+            AutomatorData.logCommandEvent(`Purchased all specified Time Studies and unlocked Eternity Challenge
+              ${studies.ec}`, ctx.startLine);
+          }
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
@@ -726,7 +738,7 @@ export const AutomatorCommands = [
       return () => {
         const imported = new TimeStudyTree(player.timestudy.presets[presetIndex - 1].studies);
         const beforeCount = GameCache.currentStudyTree.value.purchasedStudies.length;
-        TimeStudyTree.commitToGameState(imported.purchasedStudies);
+        TimeStudyTree.commitToGameState(imported.purchasedStudies, true, imported.startEC);
         const afterCount = GameCache.currentStudyTree.value.purchasedStudies.length;
         // Check if there are still any unbought studies from the preset after attempting to commit it all;
         // if there are then we keep trying on this line until there aren't, unless we are given nowait

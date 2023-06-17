@@ -157,7 +157,7 @@ export default {
   display: flex;
   overflow-y: auto;
   width: 20rem;
-  height: 55rem;
+  height: 44.5rem;
   position: relative;
   justify-content: center;
   border: var(--color-text) solid var(--var-border-width, 0.3rem);

@@ -22,6 +22,7 @@
  *  accessible or purchasable in the given order
  * @member {TimeStudyState[]} purchasedStudies  Array of studies which were actually purchased, using the given amount
  *  of available theorems
+ * @member {Boolean} startEC    Whether or not to start an EC within purchasedStudies when committing to game state
  */
 export class TimeStudyTree {
   // The first parameter will either be an import string or an array of studies (possibly with an EC at the end)
@@ -30,6 +31,7 @@ export class TimeStudyTree {
     this.invalidStudies = [];
     this.purchasedStudies = [];
     this.selectedStudies = [];
+    this.startEC = false;
     switch (typeof studies) {
       case "string":
         // Input parameter is an unparsed study import string
@@ -59,7 +61,7 @@ export class TimeStudyTree {
     }
     let test = input.replaceAll(/ +/gu, "");
     TimeStudyTree.sets.forEach((_, x) => test = test.replaceAll(new RegExp(`${x},?`, "gu"), ""));
-    return /^,?((\d{2,3}(-\d{2,3})?)\b,?)*(\|\d{0,2})?$/iu.test(test);
+    return /^,?((\d{2,3}(-\d{2,3})?)\b,?)*(\|\d{1,2}!?)?$/iu.test(test);
   }
 
   // Getter for all the studies in the current game state
@@ -74,10 +76,11 @@ export class TimeStudyTree {
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
   // This method attempts to take the parameter array and purchase all the studies specified, using the current game
   // state to determine if they are affordable. Input array may be either an id array or a TimeStudyState array
-  static commitToGameState(studyArray, auto = true) {
+  static commitToGameState(studyArray, auto = true, startEC = false) {
     for (const item of studyArray) {
       const study = typeof item === "number" ? TimeStudy(item) : item;
       if (study && !study.isBought) study.purchase(auto);
+      if (startEC && study instanceof ECTimeStudyState) EternityChallenge(study.id).start(auto);
     }
     GameCache.currentStudyTree.invalidate();
   }
@@ -143,6 +146,7 @@ export class TimeStudyTree {
 
     // If the string has an EC indicated in it, append that to the end of the study array
     const ecString = input.split("|")[1];
+    this.startEC = input.endsWith("!");
     if (!ecString) {
       // Study strings without an ending "|##" are still valid, but will result in ecString being undefined
       return output;

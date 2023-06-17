@@ -208,7 +208,8 @@ class Validator extends BaseVisitor {
         tree = new TimeStudyTree(value);
         varInfo.value = {
           normal: tree.selectedStudies.map(ts => ts.id),
-          ec: tree.ec
+          ec: tree.ec,
+          startEC: tree.startEC,
         };
         break;
       case AUTOMATOR_VAR_TYPES.DURATION:

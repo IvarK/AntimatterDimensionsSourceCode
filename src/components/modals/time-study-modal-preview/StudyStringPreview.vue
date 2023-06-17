@@ -156,13 +156,14 @@ export default {
 .l-study-string-preview__tree--wrapper {
   display: flex;
   overflow-y: auto;
-  width: 30rem;
-  height: 15rem;
+  width: 20rem;
+  height: 55rem;
   position: relative;
   justify-content: center;
   border: var(--color-text) solid var(--var-border-width, 0.3rem);
   border-radius: var(--var-border-radius, 0.3rem);
   margin: auto;
+  padding: 0.5rem;
 }
 
 .c-unavailable-warning {

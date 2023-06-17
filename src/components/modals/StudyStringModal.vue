@@ -226,50 +226,54 @@ export default {
       @keyup.enter="confirm"
       @keyup.esc="emitClose"
     >
-    <div class="l-modal-import-tree__tree-info">
-      <div v-if="inputIsSecret">
-        ???
+    <div class="c-two-column">
+      <div class="c-study-info l-modal-import-tree__tree-info">
+        <div v-if="inputIsSecret">
+          ???
+        </div>
+        <template v-else-if="inputIsValidTree">
+          <div
+            v-if="invalidMessage"
+            class="l-modal-import-tree__tree-info-line"
+            v-html="invalidMessage"
+          />
+          <StudyStringLine
+            v-if="isImporting"
+            :tree="combinedTree"
+            :into-empty="false"
+          />
+          <StudyStringLine
+            :tree="importedTree"
+            :into-empty="true"
+          />
+          <StudyTreeInfo
+            v-if="deleting && importedTree.hasInfo"
+            header-text="Study Preset contains:"
+            :tree-status="importedTree"
+          />
+          <StudyTreeInfo
+            v-if="!deleting && !isImporting && importedTree.hasInfo"
+            header-text="Status after loading with <b>no studies</b>:"
+            :tree-status="importedTree"
+          />
+          <StudyTreeInfo
+            v-if="!deleting && combinedTree.hasInfo"
+            header-text="Status after loading with <b>current tree</b>:"
+            :tree-status="combinedTree"
+          />
+        </template>
+        <div v-if="!deleting && !inputIsValidTree && hasInput">
+          Not a valid tree
+        </div>
       </div>
-      <template v-else-if="inputIsValidTree">
-        <div
-          v-if="invalidMessage"
-          class="l-modal-import-tree__tree-info-line"
-          v-html="invalidMessage"
+      <div class="c-study-preview">
+        <StudyStringPreview
+          v-if="!deleting && inputIsValidTree"
+          :show-preview="inputIsValidTree"
+          :new-studies="!isImporting || (canEternity && respecAndLoad) ? importedTree.newStudiesArray
+            : combinedTree.newStudiesArray"
+          :disregard-current-studies="!isImporting || (canEternity && respecAndLoad)"
         />
-        <StudyStringLine
-          v-if="isImporting"
-          :tree="combinedTree"
-          :into-empty="false"
-        />
-        <StudyStringLine
-          :tree="importedTree"
-          :into-empty="true"
-        />
-        <StudyTreeInfo
-          v-if="deleting && importedTree.hasInfo"
-          header-text="Study Preset contains:"
-          :tree-status="importedTree"
-        />
-        <StudyTreeInfo
-          v-if="!deleting && !isImporting && importedTree.hasInfo"
-          header-text="Status after loading with <b>no studies</b>:"
-          :tree-status="importedTree"
-        />
-        <StudyTreeInfo
-          v-if="!deleting && combinedTree.hasInfo"
-          header-text="Status after loading with <b>current tree</b>:"
-          :tree-status="combinedTree"
-        />
-      </template>
-      <StudyStringPreview
-        v-if="!deleting && inputIsValidTree"
-        :show-preview="inputIsValidTree"
-        :new-studies="!isImporting || (canEternity && respecAndLoad) ? importedTree.newStudiesArray
-          : combinedTree.newStudiesArray"
-        :disregard-current-studies="!isImporting || (canEternity && respecAndLoad)"
-      />
-      <div v-else-if="!deleting && hasInput">
-        Not a valid tree
       </div>
     </div>
     <div v-if="!isImporting && inputIsValidTree">
@@ -318,6 +322,21 @@ export default {
 </template>
 
 <style scoped>
+.c-two-column {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.c-study-info {
+  width: 30rem;
+  padding: 0 2rem;
+}
+
+.c-study-preview {
+  height: 100%;
+}
+
 .l-delete-input {
   color: var(--color-text);
   background-color: var(--color-disabled);

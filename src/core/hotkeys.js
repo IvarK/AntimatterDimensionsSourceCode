@@ -111,6 +111,12 @@ export const shortcuts = [
     },
     visible: () => PlayerProgress.eternityUnlocked()
   }, {
+    name: "Enter/Exit Dilation",
+    keys: ["l"],
+    type: "bindRepeatableHotkey",
+    function: () => startDilatedEternityRequest(),
+    visible: () => PlayerProgress.realityUnlocked() || PlayerProgress.dilationUnlocked()
+  }, {
     name: "Reality",
     keys: ["y"],
     type: "bindRepeatableHotkey",
@@ -166,6 +172,16 @@ export const shortcuts = [
     keys: ["z"],
     type: "bindRepeatableHotkey",
     function: () => armageddonRequest(),
+    visible: () => Pelle.isDoomed
+  }, {
+    name: "Toggle Glyph unequip (Pelle)",
+    keys: ["shift", "z"],
+    type: "bindHotkey",
+    function: () => {
+      if (!Pelle.isDoomed) return;
+      player.reality.respec = !player.reality.respec;
+      GameUI.notify.info(`Glyph respec is now ${player.reality.respec ? "active" : "inactive"}`);
+    },
     visible: () => Pelle.isDoomed
   }, {
     name: "Save game",

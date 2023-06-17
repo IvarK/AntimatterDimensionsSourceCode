@@ -120,7 +120,7 @@ export function simulatedRealityCount(advancePartSimCounters) {
 export function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   if (GameEnd.creditsEverClosed) return;
-  if (player.options.confirmations.glyphSelection) {
+  if (player.options.confirmations.glyphSelection || ui.view.shiftDown) {
     Modal.reality.show();
     return;
   }

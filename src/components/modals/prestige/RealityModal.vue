@@ -48,11 +48,12 @@ export default {
           purchasing the START Perk.</b>`;
       }
 
-      const sacText = this.canSacrifice ? "or Sacrifice " : "";
-      const choiceResult = this.hasFilter
-        ? "select one based on your filter settings"
-        : "randomly select one from your available choices";
-      return `Clicking Confirm ${sacText}without choosing a Glyph will ${choiceResult}.`;
+      if (this.hasFilter) {
+        return `If you do not choose a Glyph, one will be automatically selected using your Glyph filter.`;
+      }
+      return this.selectedGlyph === undefined
+        ? `<b style="color: var(--color-infinity)">You must select a Glyph in order to continue.</b>`
+        : null;
     },
     gained() {
       const gainedResources = [];
@@ -74,6 +75,9 @@ export default {
     confirmationToDisable() {
       return ConfirmationTypes.glyphSelection.isUnlocked() ? "glyphSelection" : undefined;
     },
+    canConfirm() {
+      return this.selectedGlyph !== undefined || this.hasFilter;
+    }
   },
   created() {
     this.getGlyphs();
@@ -120,6 +124,7 @@ export default {
       this.selectedGlyph = index;
     },
     confirmModal(sacrifice) {
+      if (!this.canConfirm) return;
       if (sacrifice) {
         // Sac isn't passed through confirm so we have to close it manually
         this.emitClose();
@@ -133,6 +138,7 @@ export default {
 <template>
   <ModalWrapperChoice
     :option="confirmationToDisable"
+    :show-confirm="canConfirm"
     @confirm="confirmModal(false)"
   >
     <template #header>
@@ -194,8 +200,12 @@ export default {
         {{ canSacrifice ? "Sacrificed" : "deleted" }}!
       </span>
     </div>
+    <div v-if="confirmationToDisable">
+      <br>
+      You can force this modal to appear (even if disabled) by Shift-clicking the Reality button.
+    </div>
     <template
-      v-if="canSacrifice"
+      v-if="canSacrifice && canConfirm"
       #extra-buttons
     >
       <PrimaryButton

@@ -71,6 +71,14 @@ export class EternityAutobuyerState extends AutobuyerState {
     }
   }
 
+  get highestPrevPrestige() {
+    return player.records.thisReality.maxEP;
+  }
+
+  get timeToNextTick() {
+    return Math.clampMin(this.time - Time.thisEternityRealTime.totalSeconds, 0);
+  }
+
   get willEternity() {
     if (EternityChallenge.isRunning) {
       // We Eternity asap if we're in an Eternity Challenge and can't reach more completions.
@@ -86,7 +94,7 @@ export class EternityAutobuyerState extends AutobuyerState {
         return Time.thisEternityRealTime.totalSeconds > this.time;
       case AUTO_ETERNITY_MODE.X_HIGHEST:
       default:
-        return gainedEternityPoints().gte(player.records.thisReality.maxEP.times(this.xHighest));
+        return gainedEternityPoints().gte(this.highestPrevPrestige.times(this.xHighest));
     }
   }
 

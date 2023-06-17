@@ -77,6 +77,9 @@ export default {
     isPreRealityAchievement() {
       return this.realityUnlocked && this.achievement.row <= 13;
     },
+    hasReward() {
+      return this.config.reward !== undefined && !this.isObscured;
+    },
     // The garble templates themselves can be static, and shouldn't be recreated every render tick
     garbledNameTemplate() {
       return this.makeGarbledTemplate(this.config.name);
@@ -214,6 +217,12 @@ export default {
     >
       <i :class="indicatorIconClass" />
     </div>
+    <div
+      v-if="hasReward"
+      class="o-achievement__reward"
+    >
+      <i class="fas fa-star" />
+    </div>
   </div>
 </template>
 
@@ -221,5 +230,82 @@ export default {
 .o-achievement-time {
   font-weight: bold;
   color: var(--color-accent);
+}
+
+.o-achievement--disabled {
+  background-color: var(--color-pelle--base);
+  border-color: var(--color-bad);
+}
+
+.o-achievement--locked {
+  background-color: #a3a3a3;
+  border-color: var(--color-bad);
+}
+
+.t-dark-metro .o-achievement--locked {
+  background-color: #9e9e9e;
+}
+
+.t-metro .o-achievement--locked,
+.t-inverted-metro .o-achievement--locked,
+.t-s8 .o-achievement--locked {
+  background-color: #9e9e9e;
+  border-color: var(--color-bad);
+}
+
+.t-s2 .o-achievement--locked {
+  background-color: rgba(0, 0, 0, 0%);
+}
+
+.t-s5 .o-achievement--locked {
+  background-color: #222222;
+  border-color: #000000;
+}
+
+.t-s7 .o-achievement--locked {
+  background-color: #555555;
+  border-color: #111111;
+}
+
+.o-achievement--waiting {
+  background-color: #d1d161;
+  border-color: #acac39;
+}
+
+.t-dark-metro .o-achievement--waiting {
+  background-color: #b9b946;
+  border-color: #7d7d36;
+}
+
+.t-metro .o-achievement--waiting,
+.t-inverted-metro .o-achievement--waiting,
+.t-s8 .o-achievement--waiting {
+  background-color: #ffee58;
+  border-color: #757575;
+}
+
+.o-achievement--blink {
+  animation: a-achievement--blink 2s step-start 0s infinite;
+}
+
+@keyframes a-achievement--blink {
+  50% {
+    visibility: hidden;
+  }
+}
+
+.o-achievement__reward {
+  width: 1.5rem;
+  height: 1.5rem;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: 1rem;
+  color: black;
+  background: var(--color-accent);
+  border-top: var(--var-border-width, 0.2rem) solid var(--color-accent);
+  border-right: var(--var-border-width, 0.2rem) solid var(--color-accent);
+  border-top-right-radius: var(--var-border-radius, 0.8rem);
+  border-bottom-left-radius: var(--var-border-radius, 0.6rem);
 }
 </style>

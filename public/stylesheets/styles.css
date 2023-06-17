@@ -3000,40 +3000,15 @@ br {
   background-image: url("../images/secret achievements.png");
 }
 
-.o-achievement--disabled {
-  background-color: var(--color-pelle--base);
-  border-color: var(--color-bad);
-}
-
-.o-achievement--locked {
-  background-color: #a3a3a3;
-  border-color: var(--color-bad);
-}
-
 .o-achievement--unlocked {
   background-color: #5ac467;
   border-color: #127a20;
-}
-
-.o-achievement--waiting {
-  background-color: #d1d161;
-  border-color: #acac39;
 }
 
 .o-achievement--hidden {
   background-color: #555555;
   background-image: url("../images/achhidden.png");
   border-color: black;
-}
-
-.o-achievement--blink {
-  animation: a-achievement--blink 2s step-start 0s infinite;
-}
-
-@keyframes a-achievement--blink {
-  50% {
-    visibility: hidden;
-  }
 }
 
 .o-achievement:hover .o-achievement__tooltip {
@@ -3201,14 +3176,6 @@ br {
   border-color: #388e3c;
 }
 
-.t-dark-metro .o-achievement--locked {
-  background-color: #9e9e9e;
-}
-
-.t-dark-metro .o-achievement--waiting {
-  background-color: #b9b946;
-  border-color: #7d7d36;
-}
 
 /* #endregion t-dark-metro */
 
@@ -3219,20 +3186,6 @@ br {
 .t-s8 .o-achievement--unlocked {
   background-color: #66bb6a;
   border-color: #43a047;
-}
-
-.t-metro .o-achievement--locked,
-.t-inverted-metro .o-achievement--locked,
-.t-s8 .o-achievement--locked {
-  background-color: #9e9e9e;
-  border-color: var(--color-bad);
-}
-
-.t-metro .o-achievement--waiting,
-.t-inverted-metro .o-achievement--waiting,
-.t-s8 .o-achievement--waiting {
-  background-color: #ffee58;
-  border-color: #757575;
 }
 
 /* #endregion t-metro t-dark-metro t-s8 */
@@ -3246,23 +3199,10 @@ br {
 
 /* #endregion t-s1 */
 
-/* #region t-s2 */
-
-.t-s2 .o-achievement--locked {
-  background-color: rgba(0, 0, 0, 0%);
-}
-
-/* #endregion t-s2 */
-
 /* #region t-s5 */
 
 .t-s5 .o-achievement--unlocked {
   border-color: #bbbbbb;
-}
-
-.t-s5 .o-achievement--locked {
-  background-color: #222222;
-  border-color: #000000;
 }
 
 /* #endregion t-s5 */
@@ -3281,11 +3221,6 @@ br {
 .t-s7 .o-achievement--unlocked {
   background-color: #bbbbbb;
   border-color: #666666;
-}
-
-.t-s7 .o-achievement--locked {
-  background-color: #555555;
-  border-color: #111111;
 }
 
 /* #endregion t-s7 */

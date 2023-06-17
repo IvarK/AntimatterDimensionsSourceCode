@@ -59,7 +59,7 @@ export default {
         const combinedTree = new TimeStudyTree();
         combinedTree.attemptBuyArray(TimeStudyTree.currentStudies, false);
         combinedTree.attemptBuyArray(combinedTree.parseStudyImport(this.preset.studies), true);
-        TimeStudyTree.commitToGameState(combinedTree.purchasedStudies, false);
+        TimeStudyTree.commitToGameState(combinedTree.purchasedStudies, false, combinedTree.startEC);
 
         const presetName = this.name ? `Study preset "${this.name}"` : "Study preset";
         GameUI.notify.eternity(`${presetName} loaded from slot ${this.saveslot}`);
@@ -72,7 +72,7 @@ export default {
         player.respec = true;
         const newTree = new TimeStudyTree();
         newTree.attemptBuyArray(newTree.parseStudyImport(this.preset.studies));
-        animateAndEternity(() => TimeStudyTree.commitToGameState(newTree.purchasedStudies, false));
+        animateAndEternity(() => TimeStudyTree.commitToGameState(newTree.purchasedStudies, false, newTree.startEC));
       }
     },
     deletePreset() {

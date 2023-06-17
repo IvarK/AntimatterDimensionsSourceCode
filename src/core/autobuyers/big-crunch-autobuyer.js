@@ -99,6 +99,14 @@ export class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
     return PRESTIGE_EVENT.ETERNITY;
   }
 
+  get highestPrevPrestige() {
+    return player.records.thisEternity.maxIP;
+  }
+
+  get timeToNextTick() {
+    return Math.clampMin(this.time - Time.thisInfinityRealTime.totalSeconds, 0);
+  }
+
   get willInfinity() {
     if (!player.break || Player.isInAntimatterChallenge) return true;
 
@@ -109,7 +117,7 @@ export class BigCrunchAutobuyerState extends UpgradeableAutobuyerState {
         return Time.thisInfinityRealTime.totalSeconds > this.time;
       case AUTO_CRUNCH_MODE.X_HIGHEST:
       default:
-        return gainedInfinityPoints().gte(player.records.thisEternity.maxIP.times(this.xHighest));
+        return gainedInfinityPoints().gte(this.highestPrevPrestige.times(this.xHighest));
     }
   }
 

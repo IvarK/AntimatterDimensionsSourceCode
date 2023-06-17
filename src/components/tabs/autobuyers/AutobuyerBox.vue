@@ -37,7 +37,10 @@ export default {
       isUnlockable: false,
       antimatterCost: new Decimal(),
       isBought: false,
-      antimatter: new Decimal()
+      antimatter: new Decimal(),
+      currMode: 0,
+      nextValue: 0,
+      nextTime: 0,
     };
   },
   computed: {
@@ -82,6 +85,22 @@ export default {
       return PlayerProgress.eternityUnlocked()
         ? "this Eternity"
         : "";
+    },
+    isShowingStateInfo() {
+      // Prestiging for a static amount is zero in both AUTO_CRUNCH_MODE and AUTO_ETERNITY_MODE
+      return this.isActive && ["Infinity", "Eternity"].includes(this.autobuyer.name) && this.currMode !== 0;
+    },
+    extraInfo() {
+      // This logic takes advantage of AUTO_CRUNCH_MODE and AUTO_ETERNITY_MODE being identical
+      switch (this.currMode) {
+        case AUTO_ETERNITY_MODE.TIME:
+          return this.nextTime > 0
+            ? `Will trigger in ${TimeSpan.fromSeconds(this.nextTime).toStringShort()}`
+            : "Will trigger ASAP";
+        case AUTO_ETERNITY_MODE.X_HIGHEST:
+        default:
+          return `Will trigger at ${format(this.nextValue, 2)} ${this.autobuyer.name === "Infinity" ? "IP" : "EP"}`;
+      }
     }
   },
   watch: {
@@ -101,6 +120,12 @@ export default {
       this.antimatterCost = autobuyer.antimatterCost;
       this.isBought = autobuyer.isBought;
       this.antimatter.copyFrom(player.records.thisEternity.maxAM);
+
+      this.currMode = autobuyer.mode;
+      if (this.isShowingStateInfo) {
+        this.nextValue = new Decimal(autobuyer.highestPrevPrestige).times(autobuyer.xHighest);
+        this.nextTime = autobuyer.timeToNextTick;
+      }
     },
     toggle() {
       this.isActive = !this.isActive;
@@ -125,6 +150,9 @@ export default {
         v-if="showInterval"
         :autobuyer="autobuyer"
       />
+      <div v-if="isShowingStateInfo">
+        {{ extraInfo }}
+      </div>
     </div>
     <div class="c-autobuyer-box-row__intervalSlot">
       <slot name="intervalSlot" />

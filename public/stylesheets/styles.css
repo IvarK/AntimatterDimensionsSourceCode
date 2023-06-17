@@ -5675,46 +5675,6 @@ properly on certain themes. */
 }
 
 /* #region c-modal-hotkeys */
-
-.c-modal-hotkeys {
-  font-size: 1.25rem;
-}
-
-.l-modal-hotkeys {
-  display: flex;
-  flex-direction: row;
-}
-
-.l-modal-hotkeys__column {
-  display: flex;
-  flex-direction: column;
-  width: 25rem;
-}
-
-.l-modal-hotkeys__column--right {
-  margin-left: 1rem;
-}
-
-.l-modal-hotkeys-row {
-  display: flex;
-  flex-direction: row;
-  line-height: 1.6rem;
-  padding-bottom: 0.3rem;
-}
-
-.c-modal-hotkeys-row__name {
-  text-align: left;
-}
-
-.l-modal-hotkeys-row__name {
-  flex: 1 1 auto;
-}
-
-.c-modal-hotkeys__shift-description {
-  text-align: left;
-  font-size: 1rem;
-}
-
 kbd {
   display: inline-block;
   vertical-align: middle;

@@ -69,9 +69,9 @@ export default {
     format(x) {
       switch (x) {
         case "mod":
-          return "ctrl/⌘";
+          return "CTRL/⌘";
         default:
-          return x;
+          return x.toUpperCase();
       }
     }
   },
@@ -87,7 +87,7 @@ export default {
       <div class="l-modal-hotkeys__column">
         <div class="l-modal-hotkeys-row">
           <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Buy 1 Dimension</span>
-          <kbd>shift</kbd><kbd>1</kbd>-<kbd>shift</kbd><kbd>8</kbd>
+          <kbd>SHIFT</kbd><kbd>1</kbd>-<kbd>SHIFT</kbd><kbd>8</kbd>
         </div>
         <div class="l-modal-hotkeys-row">
           <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Buy 10 Dimensions</span>
@@ -114,7 +114,7 @@ export default {
       <div class="l-modal-hotkeys__column l-modal-hotkeys__column--right">
         <div class="l-modal-hotkeys-row">
           <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Modifier Key</span>
-          <kbd>shift</kbd>
+          <kbd>SHIFT</kbd>
         </div>
         <span class="c-modal-hotkeys__shift-description">
           Shift is a modifier key that shows additional information on certain things
@@ -125,7 +125,7 @@ export default {
         <br>
         <div class="l-modal-hotkeys-row">
           <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Autobuyer Controls</span>
-          <kbd>alt</kbd>
+          <kbd>ALT</kbd>
         </div>
         <span class="c-modal-hotkeys__shift-description">
           Alt is a modifier key that, when pressed in conjunction with any key that has a corresponding autobuyer,
@@ -138,7 +138,7 @@ export default {
         <div class="l-modal-hotkeys-row">
           <span class="c-modal-hotkeys-row__name l-modal-hotkeys-row__name">Tab Movement</span>
           <div>
-            <kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd>
+            <kbd>←</kbd><kbd>↓</kbd><kbd>↑</kbd><kbd>→</kbd>
           </div>
         </div>
         <span class="c-modal-hotkeys__shift-description">
@@ -152,8 +152,8 @@ export default {
         </div>
         <span class="c-modal-hotkeys__shift-description">
           Due to technical reasons, pressing a numpad key will purchase 10 of a Dimension if possible, but pressing
-          a numpad key with <kbd>shift</kbd> will not buy a single Dimension. It may instead, depending on your device,
-          cause the page to scroll or change game tabs. <kbd>alt</kbd> will still work as expected.
+          a numpad key with <kbd>SHIFT</kbd> will not buy a single Dimension. It may instead, depending on your device,
+          cause the page to scroll or change game tabs. <kbd>ALT</kbd> will still work as expected.
         </span>
         <template v-if="isElectron">
           <br>
@@ -178,3 +178,44 @@ export default {
     </span>
   </ModalWrapper>
 </template>
+
+<style scoped>
+.l-modal-hotkeys__column {
+  display: flex;
+  flex-direction: column;
+  width: 28rem;
+}
+
+.l-modal-hotkeys__column--right {
+  margin-left: 1rem;
+}
+
+.c-modal-hotkeys {
+  font-size: 1.25rem;
+}
+
+.l-modal-hotkeys {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-modal-hotkeys-row {
+  display: flex;
+  flex-direction: row;
+  line-height: 1.6rem;
+  padding-bottom: 0.3rem;
+}
+
+.c-modal-hotkeys-row__name {
+  text-align: left;
+}
+
+.l-modal-hotkeys-row__name {
+  flex: 1 1 auto;
+}
+
+.c-modal-hotkeys__shift-description {
+  text-align: left;
+  font-size: 1rem;
+}
+</style>

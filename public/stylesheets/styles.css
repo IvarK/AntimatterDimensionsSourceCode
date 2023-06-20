@@ -8678,6 +8678,13 @@ kbd {
   background-color: #802222;
 }
 
+.o-requirement-lock {
+  position: absolute;
+  font-size: 5rem;
+  padding: 0.5rem 1.8rem;
+  opacity: 0.4;
+}
+
 .c-reality-upgrade-btn--black-hole-unlock {
   text-shadow: -0.1rem 0.1rem 0.3rem var(--color-reality-light);
   margin: auto;

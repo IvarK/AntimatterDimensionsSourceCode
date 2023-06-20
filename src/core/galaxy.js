@@ -135,6 +135,10 @@ function galaxyReset() {
 export function manualRequestGalaxyReset(bulk) {
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return;
   if (GameEnd.creditsEverClosed) return;
+  if (RealityUpgrade(7).isLockingMechanics && player.galaxies > 0) {
+    RealityUpgrade(7).tryShowWarningModal();
+    return;
+  }
   if (player.options.confirmations.antimatterGalaxy) {
     Modal.antimatterGalaxy.show({ bulk: bulk && EternityMilestone.autobuyMaxGalaxies.isReached });
     return;
@@ -142,9 +146,12 @@ export function manualRequestGalaxyReset(bulk) {
   requestGalaxyReset(bulk);
 }
 
+// All galaxy reset requests, both automatic and manual, eventually go through this function; therefore it suffices
+// to restrict galaxy count for RUPG7's requirement here and nowhere else
 export function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
-  if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(limit);
-  if (player.galaxies >= limit || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
+  const restrictedLimit = RealityUpgrade(7).isLockingMechanics ? 1 : limit;
+  if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(restrictedLimit);
+  if (player.galaxies >= restrictedLimit || !Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return false;
   Tutorial.turnOffEffect(TUTORIAL_STATE.GALAXY);
   galaxyReset();
   return true;

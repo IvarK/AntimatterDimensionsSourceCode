@@ -76,6 +76,10 @@ export function eternity(force, auto, specialConditions = {}) {
   const noStudies = player.timestudy.studies.length === 0;
   if (!force) {
     if (!Player.canEternity) return false;
+    if (RealityUpgrade(10).isLockingMechanics) {
+      RealityUpgrade(10).tryShowWarningModal();
+      return false;
+    }
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);
     player.requirementChecks.reality.noEternities = false;
@@ -141,6 +145,7 @@ export function eternity(force, auto, specialConditions = {}) {
 export function animateAndEternity(callback) {
   if (!Player.canEternity) return false;
   const hasAnimation = !FullScreenAnimationHandler.isDisplaying &&
+    !RealityUpgrade(10).isLockingMechanics &&
     ((player.dilation.active && player.options.animations.dilation) ||
     (!player.dilation.active && player.options.animations.eternity));
 

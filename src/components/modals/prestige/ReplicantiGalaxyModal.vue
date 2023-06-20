@@ -36,7 +36,7 @@ export default {
       if (this.replicanti.lt(Number.MAX_VALUE)) this.emitClose();
     },
     handleYesClick() {
-      replicantiGalaxy();
+      replicantiGalaxy(false);
     },
   },
 };

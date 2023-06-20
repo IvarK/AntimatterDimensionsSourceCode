@@ -494,6 +494,10 @@ window.player = {
       9: 0,
       10: 0,
     },
+    reqLock: {
+      reality: 0,
+      imaginary: 0,
+    },
     perks: new Set(),
     respec: false,
     showGlyphSacrifice: false,

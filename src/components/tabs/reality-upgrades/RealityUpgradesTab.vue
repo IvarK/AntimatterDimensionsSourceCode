@@ -37,6 +37,9 @@ export default {
       Hold shift to swap this behavior.
       <br>
       Every completed row of purchased upgrades increases your Glyph level by {{ formatInt(1) }}.
+      <br>
+      You can shift-click an upgrade to make the game prevent you from doing anything which would cause you to
+      fail the unlock condition, as long as it has not already been failed.
     </div>
     <div
       v-for="row in 5"

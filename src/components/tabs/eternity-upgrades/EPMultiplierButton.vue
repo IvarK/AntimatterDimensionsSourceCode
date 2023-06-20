@@ -55,6 +55,10 @@ export default {
       this.cost.copyFrom(upgrade.cost);
       this.isAffordable = upgrade.isAffordable;
     },
+    purchaseUpgrade() {
+      if (RealityUpgrade(15).isLockingMechanics) RealityUpgrade(15).tryShowWarningModal();
+      else this.upgrade.purchase();
+    }
   }
 };
 </script>
@@ -63,7 +67,7 @@ export default {
   <div class="l-spoon-btn-group l-margin-top">
     <button
       :class="classObject"
-      @click="upgrade.purchase()"
+      @click="purchaseUpgrade"
     >
       <div :class="{ 'o-pelle-disabled': isDoomed }">
         Multiply Eternity Points from all sources by {{ formatX(5) }}
@@ -75,7 +79,7 @@ export default {
     </button>
     <PrimaryButton
       class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
-      @click="upgrade.buyMax()"
+      @click="upgrade.buyMax(false)"
     >
       Max Eternity Point mult
     </PrimaryButton>

@@ -80,6 +80,10 @@ export function eternity(force, auto, specialConditions = {}) {
       RealityUpgrade(10).tryShowWarningModal();
       return false;
     }
+    if (RealityUpgrade(12).isLockingMechanics && EternityChallenge(1).isRunning) {
+      RealityUpgrade(12).tryShowWarningModal();
+      return false;
+    }
     EventHub.dispatch(GAME_EVENT.ETERNITY_RESET_BEFORE);
     giveEternityRewards(auto);
     player.requirementChecks.reality.noEternities = false;
@@ -146,6 +150,7 @@ export function animateAndEternity(callback) {
   if (!Player.canEternity) return false;
   const hasAnimation = !FullScreenAnimationHandler.isDisplaying &&
     !RealityUpgrade(10).isLockingMechanics &&
+    !(RealityUpgrade(12).isLockingMechanics && EternityChallenge(1).isRunning) &&
     ((player.dilation.active && player.options.animations.dilation) ||
     (!player.dilation.active && player.options.animations.eternity));
 
@@ -308,8 +313,12 @@ class EPMultiplierState extends GameMechanicState {
     return true;
   }
 
-  buyMax() {
+  buyMax(auto) {
     if (!this.isAffordable) return false;
+    if (RealityUpgrade(15).isLockingMechanics) {
+      if (!auto) RealityUpgrade(15).tryShowWarningModal();
+      return false;
+    }
     const bulk = bulkBuyBinarySearch(Currency.eternityPoints.value, {
       costFunction: this.costAfterCount,
       cumulative: true,

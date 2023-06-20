@@ -46,6 +46,6 @@ export class EPMultAutobuyerState extends AutobuyerState {
     // grouped as they are, and many other autobuyers in the 5xEP group must execute *after* dimensions
     if (!this.isActive) return;
     applyEU2();
-    EternityUpgrade.epMult.buyMax();
+    EternityUpgrade.epMult.buyMax(true);
   }
 }

@@ -2,9 +2,15 @@ import { DC } from "../constants";
 
 import { DimensionState } from "./dimension";
 
-export function buySingleTimeDimension(tier) {
+export function buySingleTimeDimension(tier, auto = false) {
   const dim = TimeDimension(tier);
-  if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
+  if (tier > 4) {
+    if (!TimeStudy.timeDimension(tier).isBought) return false;
+    if (RealityUpgrade(13).isLockingMechanics && Currency.eternityPoints.gte(dim.cost)) {
+      if (!auto) RealityUpgrade(13).tryShowWarningModal();
+      return false;
+    }
+  }
   if (Currency.eternityPoints.lt(dim.cost)) return false;
   if (Enslaved.isRunning && dim.bought > 0) return false;
 
@@ -35,11 +41,19 @@ export function toggleAllTimeDims() {
   }
 }
 
-export function buyMaxTimeDimension(tier, eternityPoints = Currency.eternityPoints.value) {
+export function buyMaxTimeDimension(tier, portionToSpend = 1, isMaxAll = false) {
+  const canSpend = Currency.eternityPoints.value.times(portionToSpend);
   const dim = TimeDimension(tier);
-  if (tier > 4 && !TimeStudy.timeDimension(tier).isBought) return false;
+  if (canSpend.lt(dim.cost)) return false;
+  if (tier > 4) {
+    if (!TimeStudy.timeDimension(tier).isBought) return false;
+    if (RealityUpgrade(13).isLockingMechanics) {
+      if (!isMaxAll) RealityUpgrade(13).tryShowWarningModal();
+      return false;
+    }
+  }
   if (Enslaved.isRunning) return buySingleTimeDimension(tier);
-  const bulk = bulkBuyBinarySearch(eternityPoints, {
+  const bulk = bulkBuyBinarySearch(canSpend, {
     costFunction: bought => dim.nextCost(bought),
     cumulative: true,
     firstCost: dim.cost,
@@ -55,20 +69,19 @@ export function buyMaxTimeDimension(tier, eternityPoints = Currency.eternityPoin
 export function maxAllTimeDimensions() {
   // Try to buy single from the highest affordable new dimensions
   for (let i = 8; i > 0 && TimeDimension(i).bought === 0; i--) {
-    buySingleTimeDimension(i);
+    buySingleTimeDimension(i, true);
   }
 
   // Buy everything costing less than 1% of initial EP
-  const eternityPoints = Currency.eternityPoints.value.times(0.01);
   for (let i = 8; i > 0; i--) {
-    buyMaxTimeDimension(i, eternityPoints);
+    buyMaxTimeDimension(i, 0.01, true);
   }
 
   // Loop buying the cheapest dimension possible; explicit infinite loops make me nervous
   const unlockedDimensions = TimeDimensions.all.filter(d => d.isUnlocked);
   for (let stop = 0; stop < 1000; stop++) {
     const cheapestDim = unlockedDimensions.reduce((a, b) => (b.cost.gte(a.cost) ? a : b));
-    if (!buySingleTimeDimension(cheapestDim.tier)) break;
+    if (!buySingleTimeDimension(cheapestDim.tier, true)) break;
   }
 }
 

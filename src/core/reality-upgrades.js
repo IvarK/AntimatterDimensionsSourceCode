@@ -22,6 +22,10 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     return typeof this.config.requirement === "function" ? this.config.requirement() : this.config.requirement;
   }
 
+  get lockEvent() {
+    return typeof this.config.lockEvent === "function" ? this.config.lockEvent() : this.config.lockEvent;
+  }
+
   get currency() {
     return Currency.realityMachines;
   }

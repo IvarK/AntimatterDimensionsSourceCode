@@ -23,6 +23,6 @@ export class ReplicantiGalaxyAutobuyerState extends AutobuyerState {
 
   tick() {
     if (!this.isEnabled) return;
-    replicantiGalaxy();
+    replicantiGalaxy(true);
   }
 }

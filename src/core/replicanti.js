@@ -13,6 +13,8 @@ export const ReplicantiGrowth = {
   }
 };
 
+// Internal function to add RGs; called both from within the fast replicanti code and from the function
+// used externally. Only called in cases of automatic RG and does not actually modify replicanti amount
 function addReplicantiGalaxies(newGalaxies) {
   if (newGalaxies > 0) {
     player.replicanti.galaxies += newGalaxies;
@@ -24,7 +26,13 @@ function addReplicantiGalaxies(newGalaxies) {
   }
 }
 
-export function replicantiGalaxy() {
+// Function called externally for gaining RGs, which adjusts replicanti amount before calling the function
+// which actually adds the RG. Called externally both automatically and manually
+export function replicantiGalaxy(auto) {
+  if (RealityUpgrade(6).isLockingMechanics) {
+    if (!auto) RealityUpgrade(6).tryShowWarningModal();
+    return;
+  }
   if (!Replicanti.galaxies.canBuyMore) return;
   const galaxyGain = Replicanti.galaxies.gain;
   if (galaxyGain < 1) return;
@@ -35,21 +43,24 @@ export function replicantiGalaxy() {
   addReplicantiGalaxies(galaxyGain);
 }
 
+// Only called on manual RG requests
 export function replicantiGalaxyRequest() {
   if (!Replicanti.galaxies.canBuyMore) return;
-  if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
-  else replicantiGalaxy();
+  if (RealityUpgrade(6).isLockingMechanics) RealityUpgrade(6).tryShowWarningModal();
+  else if (player.options.confirmations.replicantiGalaxy) Modal.replicantiGalaxy.show();
+  else replicantiGalaxy(false);
 }
 
 // Produces replicanti quickly below e308, will auto-bulk-RG if production is fast enough
 // Returns the remaining unused gain factor
 function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
+  const shouldBuyRG = isAutobuyerActive && !RealityUpgrade(6).isLockingMechanics;
   // More than e308 galaxies per tick causes the game to die, and I don't think it's worth the performance hit of
   // Decimalifying the entire calculation.  And yes, this can and does actually happen super-lategame.
   const uncappedAmount = DC.E1.pow(log10GainFactor.plus(Replicanti.amount.log10()));
   // Checking for uncapped equaling zero is because Decimal.pow returns zero for overflow for some reason
   if (log10GainFactor.gt(Number.MAX_VALUE) || uncappedAmount.eq(0)) {
-    if (isAutobuyerActive) {
+    if (shouldBuyRG) {
       addReplicantiGalaxies(Replicanti.galaxies.max - player.replicanti.galaxies);
     }
     Replicanti.amount = replicantiCap();
@@ -57,7 +68,7 @@ function fastReplicantiBelow308(log10GainFactor, isAutobuyerActive) {
     return log10GainFactor;
   }
 
-  if (!isAutobuyerActive) {
+  if (!shouldBuyRG) {
     const remainingGain = log10GainFactor.minus(replicantiCap().log10() - Replicanti.amount.log10()).clampMin(0);
     Replicanti.amount = Decimal.min(uncappedAmount, replicantiCap());
     return remainingGain;
@@ -156,6 +167,7 @@ export function replicantiCap() {
     : Decimal.NUMBER_MAX_VALUE;
 }
 
+// eslint-disable-next-line complexity
 export function replicantiLoop(diff) {
   if (!player.replicanti.unl) return;
   const replicantiBeforeLoop = Replicanti.amount;
@@ -236,7 +248,11 @@ export function replicantiLoop(diff) {
   }
 
   if (areRGsBeingBought && Replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) {
-    replicantiGalaxy();
+    const buyer = Autobuyer.replicantiGalaxy;
+    const isAuto = buyer.canTick && buyer.isEnabled;
+    // There might be a manual and auto tick simultaneously; pass auto === true iff the autobuyer is ticking and
+    // we aren't attempting to manually buy RG, because this controls modals appearing or not
+    replicantiGalaxy(isAuto && !Replicanti.galaxies.isPlayerHoldingR);
   }
   player.records.thisReality.maxReplicanti = player.records.thisReality.maxReplicanti
     .clampMin(Replicanti.amount);

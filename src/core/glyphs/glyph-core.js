@@ -270,6 +270,10 @@ export const Glyphs = {
       RealityUpgrade(9).tryShowWarningModal();
       return;
     }
+    if (RealityUpgrade(24).isLockingMechanics && this.activeWithoutCompanion.length === 0) {
+      RealityUpgrade(24).tryShowWarningModal();
+      return;
+    }
 
     this.validate();
     if (this.findByInventoryIndex(glyph.idx) !== glyph) {

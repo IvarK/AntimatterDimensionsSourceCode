@@ -28,7 +28,7 @@ export default {
       Reality Upgrade Condition Lock
     </template>
     <div class="c-modal-message__text">
-      Are you sure you wish to {{ upgrade.config.lockEvent }}? Doing this right now will cause you to
+      Are you sure you wish to {{ upgrade.lockEvent }}? Doing this right now will cause you to
       <span class="l-emphasis">
         fail the requirement for the Reality Upgrade "{{ upgrade.name }}"
       </span>

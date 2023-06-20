@@ -311,7 +311,7 @@ export const EternityChallenges = {
 
   autoComplete: {
     tick() {
-      if (!player.reality.autoEC || Pelle.isDisabled("autoec")) {
+      if (!player.reality.autoEC || Pelle.isDisabled("autoec") || RealityUpgrade(12).isLockingMechanics) {
         player.reality.lastAutoEC = Math.clampMax(player.reality.lastAutoEC, this.interval);
         return;
       }

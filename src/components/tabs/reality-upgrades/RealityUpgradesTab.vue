@@ -8,7 +8,12 @@ export default {
   },
   computed: {
     upgrades: () => RealityUpgrades.all,
-    maxNumber: () => Decimal.NUMBER_MAX_VALUE,
+    costScalingTooltip: () => `Prices start increasing faster above ${format(1e30)} RM and then even faster
+      above ${format(Decimal.NUMBER_MAX_VALUE, 1)} RM`,
+    possibleTooltip: () => `Checkered upgrades are impossible to unlock this Reality. Striped upgrades are
+      still possible.`,
+    lockTooltip: () => `This will only work if you have not already failed the condition, and this can only
+      be done for certain upgrades.`,
   },
   methods: {
     id(row, column) {
@@ -21,25 +26,30 @@ export default {
 <template>
   <div class="l-reality-upgrade-grid">
     <div class="c-reality-upgrade-infotext">
-      The first row of upgrades can be purchased endlessly, but costs increase much faster above {{ format(1e30) }}
-      and {{ format(maxNumber, 1) }} Reality Machines.
+      Mouseover <i class="fas fa-question-circle" /> icons for additional information
       <br>
-      The rest of the upgrades are one-time upgrades which have an unlocking requirement in addition
-      to costing Reality Machines.
+      The first row of upgrades can be purchased endlessly for increasing costs
+      <span :ach-tooltip="costScalingTooltip">
+        <i class="fas fa-question-circle" />
+      </span>
+      and the rest are single-purchase.
       <br>
-      These requirements, once completed, permanently unlock the ability to purchase the upgrades at any point.
-      <br>
-      Checkered upgrades are impossible to unlock this Reality, while striped upgrades are still possible.
-      <br>
-      Locked upgrades show their requirement and effect by default; unlocked ones show
-      their effect, current bonus, and cost.
-      <br>
-      Hold shift to swap this behavior.
-      <br>
-      Every completed row of purchased upgrades increases your Glyph level by {{ formatInt(1) }}.
+      Single-purchase upgrades also have requirements which, once completed, permanently unlock the ability
+      to purchase the upgrades at any point.
+      <span :ach-tooltip="possibleTooltip">
+        <i class="fas fa-question-circle" />
+      </span>
       <br>
       You can shift-click an upgrade to make the game prevent you from doing anything which would cause you to
-      fail the unlock condition, as long as it has not already been failed.
+      fail the unlock condition.
+      <span :ach-tooltip="lockTooltip">
+        <i class="fas fa-question-circle" />
+      </span>
+      <br>
+      Locked upgrades show their requirement and effect by default; unlocked ones show
+      their effect, current bonus, and cost. Hold shift to swap this behavior.
+      <br>
+      Every completed row of purchased upgrades increases your Glyph level by {{ formatInt(1) }}.
     </div>
     <div
       v-for="row in 5"
@@ -57,6 +67,7 @@ export default {
 
 <style scoped>
 .c-reality-upgrade-infotext {
-  margin-bottom: 1rem;
+  color: var(--color-text);
+  margin: -1rem 0 1rem;
 }
 </style>

@@ -18,6 +18,10 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     return this.config.shortDescription ? this.config.shortDescription() : "";
   }
 
+  get requirement() {
+    return typeof this.config.requirement === "function" ? this.config.requirement() : this.config.requirement;
+  }
+
   get currency() {
     return Currency.realityMachines;
   }
@@ -34,6 +38,31 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     player.reality.upgradeBits = value;
   }
 
+  get isLockingMechanics() {
+    const playerOption = (player.reality.reqLock.reality & (1 << this.bitIndex)) !== 0;
+    const shouldBypass = this.config.bypassLock?.() ?? false;
+    return playerOption && !shouldBypass;
+  }
+
+  set isLockingMechanics(value) {
+    if (value && this.config.canLock && this.isPossible) player.reality.reqLock.reality |= 1 << this.bitIndex;
+    else player.reality.reqLock.reality &= ~(1 << this.bitIndex);
+  }
+
+  // Required to be changed this way to avoid direct prop mutation in Vue components
+  setMechanicLock(value) {
+    this.isLockingMechanics = value;
+  }
+
+  toggleMechanicLock() {
+    this.isLockingMechanics = !this.isLockingMechanics;
+  }
+
+  // Note we don't actually show the modal if we already failed or unlocked it
+  tryShowWarningModal() {
+    if (this.isPossible && !this.isAvailableForPurchase) Modal.upgradeLock.show({ upgrade: this });
+  }
+
   get isAvailableForPurchase() {
     return (player.reality.upgReqs & (1 << this.id)) !== 0;
   }
@@ -47,6 +76,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     if (!realityReached || this.isAvailableForPurchase || !this.config.checkRequirement()) return;
     player.reality.upgReqs |= (1 << this.id);
     GameUI.notify.reality(`You've unlocked a Reality Upgrade: ${this.config.name}`);
+    this.isLockingMechanics = false;
   }
 
   onPurchased() {

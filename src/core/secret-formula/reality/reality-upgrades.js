@@ -76,6 +76,8 @@ export const realityUpgrades = [
     hasFailed: () => !(player.requirementChecks.eternity.noRG && player.requirementChecks.reality.noEternities),
     checkRequirement: () => player.requirementChecks.eternity.noRG && player.requirementChecks.reality.noEternities,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
+    canLock: true,
+    lockEvent: "gain a Replicanti Galaxy",
     description: "Replicanti speed is multiplied based on Replicanti Galaxies",
     effect: () => 1 + Replicanti.galaxies.total / 50,
     formatEffect: value => formatX(value, 2, 2)
@@ -88,6 +90,8 @@ export const realityUpgrades = [
     hasFailed: () => !(player.galaxies <= 1 && player.requirementChecks.reality.noInfinities),
     checkRequirement: () => player.galaxies <= 1 && player.requirementChecks.reality.noInfinities,
     checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
+    canLock: true,
+    lockEvent: "gain another Antimatter Galaxy",
     description: "Infinity gain is boosted from Antimatter Galaxy count",
     effect: () => 1 + player.galaxies / 30,
     formatEffect: value => formatX(value, 2, 2)
@@ -100,6 +104,8 @@ export const realityUpgrades = [
     hasFailed: () => player.reality.gainedAutoAchievements,
     checkRequirement: () => !player.reality.gainedAutoAchievements,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
+    canLock: true,
+    // We don't have lockEvent because the modal can never show up for this upgrade
     description: "Tachyon Particle gain is boosted based on Achievement multiplier",
     effect: () => Math.sqrt(Achievements.power),
     formatEffect: value => formatX(value, 2, 2)
@@ -119,6 +125,8 @@ export const realityUpgrades = [
     checkRequirement: () => Currency.eternityPoints.exponent >= 4000 &&
       Glyphs.activeWithoutCompanion.length === 1 && Glyphs.activeWithoutCompanion[0].level >= 3,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+    canLock: true,
+    lockEvent: "equip more than one Glyph",
     description: "Gain another Glyph slot",
     effect: () => 1
   },
@@ -131,6 +139,9 @@ export const realityUpgrades = [
     checkRequirement: () => Currency.infinityPoints.exponent >= 400 &&
       player.requirementChecks.reality.noEternities,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
+    canLock: true,
+    lockEvent: "Eternity",
+    bypassLock: () => Currency.infinityPoints.exponent >= 400,
     description: () => `Start every Reality with ${formatInt(100)} Eternities (also applies to current Reality)`,
     automatorPoints: 15,
     shortDescription: () => `Start with ${formatInt(100)} Eternities`,
@@ -157,6 +168,8 @@ export const realityUpgrades = [
     hasFailed: () => EternityChallenge(1).completions !== 0,
     checkRequirement: () => Currency.eternityPoints.exponent >= 70 && EternityChallenge(1).completions === 0,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+    canLock: true,
+    lockEvent: "complete Eternity Challenge 1",
     description: "Eternity Point multiplier based on Reality and Time Theorem count",
     effect: () => Currency.timeTheorems.value
       .minus(DC.E3).clampMin(2)
@@ -172,6 +185,8 @@ export const realityUpgrades = [
     checkRequirement: () => Currency.eternityPoints.exponent >= 4000 &&
       Array.range(5, 4).every(i => TimeDimension(i).amount.equals(0)),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+    canLock: true,
+    lockEvent: "purchase a Time Dimension above the 4th TD",
     description: () => `Improve Eternity Autobuyer and unlock autobuyers for Time Dimensions and ${formatX(5)} EP`,
     automatorPoints: 10,
     shortDescription: () => `TD and ${formatX(5)} EP Autobuyers, improved Eternity Autobuyer`,
@@ -194,10 +209,12 @@ export const realityUpgrades = [
     id: 15,
     cost: 50,
     requirement: () => `Have ${format(DC.E10)} Eternity Points without purchasing
-    the ${formatX(5)} Eternity Point upgrade`,
+      the ${formatX(5)} Eternity Point upgrade`,
     hasFailed: () => player.epmultUpgrades !== 0,
     checkRequirement: () => Currency.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
+    canLock: true,
+    lockEvent: () => `purchase a ${formatX(5)} EP upgrade`,
     description: () => `Boost Tachyon Particle gain based on ${formatX(5)} Eternity Point multiplier`,
     effect: () => Math.max(Math.sqrt(Decimal.log10(EternityUpgrade.epMult.effectValue)) / 9, 1),
     formatEffect: value => formatX(value, 2, 2)
@@ -328,6 +345,8 @@ export const realityUpgrades = [
     hasFailed: () => Glyphs.activeWithoutCompanion.length > 0,
     checkRequirement: () => MachineHandler.gainedRealityMachines.gte(5000) &&
       Glyphs.activeWithoutCompanion.length === 0,
+    canLock: true,
+    lockEvent: "equip a Glyph",
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Gain another Glyph slot",
     effect: () => 1

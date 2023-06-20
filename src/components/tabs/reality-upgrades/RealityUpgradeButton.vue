@@ -70,6 +70,10 @@ export default {
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
+    },
+    toggleLock(upgrade) {
+      if (this.isRebuyable) return;
+      upgrade.toggleMechanicLock();
     }
   }
 };
@@ -80,7 +84,8 @@ export default {
     <button
       :class="classObject"
       class="l-reality-upgrade-btn c-reality-upgrade-btn"
-      @click="upgrade.purchase()"
+      @click.shift.exact="toggleLock(upgrade)"
+      @click.exact="upgrade.purchase()"
     >
       <HintText
         type="realityUpgrades"

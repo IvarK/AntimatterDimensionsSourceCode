@@ -75,6 +75,7 @@ import StudyStringModal from "@/components/modals/StudyStringModal";
 import SwitchAutomatorEditorModal from "@/components/modals/SwitchAutomatorEditorModal";
 import UiChoiceModal from "@/components/modals/UiChoiceModal";
 import UndoGlyphModal from "@/components/modals/UndoGlyphModal";
+import UpgradeMechanicLockModal from "@/components/modals/UpgradeMechanicLockModal";
 
 import S12GamesModal from "@/components/modals/secret-themes/S12GamesModal";
 
@@ -227,6 +228,7 @@ Modal.animationOptions = new Modal(AnimationOptionsModal);
 Modal.hiddenTabs = new Modal(HiddenTabsModal);
 Modal.preferredTree = new Modal(PreferredTreeModal);
 
+Modal.upgradeLock = new Modal(UpgradeMechanicLockModal, 1);
 Modal.deleteCompanion = new Modal(DeleteCompanionGlyphModal, 1);
 Modal.glyphDelete = new Modal(DeleteGlyphModal, 1, GAME_EVENT.GLYPHS_CHANGED);
 Modal.glyphPurge = new Modal(PurgeGlyphModal, 1, GAME_EVENT.GLYPHS_CHANGED);

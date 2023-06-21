@@ -7,6 +7,18 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
     this.registerEvents(config.checkEvent, () => this.tryUnlock());
   }
 
+  get name() {
+    return this.config.name;
+  }
+
+  get requirement() {
+    return typeof this.config.requirement === "function" ? this.config.requirement() : this.config.requirement;
+  }
+
+  get lockEvent() {
+    return typeof this.config.lockEvent === "function" ? this.config.lockEvent() : this.config.lockEvent;
+  }
+
   get currency() {
     return Currency.imaginaryMachines;
   }
@@ -21,6 +33,30 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
 
   set bits(value) {
     player.reality.imaginaryUpgradeBits = value;
+  }
+
+  get isLockingMechanics() {
+    const playerOption = (player.reality.reqLock.imaginary & (1 << this.bitIndex)) !== 0;
+    return playerOption;
+  }
+
+  set isLockingMechanics(value) {
+    if (value && this.config.canLock && this.isPossible) player.reality.reqLock.imaginary |= 1 << this.bitIndex;
+    else player.reality.reqLock.imaginary &= ~(1 << this.bitIndex);
+  }
+
+  // Required to be changed this way to avoid direct prop mutation in Vue components
+  setMechanicLock(value) {
+    this.isLockingMechanics = value;
+  }
+
+  toggleMechanicLock() {
+    this.isLockingMechanics = !this.isLockingMechanics;
+  }
+
+  // Note we don't actually show the modal if we already failed or unlocked it
+  tryShowWarningModal() {
+    if (this.isPossible && !this.isAvailableForPurchase) Modal.upgradeLock.show({ upgrade: this, isImaginary: true });
   }
 
   get isAvailableForPurchase() {

@@ -51,6 +51,9 @@ export default {
         description: this.config.requirement
       };
     },
+    canLock() {
+      return this.config.canLock && !(this.isAvailableForPurchase || this.isBought);
+    },
     isUseless() {
       return Pelle.disabledRUPGs.includes(this.upgrade.id) && Pelle.isDoomed;
     },
@@ -122,11 +125,15 @@ export default {
         </b>
       </span>
     </button>
-    <div
-      v-if="hasRequirementLock"
-      class="o-requirement-lock"
-    >
-      <i class="fas fa-lock" />
+    <div class="o-requirement-lock">
+      <i
+        v-if="hasRequirementLock"
+        class="fas fa-lock"
+      />
+      <i
+        v-else-if="canLock"
+        class="fas fa-lock-open"
+      />
     </div>
     <PrimaryToggleButton
       v-if="isRebuyable && isAutoUnlocked"

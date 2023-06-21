@@ -11,6 +11,15 @@ export default {
       type: Object,
       required: true
     },
+    isImaginary: {
+      type: Boolean,
+      required: true,
+    }
+  },
+  computed: {
+    upgradeStr() {
+      return this.isImaginary ? "Imaginary Upgrade" : "Reality Upgrade";
+    }
   },
   methods: {
     disableLock() {
@@ -25,12 +34,12 @@ export default {
     @confirm="disableLock"
   >
     <template #header>
-      Reality Upgrade Condition Lock
+      {{ upgradeStr }} Condition Lock
     </template>
     <div class="c-modal-message__text">
       Are you sure you wish to {{ upgrade.lockEvent }}? Doing this right now will cause you to
       <span class="l-emphasis">
-        fail the requirement for the Reality Upgrade "{{ upgrade.name }}"
+        fail the requirement for the {{ upgradeStr }} "{{ upgrade.name }}"
       </span>
       <span :ach-tooltip="upgrade.requirement">
         <i class="fas fa-question-circle" />

@@ -29,7 +29,8 @@ export default {
       isPossible: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,
-      etaText: ""
+      etaText: "",
+      hasRequirementLock: false,
     };
   },
   computed: {
@@ -50,6 +51,9 @@ export default {
         description: this.config.requirement
       };
     },
+    canLock() {
+      return this.config.canLock && !(this.isAvailableForPurchase || this.isBought);
+    },
     isDoomed: () => Pelle.isDoomed,
   },
   watch: {
@@ -66,6 +70,7 @@ export default {
       this.isBought = !upgrade.isRebuyable && upgrade.isBought;
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = ImaginaryUpgrade(20).canBeApplied;
+      this.hasRequirementLock = upgrade.isLockingMechanics;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.imaginaryUpgrade(upgrade.id).isActive;
       this.etaText = this.getETAText();
     },
@@ -74,6 +79,10 @@ export default {
       const time = MachineHandler.estimateIMTimer(this.upgrade.cost);
       if (isFinite(time)) return TimeSpan.fromSeconds(time).toString();
       return "Never affordable";
+    },
+    toggleLock(upgrade) {
+      if (this.isRebuyable) return;
+      upgrade.toggleMechanicLock();
     }
   }
 };
@@ -87,7 +96,8 @@ export default {
     <button
       :class="classObject"
       class="l-reality-upgrade-btn c-reality-upgrade-btn"
-      @click="upgrade.purchase()"
+      @click.shift.exact="toggleLock(upgrade)"
+      @click.exact="upgrade.purchase()"
     >
       <HintText
         type="realityUpgrades"
@@ -119,6 +129,16 @@ export default {
         </template>
       </span>
     </button>
+    <div class="o-requirement-lock">
+      <i
+        v-if="hasRequirementLock"
+        class="fas fa-lock"
+      />
+      <i
+        v-else-if="canLock"
+        class="fas fa-lock-open"
+      />
+    </div>
     <PrimaryToggleButton
       v-if="isRebuyable && isAutoUnlocked"
       v-model="isAutobuyerOn"

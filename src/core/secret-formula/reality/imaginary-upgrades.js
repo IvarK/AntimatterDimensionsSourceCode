@@ -132,7 +132,7 @@ export const imaginaryUpgrades = [
     id: 13,
     cost: 5e7,
     requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} projected Reality Machines within
-    The Nameless Ones' Reality`,
+      The Nameless Ones' Reality`,
     hasFailed: () => !Enslaved.isRunning,
     // This is for consistency with the UI, which displays an amplified "projected RM" value on the reality button
     checkRequirement: () => Enslaved.isRunning &&
@@ -165,6 +165,12 @@ export const imaginaryUpgrades = [
     hasFailed: () => player.requirementChecks.reality.maxID1.gt(0),
     checkRequirement: () => player.requirementChecks.reality.maxID1.eq(0) && player.antimatter.exponent >= 1.5e12,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    canLock: true,
+    // This isn't entirely accurate (it misses the edge case of trying to purchase something inside EC7) but properly
+    // accounting for that edge case would require significantly altering program flow
+    lockEvent: () => (EternityChallenge(7).isRunning
+      ? "complete EC7, allowing Time Dimensions to produce Infinity Dimensions"
+      : "purchase this Dimension, which will give 1st Infinity Dimensions"),
     description: () => `${
       Pelle.isDoomed ? "Unlock" : "Convert Antimatter Dimensions to Continuum and unlock"
     } Lai'tela, Celestial of Dimensions`,
@@ -214,6 +220,8 @@ export const imaginaryUpgrades = [
     checkRequirement: () => player.requirementChecks.reality.maxStudies <= 8 &&
       Tickspeed.continuumValue >= 3.85e6,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    canLock: true,
+    lockEvent: () => `purchase more than ${formatInt(8)} Time Studies`,
     description: "Unlock Dark Matter Annihilation"
   },
   {
@@ -233,11 +241,13 @@ export const imaginaryUpgrades = [
     name: "Existential Elimination",
     id: 21,
     cost: 1e13,
-    requirement: () => `Reach ${format("1e7400000000000")} antimatter with Continuum disabled`,
+    requirement: () => `Reach ${format("1e7400000000000")} antimatter with Continuum disabled for the entire Reality`,
     hasFailed: () => !player.requirementChecks.reality.noContinuum,
     checkRequirement: () => player.requirementChecks.reality.noContinuum &&
       Currency.antimatter.value.log10() >= 7.4e12,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    canLock: true,
+    lockEvent: "enable Continuum",
     description: "Annihilation multiplier gain is improved based on Imaginary Machines",
     effect: () => Math.clampMin(Math.pow(Math.log10(Currency.imaginaryMachines.value) - 10, 3), 1),
     formatEffect: value => `${formatX(value, 2, 1)}`,
@@ -284,6 +294,8 @@ export const imaginaryUpgrades = [
     checkRequirement: () => Ra.isRunning && player.requirementChecks.reality.slowestBH <= 1e-300 &&
       player.galaxies >= 13000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    canLock: true,
+    lockEvent: "uninvert your Black Hole",
     description: "Increase free Dimboost strength based on Singularity count",
     effect: () => Decimal.pow(player.celestials.laitela.singularities, 300),
     formatEffect: value => `${formatX(value, 2, 1)}`,
@@ -301,6 +313,8 @@ export const imaginaryUpgrades = [
     checkRequirement: () => Laitela.isRunning && Laitela.maxAllowedDimension === 0 &&
       Glyphs.activeWithoutCompanion.length <= 1 && TimeStudy.reality.isBought,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    canLock: true,
+    lockEvent: "equip more than one Glyph",
     description: "Unlock Pelle, Celestial of Antimatter",
   },
 ];

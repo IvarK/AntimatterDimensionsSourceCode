@@ -107,7 +107,7 @@ export default {
       InfinityDimension(this.tier).buySingle();
     },
     buyMaxInfinityDimension() {
-      InfinityDimension(this.tier).buyMax();
+      InfinityDimension(this.tier).buyMax(false);
     },
   }
 };

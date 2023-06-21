@@ -43,7 +43,7 @@ export class InfinityDimensionAutobuyerState extends IntervaledAutobuyerState {
 
   tick() {
     super.tick();
-    this.dimension.buyMax();
+    this.dimension.buyMax(true);
   }
 
   static get entryCount() { return 8; }

@@ -251,9 +251,14 @@ class InfinityDimensionState extends DimensionState {
     return true;
   }
 
+  // Only ever called from manual actions
   buySingle() {
     if (!this.isUnlocked) return this.unlock();
     if (!this.isAvailableForPurchase) return false;
+    if (ImaginaryUpgrade(15).isLockingMechanics) {
+      ImaginaryUpgrade(15).tryShowWarningModal();
+      return false;
+    }
 
     Currency.infinityPoints.purchase(this.cost);
     this.cost = Decimal.round(this.cost.times(this.costMultiplier));
@@ -268,8 +273,12 @@ class InfinityDimensionState extends DimensionState {
     return true;
   }
 
-  buyMax() {
+  buyMax(auto) {
     if (!this.isAvailableForPurchase) return false;
+    if (ImaginaryUpgrade(15).isLockingMechanics) {
+      if (!auto) ImaginaryUpgrade(15).tryShowWarningModal();
+      return false;
+    }
 
     let purchasesUntilHardcap = this.purchaseCap - this.purchases;
     if (EternityChallenge(8).isRunning) {
@@ -379,6 +388,7 @@ export const InfinityDimensions = {
     }
   },
 
+  // Called from "Max All" UI buttons and nowhere else
   buyMax() {
     // Try to unlock dimensions
     const unlockedDimensions = this.all.filter(dimension => dimension.unlock());
@@ -389,7 +399,7 @@ export const InfinityDimensions = {
     });
 
     // Try to buy max from the lowest dimension (since lower dimensions have bigger multiplier per purchase)
-    unlockedDimensions.forEach(dimension => dimension.buyMax());
+    unlockedDimensions.forEach(dimension => dimension.buyMax(false));
   },
 
   get powerConversionRate() {

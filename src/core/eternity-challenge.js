@@ -319,7 +319,11 @@ export const EternityChallenges = {
 
   autoComplete: {
     tick() {
-      if (!player.reality.autoEC || Pelle.isDisabled("autoec") || RealityUpgrade(12).isLockingMechanics) {
+      const shouldPreventEC7 = TimeDimension(1).amount.gt(0);
+      const hasUpgradeLock = RealityUpgrade(12).isLockingMechanics ||
+        (ImaginaryUpgrade(15).isLockingMechanics && shouldPreventEC7 &&
+          !Array.range(1, 6).some(ec => EternityChallenge(ec).completions < 5));
+      if (!player.reality.autoEC || Pelle.isDisabled("autoec") || hasUpgradeLock) {
         player.reality.lastAutoEC = Math.clampMax(player.reality.lastAutoEC, this.interval);
         return;
       }
@@ -330,6 +334,7 @@ export const EternityChallenges = {
             next.addCompletion(true);
           }
           next = this.nextChallenge;
+          if (ImaginaryUpgrade(15).isLockingMechanics && next?.id === 7 && shouldPreventEC7) break;
         }
         return;
       }

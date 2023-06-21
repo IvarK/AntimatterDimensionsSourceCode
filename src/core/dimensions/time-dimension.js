@@ -13,6 +13,10 @@ export function buySingleTimeDimension(tier, auto = false) {
   }
   if (Currency.eternityPoints.lt(dim.cost)) return false;
   if (Enslaved.isRunning && dim.bought > 0) return false;
+  if (ImaginaryUpgrade(15).isLockingMechanics && EternityChallenge(7).completions > 0) {
+    if (!auto) ImaginaryUpgrade(15).tryShowWarningModal();
+    return false;
+  }
 
   Currency.eternityPoints.subtract(dim.cost);
   dim.amount = dim.amount.plus(1);
@@ -51,6 +55,10 @@ export function buyMaxTimeDimension(tier, portionToSpend = 1, isMaxAll = false) 
       if (!isMaxAll) RealityUpgrade(13).tryShowWarningModal();
       return false;
     }
+  }
+  if (ImaginaryUpgrade(15).isLockingMechanics && EternityChallenge(7).completions > 0) {
+    if (!isMaxAll) ImaginaryUpgrade(15).tryShowWarningModal();
+    return false;
   }
   if (Enslaved.isRunning) return buySingleTimeDimension(tier);
   const bulk = bulkBuyBinarySearch(canSpend, {

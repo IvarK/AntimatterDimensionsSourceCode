@@ -16,6 +16,7 @@ export default {
       negativeSlider: 0,
       negativeBHDivisor: 1,
       maxNegativeBlackHole: 300,
+      isDisabled: false,
     };
   },
   computed: {
@@ -23,6 +24,10 @@ export default {
       return this.isLaitela
         ? "The physics of this Reality do not allow Black Hole Inversion"
         : "Black Hole must be paused to activate Inversion";
+    },
+    reqLockText() {
+      return `Inversion strength cannot be modified due to Lock for
+        "${ImaginaryUpgrade(24).name}"`;
     }
   },
   methods: {
@@ -32,6 +37,8 @@ export default {
       this.isLaitela = Laitela.isRunning;
       this.negativeSlider = -Math.log10(player.blackHoleNegative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
+      const maxInversion = player.requirementChecks.reality.slowestBH <= 1e-300;
+      this.isDisabled = ImaginaryUpgrade(24).isLockingMechanics && Ra.isRunning && maxInversion;
     },
     adjustSliderNegative(value) {
       this.negativeSlider = value;
@@ -70,10 +77,17 @@ export default {
         </span>)
       </b>
       <SliderComponent
+        v-if="!isDisabled"
         v-bind="sliderProps(true)"
         :value="negativeSlider"
         @input="adjustSliderNegative($event)"
       />
+      <div
+        v-else
+        class="l-lock-text"
+      >
+        {{ reqLockText }}
+      </div>
       <br>
       Inverting the Black Hole only affects its own speedup, no other upgrades or effects, although
       it will also indirectly affect the Effarig Game speed power effect.
@@ -82,7 +96,18 @@ export default {
 </template>
 
 <style scoped>
+.l-black-hole-sliders {
+  width: 55rem;
+  color: var(--color-text);
+}
+
 .l-margin-left {
   margin-left: 0.5rem;
+}
+
+.l-lock-text {
+  font-weight: bold;
+  color: var(--color-bad);
+  margin: 0.5rem 0 -0.5rem;
 }
 </style>

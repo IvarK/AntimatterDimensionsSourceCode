@@ -353,6 +353,11 @@ export const BlackHoles = {
 
   togglePause: (automatic = false) => {
     if (!BlackHoles.areUnlocked) return;
+    const maxInversion = player.requirementChecks.reality.slowestBH <= 1e-300;
+    if (ImaginaryUpgrade(24).isLockingMechanics && Ra.isRunning && maxInversion) {
+      if (!automatic) ImaginaryUpgrade(24).tryShowWarningModal();
+      return;
+    }
     if (player.blackHolePause) player.requirementChecks.reality.slowestBH = 1;
     player.blackHolePause = !player.blackHolePause;
     player.blackHolePauseTime = player.records.realTimePlayed;

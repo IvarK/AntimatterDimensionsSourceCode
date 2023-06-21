@@ -627,7 +627,7 @@ export const AutomatorCommands = [
         let finalPurchasedTS;
         for (const tsNumber of studies.normal) {
           if (TimeStudy(tsNumber).isBought) prePurchasedStudies++;
-          else if (TimeStudy(tsNumber).purchase()) purchasedStudies++;
+          else if (TimeStudy(tsNumber).purchase(true)) purchasedStudies++;
           else finalPurchasedTS = finalPurchasedTS ?? tsNumber;
         }
         if (prePurchasedStudies + purchasedStudies < studies.normal.length) {
@@ -653,7 +653,7 @@ export const AutomatorCommands = [
         return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
       };
       return () => {
-        for (const tsNumber of studies.normal) TimeStudy(tsNumber).purchase();
+        for (const tsNumber of studies.normal) TimeStudy(tsNumber).purchase(true);
         if (!studies.ec || TimeStudy.eternityChallenge(studies.ec).isBought) {
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }

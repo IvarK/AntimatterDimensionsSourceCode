@@ -22,6 +22,10 @@ export default {
       player.auto.autobuyersOn = newValue;
     },
     disableContinuum(newValue) {
+      if (ImaginaryUpgrade(21).isLockingMechanics && !newValue) {
+        ImaginaryUpgrade(21).tryShowWarningModal();
+        return;
+      }
       Laitela.setContinuum(!newValue);
     }
   },

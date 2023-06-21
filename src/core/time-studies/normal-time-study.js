@@ -75,9 +75,13 @@ export class NormalTimeStudyState extends TimeStudyState {
     return this.isBought;
   }
 
-  purchase() {
+  purchase(auto = false) {
     if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
     if (GameEnd.creditsEverClosed) return false;
+    if (ImaginaryUpgrade(19).isLockingMechanics && player.requirementChecks.reality.maxStudies === 8) {
+      if (!auto) ImaginaryUpgrade(19).tryShowWarningModal();
+      return false;
+    }
     if (this.costsST()) player.celestials.v.STSpent += this.STCost;
     player.timestudy.studies.push(this.id);
     player.requirementChecks.reality.maxStudies = Math.clampMin(player.requirementChecks.reality.maxStudies,

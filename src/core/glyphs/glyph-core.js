@@ -266,8 +266,9 @@ export const Glyphs = {
     const forbiddenByPelle = Pelle.isDisabled("glyphs") || ["effarig", "reality", "cursed"].includes(glyph.type);
     if (Pelle.isDoomed && forbiddenByPelle) return;
     if (GameEnd.creditsEverClosed) return;
-    if (RealityUpgrade(9).isLockingMechanics && this.activeWithoutCompanion.length > 0) {
-      RealityUpgrade(9).tryShowWarningModal();
+    if (this.activeWithoutCompanion.length > 0) {
+      if (RealityUpgrade(9).isLockingMechanics) RealityUpgrade(9).tryShowWarningModal();
+      if (ImaginaryUpgrade(25).isLockingMechanics) ImaginaryUpgrade(25).tryShowWarningModal();
       return;
     }
     if (RealityUpgrade(24).isLockingMechanics && this.activeWithoutCompanion.length === 0) {

@@ -135,9 +135,11 @@ export default {
       :amount-text="format(amount, 2)"
       :rate="rateOfChange"
     />
-    <div class="l-dim-row-multi-button-container">
+    <div class="l-dim-row-multi-button-container c-modern-dim-tooltip-container">
+      <div class="c-modern-dim-purchase-count-tooltip">
+        {{ tooltipContents }}
+      </div>
       <PrimaryButton
-        v-tooltip="tooltipContents"
         :enabled="isAvailableForPurchase && !isCapped"
         class="o-primary-btn--buy-td o-primary-btn o-primary-btn--new o-primary-btn--buy-dim"
         :class="{ 'l-dim-row-small-text': hasLongText }"
@@ -162,3 +164,21 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-modern-dim-tooltip-container .c-modern-dim-purchase-count-tooltip {
+  position: absolute;
+  width: 20rem;
+  top: 50%;
+  font-size: 1.3rem;
+  line-height: 1.6rem;
+  color: white;
+  background: black;
+  border: 0.1rem solid var(--color-text);
+  border-radius: var(--var-border-width, 0.5rem);
+  /* Buttons are 40rem wide, tooltip is 20rem */
+  transform: translate(calc(-175% - 1rem), -50%);
+  padding: 0.5rem;
+  visibility: hidden;
+}
+</style>

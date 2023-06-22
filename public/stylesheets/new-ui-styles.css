@@ -820,6 +820,41 @@ body.t-s12 {
   height: 4.4rem;
 }
 
+.c-modern-dim-tooltip-container {
+  position: relative;
+}
+
+.c-modern-dim-tooltip-container .c-modern-dim-purchase-count-tooltip {
+  position: absolute;
+  width: 20rem;
+  top: 50%;
+  font-size: 1.3rem;
+  line-height: 1.6rem;
+  color: white;
+  background: black;
+  border: 0.1rem solid var(--color-text);
+  border-radius: var(--var-border-width, 0.5rem);
+  /* Button is 25rem wide, tooltip is 20rem */
+  transform: translate(calc(-125% - 1rem), -50%);
+  padding: 0.5rem;
+  visibility: hidden;
+}
+
+.c-modern-dim-tooltip-container:hover .c-modern-dim-purchase-count-tooltip {
+  visibility: visible;
+}
+
+.c-modern-dim-tooltip-container .c-modern-dim-purchase-count-tooltip::after {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  border-top: 0.5rem solid transparent;
+  border-left: 0.5rem solid var(--color-text);
+  border-bottom: 0.5rem solid transparent;
+  transform: translateY(-50%);
+}
+
 .l-reality-upgrade-btn {
   width: 18rem;
   margin: 0.6rem 0.4rem;

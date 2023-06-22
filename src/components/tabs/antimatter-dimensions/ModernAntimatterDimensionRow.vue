@@ -143,8 +143,8 @@ export default {
       :amount-text="amountDisplay"
       :rate="rateOfChange"
     />
-    <div class="l-dim-row-multi-button-container tooltip-container">
-      <div class="purchase-count-tooltip">
+    <div class="l-dim-row-multi-button-container c-modern-dim-tooltip-container">
+      <div class="c-modern-dim-purchase-count-tooltip">
         {{ boughtTooltip }}
       </div>
       <button
@@ -185,41 +185,6 @@ export default {
 .l-modern-buy-ad-text {
   display: flex;
   flex-direction: column;
-}
-
-.tooltip-container {
-  position: relative;
-}
-
-.tooltip-container .purchase-count-tooltip {
-  position: absolute;
-  width: 20rem;
-  top: 50%;
-  font-size: 1.3rem;
-  line-height: 1.6rem;
-  color: white;
-  background: black;
-  border: 0.1rem solid var(--color-text);
-  border-radius: var(--var-border-width, 0.5rem);
-  /* Button is 25rem wide, tooltip is 20rem */
-  transform: translate(calc(-125% - 1rem), -50%);
-  padding: 0.5rem;
-  visibility: hidden;
-}
-
-.tooltip-container:hover .purchase-count-tooltip {
-  visibility: visible;
-}
-
-.tooltip-container .purchase-count-tooltip::after {
-  content: "";
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  border-top: 0.5rem solid transparent;
-  border-left: 0.5rem solid var(--color-text);
-  border-bottom: 0.5rem solid transparent;
-  transform: translateY(-50%);
 }
 
 .o-non-clickable {

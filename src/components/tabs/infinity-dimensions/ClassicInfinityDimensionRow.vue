@@ -132,13 +132,15 @@ export default {
     />
     <div class="l-dim-row-multi-button-container">
       <PrimaryButton
-        v-tooltip="capTooltip"
         :enabled="isAvailableForPurchase || (!isUnlocked && canUnlock)"
-        class="o-primary-btn--buy-id o-primary-btn--buy-dim"
+        class="o-primary-btn--buy-id o-primary-btn--buy-dim c-dim-tooltip-container"
         :class="{ 'l-dim-row-small-text': hasLongText }"
         @click="buySingleInfinityDimension"
       >
         {{ costDisplay }}
+        <div class="c-dim-purchase-count-tooltip">
+          {{ capTooltip }}
+        </div>
       </PrimaryButton>
       <PrimaryToggleButton
         v-if="isAutobuyerUnlocked && !isEC8Running"

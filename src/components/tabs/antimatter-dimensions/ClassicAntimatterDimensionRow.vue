@@ -76,13 +76,13 @@ export default {
     },
     buySingleClass() {
       return {
-        "o-primary-btn--buy-ad o-primary-btn--buy-single-ad tooltip-container": true,
+        "o-primary-btn--buy-ad o-primary-btn--buy-single-ad c-dim-tooltip-container": true,
         "l-dim-row-small-text": this.isLongText(this.singleText) || !this.showCostTitle(this.singleCost),
       };
     },
     buyTenClass() {
       return {
-        "o-primary-btn--buy-ad o-primary-btn--buy-dim tooltip-container": true,
+        "o-primary-btn--buy-ad o-primary-btn--buy-dim c-dim-tooltip-container": true,
         "o-primary-btn--buy-10-ad": !this.isContinuumActive,
         "o-primary-btn--continuum-ad o-continuum": this.isContinuumActive,
         "l-dim-row-small-text": this.isLongText(this.until10Text) && !this.isContinuumActive
@@ -164,7 +164,7 @@ export default {
         <div :class="tutorialClass()">
           {{ singleText }}
         </div>
-        <div class="purchase-count-tooltip">
+        <div class="c-dim-purchase-count-tooltip">
           {{ boughtTooltip }}
         </div>
         <div
@@ -178,7 +178,7 @@ export default {
         @click="buyUntil10"
       >
         {{ until10Text }}
-        <div class="purchase-count-tooltip">
+        <div class="c-dim-purchase-count-tooltip">
           {{ boughtTooltip }}
         </div>
       </PrimaryButton>
@@ -197,41 +197,6 @@ export default {
   justify-content: center;
   align-items: center;
   border-radius: var(--var-border-radius, inherit);
-}
-
-.tooltip-container {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip-container .purchase-count-tooltip {
-  position: absolute;
-  width: 20rem;
-  top: 50%;
-  font-size: 1.3rem;
-  line-height: 1.6rem;
-  color: white;
-  background: black;
-  border: 0.1rem solid var(--color-text);
-  border-radius: var(--var-border-width, 0.5rem);
-  transform: translate(calc(-100% - 1.5rem), -50%);
-  padding: 0.5rem;
-  visibility: hidden;
-}
-
-.tooltip-container:hover .purchase-count-tooltip {
-  visibility: visible;
-}
-
-.tooltip-container .purchase-count-tooltip::after {
-  content: "";
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  border-top: 0.5rem solid transparent;
-  border-left: 0.5rem solid var(--color-text);
-  border-bottom: 0.5rem solid transparent;
-  transform: translateY(-50%);
 }
 
 .o-continuum {

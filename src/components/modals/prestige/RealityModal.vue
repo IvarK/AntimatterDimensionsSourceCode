@@ -76,7 +76,7 @@ export default {
       return ConfirmationTypes.glyphSelection.isUnlocked() ? "glyphSelection" : undefined;
     },
     canConfirm() {
-      return this.selectedGlyph !== undefined || this.hasFilter;
+      return this.firstReality || this.selectedGlyph !== undefined || this.hasFilter;
     }
   },
   created() {

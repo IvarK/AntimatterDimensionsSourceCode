@@ -1770,10 +1770,10 @@ export const celestialNavigation = {
       legend: {
         text: complete => {
           if (complete < 1) return [
-            "Destabalize Lai'tela's Reality",
+            "Destabilize Lai'tela's Reality",
             "To the point where you cannot",
             "use any Dimensions",
-            `${format(Laitela.difficultyTier)} / ${format(8)}`
+            `${format(Laitela.difficultyTier)} / ${format(8)} Dimensions disabled`
           ];
           return [
             "Completely destabilized",

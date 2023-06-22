@@ -307,11 +307,11 @@ export class TimeStudyTree {
     return ecStudies ? ecStudies.id : 0;
   }
 
-  // Creates an export string based on all currently purchased studies
+  // Creates an export string based on all currently purchased studies; gives an ! at the end if currently in an EC
   get exportString() {
     return `${this.purchasedStudies
       .filter(s => s instanceof NormalTimeStudyState)
       .map(s => s.id)
-      .join(",")}|${this.ec}`;
+      .join(",")}|${this.ec}${player.challenge.eternity.current === 0 ? "" : "!"}`;
   }
 }

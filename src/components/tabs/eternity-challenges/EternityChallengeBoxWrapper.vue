@@ -70,6 +70,9 @@ export default {
         height: "3rem",
         background: "var(--color-good)",
         opacity: this.completionCount >= 5 ? 0 : 0.3,
+        "border-top-left-radius": "var(--var-border-radius, 1rem)",
+        "border-bottom-left-radius": "var(--var-border-radius, 1rem)",
+        "pointer-events": "none",
       };
     },
     buttonText() {

@@ -8983,21 +8983,6 @@ input.o-automator-block-input {
   border-bottom: 0.1rem solid black;
 }
 
-.l-help-me {
-  width: 2rem;
-  height: 2rem;
-  position: absolute;
-  top: 1rem;
-  right: 2rem;
-  z-index: 1;
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 1.9rem;
-  border-radius: var(--var-border-radius, 50%);
-  pointer-events: auto;
-  cursor: pointer;
-}
-
 .l-information {
   top: 3.1rem;
 }

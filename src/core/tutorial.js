@@ -7,7 +7,8 @@ export const TUTORIAL_STATE = {
   AUTOMATOR: 5
 };
 
-// Tutorial has two ways of moving on, either by Tutorial.moveOn() or by having it's condition be true
+// Tutorial has two ways of moving on, either by Tutorial.moveOn() or by having it's condition be true. This
+// is checked by moving on when the NEXT state's condition evaluates to true
 const tutorialStates = [
   {
     // Highlight the 1st dim button
@@ -44,9 +45,10 @@ export const Tutorial = {
   },
 
   // This will remain visible until the first dimboost is purchased. However, since the tutorial state generally
-  // only updates whenever the UI elements need changing, we need to explicitly check resources here
+  // only visually updates whenever the UI elements need changing, we need to explicitly check boost count or else
+  // this will remain visible until a galaxy can be purchased
   emphasizeH2P() {
-    const hasFirstBoost = Achievement(14).isUnlocked && player.dimensionBoosts > 0;
+    const hasFirstBoost = player.tutorialState > TUTORIAL_STATE.DIMBOOST || player.dimensionBoosts > 0;
     return player.records.fullGameCompletions === 0 && !hasFirstBoost;
   },
 

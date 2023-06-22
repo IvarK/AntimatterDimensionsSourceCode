@@ -4,7 +4,6 @@ import CelestialQuoteModal from "@/components/modals/celestial-quotes/CelestialQ
 import CreditsContainer from "@/components/tabs/celestial-pelle/CreditsContainer";
 import FadeAway from "@/components/tabs/celestial-pelle/FadeAway";
 import HowToPlay from "@/components/HowToPlay";
-import InfoButton from "@/components/InfoButton";
 import ModalProgressBar from "@/components/modals/ModalProgressBar";
 import ModernSidebar from "@/components/ui-modes/modern/ModernSidebar";
 import NewGame from "@/components/tabs/celestial-pelle/NewGame";
@@ -18,7 +17,6 @@ export default {
   name: "GameUiComponentFixed",
   components: {
     HowToPlay,
-    InfoButton,
     TimeTheoremShop,
     ModernSidebar,
     SaveTimer,
@@ -67,7 +65,6 @@ export default {
       class="l-notification-container"
     />
     <HowToPlay :style="hideIfMatoFullscreen" />
-    <InfoButton :style="hideIfMatoFullscreen" />
     <TimeTheoremShop
       v-if="view.subtab === 'studies'"
       class="l-time-studies-tab__tt-shop"

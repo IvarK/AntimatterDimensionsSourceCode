@@ -964,15 +964,6 @@ body.t-s12 {
   border: var(--var-border-width, 0.2rem) solid rgba(0, 0, 0, 40%);
 }
 
-.l-help-me {
-  height: 2rem;
-  position: absolute;
-  top: 4.9rem;
-  font-size: 1.5rem;
-  border-radius: var(--var-border-radius, 50%);
-  transition-delay: 0s;
-}
-
 .l-information {
   top: 7rem;
 }

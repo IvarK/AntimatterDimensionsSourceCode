@@ -74,6 +74,14 @@ export default {
         "o-achievement__indicator--waiting": !this.isUnlocked && this.isPreRealityAchievement && !this.isDisabled,
       };
     },
+    rewardClassObject() {
+      return {
+        "o-achievement__reward": true,
+        "o-achievement__reward--disabled": this.isDisabled,
+        "o-achievement__reward--locked": !this.isUnlocked && !this.isPreRealityAchievement && !this.isDisabled,
+        "o-achievement__reward--waiting": !this.isUnlocked && this.isPreRealityAchievement && !this.isDisabled,
+      };
+    },
     isPreRealityAchievement() {
       return this.realityUnlocked && this.achievement.row <= 13;
     },
@@ -219,7 +227,7 @@ export default {
     </div>
     <div
       v-if="hasReward"
-      class="o-achievement__reward"
+      :class="rewardClassObject"
     >
       <i class="fas fa-star" />
     </div>
@@ -302,10 +310,25 @@ export default {
   bottom: 0;
   font-size: 1rem;
   color: black;
-  background: var(--color-accent);
-  border-top: var(--var-border-width, 0.2rem) solid var(--color-accent);
-  border-right: var(--var-border-width, 0.2rem) solid var(--color-accent);
+  background: #5ac467;
+  border-top: var(--var-border-width, 0.2rem) solid #127a20;
+  border-right: var(--var-border-width, 0.2rem) solid #127a20;
   border-top-right-radius: var(--var-border-radius, 0.8rem);
   border-bottom-left-radius: var(--var-border-radius, 0.6rem);
+}
+
+.o-achievement__reward--locked {
+  background: #a3a3a3;
+  border-color: var(--color-bad);
+}
+
+.o-achievement__reward--waiting {
+  background: #d1d161;
+  border-color: #acac39;
+}
+
+.o-achievement__reward--disabled {
+  background: var(--color-pelle--base);
+  border-color: var(--color-bad);
 }
 </style>

@@ -36,7 +36,7 @@ export default {
       v-if="treeStatus.ec > 0"
       class="l-modal-import-tree__tree-info-line"
     >
-      Eternity Challenge: {{ treeStatus.ec }}
+      Eternity Challenge: {{ treeStatus.ec }} {{ treeStatus.startEC ? "(will start)" : "" }}
     </div>
   </div>
 </template>

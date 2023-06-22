@@ -1106,7 +1106,7 @@ function animateTweens(time) {
   let delta = time - lastFrame;
   lastFrame = time;
   if (player.dilation.active) {
-    delta /= 10;
+    delta /= Pelle.isDoomed ? 1.5 : 10;
   }
   tweenTime += delta;
   TWEEN.update(tweenTime);

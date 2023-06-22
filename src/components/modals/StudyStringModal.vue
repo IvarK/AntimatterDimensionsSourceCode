@@ -57,6 +57,7 @@ export default {
         firstPaths: makeEnumeration(importedTree.dimensionPaths),
         secondPaths: makeEnumeration(importedTree.pacePaths),
         ec: importedTree.ec,
+        startEC: importedTree.startEC,
         hasInfo: makeEnumeration(importedTree.dimensionPaths) || importedTree.ec > 0,
       };
     },
@@ -68,6 +69,12 @@ export default {
       const combinedTree = this.combinedTreeObject;
       const newStudiesArray = combinedTree.purchasedStudies
         .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => this.studyString(s));
+      // We can only immediately enter the imported EC if we aren't already in one, or are able to unlock it first.
+      // It's unlockable in two cases - none are currently unlocked, or it happens to already be unlocked. We check
+      // for no imported EC as well because this otherwise also evaluates to true if the imported tree has no EC
+      const ecData = player.challenge.eternity;
+      const canStartEC = ecData.current === 0 && [0, ecData.unlocked].includes(this.importedTree.ec) &&
+        this.importedTree.ec !== 0;
       return {
         timeTheorems: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
         spaceTheorems: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
@@ -76,6 +83,7 @@ export default {
         firstPaths: makeEnumeration(combinedTree.dimensionPaths),
         secondPaths: makeEnumeration(combinedTree.pacePaths),
         ec: combinedTree.ec,
+        startEC: combinedTree.startEC && canStartEC,
         hasInfo: makeEnumeration(combinedTree.dimensionPaths) || combinedTree.ec > 0,
       };
     },

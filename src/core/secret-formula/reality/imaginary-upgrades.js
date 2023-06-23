@@ -311,7 +311,7 @@ export const imaginaryUpgrades = [
       Glyphs.activeWithoutCompanion.length <= 1 && TimeStudy.reality.isBought,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     canLock: true,
-    lockEvent: "equip more than one Glyph",
+    lockEvent: "equip another Glyph",
     description: "Unlock Pelle, Celestial of Antimatter",
   },
 ];

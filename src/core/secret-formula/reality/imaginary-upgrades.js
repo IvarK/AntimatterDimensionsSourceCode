@@ -166,11 +166,8 @@ export const imaginaryUpgrades = [
     checkRequirement: () => player.requirementChecks.reality.maxID1.eq(0) && player.antimatter.exponent >= 1.5e12,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     canLock: true,
-    // This isn't entirely accurate (it misses the edge case of trying to purchase something inside EC7) but properly
-    // accounting for that edge case would require significantly altering program flow
-    lockEvent: () => (EternityChallenge(7).isRunning
-      ? "complete EC7, allowing Time Dimensions to produce Infinity Dimensions"
-      : "purchase this Dimension, which will give 1st Infinity Dimensions"),
+    // Locking only occurs when purchasing any ID, entering EC7 with any amount of TD, or purchasing TD after having
+    // any number of completions of EC7
     description: () => `${
       Pelle.isDoomed ? "Unlock" : "Convert Antimatter Dimensions to Continuum and unlock"
     } Lai'tela, Celestial of Dimensions`,
@@ -289,13 +286,13 @@ export const imaginaryUpgrades = [
     id: 24,
     cost: 6e14,
     requirement: () => `Have ${formatInt(13000)} Antimatter Galaxies in Ra's Reality
-      with a fully inverted Black Hole`,
+      with a fully inverted Black Hole, without discharging or entering EC12`,
     hasFailed: () => !Ra.isRunning || player.requirementChecks.reality.slowestBH > 1e-300,
     checkRequirement: () => Ra.isRunning && player.requirementChecks.reality.slowestBH <= 1e-300 &&
       player.galaxies >= 13000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     canLock: true,
-    lockEvent: "uninvert your Black Hole",
+    // Three locking events: uninvert, discharge, and entering (but not auto-completing) EC12
     description: "Increase free Dimboost strength based on Singularity count",
     effect: () => Decimal.pow(player.celestials.laitela.singularities, 300),
     formatEffect: value => `${formatX(value, 2, 1)}`,

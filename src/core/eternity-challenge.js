@@ -192,6 +192,15 @@ export class EternityChallengeState extends GameMechanicState {
   start(auto) {
     if (EternityChallenge.isRunning) return false;
     if (!this.isUnlocked) return false;
+    const maxInversion = player.requirementChecks.reality.slowestBH <= 1e-300;
+    if (this.id === 12 && ImaginaryUpgrade(24).isLockingMechanics && Ra.isRunning && maxInversion) {
+      if (!auto) ImaginaryUpgrade(24).tryShowWarningModal("enter Eternity Challenge 12");
+      return false;
+    }
+    if (this.id === 7 && ImaginaryUpgrade(15).isLockingMechanics && TimeDimension(1).amount.gt(0)) {
+      if (!auto) ImaginaryUpgrade(15).tryShowWarningModal("enter Eternity Challenge 7");
+      return false;
+    }
 
     // If dilation is active, the { enteringEC: true } parameter will cause
     // dilation to not be disabled. We still don't force-eternity, though;
@@ -200,9 +209,7 @@ export class EternityChallengeState extends GameMechanicState {
     if (Player.canEternity) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (enteringGamespeed < 0.001) {
-        SecretAchievement(42).unlock();
-      }
+      if (enteringGamespeed < 0.001) SecretAchievement(42).unlock();
       player.requirementChecks.reality.slowestBH = 1;
     }
     if (Enslaved.isRunning) {

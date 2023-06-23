@@ -42,29 +42,34 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     player.reality.upgradeBits = value;
   }
 
-  get isLockingMechanics() {
-    const playerOption = (player.reality.reqLock.reality & (1 << this.bitIndex)) !== 0;
-    const shouldBypass = this.config.bypassLock?.() ?? false;
-    return playerOption && !shouldBypass;
+  get hasPlayerLock() {
+    return (player.reality.reqLock.reality & (1 << this.bitIndex)) !== 0;
   }
 
-  set isLockingMechanics(value) {
-    if (value && this.config.canLock && this.isPossible) player.reality.reqLock.reality |= 1 << this.bitIndex;
+  set hasPlayerLock(value) {
+    if (value) player.reality.reqLock.reality |= 1 << this.bitIndex;
     else player.reality.reqLock.reality &= ~(1 << this.bitIndex);
+  }
+
+  get isLockingMechanics() {
+    const shouldBypass = this.config.bypassLock?.() ?? false;
+    return this.hasPlayerLock && this.isPossible && !shouldBypass && !this.isAvailableForPurchase;
   }
 
   // Required to be changed this way to avoid direct prop mutation in Vue components
   setMechanicLock(value) {
-    this.isLockingMechanics = value;
+    this.hasPlayerLock = value;
   }
 
   toggleMechanicLock() {
-    this.isLockingMechanics = !this.isLockingMechanics;
+    this.hasPlayerLock = !this.hasPlayerLock;
   }
 
   // Note we don't actually show the modal if we already failed or unlocked it
-  tryShowWarningModal() {
-    if (this.isPossible && !this.isAvailableForPurchase) Modal.upgradeLock.show({ upgrade: this, isImaginary: false });
+  tryShowWarningModal(specialLockText) {
+    if (this.isPossible && !this.isAvailableForPurchase) {
+      Modal.upgradeLock.show({ upgrade: this, isImaginary: false, specialLockText });
+    }
   }
 
   get isAvailableForPurchase() {
@@ -80,7 +85,7 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
     if (!realityReached || this.isAvailableForPurchase || !this.config.checkRequirement()) return;
     player.reality.upgReqs |= (1 << this.id);
     GameUI.notify.reality(`You've unlocked a Reality Upgrade: ${this.config.name}`);
-    this.isLockingMechanics = false;
+    this.hasPlayerLock = false;
   }
 
   onPurchased() {

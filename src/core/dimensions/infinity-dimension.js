@@ -256,7 +256,10 @@ class InfinityDimensionState extends DimensionState {
     if (!this.isUnlocked) return this.unlock();
     if (!this.isAvailableForPurchase) return false;
     if (ImaginaryUpgrade(15).isLockingMechanics) {
-      ImaginaryUpgrade(15).tryShowWarningModal();
+      const lockString = this.tier === 1
+        ? "purchase a 1st Infinity Dimension"
+        : "purchase a Dimension which will produce 1st IDs";
+      ImaginaryUpgrade(15).tryShowWarningModal(lockString);
       return false;
     }
 
@@ -276,7 +279,10 @@ class InfinityDimensionState extends DimensionState {
   buyMax(auto) {
     if (!this.isAvailableForPurchase) return false;
     if (ImaginaryUpgrade(15).isLockingMechanics) {
-      if (!auto) ImaginaryUpgrade(15).tryShowWarningModal();
+      const lockString = this.tier === 1
+        ? "purchase a 1st Infinity Dimension"
+        : "purchase a Dimension which will produce 1st IDs";
+      if (!auto) ImaginaryUpgrade(15).tryShowWarningModal(lockString);
       return false;
     }
 

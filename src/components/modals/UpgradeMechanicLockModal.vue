@@ -14,11 +14,19 @@ export default {
     isImaginary: {
       type: Boolean,
       required: true,
+    },
+    specialLockText: {
+      type: String,
+      required: false,
+      default: null,
     }
   },
   computed: {
     upgradeStr() {
       return this.isImaginary ? "Imaginary Upgrade" : "Reality Upgrade";
+    },
+    lockEvent() {
+      return this.specialLockText ?? this.upgrade.lockEvent;
     }
   },
   methods: {
@@ -37,7 +45,7 @@ export default {
       {{ upgradeStr }} Condition Lock
     </template>
     <div class="c-modal-message__text">
-      Are you sure you wish to {{ upgrade.lockEvent }}? Doing this right now will cause you to
+      Are you sure you wish to {{ lockEvent }}? Doing this right now will cause you to
       <span class="l-emphasis">
         fail the requirement for the {{ upgradeStr }} "{{ upgrade.name }}"
       </span>

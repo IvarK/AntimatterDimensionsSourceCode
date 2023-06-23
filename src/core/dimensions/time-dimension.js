@@ -14,7 +14,10 @@ export function buySingleTimeDimension(tier, auto = false) {
   if (Currency.eternityPoints.lt(dim.cost)) return false;
   if (Enslaved.isRunning && dim.bought > 0) return false;
   if (ImaginaryUpgrade(15).isLockingMechanics && EternityChallenge(7).completions > 0) {
-    if (!auto) ImaginaryUpgrade(15).tryShowWarningModal();
+    if (!auto) {
+      ImaginaryUpgrade(15).tryShowWarningModal(`purchase a Time Dimension,
+        which will produce Infinity Dimensions through EC7`);
+    }
     return false;
   }
 
@@ -57,7 +60,10 @@ export function buyMaxTimeDimension(tier, portionToSpend = 1, isMaxAll = false) 
     }
   }
   if (ImaginaryUpgrade(15).isLockingMechanics && EternityChallenge(7).completions > 0) {
-    if (!isMaxAll) ImaginaryUpgrade(15).tryShowWarningModal();
+    if (!isMaxAll) {
+      ImaginaryUpgrade(15).tryShowWarningModal(`purchase a Time Dimension,
+        which will produce Infinity Dimensions through EC7`);
+    }
     return false;
   }
   if (Enslaved.isRunning) return buySingleTimeDimension(tier);

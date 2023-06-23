@@ -30,6 +30,7 @@ export default {
       isPossible: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,
+      canBeLocked: false,
       hasRequirementLock: false,
     };
   },
@@ -73,7 +74,8 @@ export default {
       this.isBought = !upgrade.isRebuyable && upgrade.isBought;
       this.isPossible = upgrade.isPossible;
       this.isAutoUnlocked = Ra.unlocks.instantECAndRealityUpgradeAutobuyers.canBeApplied;
-      this.hasRequirementLock = upgrade.isLockingMechanics;
+      this.canBeLocked = upgrade.config.canLock && !this.isAvailableForPurchase;
+      this.hasRequirementLock = upgrade.hasPlayerLock;
       if (this.isRebuyable) this.isAutobuyerOn = Autobuyer.realityUpgrade(upgrade.id).isActive;
     },
     toggleLock(upgrade) {
@@ -125,7 +127,10 @@ export default {
         </b>
       </span>
     </button>
-    <div class="o-requirement-lock">
+    <div
+      v-if="canBeLocked"
+      class="o-requirement-lock"
+    >
       <i
         v-if="hasRequirementLock"
         class="fas fa-lock"

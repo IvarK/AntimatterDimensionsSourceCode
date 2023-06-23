@@ -262,17 +262,29 @@ export const Glyphs = {
   activeGlyph(activeIndex) {
     return this.active[activeIndex];
   },
+  // eslint-disable-next-line complexity
   equip(glyph, targetSlot) {
     const forbiddenByPelle = Pelle.isDisabled("glyphs") || ["effarig", "reality", "cursed"].includes(glyph.type);
     if (Pelle.isDoomed && forbiddenByPelle) return;
     if (GameEnd.creditsEverClosed) return;
-    if (this.activeWithoutCompanion.length > 0) {
-      if (RealityUpgrade(9).isLockingMechanics) RealityUpgrade(9).tryShowWarningModal();
-      if (ImaginaryUpgrade(25).isLockingMechanics) ImaginaryUpgrade(25).tryShowWarningModal();
+
+    const isCompanion = glyph.type === "companion";
+    if (RealityUpgrade(9).isLockingMechanics) {
+      if (this.activeWithoutCompanion.length > 0 && !isCompanion) {
+        RealityUpgrade(9).tryShowWarningModal("equip another non-Companion Glyph");
+        return;
+      }
+      if (glyph.level < 3 && !isCompanion) {
+        RealityUpgrade(9).tryShowWarningModal(`equip a Glyph whose level is less than ${formatInt(3)}`);
+        return;
+      }
+    }
+    if (RealityUpgrade(24).isLockingMechanics && this.activeWithoutCompanion.length === 0 && !isCompanion) {
+      RealityUpgrade(24).tryShowWarningModal();
       return;
     }
-    if (RealityUpgrade(24).isLockingMechanics && this.activeWithoutCompanion.length === 0) {
-      RealityUpgrade(24).tryShowWarningModal();
+    if (ImaginaryUpgrade(25).isLockingMechanics && Glyphs.active.countWhere(g => g === null) === 4) {
+      ImaginaryUpgrade(25).tryShowWarningModal();
       return;
     }
 
@@ -281,7 +293,7 @@ export const Glyphs = {
       throw new Error("Inconsistent inventory indexing");
     }
     let sameSpecialTypeIndex = -1;
-    if (glyph.type === "effarig" || glyph.type === "reality") {
+    if (["effarig", "reality"].includes(glyph.type)) {
       sameSpecialTypeIndex = this.active.findIndex(x => x && x.type === glyph.type);
     }
     if (this.active[targetSlot] === null) {

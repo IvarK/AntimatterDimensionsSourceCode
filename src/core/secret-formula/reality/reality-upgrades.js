@@ -126,7 +126,7 @@ export const realityUpgrades = [
       Glyphs.activeWithoutCompanion.length === 1 && Glyphs.activeWithoutCompanion[0].level >= 3,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
     canLock: true,
-    lockEvent: "equip more than one Glyph",
+    // There are two locking events - equipping a glyph with too low a level, and equipping a second glyph
     description: "Gain another Glyph slot",
     effect: () => 1
   },
@@ -346,7 +346,7 @@ export const realityUpgrades = [
     checkRequirement: () => MachineHandler.gainedRealityMachines.gte(5000) &&
       Glyphs.activeWithoutCompanion.length === 0,
     canLock: true,
-    lockEvent: "equip a Glyph",
+    lockEvent: "equip a non-Companion Glyph",
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Gain another Glyph slot",
     effect: () => 1

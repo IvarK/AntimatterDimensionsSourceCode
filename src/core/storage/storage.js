@@ -6,47 +6,55 @@ import { migrations } from "./migrations";
 
 import { deepmergeAll } from "@/utility/deepmerge";
 
-const BACKUP_SLOT_TYPE = {
+export const BACKUP_SLOT_TYPE = {
   ONLINE: 0,
   OFFLINE: 1,
   RESERVE: 2,
 };
 
-// Note: interval is in seconds, and only the first RESERVE slot is ever used
+// Note: interval is in seconds, and only the first RESERVE slot is ever used. Having intervalStr as a redundant
+// prop is necessary because using our TimeSpan formatting functions produces undesirable strings like "1.00 minutes"
 export const AutoBackupSlots = [
   {
     id: 1,
     type: BACKUP_SLOT_TYPE.ONLINE,
+    intervalStr: () => `${formatInt(1)} minute`,
     interval: 60,
   },
   {
     id: 2,
     type: BACKUP_SLOT_TYPE.ONLINE,
+    intervalStr: () => `${formatInt(5)} minutes`,
     interval: 5 * 60,
   },
   {
     id: 3,
     type: BACKUP_SLOT_TYPE.ONLINE,
+    intervalStr: () => `${formatInt(20)} minutes`,
     interval: 20 * 60,
   },
   {
     id: 4,
     type: BACKUP_SLOT_TYPE.ONLINE,
+    intervalStr: () => `${formatInt(1)} hour`,
     interval: 3600,
   },
   {
     id: 5,
     type: BACKUP_SLOT_TYPE.OFFLINE,
+    intervalStr: () => `${formatInt(10)} minutes`,
     interval: 10 * 60,
   },
   {
     id: 6,
     type: BACKUP_SLOT_TYPE.OFFLINE,
+    intervalStr: () => `${formatInt(1)} hour`,
     interval: 3600,
   },
   {
     id: 7,
     type: BACKUP_SLOT_TYPE.OFFLINE,
+    intervalStr: () => `${formatInt(5)} hours`,
     interval: 5 * 3600,
   },
   {
@@ -115,6 +123,7 @@ export const GameStorage = {
       };
       this.currentSlot = 0;
       this.loadPlayerObject(root);
+      this.processLocalBackups();
       this.save(true);
       return;
     }
@@ -130,6 +139,7 @@ export const GameStorage = {
     // Save current slot to make sure no changes are lost
     this.save(true);
     this.loadPlayerObject(this.saves[slot] ?? Player.defaultStart);
+    this.processLocalBackups();
     Tabs.all.find(t => t.id === player.options.lastOpenTab).show(false);
     Modal.hideAll();
     Cloud.resetTempState();
@@ -250,6 +260,12 @@ export const GameStorage = {
     localStorage.setItem(this.backupTimeKey(this.currentSlot), GameSaveSerializer.serialize(this.backupTimeData));
   },
 
+  // Does not actually load, but returns an object which is meant to be passed on to loadPlayerObject()
+  loadFromBackup(backupSlot) {
+    const data = localStorage.getItem(this.backupDataKey(this.currentSlot, backupSlot));
+    return GameSaveSerializer.deserialize(data);
+  },
+
   // This is called after the player object is loaded
   processLocalBackups() {
     // Set the next backup timer to whatever the next multiple of the shortest online interval is
@@ -258,11 +274,12 @@ export const GameStorage = {
 
     // Check for the amount of time spent offline and perform immediate backups for any slots
     // which have had more than their timers elapse since the last time the game was open and saved
-    const offlineTimeMs = Date.now() - this.lastUpdateOnLoad;
+    const currentTime = Date.now();
+    const offlineTimeMs = currentTime - this.lastUpdateOnLoad;
     for (const backupInfo of AutoBackupSlots.filter(slot => slot.type === BACKUP_SLOT_TYPE.OFFLINE)) {
       if (offlineTimeMs < 1000 * backupInfo.interval) continue;
       const id = backupInfo.id;
-      this.saveToBackup(id);
+      this.saveToBackup(id, currentTime);
     }
 
     // Load in all the data from previous backup times
@@ -289,6 +306,12 @@ export const GameStorage = {
 
     this.nextBackup += this.shortestOnlineInterval;
     GameIntervals.backup.restart();
+  },
+
+  // Saves the current game state to the first reserve slot it finds
+  saveToReserveSlot() {
+    const targetSlot = AutoBackupSlots.find(slot => slot.type === 2).id;
+    this.saveToBackup(targetSlot, Date.now());
   },
 
   export() {

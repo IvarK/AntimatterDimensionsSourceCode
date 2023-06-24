@@ -6,6 +6,55 @@ import { migrations } from "./migrations";
 
 import { deepmergeAll } from "@/utility/deepmerge";
 
+const BACKUP_SLOT_TYPE = {
+  ONLINE: 0,
+  OFFLINE: 1,
+  RESERVE: 2,
+};
+
+// Note: interval is in seconds, and only the first RESERVE slot is ever used
+export const AutoBackupSlots = [
+  {
+    id: 1,
+    type: BACKUP_SLOT_TYPE.ONLINE,
+    interval: 60,
+  },
+  {
+    id: 2,
+    type: BACKUP_SLOT_TYPE.ONLINE,
+    interval: 5 * 60,
+  },
+  {
+    id: 3,
+    type: BACKUP_SLOT_TYPE.ONLINE,
+    interval: 20 * 60,
+  },
+  {
+    id: 4,
+    type: BACKUP_SLOT_TYPE.ONLINE,
+    interval: 3600,
+  },
+  {
+    id: 5,
+    type: BACKUP_SLOT_TYPE.OFFLINE,
+    interval: 10 * 60,
+  },
+  {
+    id: 6,
+    type: BACKUP_SLOT_TYPE.OFFLINE,
+    interval: 3600,
+  },
+  {
+    id: 7,
+    type: BACKUP_SLOT_TYPE.OFFLINE,
+    interval: 5 * 3600,
+  },
+  {
+    id: 8,
+    type: BACKUP_SLOT_TYPE.RESERVE,
+  },
+];
+
 export const GameStorage = {
   currentSlot: 0,
   saves: {
@@ -18,6 +67,13 @@ export const GameStorage = {
   lastCloudSave: Date.now(),
   offlineEnabled: undefined,
   offlineTicks: undefined,
+  lastUpdateOnLoad: 0,
+  shortestOnlineInterval: 1000 * AutoBackupSlots
+    .filter(slot => slot.type === BACKUP_SLOT_TYPE.ONLINE)
+    .map(slot => slot.interval)
+    .min(),
+  nextBackup: 0,
+  backupTimeData: {},
 
   maxOfflineTicks(simulatedMs, defaultTicks = this.offlineTicks) {
     return Math.clampMax(defaultTicks, Math.floor(simulatedMs / 33));
@@ -25,6 +81,14 @@ export const GameStorage = {
 
   get localStorageKey() {
     return DEV ? "dimensionTestSave" : "dimensionSave";
+  },
+
+  backupDataKey(saveSlot, backupSlot) {
+    return DEV ? `backupTestSave-${saveSlot}-${backupSlot}` : `backupSave-${saveSlot}-${backupSlot}`;
+  },
+
+  backupTimeKey(saveSlot) {
+    return DEV ? `backupTestTimes-${saveSlot}` : `backupTimes-${saveSlot}`;
   },
 
   load() {
@@ -58,6 +122,7 @@ export const GameStorage = {
     this.saves = root.saves;
     this.currentSlot = root.current;
     this.loadPlayerObject(this.saves[this.currentSlot]);
+    this.processLocalBackups();
   },
 
   loadSlot(slot) {
@@ -175,6 +240,57 @@ export const GameStorage = {
     if (!silent) GameUI.notify.info("Game saved");
   },
 
+  // Saves a backup, updates save timers (this is called before nextBackup is updated), and then saves the timers too
+  saveToBackup(backupSlot, saveTime) {
+    localStorage.setItem(this.backupDataKey(this.currentSlot, backupSlot), GameSaveSerializer.serialize(player));
+    this.backupTimeData[backupSlot] = {
+      timer: this.nextBackup,
+      last: saveTime,
+    };
+    localStorage.setItem(this.backupTimeKey(this.currentSlot), GameSaveSerializer.serialize(this.backupTimeData));
+  },
+
+  // This is called after the player object is loaded
+  processLocalBackups() {
+    // Set the next backup timer to whatever the next multiple of the shortest online interval is
+    this.nextBackup = Math.ceil(player.backupTimer / this.shortestOnlineInterval) * this.shortestOnlineInterval;
+    GameIntervals.backup.restart();
+
+    // Check for the amount of time spent offline and perform immediate backups for any slots
+    // which have had more than their timers elapse since the last time the game was open and saved
+    const offlineTimeMs = Date.now() - this.lastUpdateOnLoad;
+    for (const backupInfo of AutoBackupSlots.filter(slot => slot.type === BACKUP_SLOT_TYPE.OFFLINE)) {
+      if (offlineTimeMs < 1000 * backupInfo.interval) continue;
+      const id = backupInfo.id;
+      this.saveToBackup(id);
+    }
+
+    // Load in all the data from previous backup times
+    this.backupTimeData = GameSaveSerializer.deserialize(localStorage.getItem(this.backupTimeKey(this.currentSlot)));
+    if (!this.backupTimeData) this.backupTimeData = {};
+    for (const backupInfo of AutoBackupSlots) {
+      const key = backupInfo.id;
+      if (!this.backupTimeData[key]) this.backupTimeData[key] = {};
+    }
+  },
+
+  // Combining all the backup slots into a single call like this only works because all the longer intervals
+  // are divisible by the shortest one. We want to make sure we pass the same timestamp into saving calls on
+  // all slots, or else the displayed times will gradually desync due to the saving process itself taking time.
+  backupOnlineSlots() {
+    const currentTime = Date.now();
+    for (const backupInfo of AutoBackupSlots.filter(slot => slot.type === BACKUP_SLOT_TYPE.ONLINE)) {
+      // This may get called during player object loading, before the times are properly loaded in
+      if (!this.backupTimeData) break;
+      const id = backupInfo.id;
+      const lastSave = player.backupTimer - (this.backupTimeData[id].timer ?? 0);
+      if (lastSave >= 1000 * backupInfo.interval) this.saveToBackup(id, currentTime);
+    }
+
+    this.nextBackup += this.shortestOnlineInterval;
+    GameIntervals.backup.restart();
+  },
+
   export() {
     copyToClipboard(this.exportModifiedSave());
     GameUI.notify.info("Exported current savefile to your clipboard");
@@ -256,6 +372,7 @@ export const GameStorage = {
     }
 
     this.saves[this.currentSlot] = player;
+    this.lastUpdateOnLoad = player.lastUpdate;
 
     if (DEV) {
       guardFromNaNValues(player);

@@ -189,7 +189,15 @@ export default {
         />
       </div>
       <div class="l-options-grid__row">
+        <OptionsButton
+          :class="{ 'o-pelle-disabled-pointer': creditsClosed }"
+          onclick="Modal.backupWindows.show()"
+        >
+          Open Automatic Save Backup Menu
+        </OptionsButton>
         <SaveFileName />
+      </div>
+      <div class="l-options-grid__row">
         <OptionsButton
           v-if="canSpeedrun"
           class="o-primary-btn--option_font-x-large"

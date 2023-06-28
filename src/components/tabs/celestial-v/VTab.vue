@@ -17,7 +17,6 @@ export default {
     return {
       mainUnlock: false,
       canUnlockCelestial: false,
-      mainUnlockDB: [],
       totalUnlocks: 0,
       pp: 0,
       showReduction: false,
@@ -30,6 +29,7 @@ export default {
     };
   },
   computed: {
+    mainUnlockDB: () => GameDatabase.celestials.v.mainUnlock,
     celestialUnlockClassObject() {
       return {
         "o-v-milestone": true,
@@ -96,7 +96,6 @@ export default {
     update() {
       this.mainUnlock = VUnlocks.vAchievementUnlock.isUnlocked;
       this.canUnlockCelestial = V.canUnlockCelestial;
-      this.mainUnlockDB = GameDatabase.celestials.v.mainUnlock;
       this.totalUnlocks = V.spaceTheorems;
       this.pp = Currency.perkPoints.value;
       this.showReduction = VUnlocks.shardReduction.isUnlocked;

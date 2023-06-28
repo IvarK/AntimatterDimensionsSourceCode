@@ -1736,7 +1736,7 @@ export const celestialNavigation = {
         rMajor: 8,
       },
       legend: {
-        text: [
+        text: () => [
           "Annihilate your",
           "Dark Matter Dimensions"
         ],

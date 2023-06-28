@@ -788,6 +788,7 @@ window.player = {
     updateRate: 33,
     newUI: true,
     offlineProgress: true,
+    loadBackupWithoutOffline: false,
     automaticTabSwitching: true,
     respecIntoProtected: false,
     offlineTicks: 1e5,

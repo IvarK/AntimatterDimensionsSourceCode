@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       currTime: 0,
+      untilNextSave: 0,
     };
   },
   computed: {
@@ -47,15 +48,19 @@ export default {
       }
     },
     lastSaved() {
-      const lastSave = GameStorage.backupTimeData[this.slotData.id].last;
+      const lastSave = GameStorage.backupTimeData[this.slotData.id]?.last;
       return lastSave
         ? `Last saved: ${TimeSpan.fromMilliseconds(this.currTime - lastSave)} ago`
         : "Slot not currently in use";
+    },
+    nextSave() {
+      return `Next save in ${TimeSpan.fromMilliseconds(this.untilNextSave)}`;
     }
   },
   methods: {
     update() {
       this.currTime = Date.now();
+      this.untilNextSave = GameStorage.timeUntilNextSave(this.slotData.id);
     },
     load() {
       if (!this.save) return;
@@ -63,9 +68,16 @@ export default {
       // since the offline progress modal appears nearly immediately after clicking the button
       Modal.hide();
       if (this.slotData.type !== BACKUP_SLOT_TYPE.RESERVE) GameStorage.saveToReserveSlot();
+      GameStorage.ignoreBackupTimer = true;
+      GameStorage.offlineEnabled = player.options.loadBackupWithoutOffline ? false : undefined;
+      GameStorage.oldBackupTimer = player.backupTimer;
       GameStorage.loadPlayerObject(this.save);
       GameUI.notify.info(`Game loaded from backup slot #${this.slotData.id}`);
       GameStorage.processLocalBackups();
+      GameStorage.ignoreBackupTimer = false;
+      GameStorage.offlineEnabled = undefined;
+      player.backupTimer = Math.max(GameStorage.oldBackupTimer, player.backupTimer);
+      GameStorage.save(true);
     },
   },
 };
@@ -75,7 +87,15 @@ export default {
   <div class="c-bordered-entry">
     <h3>Slot #{{ slotData.id }}:</h3>
     <span>{{ progressStr }}</span>
-    <span>{{ slotType }}</span>
+    <span>
+      {{ slotType }}
+      <span
+        v-if="untilNextSave > 0"
+        :ach-tooltip="nextSave"
+      >
+        <i class="fas fa-question-circle" />
+      </span>
+    </span>
     <span class="c-fixed-height">{{ lastSaved }}</span>
     <PrimaryButton
       class="o-primary-btn--width-medium"

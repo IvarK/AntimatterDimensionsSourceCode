@@ -82,6 +82,8 @@ export const GameStorage = {
     .min(),
   nextBackup: 0,
   backupTimeData: {},
+  ignoreBackupTimer: true,
+  oldBackupTimer: 0,
 
   maxOfflineTicks(simulatedMs, defaultTicks = this.offlineTicks) {
     return Math.clampMax(defaultTicks, Math.floor(simulatedMs / 33));
@@ -151,19 +153,27 @@ export const GameStorage = {
     if (tryImportSecret(saveData) || Theme.tryUnlock(saveData)) {
       return;
     }
-    const player = GameSaveSerializer.deserialize(saveData);
-    if (this.checkPlayerObject(player) !== "") {
+    const newPlayer = GameSaveSerializer.deserialize(saveData);
+    if (this.checkPlayerObject(newPlayer) !== "") {
       Modal.message.show("Could not load the save (format unrecognized or invalid).");
       return;
     }
+    this.oldBackupTimer = player.backupTimer;
     Modal.hideAll();
     Quote.clearAll();
     AutomatorBackend.clearEditor();
-    this.loadPlayerObject(player);
+    this.loadPlayerObject(newPlayer);
     GlyphAppearanceHandler.clearInvalidCosmetics();
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
     Cloud.resetTempState();
+
+    // If we don't advance the backup timer when loading saves with a much lower one, this causes backups to be
+    // effectively disabled until the old timer is reached again
+    const largestBackupTimer = Object.values(GameStorage.backupTimeData).map(x => x.timer ?? 0).max();
+    player.backupTimer = Math.max(this.oldBackupTimer, player.backupTimer, largestBackupTimer);
+    this.nextBackup = player.backupTimer + this.shortestOnlineInterval;
+    GameIntervals.backup.restart();
 
     // This is to fix a very specific exploit: When the game is ending, some tabs get hidden
     // The options tab is the first one of those, which makes the player redirect to the Pelle tab
@@ -266,7 +276,7 @@ export const GameStorage = {
     return GameSaveSerializer.deserialize(data);
   },
 
-  // This is called after the player object is loaded
+  // This is only ever called directly after the player object is loaded
   processLocalBackups() {
     // Set the next backup timer to whatever the next multiple of the shortest online interval is
     this.nextBackup = Math.ceil(player.backupTimer / this.shortestOnlineInterval) * this.shortestOnlineInterval;
@@ -291,6 +301,18 @@ export const GameStorage = {
     }
   },
 
+  // Used for both checking if a backup should be done, and in the UI to tell the player how long until the next backup
+  timeUntilNextSave(slotID) {
+    const entry = AutoBackupSlots.find(slot => slot.id === slotID);
+    if (entry.type !== BACKUP_SLOT_TYPE.ONLINE) return 0;
+    const timeSinceLast = player.backupTimer - (this.backupTimeData[slotID]?.timer ?? 0);
+    const totalInterval = 1000 * entry.interval;
+    // When loading from the reserve slot, all the timers get screwed up relative to backupTimer and may otherwise give
+    // times which are longer than the actual saving interval. Using mod doesn't necessarily properly "fix" them, but it
+    // at least ensures it's less than the interval
+    return (totalInterval - timeSinceLast) % totalInterval;
+  },
+
   // Combining all the backup slots into a single call like this only works because all the longer intervals
   // are divisible by the shortest one. We want to make sure we pass the same timestamp into saving calls on
   // all slots, or else the displayed times will gradually desync due to the saving process itself taking time.
@@ -300,11 +322,13 @@ export const GameStorage = {
       // This may get called during player object loading, before the times are properly loaded in
       if (!this.backupTimeData) break;
       const id = backupInfo.id;
-      const lastSave = player.backupTimer - (this.backupTimeData[id].timer ?? 0);
-      if (lastSave >= 1000 * backupInfo.interval) this.saveToBackup(id, currentTime);
+      if (this.timeUntilNextSave(id) <= 0) this.saveToBackup(id, currentTime);
     }
 
-    this.nextBackup += this.shortestOnlineInterval;
+    // Set the next backup time, but make sure to skip forward an appropriate amount if a load or import happened,
+    // since these may cause the backup timer to be significantly behind
+    const largestBackupTimer = Object.values(GameStorage.backupTimeData).map(x => x.timer ?? 0).max();
+    this.nextBackup = Math.max(this.nextBackup, player.backupTimer, largestBackupTimer) + this.shortestOnlineInterval;
     GameIntervals.backup.restart();
   },
 
@@ -423,7 +447,7 @@ export const GameStorage = {
     Lazy.invalidateAll();
 
     const rawDiff = Date.now() - player.lastUpdate;
-    // We set offlineEnabled externally on importing; otherwise this is just a local load
+    // We set offlineEnabled externally on importing or loading a backup; otherwise this is just a local load
     const simulateOffline = this.offlineEnabled ?? player.options.offlineProgress;
     if (simulateOffline && !Speedrun.isPausedAtStart()) {
       let diff = rawDiff;
@@ -467,6 +491,7 @@ export const GameStorage = {
     // This is called from simulateTime, if that's called; otherwise, it gets called
     // manually above
     GameIntervals.restart();
+    GameStorage.ignoreBackupTimer = false;
     Enslaved.nextTickDiff = player.options.updateRate;
     // The condition for this secret achievement is only checked when the player is actively storing real time, either
     // when online or simulating time. When only storing offline, the condition is never actually entered in the

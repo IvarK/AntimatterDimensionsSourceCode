@@ -1,14 +1,17 @@
 <script>
 import BackupEntry from "@/components/modals/options/BackupEntry";
 import ModalWrapper from "@/components/modals/ModalWrapper";
+import PrimaryButton from "@/components/PrimaryButton";
 
 import { AutoBackupSlots } from "@/core/storage";
+import { STEAM } from "@/env";
 
 export default {
   name: "BackupWindowModal",
   components: {
     ModalWrapper,
-    BackupEntry
+    BackupEntry,
+    PrimaryButton
   },
   data() {
     return {
@@ -19,6 +22,7 @@ export default {
   },
   computed: {
     backupSlots: () => AutoBackupSlots,
+    deleteText: () => (STEAM ? "fully uninstalling the game" : "clearing your browser cookies"),
   },
   watch: {
     ignoreOffline(newValue) {
@@ -38,7 +42,17 @@ export default {
     },
     toggleOffline() {
       this.ignoreOffline = !this.ignoreOffline;
-    }
+    },
+    importAsFile(event) {
+      // This happens if the file dialog is canceled instead of a file being selected
+      if (event.target.files.length === 0) return;
+
+      const reader = new FileReader();
+      reader.onload = function() {
+        GameStorage.importBackupsFromFile(reader.result);
+      };
+      reader.readAsText(event.target.files[0]);
+    },
   }
 };
 </script>
@@ -73,6 +87,26 @@ export default {
           :slot-data="slot"
         />
       </div>
+      These backups are still stored in the same place as your game save and can still be lost if you do anything
+      external to the game which would delete your save itself, such as {{ deleteText }}. You can import/export
+      all backups at once as files, using these buttons:
+      <div class="c-backup-file-ops">
+        <PrimaryButton
+          class="o-btn-file-ops"
+          onclick="GameStorage.exportBackupsAsFile()"
+        >
+          Export as file
+        </PrimaryButton>
+        <PrimaryButton class="o-btn-file-ops">
+          <input
+            class="c-file-import"
+            type="file"
+            accept=".txt"
+            @change="importAsFile"
+          >
+          <label for="file">Import from file</label>
+        </PrimaryButton>
+      </div>
     </div>
   </ModalWrapper>
 </template>
@@ -80,6 +114,14 @@ export default {
 <style scoped>
 .c-info {
   width: 60rem;
+}
+
+.c-backup-file-ops {
+  margin: 0.5rem;
+}
+
+.o-btn-file-ops {
+  margin: 0 0.5rem;
 }
 
 .c-entry-container {

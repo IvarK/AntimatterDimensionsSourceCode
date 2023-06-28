@@ -172,8 +172,7 @@ export const GameStorage = {
     // effectively disabled until the old timer is reached again
     const largestBackupTimer = Object.values(GameStorage.backupTimeData).map(x => x.timer ?? 0).max();
     player.backupTimer = Math.max(this.oldBackupTimer, player.backupTimer, largestBackupTimer);
-    this.nextBackup = player.backupTimer + this.shortestOnlineInterval;
-    GameIntervals.backup.restart();
+    this.resetBackupInterval();
 
     // This is to fix a very specific exploit: When the game is ending, some tabs get hidden
     // The options tab is the first one of those, which makes the player redirect to the Pelle tab
@@ -324,9 +323,12 @@ export const GameStorage = {
       const id = backupInfo.id;
       if (this.timeUntilNextSave(id) <= 0) this.saveToBackup(id, currentTime);
     }
+    this.resetBackupInterval();
+  },
 
-    // Set the next backup time, but make sure to skip forward an appropriate amount if a load or import happened,
-    // since these may cause the backup timer to be significantly behind
+  // Set the next backup time, but make sure to skip forward an appropriate amount if a load or import happened,
+  // since these may cause the backup timer to be significantly behind
+  resetBackupInterval() {
     const largestBackupTimer = Object.values(GameStorage.backupTimeData).map(x => x.timer ?? 0).max();
     this.nextBackup = Math.max(this.nextBackup, player.backupTimer, largestBackupTimer) + this.shortestOnlineInterval;
     GameIntervals.backup.restart();
@@ -343,19 +345,55 @@ export const GameStorage = {
     GameUI.notify.info("Exported current savefile to your clipboard");
   },
 
-  exportAsFile() {
-    player.options.exportedFileCount++;
-    this.save(true);
-    const saveFileName = player.options.saveFileName ? ` - ${player.options.saveFileName},` : "";
+  get exportDateString() {
     const dateObj = new Date();
     const y = dateObj.getFullYear();
     const m = dateObj.getMonth() + 1;
     const d = dateObj.getDate();
+    return `${y}-${m}-${d}`;
+  },
+
+  exportAsFile() {
+    player.options.exportedFileCount++;
+    this.save(true);
+    const saveFileName = player.options.saveFileName ? ` - ${player.options.saveFileName},` : "";
     const save = this.exportModifiedSave();
     download(
       `AD Save, Slot ${GameStorage.currentSlot + 1}${saveFileName} #${player.options.exportedFileCount} \
-(${y}-${m}-${d}).txt`, save);
+(${this.exportDateString}).txt`, save);
     GameUI.notify.info("Successfully downloaded current save file to your computer");
+  },
+
+  exportBackupsAsFile() {
+    player.options.exportedFileCount++;
+    const backupData = {};
+    for (const id of AutoBackupSlots.map(slot => slot.id)) {
+      const backup = this.loadFromBackup(id);
+      if (backup) backupData[id] = backup;
+    }
+    backupData.time = GameSaveSerializer.deserialize(localStorage.getItem(this.backupTimeKey(this.currentSlot)));
+    download(
+      `AD Save Backups, Slot ${GameStorage.currentSlot + 1} #${player.options.exportedFileCount} \
+(${this.exportDateString}).txt`, GameSaveSerializer.serialize(backupData));
+    GameUI.notify.info("Successfully downloaded save file backups to your computer");
+  },
+
+  importBackupsFromFile(importText) {
+    const backupData = GameSaveSerializer.deserialize(importText);
+    localStorage.setItem(this.backupTimeKey(this.currentSlot), GameSaveSerializer.serialize(backupData.time));
+    for (const backupKey of Object.keys(backupData)) {
+      if (backupKey === "time") continue;
+      const id = Number(backupKey);
+      const storageKey = this.backupDataKey(this.currentSlot, id);
+      localStorage.setItem(storageKey, GameSaveSerializer.serialize(backupData[backupKey]));
+      this.backupTimeData[id] = {
+        timer: backupData.time[id].timer,
+        last: backupData.time[id].last,
+      };
+    }
+    this.nextBackup = Math.ceil(player.backupTimer / this.shortestOnlineInterval) * this.shortestOnlineInterval;
+    this.resetBackupInterval();
+    GameUI.notify.info("Successfully imported save file backups from file");
   },
 
   // There are a couple props which may need to export with different values, so we handle that here

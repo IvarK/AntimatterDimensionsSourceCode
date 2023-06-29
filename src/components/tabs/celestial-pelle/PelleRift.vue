@@ -18,6 +18,7 @@ export default {
   },
   data() {
     return {
+      hasStrike: false,
       isActive: false,
       isMaxed: false,
       totalFill: new Decimal(),
@@ -42,6 +43,8 @@ export default {
   },
   methods: {
     update() {
+      this.hasStrike = this.strike.hasStrike;
+      if (!this.hasStrike) return;
       const rift = this.rift;
       this.effects = this.rift.effects;
       this.isActive = rift.isActive;
@@ -72,44 +75,49 @@ export default {
 </script>
 
 <template>
-  <div class="c-pelle-rift">
-    <div class="c-pelle-rift-row">
-      <div class="c-pelle-rift-column c-pelle-rift-status">
-        <h2 class="c-pelle-rift-name-header">
-          {{ riftName() }}
-        </h2>
-        <div class="c-pelle-rift-rift-info-container">
-          <div
-            v-for="(effect, idx) in effects"
-            :key="idx"
-          >
-            {{ effect || "" }}
-          </div>
-        </div>
-      </div>
-      <div class="c-pelle-rift-column">
-        <PelleStrike :strike="strike" />
-        <PelleRiftBar :rift="rift" />
-      </div>
-      <div class="c-pelle-rift-status">
-        <div class="c-pelle-rift-fill-status">
+  <div
+    v-if="hasStrike"
+    class="c-pelle-single-bar"
+  >
+    <div class="c-pelle-rift">
+      <div class="c-pelle-rift-row">
+        <div class="c-pelle-rift-column c-pelle-rift-status">
           <h2 class="c-pelle-rift-name-header">
             {{ riftName() }}
           </h2>
           <div class="c-pelle-rift-rift-info-container">
-            Drains {{ drainResource() }} to fill.
-            <span
-              v-if="specialRift"
-              :ach-tooltip="infoTooltip"
+            <div
+              v-for="(effect, idx) in effects"
+              :key="idx"
             >
-              <i class="fas fa-question-circle" />
-            </span>
-            <br>
-            <template v-if="!isMaxed">
-              Current Amount: {{ formatRift(resource) }}
-            </template>
-            <br>
-            Total Filled: {{ formatRift(rift.totalFill) }}
+              {{ effect || "" }}
+            </div>
+          </div>
+        </div>
+        <div class="c-pelle-rift-column">
+          <PelleStrike :strike="strike" />
+          <PelleRiftBar :rift="rift" />
+        </div>
+        <div class="c-pelle-rift-status">
+          <div class="c-pelle-rift-fill-status">
+            <h2 class="c-pelle-rift-name-header">
+              {{ riftName() }}
+            </h2>
+            <div class="c-pelle-rift-rift-info-container">
+              Drains {{ drainResource() }} to fill.
+              <span
+                v-if="specialRift"
+                :ach-tooltip="infoTooltip"
+              >
+                <i class="fas fa-question-circle" />
+              </span>
+              <br>
+              <template v-if="!isMaxed">
+                Current Amount: {{ formatRift(resource) }}
+              </template>
+              <br>
+              Total Filled: {{ formatRift(rift.totalFill) }}
+            </div>
           </div>
         </div>
       </div>
@@ -118,6 +126,12 @@ export default {
 </template>
 
 <style scoped>
+.c-pelle-single-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
 .c-pelle-rift {
   display: flex;
   flex-direction: column;

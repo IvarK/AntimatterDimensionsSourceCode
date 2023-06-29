@@ -26,13 +26,29 @@ export default {
     },
     progressStr() {
       if (!this.save) return "(Empty)";
-      const rm = new Decimal(this.save.reality.realityMachines);
-      if (rm.gt(0)) return `Reality Machines: ${format(new Decimal(rm), 2)}`;
-      const ep = new Decimal(this.save.eternityPoints);
-      if (ep.gt(0)) return `Eternity Points: ${format(new Decimal(ep), 2)}`;
-      const ip = new Decimal(this.save.infinityPoints);
-      if (ip.gt(0)) return `Infinity Points: ${format(new Decimal(ip), 2)}`;
-      return `Antimatter: ${formatPostBreak(new Decimal(this.save.antimatter), 2, 1)}`;
+
+      // These will be checked in order; the first nonzero resource will be returned
+      const resources = [this.save.celestials.pelle.realityShards,
+        this.save.reality.iMCap,
+        this.save.reality.realityMachines,
+        this.save.eternityPoints,
+        this.save.infinityPoints,
+        this.save.antimatter
+      ];
+      const names = ["Reality Shards",
+        "Imaginary Machine Cap",
+        "Reality Machines",
+        "Eternity Points",
+        "Infinity Points",
+        "Antimatter"];
+
+      for (let index = 0; index < resources.length; index++) {
+        const val = new Decimal(resources[index]);
+        if (val.gt(0)) return `${names[index]}: ${formatPostBreak(val, 2, 1)}`;
+      }
+
+      // In practice this should never happen, unless a save triggers on the same tick the very first AD1 is bought
+      return "No resources";
     },
     slotType() {
       const formattedTime = this.slotData.intervalStr?.();
@@ -67,11 +83,16 @@ export default {
       // This seems to be the only way to properly hide the modal after the save is properly loaded,
       // since the offline progress modal appears nearly immediately after clicking the button
       Modal.hide();
-      if (this.slotData.type !== BACKUP_SLOT_TYPE.RESERVE) GameStorage.saveToReserveSlot();
+
+      // We still save to the reserve slot even if we're loading from it, so we temporarily store the
+      // save-to-be-loaded into a string in this scope so that it doesn't get overwritten by the current save
+      const toLoad = this.save;
+      GameStorage.saveToReserveSlot();
+
       GameStorage.ignoreBackupTimer = true;
       GameStorage.offlineEnabled = player.options.loadBackupWithoutOffline ? false : undefined;
       GameStorage.oldBackupTimer = player.backupTimer;
-      GameStorage.loadPlayerObject(this.save);
+      GameStorage.loadPlayerObject(toLoad);
       GameUI.notify.info(`Game loaded from backup slot #${this.slotData.id}`);
       GameStorage.processLocalBackups();
       GameStorage.ignoreBackupTimer = false;

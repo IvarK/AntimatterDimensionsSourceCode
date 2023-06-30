@@ -195,6 +195,7 @@ export const GlyphGenerator = {
       this.randomGlyph({ actualLevel: Math.floor(player.records.bestReality.glyphLevel * 0.8), rawLevel: 1 }, rng);
     rng.finalize();
     glyph.cosmetic = "music";
+    glyph.fixedCosmetic = true;
     return glyph;
   },
 

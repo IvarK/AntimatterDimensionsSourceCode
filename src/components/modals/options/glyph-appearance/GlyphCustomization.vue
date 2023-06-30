@@ -93,7 +93,9 @@ export default {
       };
     },
     resetIndividual() {
-      for (const glyph of Glyphs.allGlyphs) glyph.cosmetic = undefined;
+      for (const glyph of Glyphs.allGlyphs) {
+        if (!glyph.fixedCosmetic) glyph.cosmetic = undefined;
+      }
       this.defaultKeySwap = false;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },

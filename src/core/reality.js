@@ -181,10 +181,12 @@ export function processManualReality(sacrifice, glyphID) {
     }
   } else {
     // We can't get a random glyph directly here because that makes the RNG depend on when you get the first
-    // perk. Instead we (arbitrarily) select the first one instead of allowing a choice. The internals of
-    // generate() still advance the seed properly as if we actually had a choice of more than one glyph
+    // perk. The internals of generate() still advance the seed properly as if we actually had a choice of
+    // more than one glyph, but always selecting the first glyph results in highly biased types when the
+    // uniformity code is still active. Therefore, we choose a glyph randomly (but deterministically) instead
     GlyphSelection.generate(1);
-    GlyphSelection.select(0, sacrifice);
+    const lexIndex = player.realities * ((player.reality.initialSeed % 5) + 3);
+    GlyphSelection.select(permutationIndex(4, lexIndex)[0], sacrifice);
   }
 
   // We've already gotten a glyph at this point, so the second value has to be true.

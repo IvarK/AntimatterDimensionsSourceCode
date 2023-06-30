@@ -790,6 +790,7 @@ window.player = {
     automaticTabSwitching: true,
     respecIntoProtected: false,
     offlineTicks: 1e5,
+    hibernationCatchup: true,
     showRecentRate: true,
     multiplierTab: {
       currTab: 0,

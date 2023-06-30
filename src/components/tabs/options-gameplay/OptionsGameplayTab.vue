@@ -15,6 +15,7 @@ export default {
   data() {
     return {
       offlineProgress: false,
+      hibernationCatchup: false,
       hotkeys: false,
       offlineSlider: 0,
       offlineTicks: 0,
@@ -48,6 +49,9 @@ export default {
     offlineProgress(newValue) {
       player.options.offlineProgress = newValue;
     },
+    hibernationCatchup(newValue) {
+      player.options.hibernationCatchup = newValue;
+    },
     hotkeys(newValue) {
       player.options.hotkeys = newValue;
     },
@@ -72,6 +76,7 @@ export default {
     update() {
       const options = player.options;
       this.offlineProgress = options.offlineProgress;
+      this.hibernationCatchup = options.hibernationCatchup;
       this.hotkeys = options.hotkeys;
       this.offlineTicks = player.options.offlineTicks;
       this.automaticTabSwitching = options.automaticTabSwitching;
@@ -101,11 +106,12 @@ export default {
   <div class="l-options-tab">
     <div class="l-options-grid">
       <div class="l-options-grid__row">
-        <PrimaryToggleButton
-          v-model="offlineProgress"
-          class="o-primary-btn--option l-options-grid__button"
-          label="Offline progress:"
-        />
+        <OptionsButton
+          class="o-primary-btn--option"
+          onclick="Modal.confirmationOptions.show()"
+        >
+          Open Confirmation Options
+        </OptionsButton>
         <PrimaryToggleButton
           v-model="hotkeys"
           class="o-primary-btn--option l-options-grid__button"
@@ -120,12 +126,11 @@ export default {
         />
       </div>
       <div class="l-options-grid__row">
-        <OptionsButton
-          class="o-primary-btn--option"
-          onclick="Modal.confirmationOptions.show()"
-        >
-          Open Confirmation Options
-        </OptionsButton>
+        <PrimaryToggleButton
+          v-model="offlineProgress"
+          class="o-primary-btn--option l-options-grid__button"
+          label="Offline progress:"
+        />
         <div class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button">
           <b>Offline ticks: {{ formatInt(offlineTicks) }}</b>
           <SliderComponent
@@ -135,6 +140,11 @@ export default {
             @input="adjustSliderValueOfflineTicks($event)"
           />
         </div>
+        <PrimaryToggleButton
+          v-model="hibernationCatchup"
+          class="o-primary-btn--option l-options-grid__button"
+          label="Run suspended time as offline:"
+        />
         <div
           v-if="automatorUnlocked"
           class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button"

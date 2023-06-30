@@ -438,13 +438,13 @@ export function gameLoop(passDiff, options = {}) {
     ? Math.clamp(thisUpdate - player.lastUpdate, 1, 8.64e7)
     : diff;
 
-  // For single ticks longer than 10 seconds from the GameInterval loop, we assume that the device has gone to sleep or
+  // For single ticks longer than a minute from the GameInterval loop, we assume that the device has gone to sleep or
   // hibernation - in those cases we stop the interval and simulate time instead. The gameLoop interval automatically
   // restarts itself at the end of the simulateTime call. This will not trigger for an unfocused game, as this seems to
   // result in a ~1 second tick rate for browsers.
   // Note that we have to explicitly call all the real-time mechanics with the existing value of realDiff, because
   // simply letting it run through simulateTime seems to result in it using zero
-  if (passDiff === undefined && realDiff > 1e4) {
+  if (player.options.hibernationCatchup && passDiff === undefined && realDiff > 6e4) {
     GameIntervals.gameLoop.stop();
     simulateTime(realDiff / 1000, true);
     realTimeMechanics(realDiff);

@@ -33,6 +33,10 @@ export default {
     nicknameBlur(event) {
       const newName = event.target.value.slice(0, 4).trim();
       if (!this.isASCII(newName)) return;
+
+      const existingNames = player.timestudy.presets.map(p => p.name);
+      if (existingNames.includes(newName)) return;
+
       this.preset.name = newName;
       this.name = this.preset.name;
     },

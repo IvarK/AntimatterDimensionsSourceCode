@@ -45,9 +45,10 @@ export default {
       this.defaultKeySwap = true;
     },
     setType(type) {
+      if (type && this.glyph.fixedCosmetic) return;
       this.glyph.color = undefined;
       this.glyph.symbol = undefined;
-      this.glyph.cosmetic = type;
+      if (!this.glyph.fixedCosmetic) this.glyph.cosmetic = type;
       this.defaultKeySwap = false;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
@@ -77,8 +78,11 @@ export default {
       :type="glyphType"
       :glyph-id="glyphId"
     />
+    <div v-if="cosmeticTypes && glyph.fixedCosmetic">
+      This Glyph's Cosmetic Type cannot be changed!
+    </div>
     <div
-      v-if="cosmeticTypes"
+      v-else-if="cosmeticTypes"
       class="c-special-type"
     >
       Apply Special Cosmetic Type:

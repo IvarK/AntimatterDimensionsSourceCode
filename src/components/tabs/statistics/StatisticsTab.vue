@@ -13,6 +13,7 @@ export default {
       realTimeDoomed: TimeSpan.zero,
       totalAntimatter: new Decimal(0),
       realTimePlayed: TimeSpan.zero,
+      timeSinceCreation: 0,
       uniqueNews: 0,
       totalNews: 0,
       secretAchievementCount: 0,
@@ -71,7 +72,13 @@ export default {
     },
     fullGameCompletions() {
       return player.records.fullGameCompletions;
-    }
+    },
+    startDate() {
+      return Time.toDateTimeString(player.records.gameCreatedTime);
+    },
+    saveAge() {
+      return TimeSpan.fromMilliseconds(this.timeSinceCreation);
+    },
   },
   methods: {
     update() {
@@ -82,6 +89,7 @@ export default {
       this.uniqueNews = NewsHandler.uniqueTickersSeen;
       this.totalNews = player.news.totalSeen;
       this.secretAchievementCount = SecretAchievements.all.filter(a => a.isUnlocked).length;
+      this.timeSinceCreation = Date.now() - player.records.gameCreatedTime;
 
       const progress = PlayerProgress.current;
       const isInfinityUnlocked = progress.isInfinityUnlocked;
@@ -175,6 +183,10 @@ export default {
         <div v-if="reality.isUnlocked">
           Your existence has spanned {{ reality.totalTimePlayed }} of time. (game time)
         </div>
+        <div>
+          Your save was created on {{ startDate }} ({{ saveAge }} ago)
+        </div>
+        <br>
         <div>
           You have seen {{ quantifyInt("news message", totalNews) }} in total.
         </div>

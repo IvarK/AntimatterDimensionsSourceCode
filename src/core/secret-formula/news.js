@@ -1068,13 +1068,6 @@ export const news = [
       work environment I want to be in! I quit!`
   },
   {
-    id: "a194",
-    text:
-       `<a href='https://youtube.com/watch?v=iJgNpm8cTE8' target='_blank'>This link is not a rick roll.
-       It's a reference to a certain scene in the movie Star Wars that was also referenced by a certain
-       website and was a very popular meme.</a>`
-  },
-  {
     id: "a195",
     text:
       `Clowns are unique in that there is no such thing as an anti-clown,

@@ -30,6 +30,9 @@ export default {
         "o-eternity-upgrade--available": !this.isBought && this.isAffordable,
         "o-eternity-upgrade--unavailable": !this.isBought && !this.isAffordable
       };
+    },
+    hasEU2() {
+      return Perk.autounlockEU2.canBeApplied;
     }
   },
   methods: {
@@ -52,8 +55,11 @@ export default {
       br
       :config="upgrade.config"
     />
+    <div v-if="!isBought && hasEU2">
+      Auto: {{ format(upgrade.config.cost / 1e10) }} Eternity Points
+    </div>
     <CostDisplay
-      v-if="!isBought"
+      v-else-if="!isBought"
       br
       :config="upgrade.config"
       name="Eternity Point"

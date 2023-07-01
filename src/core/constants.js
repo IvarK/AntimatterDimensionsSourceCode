@@ -220,6 +220,13 @@ window.AUTO_REALITY_MODE = {
   RELIC_SHARD: 5,
 };
 
+window.RECENT_PRESTIGE_RESOURCE = {
+  ABSOLUTE_GAIN: 0,
+  RATE: 1,
+  CURRENCY: 2,
+  PRESTIGE_COUNT: 3,
+};
+
 // Free tickspeed multiplier with TS171. Shared here because formatting glyph effects depends on it
 window.TS171_MULTIPLIER = 1.25;
 

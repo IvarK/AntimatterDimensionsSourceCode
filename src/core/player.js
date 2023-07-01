@@ -791,7 +791,7 @@ window.player = {
     respecIntoProtected: false,
     offlineTicks: 1e5,
     hibernationCatchup: true,
-    showRecentRate: true,
+    statTabResources: 0,
     multiplierTab: {
       currTab: 0,
       showAltGroup: false,

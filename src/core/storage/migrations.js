@@ -364,6 +364,15 @@ export const migrations = {
     22: player => {
       // Added 3 new perk layouts, inserted before blob
       if (player.options.perkLayout > 2) player.options.perkLayout += 3;
+
+      // Changed recent prestige tab to allow for more than just gain rate and absolute gain
+      player.options.statTabResources = player.options.showRecentRate ? 1 : 0;
+      delete player.options.showRecentRate;
+
+      // Added iM cap value to recent realities
+      for (let index = 0; index < player.records.recentRealities.length; index++) {
+        player.records.recentRealities[index].push(0);
+      }
     },
   },
 

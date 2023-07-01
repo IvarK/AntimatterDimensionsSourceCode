@@ -513,6 +513,10 @@ export const automator = {
         const filterText = EffarigUnlock.glyphFilter.isUnlocked
           ? `<b>filter score</b> - Glyph filter score of the Glyph which your filter will select this Reality<br>`
           : "";
+        const stText = V.spaceTheorems > 0
+          ? `<b>space theorems</b> - Current unspent Space Theorem amount<br>
+            <b>total space theorems</b> - TOTAL Space Theorems, including ones spent on current Studies<br>`
+          : "";
         return `This is a list of "currencies" or numbers that you can use within the Automator.<br>
           Note that when used, most currencies will need to be in scientific notation.<br>
           <b>am</b> - Current Antimatter amount  <br>
@@ -529,7 +533,7 @@ export const automator = {
           <b>pending rm</b> - RM gained on Reality (0 if not available)<br>
           <b>pending glyph level</b> - Glyph Level gained on Reality (0 if not available)<br>
           <b>dt</b> - Current Dilated Time amount <br>
-          <b>tp</b> - Current Tachyon Particle amount  <br>
+          <b>tp</b> - Current Tachyon Particle amount<br>
           <b>rg</b> - Current Replicanti Galaxy amount (does not use scientific)<br>
           <b>rep</b> - Current Replicanti amount <br>
           <b>tt</b> - Current Time Theorem amount <br>
@@ -538,6 +542,7 @@ export const automator = {
           <b>pending completions</b> - Total completions of current EC at Eternity <br>
           <b>ec<u>X</u> completions</b> - Amount of EC completions for a certain EC (eg. "ec6 completions")<br>
           ${filterText}
+          ${stText}
         `;
       }
     },

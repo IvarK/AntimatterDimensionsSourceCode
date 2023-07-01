@@ -1,12 +1,10 @@
 <script>
 import PastPrestigeRunsContainer from "./PastPrestigeRunsContainer";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
 
 export default {
   name: "PastPrestigeRunsTab",
   components: {
-    PastPrestigeRunsContainer,
-    PrimaryToggleButton
+    PastPrestigeRunsContainer
   },
   data() {
     return {
@@ -42,18 +40,33 @@ export default {
           getRuns: () => player.records.recentInfinities,
         },
       },
-      showRate: false,
+      resourceType: false,
     };
   },
-  watch: {
-    showRate(newValue) {
-      player.options.showRecentRate = newValue;
-    },
+  computed: {
+    resourceText() {
+      switch (this.resourceType) {
+        case RECENT_PRESTIGE_RESOURCE.ABSOLUTE_GAIN:
+          return "total resource gain";
+        case RECENT_PRESTIGE_RESOURCE.RATE:
+          return "resource gain rate";
+        case RECENT_PRESTIGE_RESOURCE.CURRENCY:
+          return "prestige currency";
+        case RECENT_PRESTIGE_RESOURCE.PRESTIGE_COUNT:
+          return "prestige count";
+        default:
+          throw new Error("Unrecognized Statistics tab resource type");
+      }
+    }
   },
   methods: {
     update() {
-      this.showRate = player.options.showRecentRate;
-    }
+      this.resourceType = player.options.statTabResources;
+    },
+    cycleButton() {
+      const stateCount = Object.keys(RECENT_PRESTIGE_RESOURCE).length;
+      player.options.statTabResources = (player.options.statTabResources + 1) % stateCount;
+    },
   }
 };
 </script>
@@ -61,12 +74,12 @@ export default {
 <template>
   <div class="c-stats-tab">
     <div class="c-subtab-option-container">
-      <PrimaryToggleButton
-        v-model="showRate"
-        on="Showing resource gain rate"
-        off="Showing absolute resource gain"
-        class="o-primary-btn--subtab-option"
-      />
+      <button
+        class="o-primary-btn o-primary-btn--subtab-option"
+        @click="cycleButton()"
+      >
+        Showing {{ resourceText }}
+      </button>
     </div>
     <PastPrestigeRunsContainer
       v-for="layer in layers"

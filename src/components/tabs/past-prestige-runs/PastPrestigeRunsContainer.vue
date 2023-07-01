@@ -30,13 +30,16 @@ export default {
   data() {
     return {
       isRealityUnlocked: false,
-      showRate: false,
+      resourceType: false,
+      selectedResources: [],
+      resourceTitles: [],
       showRealTime: false,
       runs: [],
       hasEmptyRecord: false,
       shown: true,
       hasChallenges: false,
       longestRow: 0,
+      hasIM: false,
     };
   },
   computed: {
@@ -47,7 +50,8 @@ export default {
       return this.shown ? "far fa-minus-square" : "far fa-plus-square";
     },
     points() {
-      return this.layer.currency;
+      const rawText = this.layer.currency;
+      return rawText === "RM" && this.hasIM ? "iM Cap" : rawText;
     },
     condition() {
       return this.layer.condition();
@@ -70,8 +74,30 @@ export default {
       this.runs.push(this.averageRun);
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
       this.shown = player.shownRuns[this.singular];
-      this.showRate = player.options.showRecentRate;
+      this.resourceType = player.options.statTabResources;
+      this.showRate = this.resourceType === RECENT_PRESTIGE_RESOURCE.RATE;
       this.hasChallenges = this.runs.map(r => this.challengeText(r)).some(t => t);
+      this.hasIM = MachineHandler.currentIMCap > 0;
+
+      // We have 4 different "useful" stat pairings we could display, but this ends up being pretty boilerplatey
+      const names = [this.points, `${this.points} Rate`, this.plural, `${this.singular} Rate`];
+      switch (this.resourceType) {
+        case RECENT_PRESTIGE_RESOURCE.ABSOLUTE_GAIN:
+          this.selectedResources = [0, 2];
+          break;
+        case RECENT_PRESTIGE_RESOURCE.RATE:
+          this.selectedResources = [1, 3];
+          break;
+        case RECENT_PRESTIGE_RESOURCE.CURRENCY:
+          this.selectedResources = [0, 1];
+          break;
+        case RECENT_PRESTIGE_RESOURCE.PRESTIGE_COUNT:
+          this.selectedResources = [2, 3];
+          break;
+        default:
+          throw new Error("Unrecognized Statistics tab resource type");
+      }
+      this.resourceTitles = [names[this.selectedResources[0]], names[this.selectedResources[1]]];
 
       // Entries always have all values, but sometimes the trailing ones will be blank or zero which we want to hide
       const lastIndex = arr => {
@@ -101,13 +127,11 @@ export default {
 
       const cells = [name, this.gameTime(run)];
       if (this.hasRealTime) cells.push(this.realTime(run));
-      if (this.showRate) {
-        cells.push(this.prestigeCurrencyRate(run));
-        cells.push(this.prestigeCountRate(run));
-      } else {
-        cells.push(this.prestigeCurrencyGain(run));
-        cells.push(this.prestigeCountGain(run));
-      }
+
+      const resources = [this.prestigeCurrencyGain(run), this.prestigeCurrencyRate(run),
+        this.prestigeCountGain(run), this.prestigeCountRate(run)];
+      cells.push(resources[this.selectedResources[0]]);
+      cells.push(resources[this.selectedResources[1]]);
 
       if (this.hasChallenges) cells.push(this.challengeText(run));
       for (let i = 0; i < this.layer.extra?.length && cells.length <= this.longestRow; i++) {
@@ -123,10 +147,7 @@ export default {
     infoCol() {
       const cells = ["Run", this.hasRealTime ? "Game Time" : "Time in Run"];
       if (this.hasRealTime) cells.push("Real Time");
-      const prestigeResources = this.showRate
-        ? [`${this.points} Rate`, `${this.singular} Rate`]
-        : [this.points, this.plural];
-      cells.push(...prestigeResources);
+      cells.push(...this.resourceTitles);
       if (this.hasChallenges) cells.push("Challenge");
 
       for (let index = 0; index < this.layer.extra?.length && cells.length <= this.longestRow; index++) {
@@ -144,12 +165,14 @@ export default {
       return timeDisplayShort(run[1]);
     },
     prestigeCurrencyGain(run) {
+      if (this.hasIM && this.layer.name === "Reality") return `${format(run[7], 2)} iM`;
       return `${format(run[2], 2)} ${this.points}`;
     },
     prestigeCountGain(run) {
       return quantify(this.singular, run[3]);
     },
     prestigeCurrencyRate(run) {
+      if (this.hasIM && this.layer.name === "Reality") return "N/A";
       return this.rateText(run, run[2]);
     },
     prestigeCountRate(run) {
@@ -163,7 +186,9 @@ export default {
         : `${format(rpm, 2, 2)} per min`;
     },
     challengeText(run) {
-      return run[4];
+      // Special-case Nameless reality in order to keep this column small and not force a linebreak
+      const rawText = run[4];
+      return rawText === "The Nameless Ones" ? "Nameless" : rawText;
     },
     toggleShown() {
       player.shownRuns[this.singular] = !player.shownRuns[this.singular];
@@ -176,9 +201,13 @@ export default {
           width = "7rem";
           break;
         case 3:
-        case 5:
-          // Prestige currency and Challenges can potentially be very long, the reality table needs to be kept short
+        case 4:
+          // Prestige currency is long, but the reality table can be shorter due to smaller numbers
           width = this.layer.name === "Reality" ? "15rem" : "20rem";
+          break;
+        case 5:
+          // Challenges can potentially be very long, but this is glyph level in the reality table
+          width = this.layer.name === "Reality" ? "10rem" : "20rem";
           break;
         default:
           width = "13rem";

@@ -188,6 +188,20 @@ createInCategory(AutomatorCurrency, "FilterScore", /filter[ \t]+score/i, {
   $unlocked: () => EffarigUnlock.glyphFilter.isUnlocked,
 });
 
+// Space theorems can't be abbreviated as "ST" in the actual script content because then the lexer becomes unable
+// to match it due to the fact that "start" (ec/dilation) also begins with those characters. As a workaround, ST
+// uses the full string "space theorems" as does the "total ST" variant (for consistency)
+createInCategory(AutomatorCurrency, "ST", /space[ \t]+theorems/i, {
+  $autocomplete: "space theorems",
+  $getter: () => V.availableST,
+  $unlocked: () => V.spaceTheorems > 0,
+});
+createInCategory(AutomatorCurrency, "TotalST", /total[ \t]+space[ \t]+theorems/i, {
+  $autocomplete: "total space theorems",
+  $getter: () => V.spaceTheorems,
+  $unlocked: () => V.spaceTheorems > 0,
+});
+
 for (let i = 1; i <= 12; ++i) {
   const id = i;
   createInCategory(AutomatorCurrency, `EC${i}`, new RegExp(`ec${i} completions`, "i"), {

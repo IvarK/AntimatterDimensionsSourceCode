@@ -64,7 +64,7 @@ CodeMirror.defineSimpleMode("automato", {
     { regex: /blob\s\s/ui, token: "blob" },
     {
       // eslint-disable-next-line max-len
-      regex: /(auto|if|pause|studies|time[ \t]+theorems?|until|wait|while|black[ \t]+hole|stored?[ \t]+game[ \t]+time|notify)\s/ui,
+      regex: /(auto|if|pause|studies|time[ \t]+theorems?|space[ \t]+theorems?|until|wait|while|black[ \t]+hole|stored?[ \t]+game[ \t]+time|notify)\s/ui,
       token: "keyword",
       next: "commandArgs"
     },
@@ -156,12 +156,12 @@ CodeMirror.defineSimpleMode("automato", {
     { regex: /(light|dark)(\s|$|(?=,))/ui, token: "variable-2" },
     { regex: /x[\t ]+highest(\s|$)/ui, token: "variable-2" },
     { regex: /pending[\t ]+(completions|ip|ep|tp|rm|glyph[\t ]+level)(\s|$)/ui, token: "variable-2" },
-    { regex: /total[\t ]+(completions|tt)(\s|$)/ui, token: "variable-2" },
+    { regex: /total[\t ]+(completions|tt|space theorems)(\s|$)/ui, token: "variable-2" },
     { regex: /filter[ \t]+score/ui, token: "variable-2" },
     { regex: /ec(1[0-2]|[1-9])[\t ]+completions(\s|$)/ui, token: "variable-2" },
     { regex: /(am|ip|ep|all)(\s|$)/ui, token: "variable-2" },
     {
-      regex: /(rm|rg|dt|tp|tt|(banked )?infinities|eternities|realities|rep(licanti)?)(\s|$)/ui,
+      regex: /(rm|rg|dt|tp|tt|space theorems|(banked )?infinities|eternities|realities|rep(licanti)?)(\s|$)/ui,
       token: "variable-2",
     },
     { regex: / sec(onds ?) ?| min(utes ?) ?| hours ?/ui, token: "variable-2" },

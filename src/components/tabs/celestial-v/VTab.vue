@@ -304,6 +304,8 @@ export default {
         <span v-if="!isDoomed">
           You gain {{ formatInt(1) }} Space Theorem for each completion,
           allowing you to purchase Time Studies which are normally locked.
+          <br>
+          Space Theorems can now also be used as a Currency in the Automator.
         </span>
       </div>
       <br>

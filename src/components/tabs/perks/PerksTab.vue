@@ -70,9 +70,10 @@ const perkColors = () => ({
 });
 
 // Coordinate specifications are sometimes given in a grid index, so we need to spread them out to the proper scaling.
-// Positions use an inverted Y axis, so there's a vertical reflection. Will display well with |x| < 10 and |y| < 6.
-function expandFromGridCoordinates(vec) {
-  return vec.matrixTransform(20, 0, 0, 20);
+// Positions with |x| < 20 and |y| < 12 will display well with a scale factor of 10.
+// When making new layouts, the grid coordinates need to be multiplied by 5
+function globalScale(vec, factor) {
+  return vec.matrixTransform(factor, 0, 0, factor);
 }
 
 function positionNumToVector(num) {
@@ -93,15 +94,36 @@ export const PerkLayouts = [
   },
   {
     // This is the perks laid out in the same way that they're laid out in the Android version
-    buttonText: "Grid Layout",
-    position: config => expandFromGridCoordinates(positionNumToVector(config.layoutPosList[1])),
+    buttonText: "Android Layout",
+    position: config => globalScale(positionNumToVector(config.layoutPosList[1]), 20),
     centerOffset: new Vector(0, 120),
     forcePhysics: false,
     straightEdges: true,
   },
   {
+    buttonText: "Square",
+    position: config => globalScale(positionNumToVector(config.layoutPosList[2]), 27.5),
+    centerOffset: new Vector(0, 0),
+    forcePhysics: false,
+    straightEdges: true,
+  },
+  {
+    buttonText: "Horizontal Grid",
+    position: config => globalScale(positionNumToVector(config.layoutPosList[3]), 32.5),
+    centerOffset: new Vector(-60, 0),
+    forcePhysics: false,
+    straightEdges: true,
+  },
+  {
+    buttonText: "Distance from START",
+    position: config => globalScale(positionNumToVector(config.layoutPosList[4]), 17.5),
+    centerOffset: new Vector(0, 0),
+    forcePhysics: false,
+    straightEdges: true,
+  },
+  {
     buttonText: "Blob",
-    position: config => positionNumToVector(config.layoutPosList[2]),
+    position: config => positionNumToVector(config.layoutPosList[5]),
     centerOffset: new Vector(50, 0),
     forcePhysics: false,
     straightEdges: true,

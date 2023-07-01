@@ -361,6 +361,10 @@ export const migrations = {
       // Added max RM tracking for cel1 records - also for data consistency (though not 100% accurate)
       player.reality.maxRM = new Decimal(player.reality.realityMachines);
     },
+    22: player => {
+      // Added 3 new perk layouts, inserted before blob
+      if (player.options.perkLayout > 2) player.options.perkLayout += 3;
+    },
   },
 
   normalizeTimespans(player) {

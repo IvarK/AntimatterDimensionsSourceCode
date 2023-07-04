@@ -373,6 +373,10 @@ export const migrations = {
       for (let index = 0; index < player.records.recentRealities.length; index++) {
         player.records.recentRealities[index].push(0);
       }
+
+      // This seems to have slipped through in some edge cases due to an old botched migration
+      if (player.options.themeClassic === undefined) player.options.themeClassic = "Normal";
+      if (player.options.themeModern === undefined) player.options.themeModern = "Normal";
     },
   },
 

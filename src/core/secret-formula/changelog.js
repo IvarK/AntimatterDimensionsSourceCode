@@ -9,6 +9,100 @@ export const changelog = [
    * }
    */
   {
+    // TODO Update with actual date and change Github link
+    date: [2023, 7, 0],
+    name: "Final Official Patch",
+    info: `
+All of the previous patches since "The Reality Update" have been with the goal of fixing commonly reported bugs and
+implementing highly suggested features. However, this patch is planned to be the final official patch. There may be
+future minor patches from anything that may pop up in response to this set of changes, but these will likely
+be fixed or added as they come in and are unlikely to get their own entries here.
+<br>
+<br>
+<b><i>At this point, the official version of the game is largely considered to be complete.
+Thank you so much for playing Antimatter Dimensions!</i></b>
+<br>
+<br>
+<b>New things:</b><br>
+<ul>
+<li>Time Study import strings now allow you to immediately enter an Eternity Challenge on importing if the
+string contains an EC and ends with a "!"</li>
+<li>Added hotkeys for Dilation and Glyph respec on Armageddon</li>
+<li>Shift-clicking the Reality button now forces the Glyph selection modal to show up regardless of your settings</li>
+<li>Added 3 more perk layouts (Square, horizontal grid, and distance from START)</li>
+<li>You can now toggle "upgrade locks" for some Reality and Imaginary upgrades, which will automatically prevent
+any manual or automatic actions that would fail their unlock condition</li>
+<li>Glyph Filter settings can now also be imported and exported as text</li>
+<li>You can now tell your filter to immediately Reality (once available, if your autobuyer is on) if none of the
+upcoming choices will be accepted by the filter</li>
+<li>Added Space Theorems (current and total) as an Automator currency</li>
+<li>Added the ability to disable offline time simulation when the game is suspended (due to being out of focus or
+from device hibernation)</li>
+<li>Added information related to save creation time on statistics tab</li>
+<li>The game will now periodically perform automatic local backups, similar to the Android version of the game</li>
+</ul>
+<br>
+<b>Additional QoL and information:</b><br>
+<ul>
+<li>The tutorial at the start of the game now also emphasizes the How To Play</li>
+<li>Achievements with rewards now have an additional icon on their bottom-left corner</li>
+<li>Infinity and Eternity autobuyers now have status text on their settings boxes which indicate when they will next
+trigger a prestige when on "time" or "X highest" mode</li>
+<li>Eternity Challenges now stay visible on the EC tab as long as you have unlocked them at some point on that Reality,
+even if you unlock a different one afterwards without completing it first</li>
+<li>Resource catchup modal is now slightly more detailed during the first few Realities</li>
+<li>Upgrades affected by the EU2 perk now show more accurate cost text</li>
+<li>You can no longer accidentally Reality without selecting a Glyph; the confirm option will not appear unless one
+is selected. (Disabling the selection modal after unlocking sacrifice still lets the game choose randomly)</li>
+<li>Recent Prestiges for Reality now displays iM when appropriate</li>
+<li>Numerous How To Play entries have been updated or clarified to more accurately describe the game's features</li>
+<li>Added more display options for Recent Prestiges tab</li>
+<li>Many various minor text changes</li>
+</ul>
+<br>
+<b>Minor UI Changes:</b><br>
+<ul>
+<li>Purchase count tooltips for Dimensions now pop out to the left side instead of above</li>
+<li>Changed Break Infinity tab symbol on Modern UI</li>
+<li>Time Study import modal now shows info an import image as a two-column layout to reduce the need to scroll</li>
+<li>Eternity Challenges now have a visual overlay to show how many completions they have</li>
+<li>The Reality reset modal now warns you more firmly if you can otherwise Reality for rewards instead</li>
+<li>Added an icon for recently unequipped Glyphs</li>
+<li>Added an "auto" Glyph BG color mode which matches black/white Glyph backgrounds to your current Theme</li>
+<li>Improved color contrast for different Glyph rarities and added decorative borders to Glyphs depending on their
+rarity and/or type</li>
+<li>Added a message modal to clarify why not all Glyphs could be unequipped in certain cases</li>
+<li>Effarig Glyphs now show their effects in "celestial order"</li>
+<li>All <i>inventory</i> Glyphs now also show reduced levels when global level nerfs are active</li>
+<li>Cursed Glyphs can now also be made on cel4's tab</li>
+<li>The glow for the Singularity milestone button can now be disabled</li>
+</ul>
+<br>
+<b>Bugfixes:</b><br>
+<ul>
+<li>Fixed IP/EP rate display not updating properly when save slot is changed</li>
+<li>Prevented Time Study presets from having duplicate names</li>
+<li>Fixed Eternity button having incorrect styling below Infinite IP in dilation</li>
+<li>Fixed poor Glyph uniformity behavior without START perk</li>
+<li>Fixed some Glyph information being colored based on BG color instead of Theme color</li>
+<li>Disabled automator undo/redo from functioning on tabs other than the editor</li>
+<li>Fixed purchased music Glyphs getting turned into regular Glyphs when cosmetics are reset</li>
+<li>Made Glyph preset loading more forgiving and less likely to fail to load presets</li>
+<li>Fixed cel1 Reality RM record being incorrectly tracked in some cases</li>
+<li>Fixed cel7 Glyph slot not appearing/disappearing properly in certain cases</li>
+<li>Fixed misalignment in cel6 icon (credit to @mrkrutaman for the fix)</li>
+<li>Disabled IAP purchase for all Glyph Cosmetics when already purchased</li>
+<li>Fixed Hibernation offline time not giving real-time resources</li>
+<li>Hibernation offline simulation now properly uses offline time settings</li>
+<li>Added a few missing notifications for hotkey presses</li>
+<li>Made Standard notation format larger integers properly</li>
+<li>Removed news ticker with broken link</li>
+<li>Various more minor bugfixes</li>
+</ul>
+<br>
+`
+  },
+  {
     date: [2023, 5, 25],
     name: "Multiplier Tab, Automator, and Major mechanics fixes",
     info: `

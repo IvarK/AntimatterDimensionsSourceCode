@@ -145,6 +145,8 @@ export default {
           class="o-primary-btn--option l-options-grid__button"
           label="Run suspended time as offline:"
         />
+      </div>
+      <div class="l-options-grid__row">
         <div
           v-if="automatorUnlocked"
           class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button"

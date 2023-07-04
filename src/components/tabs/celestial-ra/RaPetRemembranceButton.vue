@@ -10,14 +10,19 @@ export default {
   data() {
     return {
       isUnlocked: false,
-      name: "",
       hasRemembrance: false,
     };
   },
   computed: {
+    pet() {
+      return this.petConfig.pet;
+    },
+    name() {
+      return this.pet.name;
+    },
     petStyle() {
       return {
-        backgroundColor: this.hasRemembrance ? this.petConfig.pet.color : "#555",
+        backgroundColor: this.hasRemembrance ? this.pet.color : "#555",
         "box-shadow": this.hasRemembrance ? "0.1rem 0.1rem 0.1rem rgba(0, 0, 0, 0.7)" : "",
         "border-color": this.hasRemembrance ? "black" : ""
       };
@@ -25,14 +30,13 @@ export default {
   },
   methods: {
     update() {
-      const pet = this.petConfig.pet;
+      const pet = this.pet;
       this.isUnlocked = pet.isUnlocked;
       if (!this.isUnlocked) return;
-      this.name = pet.name;
       this.hasRemembrance = pet.hasRemembrance;
     },
     toggleRemembrance() {
-      Ra.petWithRemembrance = Ra.petWithRemembrance === this.petConfig.pet.name ? "" : this.petConfig.pet.name;
+      Ra.petWithRemembrance = Ra.petWithRemembrance === this.pet.name ? "" : this.pet.name;
     }
   },
 };

@@ -9,7 +9,6 @@ export default {
   },
   data() {
     return {
-      pet: {},
       isUnlocked: false,
       level: 0,
       memories: 0,
@@ -18,6 +17,9 @@ export default {
     };
   },
   computed: {
+    pet() {
+      return this.petConfig.pet;
+    },
     shiftDown() {
       return ui.view.shiftDown;
     },
@@ -98,7 +100,6 @@ export default {
   },
   methods: {
     update() {
-      this.pet = this.petConfig.pet;
       const pet = this.pet;
       this.isUnlocked = pet.isUnlocked;
       if (!this.isUnlocked) return;

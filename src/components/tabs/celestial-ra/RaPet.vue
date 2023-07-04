@@ -16,11 +16,9 @@ export default {
   },
   data() {
     return {
-      pet: {},
       isUnlocked: false,
       isRaCapped: false,
       isCapped: false,
-      name: "",
       level: 0,
       memories: 0,
       requiredMemories: 0,
@@ -47,6 +45,12 @@ export default {
     scalingUpgradeText() {
       return this.petConfig.scalingUpgradeText(this.level);
     },
+    pet() {
+      return this.petConfig.pet;
+    },
+    name() {
+      return this.pet.name;
+    },
     petStyle() {
       return {
         color: this.pet.color
@@ -65,12 +69,10 @@ export default {
   methods: {
     update() {
       this.isRaCapped = Ra.totalPetLevel === Ra.maxTotalPetLevel;
-      this.pet = this.petConfig.pet;
       const pet = this.pet;
       this.isCapped = pet.level === Ra.levelCap;
       this.isUnlocked = pet.isUnlocked;
       if (!this.isUnlocked) return;
-      this.name = pet.name;
       this.level = pet.level;
       this.memories = pet.memories;
       this.requiredMemories = pet.requiredMemories;
@@ -158,7 +160,7 @@ export default {
           <div class="l-ra-pet-upgrade c-ra-pet-upgrade__top">
             <div
               :class="upgradeClassObject('memory')"
-              @click="petConfig.pet.purchaseMemoryUpgrade()"
+              @click="pet.purchaseMemoryUpgrade()"
             >
               <span class="fas fa-brain" />
               <div
@@ -166,7 +168,7 @@ export default {
                 class="c-ra-pet-upgrade__tooltip"
               >
                 <div class="c-ra-pet-upgrade__tooltip__name">
-                  {{ petConfig.pet.name }}'s Recollection
+                  {{ name }}'s Recollection
                 </div>
                 <div class="c-ra-pet-upgrade__tooltip__description">
                   Gain {{ formatPercents(0.3) }} more Memories
@@ -185,7 +187,7 @@ export default {
                 class="c-ra-pet-upgrade__tooltip"
               >
                 <div class="c-ra-pet-upgrade__tooltip__name">
-                  {{ petConfig.pet.name }}'s Recollection
+                  {{ name }}'s Recollection
                 </div>
                 <div class="c-ra-pet-upgrade__tooltip__description">
                   Capped: {{ formatX(currentMemoryMult, 2, 2) }}
@@ -202,7 +204,7 @@ export default {
           <div class="l-ra-pet-upgrade c-ra-pet-upgrade__bottom">
             <div
               :class="upgradeClassObject('chunk')"
-              @click="petConfig.pet.purchaseChunkUpgrade()"
+              @click="pet.purchaseChunkUpgrade()"
             >
               <span class="fas fa-dice-d6" />
               <div
@@ -210,7 +212,7 @@ export default {
                 class="c-ra-pet-upgrade__tooltip"
               >
                 <div class="c-ra-pet-upgrade__tooltip__name">
-                  {{ petConfig.pet.name }}'s Fragmentation
+                  {{ name }}'s Fragmentation
                 </div>
                 <div class="c-ra-pet-upgrade__tooltip__description">
                   Gain {{ formatPercents(0.5) }} more Memory Chunks
@@ -229,7 +231,7 @@ export default {
                 class="c-ra-pet-upgrade__tooltip"
               >
                 <div class="c-ra-pet-upgrade__tooltip__name">
-                  {{ petConfig.pet.name }}'s Fragmentation
+                  {{ name }}'s Fragmentation
                 </div>
                 <div class="c-ra-pet-upgrade__tooltip__description">
                   Capped: {{ formatX(currentChunkMult, 2, 2) }}

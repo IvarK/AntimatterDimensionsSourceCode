@@ -10,7 +10,6 @@ export default {
     return {
       decayRate: 0,
       isCollapsed: false,
-      strikes: []
     };
   },
   computed: {
@@ -18,13 +17,15 @@ export default {
       return this.isCollapsed
         ? "fas fa-expand-arrows-alt"
         : "fas fa-compress-arrows-alt";
+    },
+    strikes() {
+      return PelleStrikes.all;
     }
   },
   methods: {
     update() {
       this.decayRate = Pelle.riftDrainPercent;
       this.isCollapsed = player.celestials.pelle.collapsed.rifts;
-      this.strikes = PelleStrikes.all.filter(s => s.hasStrike);
     },
     toggleCollapse() {
       player.celestials.pelle.collapsed.rifts = !this.isCollapsed;
@@ -55,13 +56,11 @@ export default {
       Rift effects apply even when not activated, and are based on the total amount drained.
       <b class="o-strike-warning">Pelle Strike penalties are permanent and remain active even after Armageddon!</b>
       <div class="c-pelle-bar-container">
-        <div
+        <PelleRift
           v-for="strike in strikes"
           :key="strike.config.id"
-          class="c-pelle-single-bar"
-        >
-          <PelleRift :strike="strike" />
-        </div>
+          :strike="strike"
+        />
       </div>
     </div>
   </div>
@@ -82,12 +81,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.c-pelle-single-bar {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
 }
 
 .o-strike-warning {

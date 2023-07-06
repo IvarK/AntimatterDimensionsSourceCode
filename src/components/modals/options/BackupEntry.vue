@@ -17,7 +17,6 @@ export default {
   data() {
     return {
       currTime: 0,
-      untilNextSave: 0,
     };
   },
   computed: {
@@ -64,19 +63,15 @@ export default {
       }
     },
     lastSaved() {
-      const lastSave = GameStorage.backupTimeData[this.slotData.id]?.last;
+      const lastSave = GameStorage.lastBackupTimes[this.slotData.id]?.date ?? 0;
       return lastSave
         ? `Last saved: ${TimeSpan.fromMilliseconds(this.currTime - lastSave)} ago`
         : "Slot not currently in use";
     },
-    nextSave() {
-      return `Next save in ${TimeSpan.fromMilliseconds(this.untilNextSave)}`;
-    }
   },
   methods: {
     update() {
       this.currTime = Date.now();
-      this.untilNextSave = GameStorage.timeUntilNextSave(this.slotData.id);
     },
     load() {
       if (!this.save) return;
@@ -94,10 +89,10 @@ export default {
       GameStorage.oldBackupTimer = player.backupTimer;
       GameStorage.loadPlayerObject(toLoad);
       GameUI.notify.info(`Game loaded from backup slot #${this.slotData.id}`);
-      GameStorage.processLocalBackups();
+      GameStorage.loadBackupTimes();
       GameStorage.ignoreBackupTimer = false;
       GameStorage.offlineEnabled = undefined;
-      player.backupTimer = Math.max(GameStorage.oldBackupTimer, player.backupTimer);
+      GameStorage.resetBackupTimer();
       GameStorage.save(true);
     },
   },
@@ -110,12 +105,6 @@ export default {
     <span>{{ progressStr }}</span>
     <span>
       {{ slotType }}
-      <span
-        v-if="untilNextSave > 0"
-        :ach-tooltip="nextSave"
-      >
-        <i class="fas fa-question-circle" />
-      </span>
     </span>
     <span class="c-fixed-height">{{ lastSaved }}</span>
     <PrimaryButton

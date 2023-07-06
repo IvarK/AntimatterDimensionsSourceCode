@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     update() {
-      this.nextSave = GameStorage.nextBackup;
+      this.nextSave = GameStorage.lastBackupTimes.map(t => t && t.backupTimer).sum();
       this.ignoreOffline = player.options.loadBackupWithoutOffline;
     },
     offlineOptionClass() {
@@ -62,8 +62,10 @@ export default {
     <template #header>
       Automatic Backup Saves
     </template>
-    <div class="c-info">
+    <div class="c-info c-modal--short">
       The game makes automatic backups based on time you have spent online or offline.
+      Timers for online backups only run when the game is open, and offline backups only save to the slot
+      with the longest applicable timer.
       Additionally, your current save is saved into the last slot any time a backup from here is loaded.
       <div
         class="c-modal__confirmation-toggle"
@@ -114,6 +116,20 @@ export default {
 <style scoped>
 .c-info {
   width: 60rem;
+  overflow-x: hidden;
+  padding-right: 1rem;
+}
+
+.c-info::-webkit-scrollbar {
+  width: 1rem;
+}
+
+.c-info::-webkit-scrollbar-thumb {
+  border: none;
+}
+
+.s-base--metro .c-info::-webkit-scrollbar-thumb {
+  border-radius: 0;
 }
 
 .c-backup-file-ops {

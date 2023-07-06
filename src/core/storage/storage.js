@@ -76,14 +76,9 @@ export const GameStorage = {
   offlineEnabled: undefined,
   offlineTicks: undefined,
   lastUpdateOnLoad: 0,
-  shortestOnlineInterval: 1000 * AutoBackupSlots
-    .filter(slot => slot.type === BACKUP_SLOT_TYPE.ONLINE)
-    .map(slot => slot.interval)
-    .min(),
-  nextBackup: 0,
-  backupTimeData: {},
-  ignoreBackupTimer: true,
+  lastBackupTimes: [],
   oldBackupTimer: 0,
+  ignoreBackupTimer: true,
 
   maxOfflineTicks(simulatedMs, defaultTicks = this.offlineTicks) {
     return Math.clampMax(defaultTicks, Math.floor(simulatedMs / 33));
@@ -125,7 +120,8 @@ export const GameStorage = {
       };
       this.currentSlot = 0;
       this.loadPlayerObject(root);
-      this.processLocalBackups();
+      this.loadBackupTimes();
+      this.backupOfflineSlots();
       this.save(true);
       return;
     }
@@ -133,7 +129,8 @@ export const GameStorage = {
     this.saves = root.saves;
     this.currentSlot = root.current;
     this.loadPlayerObject(this.saves[this.currentSlot]);
-    this.processLocalBackups();
+    this.loadBackupTimes();
+    this.backupOfflineSlots();
   },
 
   loadSlot(slot) {
@@ -141,7 +138,8 @@ export const GameStorage = {
     // Save current slot to make sure no changes are lost
     this.save(true);
     this.loadPlayerObject(this.saves[slot] ?? Player.defaultStart);
-    this.processLocalBackups();
+    this.loadBackupTimes();
+    this.backupOfflineSlots();
     Tabs.all.find(t => t.id === player.options.lastOpenTab).show(false);
     Modal.hideAll();
     Cloud.resetTempState();
@@ -167,12 +165,7 @@ export const GameStorage = {
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
     Cloud.resetTempState();
-
-    // If we don't advance the backup timer when loading saves with a much lower one, this causes backups to be
-    // effectively disabled until the old timer is reached again
-    const largestBackupTimer = Object.values(GameStorage.backupTimeData).map(x => x.timer ?? 0).max();
-    player.backupTimer = Math.max(this.oldBackupTimer, player.backupTimer, largestBackupTimer);
-    this.resetBackupInterval();
+    this.resetBackupTimer();
 
     // This is to fix a very specific exploit: When the game is ending, some tabs get hidden
     // The options tab is the first one of those, which makes the player redirect to the Pelle tab
@@ -244,10 +237,17 @@ export const GameStorage = {
       ${invalidProps.join(", ")}`;
   },
 
+  // A few things in the current game state can prevent saving, which we want to do for all forms of saving
+  canSave() {
+    const isSelectingGlyph = GlyphSelection.active;
+    const isSimulating = ui.$viewModel.modal.progressBar !== undefined;
+    const isEnd = (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED && !GameEnd.removeAdditionalEnd) ||
+      GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
+    return !isEnd && !(isSelectingGlyph || isSimulating);
+  },
+
   save(silent = true, manual = false) {
-    if (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED && !GameEnd.removeAdditionalEnd) return;
-    if (GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED) return;
-    if (GlyphSelection.active || ui.$viewModel.modal.progressBar !== undefined) return;
+    if (!this.canSave()) return;
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();
     if (manual && ++this.saved > 99) SecretAchievement(12).unlock();
@@ -260,13 +260,14 @@ export const GameStorage = {
   },
 
   // Saves a backup, updates save timers (this is called before nextBackup is updated), and then saves the timers too
-  saveToBackup(backupSlot, saveTime) {
+  saveToBackup(backupSlot, backupTimer) {
+    if (!this.canSave()) return;
     localStorage.setItem(this.backupDataKey(this.currentSlot, backupSlot), GameSaveSerializer.serialize(player));
-    this.backupTimeData[backupSlot] = {
-      timer: this.nextBackup,
-      last: saveTime,
+    this.lastBackupTimes[backupSlot] = {
+      backupTimer,
+      date: Date.now(),
     };
-    localStorage.setItem(this.backupTimeKey(this.currentSlot), GameSaveSerializer.serialize(this.backupTimeData));
+    localStorage.setItem(this.backupTimeKey(this.currentSlot), GameSaveSerializer.serialize(this.lastBackupTimes));
   },
 
   // Does not actually load, but returns an object which is meant to be passed on to loadPlayerObject()
@@ -275,69 +276,66 @@ export const GameStorage = {
     return GameSaveSerializer.deserialize(data);
   },
 
-  // This is only ever called directly after the player object is loaded
-  processLocalBackups() {
-    // Set the next backup timer to whatever the next multiple of the shortest online interval is
-    this.nextBackup = Math.ceil(player.backupTimer / this.shortestOnlineInterval) * this.shortestOnlineInterval;
-    GameIntervals.backup.restart();
-
-    // Check for the amount of time spent offline and perform immediate backups for any slots
-    // which have had more than their timers elapse since the last time the game was open and saved
+  // Check for the amount of time spent offline and perform an immediate backup for the longest applicable slot
+  // which has had more than its timer elapse since the last time the game was open and saved
+  backupOfflineSlots() {
     const currentTime = Date.now();
     const offlineTimeMs = currentTime - this.lastUpdateOnLoad;
-    for (const backupInfo of AutoBackupSlots.filter(slot => slot.type === BACKUP_SLOT_TYPE.OFFLINE)) {
-      if (offlineTimeMs < 1000 * backupInfo.interval) continue;
-      const id = backupInfo.id;
-      this.saveToBackup(id, currentTime);
+    const offlineSlots = AutoBackupSlots
+      .filter(slot => slot.type === BACKUP_SLOT_TYPE.OFFLINE)
+      .sort((a, b) => b.interval - a.interval);
+    for (const backupInfo of offlineSlots) {
+      if (offlineTimeMs > 1000 * backupInfo.interval) {
+        this.saveToBackup(backupInfo.id, player.backupTimer);
+        break;
+      }
     }
+  },
 
-    // Load in all the data from previous backup times
-    this.backupTimeData = GameSaveSerializer.deserialize(localStorage.getItem(this.backupTimeKey(this.currentSlot)));
-    if (!this.backupTimeData) this.backupTimeData = {};
+  backupOnlineSlots(slotsToBackup) {
+    const currentTime = player.backupTimer;
+    for (const slot of slotsToBackup) this.saveToBackup(slot, currentTime);
+  },
+
+  // Loads in all the data from previous backup times in localStorage
+  loadBackupTimes() {
+    this.lastBackupTimes = GameSaveSerializer.deserialize(localStorage.getItem(this.backupTimeKey(this.currentSlot)));
+    if (!this.lastBackupTimes) this.lastBackupTimes = {};
     for (const backupInfo of AutoBackupSlots) {
       const key = backupInfo.id;
-      if (!this.backupTimeData[key]) this.backupTimeData[key] = {};
+      if (!this.lastBackupTimes[key]) {
+        this.lastBackupTimes[key] = {
+          backupTimer: 0,
+          date: 0,
+        };
+      }
     }
   },
 
-  // Used for both checking if a backup should be done, and in the UI to tell the player how long until the next backup
-  timeUntilNextSave(slotID) {
-    const entry = AutoBackupSlots.find(slot => slot.id === slotID);
-    if (entry.type !== BACKUP_SLOT_TYPE.ONLINE) return 0;
-    const timeSinceLast = player.backupTimer - (this.backupTimeData[slotID]?.timer ?? 0);
-    const totalInterval = 1000 * entry.interval;
-    // When loading from the reserve slot, all the timers get screwed up relative to backupTimer and may otherwise give
-    // times which are longer than the actual saving interval. Using mod doesn't necessarily properly "fix" them, but it
-    // at least ensures it's less than the interval
-    return (totalInterval - timeSinceLast) % totalInterval;
-  },
-
-  // Combining all the backup slots into a single call like this only works because all the longer intervals
-  // are divisible by the shortest one. We want to make sure we pass the same timestamp into saving calls on
-  // all slots, or else the displayed times will gradually desync due to the saving process itself taking time.
-  backupOnlineSlots() {
-    const currentTime = Date.now();
+  // This is checked in the checkEverySecond game interval. Determining which slots to save has a 800ms grace time to
+  // account for delays occurring from the saving operation itself; without this, the timer slips backwards by a second
+  // every time it saves
+  tryOnlineBackups() {
+    const toBackup = [];
     for (const backupInfo of AutoBackupSlots.filter(slot => slot.type === BACKUP_SLOT_TYPE.ONLINE)) {
-      // This may get called during player object loading, before the times are properly loaded in
-      if (!this.backupTimeData) break;
       const id = backupInfo.id;
-      if (this.timeUntilNextSave(id) <= 0) this.saveToBackup(id, currentTime);
+      const timeSinceLast = player.backupTimer - (this.lastBackupTimes[id]?.backupTimer ?? 0);
+      if (1000 * backupInfo.interval - timeSinceLast <= 800) toBackup.push(id);
     }
-    this.resetBackupInterval();
+    this.backupOnlineSlots(toBackup);
   },
 
   // Set the next backup time, but make sure to skip forward an appropriate amount if a load or import happened,
   // since these may cause the backup timer to be significantly behind
-  resetBackupInterval() {
-    const largestBackupTimer = Object.values(GameStorage.backupTimeData).map(x => x.timer ?? 0).max();
-    this.nextBackup = Math.max(this.nextBackup, player.backupTimer, largestBackupTimer) + this.shortestOnlineInterval;
-    GameIntervals.backup.restart();
+  resetBackupTimer() {
+    const latestBackupTime = this.lastBackupTimes.map(t => t && t.backupTimer).max();
+    player.backupTimer = Math.max(this.oldBackupTimer, player.backupTimer, latestBackupTime);
   },
 
   // Saves the current game state to the first reserve slot it finds
   saveToReserveSlot() {
-    const targetSlot = AutoBackupSlots.find(slot => slot.type === 2).id;
-    this.saveToBackup(targetSlot, Date.now());
+    const targetSlot = AutoBackupSlots.find(slot => slot.type === BACKUP_SLOT_TYPE.RESERVE).id;
+    this.saveToBackup(targetSlot, player.backupTimer);
   },
 
   export() {
@@ -354,6 +352,7 @@ export const GameStorage = {
   },
 
   exportAsFile() {
+    if (!this.canSave()) return;
     player.options.exportedFileCount++;
     this.save(true);
     const saveFileName = player.options.saveFileName ? ` - ${player.options.saveFileName},` : "";
@@ -387,12 +386,11 @@ export const GameStorage = {
       const storageKey = this.backupDataKey(this.currentSlot, id);
       localStorage.setItem(storageKey, GameSaveSerializer.serialize(backupData[backupKey]));
       this.backupTimeData[id] = {
-        timer: backupData.time[id].timer,
-        last: backupData.time[id].last,
+        backupTimer: backupData.time[id].backupTimer,
+        date: backupData.time[id].date,
       };
     }
-    this.nextBackup = Math.ceil(player.backupTimer / this.shortestOnlineInterval) * this.shortestOnlineInterval;
-    this.resetBackupInterval();
+    this.resetBackupTimer();
     GameUI.notify.info("Successfully imported save file backups from file");
   },
 

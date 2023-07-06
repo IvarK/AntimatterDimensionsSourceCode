@@ -377,6 +377,14 @@ export const migrations = {
       // This seems to have slipped through in some edge cases due to an old botched migration
       if (player.options.themeClassic === undefined) player.options.themeClassic = "Normal";
       if (player.options.themeModern === undefined) player.options.themeModern = "Normal";
+
+      // The glyph uniformity change did a few things to migrate old seeds as best it could, but it also had the
+      // side-effect of relying on player initialization and deepmerge for randomization in many cases. This made
+      // all existing pre-reality saves get initialized with a seed of 1, which we forcibly randomize here.
+      // A "valid" save can potentially get messed up, but this is exceedingly rare and impossible to detect
+      const newSeed = Math.floor(Date.now() * Math.random() + 1);
+      if (player.reality.seed === 1) player.reality.seed = newSeed;
+      if (player.reality.initialSeed === 1) player.reality.initialSeed = newSeed;
     },
   },
 

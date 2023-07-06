@@ -69,34 +69,45 @@ const rarityBorderStyles = {
   ],
   cursed: [
     {
-      lineType: "conic",
-      colorSplit: [45, 90, 135, 180, 225, 270, 315],
-    }
+      lineType: "spike",
+      center: [40, 40],
+      angles: [305, 325],
+    },
+    {
+      lineType: "spike",
+      center: [60, 40],
+      angles: [35, 55],
+    },
+    {
+      lineType: "spike",
+      center: [60, 60],
+      angles: [125, 145],
+    },
+    {
+      lineType: "spike",
+      center: [40, 60],
+      angles: [215, 235],
+    },
   ],
   companion: [
     {
-      lineType: "conic",
-      colorSplit: [45, 135, 180, 225, 315],
+      lineType: "companion",
     },
-    {
-      lineType: "linear",
-      angles: [45, 315],
-      colorSplit: [18, 20],
-    }
   ]
 };
 
 // This function does all the parsing of the above gradient specifications
-function generateGradient(data, color, isCircular) {
+// eslint-disable-next-line max-params, complexity
+function generateGradient(data, color, glyph, isCircular) {
   // The undefined declarations here are mostly to make ESLint happy, and aren't necessarily used in all cases
-  let borders, scaleFn, centers, isColor = false;
+  let borders, scaleFn, centers, specialData, isColor = false;
   const entries = [], elements = [];
   switch (data.lineType) {
     case "linear":
       // Produces stripes at the specified angle, where color sharply switches between the specified color and
       // transparent at each percentage in lines
       borders = [0, ...data.colorSplit, 100];
-      scaleFn = perc => (isCircular ? 50 + 0.8 * (perc - 50) : perc);
+      scaleFn = perc => (isCircular ? 50 + 0.7 * (perc - 50) : perc);
       for (const angle of data.angles) {
         for (let i = 0; i < borders.length - 1; i++) {
           entries.push(`${isColor ? color : "transparent"} ${scaleFn(borders[i])}% ${scaleFn(borders[i + 1])}%`);
@@ -106,11 +117,16 @@ function generateGradient(data, color, isCircular) {
       }
       return elements.join(",");
     case "bump":
-      // Produces four bumps on the cardinal directions of the glyph border, with specified color fade distances
+      // Produces four bumps on the cardinal directions of the glyph border, with specified color fade distances.
+      // These bumps overlap some dots on effarig glyphs, so we conditionally make them more transparent (effectively
+      // shrinking them so they don't overlap)
+      specialData = glyph.type === "effarig"
+        ? `${color}60`
+        : color;
       centers = ["50% -25%", "50% 125%", "-25% 50%", "125% 50%"];
       scaleFn = perc => (isCircular ? perc : 0.9 * perc);
       for (let i = 0; i < 4; i++) {
-        entries.push(`radial-gradient(at ${centers[i]}, transparent, ${color} ${scaleFn(data.colorSplit[0])}%,
+        entries.push(`radial-gradient(at ${centers[i]}, transparent, ${specialData} ${scaleFn(data.colorSplit[0])}%,
           transparent ${scaleFn(data.colorSplit[1])}%)`);
       }
       return entries.join(",");
@@ -123,17 +139,31 @@ function generateGradient(data, color, isCircular) {
         isColor = !isColor;
       }
       return `radial-gradient(${entries.join(",")})`;
-    case "conic":
-      // Produces a radial sweep, starting with the border color at angle zero ("12 o'clock" with positive angles
-      // going clockwise) and smoothly transitioning between it and transparent, hitting min/max color at each
-      // specified angle in degrees. The border color is modified to be slightly transparent
-      borders = [0, ...data.colorSplit, 360];
-      isColor = true;
-      for (const border of borders) {
-        entries.push(`${isColor ? `${color}b0` : "transparent"} ${border}deg`);
-        isColor = !isColor;
+    case "spike":
+      // Produces a single spike at the specified center, spanning between the specified angles with specified
+      // angular blur at the edges (default 5 degrees)
+      specialData = data.blur ?? 5;
+      entries.push(`transparent ${data.angles[0] - specialData}deg`);
+      entries.push(`${color}b0 ${data.angles[0] + specialData}deg`);
+      entries.push(`${color}b0 ${data.angles[1] - specialData}deg`);
+      entries.push(`transparent ${data.angles[1] + specialData}deg`);
+      return `conic-gradient(from 0deg at ${data.center[0]}% ${data.center[1]}%, ${entries.join(",")})`;
+    case "companion":
+      // Special case to make the companion border look like a heart
+      borders = [0, 30, 330, 360];
+      specialData = [color, "transparent", "transparent", color];
+      for (let i = 0; i < 4; i++) {
+        entries.push(`${specialData[i]} ${borders[i]}deg`);
       }
-      return `conic-gradient(${entries.join(",")})`;
+      elements.push(`conic-gradient(${entries.join(",")})`);
+
+      centers = ["125% 125%", "-25% 125%"];
+      scaleFn = perc => (isCircular ? 0.9 * (perc + 10) : perc);
+      for (let i = 0; i < 2; i++) {
+        elements.push(`radial-gradient(at ${centers[i]}, transparent, ${color} ${scaleFn(30)}%,
+          transparent ${scaleFn(50)}%)`);
+      }
+      return elements.join(",");
     default:
       throw new Error("Unrecognized glyph border data");
   }
@@ -672,7 +702,7 @@ export default {
       return { dx, dy };
     },
     glyphEffectDots(id) {
-      if (this.glyph.type === "companion") return {};
+      if (["companion", "cursed"].includes(this.glyph.type)) return {};
       const pos = this.effectIconPos(id);
 
       return {
@@ -691,7 +721,7 @@ export default {
       if (this.isCursedGlyph) borderAttrs = rarityBorderStyles.cursed;
       else if (this.isCompanionGlyph) borderAttrs = rarityBorderStyles.companion;
       else borderAttrs = rarityBorderStyles[getRarity(this.glyph.strength).name.toLowerCase()];
-      const lines = borderAttrs.map(attr => generateGradient(attr, this.borderColor, this.circular));
+      const lines = borderAttrs.map(attr => generateGradient(attr, this.borderColor, this.glyph, this.circular));
 
       return {
         position: "absolute",
@@ -699,7 +729,8 @@ export default {
         width: "96%",
         height: "96%",
         "border-radius": this.circular ? "50%" : "0",
-        background: lines.join(",")
+        // Some cases will have undefined lines which need to be removed to combine everything together properly
+        background: lines.filter(l => l).join(",")
       };
     }
   }

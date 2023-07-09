@@ -56,6 +56,9 @@ export default {
       <br>
       Selecting "Cancel" will close this modal with no effect, while selecting "Disable Lock" will disable the
       requirement check for this upgrade and prevent this message from reappearing unless you turn it back on.
+      <br>
+      <br>
+      Neither of these options will perform the action you just attempted, so you will need to try again.
     </div>
     <template #confirm-text>
       Disable Lock

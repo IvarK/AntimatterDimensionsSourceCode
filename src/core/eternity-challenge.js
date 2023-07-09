@@ -329,7 +329,7 @@ export const EternityChallenges = {
       const shouldPreventEC7 = TimeDimension(1).amount.gt(0);
       const hasUpgradeLock = RealityUpgrade(12).isLockingMechanics ||
         (ImaginaryUpgrade(15).isLockingMechanics && shouldPreventEC7 &&
-          !Array.range(1, 6).some(ec => EternityChallenge(ec).completions < 5));
+          !Array.range(1, 6).some(ec => !EternityChallenge(ec).isFullyCompleted));
       if (!player.reality.autoEC || Pelle.isDisabled("autoec") || hasUpgradeLock) {
         player.reality.lastAutoEC = Math.clampMax(player.reality.lastAutoEC, this.interval);
         return;

@@ -166,8 +166,11 @@ export const imaginaryUpgrades = [
     checkRequirement: () => player.requirementChecks.reality.maxID1.eq(0) && player.antimatter.exponent >= 1.5e12,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     canLock: true,
-    // Locking only occurs when purchasing any ID, entering EC7 with any amount of TD, or purchasing TD after having
-    // any number of completions of EC7
+    // This upgrade lock acts in multiple different conditions, but isn't 100% foolproof and also blocks a few edge
+    // cases which technically should be allowed but would be hard to communicate in-game. Forbidden actions are:
+    // - Purchasing any ID (edge case: this is acceptable for ID2-8 inside EC2 or EC10)
+    // - Purchasing any TD with any amount of EC7 completions (edge case: acceptable within EC1 or EC10)
+    // - Entering EC7 with any amount of purchased TD
     description: () => `${
       Pelle.isDoomed ? "Unlock" : "Convert Antimatter Dimensions to Continuum and unlock"
     } Lai'tela, Celestial of Dimensions`,
@@ -311,7 +314,7 @@ export const imaginaryUpgrades = [
       Glyphs.activeWithoutCompanion.length <= 1 && TimeStudy.reality.isBought,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     canLock: true,
-    lockEvent: "equip another Glyph",
+    lockEvent: "equip another non-Companion Glyph",
     description: "Unlock Pelle, Celestial of Antimatter",
   },
 ];

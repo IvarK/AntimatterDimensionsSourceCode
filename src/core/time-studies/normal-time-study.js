@@ -78,7 +78,7 @@ export class NormalTimeStudyState extends TimeStudyState {
   purchase(auto = false) {
     if (this.isBought || !this.isAffordable || !this.canBeBought) return false;
     if (GameEnd.creditsEverClosed) return false;
-    if (ImaginaryUpgrade(19).isLockingMechanics && player.requirementChecks.reality.maxStudies === 8) {
+    if (ImaginaryUpgrade(19).isLockingMechanics && player.timestudy.studies.length === 8) {
       if (!auto) ImaginaryUpgrade(19).tryShowWarningModal();
       return false;
     }

@@ -11,7 +11,7 @@ export const EP = {
       ? format(gainedEternityPoints(), 2, 2)
       : "Cannot Eternity"),
     // This effectively hides everything if the player can't actually gain any
-    multValue: () => (Player.canEternity ? gainedEternityPoints() : 0),
+    multValue: () => (Player.canEternity ? gainedEternityPoints() : 1),
     isActive: () => PlayerProgress.eternityUnlocked() || Player.canEternity,
     dilationEffect: () => (Laitela.isRunning ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty) : 1),
     isDilated: true,

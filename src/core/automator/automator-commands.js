@@ -640,7 +640,7 @@ export const AutomatorCommands = [
           }
           return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
         }
-        const hasEC = TimeStudy.eternityChallenge(studies.ec).isBought;
+        const hasEC = studies.ec ? TimeStudy.eternityChallenge(studies.ec).isBought : false;
         if (!studies.ec || (hasEC && !studies.startEC)) {
           AutomatorData.logCommandEvent(`Purchased all specified Time Studies`, ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;

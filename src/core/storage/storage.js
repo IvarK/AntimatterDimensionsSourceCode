@@ -238,9 +238,9 @@ export const GameStorage = {
   },
 
   // A few things in the current game state can prevent saving, which we want to do for all forms of saving
-  canSave() {
+  canSave(ignoreSimulation = false) {
     const isSelectingGlyph = GlyphSelection.active;
-    const isSimulating = ui.$viewModel.modal.progressBar !== undefined;
+    const isSimulating = ui.$viewModel.modal.progressBar !== undefined && !ignoreSimulation;
     const isEnd = (GameEnd.endState >= END_STATE_MARKERS.SAVE_DISABLED && !GameEnd.removeAdditionalEnd) ||
       GameEnd.endState >= END_STATE_MARKERS.INTERACTIVITY_DISABLED;
     return !isEnd && !(isSelectingGlyph || isSimulating);
@@ -259,9 +259,12 @@ export const GameStorage = {
     if (!silent) GameUI.notify.info("Game saved");
   },
 
-  // Saves a backup, updates save timers (this is called before nextBackup is updated), and then saves the timers too
+  // Saves a backup, updates save timers (this is called before nextBackup is updated), and then saves the timers too.
+  // When checking offline backups, this call typically resolves during offline progress simulation, so in this case
+  // we want to ignore that (which saves the game state pre-simulation). This is because it's messier and less useful
+  // to the player if we instead defer the call until after simulation
   saveToBackup(backupSlot, backupTimer) {
-    if (!this.canSave()) return;
+    if (!this.canSave(true)) return;
     localStorage.setItem(this.backupDataKey(this.currentSlot, backupSlot), GameSaveSerializer.serialize(player));
     this.lastBackupTimes[backupSlot] = {
       backupTimer,
@@ -328,7 +331,7 @@ export const GameStorage = {
   // Set the next backup time, but make sure to skip forward an appropriate amount if a load or import happened,
   // since these may cause the backup timer to be significantly behind
   resetBackupTimer() {
-    const latestBackupTime = this.lastBackupTimes.map(t => t && t.backupTimer).max();
+    const latestBackupTime = Object.values(this.lastBackupTimes).map(t => t && t.backupTimer).max();
     player.backupTimer = Math.max(this.oldBackupTimer, player.backupTimer, latestBackupTime);
   },
 

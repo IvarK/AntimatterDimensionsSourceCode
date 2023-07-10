@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     update() {
-      this.nextSave = GameStorage.lastBackupTimes.map(t => t && t.backupTimer).sum();
+      this.nextSave = Object.values(GameStorage.lastBackupTimes).map(t => t && t.backupTimer).sum();
       this.ignoreOffline = player.options.loadBackupWithoutOffline;
     },
     offlineOptionClass() {

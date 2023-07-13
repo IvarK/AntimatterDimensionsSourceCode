@@ -67,10 +67,16 @@ intents and purposes, completely separate from each other. Importing and exporti
 slot. <b>The only exception is clearing your browser or Steam data, in which case all three saves will be reset.</b>
 <br>
 <br>
-The game automatically saves periodically, by default once every ${formatInt(30)} seconds, and it will notify you in
-the top-right corner of the screen whenever it saves. Keep this in mind if you need to close the game - anything you
+The game automatically saves periodically, by default once every ${formatInt(30)} seconds.
+Keep this in mind if you need to close the game - anything you
 do right before closing it might not be saved unless you wait for the autosave interval or manually save again. The
-length of the autosave interval is adjustable.
+length of the autosave interval is adjustable, and its timer can be seen in the bottom-left of the screen.
+<br>
+<br>
+Backups of your savefile are also saved after certain amounts of time online or offline, which you can examine and
+reload at any point by clicking the "Open Automatic Save Backup Menu" button. These backups may be useful if you wish
+to revert your save to what it looked like some time in the past, such as a few minutes ago or when you were last
+offline for a while.
 <br>
 <br>
 You can also connect a Google Account to the game, allowing you to save your progress online. This allows you to play
@@ -779,7 +785,8 @@ point. Shift-click will buy studies greedily, getting as many as possible per ro
 <br>
 <b>Presets:</b> The buttons initially labeled 1 through 6 allow you to save your current set of studies into the slot,
 letting you quickly buy that particular set of studies again with a single click. You can hover over the button and
-use the tooltip to load/save a slot, or click to load and shift-click to save.
+use the tooltip to load/save a slot, or click to load and shift-click to save. These presets can be renamed, but you
+are not allowed to give multiple presets the same name.
 <br>
 <br>
 <b>Import Tree/Edit Preset:</b> When editing a preset or importing a Time Study Tree, the modal will display what

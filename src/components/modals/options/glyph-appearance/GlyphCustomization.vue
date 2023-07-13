@@ -162,17 +162,17 @@ export default {
       <br>
       <span v-if="hasSpecialTypes">
         Enabling this setting will allow you to change individual Glyphs to special cosmetic types you have unlocked.
-        <PrimaryButton
-          class="o-primary-btn--subtab-option"
-          @click="resetIndividual"
-        >
-          Reset all individual Glyph cosmetics
-        </PrimaryButton>
       </span>
       <span v-else>
         Enabling or disabling this option will currently do nothing.
       </span>
     </div>
+    <PrimaryButton
+      class="o-primary-btn--subtab-option"
+      @click="resetIndividual"
+    >
+      Reset all individual Glyph cosmetics
+    </PrimaryButton>
   </div>
 </template>
 

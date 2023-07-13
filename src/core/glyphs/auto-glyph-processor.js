@@ -124,8 +124,17 @@ export const AutoGlyphProcessor = {
   },
   // Given a list of glyphs, pick the one with the highest score
   pick(glyphs) {
+    // We want to make sure to account for when glyphs are compared to different thresholds based on their type, or
+    // else we end up always picking the rarest glyph despite all filter settings. However, we need to special-case
+    // modes which never keep glyphs, or else they all become the same value and it ends up picking pseudo-randomly
+    const glyphScore = glyph => {
+      const filter = this.filterValue(glyph);
+      const threshold = this.thresholdValue(glyph);
+      return threshold === Number.MAX_VALUE ? filter : filter - threshold;
+    };
+
     return glyphs
-      .map(g => ({ glyph: g, score: this.filterValue(g) }))
+      .map(g => ({ glyph: g, score: glyphScore(g) }))
       .reduce((x, y) => (x.score > y.score ? x : y))
       .glyph;
   },

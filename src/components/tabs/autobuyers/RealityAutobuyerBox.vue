@@ -111,7 +111,7 @@ export default {
       </div>
       <AutobuyerInput
         :autobuyer="autobuyer"
-        :type="(hasAlternateInputs && hasRelicMode) ? 'float' : 'int'"
+        :type="(hasAlternateInputs && hasRelicMode) ? 'decimal' : 'int'"
         :property="(hasAlternateInputs && hasRelicMode) ? 'shard' : 'glyph'"
       />
       <div v-if="isOverCap">

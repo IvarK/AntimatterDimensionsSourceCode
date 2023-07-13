@@ -43,7 +43,7 @@ export default {
 
       for (let index = 0; index < resources.length; index++) {
         const val = new Decimal(resources[index]);
-        if (val.gt(0)) return `${names[index]}: ${formatPostBreak(val, 2, 1)}`;
+        if (val.gt(0)) return `${names[index]}: ${formatPostBreak(val, 2)}`;
       }
 
       // In practice this should never happen, unless a save triggers on the same tick the very first AD1 is bought

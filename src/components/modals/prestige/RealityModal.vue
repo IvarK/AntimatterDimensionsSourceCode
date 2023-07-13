@@ -41,18 +41,18 @@ export default {
     canSacrifice() {
       return RealityUpgrade(19).isEffectActive;
     },
-    selectInfo() {
+    warnText() {
       if (!this.hasChoice) {
-        return `<b style="color: var(--color-infinity)">You currently only have a single option for new Glyphs every
+        return `You currently only have a single option for new Glyphs every
           Reality. You can unlock the ability to choose from multiple Glyphs by canceling out of this modal and
-          purchasing the START Perk.</b>`;
+          purchasing the START Perk.`;
       }
 
-      if (this.hasFilter) {
+      if (this.hasFilter && this.selectedGlyph === undefined) {
         return `If you do not choose a Glyph, one will be automatically selected using your Glyph filter.`;
       }
       return this.selectedGlyph === undefined
-        ? `<b style="color: var(--color-infinity)">You must select a Glyph in order to continue.</b>`
+        ? `You must select a Glyph in order to continue.`
         : null;
     },
     gained() {
@@ -172,7 +172,9 @@ export default {
     <div v-if="!firstReality">
       {{ levelStats }}
       <br>
-      <span v-html="selectInfo" />
+      <b class="o-warning">
+        {{ warnText }}
+      </b>
     </div>
     <div v-if="simRealities > 1">
       <br>

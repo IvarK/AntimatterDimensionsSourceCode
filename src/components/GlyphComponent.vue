@@ -97,7 +97,7 @@ const rarityBorderStyles = {
 };
 
 // This function does all the parsing of the above gradient specifications
-// eslint-disable-next-line max-params, complexity
+// eslint-disable-next-line max-params
 function generateGradient(data, color, glyph, isCircular) {
   // The undefined declarations here are mostly to make ESLint happy, and aren't necessarily used in all cases
   let borders, scaleFn, centers, specialData, isColor = false;
@@ -140,13 +140,11 @@ function generateGradient(data, color, glyph, isCircular) {
       }
       return `radial-gradient(${entries.join(",")})`;
     case "spike":
-      // Produces a single spike at the specified center, spanning between the specified angles with specified
-      // angular blur at the edges (default 5 degrees)
-      specialData = data.blur ?? 5;
-      entries.push(`transparent ${data.angles[0] - specialData}deg`);
-      entries.push(`${color}b0 ${data.angles[0] + specialData}deg`);
-      entries.push(`${color}b0 ${data.angles[1] - specialData}deg`);
-      entries.push(`transparent ${data.angles[1] + specialData}deg`);
+      // Produces a single spike at the specified center, spanning between the specified angles with 5deg blur
+      entries.push(`transparent ${data.angles[0] - 5}deg`);
+      entries.push(`${color}b0 ${data.angles[0] + 5}deg`);
+      entries.push(`${color}b0 ${data.angles[1] - 5}deg`);
+      entries.push(`transparent ${data.angles[1] + 5}deg`);
       return `conic-gradient(from 0deg at ${data.center[0]}% ${data.center[1]}%, ${entries.join(",")})`;
     case "companion":
       // Special case to make the companion border look like a heart
@@ -326,7 +324,7 @@ export default {
       else {
         symbolColor = this.cosmeticConfig.ignoreRarityColor
           ? GlyphAppearanceHandler.getBorderColor(this.glyph.type)
-          : GlyphAppearanceHandler.getRarityColor(this.glyph.strength);
+          : GlyphAppearanceHandler.getRarityColor(this.glyph.strength, this.glyph.type);
       }
 
       return {

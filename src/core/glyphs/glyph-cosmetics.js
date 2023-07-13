@@ -170,8 +170,10 @@ export const GlyphAppearanceHandler = {
     if (type === "cursed" && !CosmeticGlyphTypes.cursed.currentColor.str) return this.isLightBG ? "#ffffff" : "#000000";
     return CosmeticGlyphTypes[type].currentColor.border;
   },
-  getRarityColor(strength) {
-    return getRarity(strength)[this.isLightBG ? "lightColor" : "darkColor"];
+  getRarityColor(strength, type) {
+    const rarityEntry = getRarity(strength);
+    const isLight = CosmeticGlyphTypes[type].currentColor.bg === "white";
+    return rarityEntry[isLight ? "lightColor" : "darkColor"];
   },
   getColorProps(colorStr) {
     // This condition is a bit odd - this specifically selects out the hybrid custom colors which have both a BG color

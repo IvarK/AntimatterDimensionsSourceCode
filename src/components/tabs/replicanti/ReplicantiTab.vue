@@ -30,6 +30,7 @@ export default {
       multIP: new Decimal(),
       hasRaisedCap: false,
       replicantiCap: new Decimal(),
+      capMultText: "",
       distantRG: 0,
       remoteRG: 0,
       effarigInfinityBonusRG: 0,
@@ -151,6 +152,12 @@ export default {
       this.isUncapped = PelleRifts.vacuum.milestones[1].canBeApplied;
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;
       this.replicantiCap.copyFrom(replicantiCap());
+      if (this.hasRaisedCap) {
+        const mult = this.replicantiCap.div(Decimal.NUMBER_MAX_VALUE);
+        this.capMultText = TimeStudy(31).canBeApplied
+          ? `Base: ${formatX(mult.pow(1 / TimeStudy(31).effectValue), 2)}; after TS31: ${formatX(mult, 2)}`
+          : formatX(mult, 2);
+      }
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
       this.remoteRG = ReplicantiUpgrade.galaxies.remoteRGStart;
       this.effarigInfinityBonusRG = Effarig.bonusRG;
@@ -193,14 +200,23 @@ export default {
       Cost: {{ format(unlockCost) }} IP
     </PrimaryButton>
     <template v-else>
-      <div v-if="isDoomed">
+      <div
+        v-if="isDoomed"
+        class="modified-cap"
+      >
         Your Replicanti cap has been removed due to the second {{ scrambledText }} milestone.
       </div>
-      <div v-else-if="hasRaisedCap">
-        Your Replicanti cap without Time Study 192 has been raised to {{ format(replicantiCap, 2) }}
-        and is giving you {{ quantifyInt("extra Replicanti Galaxy", effarigInfinityBonusRG) }}
+      <div
+        v-else-if="hasRaisedCap"
+        class="modified-cap"
+      >
+        Completion of Effarig's Infinity is giving you the following rewards:
         <br>
-        due to the reward from Effarig's Infinity. (Next Replicanti Galaxy at {{ format(nextEffarigRGThreshold, 2) }})
+        Your Replicanti cap without TS192 is now {{ format(replicantiCap, 2) }}
+        ({{ capMultText }})
+        <br>
+        {{ quantifyInt("extra Replicanti Galaxy", effarigInfinityBonusRG) }}
+        (Next Replicanti Galaxy at {{ format(nextEffarigRGThreshold, 2) }} cap)
       </div>
       <p class="c-replicanti-description">
         You have
@@ -247,5 +263,10 @@ export default {
   color: var(--color-accent);
   text-shadow: 0 0 0.2rem var(--color-reality-dark);
   cursor: default;
+}
+
+.modified-cap {
+  margin: -0.8rem 0 0.8rem;
+  font-weight: bold;
 }
 </style>

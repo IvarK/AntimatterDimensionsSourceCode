@@ -67,7 +67,7 @@ export default {
       EventHub.dispatch(GAME_EVENT.GLYPH_SET_SAVE_CHANGE);
     },
     // A proper full solution to this turns out to contain an NP-hard problem as a subproblem, so instead we do
-    // somwthing which should work in most cases - we match greedily when it won't obviously lead to an incomplete
+    // something which should work in most cases - we match greedily when it won't obviously lead to an incomplete
     // preset match, and leniently when matching greedily may lead to an incomplete set being loaded
     loadGlyphSet(set, id) {
       if (!this.setLengthValid(set)) return;

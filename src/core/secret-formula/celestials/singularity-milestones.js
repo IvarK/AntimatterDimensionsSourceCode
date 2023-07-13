@@ -146,7 +146,7 @@ export const singularityMilestones = {
     start: 130000,
     repeat: 50000,
     limit: 5,
-    description: "Interval cost scaling is better",
+    description: "DMD Interval cost scaling is better",
     effect: completions => 1 - 0.03 * completions,
     effectFormat: x => `${formatPow(x, 2, 2)}`,
     upgradeDirection: LAITELA_UPGRADE_DIRECTION.SELF_BOOST,

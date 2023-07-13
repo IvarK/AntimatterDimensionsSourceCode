@@ -109,6 +109,7 @@ export default {
           <label for="file">Import from file</label>
         </PrimaryButton>
       </div>
+      Each of your three save slots has its own separate set of backups.
     </div>
   </ModalWrapper>
 </template>

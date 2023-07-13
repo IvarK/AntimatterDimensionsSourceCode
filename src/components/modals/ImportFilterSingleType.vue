@@ -60,7 +60,7 @@ export default {
         return `${check}${formatInt(value)}`;
       };
       const oldStr = fullStr(effectEntry.oldReq, effectEntry.oldScore);
-      const newStr = fullStr(effectEntry.neReq, effectEntry.newScore);
+      const newStr = fullStr(effectEntry.newReq, effectEntry.newScore);
 
       if (effectEntry.oldScore === effectEntry.newScore) return oldStr;
       return `${oldStr}➜${newStr}`;

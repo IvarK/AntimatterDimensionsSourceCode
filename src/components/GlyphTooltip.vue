@@ -87,17 +87,18 @@ export default {
     rarityInfo() {
       return getRarity(this.strength);
     },
+    // Values for baseColor and textColor will only ever be black or white
     baseColor() {
-      return GlyphAppearanceHandler.getBaseColor(this.type === "cursed");
+      return CosmeticGlyphTypes[this.type].currentColor.bg;
     },
     textColor() {
-      return GlyphAppearanceHandler.getBaseColor(this.type !== "cursed");
+      return this.baseColor === "black" ? "white" : "black";
     },
     mainBorderColor() {
       return GlyphAppearanceHandler.getBorderColor(this.type);
     },
     descriptionStyle() {
-      const color = GlyphAppearanceHandler.getRarityColor(this.strength);
+      const color = GlyphAppearanceHandler.getRarityColor(this.strength, this.type);
       const cursedColor = GlyphAppearanceHandler.isLightBG ? "white" : "black";
       return {
         color: this.type === "cursed" ? cursedColor : color,
@@ -167,7 +168,7 @@ export default {
       const isCursed = this.type === "cursed";
       const isReality = this.type === "reality";
 
-      let color = GlyphAppearanceHandler.getRarityColor(this.strength);
+      let color = GlyphAppearanceHandler.getRarityColor(this.strength, this.type);
       if (isCursed) color = this.textColor;
       if (this.type === "companion") color = GlyphAppearanceHandler.getBorderColor(this.type);
       return {

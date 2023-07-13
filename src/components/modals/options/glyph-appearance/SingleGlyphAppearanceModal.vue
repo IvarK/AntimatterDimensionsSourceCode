@@ -48,7 +48,8 @@ export default {
       if (type && this.glyph.fixedCosmetic) return;
       this.glyph.color = undefined;
       this.glyph.symbol = undefined;
-      if (!this.glyph.fixedCosmetic) this.glyph.cosmetic = type;
+      if (this.glyph.fixedCosmetic) this.glyph.cosmetic = this.glyph.fixedCosmetic;
+      else this.glyph.cosmetic = type;
       this.defaultKeySwap = false;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },

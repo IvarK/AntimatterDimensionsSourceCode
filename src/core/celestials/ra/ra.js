@@ -421,23 +421,26 @@ export const GlyphAlteration = {
     const capped = Math.clampMax(this.getSacrificePower(type), GlyphSacrificeHandler.maxSacrificeForEffects);
     return Math.log10(Math.clampMin(capped / this.boostingThreshold, 1)) / 2;
   },
-  baseAdditionColor() {
-    return Theme.current().isDark() ? "#CCCCCC" : "black";
+  baseAdditionColor(isDark = Theme.current().isDark()) {
+    return isDark ? "#CCCCCC" : "black";
   },
-  baseEmpowermentColor() {
-    return Theme.current().isDark() ? "#EEEE30" : "#C6C610";
+  baseEmpowermentColor(isDark = Theme.current().isDark()) {
+    return isDark ? "#EEEE30" : "#C6C610";
   },
-  baseBoostColor() {
-    return Theme.current().isDark() ? "#60DDDD" : "#28BDBD";
+  baseBoostColor(isDark = Theme.current().isDark()) {
+    return isDark ? "#60DDDD" : "#28BDBD";
   },
   getAdditionColor(type) {
-    return this.isAdded(type) ? this.baseAdditionColor() : undefined;
+    const isDark = CosmeticGlyphTypes[type].currentColor.bg === "black";
+    return this.isAdded(type) ? this.baseAdditionColor(isDark) : undefined;
   },
   getEmpowermentColor(type) {
-    return this.isEmpowered(type) ? this.baseEmpowermentColor() : undefined;
+    const isDark = CosmeticGlyphTypes[type].currentColor.bg === "black";
+    return this.isEmpowered(type) ? this.baseEmpowermentColor(isDark) : undefined;
   },
   getBoostColor(type) {
-    return this.isBoosted(type) ? this.baseBoostColor() : undefined;
+    const isDark = CosmeticGlyphTypes[type].currentColor.bg === "black";
+    return this.isBoosted(type) ? this.baseBoostColor(isDark) : undefined;
   }
 };
 

@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     isBasedOnInfinities() {
-      return /(18|27|36|45)Mult/u.test(this.upgrade.id);
+      return /(18|27|36|45)Mult/u.test(this.upgrade.id) || this.upgrade.id === "infinitiedMult";
     },
     shiftDown() {
       return ui.view.shiftDown;
@@ -89,7 +89,7 @@ export default {
       this.isDisabled = upgrade.config.isDisabled && upgrade.config.isDisabled(upgrade.config.effect());
       this.isUseless = Pelle.uselessInfinityUpgrades.includes(upgrade.id) && Pelle.isDoomed;
       this.hasTS31 = TimeStudy(31).canBeApplied;
-      if (!this.isDisabled && this.isImprovedByTS31) this.ts31Effect = upgrade.config.effect().pow(4);
+      if (!this.isDisabled && this.isImprovedByTS31) this.ts31Effect = Decimal.pow(upgrade.config.effect(), 4);
       if (upgrade.id !== "challengeMult") return;
       this.showWorstChallenge = upgrade.effectValue !== upgrade.cap &&
         player.challenge.normal.bestTimes.sum() < Number.MAX_VALUE;

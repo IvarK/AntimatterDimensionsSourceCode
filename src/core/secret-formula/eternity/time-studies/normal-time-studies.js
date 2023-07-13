@@ -78,7 +78,7 @@ export const normalTimeStudies = [
     cost: 3,
     requirement: [21],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => `Powers up bonuses that are based on your Infinities (Bonuses${formatPow(4)})`,
+    description: () => `Powers up multipliers that are based on your Infinities (Bonuses${formatPow(4)})`,
     effect: 4
   },
   {

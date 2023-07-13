@@ -65,6 +65,7 @@ is selected. (Disabling the selection modal after unlocking sacrifice still lets
 <li>Purchase count tooltips for Dimensions now pop out to the left side instead of above</li>
 <li>Changed Break Infinity tab symbol on Modern UI</li>
 <li>Time Study import modal now shows info an import image as a two-column layout to reduce the need to scroll</li>
+<li>Clarified interactions with TS31 and other upgrades</li>
 <li>Eternity Challenges now have a visual overlay to show how many completions they have</li>
 <li>The Reality reset modal now warns you more firmly if you can otherwise Reality for rewards instead</li>
 <li>Added an icon for recently unequipped Glyphs</li>
@@ -89,6 +90,7 @@ rarity and/or type</li>
 <li>Fixed purchased music Glyphs getting turned into regular Glyphs when cosmetics are reset</li>
 <li>Made Glyph preset loading more forgiving and less likely to fail to load presets</li>
 <li>Fixed cel1 Reality RM record being incorrectly tracked in some cases</li>
+<li>Fixed Glyph filter sometimes not comparing to rarity properly</li>
 <li>Fixed cel7 Glyph slot not appearing/disappearing properly in certain cases</li>
 <li>Fixed misalignment in cel6 icon (credit to @mrkrutaman for the fix)</li>
 <li>Disabled IAP purchase for all Glyph Cosmetics when already purchased</li>

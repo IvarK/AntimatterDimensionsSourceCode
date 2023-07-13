@@ -53,8 +53,10 @@ export class RealityAutobuyerState extends AutobuyerState {
     return this.data.shard;
   }
 
+  // This only gets set via functions in AutobuyerInput.vue; we want to take advantage of auto-formatting when the input
+  // is for a Decimal prop, but the actual value needs to be clamped to fit within a Number
   set shard(value) {
-    this.data.shard = value;
+    this.data.shard = value.clamp(0, Number.MAX_VALUE).toNumber();
   }
 
   toggleMode() {

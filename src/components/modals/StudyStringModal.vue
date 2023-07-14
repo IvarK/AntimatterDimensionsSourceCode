@@ -69,10 +69,17 @@ export default {
       const combinedTree = this.combinedTreeObject;
       const newStudiesArray = combinedTree.purchasedStudies
         .filter(s => !currentStudyTree.purchasedStudies.includes(s)).map(s => this.studyString(s));
-      // We can only immediately enter the imported EC if we aren't already in one and are able to unlock the new one.
-      // It's unlockable in two cases - none are currently unlocked, or it happens to already be unlocked
-      const ecData = player.challenge.eternity;
-      const canStartEC = ecData.current === 0 && this.importedTree.ec === ecData.unlocked;
+      // To start an EC using the ! functionality, we want to make sure all the following are true:
+      // - The imported string needs to end with "!" (this is parsed out in time-study-tree.js and stored into the
+      //   canStart prop for tree objects)
+      // - We can unlock the EC in the string. This requires either no EC currently unlocked, or we coincidentally
+      //   already have it unlocked
+      // - The ECs in the tree object and the import string MUST match; the only EC we want to try to enter is the
+      //   one which is being imported, and the tree object will contain a different EC if we already have one
+      const stringEC = TimeStudyTree.getECFromString(this.truncatedInput);
+      const hasExclamationPoint = combinedTree.startEC;
+      const canUnlockEC = [0, stringEC].includes(player.challenge.eternity.current);
+      const hasECMismatch = combinedTree.ec !== stringEC;
       return {
         timeTheorems: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
         spaceTheorems: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
@@ -81,7 +88,7 @@ export default {
         firstPaths: makeEnumeration(combinedTree.dimensionPaths),
         secondPaths: makeEnumeration(combinedTree.pacePaths),
         ec: combinedTree.ec,
-        startEC: combinedTree.startEC && canStartEC,
+        startEC: hasExclamationPoint && canUnlockEC && !hasECMismatch,
         hasInfo: makeEnumeration(combinedTree.dimensionPaths) || combinedTree.ec > 0,
       };
     },
@@ -170,7 +177,8 @@ export default {
         if (this.respecAndLoad && Player.canEternity) {
           player.respec = true;
           const tree = new TimeStudyTree(this.truncatedInput);
-          animateAndEternity(() => TimeStudyTree.commitToGameState(tree.purchasedStudies, false, tree.startEC));
+          animateAndEternity(() =>
+            TimeStudyTree.commitToGameState(tree.purchasedStudies, false, this.combinedTree.startEC));
           return;
         }
         this.importTree();
@@ -188,7 +196,7 @@ export default {
       this.emitClose();
       // We need to use a combined tree for committing to the game state, or else it won't buy studies in the imported
       // tree are only reachable if the current tree is already bought
-      TimeStudyTree.commitToGameState(this.combinedTreeObject.purchasedStudies, false, this.combinedTreeObject.startEC);
+      TimeStudyTree.commitToGameState(this.combinedTreeObject.purchasedStudies, false, this.combinedTree.startEC);
     },
     savePreset() {
       if (this.inputIsValid) {

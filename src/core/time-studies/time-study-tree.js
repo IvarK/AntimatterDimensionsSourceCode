@@ -73,6 +73,15 @@ export class TimeStudyTree {
     return currentStudies;
   }
 
+  // Parses out the EC number from an import string (returns 0 for invalid or nonexistent EC ids)
+  static getECFromString(input) {
+    if (!this.isValidImportString(input)) return 0;
+    const parts = input.split("|");
+    if (parts.length < 1) return 0;
+    // Note: parseInt() seems to silently ignore the presence of "!"
+    return parseInt(parts[1], 10);
+  }
+
   // THIS METHOD HAS LASTING CONSEQUENCES ON THE GAME STATE. STUDIES WILL ACTUALLY BE PURCHASED IF POSSIBLE.
   // This method attempts to take the parameter array and purchase all the studies specified, using the current game
   // state to determine if they are affordable. Input array may be either an id array or a TimeStudyState array
@@ -80,6 +89,7 @@ export class TimeStudyTree {
     for (const item of studyArray) {
       const study = typeof item === "number" ? TimeStudy(item) : item;
       if (study && !study.isBought) study.purchase(auto);
+      // Note: This will automatically (silently) fail if we try to start an EC while we have a different one unlocked
       if (startEC && study instanceof ECTimeStudyState) EternityChallenge(study.id).start(auto);
     }
     GameCache.currentStudyTree.invalidate();
@@ -151,6 +161,7 @@ export class TimeStudyTree {
       // Study strings without an ending "|##" are still valid, but will result in ecString being undefined
       return output;
     }
+    // Note: parseInt() seems to silently ignore the presence of "!"
     const ecID = parseInt(ecString, 10);
     const ecDB = GameDatabase.eternity.timeStudies.ec;
     // Specifically exclude 0 because saved presets will contain it by default

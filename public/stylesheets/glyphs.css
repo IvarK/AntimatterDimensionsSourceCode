@@ -567,18 +567,6 @@
   margin-bottom: -0.8rem;
 }
 
-.c-glyph-tooltip__sacrifice {
-  font-size: 1rem;
-  font-weight: normal;
-}
-
-.c-glyph-tooltip__sacrifice--touchable {
-  color: var(--color-text-light-blue-gray);
-  border: 0.1rem solid var(--color-text-light-blue-gray);
-  border-radius: var(--var-border-radius, 0.5rem);
-  padding: 0.25rem 1rem;
-}
-
 .l-modal-glyph-selection__row {
   display: flex;
   flex-direction: row;

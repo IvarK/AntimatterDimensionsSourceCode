@@ -277,7 +277,7 @@ export default {
       </span>
       <span v-if="showDeletionText">
         <span
-          :class="['c-glyph-tooltip__sacrifice', {'c-glyph-tooltip__sacrifice--touchable': onTouchDevice}]"
+          class="c-glyph-tooltip__sacrifice"
           v-on="onTouchDevice ? { click: removeGlyph } : {}"
         >
           <span v-html="sacrificeText()" />
@@ -303,3 +303,10 @@ export default {
     </div>
   </div>
 </template>
+
+<style scoped>
+.c-glyph-tooltip__sacrifice {
+  font-size: 1rem;
+  font-weight: normal;
+}
+</style>

@@ -288,8 +288,11 @@ export const imaginaryUpgrades = [
     name: "Absolute Annulment",
     id: 24,
     cost: 6e14,
+    // We unfortunately don't have the UI space to be more descriptive on this button without causing text overflow,
+    // so hopefully the additional modals (from the upgrade lock) will mostly communicate the idea that this is under
+    // the same conditions as hard V's Post-destination
     requirement: () => `Have ${formatInt(13000)} Antimatter Galaxies in Ra's Reality
-      with a fully inverted Black Hole, without discharging or entering EC12`,
+      with a fully inverted Black Hole`,
     hasFailed: () => !Ra.isRunning || player.requirementChecks.reality.slowestBH > 1e-300,
     checkRequirement: () => Ra.isRunning && player.requirementChecks.reality.slowestBH <= 1e-300 &&
       player.galaxies >= 13000,

@@ -2437,7 +2437,7 @@ export const news = [
       Realmway Revitalisation Roadmap, a revolutionary program referred to by the 3 R's, which is known as the
       pinnacle of the most famous of the empire's bureaucratic infrastructure committees - the EMIF (empire magic
       infrastructure foundation) - not to be confused with the EAIF (Electric airship investment fund) or the
-      NMIC (National Magical Infrrastructure Coalition). The goal of the three R's, set out by the EMIF, was to
+      NMIC (National Magical Infrastructure Coalition). The goal of the three R's, set out by the EMIF, was to
       reinstate a mana trade corridor for SMSS (Small-Medium Steam Shuttles), a vital part of the burgeoning
       consolidated states after their unfortunate pillaging during the NELC (ninth empire liberation crusade).
       The three R's was a multi stage project - stage 1 was a survey glyph in the air - all big things start with

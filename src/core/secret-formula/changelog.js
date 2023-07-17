@@ -9,14 +9,14 @@ export const changelog = [
    * }
    */
   {
-    // TODO Update with actual date and change Github link
-    date: [2023, 7, 0],
+    date: [2023, 7, 18],
     name: "Final Official Patch",
     info: `
 All of the previous patches since "The Reality Update" have been with the goal of fixing commonly reported bugs and
 implementing highly suggested features. However, this patch is planned to be the final official patch. There may be
-future minor patches from anything that may pop up in response to this set of changes, but these will likely
-be fixed or added as they come in and are unlikely to get their own entries here.
+a few minor patches from bugs/requests in response to this set of changes, but these will likely be fixed or added
+as they come in. We may try to add more beyond that, but this is no longer a guarantee and future changes will
+probably not have their own changelog entries.
 <br>
 <br>
 <b><i>At this point, the official version of the game is largely considered to be complete.

@@ -80,8 +80,12 @@ export const GameStorage = {
   oldBackupTimer: 0,
   ignoreBackupTimer: true,
 
+  // Limit offline tick count using two conditions:
+  // - Ticks should never be shorter than 33ms (this would allow offline to exploit tick microstructure)
+  // - Count should be limited to 1e6 (the options UI doesn't allow for this to be set above this value)
   maxOfflineTicks(simulatedMs, defaultTicks = this.offlineTicks) {
-    return Math.clampMax(defaultTicks, Math.floor(simulatedMs / 33));
+    const tickLimit = Math.clampMax(Math.floor(simulatedMs / 33), 1e6);
+    return Math.clampMax(defaultTicks, tickLimit);
   },
 
   get localStorageKey() {

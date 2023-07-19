@@ -173,7 +173,8 @@ export const GlyphAppearanceHandler = {
   getRarityColor(strength, type) {
     const rarityEntry = getRarity(strength);
     const isLight = CosmeticGlyphTypes[type].currentColor.bg === "white";
-    return rarityEntry[isLight ? "lightColor" : "darkColor"];
+    const colorKey = `${isLight ? "light" : "dark"}${player.options.highContrastRarity ? "HighContrast" : "Color"}`;
+    return rarityEntry[colorKey];
   },
   getColorProps(colorStr) {
     // This condition is a bit odd - this specifically selects out the hybrid custom colors which have both a BG color

@@ -133,7 +133,7 @@ function generateGradient(data, color, glyph, isCircular) {
     case "radial":
       // Produces a centered circle that only shades within a certain radial distance
       borders = [50, ...data.colorSplit, 100];
-      scaleFn = perc => (isCircular ? perc : 100 - (100 - perc) / 2);
+      scaleFn = perc => (isCircular ? 0.9 * perc : 100 - (100 - perc) / 2);
       for (const border of borders) {
         entries.push(`${isColor ? color : "transparent"} ${scaleFn(border)}%`);
         isColor = !isColor;

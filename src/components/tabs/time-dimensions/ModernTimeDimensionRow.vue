@@ -137,7 +137,7 @@ export default {
     />
     <div class="l-dim-row-multi-button-container c-modern-dim-tooltip-container">
       <div class="c-modern-dim-purchase-count-tooltip">
-        {{ tooltipContents }}
+        <span v-html="tooltipContents" />
       </div>
       <PrimaryButton
         :enabled="isAvailableForPurchase && !isCapped"

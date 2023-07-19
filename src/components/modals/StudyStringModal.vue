@@ -282,7 +282,6 @@ export default {
       </div>
       <div class="c-study-preview">
         <StudyStringPreview
-          v-if="!deleting && inputIsValidTree"
           :show-preview="inputIsValidTree"
           :new-studies="!isImporting || (canEternity && respecAndLoad) ? importedTree.newStudiesArray
             : combinedTree.newStudiesArray"
@@ -349,6 +348,7 @@ export default {
 
 .c-study-preview {
   height: 100%;
+  margin-right: 3rem;
 }
 
 .l-delete-input {

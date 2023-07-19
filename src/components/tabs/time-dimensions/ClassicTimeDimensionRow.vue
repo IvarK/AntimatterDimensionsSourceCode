@@ -142,7 +142,7 @@ export default {
       >
         {{ buttonContents }}
         <div class="c-dim-purchase-count-tooltip">
-          {{ tooltipContents }}
+          <span v-html="tooltipContents" />
         </div>
       </PrimaryButton>
       <PrimaryToggleButton

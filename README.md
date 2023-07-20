@@ -5,6 +5,8 @@
 To run the game locally, you will need to install
 [Node.js](https://nodejs.org/) (LTS suggested).
 
+(As of right now we can only confirm that this repo builds properly on node v16, so for now you should ensure you have that main version to build AD. We are looking into this at the moment.)
+
 First, run the following command in your terminal (or command line) while being
 inside the checked out repository:
 

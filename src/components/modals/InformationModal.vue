@@ -29,9 +29,9 @@ export default {
     </div>
     <div class="l-socials">
       <InformationModalButton
-        name="GitHub repository (pre-Reality code)"
+        name="GitHub repository"
         icon="fa-brands fa-github"
-        link="https://github.com/IvarK/IvarK.github.io"
+        link="https://github.com/IvarK/AntimatterDimensionsSourceCode"
       />
       <InformationModalButton
         name="r/AntimatterDimensions"

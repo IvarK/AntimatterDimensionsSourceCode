@@ -334,10 +334,10 @@ export default {
       };
     },
     symbolColor() {
-      return this.colorObj.symbol;
+      return player.options.swapGlyphColors ? this.colorObj.border : this.colorObj.symbol;
     },
     borderColor() {
-      return this.colorObj.border;
+      return player.options.swapGlyphColors ? this.colorObj.symbol : this.colorObj.border;
     },
     bgColor() {
       return this.colorObj.bg;

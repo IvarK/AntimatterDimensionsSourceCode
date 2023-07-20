@@ -25,6 +25,7 @@ export default {
       showGlyphInfoByDefault: false,
       glyphBorders: false,
       highContrastRarity: false,
+      swapGlyphColors: false,
     };
   },
   computed: {
@@ -69,6 +70,10 @@ export default {
       player.options.highContrastRarity = newValue;
       EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
     },
+    swapGlyphColors(newValue) {
+      player.options.swapGlyphColors = newValue;
+      EventHub.dispatch(GAME_EVENT.GLYPH_VISUAL_CHANGE);
+    },
   },
   methods: {
     update() {
@@ -81,6 +86,7 @@ export default {
       this.showGlyphInfoByDefault = options.showHintText.showGlyphInfoByDefault;
       this.glyphBorders = options.glyphBorders;
       this.highContrastRarity = options.highContrastRarity;
+      this.swapGlyphColors = options.swapGlyphColors;
     },
     noEffectStyle() {
       if (this.glyphInfoType !== 0) return null;
@@ -132,6 +138,10 @@ export default {
       <ModalOptionsToggleButton
         v-model="highContrastRarity"
         text="High-contrast rarity colors:"
+      />
+      <ModalOptionsToggleButton
+        v-model="swapGlyphColors"
+        text="Swap border and symbol colors:"
       />
       <ExpandingControlBox
         class="o-primary-btn c-dropdown-btn"

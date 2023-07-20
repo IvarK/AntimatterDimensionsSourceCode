@@ -354,12 +354,13 @@ const RCurly = createToken({ name: "RCurly", pattern: /[ \t]*}/ });
 const Comma = createToken({ name: "Comma", pattern: /,/ });
 const Pipe = createToken({ name: "Pipe", pattern: /\|/, label: "|" });
 const Dash = createToken({ name: "Dash", pattern: /-/, label: "-" });
+const Exclamation = createToken({ name: "Exclamation", pattern: /!/, label: "!" });
 
 // The order here is the order the lexer looks for tokens in.
 export const automatorTokens = [
   HSpace, StringLiteral, StringLiteralSingleQuote, Comment, EOL,
   ComparisonOperator, ...tokenLists.ComparisonOperator,
-  LCurly, RCurly, Comma, EqualSign, Pipe, Dash,
+  LCurly, RCurly, Comma, EqualSign, Pipe, Dash, Exclamation,
   BlackHoleStr, NumberLiteral,
   AutomatorCurrency, ...tokenLists.AutomatorCurrency,
   ECLiteral,

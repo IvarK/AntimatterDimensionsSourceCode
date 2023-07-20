@@ -98,9 +98,10 @@ CodeMirror.defineSimpleMode("automato", {
     { regex: /(antimatter|infinity|time)(?=[\s,|]|$)/ui, token: "number" },
     { regex: /(active|passive|idle)(?=[\s,|]|$)/ui, token: "number" },
     { regex: /(light|dark)(?=[\s,|]|$)/ui, token: "number" },
-    { regex: /([1-9][0-9]+)(?=[\s,|-]|$)/ui, token: "number" },
+    { regex: /([1-9][0-9]+)(?=[\s,!|-]|$)/ui, token: "number" },
     { regex: /[a-zA-Z_][a-zA-Z_0-9]*/u, token: "variable", next: "commandDone" },
-    { regex: /([1-9]|1[0-2])$/ui, token: "number" },
+    { regex: /!$/ui, token: "variable-2" },
+    { regex: /([1-9]|1[0-2])(?=!|$)/ui, token: "number" },
   ],
   studiesLoad: [
     commentRule,

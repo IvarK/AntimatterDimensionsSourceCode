@@ -89,10 +89,11 @@ class AutomatorParser extends Parser {
 
     $.RULE("studyList", () => {
       $.AT_LEAST_ONE(() => $.SUBRULE($.studyListEntry));
-      // Support the |3 export format for EC number
+      // Support the |3 export format for EC number and optionally the ending exclamation point
       $.OPTION(() => {
         $.CONSUME(T.Pipe);
         $.CONSUME1(T.NumberLiteral, { LABEL: "ECNumber" });
+        $.OPTION1(() => $.CONSUME(T.Exclamation));
       });
     }, { resyncEnabled: false });
 

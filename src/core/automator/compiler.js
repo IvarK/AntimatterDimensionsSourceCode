@@ -322,7 +322,8 @@ class Validator extends BaseVisitor {
     ctx.$cached = {
       normal: studiesOut,
       image: this.rawText.substr(positionRange.startOffset, positionRange.endOffset - positionRange.startOffset + 1),
-      ec: 0
+      ec: 0,
+      startEC: false,
     };
     if (ctx.ECNumber) {
       if (ctx.ECNumber.isInsertedInRecovery) {
@@ -336,6 +337,7 @@ class Validator extends BaseVisitor {
       }
       ctx.$cached.ec = ecNumber;
     }
+    if (ctx.Exclamation) ctx.$cached.startEC = true;
     return ctx.$cached;
   }
 

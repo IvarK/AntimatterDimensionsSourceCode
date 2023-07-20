@@ -386,6 +386,24 @@ export const migrations = {
       if (player.reality.seed === 1) player.reality.seed = newSeed;
       if (player.reality.initialSeed === 1) player.reality.initialSeed = newSeed;
     },
+    23: player => {
+      // We missed presets in effarig format migration
+      const updateBitmask = bitmask => {
+        const modifiedBits = [20, 21, 22].map(b => 1 << b).sum();
+        const foundBits = [20, 21, 22].map(b => (bitmask & (1 << b)) !== 0);
+        foundBits.push(foundBits.shift());
+        let newSubmask = 0;
+        for (let bit = 20; bit <= 22; bit++) {
+          if (foundBits[bit - 20]) newSubmask |= 1 << bit;
+        }
+        return (bitmask & ~modifiedBits) | newSubmask;
+      };
+      for (const preset of player.reality.glyphs.sets) {
+        for (const glyph of preset.glyphs) {
+          glyph.effects = updateBitmask(glyph.effects);
+        }
+      }
+    },
   },
 
   normalizeTimespans(player) {

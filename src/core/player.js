@@ -809,6 +809,7 @@ window.player = {
     showNewGlyphIcon: true,
     showUnequippedGlyphIcon: true,
     highContrastRarity: false,
+    swapGlyphColors: false,
     hideAlterationEffects: false,
     ignoreGlyphEffects: false,
     ignoreGlyphLevel: false,

@@ -26,7 +26,7 @@ export default {
   },
   {
     name: "Synergism",
-    link: "https://pseudo-corp.github.io/SynergismOfficial/",
+    link: "https://synergism.cc/",
     image: "game--synergism.png"
   },
   {

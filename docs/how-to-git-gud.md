@@ -56,7 +56,7 @@ If you did the stuff in the fork section:
 2. (Optional) If you've got merge conflicts, go to
    **Something's not working / I'm stuck** section
 
-## Something's not working / I'm stuck
+**Something's not working / I'm stuck**
 
 Go to Discord channel #modifications-development and ask
 your question there.

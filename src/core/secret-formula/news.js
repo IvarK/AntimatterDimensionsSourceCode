@@ -437,7 +437,7 @@ export const news = [
         },
         {
           name: "Synergism",
-          link: "https://pseudo-corp.github.io/SynergismOfficial/"
+          link: "https://synergism.cc/"
         },
         {
           name: "Universal Paperclips",

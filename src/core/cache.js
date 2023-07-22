@@ -101,8 +101,6 @@ export const GameCache = {
 
   timeDimensionCommonMultiplier: new Lazy(() => timeDimensionCommonMultiplier()),
 
-  solarDimensionCommonMultiplier: new Lazy(() => solarDimensionCommonMultiplier()),
-
   glyphInventorySpace: new Lazy(() => Glyphs.freeInventorySpace),
 
   glyphEffects: new Lazy(() => orderedEffectList.mapToObject(k => k, k => getAdjustedGlyphEffectUncached(k))),

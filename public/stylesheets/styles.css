@@ -104,8 +104,6 @@ html {
 
   --color-pelle--base: crimson;
   --color-pelle--secondary: #00bcd4;
-
-  --color-earth: #37a4ba;
 }
 
 :root .t-metro,
@@ -125,8 +123,6 @@ html {
   --color-reality: #3a823d;
   --color-reality-light: #d5ffd7;
   --color-celestials: #00bcd4;
-
-  --color-earth: #37a4ba;
 }
 
 :root .t-dark {
@@ -146,8 +142,6 @@ html {
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
-
-  --color-earth: #37a4ba;
 }
 
 :root .t-dark-metro {
@@ -173,8 +167,6 @@ html {
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
-
-  --color-earth: #37a4ba;
 }
 
 :root .t-amoled {
@@ -193,8 +185,6 @@ html {
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
-
-  --color-earth: #37a4ba;
 }
 
 :root .t-amoled-metro {
@@ -217,8 +207,6 @@ html {
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
-
-  --color-earth: #37a4ba;
 }
 
 :root .t-s1 {
@@ -268,8 +256,6 @@ html {
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
-
-  --color-earth: #37a4ba;
 }
 
 :root .t-s11 {
@@ -286,8 +272,6 @@ html {
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
-
-  --color-earth: #37a4ba;
 }
 
 :root .s-base--metro {
@@ -768,16 +752,6 @@ button:focus {
 
 .o-tab-btn--celestial:hover {
   background: var(--color-celestials);
-}
-
-.o-tab-btn--earth {
-  color: var(--color-earth);
-  background-color: var(--color-prestige--accent);
-  border-color: var(--color-earth);
-}
-
-.o-tab-btn--earth:hover {
-  background: var(--color-earth);
 }
 
 /* #endregion tab buttons */
@@ -2159,19 +2133,6 @@ br {
 
 /* #endregion Eternity */
 
-.o-planet-button {
-  font-weight: bold;
-  color: var(--color-earth);
-  background-color: var(--color-prestige--accent);
-  border-color: var(--color-earth);
-  cursor: pointer;
-}
-
-.o-planet-button:hover {
-  color: black;
-  background-color: var(--color-earth);
-}
-
 /* #endregion Big Crunch */
 
 /* #endregion o-prestige-btn */
@@ -2347,12 +2308,6 @@ br {
 
 /* #endregion EP Amount */
 
-/* #region PP Amount */
-
-.c-game-header__pp-amount {
-  color: var(--color-earth);
-}
-
 /* #region c-game-header__antimatter */
 
 .c-game-header__antimatter {
@@ -2450,14 +2405,13 @@ br {
 }
 
 .c-dim-tooltip-container {
-  display: inline-block;
   position: relative;
+  display: inline-block;
 }
 
 .c-dim-tooltip-container .c-dim-purchase-count-tooltip {
-  visibility: hidden;
-  width: 20rem;
   position: absolute;
+  width: 20rem;
   top: 50%;
   font-size: 1.3rem;
   line-height: 1.6rem;
@@ -2465,8 +2419,9 @@ br {
   background: black;
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-width, 0.5rem);
-  padding: 0.5rem;
   transform: translate(calc(-100% - 1.5rem), -50%);
+  padding: 0.5rem;
+  visibility: hidden;
 }
 
 .c-dim-tooltip-container:hover .c-dim-purchase-count-tooltip {
@@ -2476,11 +2431,11 @@ br {
 .c-dim-tooltip-container .c-dim-purchase-count-tooltip::after {
   content: "";
   position: absolute;
-  top: 50%;
   left: 100%;
+  top: 50%;
   border-top: 0.5rem solid transparent;
-  border-bottom: 0.5rem solid transparent;
   border-left: 0.5rem solid var(--color-text);
+  border-bottom: 0.5rem solid transparent;
   transform: translateY(-50%);
 }
 
@@ -3255,6 +3210,7 @@ br {
   background-color: #4caf50;
   border-color: #388e3c;
 }
+
 
 /* #endregion t-dark-metro */
 
@@ -4625,11 +4581,11 @@ properly on certain themes. */
 .l-replicanti-tab {
   display: flex;
   flex-direction: column;
+  color: var(--color-text);
 
   /* To prevent button jitter */
   width: 100%;
   align-items: center;
-  color: var(--color-text);
 }
 
 /* #region c-replicanti-description */
@@ -5764,9 +5720,9 @@ kbd {
 }
 
 .o-notification--automator {
-  color: var(--color-automator-docs-font);
   background-color: var(--color-automator-active-line-background);
   border-color: var(--color-automator-active-line-outline);
+  color: var(--color-automator-docs-font);
 }
 
 .o-notification--strike {
@@ -8605,8 +8561,8 @@ kbd {
   background:
     repeating-linear-gradient(
       -45deg,
-      #a2a229,
-      #a2a229 3rem,
+      #A2A229,
+      #A2A229 3rem,
       #919122 3rem,
       #919122 6rem
     );
@@ -8638,11 +8594,11 @@ kbd {
 .o-requirement-lock {
   position: absolute;
   font-size: 5rem;
-  opacity: 0.4;
-  color: black;
   padding: 0.5rem 1.8rem;
-  pointer-events: none;
+  color: black;
+  opacity: 0.4;
   user-select: none;
+  pointer-events: none;
 }
 
 .c-reality-upgrade-btn--black-hole-unlock {

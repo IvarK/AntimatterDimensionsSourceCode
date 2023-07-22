@@ -170,10 +170,6 @@ export function gainedGlyphLevel() {
   };
 }
 
-export function gainedPlanetPoints() {
-  return new Decimal(1);
-}
-
 export function resetChallengeStuff() {
   player.chall2Pow = 1;
   player.chall3Pow = DC.D0_01;
@@ -402,8 +398,6 @@ export function realTimeMechanics(realDiff) {
 
   DarkMatterDimensions.tick(realDiff);
 
-  SolarDimensions.tick(realDiff);
-
   // When storing real time, skip everything else having to do with production once stats are updated
   if (Enslaved.isStoringRealTime) {
     player.records.realTimePlayed += realDiff;
@@ -489,7 +483,6 @@ export function gameLoop(passDiff, options = {}) {
   GameCache.antimatterDimensionFinalMultipliers.invalidate();
   GameCache.infinityDimensionCommonMultiplier.invalidate();
   GameCache.timeDimensionCommonMultiplier.invalidate();
-  GameCache.solarDimensionCommonMultiplier.invalidate();
   GameCache.totalIPMult.invalidate();
 
   const blackHoleDiff = realDiff;

@@ -27,11 +27,6 @@ window.player = {
       cost: [DC.D1, DC.D5, DC.E2, DC.E3, DC.E2350, DC.E2650, DC.E3000, DC.E3350][tier],
       amount: DC.D0,
       bought: 0
-    })),
-    solar: Array.range(0, 8).map(tier => ({
-      cost: [DC.D1, DC.D5, DC.E3, DC.E10, DC.E100, DC.E1000, DC.E5000, DC.E10000][tier],
-      amount: DC.D0,
-      bought: 0
     }))
   },
   buyUntil10: true,
@@ -764,16 +759,6 @@ window.player = {
       showBought: false,
     }
   },
-  planetPoints: DC.D0,
-  watts: DC.D0,
-  planets: {
-    earth: {
-      unlocked: false
-    },
-    mars: {
-      unlocked: false
-    }
-  },
   isGameEnd: false,
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,
@@ -874,8 +859,7 @@ window.player = {
       antimatterGalaxy: true,
       dimensionBoost: true,
       switchAutomatorMode: true,
-      respecIAP: true,
-      planets: true,
+      respecIAP: true
     },
     awayProgress: {
       antimatter: true,

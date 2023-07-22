@@ -61,7 +61,6 @@ export * from "./tickspeed";
 export * from "./dimensions/antimatter-dimension";
 export * from "./dimensions/infinity-dimension";
 export * from "./dimensions/time-dimension";
-export * from "./dimensions/solar-dimensions";
 
 export * from "./time-studies";
 
@@ -74,7 +73,6 @@ export * from "./normal-challenges";
 export * from "./infinity-challenges";
 export * from "./eternity";
 export * from "./eternity-challenge";
-export * from "./planets";
 export * from "./reality";
 export * from "./replicanti";
 export * from "./time-theorems";

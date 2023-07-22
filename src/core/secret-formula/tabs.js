@@ -496,5 +496,40 @@ export const tabs = [
         hidable: true
       }
     ]
+  },
+  {
+    key: "planets",
+    name: "Planets",
+    hideAt: 1.9,
+    UIClass: "o-tab-btn--earth",
+    condition: () => true,
+    id: 11,
+    hidable: true,
+    subtabs: [
+      {
+        key: "venus",
+        name: "Venus, Bringer of Peace",
+        symbol: "*",
+        component: "VenusTab",
+        id: 2,
+        hidable: true
+      },
+      {
+        key: "earth",
+        name: "Earth",
+        symbol: "%",
+        component: "EarthTab",
+        id: 0,
+        hidable: true
+      },
+      {
+        key: "mars",
+        name: "Mars, Bringer of War",
+        symbol: "?",
+        component: "MarsTab",
+        id: 1,
+        hidable: true
+      }
+    ]
   }
 ];

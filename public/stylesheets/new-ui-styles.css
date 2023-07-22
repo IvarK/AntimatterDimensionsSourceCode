@@ -12,6 +12,7 @@
   --color-antimatter--bg: #df50504d;
   --color-infinity--bg: #b67f334d;
   --color-eternity--bg: #b341e04d;
+  --color-earth--bg: #37a4ba4d;
 }
 
 :root .t-s12 {
@@ -37,12 +38,14 @@
 
   --color-laitela--base: black;
   --color-laitela--accent: white;
+
+  --color-earth: #37a4ba;
 }
 
 :root .t-metro,
 :root .t-inverted-metro,
 :root .t-s8 {
-  --color-antimatter--bg: rgba(33, 150, 243, 30%);
+  --color-antimatter--bg: rgba(117, 125, 132, 30%);
 }
 
 body.t-normal,
@@ -266,6 +269,10 @@ body.t-s12 {
   border-left-color: var(--color-celestials);
 }
 
+.o-tab-btn--earth::after {
+  border-left-color: var(--color-earth);
+}
+
 .tab-button.shop {
   background-color: #d9bb26;
 }
@@ -418,6 +425,16 @@ body.t-s12 {
 
 .o-tab-btn--celestial .o-subtab__tooltip::after {
   border-top-color: var(--color-celestials);
+}
+
+.o-tab-btn--earth .o-subtab__tooltip {
+  color: var(--color-earth);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-earth);
+}
+
+.o-tab-btn--earth .o-subtab__tooltip::after {
+  border-top-color: var(--color-earth);
 }
 
 .active {
@@ -825,8 +842,9 @@ body.t-s12 {
 }
 
 .c-modern-dim-tooltip-container .c-modern-dim-purchase-count-tooltip {
-  position: absolute;
+  visibility: hidden;
   width: 20rem;
+  position: absolute;
   top: 50%;
   font-size: 1.3rem;
   line-height: 1.6rem;
@@ -834,10 +852,9 @@ body.t-s12 {
   background: black;
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-width, 0.5rem);
+  padding: 0.5rem;
   /* Button is 25rem wide, tooltip is 20rem */
   transform: translate(calc(-125% - 1rem), -50%);
-  padding: 0.5rem;
-  visibility: hidden;
 }
 
 .c-modern-dim-tooltip-container:hover .c-modern-dim-purchase-count-tooltip {
@@ -847,11 +864,11 @@ body.t-s12 {
 .c-modern-dim-tooltip-container .c-modern-dim-purchase-count-tooltip::after {
   content: "";
   position: absolute;
-  left: 100%;
   top: 50%;
+  left: 100%;
   border-top: 0.5rem solid transparent;
-  border-left: 0.5rem solid var(--color-text);
   border-bottom: 0.5rem solid transparent;
+  border-left: 0.5rem solid var(--color-text);
   transform: translateY(-50%);
 }
 
@@ -944,6 +961,10 @@ body.t-s12 {
 
 .c-game-header__ep-amount {
   color: var(--color-eternity);
+}
+
+.c-game-header__pp-amount {
+  color: var(--color-earth);
 }
 
 .t-normal .c-game-header__antimatter,

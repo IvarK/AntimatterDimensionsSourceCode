@@ -477,3 +477,13 @@ Currency.galaxyGeneratorGalaxies = new class extends NumberCurrency {
     player.celestials.pelle.galaxyGenerator.spentGalaxies += spent;
   }
 }();
+
+Currency.planetPoints = new class extends DecimalCurrency {
+  get value() { return player.planetPoints; }
+  set value(value) { player.planetPoints = value; }
+}();
+
+Currency.watts = new class extends DecimalCurrency {
+  get value() { return player.watts; }
+  set value(value) { player.watts = value; }
+}();

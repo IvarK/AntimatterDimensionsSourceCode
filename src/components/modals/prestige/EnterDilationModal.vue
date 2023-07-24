@@ -33,11 +33,12 @@ export default {
     handleYesClick() {
       if (player.dilation.active) return;
       if (player.options.animations.dilation && !FullScreenAnimationHandler.isDisplaying) {
+        // Strike trigger happens within the delayed dilation callback in this function
         animateAndDilate();
       } else {
         startDilatedEternity();
+        if (Pelle.isDoomed) PelleStrikes.dilation.trigger();
       }
-      if (Pelle.isDoomed) PelleStrikes.dilation.trigger();
     },
   },
 };

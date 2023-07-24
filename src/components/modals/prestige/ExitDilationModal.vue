@@ -21,6 +21,9 @@ export default {
     },
     isInEC() {
       return Player.anyChallenge instanceof EternityChallengeState;
+    },
+    confirmText() {
+      return this.isDoomed ? "Okay" : "Exit";
     }
   },
   methods: {
@@ -59,8 +62,7 @@ export default {
     </template>
     <div class="c-modal-message__text">
       <span v-if="isDoomed">
-        Dilation is permanent. You will {{ gainText }} and reset your current eternity. You will not gain any
-        Eternity Points.
+        Dilation is permanent. You will {{ gainText }} and reset your current Eternity.
       </span>
       <span v-else>
         If you exit Dilation now, you will {{ gainText }}.
@@ -72,7 +74,7 @@ export default {
       Are you sure you want to proceed?
     </div>
     <template #confirm-text>
-      Exit
+      {{ confirmText }}
     </template>
   </ModalWrapperChoice>
 </template>

@@ -177,8 +177,7 @@ export default {
         if (this.respecAndLoad && Player.canEternity) {
           player.respec = true;
           const tree = new TimeStudyTree(this.truncatedInput);
-          animateAndEternity(() =>
-            TimeStudyTree.commitToGameState(tree.purchasedStudies, false, this.combinedTree.startEC));
+          animateAndEternity(() => TimeStudyTree.commitToGameState(tree.purchasedStudies, false, tree.startEC));
           return;
         }
         this.importTree();

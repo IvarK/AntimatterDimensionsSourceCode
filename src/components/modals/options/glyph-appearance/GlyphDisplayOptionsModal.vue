@@ -103,66 +103,78 @@ export default {
 </script>
 
 <template>
-  <ModalWrapperOptions class="c-modal-options__large">
+  <ModalWrapperOptions class="c-modal-options__glyph">
     <template #header>
       Glyph Display Options
     </template>
-    <div class="c-modal-options__button-container">
-      <ModalOptionsToggleButton
-        v-model="newGlyphs"
-        text="New Glyph identifier:"
-      />
-      <ModalOptionsToggleButton
-        v-model="showUnequippedGlyphIcon"
-        text="Unequipped Glyph identifier:"
-      />
-      <ModalOptionsToggleButton
-        v-model="glyphEffectDots"
-        text="Always show Glyph effect dots:"
-      />
-      <ModalOptionsToggleButton
-        v-model="glyphBorders"
-        text="Fancy Glyph borders:"
-      />
-      <button
-        class="o-primary-btn o-primary-btn--modal-option"
-        @click="cycleBG()"
-      >
-        Glyph BG color: {{ glyphBGStr }}
-      </button>
-      <ModalOptionsToggleButton
-        v-model="showGlyphInfoByDefault"
-        :style="noEffectStyle()"
-        text="Always show Glyph Info:"
-      />
-      <ModalOptionsToggleButton
-        v-model="highContrastRarity"
-        text="High-contrast rarity colors:"
-      />
-      <ModalOptionsToggleButton
-        v-model="swapGlyphColors"
-        text="Swap border and symbol colors:"
-      />
-      <ExpandingControlBox
-        class="o-primary-btn c-dropdown-btn"
-      >
-        <template #header>
-          <div class="c-dropdown-header">
-            ▼ Additional Glyph Info: ▼
-            <br>
-            {{ infoLabel }}
-          </div>
-        </template>
-        <template #dropdown>
-          <SelectGlyphInfoDropdown />
-        </template>
-      </ExpandingControlBox>
+    <div class="c-glyph-visual-options c-modal--short">
+      <div class="c-modal-options__button-container">
+        <ModalOptionsToggleButton
+          v-model="newGlyphs"
+          text="New Glyph identifier:"
+        />
+        <ModalOptionsToggleButton
+          v-model="showUnequippedGlyphIcon"
+          text="Unequipped Glyph identifier:"
+        />
+        <ModalOptionsToggleButton
+          v-model="glyphEffectDots"
+          text="Always show Glyph effect dots:"
+        />
+        <ModalOptionsToggleButton
+          v-model="glyphBorders"
+          text="Fancy Glyph borders:"
+        />
+        <button
+          class="o-primary-btn o-primary-btn--modal-option"
+          @click="cycleBG()"
+        >
+          Glyph BG color: {{ glyphBGStr }}
+        </button>
+        <ModalOptionsToggleButton
+          v-model="showGlyphInfoByDefault"
+          :style="noEffectStyle()"
+          text="Always show Glyph Info:"
+        />
+        <ModalOptionsToggleButton
+          v-model="highContrastRarity"
+          text="High-contrast rarity colors:"
+        />
+        <ModalOptionsToggleButton
+          v-model="swapGlyphColors"
+          text="Swap border and symbol colors:"
+        />
+        <ExpandingControlBox
+          class="o-primary-btn c-dropdown-btn"
+        >
+          <template #header>
+            <div class="c-dropdown-header">
+              ▼ Additional Glyph Info: ▼
+              <br>
+              {{ infoLabel }}
+            </div>
+          </template>
+          <template #dropdown>
+            <SelectGlyphInfoDropdown />
+          </template>
+        </ExpandingControlBox>
+      </div>
+      <GlyphCustomization />
     </div>
-    <GlyphCustomization />
   </ModalWrapperOptions>
 </template>
 
 <style scoped>
+.c-modal-options__glyph {
+  width: 55rem;
+}
+
+.c-glyph-visual-options {
+  width: 55rem;
+  overflow-x: hidden;
+  padding-right: 1rem;
+}
+
 .c-dropdown-btn {
   width: 24rem;
   margin: 0.3rem;

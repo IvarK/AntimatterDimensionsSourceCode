@@ -161,7 +161,7 @@ export const credits = {
       name: "Phillip Marshall",
       roles: 12
     }, {
-      name: "Phoenix",
+      name: "Phoebe",
       roles: 12
     }, {
       name: "Reda Kotob",

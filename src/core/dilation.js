@@ -5,7 +5,10 @@ import { SpeedrunMilestones } from "./speedrun";
 
 export function animateAndDilate() {
   FullScreenAnimationHandler.display("a-dilate", 2);
-  setTimeout(startDilatedEternity, 1000);
+  setTimeout(() => {
+    startDilatedEternity();
+    if (Pelle.isDoomed) PelleStrikes.dilation.trigger();
+  }, 1000);
 }
 
 // eslint-disable-next-line no-empty-function

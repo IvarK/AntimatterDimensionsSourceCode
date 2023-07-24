@@ -404,6 +404,13 @@ export const migrations = {
         }
       }
     },
+    24: player => {
+      // Automator constants didn't copy over properly across new games - retroactively fix bugged saves as well
+      const definedConstants = Object.keys(player.reality.automator.constants);
+      if (definedConstants.length !== player.reality.automator.constantSortOrder.length) {
+        player.reality.automator.constantSortOrder = [...definedConstants];
+      }
+    },
   },
 
   normalizeTimespans(player) {

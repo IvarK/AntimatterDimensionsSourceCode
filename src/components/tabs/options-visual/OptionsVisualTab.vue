@@ -97,13 +97,12 @@ export default {
             <SelectNotationDropdown />
           </template>
         </ExpandingControlBox>
-        <PrimaryToggleButton
-          v-model="commas"
-          class="o-primary-btn--option l-options-grid__button"
-          label="Exponent formatting:"
-          on="Commas"
-          off="Notation"
-        />
+        <OptionsButton
+          class="o-primary-btn--option"
+          onclick="Modal.notation.show();"
+        >
+          Open Exponent Notation Options
+        </OptionsButton>
       </div>
       <div class="l-options-grid__row">
         <OptionsButton

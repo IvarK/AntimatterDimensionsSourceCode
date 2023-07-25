@@ -483,7 +483,8 @@ export const GameStorage = {
     Glyphs.unseen = [];
     Glyphs.unequipped = [];
     Notations.find(player.options.notation).setAsCurrent(true);
-    ADNotations.Settings.exponentCommas.show = player.options.commas;
+    ADNotations.Settings.exponentCommas.min = 10 ** player.options.notationDigits.comma;
+    ADNotations.Settings.exponentCommas.max = 10 ** player.options.notationDigits.notation;
 
     EventHub.dispatch(GAME_EVENT.GAME_LOAD);
     AutomatorBackend.initializeFromSave();

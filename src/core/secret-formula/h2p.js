@@ -107,10 +107,9 @@ which can be unlocked through importing certain phrases. Both UI layouts support
 <br>
 The notation used to display numbers in the game defaults to Mixed Scientific, but can be changed to one of numerous
 options in the drop-down menu. Many of these notations are intended as jokes and in some cases will format numbers
-in a way that causes text to spill over into other parts of the screen - this is not a bug. "Exponent formatting" is
-a setting affecting some notations which lets you toggle between showing the number in an exponent itself (with commas
-every three digits) or also applying the notation formatting to the exponent. Note that notation formatting is forced
-when exponents are larger than ${format(DC.E9)}.
+in a way that causes text to spill over into other parts of the screen - this is not a bug. You can additionally
+configure what numbers look like when they are extremely large using the "Exponent Notation Options" menu,
+although this may result in some odd text appearances in some places.
 <br>
 <br>
 Many events in the game trigger full-screen animations or pop-up modals which require you to confirm that you want to

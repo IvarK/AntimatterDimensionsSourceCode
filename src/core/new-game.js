@@ -84,7 +84,8 @@ export const NG = {
     player.speedrun.isUnlocked = hasSpeedrun;
     Themes.find(Theme.currentName()).set();
     Notations.all.find(n => n.name === player.options.notation).setAsCurrent();
-    ADNotations.Settings.exponentCommas.show = player.options.commas;
+    ADNotations.Settings.exponentCommas.min = 10 ** player.options.notationDigits.comma;
+    ADNotations.Settings.exponentCommas.max = 10 ** player.options.notationDigits.notation;
     player.lastUpdate = Date.now();
   }
 };

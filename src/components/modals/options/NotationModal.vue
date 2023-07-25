@@ -108,13 +108,14 @@ export default {
         :key="id"
         class="o-single-number"
       >
-        {{ format(num) }}
+        {{ formatPostBreak(num) }}
       </span>
     </div>
     <br>
     Note: The interface is generally optimized for Scientific notation with settings of {{ formatInt(5) }}
     and {{ formatInt(9) }} digits. Some text may look odd or overflow out of boxes if you
-    differ significantly from these values.
+    differ significantly from these values. Additionally, these settings might not cause any visual changes
+    when using certain notations.
   </ModalWrapper>
 </template>
 

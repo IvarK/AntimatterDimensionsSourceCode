@@ -189,5 +189,11 @@ export const pelleUpgrades = {
     description: "Tachyon Particles no longer reset on Armageddon",
     cost: 1e50,
     formatCost,
+  },
+  replicantiGalaxyEM40: {
+    id: 22,
+    description: "Replicanti Galaxies no longer reset anything they normally reset",
+    cost: 1e30,
+    formatCost,
   }
 };

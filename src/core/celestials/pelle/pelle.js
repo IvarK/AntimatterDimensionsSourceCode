@@ -443,4 +443,5 @@ export const PelleUpgrade = mapGameDataToObject(
 );
 
 PelleUpgrade.rebuyables = PelleUpgrade.all.filter(u => u.isRebuyable);
-PelleUpgrade.singles = PelleUpgrade.all.filter(u => !u.isRebuyable);
+// An upgrade was added post-release; it's simpler to just sort them by cost rather than to migrate the internal data
+PelleUpgrade.singles = PelleUpgrade.all.filter(u => !u.isRebuyable).sort((a, b) => a.cost - b.cost);

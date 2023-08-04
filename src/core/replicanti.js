@@ -19,7 +19,10 @@ function addReplicantiGalaxies(newGalaxies) {
   if (newGalaxies > 0) {
     player.replicanti.galaxies += newGalaxies;
     player.requirementChecks.eternity.noRG = false;
-    if (!EternityMilestone.replicantiNoReset.isReached || Pelle.isDoomed) {
+    const keepResources = Pelle.isDoomed
+      ? PelleUpgrade.replicantiGalaxyEM40.canBeApplied
+      : EternityMilestone.replicantiNoReset.isReached;
+    if (!keepResources) {
       player.dimensionBoosts = 0;
       softReset(0, true, true);
     }

@@ -1648,20 +1648,6 @@ br {
   cursor: auto;
 }
 
-.o-primary-btn--dimboost {
-  width: 21rem;
-  height: 4.5rem;
-  position: relative;
-  font-size: 0.9rem;
-}
-
-.o-primary-btn--galaxy {
-  width: 21rem;
-  height: 4.5rem;
-  position: relative;
-  font-size: 0.9rem;
-}
-
 .o-primary-btn--quick-reset {
   width: 20rem;
   height: 7rem;

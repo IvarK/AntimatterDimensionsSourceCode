@@ -166,8 +166,8 @@ export default {
 .c-pelle-upgrade {
   display: flex;
   flex-direction: column;
-  width: 18.5rem;
-  height: 12rem;
+  width: 18rem;
+  height: 9rem;
   position: relative;
   justify-content: center;
   align-items: center;
@@ -179,8 +179,8 @@ export default {
   border: 0.1rem solid var(--color-pelle--secondary);
   border-radius: var(--var-border-radius, 0.5rem);
   box-shadow: inset 0 0 1rem 0.1rem var(--color-pelle--secondary);
-  margin: 0.6rem 0.3rem;
-  padding: 2rem;
+  margin: 0.6rem 0.55rem;
+  padding: 1rem;
   cursor: pointer;
 }
 

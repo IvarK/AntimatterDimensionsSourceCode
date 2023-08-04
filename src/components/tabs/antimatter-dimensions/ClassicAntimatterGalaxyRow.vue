@@ -152,4 +152,11 @@ export default {
 .l-scaling-text-wrapper {
   height: 2rem;
 }
+
+.o-primary-btn--galaxy {
+  width: 22rem;
+  height: 5.5rem;
+  position: relative;
+  font-size: 0.9rem;
+}
 </style>

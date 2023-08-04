@@ -117,8 +117,7 @@ export default {
     },
     getGlyphs() {
       this.canRefresh = true;
-      this.glyphs = GlyphSelection.glyphList(
-        GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
+      this.glyphs = GlyphSelection.upcomingGlyphs;
     },
     select(index) {
       this.selectedGlyph = index;

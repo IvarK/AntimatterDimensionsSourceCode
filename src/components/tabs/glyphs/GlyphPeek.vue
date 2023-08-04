@@ -32,8 +32,7 @@ export default {
     },
     refreshGlyphs() {
       this.canRefresh = true;
-      this.glyphs = GlyphSelection.glyphList(
-        GlyphSelection.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
+      this.glyphs = GlyphSelection.upcomingGlyphs;
       for (const glyph of this.glyphs) Glyphs.applyGamespeed(glyph);
       this.level = gainedGlyphLevel().actualLevel;
     },

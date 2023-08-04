@@ -152,7 +152,7 @@ export default {
         <div v-html="boostText" />
       </span>
     </div>
-    <div class="c-achievements-tab__header c-achievements-tab__header--multipliers">
+    <div class="c-achievements-tab__header">
       Achievements with a <i class="fas fa-star" /> icon also give an additional reward.
     </div>
     <div

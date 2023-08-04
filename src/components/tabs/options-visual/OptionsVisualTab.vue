@@ -24,7 +24,6 @@ export default {
     return {
       theme: "",
       notation: "",
-      commas: false,
       headerTextColored: true,
     };
   },
@@ -40,10 +39,6 @@ export default {
     }
   },
   watch: {
-    commas(newValue) {
-      player.options.commas = newValue;
-      ADNotations.Settings.exponentCommas.show = newValue;
-    },
     headerTextColored(newValue) {
       player.options.headerTextColored = newValue;
     },
@@ -53,7 +48,6 @@ export default {
       const options = player.options;
       this.theme = Theme.currentName();
       this.notation = options.notation;
-      this.commas = options.commas;
       this.headerTextColored = options.headerTextColored;
     },
   }

@@ -58,6 +58,9 @@ export const GlyphGenerator = {
   // properties up to a reality count one more than 5x this value; the modified RNG for uniform
   // glyphs excludes the first fixed glyph and only starts from the 2nd one onward
   uniformityGroups: 4,
+  get isUniformityActive() {
+    return player.realities <= 5 * this.uniformityGroups;
+  },
 
   fakeSeed: Date.now() % Math.pow(2, 32),
   fakeSecondGaussian: null,

@@ -42,7 +42,7 @@ export const GlyphSelection = {
     // To attempt to reduce RNG swing, we follow slightly different logic early on in order
     // to spread out types and effects more equally for the first few realities. Types and
     // effects are spread out over the choices of each consecutive group of 5 realities
-    if (player.realities <= 5 * GlyphGenerator.uniformityGroups) {
+    if (GlyphGenerator.isUniformityActive) {
       glyphList = GlyphGenerator.uniformGlyphs(level, rng, player.realities);
     } else {
       for (let out = 0; out < count; ++out) {
@@ -94,6 +94,25 @@ export const GlyphSelection = {
     }
     this.glyphs = [];
     this.realityProps = undefined;
+  },
+
+  // Normally shows all of the possible choices, but we need to treat START-less saves differently due to the fact
+  // that we actually generate all of them and pick randomly. In this case, we also do exactly that and then present
+  // this pre-selected glyph as the only option
+  get upcomingGlyphs() {
+    if (Perk.firstPerk.isEffectActive) {
+      return this.glyphList(this.choiceCount, gainedGlyphLevel(), { isChoosingGlyph: false });
+    }
+
+    const group = this.glyphList(4, gainedGlyphLevel(), { isChoosingGlyph: false });
+    return [group[this.indexWithoutSTART]];
+  },
+
+  // The uniformity code behaves poorly without START, so we generate actually generate them 4 at a time and then
+  // deterministically pick one of them randomly
+  get indexWithoutSTART() {
+    const lexIndex = player.realities * ((player.reality.initialSeed % 5) + 3);
+    return permutationIndex(4, lexIndex)[0];
   }
 };
 
@@ -181,12 +200,11 @@ export function processManualReality(sacrifice, glyphID) {
     }
   } else {
     // We can't get a random glyph directly here because that makes the RNG depend on when you get the first
-    // perk. The internals of generate() still advance the seed properly as if we actually had a choice of
-    // more than one glyph, but always selecting the first glyph results in highly biased types when the
-    // uniformity code is still active. Therefore, we choose a glyph randomly (but deterministically) instead
-    GlyphSelection.generate(1);
-    const lexIndex = player.realities * ((player.reality.initialSeed % 5) + 3);
-    GlyphSelection.select(permutationIndex(4, lexIndex)[0], sacrifice);
+    // perk. We explicitly generate 4 glyphs every time here because otherwise this has some poor interactions
+    // when the uniformity code is still active (selected types become highly biased). Therefore, we generate
+    // the whole group and then choose a glyph randomly (but deterministically) instead
+    GlyphSelection.generate(4);
+    GlyphSelection.select(GlyphSelection.indexWithoutSTART, sacrifice);
   }
 
   // We've already gotten a glyph at this point, so the second value has to be true.

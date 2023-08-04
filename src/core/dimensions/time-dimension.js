@@ -92,9 +92,10 @@ export function maxAllTimeDimensions() {
   }
 
   // Loop buying the cheapest dimension possible; explicit infinite loops make me nervous
-  const unlockedDimensions = TimeDimensions.all.filter(d => d.isUnlocked);
+  const tierCheck = tier => (RealityUpgrade(13).isLockingMechanics ? tier < 5 : true);
+  const purchasableDimensions = TimeDimensions.all.filter(d => d.isUnlocked && tierCheck(d.tier));
   for (let stop = 0; stop < 1000; stop++) {
-    const cheapestDim = unlockedDimensions.reduce((a, b) => (b.cost.gte(a.cost) ? a : b));
+    const cheapestDim = purchasableDimensions.reduce((a, b) => (b.cost.gte(a.cost) ? a : b));
     if (!buySingleTimeDimension(cheapestDim.tier, true)) break;
   }
 }

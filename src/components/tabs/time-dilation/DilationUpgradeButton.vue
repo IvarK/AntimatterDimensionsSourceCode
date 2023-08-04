@@ -153,9 +153,9 @@ export default {
 <style scoped>
 .o-dilation-upgrade {
   width: 19rem;
-  height: 10rem;
+  height: 9rem;
   font-family: Typewriter, serif;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: bold;
   background: black;
   border: 0.1rem solid;

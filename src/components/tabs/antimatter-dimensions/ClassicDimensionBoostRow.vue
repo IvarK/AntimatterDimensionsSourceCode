@@ -89,3 +89,12 @@ export default {
     </PrimaryButton>
   </div>
 </template>
+
+<style scoped>
+.o-primary-btn--dimboost {
+  width: 22rem;
+  height: 5.5rem;
+  position: relative;
+  font-size: 0.9rem;
+}
+</style>

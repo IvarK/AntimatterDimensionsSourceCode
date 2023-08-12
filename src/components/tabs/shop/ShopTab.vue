@@ -11,6 +11,8 @@ import { SteamRuntime } from "@/steam";
 import PrimaryButton from "@/components/PrimaryButton";
 import ShopButton from "./ShopButton";
 
+import { PlayFab } from "@/steam/bindings/PlayFabClientApi";
+
 export default {
   name: "ShopTab",
   components: {
@@ -48,6 +50,9 @@ export default {
     },
     hiddenName() {
       return player.options.hideGoogleName;
+    },
+    playfabActive(){
+      return PlayFab.ClientApi.IsClientLoggedIn()
     }
   },
   methods: {
@@ -131,6 +136,7 @@ export default {
     >
       <template v-if="STEAM">
         You are logged in as {{ username }}.
+        <div v-if="!playfabActive">You are currently not fully logged into Steam. Please reopen the game from the Steam app if your purchases are not showing accurately.</div>
       </template>
       <template v-else>
         <span v-if="hiddenName">You are logged in. <i>(name hidden)</i></span>

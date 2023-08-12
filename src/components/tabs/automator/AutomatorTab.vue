@@ -1,6 +1,8 @@
 <script>
 import SplitPane from "vue-splitpane";
 
+import { STEAM } from "@/env";
+
 import AutomatorDocs from "./AutomatorDocs";
 import AutomatorEditor from "./AutomatorEditor";
 import AutomatorPointsList from "./AutomatorPointsList";
@@ -28,7 +30,8 @@ export default {
     },
     tabClass() {
       if (!this.fullScreen) return undefined;
-      return "c-automator-tab--full-screen";
+      else if (STEAM) return "c-automator-tab--full-screen-s"
+      else return "c-automator-tab--full-screen";
     },
     fullScreenIconClass() {
       return this.fullScreen ? "fa-compress-arrows-alt" : "fa-expand-arrows-alt";
@@ -133,6 +136,16 @@ export default {
 .c-automator-tab--full-screen .c-automator-split-pane {
   width: 100%;
   height: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  margin-top: 0;
+  padding-bottom: 0;
+}
+.c-automator-tab--full-screen-s .c-automator-split-pane {
+  width: 95vw;
+  height: 70%;
+  left: 2.5vw;
   position: fixed;
   inset: 0;
   z-index: 5;

@@ -69,7 +69,7 @@ export default {
     handleFocus() {
       this.isFocused = true;
     },
-    handleBlur() {
+    updateAutobuyerValue() {
       if (this.displayValue === "69") {
         SecretAchievement(28).unlock();
       }
@@ -80,8 +80,11 @@ export default {
       }
       this.updateDisplayValue();
       this.isValid = true;
+    },
+    handleBlur() {
+      this.updateActualValue();
       this.isFocused = false;
-    }
+    },
   }
 };
 
@@ -143,6 +146,7 @@ export const AutobuyerInputFunctions = {
     :type="inputType"
     class="o-autobuyer-input"
     @blur="handleBlur"
+    @change="updateAutobuyerValue"
     @focus="handleFocus"
     @input="handleInput"
   >

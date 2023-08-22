@@ -18,3 +18,7 @@
 .t-metro .c-tt-buy-button--locked:hover {
   background: #ef5350;
 }
+
+.o-tachyon-particle {
+  fill: black !important;
+}

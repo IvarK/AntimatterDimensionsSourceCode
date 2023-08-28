@@ -120,7 +120,7 @@ export default {
     toMaxTooltip() {
       if (this.amount.lte(this.replicantiCap)) return null;
       return this.estimateToMax.lt(0.01)
-        ? "Currently increasing"
+        ? "Currently Increasing"
         : TimeSpan.fromSeconds(this.estimateToMax.toNumber()).toStringShort();
     }
   },

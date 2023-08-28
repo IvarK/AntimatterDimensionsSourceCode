@@ -31,6 +31,7 @@ input.t-amoled {
 }
 
 .t-amoled .c-tt-buy-button--locked:hover {
+  color: black;
   background: var(--color-bad);
   border: 0.1rem solid var(--color-bad);
 }

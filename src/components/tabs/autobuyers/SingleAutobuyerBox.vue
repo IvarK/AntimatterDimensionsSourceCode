@@ -20,16 +20,22 @@ export default {
   data() {
     return {
       isUnlocked: false,
+      // Used to hide the input box if the game is auto-sacrificing every tick without resource resets
+      isHiddenSacrifice: false,
     };
   },
   computed: {
     name() {
       return this.autobuyer.name;
     },
+    isSacrifice() {
+      return this.name === "Dimensional Sacrifice";
+    }
   },
   methods: {
     update() {
       this.isUnlocked = this.autobuyer.isUnlocked;
+      this.isHiddenSacrifice = this.isSacrifice && Achievement(118).canBeApplied;
     },
   }
 };
@@ -45,8 +51,14 @@ export default {
       {{ name }}
       <AutobuyerIntervalLabel :autobuyer="autobuyer" />
 
+      <b
+        v-if="isHiddenSacrifice"
+        class="c-autobuyer-box__small-text"
+      >
+        Automatic (Achievement 118)
+      </b>
       <span
-        v-if="autobuyer.hasInput"
+        v-else-if="autobuyer.hasInput"
         class="c-autobuyer-box__small-text"
       >
         Multiplier:

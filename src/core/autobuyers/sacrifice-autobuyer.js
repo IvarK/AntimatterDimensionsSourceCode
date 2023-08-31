@@ -38,7 +38,6 @@ export class SacrificeAutobuyerState extends AutobuyerState {
   }
 
   tick() {
-    if (Sacrifice.nextBoost.lt(Decimal.max(this.multiplier, 1.01))) return;
-    sacrificeReset();
+    if (Achievement(118).canBeApplied || Sacrifice.nextBoost.gte(Decimal.max(this.multiplier, 1.01))) sacrificeReset();
   }
 }

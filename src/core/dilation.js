@@ -271,3 +271,25 @@ export const DilationUpgrades = {
   ],
   fromId: id => DilationUpgrade.all.find(x => x.id === Number(id))
 };
+
+function affordsXUpgrades(currency, id) {
+  return Decimal.affordGeometricSeries(currency, DilationUpgrade.all[id + 1].config.initialCost, DilationUpgrade.all[id + 1].config.increment, player.dilation.rebuyables[id + 1]).toNumber()
+}
+
+export function buyMaxDilationUpgrades() {
+  const TGRBought = Perk.bypassTGReset.isBought || Pelle.isDoomed
+  for (let i = 0; Pelle.isDoomed ? i <= 5 : i <= 2; i++) {
+    if (!TGRBought && i == 1) return
+    player.dilation.rebuyables[i + 1] += affordsXUpgrades(Currency.dilatedTime.value.div(1e6), i)
+  }
+  let bought = true
+  for (let i = 0; i < 100 && bought; i++) {
+    bought = false
+    for (let i = 0; Pelle.isDoomed ? i <= 5 : i <= 2; i++) {
+      if (!TGRBought && i == 1) return
+      bought = buyDilationUpgrade(i + 1) || bought
+      
+    }
+  }
+  if (!TGRBought) buyDilationUpgrade(2)
+}

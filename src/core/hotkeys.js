@@ -51,6 +51,12 @@ export const shortcuts = [
     function: () => maxAll(),
     visible: true
   }, {
+    name: "Dilation Max all",
+    keys: ["/"],
+    type: "bindRepeatableHotkey",
+    function: () => buyMaxDilationUpgrades(),
+    visible: true
+  }, {
     name: "Dimensional Sacrifice",
     keys: ["s"],
     type: "bindRepeatableHotkey",

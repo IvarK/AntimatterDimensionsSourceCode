@@ -1030,6 +1030,9 @@ export const AutomatorBackend = {
       this._data = [];
       player.reality.automator.state.stack.length = 0;
     },
+    forEach(fn) {
+      this._data.forEach(fn);
+    },
     initializeFromSave(commands) {
       this._data = [];
       const playerStack = player.reality.automator.state.stack;

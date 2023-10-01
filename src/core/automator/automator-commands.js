@@ -9,10 +9,14 @@ const idSplitter = /id[ \t]+(\d)/ui;
 
 function prestigeNotify(flag) {
   if (!AutomatorBackend.isOn) return;
-  const state = AutomatorBackend.stack.top.commandState;
+
+  // Any frame in the stack may be waiting for a prestige event, so update all of them.
+  AutomatorBackend.stack.forEach(frame => {
+    const state = frame.commandState;
   if (state && state.prestigeLevel !== undefined) {
     state.prestigeLevel = Math.max(state.prestigeLevel, flag);
   }
+  });
 }
 
 EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_AFTER, () => prestigeNotify(T.Infinity.$prestigeLevel));

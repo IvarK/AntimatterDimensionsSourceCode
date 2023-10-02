@@ -2621,7 +2621,7 @@ export const news = [
   {
     id: "l6",
     text:
-      `Antimatter people seem to be even more afraid of 13 then we are. They destroyed
+      `Antimatter people seem to be even more afraid of 13 than we are. They destroyed
       entire galaxies just to remove 13 from their percents.`,
     get unlocked() { return player.galaxies > 0 || Currency.infinities.gt(0); }
   },

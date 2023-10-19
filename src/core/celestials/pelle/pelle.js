@@ -187,7 +187,7 @@ export const Pelle = {
   },
 
   get uselessInfinityUpgrades() {
-    return ["passiveGen", "ipMult", "infinitiedGeneration"];
+    return ["ipGen", "ipMult", "infinitiedGeneration"];
   },
 
   get uselessTimeStudies() {

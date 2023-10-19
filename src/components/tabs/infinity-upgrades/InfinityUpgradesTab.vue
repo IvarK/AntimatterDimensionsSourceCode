@@ -1,21 +1,17 @@
 <script>
 import InfinityUpgradeButton from "@/components/InfinityUpgradeButton";
+import IpMultiplierButton from "./IpMultiplierButton";
 import PrimaryButton from "@/components/PrimaryButton";
-import PrimaryToggleButton from "@/components/PrimaryToggleButton";
-
 
 export default {
   name: "InfinityUpgradesTab",
   components: {
     PrimaryButton,
-    PrimaryToggleButton,
     InfinityUpgradeButton,
+    IpMultiplierButton
   },
   data() {
     return {
-      isAutobuyerActive: false,
-      isAutoUnlocked: false,
-      isCapped: false,
       isUseless: false,
       chargeUnlocked: false,
       totalCharges: 0,
@@ -29,11 +25,33 @@ export default {
     };
   },
   computed: {
-    ipUpgrade() {
-      return InfinityUpgrade.ipMult;
-    },
     grid() {
-      return ADevil.getInfinityUpgradeGrid();
+      return [
+        [
+          InfinityUpgrade.totalTimeMult,
+          InfinityUpgrade.dim18mult,
+          InfinityUpgrade.dim36mult,
+          InfinityUpgrade.resetBoost
+        ],
+        [
+          InfinityUpgrade.buy10Mult,
+          InfinityUpgrade.dim27mult,
+          InfinityUpgrade.dim45mult,
+          InfinityUpgrade.galaxyBoost
+        ],
+        [
+          InfinityUpgrade.thisInfinityTimeMult,
+          InfinityUpgrade.unspentIPMult,
+          InfinityUpgrade.dimboostMult,
+          InfinityUpgrade.ipGen
+        ],
+        [
+          InfinityUpgrade.skipReset1,
+          InfinityUpgrade.skipReset2,
+          InfinityUpgrade.skipReset3,
+          InfinityUpgrade.skipResetGalaxy
+        ]
+      ];
     },
     allColumnUpgrades() {
       return this.grid.flat();
@@ -47,9 +65,6 @@ export default {
     offlineIpUpgrade: () => InfinityUpgrade.ipOffline
   },
   watch: {
-    isAutobuyerActive(newValue) {
-      Autobuyer.ipMult.isActive = newValue;
-    },
     disCharge(newValue) {
       player.celestials.ra.disCharge = newValue;
     }
@@ -63,9 +78,6 @@ export default {
   },
   methods: {
     update() {
-      this.isAutoUnlocked = Autobuyer.ipMult.isUnlocked;
-      this.isAutobuyerActive = Autobuyer.ipMult.isActive;
-      this.isCapped = this.ipUpgrade.isCapped;
       this.isUseless = Pelle.isDoomed;
       this.chargeUnlocked = Ra.unlocks.chargedInfinityUpgrades.canBeApplied && !Pelle.isDoomed;
       this.totalCharges = Ra.totalCharges;
@@ -75,9 +87,6 @@ export default {
       this.ipMultHardCap = GameDatabase.infinity.upgrades.ipMult.costCap;
       this.eternityUnlocked = PlayerProgress.current.isEternityUnlocked;
       this.bottomRowUnlocked = Achievement(41).isUnlocked;
-    },
-    buyMaxIPMult() {
-      InfinityUpgrade.ipMult.buyMax();
     },
     btnClassObject(column) {
       const classObject = {
@@ -155,29 +164,7 @@ export default {
       v-if="bottomRowUnlocked"
       class="l-infinity-upgrades-bottom-row"
     >
-      <div class="l-spoon-btn-group">
-        <InfinityUpgradeButton
-          :upgrade="ipUpgrade"
-          class="o-infinity-upgrade-btn--multiplier"
-        >
-          <template v-if="isCapped">
-            <br>
-            <span>(Capped at {{ quantify("Infinity Point", ipUpgrade.config.costCap) }})</span>
-          </template>
-        </InfinityUpgradeButton>
-        <PrimaryButton
-          class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
-          @click="buyMaxIPMult()"
-        >
-          Max Infinity Point mult
-        </PrimaryButton>
-        <PrimaryToggleButton
-          v-if="isAutoUnlocked"
-          v-model="isAutobuyerActive"
-          label="Autobuy IP mult"
-          class="l--spoon-btn-group__little-spoon o-primary-btn--small-spoon"
-        />
-      </div>
+      <IpMultiplierButton class="l-infinity-upgrades-tab__mult-btn" />
       <InfinityUpgradeButton
         :upgrade="offlineIpUpgrade"
         :class="btnClassObject(1)"

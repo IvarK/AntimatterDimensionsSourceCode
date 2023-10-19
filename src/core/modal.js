@@ -44,8 +44,6 @@ import PurgeGlyphModal from "@/components/modals/glyph-management/PurgeGlyphModa
 import RefineGlyphModal from "@/components/modals/glyph-management/RefineGlyphModal";
 import SacrificeGlyphModal from "@/components/modals/glyph-management/SacrificeGlyphModal";
 
-import ADevilIntroModal from "@/components/modals/ADevilIntroModal";
-
 import AutobuyerEditModal from "@/components/modals/AutobuyerEditModal";
 import AutomatorScriptTemplate from "@/components/modals/AutomatorScriptTemplate";
 import AwayProgressModal from "@/components/modals/AwayProgressModal";
@@ -199,8 +197,6 @@ class TimeModal extends Modal {
 Modal.startEternityChallenge = new ChallengeConfirmationModal(EternityChallengeStartModal);
 Modal.startInfinityChallenge = new ChallengeConfirmationModal(InfinityChallengeStartModal);
 Modal.startNormalChallenge = new ChallengeConfirmationModal(NormalChallengeStartModal);
-
-Modal.ADevilIntroModal = new TimeModal(ADevilIntroModal, -1);
 
 Modal.catchup = new TimeModal(CatchupModal, -1);
 

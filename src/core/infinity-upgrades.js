@@ -29,7 +29,7 @@ export class InfinityUpgradeState extends SetPurchasableMechanicState {
   }
 
   get isAvailableForPurchase() {
-    return ADevil.canBuyUpgrade(this.config.id);
+    return this.config.checkRequirement?.() ?? true;
   }
 
   get isEffectActive() {

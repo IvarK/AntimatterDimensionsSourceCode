@@ -64,7 +64,6 @@ export * from "./dimensions/time-dimension";
 
 export * from "./time-studies";
 
-export * from "./adevil";
 export * from "./dimboost";
 export * from "./sacrifice";
 export * from "./big-crunch";

@@ -19,19 +19,19 @@ GlobalErrorHandler.cleanStart = true;
 export function playerInfinityUpgradesOnReset() {
 
   const infinityUpgrades = new Set(
-    ["totalTimeMult", "dibuy10MultmMult", "thisInfinityTimeMult",
-      "skipReset1", "skipReset2", "unspentIPMult",
-      "dim27mult", "dim18mult", "dim36mult", "dimboostMult",
-      "skipReset3", "ipGen", "dim45mult",
+    ["timeMult", "dimMult", "timeMult2",
+      "skipReset1", "skipReset2", "unspentBonus",
+      "27Mult", "18Mult", "36Mult", "resetMult",
+      "skipReset3", "passiveGen", "45Mult",
       "resetBoost", "galaxyBoost", "skipResetGalaxy",
       "ipOffline"]
   );
 
   const breakInfinityUpgrades = new Set(
-    ["totalTimeMult", "buy10Mult", "thisInfinityTimeMult",
-      "skipReset1", "skipReset2", "unspentIPMult",
-      "dim27mult", "dim18mult", "dim36mult", "dimboostMult",
-      "skipReset3", "ipGen", "dim45mult",
+    ["timeMult", "dimMult", "timeMult2",
+      "skipReset1", "skipReset2", "unspentBonus",
+      "27Mult", "18Mult", "36Mult", "resetMult",
+      "skipReset3", "passiveGen", "45Mult",
       "resetBoost", "galaxyBoost", "skipResetGalaxy",
       "totalMult", "currentMult", "postGalaxy",
       "challengeMult", "achievementMult", "infinitiedMult",

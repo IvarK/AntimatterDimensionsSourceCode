@@ -759,6 +759,10 @@ window.player = {
       showBought: false,
     }
   },
+  ADevil: {
+    modded: false,
+    infUpgGridNames: {},
+  },
   isGameEnd: false,
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,

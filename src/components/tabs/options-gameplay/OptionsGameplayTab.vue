@@ -66,7 +66,7 @@ export default {
       player.options.automatorEvents.maxEntries = parseInt(newValue, 10);
     },
     gamePaused(newValue) {
-      if (player.options.gamePaused != newValue) {
+      if (player.options.gamePaused !== newValue) {
         GameUI.notify.info(newValue ? "Game paused" : "Game resumed", 2000);
       }
       player.options.gamePaused = newValue;

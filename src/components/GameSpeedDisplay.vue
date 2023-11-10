@@ -29,7 +29,7 @@ export default {
       return `${this.formatNumber(this.pulsedSpeed)}`;
     },
     baseText() {
-      if (this.isPaused) return "The game is completely paused."
+      if (this.isPaused) return "The game is completely paused.";
       if (!this.hasSeenAlteredSpeed) return null;
       return this.baseSpeed === 1
         ? "The game is running at normal speed."

@@ -340,6 +340,16 @@ export const shortcuts = [
     function: () => ElectronRuntime.resetZoom(),
     visible: () => false
   },
+  {
+    name: "Pause/Resume Game",
+    keys: ["p"],
+    type: "bind",
+    function: () => {
+      player.options.gamePaused = !player.options.gamePaused;
+      GameUI.notify.info(player.options.gamePaused ? "Game paused" : "Game resumed", 2000);
+    },
+    visible: () => true
+  },
 ];
 
 for (const hotkey of shortcuts) {

@@ -424,10 +424,14 @@ export function gameLoop(passDiff, options = {}) {
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
 
+  // When you have offline progress on and game paused, and just get back from offline, and resume the game, the game treats
+  // all prievous time offline and simulates them. This is unintended so here is a fix.
+  if (player.options.gamePaused) player.lastUpdate = Date.now();
+
   // In certain cases we want to allow the player to interact with the game's settings and tabs, but prevent any actual
   // resource generation from happening - in these cases, we have to make sure this all comes before the hibernation
   // check or else it'll attempt to run the game anyway
-  if (Speedrun.isPausedAtStart() || GameEnd.creditsEverClosed) {
+  if (Speedrun.isPausedAtStart() || GameEnd.creditsEverClosed || player.options.gamePaused) {
     GameUI.update();
     return;
   }

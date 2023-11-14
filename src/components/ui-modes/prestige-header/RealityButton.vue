@@ -31,7 +31,8 @@ export default {
         return `(Capped this Reality!)`;
       }
       if (this.machinesGained.gt(0) && this.machinesGained.lt(100)) {
-        return `(Next at ${format(this.nextMachineEP, 2)} EP)`;
+        if (simulatedRealityCount(false) == 0) return `(Next at ${format(this.nextMachineEP, 2)} EP)`;
+        return `(Next ${formatInt(simulatedRealityCount(false) + 1)} at ${format(this.nextMachineEP, 2)} EP)`;
       }
       if (this.machinesGained.eq(0) && this.newIMCap === 0) {
         return `(Projected: ${format(this.projectedRM, 2)} RM)`;
@@ -97,7 +98,7 @@ export default {
       this.realityTime = Time.thisRealityRealTime.totalMinutes;
       this.glyphLevel = gainedGlyphLevel().actualLevel;
       this.nextGlyphPercent = this.percentToNextGlyphLevelText();
-      this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
+      this.nextMachineEP = EPforRM(Decimal.divide(this.machinesGained, multiplier).plus(1));
       this.ppGained = multiplier;
       this.shardsGained = Effarig.shardsGained * multiplier;
       this.currentShardsRate = (this.shardsGained / Time.thisRealityRealTime.totalMinutes);

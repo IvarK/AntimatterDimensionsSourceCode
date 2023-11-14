@@ -31,7 +31,7 @@ export default {
         return `(Capped this Reality!)`;
       }
       if (this.machinesGained.gt(0) && this.machinesGained.lt(100)) {
-        if (simulatedRealityCount(false) == 0) return `(Next at ${format(this.nextMachineEP, 2)} EP)`;
+        if (simulatedRealityCount(false) === 0) return `(Next at ${format(this.nextMachineEP, 2)} EP)`;
         return `(Next ${formatInt(simulatedRealityCount(false) + 1)} at ${format(this.nextMachineEP, 2)} EP)`;
       }
       if (this.machinesGained.eq(0) && this.newIMCap === 0) {

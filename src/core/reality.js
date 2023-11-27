@@ -631,7 +631,7 @@ export function finishProcessReality(realityProps) {
   player.galaxies = 0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.break = false;
+  player.break = true;
   player.IPMultPurchases = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();

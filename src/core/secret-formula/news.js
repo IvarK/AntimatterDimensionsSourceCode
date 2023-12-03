@@ -1256,7 +1256,7 @@ export const news = [
       fortunately, we've developed a reverse-containment cell, meaning it's everywhere except here. Our brain has
       a protection system, that specifically filters out any information regarding this number, that's how we've
       been able to survive for this long, and why others like us went extinct in the past, but the number has been
-      getting stronger, slowly getting closer to breaking our protection. We've temporary stopped the number from
+      getting stronger, slowly getting closer to breaking our protection. We've temporarily stopped the number from
       slipping into our memory by using the world-wide memory manipulator located in this room to keep making
       everyone think that 9 comes after 8 with a side effect that makes everyone think that 9 is evil, but this
       won't last forever, as the number will keep getting stronger, and will eventually overpower the memory

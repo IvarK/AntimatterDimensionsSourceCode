@@ -5,11 +5,11 @@ import { DimensionState } from "./dimension";
 // Multiplier applied to all Antimatter Dimensions, regardless of tier. This is cached using a Lazy
 // and invalidated every update.
 export function antimatterDimensionCommonMultiplier() {
-  let multiplier = DC.D1;
+  let multiplier = DC.D1pow3;
 
-  multiplier = multiplier.times(Achievements.power);
-  multiplier = multiplier.times(ShopPurchase.dimPurchases.currentMult);
-  multiplier = multiplier.times(ShopPurchase.allDimPurchases.currentMult);
+  multiplier = multiplier.pow(Achievements.power);
+  multiplier = multiplier.pow(ShopPurchase.dimPurchases.currentMult);
+  multiplier = multiplier.pow(ShopPurchase.allDimPurchases.currentMult);
 
   if (!EternityChallenge(9).isRunning) {
     multiplier = multiplier.times(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1));

@@ -2041,7 +2041,7 @@ export const news = [
     id: "a325",
     text:
       `After the accident at the antimatter reactor in Pripyat last month, concerns are rising about the safety of
-      antimattter reactors, and many are starting to believe we should return to safer means of energy generation,
+      antimatter reactors, and many are starting to believe we should return to safer means of energy generation,
       such as nuclear.`
   },
   {

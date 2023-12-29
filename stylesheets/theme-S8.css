@@ -1,0 +1,44 @@
+body.t-s8 {
+  height: 100%;
+  color: black;
+  background: url("../images/s8-bg.jpg") no-repeat;
+  background-attachment: fixed;
+  background-color: white;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.t-s8 .container {
+  color: black;
+}
+
+/* metro  theme with less box shadows */
+
+.t-s8 input,
+.t-s8 select {
+  border: 0.1rem solid #a9a9a9;
+}
+
+.t-s8 .c-tt-buy-button--unlocked {
+  color: #00bcd4;
+  background: #212121;
+  border: 0.1rem solid #00bcd4;
+}
+
+.t-s8 .c-tt-buy-button--unlocked:hover {
+  color: #212121;
+  background: #00bcd4;
+}
+
+.t-s8 .c-tt-buy-button--locked {
+  background: #9e9e9e;
+  border: none;
+  box-shadow: 1px 1px 1px 0 #000000;
+}
+
+.t-s8 .c-tt-buy-button--locked:hover {
+  background: #ef5350;
+}

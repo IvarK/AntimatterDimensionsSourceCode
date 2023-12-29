@@ -1,0 +1,58 @@
+body.t-s11 {
+  color: #999999;
+  background: black;
+  background-position: center;
+  background-size: 100%;
+}
+
+.t-s11 .c-tt-amount {
+  color: #64dd17;
+  text-shadow: 0 0 7px #64dd17;
+}
+
+.t-s11 .c-tt-buy-button--unlocked {
+  color: #3aacd6;
+  background: black;
+  border: 0.1rem solid #3aacd6;
+}
+
+.t-s11 .c-tt-buy-button--unlocked:hover {
+  color: black;
+  background: #3aacd6;
+}
+
+.t-s11 .c-tt-buy-button--locked {
+  color: grey;
+  background: black;
+  border: 0.1rem solid grey;
+}
+
+.t-s11 .c-tt-buy-button--locked:hover {
+  color: black;
+  background: var(--color-bad);
+  border: 0.1rem solid var(--color-bad);
+}
+
+.t-s11 .c-rm-amount__desc {
+  color: #999999;
+}
+
+.t-s11 .c-modal {
+  border-color: #e1ae18;
+  box-shadow: 0 0 1.5rem 0 black;
+}
+
+.t-s11 .c-modal__confirmation-toggle__checkbox {
+  top: 0.05rem;
+  border-color: black;
+}
+
+.o-tachyon-particle {
+  fill: orange !important;
+  font-family: Typewriter;
+  font-size: 20px;
+  pointer-events: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
+}

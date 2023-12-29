@@ -1,0 +1,24 @@
+.t-metro .c-tt-buy-button--unlocked {
+  color: #00bcd4;
+  background: #212121;
+  border: 0.1rem solid #00bcd4;
+}
+
+.t-metro .c-tt-buy-button--unlocked:hover {
+  color: #212121;
+  background: #00bcd4;
+}
+
+.t-metro .c-tt-buy-button--locked {
+  background: #9e9e9e;
+  border: none;
+  box-shadow: 1px 1px 1px 0 #000000;
+}
+
+.t-metro .c-tt-buy-button--locked:hover {
+  background: #ef5350;
+}
+
+.o-tachyon-particle {
+  fill: black !important;
+}

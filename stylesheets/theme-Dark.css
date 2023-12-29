@@ -1,0 +1,40 @@
+body.t-dark {
+  color: #888888;
+  background-image: url("../images/dark-bg.png");
+  background-position: center;
+}
+
+input.t-dark {
+  background-color: #455a64;
+  border: 0.1rem solid black;
+}
+
+.t-dark .c-tt-amount {
+  color: #64dd17;
+  text-shadow: 0 0 7px #64dd17;
+}
+
+.t-dark .c-tt-buy-button--unlocked {
+  color: #3aacd6;
+  background: #161616;
+  border: 0.1rem solid #3aacd6;
+}
+
+.t-dark .c-tt-buy-button--unlocked:hover {
+  color: #161616;
+  background: #3aacd6;
+}
+
+.t-dark .c-tt-buy-button--locked {
+  background: #263238;
+  border: 0.1rem solid #3aacd6;
+}
+
+.t-dark .c-tt-buy-button--locked:hover {
+  background: var(--color-bad);
+  border: 0.1rem solid var(--color-bad);
+}
+
+.t-dark .c-rm-amount__desc {
+  color: #757575;
+}

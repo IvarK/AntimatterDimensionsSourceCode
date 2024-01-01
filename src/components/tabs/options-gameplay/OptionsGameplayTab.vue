@@ -23,6 +23,7 @@ export default {
       infinityUnlocked: false,
       automatorUnlocked: false,
       automatorLogSize: 0,
+      gamePaused: false,
     };
   },
   computed: {
@@ -64,6 +65,12 @@ export default {
     automatorLogSize(newValue) {
       player.options.automatorEvents.maxEntries = parseInt(newValue, 10);
     },
+    gamePaused(newValue) {
+      if (player.options.gamePaused !== newValue) {
+        GameUI.notify.info(newValue ? "Game paused" : "Game resumed", 2000);
+      }
+      player.options.gamePaused = newValue;
+    },
   },
   // This puts the slider in the right spot on initialization
   created() {
@@ -83,6 +90,7 @@ export default {
       this.infinityUnlocked = PlayerProgress.current.isInfinityUnlocked;
       this.automatorUnlocked = Player.automatorUnlocked;
       this.automatorLogSize = options.automatorEvents.maxEntries;
+      this.gamePaused = options.gamePaused;
     },
     // Given the endpoints of 22-54, this produces 500, 600, ... , 900, 1000, 2000, ... , 1e6 ticks
     // It's essentially 10^(x/10) but with the mantissa spaced linearly instead of logarithmically
@@ -147,6 +155,13 @@ export default {
         />
       </div>
       <div class="l-options-grid__row">
+        <PrimaryToggleButton
+          v-model="gamePaused"
+          class="o-primary-btn--option l-options-grid__button"
+          label=""
+          on="Resume the game"
+          off="Pause the game"
+        />
         <div
           v-if="automatorUnlocked"
           class="o-primary-btn o-primary-btn--option o-primary-btn--slider l-options-grid__button"

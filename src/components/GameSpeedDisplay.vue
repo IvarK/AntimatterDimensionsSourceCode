@@ -11,6 +11,7 @@ export default {
       isStopped: false,
       isEC12: false,
       isPulsing: false,
+      isPaused: false,
     };
   },
   computed: {
@@ -28,6 +29,7 @@ export default {
       return `${this.formatNumber(this.pulsedSpeed)}`;
     },
     baseText() {
+      if (this.isPaused) return "The game is completely paused.";
       if (!this.hasSeenAlteredSpeed) return null;
       return this.baseSpeed === 1
         ? "The game is running at normal speed."
@@ -41,7 +43,8 @@ export default {
       this.hasSeenAlteredSpeed = PlayerProgress.seenAlteredSpeed();
       this.isStopped = Enslaved.isStoringRealTime;
       this.isEC12 = EternityChallenge(12).isRunning;
-      this.isPulsing = (this.baseSpeed !== this.pulsedSpeed) && Enslaved.canRelease(true);
+      this.isPaused = player.options.gamePaused;
+      this.isPulsing = (this.baseSpeed !== this.pulsedSpeed) && Enslaved.canRelease(true) && !this.isPaused;
     },
     formatNumber(num) {
       if (num >= 0.001 && num < 10000 && num !== 1) {

@@ -13,7 +13,9 @@ export const credits = {
     10: "Modal Maker, Lady Taker, Pie Baker",
     11: "Lurker Tester",
     12: "Web Tester",
-    13: "Android Tester"
+    13: "Android Tester",
+    14: "Writer",
+    15: "Achievement Art",
   },
 
   // Each person must have a name and at least one role (the index of the desired role in roles). They can also have a
@@ -32,7 +34,7 @@ export const credits = {
       roles: 3
     }, {
       name: "Omsi",
-      roles: 3
+      roles: [3, 15]
     }, {
       name: "SpectralFlame",
       name2: "Christopher Yip",
@@ -74,7 +76,7 @@ export const credits = {
       roles: [7, 9, 12]
     }, {
       name: "realrapidjazz",
-      roles: [7, 8]
+      roles: [7, 8, 14]
     }, {
       name: "Scarlet",
       roles: [7, 12, 13]
@@ -102,8 +104,7 @@ export const credits = {
       name: "Anno",
       roles: 12
     }, {
-      name: "Archa",
-      name2: "Myresa",
+      name: "Myresa Exina",
       roles: [12, 13]
     }, {
       name: "ArrowBounce",
@@ -168,7 +169,7 @@ export const credits = {
       roles: 12
     }, {
       name: "Saturnus",
-      roles: 12
+      roles: [12, 14]
     }, {
       name: "SereKabii",
       roles: 12
@@ -362,7 +363,7 @@ export const credits = {
       name: "Pavlxiiv",
       roles: 13
     }, {
-      name: "PotatoTIAB",
+      name: "coffeeflake",
       roles: 13
     }, {
       name: "Razor",
@@ -434,6 +435,102 @@ export const credits = {
     }, {
       name: "ZylaKat",
       name2: "Katherine Goforth-Harbin",
+      roles: 13
+    }, {
+      name: "Jedall",
+      roles: 13
+    }, {
+      name: "Lapis",
+      roles: 13
+    }, {
+      name: "Guimora",
+      roles: 13
+    }, {
+      name: "Neowo",
+      name2: "Neo Mitchell",
+      roles: 13
+    }, {
+      name: "AshTheDinosaur",
+      roles: 13
+    }, {
+      name: "Annyeong1",
+      name2: "Jeeho Yoon",
+      roles: 13
+    }, {
+      name: "Dedzuka",
+      roles: 13
+    }, {
+      name: "Something",
+      name2: "Sushi",
+      roles: 13
+    }, {
+      name: "Viola",
+      roles: 13
+    }, {
+      name: "Luna van Yeethoven",
+      roles: 13
+    }, {
+      name: "Lotocion",
+      roles: 13
+    }, {
+      name: "Merlyn",
+      roles: 13
+    }, {
+      name: "Tilly",
+      roles: 13
+    }, {
+      name: "Sauer",
+      name2: "Matt",
+      roles: 13
+    }, {
+      name: "PtigaD",
+      roles: 13
+    }, {
+      name: "Aleame",
+      roles: 13
+    }, {
+      name: "GFADE00",
+      roles: 13
+    }, {
+      name: "Amity Emily",
+      roles: 13
+    }, {
+      name: "BsonHK",
+      roles: 13
+    }, {
+      name: "Angel",
+      roles: 13
+    }, {
+      name: "OhBrod",
+      roles: 13
+    }, {
+      name: "sxy62146214",
+      roles: 13
+    }, {
+      name: "cyxw",
+      roles: 13
+    }, {
+      name: "Cosmic_Fyre",
+      roles: 13
+    }, {
+      name: "The Cube Dude",
+      roles: 13
+    }, {
+      name: "Tias",
+      name2: "Tim Stanglow",
+      roles: 13
+    }, {
+      name: "Rad Cooldude",
+      roles: 13
+    }, {
+      name: "DataBitMC",
+      roles: 13
+    }, {
+      name: "Pizzalover04",
+      name2: "Zanpaulco",
+      roles: 13
+    }, {
+      name: "Airakogi",
       roles: 13
     }
   ]

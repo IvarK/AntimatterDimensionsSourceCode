@@ -2574,7 +2574,7 @@ export const news = [
     id: "a388",
     text:
       `In light of recent events, we'd like to issue an official statement. Antimatter Dimensions™ is in no way
-      affiliated with Jimmy's Causality Violating Brainworms™. We do not endorse, no were we involved in their creation
+      affiliated with Jimmy's Causality Violating Brainworms™. We do not endorse, nor were we involved in their creation
       of the product which was involved in several catastrophic dimension-destabilising and reality-toppling incidents.
       We almost certainly did not sign a contract at 5:30:26 UTC on 08/12/1994 after discussing how we could benefit
       from destabilising and warping dimensions. There was no industrial zone constructed in the 5th Orion Arm of the

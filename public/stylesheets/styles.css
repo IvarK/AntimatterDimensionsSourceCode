@@ -2816,8 +2816,8 @@ br {
   background-color: var(--color-base);
   border: 0.1rem var(--color-good);
   border-style: solid;
-  border-radius: var(--var-border-radius, 0.4rem);
   border-top-color: transparent;
+  border-radius: var(--var-border-radius, 0.4rem);
 }
 
 /* We need scrollbar-color in this rule as well as identical color specifications in the following two; some

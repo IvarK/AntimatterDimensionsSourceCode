@@ -80,7 +80,7 @@ offline for a while.
 <br>
 <br>
 You can also connect a Google Account to the game, allowing you to save your progress online. This allows you to play
-with the same save on any device which is also logged into the same account. Cloud saving is only compatable with other
+with the same save on any device which is also logged into the same account. Cloud saving is only compatible with other
 saves on the web or Steam versions of the game; saves from the Android app of the game will not be automatically linked
 via Cloud saving. Saving and loading from the Cloud will
 automatically overwrite the other save unless the other save is either older or has noticeably more progression, in

@@ -563,7 +563,7 @@ Balance Changes:
 <li>The Big Crunch Autobuyer's initial interval has been halved, requiring only half as much IP to max out, and
   other autobuyers have drastically lowered initial intervals.</li>
 <li>The 500 IP Infinity upgrade now costs 300 IP.</li>
-<li>Nicholas Cage.</li>
+<li>Nicolas Cage.</li>
 <li>The 20-eternities milestone was moved to 8-eternities.</li>
 <li>Increased cost scaling for Time Dimensions after 1e6000.</li>
 <li>TS 83 has been hard capped.</li>
@@ -674,13 +674,13 @@ Bugfixes:
 <ul>
 <li>TIME DILATION</li>
 <li>3 ROWS OF SECRET ACHIEVEMENTS</li>
-<li>Added more Nicholas Cage.</li>
+<li>Added more Nicolas Cage.</li>
 <li>1 new row of achievements.</li>
 <li>Added 3 study tree save slots.</li>
 <li>Greatly improved performance. (up to 5x in certain cases, ~3x in almost all cases)</li>
 <li>Nerfed EC10 reward. ((infinities * EC10 completions * 0.000002+1) >
 (infinities ^ 0.9 * EC10 completions * 0.000002+1))</li>
-<li>Added even more Nicholas Cage.</li>
+<li>Added even more Nicolas Cage.</li>
 <li>Time study 11 has been capped at 1e2500 and now displays its current multiplier.</li>
 <li>Time study 193 has been buffed, requires ~1012680 eternities to cap, rather than 1.5m, and is now capped at 1e13000
 instead of ~1.81e12900/1.5m eternities. (1.02^x) > (1.03^x)</li>
@@ -696,7 +696,7 @@ capped at 1000 ticks, with additional ticks increasing the production of said 10
 a new cloud save UI.</li>
 <li>Added an animation to visualize your multiplier gain when you purchase 10 of a dimension, dimension boost/shift,
 or sacrifice.</li>
-<li>Nicholas Cage.</li>
+<li>Nicolas Cage.</li>
 <li>Added an animation to big crunches. This will only trigger if you haven't eternitied, have a fastest infinity time
 above 1 minute, and haven't broken infinity.</li>
 <li>Added a button in the options menu to disable individual animations.</li>

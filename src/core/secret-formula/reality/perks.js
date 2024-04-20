@@ -208,7 +208,7 @@ export const perks = {
     label: "IDR",
     family: PERK_FAMILY.INFINITY,
     description: "Infinity Dimensions no longer have antimatter requirements.",
-    layoutPosList: [61684, 80198, 79797, 80997, 82200, 79297],
+    layoutPosList: [61684, 80998, 79797, 80997, 82200, 79297],
   },
   bypassTGReset: {
     id: 52,
@@ -407,7 +407,7 @@ export const perks = {
     effect: 1 / 3,
     automatorPoints: 5,
     shortDescription: () => "Faster Replicanti Autobuyers",
-    layoutPosList: [55315, 80998, 80197, 80999, 82600, 104489],
+    layoutPosList: [55315, 80198, 80197, 80999, 82600, 104489],
   },
   autobuyerFasterDilation: {
     id: 103,

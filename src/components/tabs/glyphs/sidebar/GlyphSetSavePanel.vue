@@ -71,7 +71,7 @@ export default {
     // preset match, and leniently when matching greedily may lead to an incomplete set being loaded
     loadGlyphSet(set, id) {
       if (!this.setLengthValid(set)) return;
-      let glyphsToLoad = [...set];
+      let glyphsToLoad = [...set].sort((a, b) => -a.level * a.strength + b.level * b.strength);
       const activeGlyphs = [...Glyphs.active.filter(g => g)];
 
       // Create an array where each entry contains a single active glyph and all its matches in the preset which it
@@ -144,11 +144,10 @@ export default {
       for (let index = 0; index < optionList.length; index++) {
         if (slotsLeft === 0) break;
         const entry = optionList[index];
-        const greedyPick = index === optionList.length - 1 || optionList[index + 1].options.length > 1;
 
         const filteredOptions = entry.options.filter(g => !toLoad.includes(g));
         if (filteredOptions.length === 0) continue;
-        const selectedGlyph = filteredOptions[greedyPick ? 0 : (filteredOptions.length - 1)];
+        const selectedGlyph = filteredOptions[filteredOptions.length - 1];
         toLoad.push(selectedGlyph);
         slotsLeft--;
       }

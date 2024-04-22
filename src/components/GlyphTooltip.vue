@@ -128,7 +128,7 @@ export default {
       if (!GlyphTypes[this.type].hasRarity) return "";
       const strength = Pelle.isDoomed ? Pelle.glyphStrength : this.strength;
       return `| Rarity:
-        <span style="color: ${this.rarityInfo.color}">${formatRarity(strengthToRarity(strength))}</span>`;
+        <span style="color: ${this.descriptionStyle.color}">${formatRarity(strengthToRarity(strength))}</span>`;
     },
     levelText() {
       if (this.type === "companion") return "";

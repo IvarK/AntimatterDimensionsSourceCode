@@ -82,9 +82,17 @@ export class RealityAutobuyerState extends AutobuyerState {
     // than everything else, preempting other settings and only checking them if it fails
     // In order to reduce excessive computational load, this only ever gets checked once per reality unless filter
     // settings are changed (which causes it to check again); otherwise, glyph choices would be generated every tick
-    const shouldCheckFilter = EffarigUnlock.glyphFilter.isUnlocked && !player.reality.hasCheckedFilter;
+    const dontCheckModes = [AUTO_GLYPH_SCORE.LOWEST_SACRIFICE, AUTO_GLYPH_SCORE.LOWEST_ALCHEMY,
+      AUTO_GLYPH_SCORE.ALCHEMY_VALUE];
+    const shouldCheckFilter = EffarigUnlock.glyphFilter.isUnlocked && !player.reality.hasCheckedFilter &&
+      !dontCheckModes.includes(AutoGlyphProcessor.scoreMode);
     if (isRealityAvailable() && player.options.autoRealityForFilter && shouldCheckFilter) {
-      const choices = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(),
+      const gainedLevel = gainedGlyphLevel();
+      const checkModes = [AUTO_REALITY_MODE.GLYPH, AUTO_REALITY_MODE.EITHER, AUTO_REALITY_MODE.BOTH];
+      const levelToCheck = (checkModes.includes(this.mode))
+        ? { actualLevel: Math.min(this.glyph, Glyphs.levelCap), rawLevel: 1 }
+        : gainedLevel;
+      const choices = GlyphSelection.glyphList(GlyphSelection.choiceCount, levelToCheck,
         { isChoosingGlyph: false });
       const bestGlyph = AutoGlyphProcessor.pick(choices);
       player.reality.hasCheckedFilter = true;

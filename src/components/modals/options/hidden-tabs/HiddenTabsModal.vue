@@ -24,7 +24,7 @@ export default {
       this.isEnslaved = Enslaved.isRunning;
       this.isAlmostEnd = Pelle.hasGalaxyGenerator;
     },
-    resetAllTabs() {
+    showAllTabs() {
       for (const tab of this.tabs) {
         tab.unhideTab();
         for (const subtab of tab.subtabs)
@@ -58,9 +58,9 @@ export default {
         (You cannot hide your tabs within this Reality)
       </div>
       <PrimaryButton
-        @click="resetAllTabs"
+        @click="showAllTabs"
       >
-        Reset all tabs
+        Show all tabs
       </PrimaryButton>
       <HiddenTabGroup
         v-for="(tab, index) in tabs"

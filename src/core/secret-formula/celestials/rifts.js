@@ -212,7 +212,7 @@ export const pelleRifts = {
         requirement: 0.5,
         description: "Dilation rebuyable purchase count improves Infinity Power conversion rate",
         effect: () => Math.min(
-          1.1 ** (Object.values(player.dilation.rebuyables).sum() - 90),
+          1.1075 ** (Object.values(player.dilation.rebuyables).sum() - 60),
           712
         ),
         formatEffect: x => `Infinity Power Conversion ${formatX(x, 2, 2)}`

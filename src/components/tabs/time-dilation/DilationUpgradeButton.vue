@@ -40,7 +40,6 @@ export default {
       currentDT: new Decimal(0),
       currentDTGain: new Decimal(0),
       timeEstimate: "",
-      rebuyableBoost: false,
       isHovering: false,
       hideEstimate: false,
     };
@@ -48,12 +47,12 @@ export default {
   computed: {
     classObject() {
       if (this.isUseless) {
-        // Note: TP mult (3) is conditionally useless and IP mult (7) is always useless; we style them similarly to
-        // the rest of the game - TP appears as "currently available" while IP appears as "strictly disabled"
+        // A lot of people did not understand the old way of handling TP mult (3) so we now permanently disable it
+        // and adjust the rift formula to come up for the lack of purchasable upgrade. Therefore we mark both upgrades
+        // similar to the rest of the game - as strictly disabled.
         return {
           "o-dilation-upgrade o-pelle-disabled-pointer": true,
-          "o-dilation-upgrade--unavailable": this.upgrade.id === 3,
-          "o-pelle-disabled o-dilation-upgrade--useless": this.upgrade.id === 7,
+          "o-pelle-disabled o-dilation-upgrade--useless": this.upgrade.id === 7 || this.upgrade.id === 3,
         };
       }
       return {
@@ -66,9 +65,8 @@ export default {
       };
     },
     isUseless() {
-      const tp = this.upgrade.id === 3 && !this.rebuyableBoost;
-      const ip = this.upgrade.id === 7;
-      return Pelle.isDoomed && (tp || ip);
+      const tpip = this.upgrade.id === 3 || this.upgrade.id === 7;
+      return Pelle.isDoomed && tpip;
     }
   },
   watch: {
@@ -88,7 +86,6 @@ export default {
         this.isCapped = upgrade.isCapped;
         const autobuyer = Autobuyer.dilationUpgrade(upgrade.id);
         this.boughtAmount = upgrade.boughtAmount;
-        this.rebuyableBoost = PelleRifts.paradox.milestones[2].canBeApplied;
         if (!autobuyer) return;
         this.isAutoUnlocked = autobuyer.isUnlocked;
         this.isAutobuyerOn = autobuyer.isActive;

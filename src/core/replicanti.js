@@ -144,8 +144,8 @@ export function totalReplicantiSpeedMult(overCap) {
     RealityUpgrade(23),
   );
   totalMult = totalMult.times(preCelestialEffects);
-  if (TimeStudy(132).isBought && Perk.studyPassive.isBought) {
-    totalMult = totalMult.times(3);
+  if (TimeStudy(132).isBought) {
+    totalMult = totalMult.times(Perk.studyPassive.isBought ? 3 : 1.5);
   }
 
   if (!overCap && Achievement(134).isUnlocked) {

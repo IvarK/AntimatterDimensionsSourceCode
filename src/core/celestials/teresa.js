@@ -5,7 +5,7 @@ import { Quotes } from "./quotes";
 
 export const Teresa = {
   timePoured: 0,
-  lastUnlock: "shop",
+  lastUnlock: "effarig",
   pouredAmountCap: 1e24,
   displayName: "Teresa",
   possessiveName: "Teresa's",

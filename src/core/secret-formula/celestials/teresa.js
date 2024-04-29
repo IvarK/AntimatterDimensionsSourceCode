@@ -13,14 +13,14 @@ export const teresa = {
       isDisabledInDoomed: true
     },
     effarig: {
-      id: 2,
-      price: 1e21,
+      id: 3,
+      price: 1e24,
       description: "Unlock Effarig, Celestial of Ancient Relics.",
       onUnlock: () => Teresa.quotes.effarig.show(),
     },
     shop: {
-      id: 3,
-      price: 1e24,
+      id: 2,
+      price: 1e21,
       description: "Unlock Teresa's Perk Point Shop.",
     },
     undo: {

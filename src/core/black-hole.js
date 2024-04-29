@@ -491,7 +491,7 @@ export const BlackHoles = {
     const effectsToConsider = [GAME_SPEED_EFFECT.FIXED_SPEED, GAME_SPEED_EFFECT.TIME_GLYPH,
       GAME_SPEED_EFFECT.SINGULARITY_MILESTONE, GAME_SPEED_EFFECT.NERFS];
     const speedupWithoutBlackHole = getGameSpeedupFactor(effectsToConsider);
-    const speedups = [1];
+    const speedups = [speedupWithoutBlackHole];
     effectsToConsider.push(GAME_SPEED_EFFECT.BLACK_HOLE);
     // Crucial thing: this works even if the black holes are paused, it's just that the speedups will be 1.
     for (const blackHole of this.list) {

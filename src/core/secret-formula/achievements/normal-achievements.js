@@ -934,7 +934,11 @@ export const normalAchievements = [
       return `You gain ${formatX(2)} times more Infinities and
       after Eternity you permanently keep ${formatPercents(0.05)} of your Infinities as Banked Infinities.`;
     },
-    effect: () => Currency.infinities.value.times(0.05).floor()
+    effects: {
+      infinitiesGain: 2,
+      bankedInfinitiesGain: () => Currency.infinities.value.times(0.05).floor()
+    }
+
   },
   {
     id: 132,

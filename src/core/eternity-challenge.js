@@ -236,16 +236,17 @@ export class EternityChallengeState extends GameMechanicState {
       this.config.checkRestriction(this.config.restriction(completions));
   }
 
-  exit() {
+  exit(isRestarting) {
     if (Player.isInAntimatterChallenge) {
       Player.antimatterChallenge.exit();
     }
     player.challenge.eternity.current = 0;
+    if (!isRestarting) player.respec = true;
     eternity(true);
   }
 
   fail(auto = false) {
-    this.exit();
+    this.exit(false);
     let reason;
     if (auto) {
       if (this.id === 4) {

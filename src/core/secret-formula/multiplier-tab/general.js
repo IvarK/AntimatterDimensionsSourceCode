@@ -48,8 +48,12 @@ export const general = {
       : `Time Study ${ts}`),
     multValue: (ts, dim) => {
       // This is a special case for the passive path RG study, as its effect is 0.4 (for galaxy power) but
-      // in the multiplier tab we only reference its replicanti speed value (which is 3)
-      if (ts === 132) return TimeStudy(ts).canBeApplied ? 3 : 1;
+      // in the multiplier tab we only reference its replicanti speed value (which is 1.5)
+      // The PASS perk doubles this effect
+      if (ts === 132) {
+        const passPerkMult = Perk.studyPassive.isBought ? 2 : 1;
+        return TimeStudy(ts).canBeApplied ? 1.5 * passPerkMult : 1;
+      }
 
       if (!dim) return TimeStudy(ts).canBeApplied ? TimeStudy(ts).effectOrDefault(1) : 1;
       if (dim?.length === 2) {

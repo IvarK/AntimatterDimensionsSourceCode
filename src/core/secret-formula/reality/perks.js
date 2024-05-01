@@ -109,7 +109,7 @@ export const perks = {
     effect: 5e9,
     automatorPoints: 10,
     shortDescription: () => `Start with ${format(5e9)} EP`,
-    layoutPosList: [96459, 81798, 78997, 80996, 81803, 106247],
+    layoutPosList: [96459, 81798, 78997, 80596, 81803, 106247],
   },
   startTP: {
     id: 17,
@@ -121,7 +121,7 @@ export const perks = {
     effect: () => (Enslaved.isRunning ? 1 : 10),
     automatorPoints: 5,
     shortDescription: () => `Start with ${formatInt(10)} TP`,
-    layoutPosList: [102120, 81399, 79399, 80198, 81400, 109376],
+    layoutPosList: [102120, 81399, 79399, 80197, 81400, 109376],
   },
   antimatterNoReset: {
     id: 30,
@@ -201,7 +201,7 @@ export const perks = {
     },
     automatorPoints: 10,
     shortDescription: () => "Auto-unlock Reality",
-    layoutPosList: [124343, 83000, 79000, 80196, 80212, 71046],
+    layoutPosList: [124343, 83000, 79000, 79795, 80212, 71046],
   },
   bypassIDAntimatter: {
     id: 51,
@@ -225,7 +225,7 @@ export const perks = {
       "requirements from Time Dilation unlock.",
     automatorPoints: 5,
     shortDescription: () => `Unlocking Dilation only requires TT`,
-    layoutPosList: [129011, 81802, 80203, 79799, 80600, 109116],
+    layoutPosList: [129011, 81802, 80203, 80198, 80600, 109116],
   },
   bypassEC1Lock: {
     id: 54,
@@ -350,7 +350,7 @@ export const perks = {
         multiply your current Tachyon Particle amount by ${formatInt(2)}.`;
     },
     effect: 2,
-    layoutPosList: [103757, 82199, 79401, 80197, 81006, 117382],
+    layoutPosList: [103757, 82199, 79401, 80196, 81006, 117382],
   },
   retroactiveTP3: {
     id: 82,
@@ -361,7 +361,7 @@ export const perks = {
         multiply your current Tachyon Particle amount by ${formatFloat(2.5, 1)}.`;
     },
     effect: 2.5,
-    layoutPosList: [96175, 82599, 79400, 80596, 81009, 116540],
+    layoutPosList: [96175, 82599, 79400, 80195, 81009, 116540],
   },
   retroactiveTP4: {
     id: 83,
@@ -374,7 +374,7 @@ export const perks = {
     effect: 3,
     automatorPoints: 10,
     shortDescription: () => `${formatX(3)} TP upgrade applies retroactively`,
-    layoutPosList: [86984, 82598, 78999, 80995, 81012, 114103],
+    layoutPosList: [86984, 82598, 78999, 80595, 81012, 114103],
   },
   autobuyerDilation: {
     id: 100,
@@ -383,7 +383,7 @@ export const perks = {
     description: "Unlock autobuyers for the repeatable Dilation Upgrades.",
     automatorPoints: 5,
     shortDescription: () => "Dilation Upgrade Autobuyers",
-    layoutPosList: [117401, 81401, 79802, 79399, 80597, 96672],
+    layoutPosList: [117401, 81401, 79802, 79799, 80597, 96672],
   },
   autobuyerFasterID: {
     id: 101,

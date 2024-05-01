@@ -39,7 +39,7 @@ export const perks = {
       and allow you to choose from ${formatInt(4)} different Glyphs on Reality.`;
     },
     effect: 4,
-    layoutPosList: [76596, 80200, 80200, 80200, 80188, 67769],
+    layoutPosList: [76596, 80200, 80600, 80200, 80188, 67769],
   },
   startAM: {
     id: 10,
@@ -72,7 +72,7 @@ export const perks = {
     },
     bumpCurrency: () => Currency.infinityPoints.bumpTo(5e130),
     effect: 5e130,
-    layoutPosList: [62111, 80598, 80198, 80998, 82197, 91690],
+    layoutPosList: [62111, 80598, 79797, 80998, 82197, 91690],
   },
   startEP1: {
     id: 14,
@@ -140,7 +140,7 @@ export const perks = {
         Time Study 142 to ${formatX(DC.E50)} Infinity Points.
         ${Pelle.isDoomed ? "" : `In addition, Time Study 132 also makes Replicanti ${format(3)} times faster.`}`;
     },
-    layoutPosList: [67054, 79400, 81000, 80202, 78594, 52589],
+    layoutPosList: [67054, 79400, 80999, 80202, 78594, 52589],
   },
   autounlockEU1: {
     id: 40,
@@ -164,14 +164,14 @@ export const perks = {
     label: "DU1",
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, automatically unlock the second row of Dilation Upgrades for free.",
-    layoutPosList: [119833, 81801, 79803, 79398, 80200, 97510],
+    layoutPosList: [119833, 81801, 79403, 79398, 80200, 97510],
   },
   autounlockDilation2: {
     id: 43,
     label: "DU2",
     family: PERK_FAMILY.DILATION,
     description: "After unlocking Dilation, automatically unlock the third row of Dilation Upgrades for free.",
-    layoutPosList: [124260, 82201, 79403, 79397, 80203, 85513],
+    layoutPosList: [124260, 82201, 79003, 79397, 80203, 85513],
   },
   autounlockDilation3: {
     id: 44,
@@ -180,7 +180,7 @@ export const perks = {
     description: "Automatically purchase the passive Time Theorem generation Dilation Upgrade once you can afford it.",
     automatorPoints: 5,
     shortDescription: () => "Auto-purchase TT generation",
-    layoutPosList: [124289, 82601, 79402, 79396, 80206, 72282],
+    layoutPosList: [124289, 82601, 79002, 79396, 80206, 72282],
   },
   autounlockTD: {
     id: 45,
@@ -208,7 +208,7 @@ export const perks = {
     label: "IDR",
     family: PERK_FAMILY.INFINITY,
     description: "Infinity Dimensions no longer have antimatter requirements.",
-    layoutPosList: [57685, 80998, 79797, 80997, 82200, 79297],
+    layoutPosList: [57685, 80998, 79397, 80997, 82200, 79297],
   },
   bypassTGReset: {
     id: 52,
@@ -239,7 +239,7 @@ export const perks = {
     label: "EC2R",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove the Eternity Challenge 2 requirement from Time Study 181.",
-    layoutPosList: [55463, 78999, 80999, 80602, 78197, 48944],
+    layoutPosList: [55463, 78999, 80998, 80602, 78197, 48944],
   },
   bypassEC3Lock: {
     id: 56,
@@ -253,7 +253,7 @@ export const perks = {
     label: "EC5R",
     family: PERK_FAMILY.ETERNITY,
     description: "Remove the Eternity Challenge 5 requirement from Time Study 62.",
-    layoutPosList: [70626, 79800, 80600, 80201, 78591, 62607],
+    layoutPosList: [70626, 79800, 81000, 80201, 78591, 62607],
   },
   autocompleteEC1: {
     id: 60,
@@ -328,7 +328,7 @@ export const perks = {
       you reach the goal for a higher completion of that challenge.`,
     automatorPoints: 15,
     shortDescription: () => "Bulk EC Completion",
-    layoutPosList: [62741, 78200, 80998, 81004, 78603, 41435],
+    layoutPosList: [62741, 78200, 81397, 81004, 78603, 41435],
   },
   retroactiveTP1: {
     id: 80,
@@ -395,7 +395,7 @@ export const perks = {
     effect: 1 / 3,
     automatorPoints: 5,
     shortDescription: () => "Faster ID Autobuyers",
-    layoutPosList: [74095, 80199, 79397, 81000, 82597, 77720],
+    layoutPosList: [74095, 80199, 80198, 81000, 82597, 77720],
   },
   autobuyerFasterReplicanti: {
     id: 102,
@@ -419,7 +419,7 @@ export const perks = {
     effect: 1 / 3,
     automatorPoints: 5,
     shortDescription: () => "Faster Dilation Autobuyers",
-    layoutPosList: [113895, 82602, 79002, 79395, 80609, 72715],
+    layoutPosList: [113895, 82602, 79402, 79395, 80609, 72715],
   },
   ttBuySingle: {
     id: 104,
@@ -460,7 +460,7 @@ export const perks = {
     effect: 3,
     automatorPoints: 5,
     shortDescription: () => "Dilation Autobuyer bulk",
-    layoutPosList: [127384, 81400, 79802, 79399, 80597, 96672],
+    layoutPosList: [127384, 81400, 79803, 79399, 80597, 96672],
   },
   achievementGroup1: {
     id: 201,

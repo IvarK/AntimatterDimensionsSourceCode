@@ -112,6 +112,9 @@ export default {
       const costCond = (this.showCost && !this.showStCost) || this.STCost === 0;
       return !this.setup.isSmall && !this.doomedRealityStudy && costCond;
     },
+    isDisabledByEnslaved() {
+      return this.study.id === 192 && Enslaved.isRunning;
+    },
     customCostStr() {
       const ttStr = this.setup.isSmall
         ? `${formatInt(this.config.cost)} TT`
@@ -188,7 +191,7 @@ export class TimeStudySetup {
       :config="config"
       name="Time Theorem"
     />
-    <div v-else-if="!doomedRealityStudy">
+    <div v-else-if="!doomedRealityStudy && !isDisabledByEnslaved">
       Cost: {{ customCostStr }}
     </div>
   </button>

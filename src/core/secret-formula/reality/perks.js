@@ -109,7 +109,7 @@ export const perks = {
     effect: 5e9,
     automatorPoints: 10,
     shortDescription: () => `Start with ${format(5e9)} EP`,
-    layoutPosList: [96459, 81798, 78997, 80596, 82203, 106247],
+    layoutPosList: [96459, 81798, 78997, 80596, 82203, 106224],
   },
   startTP: {
     id: 17,
@@ -208,7 +208,7 @@ export const perks = {
     label: "IDR",
     family: PERK_FAMILY.INFINITY,
     description: "Infinity Dimensions no longer have antimatter requirements.",
-    layoutPosList: [57685, 80998, 79397, 80997, 82600, 79297],
+    layoutPosList: [57685, 80998, 79397, 80997, 82600, 104489],
   },
   bypassTGReset: {
     id: 52,
@@ -407,7 +407,7 @@ export const perks = {
     effect: 1 / 3,
     automatorPoints: 5,
     shortDescription: () => "Faster Replicanti Autobuyers",
-    layoutPosList: [51317, 80198, 80197, 80999, 83000, 104489],
+    layoutPosList: [51317, 80198, 80197, 80999, 83000, 79297],
   },
   autobuyerFasterDilation: {
     id: 103,
@@ -460,7 +460,7 @@ export const perks = {
     effect: 3,
     automatorPoints: 5,
     shortDescription: () => "Dilation Autobuyer bulk",
-    layoutPosList: [127384, 81400, 79803, 79399, 81000, 96672],
+    layoutPosList: [127384, 81400, 79803, 79399, 81000, 103048],
   },
   achievementGroup1: {
     id: 201,

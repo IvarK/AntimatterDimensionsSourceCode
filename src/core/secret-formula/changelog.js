@@ -9,6 +9,79 @@ export const changelog = [
    * }
    */
   {
+    date: [2024, 4, 1],
+    name: "Celebrate Android Reality update",
+    info: `
+Congratulations for the release of Android Reality update! In order to celebrate this big milestone, we implemented
+some changes mainly based on the player comments and feedback from the Android version.
+<br>
+<br>
+<b><i>Once again, thank you so much for playing Antimatter Dimensions!</i></b>
+<br>
+<br>
+<b>Major things:</b><br>
+<ul>
+<li>Added newly joined Android testers in credits</li>
+<li>Added a new perk</li>
+</ul>
+<br>
+<b>Additional QoL and information:</b><br>
+<ul>
+<li>Companion Glyph and Study Presets now carry over when you start over</li>
+<li>Swapped cel2 and Perk shop unlocks</li>
+<li>TS131 now has an additional reward</li>
+<li>Enter key now works in autobuyer inputs to apply changes</li>
+<li>Reward of achievement 118 now improves Sacrifice autobuyer</li>
+<li>Glyph preset settings are now including/increased by default</li>
+<li>Glyph recycle now checks the Glyph effects with Glyph level set in Reality autobuyer</li>
+<li>Added a new cel7 upgrade mimicking EM40</li>
+<li>Added show all tabs button in tab modify modal</li>
+<li>Added display when Auto EC is disabled by requirement lock</li>
+<li>Added an option to swap symbol and border colors on glyphs</li>
+<li>Added functionality to change the visible resource on Modern UI</li>
+<li>Added a new modal for adjusting exponent notation formatting more flexibly</li>
+<li>Automator now ignores blackhole command while it is being disabled</li>
+<li>Changed requirement of EM1000 to 5 seconds or less</li>
+<li>Study tree will now automatically respec when exiting an EC</li>
+<li>Disabled a rebuyable TP upgrade in cel7, because it caused confusion to many players</li>
+<li>Various minor text changes</li>
+</ul>
+<br>
+<b>Minor UI Changes:</b><br>
+<ul>
+<li>Adjusted perk layouts for new DAB perk</li>
+<li>Made glyph sorting order consistent in showcase modal</li>
+<li>Added light and dark glyph rarity colorblind palettes</li>
+<li>Adjusted various minor UI glitches</li>
+</ul>
+<br>
+<b>Bugfixes:</b><br>
+<ul>
+<li>Fixed link to Synergism</li>
+<li>Fixed tooltip in TD tab</li>
+<li>Fixed offline progress bug</li>
+<li>Fixed Glyph Rarity color bug in popup</li>
+<li>Fixed automator pause command ticking wrongly</li>
+<li>Fixed a NaN display bug with certain autobuyer inputs</li>
+<li>Fixed some buggy behavior for saves without START perk</li>
+<li>Fixed TS192 gave console error while it is being disabled</li>
+<li>Fixed wording on cel7 dilation modal claiming that EP will not be gained</li>
+<li>Fixed ! not being parsed properly when used in study strings in automator scripts</li>
+<li>Fixed Max All TD button not behaving properly with an active Telemechanical Process lock</li>
+<li>Fixed Effarig glyphs in presets were messed up bug because of the internal format change</li>
+<li>Fixed Glyph preset did not pick the highest level Glyphs while level:increased is selected</li>
+<li>Fixed remnant count not being properly reset when entering cel7 dilation with animation on</li>
+<li>Fixed EC TT cost being calculated incorrectly when using EC! functionality and tree respec simultaneously</li>
+<li>Fixed constant data not being properly carried over on full completion and migrated data on saves
+affected by this bug</li>
+<li>Removed duplicated achievement page text on Design theme</li>
+<li>Prevented offline progress from going above the 1e6 limit that the options menu has</li>
+<li>Fixed tpyo of the century</li>
+</ul>
+<br>
+`
+  },
+  {
     date: [2023, 7, 18],
     name: "Final Official Patch",
     info: `

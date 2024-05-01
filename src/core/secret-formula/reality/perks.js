@@ -50,7 +50,7 @@ export const perks = {
     },
     bumpCurrency: () => Currency.antimatter.bumpTo(5e130),
     effect: 5e130,
-    layoutPosList: [76559, 80600, 80199, 80600, 81391, 75745],
+    layoutPosList: [76559, 80600, 80199, 80600, 82191, 75745],
   },
   startIP1: {
     id: 12,
@@ -61,7 +61,7 @@ export const perks = {
     },
     bumpCurrency: () => Currency.infinityPoints.bumpTo(5e15),
     effect: 5e15,
-    layoutPosList: [74523, 80599, 79798, 80599, 82194, 91322],
+    layoutPosList: [74523, 80599, 79798, 80599, 82594, 91322],
   },
   startIP2: {
     id: 13,
@@ -72,7 +72,7 @@ export const perks = {
     },
     bumpCurrency: () => Currency.infinityPoints.bumpTo(5e130),
     effect: 5e130,
-    layoutPosList: [62111, 80598, 79797, 80998, 82197, 91690],
+    layoutPosList: [62111, 80598, 79797, 80998, 82597, 91690],
   },
   startEP1: {
     id: 14,
@@ -85,7 +85,7 @@ export const perks = {
     effect: 10,
     automatorPoints: 5,
     shortDescription: () => `Start with ${formatInt(10)} EP`,
-    layoutPosList: [88915, 80999, 79398, 80598, 81397, 103734],
+    layoutPosList: [88915, 80999, 79398, 80598, 82197, 103734],
   },
   startEP2: {
     id: 15,
@@ -96,7 +96,7 @@ export const perks = {
     },
     bumpCurrency: () => Currency.eternityPoints.bumpTo(5000),
     effect: 5000,
-    layoutPosList: [92484, 81398, 78998, 80597, 81800, 102193],
+    layoutPosList: [92484, 81398, 78998, 80597, 82200, 102193],
   },
   startEP3: {
     id: 16,
@@ -109,7 +109,7 @@ export const perks = {
     effect: 5e9,
     automatorPoints: 10,
     shortDescription: () => `Start with ${format(5e9)} EP`,
-    layoutPosList: [96459, 81798, 78997, 80596, 81803, 106247],
+    layoutPosList: [96459, 81798, 78997, 80596, 82203, 106247],
   },
   startTP: {
     id: 17,
@@ -121,7 +121,7 @@ export const perks = {
     effect: () => (Enslaved.isRunning ? 1 : 10),
     automatorPoints: 5,
     shortDescription: () => `Start with ${formatInt(10)} TP`,
-    layoutPosList: [102120, 81399, 79399, 80197, 81400, 109376],
+    layoutPosList: [102120, 81399, 79399, 80197, 81800, 109376],
   },
   antimatterNoReset: {
     id: 30,
@@ -129,7 +129,7 @@ export const perks = {
     family: PERK_FAMILY.ANTIMATTER,
     description: `Dimension Boosts and Antimatter Galaxies no longer reset
       Antimatter, Antimatter Dimensions, Tickspeed, or Dimensional Sacrifice.`,
-    layoutPosList: [85343, 81000, 79799, 80199, 81394, 92553],
+    layoutPosList: [85343, 81000, 79799, 80199, 82194, 92553],
   },
   studyPassive: {
     id: 31,
@@ -208,14 +208,14 @@ export const perks = {
     label: "IDR",
     family: PERK_FAMILY.INFINITY,
     description: "Infinity Dimensions no longer have antimatter requirements.",
-    layoutPosList: [57685, 80998, 79397, 80997, 82200, 79297],
+    layoutPosList: [57685, 80998, 79397, 80997, 82600, 79297],
   },
   bypassTGReset: {
     id: 52,
     label: "TGR",
     family: PERK_FAMILY.DILATION,
     description: "The 2nd rebuyable Dilation Upgrade no longer resets your Dilated Time.",
-    layoutPosList: [116568, 81800, 79801, 79798, 81000, 112677],
+    layoutPosList: [116568, 81800, 79801, 79798, 81400, 112677],
   },
   bypassECDilation: {
     id: 53,
@@ -339,7 +339,7 @@ export const perks = {
         multiply your current Tachyon Particle amount by ${formatFloat(1.5, 1)}.`;
     },
     effect: 1.5,
-    layoutPosList: [111739, 81799, 79800, 79797, 81003, 115434],
+    layoutPosList: [111739, 81799, 79800, 79797, 81403, 115434],
   },
   retroactiveTP2: {
     id: 81,
@@ -350,7 +350,7 @@ export const perks = {
         multiply your current Tachyon Particle amount by ${formatInt(2)}.`;
     },
     effect: 2,
-    layoutPosList: [103757, 82199, 79401, 80196, 81006, 117382],
+    layoutPosList: [103757, 82199, 79401, 80196, 81406, 117382],
   },
   retroactiveTP3: {
     id: 82,
@@ -361,7 +361,7 @@ export const perks = {
         multiply your current Tachyon Particle amount by ${formatFloat(2.5, 1)}.`;
     },
     effect: 2.5,
-    layoutPosList: [96175, 82599, 79400, 80195, 81009, 116540],
+    layoutPosList: [96175, 82599, 79400, 80195, 81409, 116540],
   },
   retroactiveTP4: {
     id: 83,
@@ -374,7 +374,7 @@ export const perks = {
     effect: 3,
     automatorPoints: 10,
     shortDescription: () => `${formatX(3)} TP upgrade applies retroactively`,
-    layoutPosList: [86984, 82598, 78999, 80595, 81012, 114103],
+    layoutPosList: [86984, 82598, 78999, 80595, 81412, 114103],
   },
   autobuyerDilation: {
     id: 100,
@@ -395,7 +395,7 @@ export const perks = {
     effect: 1 / 3,
     automatorPoints: 5,
     shortDescription: () => "Faster ID Autobuyers",
-    layoutPosList: [74095, 80199, 80198, 81000, 82597, 77720],
+    layoutPosList: [74095, 80199, 80198, 81000, 82997, 77720],
   },
   autobuyerFasterReplicanti: {
     id: 102,
@@ -407,7 +407,7 @@ export const perks = {
     effect: 1 / 3,
     automatorPoints: 5,
     shortDescription: () => "Faster Replicanti Autobuyers",
-    layoutPosList: [51317, 80198, 80197, 80999, 82600, 104489],
+    layoutPosList: [51317, 80198, 80197, 80999, 83000, 104489],
   },
   autobuyerFasterDilation: {
     id: 103,
@@ -460,7 +460,7 @@ export const perks = {
     effect: 3,
     automatorPoints: 5,
     shortDescription: () => "Dilation Autobuyer bulk",
-    layoutPosList: [127384, 81400, 79803, 79399, 80597, 96672],
+    layoutPosList: [127384, 81400, 79803, 79399, 81000, 96672],
   },
   achievementGroup1: {
     id: 201,

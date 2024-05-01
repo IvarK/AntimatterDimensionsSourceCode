@@ -250,7 +250,7 @@ export const PerkNetwork = {
         shadow: true
       },
       edges: {
-        width: 2,
+        width: 4,
         shadow: true,
         hoverWidth: width => width,
         selectionWidth: width => width,

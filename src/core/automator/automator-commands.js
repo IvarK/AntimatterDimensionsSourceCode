@@ -222,25 +222,23 @@ export const AutomatorCommands = [
         { ALT: () => $.CONSUME(T.Off) },
       ]);
     },
-    validate: (ctx, V) => {
+    validate: ctx => {
       ctx.startLine = ctx.BlackHole[0].startLine;
-      if (!BlackHole(1).isUnlocked) {
-        if (Enslaved.isRunning || Pelle.isDisabled("blackhole")) {
-          V.addError(ctx.BlackHole[0], "Black Hole is disabled in your current Reality",
-            "Return to normal Reality conditions to use this command again");
-        } else {
-          V.addError(ctx.BlackHole[0], "Black Hole is not unlocked",
-            "Unlock the Black Hole in order to pause or unpause it");
-        }
-        return false;
-      }
       return true;
     },
     compile: ctx => {
       const on = Boolean(ctx.On);
       return () => {
         if (on === BlackHoles.arePaused) BlackHoles.togglePause();
-        AutomatorData.logCommandEvent(`Black Holes toggled ${ctx.On ? "ON" : "OFF"}`, ctx.startLine);
+        let blackHoleEvent;
+        if (BlackHole(1).isUnlocked) {
+          blackHoleEvent = `Black Holes toggled ${ctx.On ? "ON" : "OFF"}`;
+        } else if (Enslaved.isRunning || Pelle.isDisabled("blackhole")) {
+          blackHoleEvent = "Black Hole command ignored because BH is disabled in your current Reality";
+        } else {
+          blackHoleEvent = "Black Hole command ignored because BH is not unlocked";
+        }
+        AutomatorData.logCommandEvent(blackHoleEvent, ctx.startLine);
         return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
       };
     },

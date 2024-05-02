@@ -41,14 +41,14 @@ export default {
     restartChallenge() {
       const current = Player.anyChallenge;
       if (Player.isInAnyChallenge) {
-        current.exit();
+        current.exit(true);
         current.start();
       }
     },
     exitChallenge() {
       const current = Player.anyChallenge;
       if (Player.isInAnyChallenge) {
-        current.exit();
+        current.exit(false);
       }
     },
   }

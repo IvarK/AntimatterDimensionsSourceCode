@@ -40,7 +40,8 @@ export default {
     :style="style"
   >
     <h2>
-      Reset the entire game, but keep Automator Scripts, Secret Themes, Secret Achievements, and Options.
+      Reset the entire game, but keep Automator Scripts, Study Presets, Secret Themes, Secret Achievements, Options,
+      and Companion Glyph.
     </h2>
     <h3>You can use the button in the top-right to view the game as it is right now.</h3>
     <div class="c-new-game-button-container">

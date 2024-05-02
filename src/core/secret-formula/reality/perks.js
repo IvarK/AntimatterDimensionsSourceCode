@@ -455,7 +455,7 @@ export const perks = {
     label: "DAB",
     family: PERK_FAMILY.AUTOMATION,
     get description() {
-      return `Buy three times as many Dilation Upgrades at once.`;
+      return `Dilation Upgrade autobuyers buy three times as many Dilation Upgrades at once.`;
     },
     effect: 3,
     automatorPoints: 5,

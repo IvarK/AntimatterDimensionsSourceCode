@@ -44,7 +44,7 @@ function giveEternityRewards(auto) {
     player.records.bestEternity.bestEPminReality.max(player.records.thisEternity.bestEPmin);
 
   Currency.infinitiesBanked.value = Currency.infinitiesBanked.value.plusEffectsOf(
-    Achievement(131),
+    Achievement(131).effects.bankedInfinitiesGain,
     TimeStudy(191)
   );
 

@@ -100,7 +100,7 @@ export default {
         infinity.count.copyFrom(Currency.infinities);
         infinity.banked.copyFrom(Currency.infinitiesBanked);
         infinity.projectedBanked = new Decimal(0).plusEffectsOf(
-          Achievement(131),
+          Achievement(131).effects.bankedInfinitiesGain,
           TimeStudy(191)
         );
         infinity.bankRate = infinity.projectedBanked.div(Math.clampMin(33, records.thisEternity.time)).times(60000);

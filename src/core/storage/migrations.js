@@ -411,6 +411,12 @@ export const migrations = {
         player.reality.automator.constantSortOrder = [...definedConstants];
       }
     },
+    25: player => {
+      // If the player has r146 "Perks of living" achievement we give them the DAB perk automatically
+      if ((player.achievementBits[13] & 32) !== 0 && !player.reality.perks.has(107)) {
+        player.reality.perks.add(107);
+      }
+    }
   },
 
   normalizeTimespans(player) {

@@ -9,10 +9,10 @@ export const changelog = [
    * }
    */
   {
-    date: [2024, 4, 1],
-    name: "Celebrate Android Reality update",
+    date: [2024, 5, 3],
+    name: "Celebrate Android Reality Update",
     info: `
-Congratulations for the release of Android Reality update! In order to celebrate this big milestone, we implemented
+Congratulations for the release of Android Reality Update! In order to celebrate this big milestone, we implemented
 some changes mainly based on the player comments and feedback from the Android version.
 <br>
 <br>
@@ -27,31 +27,32 @@ some changes mainly based on the player comments and feedback from the Android v
 <br>
 <b>Additional QoL and information:</b><br>
 <ul>
-<li>Companion Glyph and Study Presets now carry over when you start over</li>
+<li>Study Presets now carry over when you start over, and Companion Glyph will not leave you too</li>
 <li>Swapped cel2 and Perk shop unlocks</li>
-<li>TS131 now has an additional reward</li>
+<li>TS131 now has an additional effect</li>
 <li>Enter key now works in autobuyer inputs to apply changes</li>
 <li>Reward of achievement 118 now improves Sacrifice autobuyer</li>
 <li>Glyph preset settings are now including/increased by default</li>
 <li>Glyph recycle now checks the Glyph effects with Glyph level set in Reality autobuyer</li>
 <li>Added a new cel7 upgrade mimicking EM40</li>
-<li>Added show all tabs button in tab modify modal</li>
-<li>Added display when Auto EC is disabled by requirement lock</li>
-<li>Added an option to swap symbol and border colors on glyphs</li>
-<li>Added functionality to change the visible resource on Modern UI</li>
+<li>Added a show all tabs button in tab modify modal</li>
+<li>Added a display when Auto EC is disabled by requirement lock</li>
+<li>Added an option to swap symbol and border colors on Glyphs</li>
+<li>Added a functionality to change the visible resource on Modern UI</li>
 <li>Added a new modal for adjusting exponent notation formatting more flexibly</li>
 <li>Automator now ignores blackhole command while it is being disabled</li>
 <li>Changed requirement of EM1000 to 5 seconds or less</li>
 <li>Study tree will now automatically respec when exiting an EC</li>
 <li>Disabled a rebuyable TP upgrade in cel7, because it caused confusion to many players</li>
+<li>Rebalanced 3rd milestone of 5th bar due to the above upgrade deletion</li>
 <li>Various minor text changes</li>
 </ul>
 <br>
 <b>Minor UI Changes:</b><br>
 <ul>
 <li>Adjusted perk layouts for new DAB perk</li>
-<li>Made glyph sorting order consistent in showcase modal</li>
-<li>Added light and dark glyph rarity colorblind palettes</li>
+<li>Made Glyph sorting order consistent in showcase modal</li>
+<li>Added light and dark Glyph rarity colorblind palettes</li>
 <li>Adjusted various minor UI glitches</li>
 </ul>
 <br>
@@ -68,7 +69,7 @@ some changes mainly based on the player comments and feedback from the Android v
 <li>Fixed wording on cel7 dilation modal claiming that EP will not be gained</li>
 <li>Fixed ! not being parsed properly when used in study strings in automator scripts</li>
 <li>Fixed Max All TD button not behaving properly with an active Telemechanical Process lock</li>
-<li>Fixed Effarig glyphs in presets were messed up bug because of the internal format change</li>
+<li>Fixed Effarig Glyphs in presets were messed up bug because of the internal format change</li>
 <li>Fixed Glyph preset did not pick the highest level Glyphs while level:increased is selected</li>
 <li>Fixed remnant count not being properly reset when entering cel7 dilation with animation on</li>
 <li>Fixed EC TT cost being calculated incorrectly when using EC! functionality and tree respec simultaneously</li>

@@ -44,7 +44,7 @@ export const perkShop = {
     id: 2,
     initialCost: 100,
     increment: 2,
-    description: "Buy twice as many Dilation Upgrades at once.",
+    description: "Dilation autobuyers buy twice as many Dilation Upgrades at once.",
     effect: bought => Math.pow(2, bought),
     formatEffect: value => formatX(value, 2),
     formatCost: value => format(value, 2),

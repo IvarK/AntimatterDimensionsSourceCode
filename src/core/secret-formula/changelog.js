@@ -9,7 +9,7 @@ export const changelog = [
    * }
    */
   {
-    date: [2024, 5, 3],
+    date: [2024, 5, 2],
     name: "Celebrate Android Reality Update",
     info: `
 Congratulations for the release of Android Reality Update! In order to celebrate this big milestone, we implemented

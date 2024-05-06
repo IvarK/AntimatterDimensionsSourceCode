@@ -72,8 +72,8 @@ const perkColors = () => ({
 // Coordinate specifications are sometimes given in a grid index, so we need to spread them out to the proper scaling.
 // Positions with |x| < 20 and |y| < 12 will display well with a scale factor of 10.
 // When making new layouts, the grid coordinates need to be multiplied by 5
-function globalScale(vec, factor) {
-  return vec.matrixTransform(factor, 0, 0, factor);
+function globalScale(vec, factor, widthFactor = 1) {
+  return vec.matrixTransform(factor * widthFactor, 0, 0, factor);
 }
 
 function positionNumToVector(num) {
@@ -95,7 +95,7 @@ export const PerkLayouts = [
   {
     // This is the perks laid out in the same way that they're laid out in the Android version
     buttonText: "Android Layout",
-    position: config => globalScale(positionNumToVector(config.layoutPosList[1]), 20),
+    position: config => globalScale(positionNumToVector(config.layoutPosList[1]), 20, 1.5),
     centerOffset: new Vector(0, 120),
     forcePhysics: false,
     straightEdges: true,

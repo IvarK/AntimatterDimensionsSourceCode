@@ -41,7 +41,7 @@ some changes mainly based on the player comments and feedback from the Android v
 <li>Added a functionality to change the visible resource on Modern UI</li>
 <li>Added a new modal for adjusting exponent notation formatting more flexibly</li>
 <li>Automator now ignores blackhole command while it is being disabled</li>
-<li>Changed requirement of EM1000 to 5 seconds or less</li>
+<li>EM1000 requirement is now Eternity in 5 seconds or less</li>
 <li>Study tree will now automatically respec when exiting an EC</li>
 <li>Disabled a rebuyable TP upgrade in cel7, because it caused confusion to many players</li>
 <li>Rebalanced 3rd milestone of 5th bar due to the above upgrade deletion</li>

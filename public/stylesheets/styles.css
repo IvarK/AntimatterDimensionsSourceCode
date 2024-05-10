@@ -6543,8 +6543,11 @@ kbd {
 }
 
 .c-enslaved-run-button__icon__sigil {
-  font-size: 12rem;
+  font-size: 14.8rem;
   transform: rotate(45deg);
+  position: absolute;
+  top: -3.7rem;
+  right: -0.2rem;
 }
 
 .c-enslaved-run-button__icon__glitch {

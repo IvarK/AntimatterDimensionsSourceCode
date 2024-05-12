@@ -21,6 +21,7 @@ export const changelog = [
 <ul>
 <li>Adjusted a cel 3 symbol size in the Glyph cosmetic</li>
 <li>Added rounded corners to some buttons</li>
+<li>Added always use \uE010hole animation option</li>
 </ul>
 <br>
 <b>Bugfixes:</b><br>

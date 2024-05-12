@@ -19,11 +19,11 @@ export default {
     },
     autoCleanTooltip() {
       return `${this.removeString} Glyphs that are worse in every way than
-        enough other Glyphs${this.hasPerkShop ? " (ignores Music Glyphs)" : ""}`;
+        enough other Glyphs${this.hasPerkShop ? " (ignores customized Glyphs)" : ""}`;
     },
     harshAutoCleanTooltip() {
       return `${this.removeString} Glyphs that are worse in every way than
-        ANY other Glyph${this.hasPerkShop ? " (includes Music Glyphs)" : ""}`;
+        ANY other Glyph${this.hasPerkShop ? " (includes customized Glyphs)" : ""}`;
     },
     deleteRejectedTooltip() {
       const negativeWarning = AutoGlyphProcessor.hasNegativeEffectScore()

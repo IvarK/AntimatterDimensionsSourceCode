@@ -9,6 +9,28 @@ export const changelog = [
    * }
    */
   {
+    date: [2024, 5, 12],
+    name: "Hi Ra",
+    info: `
+<b>Added things:</b><br>
+<ul>
+<li>Added a cel 5 symbol to the celestial Glyph cosmetic set</li>
+</ul>
+<br>
+<b>Minor UI Changes:</b><br>
+<ul>
+<li>Adjusted a cel 3 symbol size in the Glyph cosmetic</li>
+<li>Added rounded corners to some buttons</li>
+</ul>
+<br>
+<b>Bugfixes:</b><br>
+<ul>
+<li>Fixed a BH pulse does not apply during offline progess</li>
+</ul>
+<br>
+`
+  },
+  {
     date: [2024, 5, 2],
     name: "Celebrate Android Reality Update",
     info: `

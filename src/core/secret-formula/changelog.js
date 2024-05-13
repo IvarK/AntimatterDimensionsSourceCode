@@ -9,7 +9,7 @@ export const changelog = [
    * }
    */
   {
-    date: [2024, 5, 12],
+    date: [2024, 5, 14],
     name: "Hi Ra",
     info: `
 <b>Added things:</b><br>
@@ -19,14 +19,16 @@ export const changelog = [
 <br>
 <b>Minor UI Changes:</b><br>
 <ul>
-<li>Adjusted a cel 3 symbol size in the Glyph cosmetic</li>
 <li>Added rounded corners to some buttons</li>
-<li>Added always use \uE010hole animation option</li>
+<li>Added an always use \uE010hole animation option</li>
+<li>Adjusted a cel 3 symbol size in the Glyph cosmetic</li>
 </ul>
 <br>
 <b>Bugfixes:</b><br>
 <ul>
 <li>Fixed a BH pulse does not apply during offline progess</li>
+<li>Fixed a BH inversion is active while it is being disabled</li>
+<li>Fixed a BH inversion slider is visible while it is being disabled</li>
 </ul>
 <br>
 `

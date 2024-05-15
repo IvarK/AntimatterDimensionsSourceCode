@@ -9,7 +9,7 @@ export const changelog = [
    * }
    */
   {
-    date: [2024, 5, 14],
+    date: [2024, 5, 15],
     name: "Hi Ra",
     info: `
 <b>Added things:</b><br>
@@ -19,6 +19,7 @@ export const changelog = [
 <br>
 <b>Minor UI Changes:</b><br>
 <ul>
+<li>Improved wording of BI upgrades</li>
 <li>Added rounded corners to some buttons</li>
 <li>Added an always use \uE010hole animation option</li>
 <li>Adjusted a cel 3 symbol size in the Glyph cosmetic</li>

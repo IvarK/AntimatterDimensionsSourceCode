@@ -1,11 +1,12 @@
 <script>
+import { Achievement } from "../../../core/globals";
+
 import AntimatterDimensionProgressBar from "./AntimatterDimensionProgressBar";
 import AntimatterDimensionRow from "@/components/tabs/antimatter-dimensions/ModernAntimatterDimensionRow";
 import AntimatterGalaxyRow from "@/components/tabs/antimatter-dimensions/ModernAntimatterGalaxyRow";
 import DimensionBoostRow from "@/components/tabs/antimatter-dimensions/ModernDimensionBoostRow";
 import PrimaryButton from "@/components/PrimaryButton";
 import TickspeedRow from "@/components/tabs/antimatter-dimensions/TickspeedRow";
-import { Achievement } from "../../../core/globals";
 
 export default {
   name: "ModernAntimatterDimensionsTab",
@@ -117,7 +118,9 @@ export default {
         @click="sacrifice"
       >
         <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
-        <span v-else-if="isFullyAutomated && disabledCondition !== ''">Dimensional Sacrifice is Automated (Achievement 118)</span>
+        <span v-else-if="isFullyAutomated && disabledCondition !== ''">
+          Dimensional Sacrifice is Automated (Achievement 118)
+        </span>
         <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
       </PrimaryButton>
       <button

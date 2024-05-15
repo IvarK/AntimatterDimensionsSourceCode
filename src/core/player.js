@@ -52,9 +52,6 @@ window.player = {
       requirementBits: 0,
     }
   },
-  infinity: {
-    upgradeBits: 0
-  },
   auto: {
     autobuyersOn: true,
     disableContinuum: false,
@@ -359,7 +356,7 @@ window.player = {
     previousRuns: {}
   },
   IPMultPurchases: 0,
-  version: 25,
+  version: 26,
   infinityPower: DC.D1,
   postC4Tier: 0,
   eternityPoints: DC.D0,

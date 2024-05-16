@@ -100,7 +100,6 @@ export const migrations = {
           clearInterval(window.uiChoiceModalInterval);
         }
       }, 1000);
-      player.infinity = { upgradeBits: 0 };
 
       migrations.normalizeTimespans(player);
       migrations.convertAutobuyerMode(player);
@@ -422,7 +421,7 @@ export const migrations = {
       if (player.celestials.pelle.doomed) player.dilation.rebuyables[3] = 0;
     },
     26: player => {
-      delete player.infinity.upgradeBits;
+      if (!!player.infinity?.upgradeBits) delete player.infinity.upgradeBits;
     }
   },
 

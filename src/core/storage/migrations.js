@@ -100,6 +100,7 @@ export const migrations = {
           clearInterval(window.uiChoiceModalInterval);
         }
       }, 1000);
+      player.infinity = { upgradeBits: 0 };
 
       migrations.normalizeTimespans(player);
       migrations.convertAutobuyerMode(player);

@@ -94,7 +94,7 @@ export default {
       }
     },
     onresize() {
-      // Calling this.beforeMounted doesn't work here
+      // Calling this.beforeDestroy doesn't work here
       for (const tween of this.tweens) {
         TWEEN.remove(tween);
       }

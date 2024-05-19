@@ -11,11 +11,13 @@ export default {
   },
   mounted() {
     this.fly();
+    window.addEventListener("resize", this.onresize);
   },
   beforeDestroy() {
     for (const tween of this.tweens) {
       TWEEN.remove(tween);
     }
+    window.removeEventListener("resize", this.onresize);
   },
   methods: {
     fly() {
@@ -91,6 +93,13 @@ export default {
           : SNOW[Math.floor(Math.random() * SNOW.length)];
       }
     },
+    onresize() {
+      // Calling this.beforeMounted doesn't work here
+      for (const tween of this.tweens) {
+        TWEEN.remove(tween);
+      }
+      this.fly();
+    }
   }
 };
 </script>

@@ -92,17 +92,6 @@ export const AD = {
   dimboost: {
     name: dim => (dim ? `Dimboosts on AD ${dim}` : "Dimboosts"),
     multValue: dim => (dim
-      ? DimBoost.multiplierToNDTier(dim)
-      : AntimatterDimensions.all
-        .filter(ad => ad.isProducing)
-        .map(ad => DimBoost.multiplierToNDTier(ad.tier))
-        .reduce((x, y) => x.times(y), DC.D1)),
-    isActive: true,
-    icon: MultiplierTabIcons.DIMBOOST,
-  },
-  dimboost: {
-    name: dim => (dim ? `Dimboosts on AD ${dim}` : "Dimboosts"),
-    multValue: dim => (dim
       ? (dim <= MultiplierTabHelper.activeDimCount("AD")
         ? DimBoost.multiplierToNDTier(dim)
         : DC.D1)

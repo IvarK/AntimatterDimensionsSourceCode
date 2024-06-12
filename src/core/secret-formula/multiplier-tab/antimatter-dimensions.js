@@ -96,7 +96,7 @@ export const AD = {
         ? DimBoost.multiplierToNDTier(dim)
         : DC.D1)
       : AntimatterDimensions.all
-        .filter((ad,i) => ad.isProducing && i < MultiplierTabHelper.activeDimCount("AD"))
+        .filter(ad => ad.tier <= MultiplierTabHelper.activeDimCount("AD"))
         .map(ad => DimBoost.multiplierToNDTier(ad.tier))
         .reduce((x, y) => x.times(y), DC.D1)),
     isActive: true,

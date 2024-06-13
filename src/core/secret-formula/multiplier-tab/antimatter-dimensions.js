@@ -91,14 +91,15 @@ export const AD = {
 
   dimboost: {
     name: dim => (dim ? `Dimboosts on AD ${dim}` : "Dimboosts"),
-    multValue: dim => (dim
-      ? (dim <= MultiplierTabHelper.activeDimCount("AD")
+    multValue: dim => {
+      if (dim) return (dim <= MultiplierTabHelper.activeDimCount("AD")
         ? DimBoost.multiplierToNDTier(dim)
-        : DC.D1)
-      : AntimatterDimensions.all
+        : DC.D1);
+      return AntimatterDimensions.all
         .filter(ad => ad.tier <= MultiplierTabHelper.activeDimCount("AD"))
         .map(ad => DimBoost.multiplierToNDTier(ad.tier))
-        .reduce((x, y) => x.times(y), DC.D1)),
+        .reduce((x, y) => x.times(y), DC.D1);
+    },
     isActive: true,
     icon: MultiplierTabIcons.DIMBOOST,
   },

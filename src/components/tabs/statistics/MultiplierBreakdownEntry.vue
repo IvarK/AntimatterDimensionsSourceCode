@@ -153,8 +153,8 @@ export default {
         const powFrac = totalPosPow === 1 ? 0 : Math.log(entry.data.pow) / Math.log(totalPosPow);
 
         // Nerfs are dealt later; divider nerf is also viewed as a power nerf for later calculation.
-        const perc = (multFrac >= 0 ? multFrac / totalPosPow : Math.clampMin(multFrac, -0.99999999))
-          + (entry.data.pow >= 1 ? powFrac * (1 - 1 / totalPosPow) : entry.data.pow - 1);
+        const perc = (multFrac >= 0 ? multFrac / totalPosPow : Math.clampMin(multFrac, -0.99999999)) +
+          (entry.data.pow >= 1 ? powFrac * (1 - 1 / totalPosPow) : entry.data.pow - 1);
 
         // This is clamped to a minimum of something that's still nonzero in order to show it at <0.1% instead of 0%
         percentList.push(
@@ -177,8 +177,8 @@ export default {
         if (p[1] >= 0) {
           return (p[0] ? p[1] : p[1] * totalNegPowRecalc) / nerfedPerc;
         }
-        return Math.clampMin(-Math.log(p[1] + 1) / Math.log(totalNegPowRecalc)
-          * (totalPerc - nerfedPerc) / totalPerc, -1);
+        return Math.clampMin(-Math.log(p[1] + 1) / Math.log(totalNegPowRecalc) *
+          (totalPerc - nerfedPerc) / totalPerc, -1);
       });
       this.percentList = percentList;
       this.rollingAverage.add(isEmpty ? undefined : percentList);

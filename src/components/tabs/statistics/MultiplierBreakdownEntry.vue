@@ -137,23 +137,24 @@ export default {
     calculatePercents() {
       const powList = this.entries.map(e => e.data.pow);
       const totalPosPow = powList.filter(p => p > 1).reduce((x, y) => x * y, 1);
-      const totalNegPow = powList.filter(p => p < 1).reduce((x, y) => x * y, 1);
-      const log10Mult = (this.resource.fakeValue ?? this.resource.mult).log10() / totalPosPow;
-      const isEmpty = log10Mult === 0;
+      const totalPositiveMult = this.entries
+        .map(e => Decimal.max(e.data.mult, 1))
+        .reduce((x, y) => x.times(y), DC.D1)
+        .log10();
+      const isEmpty = totalPositiveMult === 0;
       if (!isEmpty) {
         this.lastNotEmptyAt = Date.now();
       }
       let percentList = [];
       for (const entry of this.entries) {
-        const multFrac = log10Mult === 0
+        const multFrac = totalPositiveMult === 0
           ? 0
-          : Decimal.log10(entry.data.mult) / log10Mult;
+          : Decimal.log10(entry.data.mult) / totalPositiveMult;
         const powFrac = totalPosPow === 1 ? 0 : Math.log(entry.data.pow) / Math.log(totalPosPow);
 
-        // Handle nerf powers differently from everything else in order to render them with the correct bar percentage
-        const perc = entry.data.pow >= 1
-          ? multFrac / totalPosPow + powFrac * (1 - 1 / totalPosPow)
-          : Math.log(entry.data.pow) / Math.log(totalNegPow) * (totalNegPow - 1);
+        // Nerfs are dealt later; divider nerf is also viewed as a power nerf for later calculation.
+        const perc = (multFrac >= 0 ? multFrac / totalPosPow : Math.clampMin(multFrac, -0.99999999))
+          + (entry.data.pow >= 1 ? powFrac * (1 - 1 / totalPosPow) : entry.data.pow - 1);
 
         // This is clamped to a minimum of something that's still nonzero in order to show it at <0.1% instead of 0%
         percentList.push(
@@ -168,19 +169,21 @@ export default {
       // power effects already had them applied; there is support in the classes to allow for some to be affected but
       // not others. The only actual case of this occurring is V's Reality not affecting gamespeed for DT, but it was
       // cleaner to adjust the class structure instead of specifically special-casing it here
+      const totalNegPowRecalc = percentList.filter(p => p[1] < 0).map(p => p[1] + 1).reduce((x, y) => x * y, 1);
       const totalPerc = percentList.filter(p => p[1] > 0).map(p => p[1]).sum();
       const nerfedPerc = percentList.filter(p => p[1] > 0)
-        .reduce((x, y) => x + (y[0] ? y[1] : y[1] * totalNegPow), 0);
+        .reduce((x, y) => x + (y[0] ? y[1] : y[1] * totalNegPowRecalc), 0);
       percentList = percentList.map(p => {
-        if (p[1] > 0) {
-          return (p[0] ? p[1] : p[1] * totalNegPow) / nerfedPerc;
+        if (p[1] >= 0) {
+          return (p[0] ? p[1] : p[1] * totalNegPowRecalc) / nerfedPerc;
         }
-        return Math.clampMin(p[1] * (totalPerc - nerfedPerc) / totalPerc / totalNegPow, -1);
+        return Math.clampMin(-Math.log(p[1] + 1) / Math.log(totalNegPowRecalc)
+          * (totalPerc - nerfedPerc) / totalPerc, -1);
       });
       this.percentList = percentList;
       this.rollingAverage.add(isEmpty ? undefined : percentList);
       this.averagedPercentList = this.rollingAverage.average;
-      this.totalMultiplier = Decimal.pow10(log10Mult);
+      this.totalMultiplier = (this.resource.fakeValue ?? this.resource.mult).pow(1 / totalPosPow);
       this.totalPositivePower = totalPosPow;
     },
     styleObject(index) {

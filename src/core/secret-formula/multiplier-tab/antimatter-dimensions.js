@@ -440,7 +440,9 @@ export const AD = {
       if (InfinityChallenge(4).isRunning) {
         for (let tier = 1; tier <= 8; tier++) {
           if (player.postC4Tier !== tier) {
-            dimMults[tier] = dimMults[tier].pow(1 - InfinityChallenge(4).effectValue).reciprocal();
+            dimMults[tier] = applyNDMultipliers(DC.D1, tier)
+              .pow(1 - InfinityChallenge(4).effectValue)
+              .reciprocal();
           }
         }
       } else if (InfinityChallenge(6).isRunning) {

@@ -88,7 +88,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
   return multiplier;
 }
 
-function applyNDMultipliers(mult, tier) {
+export function applyNDMultipliers(mult, tier) {
   let multiplier = mult.times(GameCache.antimatterDimensionCommonMultiplier.value);
 
   let buy10Value;

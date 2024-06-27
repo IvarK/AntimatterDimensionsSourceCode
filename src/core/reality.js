@@ -655,8 +655,8 @@ export function finishProcessReality(realityProps) {
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) player.challenge.eternity.unlocked = 0;
   player.challenge.eternity.requirementBits = 0;
   player.timestudy.respec = false;
-  player.cValues.ec8ids = 50;
-  player.cValues.ec8repl = 40;
+  player.cValues.ec8.ids = 50;
+  player.cValues.ec8.repl = 40;
   if (realityProps.glyphUndo) {
     player.requirementChecks.reality.maxGlyphs =
       Math.max(Glyphs.bestUndoGlyphCount, player.requirementChecks.reality.maxGlyphs);

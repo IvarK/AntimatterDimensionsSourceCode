@@ -270,7 +270,7 @@ class InfinityDimensionState extends DimensionState {
     this.baseAmount += 10;
 
     if (EternityChallenge(8).isRunning) {
-      player.cValues.ec8ids -= 1;
+      player.cValues.ec8.ids -= 1;
     }
 
     return true;
@@ -288,7 +288,7 @@ class InfinityDimensionState extends DimensionState {
 
     let purchasesUntilHardcap = this.purchaseCap - this.purchases;
     if (EternityChallenge(8).isRunning) {
-      purchasesUntilHardcap = Math.clampMax(purchasesUntilHardcap, player.cValues.ec8ids);
+      purchasesUntilHardcap = Math.clampMax(purchasesUntilHardcap, player.cValues.ec8.ids);
     }
 
     const costScaling = new LinearCostScaling(
@@ -307,7 +307,7 @@ class InfinityDimensionState extends DimensionState {
     this.baseAmount += 10 * costScaling.purchases;
 
     if (EternityChallenge(8).isRunning) {
-      player.cValues.ec8ids -= costScaling.purchases;
+      player.cValues.ec8.ids -= costScaling.purchases;
     }
     return true;
   }
@@ -362,7 +362,7 @@ export const InfinityDimensions = {
   canBuy() {
     return !EternityChallenge(2).isRunning &&
       !EternityChallenge(10).isRunning &&
-      (!EternityChallenge(8).isRunning || player.cValues.ec8ids > 0);
+      (!EternityChallenge(8).isRunning || player.cValues.ec8.ids > 0);
   },
 
   canAutobuy() {

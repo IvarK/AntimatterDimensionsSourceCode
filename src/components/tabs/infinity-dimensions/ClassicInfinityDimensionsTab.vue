@@ -52,7 +52,7 @@ export default {
       this.incomeType = EternityChallenge(7).isRunning ? "Seventh Dimensions" : "Infinity Power";
       this.isEC8Running = EternityChallenge(8).isRunning;
       if (this.isEC8Running) {
-        this.EC8PurchasesLeft = player.cValues.ec8ids;
+        this.EC8PurchasesLeft = player.cValues.ec8.ids;
       }
       this.isEnslavedRunning = Enslaved.isRunning;
       this.isAnyAutobuyerUnlocked = Autobuyer.infinityDimension(1).isUnlocked;

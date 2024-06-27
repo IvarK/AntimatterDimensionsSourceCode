@@ -200,8 +200,8 @@ export function initializeResourcesAfterEternity() {
   player.records.thisEternity.time = 0;
   player.records.thisEternity.realTime = 0;
   player.totalTickGained = 0;
-  player.cValues.ec8ids = 50;
-  player.cValues.ec8repl = 40;
+  player.cValues.ec8.ids = 50;
+  player.cValues.ec8.repl = 40;
   Player.resetRequirements("eternity");
 }
 

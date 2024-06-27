@@ -40,32 +40,32 @@ export function playerInfinityUpgradesOnReset() {
   );
 
   if (PelleUpgrade.keepBreakInfinityUpgrades.canBeApplied) {
-    player.infinityUpgrades = new Set([...player.infinityUpgrades].filter(u => breakInfinityUpgrades.has(u)));
+    player.infinity.upgrades = new Set([...player.infinity.upgrades].filter(u => breakInfinityUpgrades.has(u)));
     return;
   }
 
   if (PelleUpgrade.keepInfinityUpgrades.canBeApplied) {
-    player.infinityUpgrades = new Set([...player.infinityUpgrades].filter(u => infinityUpgrades.has(u)));
-    player.infinityRebuyables = [0, 0, 0];
+    player.infinity.upgrades = new Set([...player.infinity.upgrades].filter(u => infinityUpgrades.has(u)));
+    player.infinity.rebuyables = [0, 0, 0];
     GameCache.tickSpeedMultDecrease.invalidate();
     GameCache.dimensionMultDecrease.invalidate();
     return;
   }
 
   if (RealityUpgrade(10).isBought || EternityMilestone.keepBreakUpgrades.isReached) {
-    player.infinityUpgrades = breakInfinityUpgrades;
-    player.infinityRebuyables = [8, 7, 10];
+    player.infinity.upgrades = breakInfinityUpgrades;
+    player.infinity.rebuyables = [8, 7, 10];
   } else if (EternityMilestone.keepInfinityUpgrades.isReached) {
-    player.infinityUpgrades = infinityUpgrades;
-    player.infinityRebuyables = [0, 0, 0];
+    player.infinity.upgrades = infinityUpgrades;
+    player.infinity.rebuyables = [0, 0, 0];
   } else {
-    player.infinityUpgrades.clear();
-    player.infinityRebuyables = [0, 0, 0];
+    player.infinity.upgrades.clear();
+    player.infinity.rebuyables = [0, 0, 0];
   }
 
   if (Pelle.isDoomed) {
-    player.infinityUpgrades.clear();
-    player.infinityRebuyables = [0, 0, 0];
+    player.infinity.upgrades.clear();
+    player.infinity.rebuyables = [0, 0, 0];
   }
 
   GameCache.tickSpeedMultDecrease.invalidate();
@@ -171,11 +171,11 @@ export function gainedGlyphLevel() {
 }
 
 export function resetChallengeStuff() {
-  player.chall2Pow = 1;
-  player.chall3Pow = DC.D0_01;
+  player.cValues.c2Pow = 1;
+  player.cValues.c3Pow = DC.D0_01;
   Currency.matter.reset();
-  player.chall8TotalSacrifice = DC.D1;
-  player.postC4Tier = 1;
+  player.cValues.c8TotalSacrifice = DC.D1;
+  player.cValues.ic4Tier = 1;
 }
 
 export function ratePerMinute(amount, time) {
@@ -325,7 +325,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   let factor = 1;
   if (effects.includes(GAME_SPEED_EFFECT.BLACK_HOLE)) {
     if (BlackHoles.areNegative) {
-      factor *= player.blackHoleNegative;
+      factor *= player.bh.negative;
     } else if (!BlackHoles.arePaused) {
       for (const blackHole of BlackHoles.list) {
         if (!blackHole.isUnlocked) break;
@@ -705,9 +705,9 @@ function passivePrestigeGen() {
       infGen = infGen.plus(gainedInfinities().times(
         Currency.eternities.value.minus(eternitiedGain.div(2).floor())).times(Time.deltaTime));
     }
-    infGen = infGen.plus(player.partInfinitied);
+    infGen = infGen.plus(player.partInfinities);
     Currency.infinities.add(infGen.floor());
-    player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
+    player.partInfinities = infGen.minus(infGen.floor()).toNumber();
   }
 }
 

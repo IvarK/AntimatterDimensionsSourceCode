@@ -88,7 +88,7 @@ export const gamespeed = {
   },
   invertedBH: {
     name: "Inverted Black Hole",
-    multValue: () => player.blackHoleNegative,
+    multValue: () => player.bh.negative,
     isActive: () => BlackHoles.areNegative,
     icon: MultiplierTabIcons.CHALLENGE("eternity"),
   },

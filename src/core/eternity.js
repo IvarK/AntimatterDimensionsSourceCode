@@ -114,12 +114,12 @@ export function eternity(force, auto, specialConditions = {}) {
   resetChallengeStuff();
   AntimatterDimensions.reset();
 
-  if (!specialConditions.enteringEC && player.respec) {
+  if (!specialConditions.enteringEC && player.timestudy.respec) {
     if (noStudies) {
       SecretAchievement(34).unlock();
     }
     respecTimeStudies(auto);
-    player.respec = false;
+    player.timestudy.respec = false;
   }
 
   Currency.infinityPoints.reset();
@@ -193,15 +193,15 @@ export function initializeResourcesAfterEternity() {
   player.dimensionBoosts = (EternityMilestone.keepInfinityUpgrades.isReached) ? 4 : 0;
   player.galaxies = (EternityMilestone.keepInfinityUpgrades.isReached) ? 1 : 0;
   player.partInfinityPoint = 0;
-  player.partInfinitied = 0;
-  player.IPMultPurchases = 0;
+  player.partInfinities = 0;
+  player.infinity.IPMult = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   player.records.thisEternity.time = 0;
   player.records.thisEternity.realTime = 0;
   player.totalTickGained = 0;
-  player.eterc8ids = 50;
-  player.eterc8repl = 40;
+  player.cValues.ec8ids = 50;
+  player.cValues.ec8repl = 40;
   Player.resetRequirements("eternity");
 }
 
@@ -272,8 +272,8 @@ class EternityUpgradeState extends SetPurchasableMechanicState {
 class EPMultiplierState extends GameMechanicState {
   constructor() {
     super({});
-    this.cachedCost = new Lazy(() => this.costAfterCount(player.epmultUpgrades));
-    this.cachedEffectValue = new Lazy(() => DC.D5.pow(player.epmultUpgrades));
+    this.cachedCost = new Lazy(() => this.costAfterCount(player.eternity.EPMult));
+    this.cachedEffectValue = new Lazy(() => DC.D5.pow(player.eternity.EPMult));
   }
 
   get isAffordable() {
@@ -285,14 +285,14 @@ class EPMultiplierState extends GameMechanicState {
   }
 
   get boughtAmount() {
-    return player.epmultUpgrades;
+    return player.eternity.EPMult;
   }
 
   set boughtAmount(value) {
     // Reality resets will make this bump amount negative, causing it to visually appear as 0 even when it isn't.
     // A dev migration fixes bad autobuyer states and this change ensures it doesn't happen again
-    const diff = Math.clampMin(value - player.epmultUpgrades, 0);
-    player.epmultUpgrades = value;
+    const diff = Math.clampMin(value - player.eternity.EPMult, 0);
+    player.eternity.EPMult = value;
     this.cachedCost.invalidate();
     this.cachedEffectValue.invalidate();
     Autobuyer.eternity.bumpAmount(DC.D5.pow(diff));

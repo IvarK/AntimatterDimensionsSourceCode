@@ -774,7 +774,7 @@ export const AutomatorCommands = [
       return true;
     },
     compile: ctx => () => {
-      player.respec = true;
+      player.timestudy.respec = true;
       AutomatorData.logCommandEvent(`Turned study respec ON`, ctx.startLine);
       return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
     },

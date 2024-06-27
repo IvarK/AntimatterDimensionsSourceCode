@@ -25,7 +25,7 @@ export class InfinityUpgradeState extends SetPurchasableMechanicState {
   }
 
   get set() {
-    return player.infinityUpgrades;
+    return player.infinity.upgrades;
   }
 
   get isAvailableForPurchase() {
@@ -143,7 +143,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
   }
 
   get purchaseCount() {
-    return player.IPMultPurchases;
+    return player.infinity.IPMult;
   }
 
   get purchasesAtIncrease() {
@@ -182,7 +182,7 @@ class InfinityIPMultUpgrade extends GameMechanicState {
       Autobuyer.bigCrunch.bumpAmount(DC.D2.pow(amount));
     }
     Currency.infinityPoints.subtract(Decimal.sumGeometricSeries(amount, this.cost, this.costIncrease, 0));
-    player.IPMultPurchases += amount;
+    player.infinity.IPMult += amount;
     GameUI.update();
   }
 

@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      respec: player.respec,
+      respec: player.timestudy.respec,
       layoutType: STUDY_TREE_LAYOUT_TYPE.NORMAL,
       vLevel: 0,
       renderedStudyCount: 0,
@@ -66,7 +66,7 @@ export default {
   },
   watch: {
     respec(newValue) {
-      player.respec = newValue;
+      player.timestudy.respec = newValue;
     },
     vLevel() {
       // When vLevel changes, we recompute the study tree because of triad studies
@@ -108,7 +108,7 @@ export default {
   },
   methods: {
     update() {
-      this.respec = player.respec;
+      this.respec = player.timestudy.respec;
       this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
       this.vLevel = Ra.pets.v.level;
       this.isEnslaved = Enslaved.isRunning || Date.now() - this.delayTimer < 1000;

@@ -6,31 +6,31 @@ function isEND() {
   return player.celestials.pelle.doomed && Math.random() < threshold;
 }
 
-window.format = function format(value, places = 0, placesUnder1000 = 0) {
-  if (isEND()) return "END";
+window.format = function format(value, places = 0, placesUnder1000 = 0, bypassEND = false) {
+  if (isEND() && !bypassEND) return "END";
   return Notations.current.format(value, places, placesUnder1000, 3);
 };
 
-window.formatInt = function formatInt(value) {
-  if (isEND()) return "END";
+window.formatInt = function formatInt(value, bypassEND = false) {
+  if (isEND() && !bypassEND) return "END";
   // Suppress painful formatting for Standard because it's the most commonly used and arguably "least painful"
   // of the painful notations. Prevents numbers like 5004 from appearing imprecisely as "5.00 K" for example
   if (Notations.current.isPainful && Notations.current.name !== "Standard") {
-    return format(value, 2);
+    return format(value, 2, 0, bypassEND);
   }
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 };
 
-window.formatFloat = function formatFloat(value, digits) {
-  if (isEND()) return "END";
+window.formatFloat = function formatFloat(value, digits, bypassEND = false) {
+  if (isEND() && !bypassEND) return "END";
   if (Notations.current.isPainful) {
     return format(value, Math.max(2, digits), digits);
   }
   return formatWithCommas(value.toFixed(digits));
 };
 
-window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000) {
-  if (isEND()) return "END";
+window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000, bypassEND = false) {
+  if (isEND() && !bypassEND) return "END";
   const notation = Notations.current;
   // This is basically just a copy of the format method from notations library,
   // with the pre-break case removed.

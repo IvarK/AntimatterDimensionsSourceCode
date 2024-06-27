@@ -210,8 +210,8 @@ export const realityUpgrades = [
     cost: 50,
     requirement: () => `Have ${format(DC.E10)} Eternity Points without purchasing
       the ${formatX(5)} Eternity Point upgrade`,
-    hasFailed: () => player.epmultUpgrades !== 0,
-    checkRequirement: () => Currency.eternityPoints.exponent >= 10 && player.epmultUpgrades === 0,
+    hasFailed: () => player.eternity.EPMult !== 0,
+    checkRequirement: () => Currency.eternityPoints.exponent >= 10 && player.eternity.EPMult === 0,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
     canLock: true,
     lockEvent: () => `purchase a ${formatX(5)} EP upgrade`,

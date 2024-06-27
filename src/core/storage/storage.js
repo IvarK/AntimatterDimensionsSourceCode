@@ -470,8 +470,8 @@ export const GameStorage = {
 
     ui.view.news = player.options.news.enabled;
     ui.view.newUI = player.options.newUI;
-    ui.view.tutorialState = player.tutorialState;
-    ui.view.tutorialActive = player.tutorialActive;
+    ui.view.tutorialState = player.tutorial.state;
+    ui.view.tutorialActive = player.tutorial.active;
 
     ECTimeStudyState.invalidateCachedRequirements();
     recalculateAllGlyphs();

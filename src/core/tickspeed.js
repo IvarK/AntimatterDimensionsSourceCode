@@ -77,7 +77,7 @@ export function buyTickSpeed() {
   player.totalTickBought++;
   player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
   player.requirementChecks.permanent.singleTickspeed++;
-  if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
+  if (NormalChallenge(2).isRunning) player.cValues.c2Pow = 0;
   GameUI.update();
   return true;
 }
@@ -109,13 +109,13 @@ export function buyMaxTickSpeed() {
 
   if (boughtTickspeed) {
     player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
-    if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
+    if (NormalChallenge(2).isRunning) player.cValues.c2Pow = 0;
   }
 }
 
 export function resetTickspeed() {
   player.totalTickBought = 0;
-  player.chall9TickspeedCostBumps = 0;
+  player.cValues.c9TickspeedCostBumps = 0;
 }
 
 export const Tickspeed = {
@@ -148,7 +148,7 @@ export const Tickspeed = {
   },
 
   get cost() {
-    return this.costScale.calculateCost(player.totalTickBought + player.chall9TickspeedCostBumps);
+    return this.costScale.calculateCost(player.totalTickBought + player.cValues.c9TickspeedCostBumps);
   },
 
   get costScale() {

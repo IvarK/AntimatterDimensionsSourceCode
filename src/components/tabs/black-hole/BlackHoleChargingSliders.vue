@@ -35,17 +35,17 @@ export default {
       this.isNegativeBHUnlocked = V.isFlipped && BlackHoles.arePermanent;
       this.isInverted = BlackHoles.areNegative;
       this.isLaitela = Laitela.isRunning;
-      this.negativeSlider = -Math.log10(player.blackHoleNegative);
+      this.negativeSlider = -Math.log10(player.bh.negative);
       this.negativeBHDivisor = Math.pow(10, this.negativeSlider);
       const maxInversion = player.requirementChecks.reality.slowestBH <= 1e-300;
       this.isDisabled = ImaginaryUpgrade(24).isLockingMechanics && Ra.isRunning && maxInversion;
     },
     adjustSliderNegative(value) {
       this.negativeSlider = value;
-      player.blackHoleNegative = Math.pow(10, -this.negativeSlider);
+      player.bh.negative = Math.pow(10, -this.negativeSlider);
       player.requirementChecks.reality.slowestBH = Math.max(
         player.requirementChecks.reality.slowestBH,
-        player.blackHoleNegative
+        player.bh.negative
       );
     },
     sliderProps(negative) {

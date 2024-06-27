@@ -94,7 +94,7 @@ dev.refundTimeDims = function() {
 };
 
 dev.refundEPMult = function() {
-  player.epmultUpgrades = 0;
+  player.eternity.EPMult = 0;
 };
 
 dev.refundDilStudies = function() {

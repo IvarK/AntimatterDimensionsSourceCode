@@ -203,7 +203,7 @@ export const normalAchievements = [
     id: 41,
     name: "No DLC required",
     get description() { return `Buy ${formatInt(16)} Infinity Upgrades.`; },
-    checkRequirement: () => player.infinityUpgrades.size >= 16,
+    checkRequirement: () => player.infinity.upgrades.size >= 16,
     checkEvent: [
       GAME_EVENT.INFINITY_UPGRADE_BOUGHT,
       GAME_EVENT.REALITY_RESET_AFTER,
@@ -962,7 +962,7 @@ export const normalAchievements = [
     },
     checkRequirement: () =>
       Array.dimensionTiers.map(InfinityDimension).every(dim => dim.baseAmount === 0) &&
-      player.IPMultPurchases === 0 &&
+      player.infinity.IPMult === 0 &&
       Currency.infinityPoints.exponent >= 200000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     reward: "You start Eternities with all Infinity Challenges unlocked and completed."

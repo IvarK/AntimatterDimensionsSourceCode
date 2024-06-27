@@ -55,7 +55,7 @@ class BlackHoleUpgradeState {
 
     // Prevents a rare edge case where the player makes an inactive black hole permanent, locking themselves into
     // a permanently inactive black hole
-    if (bh.isPermanent) player.blackHole[this.id - 1].active = true;
+    if (bh.isPermanent) player.bh.data[this.id - 1].active = true;
 
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UPGRADE_BOUGHT);
   }
@@ -106,7 +106,7 @@ class BlackHoleState {
    * @private
    */
   get _data() {
-    return player.blackHole[this.id - 1];
+    return player.bh.data[this.id - 1];
   }
 
   /**
@@ -345,7 +345,7 @@ export const BlackHoles = {
 
   unlock() {
     if (!this.canBeUnlocked) return;
-    player.blackHole[0].unlocked = true;
+    player.bh.data[0].unlocked = true;
     Currency.realityMachines.purchase(100);
     player.records.timePlayedAtBHUnlock = player.records.totalTimePlayed;
     EventHub.dispatch(GAME_EVENT.BLACK_HOLE_UNLOCKED);
@@ -358,31 +358,31 @@ export const BlackHoles = {
       if (!automatic) ImaginaryUpgrade(24).tryShowWarningModal("uninvert your Black Hole");
       return;
     }
-    if (player.blackHolePause) player.requirementChecks.reality.slowestBH = 1;
-    player.blackHolePause = !player.blackHolePause;
-    player.blackHolePauseTime = player.records.realTimePlayed;
+    if (player.bh.pause) player.requirementChecks.reality.slowestBH = 1;
+    player.bh.pause = !player.bh.pause;
+    player.bh.pauseTime = player.records.realTimePlayed;
     const blackHoleString = RealityUpgrade(20).isBought ? "Black Holes" : "Black Hole";
     // If black holes are going unpaused -> paused, use "inverted" or "paused" depending o
     // whether the player's using negative BH (i.e. BH inversion); if going paused -> unpaused,
     // use "unpaused".
     // eslint-disable-next-line no-nested-ternary
-    const pauseType = player.blackHolePause ? (BlackHoles.areNegative ? "inverted" : "paused") : "unpaused";
+    const pauseType = player.bh.pause ? (BlackHoles.areNegative ? "inverted" : "paused") : "unpaused";
     const automaticString = automatic ? "automatically " : "";
     GameUI.notify.blackHole(`${blackHoleString} ${automaticString}${pauseType}`);
   },
 
   get unpauseAccelerationFactor() {
     if (this.arePermanent) return 1;
-    return Math.clamp((player.records.realTimePlayed - player.blackHolePauseTime) /
+    return Math.clamp((player.records.realTimePlayed - player.bh.pauseTime) /
       (1000 * this.ACCELERATION_TIME), 0, 1);
   },
 
   get arePaused() {
-    return player.blackHolePause;
+    return player.bh.pause;
   },
 
   get areNegative() {
-    return this.arePaused && !Laitela.isRunning && player.blackHoleNegative < 1;
+    return this.arePaused && !Laitela.isRunning && player.bh.negative < 1;
   },
 
   get arePermanent() {
@@ -654,10 +654,10 @@ export const BlackHoles = {
     // In that case we don't need to pause them (need to pause = false), but they're already paused (0 time).
     // This saves us some computation.
     if (this.arePaused) return [false, 0];
-    if (player.blackHoleAutoPauseMode === BLACK_HOLE_PAUSE_MODE.NO_PAUSE) {
+    if (player.bh.autoPauseMode === BLACK_HOLE_PAUSE_MODE.NO_PAUSE) {
       return [false, realTime];
     }
-    const timeLeft = this.timeToNextPause(player.blackHoleAutoPauseMode);
+    const timeLeft = this.timeToNextPause(player.bh.autoPauseMode);
     // Cases in which we don't pause in the given amount of real time:
     // null = no pause, (timeLeft < 1e-9) = we auto-paused and there was maybe rounding error,
     // now the player's unpaused at this exact point (so we shouldn't pause again),

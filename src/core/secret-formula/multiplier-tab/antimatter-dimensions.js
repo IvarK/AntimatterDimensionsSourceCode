@@ -373,10 +373,10 @@ export const AD = {
 
       let dimMults = Array.repeat(DC.D1, 9);
       if (NormalChallenge(2).isRunning) {
-        dimMults = Array.repeat(new Decimal(player.chall2Pow), 9);
+        dimMults = Array.repeat(new Decimal(player.cValues.c2Pow), 9);
       }
       if (NormalChallenge(3).isRunning) {
-        dimMults[1] = dimMults[1].times(player.chall3Pow);
+        dimMults[1] = dimMults[1].times(player.cValues.c3Pow);
       }
 
       if (NormalChallenge(12).isRunning) {
@@ -397,10 +397,10 @@ export const AD = {
       let dimMults = Array.repeat(DC.D1, 9);
       // Do not change this to an else-if, as NC2/NC3 need to be enterable simultaneously in IC1
       if (NormalChallenge(2).isRunning) {
-        dimMults = Array.repeat(new Decimal(player.chall2Pow), 9);
+        dimMults = Array.repeat(new Decimal(player.cValues.c2Pow), 9);
       }
       if (NormalChallenge(3).isRunning) {
-        dimMults[1] = dimMults[1].times(player.chall3Pow);
+        dimMults[1] = dimMults[1].times(player.cValues.c3Pow);
       }
 
       // Legacy behavior for NC12 we're preserving dictates that it boosts production based on dimension amount
@@ -437,7 +437,7 @@ export const AD = {
       let dimMults = Array.repeat(DC.D1, 9);
       if (InfinityChallenge(4).isRunning) {
         for (let tier = 1; tier <= 8; tier++) {
-          if (player.postC4Tier !== tier) {
+          if (player.cValues.ic4Tier !== tier) {
             dimMults[tier] = dimMults[tier].pow(1 - InfinityChallenge(4).effectValue).reciprocal();
           }
         }

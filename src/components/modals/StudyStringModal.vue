@@ -175,7 +175,7 @@ export default {
         this.deletePreset();
       } else if (this.isImporting) {
         if (this.respecAndLoad && Player.canEternity) {
-          player.respec = true;
+          player.timestudy.respec = true;
           const tree = new TimeStudyTree(this.truncatedInput);
           animateAndEternity(() => TimeStudyTree.commitToGameState(tree.purchasedStudies, false, tree.startEC));
           return;

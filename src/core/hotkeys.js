@@ -106,8 +106,8 @@ export const shortcuts = [
     keys: ["shift", "e"],
     type: "bindHotkey",
     function: () => {
-      player.respec = !player.respec;
-      GameUI.notify.info(`Time Study respec is now ${player.respec ? "active" : "inactive"}`);
+      player.timestudy.respec = !player.timestudy.respec;
+      GameUI.notify.info(`Time Study respec is now ${player.timestudy.respec ? "active" : "inactive"}`);
     },
     visible: () => PlayerProgress.eternityUnlocked()
   }, {

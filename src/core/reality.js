@@ -630,9 +630,9 @@ export function finishProcessReality(realityProps) {
   player.dimensionBoosts = 0;
   player.galaxies = 0;
   player.partInfinityPoint = 0;
-  player.partInfinitied = 0;
+  player.partInfinities = 0;
   player.break = false;
-  player.IPMultPurchases = 0;
+  player.infinity.IPMult = 0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);
@@ -648,15 +648,15 @@ export function finishProcessReality(realityProps) {
   player.records.bestEternity.realTime = 999999999999;
   if (!PelleUpgrade.keepEternityUpgrades.canBeApplied) player.eternityUpgrades.clear();
   player.totalTickGained = 0;
-  if (!PelleUpgrade.keepEternityChallenges.canBeApplied) player.eternityChalls = {};
+  if (!PelleUpgrade.keepEternityChallenges.canBeApplied) player.eternity.challs = {};
   player.reality.unlockedEC = 0;
   player.reality.lastAutoEC = 0;
   player.challenge.eternity.current = 0;
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) player.challenge.eternity.unlocked = 0;
   player.challenge.eternity.requirementBits = 0;
-  player.respec = false;
-  player.eterc8ids = 50;
-  player.eterc8repl = 40;
+  player.timestudy.respec = false;
+  player.cValues.ec8ids = 50;
+  player.cValues.ec8repl = 40;
   if (realityProps.glyphUndo) {
     player.requirementChecks.reality.maxGlyphs =
       Math.max(Glyphs.bestUndoGlyphCount, player.requirementChecks.reality.maxGlyphs);

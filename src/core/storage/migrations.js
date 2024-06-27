@@ -419,6 +419,65 @@ export const migrations = {
 
       // This update has a rebalance that assumes the 3rd dilation repeatable is unpurchasable in cel7
       if (player.celestials.pelle.doomed) player.dilation.rebuyables[3] = 0;
+    },
+    26: player => {
+      player.infinity = {
+        upgrades: player.infinityUpgrades,
+        rebuyables: player.infinityRebuyables,
+        IPMult: player.IPMultPurchases
+      };
+      player.eternity = {
+        challs: player.eternityChalls,
+        upgrades: player.eternityUpgrades,
+        EPMult: player.epmultUpgrades
+      };
+      player.timestudy.respec = player.respec;
+      player.tutorial = {
+        active: player.tutorialActive,
+        state: player.tutorialState
+      };
+      player.cValues = {
+        c2Pow: player.chall2Pow,
+        c3Pow: player.chall3Pow,
+        c8TotalSacrifice: player.chall8TotalSacrifice,
+        c9TickspeedCostBumps: player.chall9TickspeedCostBumps,
+        ic2Count: player.ic2Count,
+        ic4Tier: player.postC4Tier,
+        ec8: {
+          ids: player.eterc8ids,
+          repl: player.eterc8repl
+        }
+      };
+      player.bh = {
+        pause: player.blackHolePause,
+        autoPauseMode: player.blackHoleAutoPauseMode,
+        pauseTime: player.blackHolePauseTime,
+        negative: player.blackHoleNegative,
+        data: player.blackHole
+      };
+      player.partInfinities = player.partInfinitied;
+      delete player.infinityUpgrades;
+      delete player.infinityRebuyables;
+      delete player.IPMultPurchases;
+      delete player.eternityChalls;
+      delete player.epmultUpgrades;
+      delete player.respec;
+      delete player.tutorialActive;
+      delete player.tutorialState;
+      delete player.chall2Pow;
+      delete player.chall3Pow;
+      delete player.chall8TotalSacrifice;
+      delete player.chall9TickspeedCostBumps;
+      delete player.ic2Count;
+      delete player.postC4Tier;
+      delete player.eterc8ids;
+      delete player.eterc8repl;
+      delete player.blackHolePause;
+      delete player.blackHoleAutoPauseMode;
+      delete player.blackHolePauseTime;
+      delete player.blackHoleNegative;
+      delete player.blackHole;
+      delete player.partInfinitied;
     }
   },
 

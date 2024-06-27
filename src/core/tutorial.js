@@ -48,14 +48,14 @@ export const Tutorial = {
   // only visually updates whenever the UI elements need changing, we need to explicitly check boost count or else
   // this will remain visible until a galaxy can be purchased
   emphasizeH2P() {
-    const hasFirstBoost = player.tutorialState > TUTORIAL_STATE.DIMBOOST || player.dimensionBoosts > 0;
+    const hasFirstBoost = player.tutorial.state > TUTORIAL_STATE.DIMBOOST || player.dimensionBoosts > 0;
     return player.records.fullGameCompletions === 0 && !hasFirstBoost;
   },
 
   // Turns off the visual effect
   turnOffEffect(fromState) {
-    if (fromState !== player.tutorialState) return;
-    player.tutorialActive = false;
+    if (fromState !== player.tutorial.state) return;
+    player.tutorial.active = false;
     ui.view.tutorialActive = false;
     // Check if we can immediately enter next tutorial state. This is needed
     // to correctly handle buying dimension 2 + tickspeed in the same tick,
@@ -65,15 +65,15 @@ export const Tutorial = {
 
   // Moves on to the next tutorialState, but only if parameter is current state.
   moveOn(fromState) {
-    if (fromState !== player.tutorialState) return;
-    player.tutorialState++;
+    if (fromState !== player.tutorial.state) return;
+    player.tutorial.state++;
     ui.view.tutorialState++;
-    player.tutorialActive = true;
+    player.tutorial.active = true;
     ui.view.tutorialActive = true;
   },
 
   tutorialLoop() {
-    const nextState = tutorialStates.find(o => o.id === player.tutorialState + 1);
-    if (nextState && nextState.condition()) this.moveOn(player.tutorialState);
+    const nextState = tutorialStates.find(o => o.id === player.tutorial.state + 1);
+    if (nextState && nextState.condition()) this.moveOn(player.tutorial.state);
   }
 };

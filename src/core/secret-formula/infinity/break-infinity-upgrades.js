@@ -6,10 +6,10 @@ function rebuyable(config) {
   return {
     rebuyable: true,
     id,
-    cost: () => config.initialCost * Math.pow(config.costIncrease, player.infinityRebuyables[config.id]),
+    cost: () => config.initialCost * Math.pow(config.costIncrease, player.infinity.rebuyables[config.id]),
     maxUpgrades,
     description,
-    effect: () => effectFunction(player.infinityRebuyables[config.id]),
+    effect: () => effectFunction(player.infinity.rebuyables[config.id]),
     isDisabled,
     // There isn't enough room in the button to fit the EC reduction and "Next:" at the same time while still
     // presenting all the information in an understandable way, so we only show it if the upgrade is maxed
@@ -133,9 +133,9 @@ export const breakInfinityUpgrades = {
     maxUpgrades: 10,
     effect: value => Player.bestRunIPPM.times(value / 20),
     description: () => {
-      let generation = `Generate ${formatInt(5 * player.infinityRebuyables[2])}%`;
+      let generation = `Generate ${formatInt(5 * player.infinity.rebuyables[2])}%`;
       if (!BreakInfinityUpgrade.ipGen.isCapped) {
-        generation += ` ➜ ${formatInt(5 * (1 + player.infinityRebuyables[2]))}%`;
+        generation += ` ➜ ${formatInt(5 * (1 + player.infinity.rebuyables[2]))}%`;
       }
       return `${generation} of your best IP/min from your last 10 Infinities`;
     },

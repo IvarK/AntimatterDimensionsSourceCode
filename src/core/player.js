@@ -33,8 +33,6 @@ window.player = {
   sacrificed: DC.D0,
   achievementBits: Array.repeat(0, 17),
   secretAchievementBits: Array.repeat(0, 4),
-  infinityUpgrades: new Set(),
-  infinityRebuyables: [0, 0, 0],
   challenge: {
     normal: {
       current: 0,
@@ -52,8 +50,22 @@ window.player = {
       requirementBits: 0,
     }
   },
+  cValues: {
+    c2Pow: 1,
+    c3Pow: DC.D0_01,
+    c8TotalSacrifice: DC.D1,
+    c9TickspeedCostBumps: 0,
+    ic2Count: 0,
+    ic4Tier: 0,
+    ec8: {
+      ids: 50,
+      repl: 40,
+    }
+  },
   infinity: {
-    upgradeBits: 0
+    upgrades: new Set(),
+    rebuyables: [0, 0, 0],
+    IPMult: 0,
   },
   auto: {
     autobuyersOn: true,
@@ -218,14 +230,9 @@ window.player = {
   },
   lastUpdate: new Date().getTime(),
   backupTimer: 0,
-  chall2Pow: 1,
-  chall3Pow: DC.D0_01,
   matter: DC.D1,
-  chall9TickspeedCostBumps: 0,
-  chall8TotalSacrifice: DC.D1,
-  ic2Count: 0,
   partInfinityPoint: 0,
-  partInfinitied: 0,
+  partInfinities: 0,
   break: false,
   secretUnlocks: {
     themes: new Set(),
@@ -358,14 +365,15 @@ window.player = {
     initialSeed: 0,
     previousRuns: {}
   },
-  IPMultPurchases: 0,
-  version: 25,
+  version: 26,
   infinityPower: DC.D1,
-  postC4Tier: 0,
   eternityPoints: DC.D0,
   eternities: DC.D0,
-  eternityUpgrades: new Set(),
-  epmultUpgrades: 0,
+  eternity: {
+    challs: {},
+    upgrades: new Set(),
+    EPMult: 0
+  },
   timeShards: DC.D0,
   totalTickGained: 0,
   totalTickBought: 0,
@@ -387,6 +395,7 @@ window.player = {
     ipBought: 0,
     epBought: 0,
     studies: [],
+    respec: false,
     shopMinimized: false,
     preferredPaths: [[], 0],
     presets: new Array(6).fill({
@@ -394,10 +403,6 @@ window.player = {
       studies: "",
     }),
   },
-  eternityChalls: {},
-  respec: false,
-  eterc8ids: 50,
-  eterc8repl: 40,
   dilation: {
     studies: [],
     active: false,
@@ -537,20 +542,22 @@ window.player = {
     achTimer: 0,
     hasCheckedFilter: false,
   },
-  blackHole: Array.range(0, 2).map(id => ({
-    id,
-    intervalUpgrades: 0,
-    powerUpgrades: 0,
-    durationUpgrades: 0,
-    phase: 0,
-    active: false,
-    unlocked: false,
-    activations: 0,
-  })),
-  blackHolePause: false,
-  blackHoleAutoPauseMode: 0,
-  blackHolePauseTime: 0,
-  blackHoleNegative: 1,
+  bh: {
+    pause: false,
+    autoPauseMode: 0,
+    pauseTime: 0,
+    negative: 1,
+    data: Array.range(0, 2).map(id => ({
+      id,
+      intervalUpgrades: 0,
+      powerUpgrades: 0,
+      durationUpgrades: 0,
+      phase: 0,
+      active: false,
+      unlocked: false,
+      activations: 0,
+    }))
+  },
   celestials: {
     teresa: {
       pouredAmount: 0,
@@ -762,8 +769,10 @@ window.player = {
   isGameEnd: false,
   tabNotifications: new Set(),
   triggeredTabNotificationBits: 0,
-  tutorialState: 0,
-  tutorialActive: true,
+  tutorial: {
+    active: true,
+    state: 0
+  },
   options: {
     news: {
       enabled: true,
@@ -1005,7 +1014,7 @@ export const Player = {
           // This only gets set to the correct value when Glyphs.updateMaxGlyphCount is called, which always happens
           // before this part of the code is reached in the Reality reset. Nevertheless, we want to keep its old value.
           maxGlyphs: glyphCount,
-          slowestBH: BlackHoles.areNegative ? player.blackHoleNegative : 1,
+          slowestBH: BlackHoles.areNegative ? player.bh.negative : 1,
         };
       // eslint-disable-next-line no-fallthrough
       case "eternity":

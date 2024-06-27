@@ -244,7 +244,7 @@ window.TimeSpan = class TimeSpan {
       // This conditional happens when when the time is less than 1 millisecond
       // but big enough not to round to 0 with 3 decimal places (so showing decimal places
       // won't just show 0 and waste space).
-      return `${format(1000 * totalSeconds, 0, 3)} ms`;
+      return `${format(1000 * totalSeconds, 0, 3, true)} ms`;
     }
     if (totalSeconds < 1) {
       // This catches all the cases when totalSeconds is less than 1 but not
@@ -253,13 +253,13 @@ window.TimeSpan = class TimeSpan {
       // (the most notable case of this kind is 0 itself).
       // (2) those greater than or equal to 1e-3, which will be formatted with default settings
       // (for most notations, rounding to the nearest integer number of milliseconds)
-      return `${format(1000 * totalSeconds)} ms`;
+      return `${format(1000 * totalSeconds, 0, 0, true)} ms`;
     }
     if (totalSeconds < 10) {
-      return `${format(totalSeconds, 0, 3)} seconds`;
+      return `${format(totalSeconds, 0, 3, true)} seconds`;
     }
     if (totalSeconds < 60) {
-      return `${format(totalSeconds, 0, 2)} seconds`;
+      return `${format(totalSeconds, 0, 2, true)} seconds`;
     }
     if (this.totalHours < 100 || (isSpeedrun && this.totalHours < 1000)) {
       if (useHMS && !Notations.current.isPainful) {
@@ -268,16 +268,16 @@ window.TimeSpan = class TimeSpan {
         return `${formatHMS(Math.floor(this.totalHours))}:${formatHMS(this.minutes)}:${sec}`;
       }
       if (this.totalMinutes < 60) {
-        return `${format(this.totalMinutes, 0, 2)} minutes`;
+        return `${format(this.totalMinutes, 0, 2, true)} minutes`;
       }
       if (this.totalHours < 24) {
-        return `${format(this.totalHours, 0, 2)} hours`;
+        return `${format(this.totalHours, 0, 2, true)} hours`;
       }
     }
     if (this.totalDays < 500) {
-      return `${isSpeedrun ? this.totalDays.toFixed(2) : format(this.totalDays, 0, 2)} days`;
+      return `${isSpeedrun ? this.totalDays.toFixed(2) : format(this.totalDays, 0, 2, true)} days`;
     }
-    return `${isSpeedrun ? this.totalYears.toFixed(3) : format(this.totalYears, 3, 2)} years`;
+    return `${isSpeedrun ? this.totalYears.toFixed(3) : format(this.totalYears, 3, 2, true)} years`;
 
     function formatHMS(value) {
       const s = value.toString();

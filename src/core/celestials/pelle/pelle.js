@@ -89,7 +89,7 @@ export const Pelle = {
     Pelle.armageddon(false);
     respecTimeStudies(true);
     Currency.infinityPoints.reset();
-    player.IPMultPurchases = 0;
+    player.infinity.IPMult = 0;
     Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
     disChargeAll();
     clearCelestialRuns();

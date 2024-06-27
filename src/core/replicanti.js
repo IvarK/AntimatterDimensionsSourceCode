@@ -303,7 +303,7 @@ class ReplicantiUpgradeState {
   get autobuyerMilestone() { throw new NotImplementedError(); }
 
   get canBeBought() {
-    return !this.isCapped && Currency.infinityPoints.gte(this.cost) && player.eterc8repl !== 0;
+    return !this.isCapped && Currency.infinityPoints.gte(this.cost) && player.cValues.ec8repl !== 0;
   }
 
   purchase() {
@@ -311,7 +311,7 @@ class ReplicantiUpgradeState {
     Currency.infinityPoints.subtract(this.cost);
     this.baseCost = Decimal.times(this.baseCost, this.costIncrease);
     this.value = this.nextValue;
-    if (EternityChallenge(8).isRunning) player.eterc8repl--;
+    if (EternityChallenge(8).isRunning) player.cValues.ec8repl--;
     GameUI.update();
   }
 

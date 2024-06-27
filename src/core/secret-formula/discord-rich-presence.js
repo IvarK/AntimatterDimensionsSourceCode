@@ -161,11 +161,11 @@ export const discordRichPresence = {
     {
       // Eternity Challenge era
       name: "Eternity",
-      hasReached: () => player.eternityChalls.eterc1 > 0,
+      hasReached: () => player.eternity.challs.eterc1 > 0,
       mainResource: () => `${format(player.eternityPoints, 2)} EP`,
       resourceList: [
         () => quantify("EC completion",
-          Object.values(player.eternityChalls).reduce((sum, c) => sum + c, 0), 0, 0, formatInt)
+          Object.values(player.eternity.challs).reduce((sum, c) => sum + c, 0), 0, 0, formatInt)
       ]
     },
     {

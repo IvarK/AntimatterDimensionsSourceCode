@@ -71,12 +71,12 @@ export class EternityChallengeState extends GameMechanicState {
   }
 
   get completions() {
-    const completions = player.eternityChalls[this.fullId];
+    const completions = player.eternity.challs[this.fullId];
     return completions === undefined ? 0 : completions;
   }
 
   set completions(value) {
-    player.eternityChalls[this.fullId] = Math.min(value, this.maxCompletions);
+    player.eternity.challs[this.fullId] = Math.min(value, this.maxCompletions);
   }
 
   get maxCompletions() {
@@ -241,7 +241,7 @@ export class EternityChallengeState extends GameMechanicState {
       Player.antimatterChallenge.exit();
     }
     player.challenge.eternity.current = 0;
-    if (!isRestarting) player.respec = true;
+    if (!isRestarting) player.timestudy.respec = true;
     eternity(true);
   }
 

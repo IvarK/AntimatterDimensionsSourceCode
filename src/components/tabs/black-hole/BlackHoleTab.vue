@@ -60,13 +60,13 @@ export default {
       }
       this.isEnslaved = Enslaved.isRunning;
       this.isPermanent = BlackHoles.arePermanent;
-      this.pauseMode = player.blackHoleAutoPauseMode;
+      this.pauseMode = player.bh.autoPauseMode;
       this.hasBH2 = BlackHole(2).isUnlocked;
       this.blackHoleUptime = [BlackHole(1).duration / BlackHole(1).cycleLength,
         BlackHole(2).duration / BlackHole(2).cycleLength];
       this.detailedBH2 = this.bh2Status();
 
-      if (player.blackHoleNegative < 1) this.stateChange = this.isPaused ? "Uninvert" : "Invert";
+      if (player.bh.negative < 1) this.stateChange = this.isPaused ? "Uninvert" : "Invert";
       else this.stateChange = this.isPaused ? "Unpause" : "Pause";
     },
     bh2Status() {
@@ -129,7 +129,7 @@ export default {
         default:
           throw new Error("Unrecognized BH offline pausing mode");
       }
-      player.blackHoleAutoPauseMode = (this.pauseMode + steps) % Object.values(BLACK_HOLE_PAUSE_MODE).length;
+      player.bh.autoPauseMode = (this.pauseMode + steps) % Object.values(BLACK_HOLE_PAUSE_MODE).length;
     },
     startAnimation() {
       setTimeout(() => {

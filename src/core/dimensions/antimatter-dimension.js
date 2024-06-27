@@ -146,7 +146,7 @@ function applyNDPowers(mult, tier) {
   const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
   const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
 
-  if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
+  if (InfinityChallenge(4).isRunning && player.cValues.ic4Tier !== tier) {
     multiplier = multiplier.pow(InfinityChallenge(4).effectValue);
   }
   if (InfinityChallenge(4).isCompleted) {
@@ -185,12 +185,12 @@ function onBuyDimension(tier) {
 
   if (player.speedrun.isActive && !player.speedrun.hasStarted) Speedrun.startTimer();
 
-  if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
+  if (NormalChallenge(2).isRunning) player.cValues.c2Pow = 0;
   if (NormalChallenge(4).isRunning || InfinityChallenge(1).isRunning) {
     AntimatterDimensions.resetAmountUpToTier(tier - 1);
   }
 
-  player.postC4Tier = tier;
+  player.cValues.ic4Tier = tier;
   player.records.thisInfinity.lastBuyTime = player.records.thisInfinity.time;
   if (tier !== 8) player.requirementChecks.eternity.onlyAD8 = false;
   if (tier !== 1) player.requirementChecks.eternity.onlyAD1 = false;
@@ -552,7 +552,7 @@ class AntimatterDimensionState extends DimensionState {
         dimension.costBumps++;
       }
     }
-    if (Tickspeed.cost.e === this.cost.e) player.chall9TickspeedCostBumps++;
+    if (Tickspeed.cost.e === this.cost.e) player.cValues.c9TickspeedCostBumps++;
   }
 
   multiplyIC5Costs() {
@@ -587,11 +587,11 @@ class AntimatterDimensionState extends DimensionState {
     }
     let production = amount.times(this.multiplier).times(Tickspeed.perSecond);
     if (NormalChallenge(2).isRunning) {
-      production = production.times(player.chall2Pow);
+      production = production.times(player.cValues.c2Pow);
     }
     if (tier === 1) {
       if (NormalChallenge(3).isRunning) {
-        production = production.times(player.chall3Pow);
+        production = production.times(player.cValues.c3Pow);
       }
       if (production.gt(10)) {
         const log10 = production.log10();

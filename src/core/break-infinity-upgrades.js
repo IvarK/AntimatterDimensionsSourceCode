@@ -7,7 +7,7 @@ export class BreakInfinityUpgradeState extends SetPurchasableMechanicState {
   }
 
   get set() {
-    return player.infinityUpgrades;
+    return player.infinity.upgrades;
   }
 
   onPurchased() {
@@ -24,11 +24,11 @@ class RebuyableBreakInfinityUpgradeState extends RebuyableMechanicState {
   }
 
   get boughtAmount() {
-    return player.infinityRebuyables[this.id];
+    return player.infinity.rebuyables[this.id];
   }
 
   set boughtAmount(value) {
-    player.infinityRebuyables[this.id] = value;
+    player.infinity.rebuyables[this.id] = value;
   }
 
   get isCapped() {

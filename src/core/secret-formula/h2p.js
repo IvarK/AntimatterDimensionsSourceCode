@@ -153,7 +153,7 @@ autobuyers - in this situation autobuyers will effectively only trigger once eve
 may have a strong impact depending on the part of the game.
 <br>
 <br>
-${player.blackHole[0].unlocked
+${player.bh.data[0].unlocked
     ? `<b>Offline Black Hole behavior:</b> Once the Black Hole has been unlocked, the offline progress simulation will
       attempt to run the game in a way where each tick contains roughly the same amount of <i>game</i> time. This may
       give the appearance of the Black Hole(s) being active for a much larger fraction of time than normal while
@@ -1192,7 +1192,7 @@ but the same cost multipliers.
 <br>
 <b>Hotkey: B</b> will pause/unpause the Black Holes.
 `,
-      isUnlocked: () => player.blackHole[0].unlocked,
+      isUnlocked: () => player.bh.data[0].unlocked,
       tags: ["reality", "time", "speed", "duration", "interval", "rm", "endgame", "lategame"],
       tab: "reality/hole"
     }, {

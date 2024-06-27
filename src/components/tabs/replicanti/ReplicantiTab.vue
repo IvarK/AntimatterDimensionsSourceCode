@@ -135,7 +135,7 @@ export default {
       }
       this.isInEC8 = EternityChallenge(8).isRunning;
       if (this.isInEC8) {
-        this.ec8Purchases = player.eterc8repl;
+        this.ec8Purchases = player.cValues.ec8repl;
       }
       this.amount.copyFrom(Replicanti.amount);
       this.mult.copyFrom(replicantiMult());

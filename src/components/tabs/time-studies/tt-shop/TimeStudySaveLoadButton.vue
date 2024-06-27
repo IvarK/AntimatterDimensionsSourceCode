@@ -73,7 +73,7 @@ export default {
     },
     respecAndLoad() {
       if (Player.canEternity) {
-        player.respec = true;
+        player.timestudy.respec = true;
         const newTree = new TimeStudyTree();
         newTree.attemptBuyArray(newTree.parseStudyImport(this.preset.studies));
         animateAndEternity(() => TimeStudyTree.commitToGameState(newTree.purchasedStudies, false, newTree.startEC));

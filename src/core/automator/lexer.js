@@ -235,7 +235,7 @@ createInCategory(PrestigeEvent, "Eternity", /eternity/i, {
   $prestigeCurrency: "EP",
   $prestige: () => eternity(false, true),
   $respec: () => {
-    player.respec = true;
+    player.timestudy.respec = true;
   },
 });
 createInCategory(PrestigeEvent, "Reality", /reality/i, {

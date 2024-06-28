@@ -2,7 +2,6 @@
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 import SliderComponent from "@/components/SliderComponent";
-import { BlackHoles } from "../../../core/black-hole";
 
 export default {
   name: "AnimationOptionsModal",

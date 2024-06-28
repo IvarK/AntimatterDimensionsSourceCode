@@ -9,6 +9,8 @@ import { GlyphTypes } from "./glyph-effects";
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
 window.player = {
+  version: 26,
+  lastUpdate: new Date().getTime(),
   antimatter: DC.E1,
   dimensions: {
     antimatter: Array.range(0, 8).map(() => ({
@@ -29,10 +31,39 @@ window.player = {
       bought: 0
     }))
   },
+  tutorial: {
+    active: true,
+    state: 0
+  },
   buyUntil10: true,
   sacrificed: DC.D0,
   achievementBits: Array.repeat(0, 17),
   secretAchievementBits: Array.repeat(0, 4),
+  dimensionBoosts: 0,
+  galaxies: 0,
+  news: {
+    // This is properly handled in NewsHandler.addSeenNews which adds properties as needed
+    seen: {},
+    specialTickerData: {
+      uselessNewsClicks: 0,
+      paperclips: 0,
+      newsQueuePosition: 1000,
+      eiffelTowerChapter: 0
+    },
+    totalSeen: 0,
+  },
+  infinity: {
+    upgrades: new Set(),
+    rebuyables: [0, 0, 0],
+    IPMult: 0,
+  },
+  infinities: DC.D0,
+  infinityPoints: DC.D0,
+  partInfinities: 0,
+  partInfinityPoint: 0,
+  infinitiesBanked: DC.D0,
+  tabNotifications: new Set(),
+  triggeredTabNotificationBits: 0,
   challenge: {
     normal: {
       current: 0,
@@ -61,11 +92,6 @@ window.player = {
       ids: 50,
       repl: 40,
     }
-  },
-  infinity: {
-    upgrades: new Set(),
-    rebuyables: [0, 0, 0],
-    IPMult: 0,
   },
   auto: {
     autobuyersOn: true,
@@ -212,171 +238,10 @@ window.player = {
     ipMultBuyer: { isActive: false, },
     epMultBuyer: { isActive: false, },
   },
-  infinityPoints: DC.D0,
-  infinities: DC.D0,
-  infinitiesBanked: DC.D0,
-  dimensionBoosts: 0,
-  galaxies: 0,
-  news: {
-    // This is properly handled in NewsHandler.addSeenNews which adds properties as needed
-    seen: {},
-    specialTickerData: {
-      uselessNewsClicks: 0,
-      paperclips: 0,
-      newsQueuePosition: 1000,
-      eiffelTowerChapter: 0
-    },
-    totalSeen: 0,
-  },
-  lastUpdate: new Date().getTime(),
   backupTimer: 0,
   matter: DC.D1,
-  partInfinityPoint: 0,
-  partInfinities: 0,
-  break: false,
-  secretUnlocks: {
-    themes: new Set(),
-    viewSecretTS: false,
-    cancerAchievements: false,
-  },
-  shownRuns: {
-    Reality: true,
-    Eternity: true,
-    Infinity: true
-  },
-  requirementChecks: {
-    infinity: {
-      maxAll: false,
-      noSacrifice: true,
-      noAD8: true,
-    },
-    eternity: {
-      onlyAD1: true,
-      onlyAD8: true,
-      noAD1: true,
-      noRG: true,
-    },
-    reality: {
-      noAM: true,
-      noTriads: true,
-      noPurchasedTT: true,
-      noInfinities: true,
-      noEternities: true,
-      noContinuum: true,
-      maxID1: DC.D0,
-      maxStudies: 0,
-      maxGlyphs: 0,
-      slowestBH: 1,
-    },
-    permanent: {
-      emojiGalaxies: 0,
-      singleTickspeed: 0,
-      perkTreeDragging: 0
-    }
-  },
-  records: {
-    gameCreatedTime: Date.now(),
-    totalTimePlayed: 0,
-    timePlayedAtBHUnlock: Number.MAX_VALUE,
-    realTimePlayed: 0,
-    realTimeDoomed: 0,
-    fullGameCompletions: 0,
-    previousRunRealTime: 0,
-    totalAntimatter: DC.E1,
-    recentInfinities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, ""]),
-    recentEternities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, "", DC.D0]),
-    recentRealities: Array.range(0, 10).map(() =>
-      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, 1, "", 0, 0]),
-    thisInfinity: {
-      time: 0,
-      realTime: 0,
-      lastBuyTime: 0,
-      maxAM: DC.D0,
-      bestIPmin: DC.D0,
-      bestIPminVal: DC.D0,
-    },
-    bestInfinity: {
-      time: Number.MAX_VALUE,
-      realTime: Number.MAX_VALUE,
-      bestIPminEternity: DC.D0,
-      bestIPminReality: DC.D0,
-    },
-    thisEternity: {
-      time: 0,
-      realTime: 0,
-      maxAM: DC.D0,
-      maxIP: DC.D0,
-      bestIPMsWithoutMaxAll: DC.D0,
-      bestEPmin: DC.D0,
-      bestEPminVal: DC.D0,
-      bestInfinitiesPerMs: DC.D0,
-    },
-    bestEternity: {
-      time: Number.MAX_VALUE,
-      realTime: Number.MAX_VALUE,
-      bestEPminReality: DC.D0,
-    },
-    thisReality: {
-      time: 0,
-      realTime: 0,
-      maxAM: DC.D0,
-      maxIP: DC.D0,
-      maxEP: DC.D0,
-      bestEternitiesPerMs: DC.D0,
-      maxReplicanti: DC.D0,
-      maxDT: DC.D0,
-      bestRSmin: 0,
-      bestRSminVal: 0,
-    },
-    bestReality: {
-      time: Number.MAX_VALUE,
-      realTime: Number.MAX_VALUE,
-      glyphStrength: 0,
-      RM: DC.D0,
-      RMSet: [],
-      RMmin: DC.D0,
-      RMminSet: [],
-      glyphLevel: 0,
-      glyphLevelSet: [],
-      bestEP: DC.D0,
-      bestEPSet: [],
-      speedSet: [],
-      iMCapSet: [],
-      laitelaSet: [],
-    },
-  },
-  speedrun: {
-    isUnlocked: false,
-    isActive: false,
-    isSegmented: false,
-    usedSTD: false,
-    hasStarted: false,
-    hideInfo: false,
-    displayAllMilestones: false,
-    startDate: 0,
-    name: "",
-    offlineTimeUsed: 0,
-    // One spot for every entry in GameDatabase.speedrunMilestones (note: 1-indexed)
-    records: Array.repeat(0, 26),
-    achievementTimes: {},
-    seedSelection: SPEEDRUN_SEED_STATE.FIXED,
-    initialSeed: 0,
-    previousRuns: {}
-  },
-  version: 26,
   infinityPower: DC.D1,
-  eternityPoints: DC.D0,
-  eternities: DC.D0,
-  eternity: {
-    challs: {},
-    upgrades: new Set(),
-    EPMult: 0
-  },
-  timeShards: DC.D0,
-  totalTickGained: 0,
-  totalTickBought: 0,
+  break: false,
   replicanti: {
     unl: false,
     amount: DC.D0,
@@ -388,6 +253,16 @@ window.player = {
     galaxies: 0,
     galCost: DC.E170,
   },
+  eternityPoints: DC.D0,
+  eternities: DC.D0,
+  eternity: {
+    challs: {},
+    upgrades: new Set(),
+    EPMult: 0
+  },
+  timeShards: DC.D0,
+  totalTickGained: 0,
+  totalTickBought: 0,
   timestudy: {
     theorem: DC.D0,
     maxTheorem: DC.D0,
@@ -767,13 +642,138 @@ window.player = {
     }
   },
   isGameEnd: false,
-  tabNotifications: new Set(),
-  triggeredTabNotificationBits: 0,
-  tutorial: {
-    active: true,
-    state: 0
+  secretUnlocks: {
+    themes: new Set(),
+    viewSecretTS: false,
+    cancerAchievements: false,
+  },
+  requirementChecks: {
+    infinity: {
+      maxAll: false,
+      noSacrifice: true,
+      noAD8: true,
+    },
+    eternity: {
+      onlyAD1: true,
+      onlyAD8: true,
+      noAD1: true,
+      noRG: true,
+    },
+    reality: {
+      noAM: true,
+      noTriads: true,
+      noPurchasedTT: true,
+      noInfinities: true,
+      noEternities: true,
+      noContinuum: true,
+      maxID1: DC.D0,
+      maxStudies: 0,
+      maxGlyphs: 0,
+      slowestBH: 1,
+    },
+    permanent: {
+      emojiGalaxies: 0,
+      singleTickspeed: 0,
+      perkTreeDragging: 0
+    }
+  },
+  records: {
+    gameCreatedTime: Date.now(),
+    totalTimePlayed: 0,
+    timePlayedAtBHUnlock: Number.MAX_VALUE,
+    realTimePlayed: 0,
+    realTimeDoomed: 0,
+    fullGameCompletions: 0,
+    previousRunRealTime: 0,
+    totalAntimatter: DC.E1,
+    recentInfinities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, ""]),
+    recentEternities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, DC.D1, "", DC.D0]),
+    recentRealities: Array.range(0, 10).map(() =>
+      [Number.MAX_VALUE, Number.MAX_VALUE, DC.D1, 1, "", 0, 0]),
+    thisInfinity: {
+      time: 0,
+      realTime: 0,
+      lastBuyTime: 0,
+      maxAM: DC.D0,
+      bestIPmin: DC.D0,
+      bestIPminVal: DC.D0,
+    },
+    bestInfinity: {
+      time: Number.MAX_VALUE,
+      realTime: Number.MAX_VALUE,
+      bestIPminEternity: DC.D0,
+      bestIPminReality: DC.D0,
+    },
+    thisEternity: {
+      time: 0,
+      realTime: 0,
+      maxAM: DC.D0,
+      maxIP: DC.D0,
+      bestIPMsWithoutMaxAll: DC.D0,
+      bestEPmin: DC.D0,
+      bestEPminVal: DC.D0,
+      bestInfinitiesPerMs: DC.D0,
+    },
+    bestEternity: {
+      time: Number.MAX_VALUE,
+      realTime: Number.MAX_VALUE,
+      bestEPminReality: DC.D0,
+    },
+    thisReality: {
+      time: 0,
+      realTime: 0,
+      maxAM: DC.D0,
+      maxIP: DC.D0,
+      maxEP: DC.D0,
+      bestEternitiesPerMs: DC.D0,
+      maxReplicanti: DC.D0,
+      maxDT: DC.D0,
+      bestRSmin: 0,
+      bestRSminVal: 0,
+    },
+    bestReality: {
+      time: Number.MAX_VALUE,
+      realTime: Number.MAX_VALUE,
+      glyphStrength: 0,
+      RM: DC.D0,
+      RMSet: [],
+      RMmin: DC.D0,
+      RMminSet: [],
+      glyphLevel: 0,
+      glyphLevelSet: [],
+      bestEP: DC.D0,
+      bestEPSet: [],
+      speedSet: [],
+      iMCapSet: [],
+      laitelaSet: [],
+    },
+  },
+  speedrun: {
+    isUnlocked: false,
+    isActive: false,
+    isSegmented: false,
+    usedSTD: false,
+    hasStarted: false,
+    hideInfo: false,
+    displayAllMilestones: false,
+    startDate: 0,
+    name: "",
+    offlineTimeUsed: 0,
+    // One spot for every entry in GameDatabase.speedrunMilestones (note: 1-indexed)
+    records: Array.repeat(0, 26),
+    achievementTimes: {},
+    seedSelection: SPEEDRUN_SEED_STATE.FIXED,
+    initialSeed: 0,
+    previousRuns: {}
   },
   options: {
+    shownRuns: {
+      Infinity: true,
+      Eternity: true,
+      Reality: true
+    },
     news: {
       enabled: true,
       repeatBuffer: 40,
@@ -852,26 +852,26 @@ window.player = {
       blobSnowflakes: 16
     },
     confirmations: {
-      armageddon: true,
+      dimensionBoost: true,
+      antimatterGalaxy: true,
       sacrifice: true,
       challenges: true,
       exitChallenge: true,
+      bigCrunch: true,
+      replicantiGalaxy: true,
       eternity: true,
       dilation: true,
       resetReality: true,
+      glyphSelection: true,
       glyphReplace: true,
       glyphSacrifice: true,
       autoClean: true,
       sacrificeAll: true,
-      glyphSelection: true,
       glyphUndo: true,
       deleteGlyphSetSave: true,
       glyphRefine: true,
-      bigCrunch: true,
-      replicantiGalaxy: true,
-      antimatterGalaxy: true,
-      dimensionBoost: true,
       switchAutomatorMode: true,
+      armageddon: true,
       respecIAP: true
     },
     awayProgress: {

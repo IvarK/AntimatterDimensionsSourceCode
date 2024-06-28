@@ -174,10 +174,10 @@ export function preProductionGenerateIP(diff) {
     if (diff >= 1e300 * genPeriod) {
       genCount = Decimal.div(diff, genPeriod);
     } else {
-      // Partial progress (fractions from 0 to 1) are stored in player.partInfinityPoint
-      player.partInfinityPoint += diff / genPeriod;
-      genCount = Math.floor(player.partInfinityPoint);
-      player.partInfinityPoint -= genCount;
+      // Partial progress (fractions from 0 to 1) are stored in player.partInfinityPoints
+      player.partInfinityPoints += diff / genPeriod;
+      genCount = Math.floor(player.partInfinityPoints);
+      player.partInfinityPoints -= genCount;
     }
     let gainedPerGen = player.records.bestInfinity.time >= 999999999999 ? DC.D0 : InfinityUpgrade.ipGen.effectValue;
     if (Laitela.isRunning) gainedPerGen = dilatedValueOf(gainedPerGen);

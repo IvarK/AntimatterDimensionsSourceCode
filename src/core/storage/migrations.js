@@ -456,6 +456,8 @@ export const migrations = {
         data: player.blackHole
       };
       player.partInfinities = player.partInfinitied;
+      player.partInfinityPoints = player.partInfinityPoint;
+      player.options.shownRuns = player.shownRuns;
       delete player.infinityUpgrades;
       delete player.infinityRebuyables;
       delete player.IPMultPurchases;
@@ -478,6 +480,8 @@ export const migrations = {
       delete player.blackHoleNegative;
       delete player.blackHole;
       delete player.partInfinitied;
+      delete player.partInfinityPoint;
+      delete player.shownRuns;
     }
   },
 

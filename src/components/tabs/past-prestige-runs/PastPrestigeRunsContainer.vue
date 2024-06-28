@@ -73,7 +73,7 @@ export default {
       this.hasEmptyRecord = this.runs[0][0] === Number.MAX_VALUE;
       this.runs.push(this.averageRun);
       this.isRealityUnlocked = PlayerProgress.current.isRealityUnlocked;
-      this.shown = player.shownRuns[this.singular];
+      this.shown = player.options.shownRuns[this.singular];
       this.resourceType = player.options.statTabResources;
       this.showRate = this.resourceType === RECENT_PRESTIGE_RESOURCE.RATE;
       this.hasChallenges = this.runs.map(r => this.challengeText(r)).some(t => t);
@@ -191,7 +191,7 @@ export default {
       return rawText === "The Nameless Ones" ? "Nameless" : rawText;
     },
     toggleShown() {
-      player.shownRuns[this.singular] = !player.shownRuns[this.singular];
+      player.options.shownRuns[this.singular] = !player.options.shownRuns[this.singular];
     },
     cellStyle(col, isHeader) {
       let width;

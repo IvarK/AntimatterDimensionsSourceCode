@@ -629,7 +629,7 @@ export function finishProcessReality(realityProps) {
   player.records.thisInfinity.realTime = 0;
   player.dimensionBoosts = 0;
   player.galaxies = 0;
-  player.partInfinityPoint = 0;
+  player.partInfinityPoints = 0;
   player.partInfinities = 0;
   player.break = false;
   player.infinity.IPMult = 0;

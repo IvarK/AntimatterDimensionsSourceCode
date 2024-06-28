@@ -2,6 +2,7 @@
 import ModalOptionsToggleButton from "@/components/ModalOptionsToggleButton";
 import ModalWrapperOptions from "@/components/modals/options/ModalWrapperOptions";
 import SliderComponent from "@/components/SliderComponent";
+import { BlackHoles } from "../../../core/black-hole";
 
 export default {
   name: "AnimationOptionsModal",
@@ -83,7 +84,7 @@ export default {
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
       this.isS11Active = Theme.currentName() === "S11";
       this.isS11Unlocked = Themes.available().map(t => t.name).includes("S11");
-      this.isBlackHoleUnlocked = player.blackHole[0].unlocked;
+      this.isBlackHoleUnlocked = BlackHoles.areUnlocked;
 
       const options = player.options.animations;
       this.bigCrunch = options.bigCrunch;

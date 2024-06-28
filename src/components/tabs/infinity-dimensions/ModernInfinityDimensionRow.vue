@@ -58,7 +58,7 @@ export default {
       return `Reach ${formatPostBreak(InfinityDimension(this.tier).amRequirement)} AM`;
     },
     hasLongText() {
-      return this.costDisplay.length > 15;
+      return this.costDisplay.length > 20;
     },
     capTooltip() {
       if (this.enslavedRunning) return `Nameless prevents the purchase of more than ${format(10)} Infinity Dimensions`;
@@ -70,7 +70,7 @@ export default {
         this.hasPrevTier;
     },
     showCostTitle() {
-      return this.cost.exponent < 1e6;
+      return this.cost.exponent < 1e5;
     }
   },
   watch: {

@@ -68,7 +68,7 @@ export default {
       return this.buttonContents.length > 20;
     },
     showCostTitle() {
-      return this.cost.exponent < 1e6;
+      return this.cost.exponent < 1e5;
     },
     timeEstimate() {
       if (!this.showTTCost || this.ttGen.eq(0)) return "";

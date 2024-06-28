@@ -30,10 +30,14 @@ export default {
       hasContinuum: false,
       isContinuumActive: false,
       multiplierText: "",
+      isFullyAutomated: false,
     };
   },
   computed: {
     sacrificeTooltip() {
+      if (this.isFullyAutomated) {
+        return "Sacrifice autobuyer is enabled and Achievement 118 is unlocked, so Sacrifice is now fully automated";
+      }
       return `Boosts 8th Antimatter Dimension by ${formatX(this.sacrificeBoost, 2, 2)}`;
     },
   },
@@ -82,7 +86,8 @@ export default {
 
       this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 2)}`;
       if (!isSacrificeUnlocked) return;
-      this.isSacrificeAffordable = Sacrifice.canSacrifice;
+      this.isFullyAutomated = Autobuyer.sacrifice.isActive && Achievement(118).isUnlocked;
+      this.isSacrificeAffordable = Sacrifice.canSacrifice && !this.isFullyAutomated;
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
       this.disabledCondition = Sacrifice.disabledCondition;
@@ -112,6 +117,9 @@ export default {
         @click="sacrifice"
       >
         <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
+        <span v-else-if="isFullyAutomated && disabledCondition !== ''">
+          Dimensional Sacrifice is Automated (Achievement 118)
+        </span>
         <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
       </PrimaryButton>
       <button

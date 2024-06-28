@@ -32,12 +32,6 @@ export default {
     };
   },
   computed: {
-    sacrificeBoostDisplay() {
-      return formatX(this.sacrificeBoost, 2, 2);
-    },
-    sacrificeTooltip() {
-      return `Boosts 8th Antimatter Dimension by ${this.sacrificeBoostDisplay}`;
-    },
     tesseractCountString() {
       const extra = this.extraTesseracts > 0 ? ` + ${format(this.extraTesseracts, 2, 2)}` : "";
       return `${formatInt(this.boughtTesseracts)}${extra}`;

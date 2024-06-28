@@ -25,9 +25,9 @@ export default {
       reality: false,
       background: false,
       blobSnowflakes: 16,
+      isS11Active: false,
       isBlackHoleUnlocked: false,
       blobHole: false,
-      isS11Active: false,
       isS11Unlocked: false
     };
   },

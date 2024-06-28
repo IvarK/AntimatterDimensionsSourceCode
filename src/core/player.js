@@ -840,7 +840,8 @@ window.player = {
       tachyonParticles: true,
       reality: true,
       background: true,
-      blobSnowflakes: 16
+      blobSnowflakes: 16,
+      blobHole: false
     },
     confirmations: {
       armageddon: true,

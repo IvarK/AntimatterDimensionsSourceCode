@@ -6,6 +6,7 @@ function isEND() {
   return player.celestials.pelle.doomed && Math.random() < threshold;
 }
 
+// eslint-disable-next-line max-params
 window.format = function format(value, places = 0, placesUnder1000 = 0, bypassEND = false) {
   if (isEND() && !bypassEND) return "END";
   return Notations.current.format(value, places, placesUnder1000, 3);
@@ -29,6 +30,7 @@ window.formatFloat = function formatFloat(value, digits, bypassEND = false) {
   return formatWithCommas(value.toFixed(digits));
 };
 
+// eslint-disable-next-line max-params
 window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000, bypassEND = false) {
   if (isEND() && !bypassEND) return "END";
   const notation = Notations.current;

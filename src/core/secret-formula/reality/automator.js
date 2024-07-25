@@ -538,6 +538,7 @@ export const automator = {
           <b>rep</b> - Current Replicanti amount <br>
           <b>tt</b> - Current Time Theorem amount <br>
           <b>total tt</b> - TOTAL Time Theorems, includes all forms of generated TT and any spent on Studies <br>
+          <b>spent tt</b> - Time Theorems currently spent on all Time Studies <br>
           <b>total completions</b> - Total completions of all Eternity Challenges <br>
           <b>pending completions</b> - Total completions of current EC at Eternity <br>
           <b>ec<u>X</u> completions</b> - Amount of EC completions for a certain EC (eg. "ec6 completions")<br>

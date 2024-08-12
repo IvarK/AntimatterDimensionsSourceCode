@@ -9,11 +9,12 @@ export const changelog = [
    * }
    */
   {
-    date: [2024, 6, 28],
+    date: [2024, 8, 12],
     name: "Hi Ra",
     info: `
 <b>Added things:</b><br>
 <ul>
+<li>Added a Spent TT as an Automator currency</li>
 <li>Added a cel 5 symbol to the celestial Glyph cosmetic set</li>
 </ul>
 <br>

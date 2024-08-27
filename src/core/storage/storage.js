@@ -470,6 +470,7 @@ export const GameStorage = {
 
     ui.view.news = player.options.news.enabled;
     ui.view.newUI = player.options.newUI;
+    ui.view.srMode = player.options.srMode;
     ui.view.tutorialState = player.tutorialState;
     ui.view.tutorialActive = player.tutorialActive;
 

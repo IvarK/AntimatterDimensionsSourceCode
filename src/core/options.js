@@ -24,6 +24,13 @@ export class GameOptions {
     GameStorage.save();
   }
 
+  static toggleSRMode() {
+    player.options.srMode = !player.options.srMode;
+    ui.view.srMode = player.options.srMode;
+    GameStorage.save();
+    if (player.options.srMode) GameUI.notify.info("Screen reader mode enabled. Some tricks to using this mode can now be found in certain sections of the how to play modal (open by pressing H or clicking on the question mark near the bottom of the page). You can also try setting the UI mode to classic, and don't forget to turn off animations if they slow things down.");
+  }
+
   static cloudSave() {
     Cloud.saveCheck(true);
   }

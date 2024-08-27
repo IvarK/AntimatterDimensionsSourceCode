@@ -41,6 +41,9 @@ export default {
     },
     UILabel() {
       return `UI: ${this.$viewModel.newUI ? "Modern" : "Classic"}`;
+    },
+    SRModeLabel() {
+      return `Screen reader mode: ${this.$viewModel.srMode ? "On" : "Off"}`;
     }
   },
   watch: {
@@ -71,6 +74,12 @@ export default {
           onclick="GameOptions.toggleUI()"
         >
           {{ UILabel }}
+        </OptionsButton>
+        <OptionsButton
+          class="o-primary-btn--option_font-large"
+          onclick="GameOptions.toggleSRMode()"
+        >
+          {{ SRModeLabel }}
         </OptionsButton>
         <UpdateRateSlider />
         <OptionsButton

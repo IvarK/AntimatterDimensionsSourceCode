@@ -27,7 +27,6 @@ const disabledMechanicUnlocks = {
   glyphs: () => !PelleRifts.vacuum.milestones[0].canBeApplied,
   V: () => ({}),
   singularity: () => ({}),
-  continuum: () => ({}),
   alchemy: () => ({}),
   achievementMult: () => ({}),
   blackhole: () => ({}),

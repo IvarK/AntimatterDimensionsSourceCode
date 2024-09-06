@@ -182,7 +182,7 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [164, 156, 143, 142, 141, 137, 134, 133, 132, 131, 126, 125, 118, 117, 116, 113, 111, 104, 103, 95, 93, 92,
+    return [164, 156, 143, 142, 141, 137, 134, 133, 132, 131, 125, 118, 117, 116, 113, 111, 104, 103, 95, 93, 92,
       91, 87, 85, 78, 76, 74, 65, 55, 54, 37];
   },
 
@@ -291,14 +291,14 @@ export const Pelle = {
     }
 
     const gain = (
-      (Math.log10(am + 2) + Math.log10(ip + 2) + Math.log10(ep + 2)) / 1.64
-    ) ** 7.5;
+      (Math.log10(am + 2) + Math.log10(ip + 2) + Math.log10(ep + 2)) / 2
+    ) ** 8;
 
     return gain < 1 ? gain : Math.floor(gain - this.cel.remnants);
   },
 
   realityShardGain(remnants) {
-    return Decimal.pow(10, remnants ** (1 / 7.5) * 4).minus(1).div(1e3);
+    return Decimal.pow(10, remnants ** (1 / 8) * 4.2).minus(1).div(1e3);
   },
 
   get realityShardGainPerSecond() {
@@ -311,7 +311,7 @@ export const Pelle = {
 
   // Calculations assume this is in units of proportion per second (eg. 0.03 is 3% drain per second)
   get riftDrainPercent() {
-    return 0.03;
+    return 0.05;
   },
 
   get glyphMaxLevel() {
@@ -323,7 +323,7 @@ export const Pelle = {
   },
 
   antimatterDimensionMult(x) {
-    return Decimal.pow(10, Math.log10(x + 1) + x ** 5.1 / 1e3 + 4 ** x / 1e19);
+    return Decimal.pow(10, Math.log10(x + 1) + x ** 6 / 1e3 + 4.5 ** x / 1e18);
   },
 
   get activeGlyphType() {
@@ -354,7 +354,7 @@ export const Pelle = {
     return zalgo(str, Math.floor(stage ** 2 * 7));
   },
 
-  endTabNames: "End Is Nigh Destruction Is Imminent Help Us Good Bye Forever".split(" "),
+  endTabNames: "It's Not Over We Will Return We Soon Will Meet Again".split(" "),
 
   quotes: Quotes.pelle,
 };

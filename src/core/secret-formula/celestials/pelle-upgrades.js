@@ -21,10 +21,10 @@ export const pelleUpgrades = {
   antimatterDimensionMult: rebuyable({
     id: "antimatterDimensionMult",
     description: "Gain a multiplier to Antimatter Dimensions",
-    cost: [10, 1e3, 41, 100],
+    cost: [10, 250, 41, 10],
     effect: x => Pelle.antimatterDimensionMult(x),
     formatEffect: x => formatX(x, 2, 2),
-    cap: 44
+    cap: 50
   }),
   timeSpeedMult: rebuyable({
     id: "timeSpeedMult",

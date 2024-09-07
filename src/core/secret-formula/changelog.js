@@ -9,6 +9,19 @@ export const changelog = [
    * }
    */
   {
+    date: [2024, 9, 6],
+    name: "Rebalance Testing",
+    info: `
+<b>Things Changed:</b><br>
+<ul>
+<li>Various Pelle attributes changed</li>
+<li>Enabled Continuum in Pelle (may be buggy let me know if it is)</li>
+<li>Remnant formula changed</li>
+<li>Reality Shard formula changed</li>
+</ul>
+`
+  },
+  {
     date: [2024, 8, 12],
     name: "Hi Ra",
     info: `

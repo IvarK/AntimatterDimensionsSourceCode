@@ -1,6 +1,4 @@
 <script>
-import { STUDY_TREE_LAYOUT_TYPE, TimeStudyTreeLayout } from "./time-study-tree-layout";
-
 import DilationTimeStudy from "./DilationTimeStudy";
 import ECTimeStudy from "./ECTimeStudy";
 import EnslavedTimeStudy from "./EnslavedTimeStudy";
@@ -9,6 +7,7 @@ import NormalTimeStudy from "./NormalTimeStudy";
 import PrimaryButton from "@/components/PrimaryButton";
 import SecretTimeStudy from "./SecretTimeStudy";
 import TimeStudyConnection from "./TimeStudyConnection";
+import TimeStudyTreeLayout from "./time-study-tree-layout";
 import TriadTimeStudy from "./TriadTimeStudy";
 
 export default {
@@ -27,7 +26,7 @@ export default {
   data() {
     return {
       respec: player.respec,
-      layoutType: STUDY_TREE_LAYOUT_TYPE.NORMAL,
+      layoutType: {},
       vLevel: 0,
       renderedStudyCount: 0,
       renderedConnectionCount: 0,
@@ -109,7 +108,7 @@ export default {
   methods: {
     update() {
       this.respec = player.respec;
-      this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
+      this.layoutType = TimeStudyTreeLayout.current;
       this.vLevel = Ra.pets.v.level;
       this.isEnslaved = Enslaved.isRunning || Date.now() - this.delayTimer < 1000;
     },

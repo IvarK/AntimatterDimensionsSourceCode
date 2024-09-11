@@ -1,3 +1,3 @@
-export const DEV = process.env.VUE_APP_DEV === "true";
-export const STEAM = process.env.VUE_APP_STEAM === "true";
+export const DEV = import.meta.env.VITE_DEV === "true";
+export const STEAM = import.meta.env.VITE_STEAM === "true";
 export const MAC = window.navigator.platform === "MacIntel";

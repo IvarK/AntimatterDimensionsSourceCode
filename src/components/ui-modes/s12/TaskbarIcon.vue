@@ -66,7 +66,7 @@ export default {
   >
     <img
       class="c-taskbar-icon__image"
-      :src="`images/s12/${tab.key}.png`"
+      :src="`/images/s12/${tab.key}.png`"
     >
     <div
       v-if="hasNotification"

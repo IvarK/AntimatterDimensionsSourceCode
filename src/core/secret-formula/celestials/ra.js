@@ -259,15 +259,17 @@ export const ra = {
     continuousTTBoost: {
       id: 25,
       reward: "Time Theorems boost all forms of continuous non-dimension production",
+      // Removing the hardcap of 10 may cause runaways.
+      effect: () => Math.min(10, Math.max(0, Currency.timeTheorems.value.pLog10() - 350) / 50),
       effects: {
-        ttGen: () => Math.pow(10, 5 * Ra.theoremBoostFactor()),
-        eternity: () => Math.pow(10, 2 * Ra.theoremBoostFactor()),
-        infinity: () => Math.pow(10, 15 * Ra.theoremBoostFactor()),
-        replicanti: () => Math.pow(10, 20 * Ra.theoremBoostFactor()),
-        dilatedTime: () => Math.pow(10, 3 * Ra.theoremBoostFactor()),
-        memories: () => 1 + Ra.theoremBoostFactor() / 50,
-        memoryChunks: () => 1 + Ra.theoremBoostFactor() / 50,
-        autoPrestige: () => 1 + 2.4 * Ra.theoremBoostFactor()
+        ttGen: e => Math.pow(10, 5 * e),
+        eternity: e => Math.pow(10, 2 * e),
+        infinity: e => Math.pow(10, 15 * e),
+        replicanti: e => Math.pow(10, 20 * e),
+        dilatedTime: e => Math.pow(10, 3 * e),
+        memories: e => 1 + e / 50,
+        memoryChunks: e => 1 + e / 50,
+        autoPrestige: e => 1 + 2.4 * e
       },
       pet: "v",
       level: 10,

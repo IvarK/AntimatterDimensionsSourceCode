@@ -47,7 +47,7 @@ export default {
     >
       <div class="c-s12-desktop-icon__inner">
         <img
-          :src="`images/s12/${icon.image}`"
+          :src="`/images/s12/${icon.image}`"
           class="c-s12-desktop-icon__img"
         >
         <div class="c-s12-desktop-icon__text">

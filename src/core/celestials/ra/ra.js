@@ -327,13 +327,6 @@ export const Ra = {
   toggleMode() {
     player.celestials.ra.activeMode = !player.celestials.ra.activeMode;
   },
-  // This gets widely used in lots of places since the relevant upgrade is "all forms of continuous non-dimension
-  // production", which in this case is infinities, eternities, replicanti, dilated time, and time theorem generation.
-  // It also includes the 1% IP time study, Teresa's 1% EP upgrade, and the charged RM generation upgrade. Note that
-  // removing the hardcap of 10 may cause runaways.
-  theoremBoostFactor() {
-    return Math.min(10, Math.max(0, Currency.timeTheorems.value.pLog10() - 350) / 50);
-  },
   get isUnlocked() {
     return V.spaceTheorems >= 36;
   },

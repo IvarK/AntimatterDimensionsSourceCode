@@ -33,7 +33,7 @@ export default {
       <template v-if="S12Games.selected !== -1">
         <img
           class="c-modal-s12-games__magnified-display__img"
-          :src="`images/s12/${S12Games.entries[S12Games.selected].image}`"
+          :src="`/images/s12/${S12Games.entries[S12Games.selected].image}`"
         >
         <b class="c-modal-s12-games__magnified-display__text">
           {{ S12Games.entries[S12Games.selected].name }}

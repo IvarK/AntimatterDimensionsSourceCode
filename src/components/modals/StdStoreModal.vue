@@ -35,7 +35,7 @@ export default {
       <br><span>(Required on Mac)</span><br>
     </span>
     <div class="l-modal-store-content">
-      <img src="images/std_coin.png">
+      <img src="/images/std_coin.png">
       <div class="c-modal-store-buttons">
         <StdStoreRow
           :amount="30"

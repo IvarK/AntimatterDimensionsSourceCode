@@ -15,11 +15,11 @@ npm ci
 After all the packages are installed, start up the game:
 
 ```
-npm run serve
+npm run dev
 ```
 
 This will make the game served via your localhost, and the playable link will
 be displayed in your terminal. The server **doesn't** need to be restarted
-after you've made changes - just reload the page. The server **can**
-occasionally crash, so check your terminal from time to time and run `serve`
+after you've made changes - just reload the page (if it doesn't reload automatically).
+The server **can** occasionally crash, so check your terminal from time to time and run `dev`
 again if needed.

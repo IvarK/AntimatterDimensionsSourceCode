@@ -6,13 +6,14 @@ function isEND() {
   return player.celestials.pelle.doomed && Math.random() < threshold;
 }
 
-window.format = function format(value, places = 0, placesUnder1000 = 0) {
-  if (isEND()) return "END";
+// eslint-disable-next-line max-params
+window.format = function format(value, places = 0, placesUnder1000 = 0, bypassEND = false) {
+  if (isEND() && !bypassEND) return "END";
   return Notations.current.format(value, places, placesUnder1000, 3);
 };
 
-window.formatInt = function formatInt(value) {
-  if (isEND()) return "END";
+window.formatInt = function formatInt(value, bypassEND = false) {
+  if (isEND() && !bypassEND) return "END";
   // Suppress painful formatting for Standard because it's the most commonly used and arguably "least painful"
   // of the painful notations. Prevents numbers like 5004 from appearing imprecisely as "5.00 K" for example
   if (Notations.current.isPainful && Notations.current.name !== "Standard") {
@@ -21,16 +22,17 @@ window.formatInt = function formatInt(value) {
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 };
 
-window.formatFloat = function formatFloat(value, digits) {
-  if (isEND()) return "END";
+window.formatFloat = function formatFloat(value, digits, bypassEND = false) {
+  if (isEND() && !bypassEND) return "END";
   if (Notations.current.isPainful) {
     return format(value, Math.max(2, digits), digits);
   }
   return formatWithCommas(value.toFixed(digits));
 };
 
-window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000) {
-  if (isEND()) return "END";
+// eslint-disable-next-line max-params
+window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000, bypassEND = false) {
+  if (isEND() && !bypassEND) return "END";
   const notation = Notations.current;
   // This is basically just a copy of the format method from notations library,
   // with the pre-break case removed.
@@ -78,8 +80,8 @@ window.formatRarity = function formatRarity(value) {
 };
 
 // We assume 2/0, 2/2 decimal places to keep parameter count sensible; this is used very rarely
-window.formatMachines = function formatMachines(realPart, imagPart) {
-  if (isEND()) return "END";
+window.formatMachines = function formatMachines(realPart, imagPart, bypassEND = false) {
+  if (isEND() && !bypassEND) return "END";
   const parts = [];
   if (Decimal.neq(realPart, 0)) parts.push(format(realPart, 2));
   if (Decimal.neq(imagPart, 0)) parts.push(`${format(imagPart, 2, 2)}i`);
@@ -108,17 +110,6 @@ window.formatWithCommas = function formatWithCommas(value) {
   return decimalPointSplit.join(".");
 };
 
-/**
- * Check if a number or Decimal is equal to 1.
- * @param  {number|Decimal} amount
- * @return {Boolean} - if the {amount} was equal to 1.
- */
-window.isSingular = function isSingular(amount) {
-  if (typeof amount === "number") return amount === 1;
-  if (amount instanceof Decimal) return amount.eq(1);
-  throw `Amount must be either a number or Decimal. Instead, amount was ${amount}`;
-};
-
 // Some letters in the english language pluralize in a different manner than simply adding an 's' to the end.
 // As such, the regex match should be placed in the first location, followed by the desired string it
 // should be replaced with. Note that $ refers to the EndOfLine for regex, and should be included if the plural occurs
@@ -135,6 +126,8 @@ const PLURAL_HELPER = new Map([
 const pluralDatabase = new Map([
   ["Antimatter", "Antimatter"],
   ["Dilated Time", "Dilated Time"],
+  ["Matter", "Matter"],
+  ["Replicanti", "Replicanti"]
 ]);
 
 /**
@@ -148,7 +141,7 @@ const pluralDatabase = new Map([
 window.pluralize = function pluralize(word, amount, plural) {
   if (word === undefined || amount === undefined) throw "Arguments must be defined";
 
-  if (isSingular(amount)) return word;
+  if (Decimal.eq(amount, 1)) return word;
   const existingPlural = plural ?? pluralDatabase.get(word);
   if (existingPlural !== undefined) return existingPlural;
 

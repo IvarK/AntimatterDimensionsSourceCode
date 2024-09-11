@@ -1,7 +1,7 @@
+import { isDecimal } from "../utility/type-check";
+
 Array.prototype.distinct = function() {
-    return this.filter(function (value, index, self) {
-        return self.indexOf(value) === index;
-    });
+  return this.filter((value, index, self) => self.indexOf(value) === index);
 };
 
 Math.wrap = function(number, min, max) {
@@ -73,17 +73,18 @@ Decimal.prototype.copyFrom = function(decimal) {
 };
 
 window.copyToClipboard = (function() {
-  let el = document.createElement('textarea');
+  const el = document.createElement("textarea");
   document.body.appendChild(el);
   el.style.position = "absolute";
-  el.style.left = '-9999999px';
-  el.setAttribute('readonly', '');
+  el.style.left = "-9999999px";
+  el.setAttribute("readonly", "");
   return function(str) {
     try {
       el.value = str;
       el.select();
-      return document.execCommand('copy');
-    } catch(ex) {
+      return document.execCommand("copy");
+    } catch (ex) {
+      // eslint-disable-next-line no-console
       console.log(ex);
       return false;
     }
@@ -91,8 +92,8 @@ window.copyToClipboard = (function() {
 }());
 
 window.safeCall = function safeCall(fn) {
-    if (fn) fn();
-}
+  if (fn) fn();
+};
 
 String.prototype.capitalize = function() {
   return this.toLowerCase().replace(/^\w/u, c => c.toUpperCase());
@@ -158,12 +159,12 @@ Array.prototype.last = function(predicate) {
 Array.prototype.mapToObject = function(keyFun, valueFun) {
   if (typeof keyFun !== "function" || typeof valueFun !== "function")
     throw "keyFun and valueFun must be functions";
-  let out = {}
+  const out = {};
   for (let idx = 0; idx < this.length; ++idx) {
     out[keyFun(this[idx], idx)] = valueFun(this[idx], idx);
   }
   return out;
-}
+};
 
 /**
  * @type {number[]}
@@ -288,4 +289,9 @@ Array.fromBitmask = function(mask) {
 
 String.isWhiteSpace = function(value) {
   return value && !value.trim();
+};
+
+Decimal.isFinite = function(value) {
+  if (!isDecimal(value)) return isFinite(value);
+  return (isFinite(value.m) || isFinite(value.e)) && !(value.e >= 9e15);
 };

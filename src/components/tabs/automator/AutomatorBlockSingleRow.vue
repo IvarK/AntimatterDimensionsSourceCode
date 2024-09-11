@@ -147,12 +147,8 @@ export default {
         X
       </div>
     </div>
-    <draggable
-      v-if="block.nested"
-      v-model="block.nest"
-      class="l-automator-nested-block"
-      group="code-blocks"
-    >
+    <!-- eslint-disable-next-line vue/no-mutating-props, vue/max-attributes-per-line -->
+    <draggable v-if="block.nested" v-model="block.nest" class="l-automator-nested-block" group="code-blocks">
       <AutomatorBlockSingleRow
         v-for="subblock in block.nest"
         :key="subblock.id"

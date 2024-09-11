@@ -51,7 +51,7 @@ export const effarigUnlocks = {
     id: 5,
     label: "Eternity",
     get description() {
-      return ` Eternities generates Infinities
+      return ` Eternities generate Infinities
         Infinity Points are no longer limited in any way in Effarig's Reality
         You have unlocked The Nameless Ones`;
     },

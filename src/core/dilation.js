@@ -1,7 +1,7 @@
 import { RebuyableMechanicState, SetPurchasableMechanicState } from "./game-mechanics";
 import { DC } from "./constants";
 import FullScreenAnimationHandler from "./full-screen-animation-handler";
-import { SpeedrunMilestones } from "./speedrun";
+import { SpeedrunMilestone } from "./speedrun";
 
 export function animateAndDilate() {
   FullScreenAnimationHandler.display("a-dilate", 2);
@@ -230,7 +230,7 @@ class DilationUpgradeState extends SetPurchasableMechanicState {
 
   onPurchased() {
     if (this.id === 4) player.dilation.totalTachyonGalaxies *= 2;
-    if (this.id === 10) SpeedrunMilestones(15).tryComplete();
+    if (this.id === 10) SpeedrunMilestone.upgradeTTgen.tryComplete();
   }
 }
 

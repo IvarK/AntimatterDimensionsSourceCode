@@ -125,7 +125,7 @@ export const Speedrun = {
   }
 };
 
-class SpeedrunMilestone extends GameMechanicState {
+class SpeedrunMilestoneState extends GameMechanicState {
   constructor(config) {
     super(config);
     this.registerEvents(config.checkEvent, args => this.tryComplete(args));
@@ -152,4 +152,7 @@ class SpeedrunMilestone extends GameMechanicState {
   }
 }
 
-export const SpeedrunMilestones = SpeedrunMilestone.createAccessor(GameDatabase.speedrunMilestones);
+export const SpeedrunMilestone = mapGameDataToObject(
+  GameDatabase.speedrunMilestones,
+  config => new SpeedrunMilestoneState(config)
+);

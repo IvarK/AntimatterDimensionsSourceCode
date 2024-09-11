@@ -2,11 +2,11 @@ import TWEEN from "tween.js";
 
 import { ElectronRuntime, SteamRuntime } from "@/steam";
 
+import { Cloud } from "./core/storage";
 import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
 import { DEV } from "@/env";
-import { SpeedrunMilestones } from "./core/speedrun";
-import { Cloud } from "./core/storage";
+import { SpeedrunMilestone } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
 
 import Payments from "./core/payments";
@@ -740,7 +740,8 @@ function laitelaRealityTick(realDiff) {
     laitelaInfo.thisCompletion = Time.thisRealityRealTime.totalSeconds;
     laitelaInfo.fastestCompletion = Math.min(laitelaInfo.thisCompletion, laitelaInfo.fastestCompletion);
     clearCelestialRuns();
-    if (Time.thisRealityRealTime.totalSeconds < 30) {
+    const destabilizing = Time.thisRealityRealTime.totalSeconds < 30;
+    if (destabilizing) {
       laitelaInfo.difficultyTier++;
       laitelaInfo.fastestCompletion = 300;
       completionText += laitelaBeatText(Laitela.maxAllowedDimension + 1);
@@ -752,37 +753,19 @@ function laitelaRealityTick(realDiff) {
     }
     if (Laitela.realityReward > oldInfo.realityReward) {
       completionText += `<br><br>Dark Matter Multiplier: ${formatX(oldInfo.realityReward, 2, 2)}
-      ➜ ${formatX(Laitela.realityReward, 2, 2)}`;
-      if (oldInfo.fastestCompletion === 3600 || oldInfo.fastestCompletion === 300 && oldInfo.difficultyTier > 0) {
-        if (Time.thisRealityRealTime.totalSeconds < 30) {
-          // First attempt - destabilising
-          completionText += `<br>Best Completion Time: None ➜ Destabilized
-          <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)} ➜
-          ${formatInt(8 - laitelaInfo.difficultyTier)}`;
-        } else {
-          // First attempt - not destabilising
-          completionText += `<br>Best Completion Time: None ➜
-            ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
-            <br>Highest Active Dimension: ${formatInt(8 - laitelaInfo.difficultyTier)}`;
-        }
-      } else if (Time.thisRealityRealTime.totalSeconds < 30) {
-        // Second+ attempt - destabilising
-        completionText += `<br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
-          ➜ Destabilized
-          <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)} ➜
-          ${formatInt(8 - laitelaInfo.difficultyTier)}`;
-      } else {
-        // Second+ attempt - not destabilising
-        completionText += `<br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
-        ➜ ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
-        <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)}`;
-      }
+      ➜ ${formatX(Laitela.realityReward, 2, 2)}<br>Best Completion Time: `;
+      const firstAttempt =
+        oldInfo.fastestCompletion === 3600 || oldInfo.fastestCompletion === 300 && oldInfo.difficultyTier > 0;
+      completionText += `${firstAttempt ? "None" : TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()} ➜
+        ${destabilizing ? "Destabilized" : TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
+        <br>Highest Active Dimension: ${destabilising ? `${formatInt(8 - oldInfo.difficultyTier)} ➜` : ""}
+        ${formatInt(8 - laitelaInfo.difficultyTier)}`;
       player.records.bestReality.laitelaSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     } else {
       completionText += ` You need to destabilize in faster than
         ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()} to improve your multiplier.`;
     }
-    if (Laitela.isFullyDestabilized) SpeedrunMilestones(24).tryComplete();
+    if (Laitela.isFullyDestabilized) SpeedrunMilestone.completeFullDestabilize.tryComplete();
     Modal.message.show(completionText, {}, 2);
   }
 }
@@ -1039,9 +1022,7 @@ export function simulateTime(seconds, real, fast) {
           // .postLoadStuff will restart GameIntervals
           GameStorage.postLoadStuff();
         },
-        then: () => {
-          afterSimulation(seconds, playerStart);
-        },
+        then: () => afterSimulation(seconds, playerStart),
         progress
       });
   }

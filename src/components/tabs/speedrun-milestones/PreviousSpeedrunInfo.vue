@@ -6,6 +6,7 @@ export default {
     prevRunInfo: {
       type: Object,
       required: false,
+      // eslint-disable-next-line no-empty-function
       default: () => {}
     },
     index: {

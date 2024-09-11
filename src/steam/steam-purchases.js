@@ -1,6 +1,6 @@
+import * as PlayFab from "./bindings/playfab";
 import { MAC } from "@/env";
 import { openExternalLink } from "@/utility/open-external-link";
-import * as PlayFab from "./bindings/playfab";
 
 export async function loginPlayFabWithSteam(ticket, screenName) {
   await PlayFab.LoginWithSteam(ticket);

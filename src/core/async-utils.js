@@ -47,6 +47,7 @@ window.Async = {
    * @param {function} [config.then] Run after everything is done
    * @returns {Promise|undefined}
    */
+  // eslint-disable-next-line consistent-return
   run(fun, maxIter, config) {
     if (this.enabled) {
       // Disable async if we're already doing async

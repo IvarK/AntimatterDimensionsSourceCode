@@ -198,7 +198,6 @@ window.DecimalCurrency = DecimalCurrency;
 
 Currency.antimatter = new class extends DecimalCurrency {
   get value() { return player.antimatter; }
-
   set value(value) {
     if (InfinityChallenges.nextIC) InfinityChallenges.notifyICUnlock(value);
     if (GameCache.cheapestAntimatterAutobuyer.value && value.gte(GameCache.cheapestAntimatterAutobuyer.value)) {

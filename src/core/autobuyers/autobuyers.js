@@ -1,3 +1,4 @@
+import { EPMultAutobuyerState, IPMultAutobuyerState } from "./prestige-currency-multiplier-autobuyer";
 import { AnnihilationAutobuyerState } from "./annihilation-autobuyer";
 import { AntimatterDimensionAutobuyerState } from "./antimatter-dimension-autobuyer";
 import { BigCrunchAutobuyerState } from "./big-crunch-autobuyer";
@@ -10,7 +11,6 @@ import { EternityAutobuyerState } from "./eternity-autobuyer";
 import { GalaxyAutobuyerState } from "./galaxy-autobuyer";
 import { ImaginaryUpgradeAutobuyerState } from "./imaginary-upgrade-autobuyer";
 import { InfinityDimensionAutobuyerState } from "./infinity-dimension-autobuyer";
-import { EPMultAutobuyerState, IPMultAutobuyerState } from "./prestige-currency-multiplier-autobuyer";
 import { RealityAutobuyerState } from "./reality-autobuyer";
 import { RealityUpgradeAutobuyerState } from "./reality-upgrade-autobuyer";
 import { ReplicantiGalaxyAutobuyerState } from "./replicanti-galaxy-autobuyer";

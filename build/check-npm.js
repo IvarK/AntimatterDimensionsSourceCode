@@ -1,9 +1,8 @@
 /* eslint-disable no-console */
-
-const fs = require("fs");
-const path = require("path");
-const proc = require("child_process");
-const readline = require("readline");
+import fs from "fs";
+import path from "path";
+import proc from "child_process";
+import readline from "readline";
 
 
 function getHash(string) {
@@ -17,18 +16,18 @@ function getHash(string) {
   return hash.toString();
 }
 
-const hashPath = path.resolve(__dirname, "../.tmp/package-lock.json.hash");
+const hashPath = path.resolve(import.meta.dirname, "../.tmp/package-lock.json.hash");
 let currentHash = undefined;
 if (fs.existsSync(hashPath)) {
   currentHash = fs.readFileSync(hashPath, { encoding: "utf-8" });
 }
 
-const packageLockPath = path.resolve(__dirname, "../package-lock.json");
+const packageLockPath = path.resolve(import.meta.dirname, "../package-lock.json");
 const packageLockContents = fs.readFileSync(packageLockPath, { encoding: "utf-8" });
 const newHash = getHash(packageLockContents);
 
 if (newHash !== currentHash) {
-  const tmpPath = path.resolve(__dirname, "../.tmp");
+  const tmpPath = path.resolve(import.meta.dirname, "../.tmp");
   if (!fs.existsSync(tmpPath)) {
     fs.mkdirSync(tmpPath);
   }

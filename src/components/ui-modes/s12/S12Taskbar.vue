@@ -38,7 +38,7 @@ export default {
     <div class="c-taskbar">
       <img
         class="c-start-icon"
-        src="images/s12/win7-start-menu-inactive.png"
+        src="/images/s12/win7-start-menu-inactive.png"
         @click="startupSound.play()"
       >
       <template

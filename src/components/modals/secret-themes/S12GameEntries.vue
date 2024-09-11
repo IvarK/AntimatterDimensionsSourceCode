@@ -47,7 +47,7 @@ export default {
     >
       <div class="c-s12-game__inner">
         <img
-          :src="`images/s12/${game.image}`"
+          :src="`/images/s12/${game.image}`"
           class="c-s12-game__img"
         >
         <div class="c-s12-game__text">

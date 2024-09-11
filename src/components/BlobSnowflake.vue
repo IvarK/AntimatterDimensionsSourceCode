@@ -1,5 +1,5 @@
 <script>
-import TWEEN from "tween.js";
+import TWEEN from "@tweenjs/tween.js";
 
 export default {
   name: "BlobSnowflake",

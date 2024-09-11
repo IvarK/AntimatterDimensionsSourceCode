@@ -391,7 +391,7 @@ const CelestialNavigationViewportCache = {
         y="-350"
         height="1503"
         width="1503"
-        href="images/celestial-navigation-bg.webp"
+        href="/images/celestial-navigation-bg.webp"
       />
       <g
         v-for="(obj, index) in drawOrder"

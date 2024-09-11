@@ -158,7 +158,7 @@ export default {
     <div class="c-shop-header">
       <span>You have {{ availableSTD }}</span>
       <img
-        src="images/std_coin.png"
+        src="/images/std_coin.png"
         class="c-shop-header__img"
       >
       <button

@@ -9,14 +9,6 @@ function formatInt(value) {
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 }
 
-function formatMachines(realPart, imagPart) {
-  const parts = [];
-  if (Decimal.neq(realPart, 0)) parts.push(format(realPart, 2));
-  if (Decimal.neq(imagPart, 0)) parts.push(`${format(imagPart, 2, 2)}i`);
-  if (Decimal.eq(realPart, 0) && Decimal.eq(imagPart, 0)) return format(0);
-  return parts.join(" + ");
-}
-
 // This is used for Discord Rich Presence, the information which shows up on a person's profile badge in Discord if
 // they are playing a game on Steam which has integration that pushes the info to Discord
 export const discordRichPresence = {

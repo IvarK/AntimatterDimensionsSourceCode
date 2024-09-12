@@ -1,7 +1,7 @@
 import { BitUpgradeState, GameMechanicState } from "../game-mechanics";
 import { GameDatabase } from "../secret-formula/game-database";
 
-import { SpeedrunMilestones } from "../speedrun";
+import { SpeedrunMilestone } from "../speedrun";
 
 import { Quotes } from "./quotes";
 
@@ -166,7 +166,7 @@ export const V = {
       for (const unlock of VRunUnlocks.all) {
         unlock.tryComplete();
       }
-      if (this.spaceTheorems >= 36) SpeedrunMilestones(22).tryComplete();
+      if (this.spaceTheorems >= 36) SpeedrunMilestone.complete36VAchievement.tryComplete();
     }
 
     if (VUnlocks.raUnlock.canBeApplied && !Ra.unlocks.autoTP.canBeApplied) {

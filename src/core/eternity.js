@@ -254,9 +254,7 @@ export class EternityMilestoneState {
 }
 export const EternityMilestone = mapGameDataToObject(
   GameDatabase.eternity.milestones,
-  config => (config.isBaseResource
-    ? new EternityMilestoneState(config)
-    : new EternityMilestoneState(config))
+  config => new EternityMilestoneState(config)
 );
 
 class EternityUpgradeState extends SetPurchasableMechanicState {

@@ -1,5 +1,5 @@
-export const speedrunMilestones = [
-  {
+export const speedrunMilestones = {
+  firstBoost: {
     id: 1,
     key: "firstBoost",
     name: "First Dimboost",
@@ -7,7 +7,7 @@ export const speedrunMilestones = [
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.DIMBOOST_AFTER,
   },
-  {
+  firstGalaxy: {
     id: 2,
     key: "firstGalaxy",
     name: "First Galaxy",
@@ -15,7 +15,7 @@ export const speedrunMilestones = [
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER,
   },
-  {
+  firstInfinity: {
     id: 3,
     key: "firstInfinity",
     name: "First Infinity",
@@ -23,7 +23,7 @@ export const speedrunMilestones = [
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
   },
-  {
+  completeC9: {
     id: 4,
     key: "completeC9",
     name: "Tickspeed Challenge",
@@ -31,7 +31,7 @@ export const speedrunMilestones = [
     checkRequirement: () => NormalChallenge(9).isCompleted,
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
   },
-  {
+  completeAllNC: {
     id: 5,
     key: "completeAllNC",
     name: "All Normal Challenges",
@@ -39,7 +39,7 @@ export const speedrunMilestones = [
     checkRequirement: () => NormalChallenges.all.countWhere(c => !c.isCompleted) === 0,
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
   },
-  {
+  breakInfinity: {
     id: 6,
     key: "breakInfinity",
     name: "Break Infinity",
@@ -47,7 +47,7 @@ export const speedrunMilestones = [
     checkRequirement: () => player.break,
     checkEvent: GAME_EVENT.BREAK_INFINITY,
   },
-  {
+  upgrade5e11IP: {
     id: 7,
     key: "upgrade5e11IP",
     get name() { return `${format(5e11)} IP Upgrade`; },
@@ -55,7 +55,7 @@ export const speedrunMilestones = [
     checkRequirement: () => true,
     // This is checked within BreakInfinityUpgrade.onPurchased
   },
-  {
+  completeIC5: {
     id: 8,
     key: "completeIC5",
     name: "Infinity Challenge 5",
@@ -63,7 +63,7 @@ export const speedrunMilestones = [
     checkRequirement: () => InfinityChallenge(5).isCompleted,
     checkEvent: GAME_EVENT.BIG_CRUNCH_AFTER,
   },
-  {
+  unlockReplicanti: {
     id: 9,
     key: "unlockReplicanti",
     name: "Replicanti",
@@ -71,7 +71,7 @@ export const speedrunMilestones = [
     checkRequirement: () => player.replicanti.unl,
     checkEvent: GAME_EVENT.REPLICANTI_TICK_AFTER,
   },
-  {
+  firstEternity: {
     id: 10,
     key: "firstEternity",
     name: "First Eternity",
@@ -79,7 +79,7 @@ export const speedrunMilestones = [
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
   },
-  {
+  allEternityMilestones: {
     id: 11,
     key: "allEternityMilestones",
     name: "All Eternity Milestones",
@@ -87,7 +87,7 @@ export const speedrunMilestones = [
     checkRequirement: () => EternityMilestone.all.every(m => m.isReached),
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
   },
-  {
+  completeFirstEC: {
     id: 12,
     key: "completeFirstEC",
     name: "First Eternity Challenge",
@@ -95,7 +95,7 @@ export const speedrunMilestones = [
     checkRequirement: () => EternityChallenges.completions > 0,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
   },
-  {
+  completeEC10: {
     id: 13,
     key: "completeEC10",
     name: "Eternity Challenge 10",
@@ -103,7 +103,7 @@ export const speedrunMilestones = [
     checkRequirement: () => EternityChallenge(10).completions > 0,
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
   },
-  {
+  firstDilation: {
     id: 14,
     key: "firstDilation",
     name: "First Dilated Eternity",
@@ -111,7 +111,7 @@ export const speedrunMilestones = [
     checkRequirement: () => player.dilation.active,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
   },
-  {
+  upgradeTTgen: {
     id: 15,
     key: "upgradeTTgen",
     name: "Time Theorem Generation",
@@ -119,7 +119,7 @@ export const speedrunMilestones = [
     checkRequirement: () => true,
     // This is checked within DilationUpgradeState.onPurchased
   },
-  {
+  firstReality: {
     id: 16,
     key: "firstReality",
     name: "First Reality",
@@ -127,7 +127,7 @@ export const speedrunMilestones = [
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
   },
-  {
+  upgradeBlackHole: {
     id: 17,
     key: "upgradeBlackHole",
     name: "Black Hole",
@@ -135,7 +135,7 @@ export const speedrunMilestones = [
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.BLACK_HOLE_UNLOCKED,
   },
-  {
+  allRealityUpgrades: {
     id: 18,
     key: "allRealityUpgrades",
     name: "All Reality Upgrades",
@@ -143,7 +143,7 @@ export const speedrunMilestones = [
     checkRequirement: () => RealityUpgrades.allBought,
     checkEvent: GAME_EVENT.REALITY_UPGRADE_BOUGHT,
   },
-  {
+  completeTeresaReality: {
     id: 19,
     key: "completeTeresaReality",
     name: "Teresa's Reality",
@@ -151,7 +151,7 @@ export const speedrunMilestones = [
     checkRequirement: () => Teresa.isRunning,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },
-  {
+  completeEffarigReality: {
     id: 20,
     key: "completeEffarigReality",
     name: "Effarig's Reality",
@@ -159,7 +159,7 @@ export const speedrunMilestones = [
     checkRequirement: () => Effarig.currentStage === EFFARIG_STAGES.COMPLETED,
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
   },
-  {
+  completeEnslavedReality: {
     id: 21,
     key: "completeEnslavedReality",
     name: "The Nameless Ones' Reality",
@@ -167,7 +167,7 @@ export const speedrunMilestones = [
     checkRequirement: () => Enslaved.isRunning,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
   },
-  {
+  complete36VAchievement: {
     id: 22,
     key: "complete36VAchievement",
     name: "All basic V-Achievements",
@@ -175,7 +175,7 @@ export const speedrunMilestones = [
     checkRequirement: () => true,
     // In order to avoid unnecessary overhead, this is checked within V.checkForUnlocks instead of every tick
   },
-  {
+  completeRaMemories: {
     id: 23,
     key: "completeRaMemories",
     name: "Regain Ra's Memories",
@@ -183,7 +183,7 @@ export const speedrunMilestones = [
     checkRequirement: () => Ra.totalPetLevel >= Ra.maxTotalPetLevel,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
-  {
+  completeFullDestabilize: {
     id: 24,
     key: "completeFullDestabilize",
     name: "Full Destabilization",
@@ -191,7 +191,7 @@ export const speedrunMilestones = [
     checkRequirement: () => Laitela.isFullyDestabilized,
     // Destabilization isn't a reality reset because it shortcuts gameLoop; this is checked in laitelaRealityTick
   },
-  {
+  completeFullGame: {
     id: 25,
     key: "completeFullGame",
     name: "Game Completed!",
@@ -199,4 +199,4 @@ export const speedrunMilestones = [
     checkRequirement: () => Achievement(188).isUnlocked,
     checkEvent: GAME_EVENT.ACHIEVEMENT_UNLOCKED,
   },
-];
+};

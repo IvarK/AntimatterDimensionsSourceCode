@@ -4,8 +4,7 @@ import { DC } from "./constants";
 import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
 /* eslint-disable no-console */
-// Disabling no-console here seems
-// reasonable, since these are the devtools after all
+// Disabling no-console here seems reasonable, since these are the devtools after all
 export const dev = {};
 
 dev.hardReset = function() {
@@ -17,35 +16,28 @@ dev.giveAllAchievements = function() {
   for (const achievement of allAchievements) achievement.unlock();
 };
 
-// Know that both dev.doubleEverything and dev.tripleEverything are both broken
-// with this error https://i.imgur.com/ZMEBNTv.png
-
-dev.doubleEverything = function() {
+dev.multiplyEverythingBy = function(amount) {
+  // eslint-disable-next-line no-param-reassign
+  amount = new Decimal(amount);
   Object.keys(player).forEach(key => {
-    if (typeof player[key] === "number") player[key] *= 2;
-    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(2);
-    if (typeof player[key] === "object" && !isFinite(player[key])) {
+    if (typeof player[key] === "number") player[key] *= amount.toNumber();
+    if (player[key] instanceof Decimal && Decimal.isFinite(player[key])) player[key] = player[key].times(amount);
+    if (typeof player[key] === "object" && !Decimal.isFinite(player[key])) {
       Object.keys(player[key]).forEach(key2 => {
-        if (typeof player[key][key2] === "number") player[key][key2] *= 2;
-        if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object)
-          player[key][key2] = player[key][key2].times(2);
+        if (typeof player[key][key2] === "number" && !Decimal.isFinite(player[key][key2]))
+          player[key][key2] *= amount.toNumber();
+        if (player[key][key2] instanceof Decimal) player[key][key2] = player[key][key2].times(amount);
       });
     }
   });
 };
 
+dev.doubleEverything = function() {
+  dev.multiplyEverythingBy(2);
+};
+
 dev.tripleEverything = function() {
-  Object.keys(player).forEach(key => {
-    if (typeof player[key] === "number") player[key] *= 3;
-    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(3);
-    if (typeof player[key] === "object" && !isFinite(player[key])) {
-      Object.keys(player[key]).forEach(key3 => {
-        if (typeof player[key][key3] === "number") player[key][key3] *= 3;
-        if (typeof player[key][key3] === "object" && player[key][key3].constructor !== Object)
-          player[key][key3] = player[key][key3].times(3);
-      });
-    }
-  });
+  dev.multiplyEverythingBy(3);
 };
 
 dev.barrelRoll = function() {

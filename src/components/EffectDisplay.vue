@@ -16,8 +16,8 @@ export default {
     },
     label: {
       type: String,
-      default: "Currently",
-      required: false
+      required: false,
+      default: "Currently"
     },
     ignoreCapped: {
       type: Boolean,
@@ -72,8 +72,7 @@ export default {
         }
 
         if (!isFunction(effect)) {
-          throw new Error(`EffectDisplay config.effect has ` +
-            ` unsupported type "${typeof effect}"`);
+          throw new Error(`EffectDisplay config.effect has unsupported type "${typeof effect}"`);
         }
 
         const value = effect();
@@ -85,8 +84,8 @@ export default {
           this.effectValue = Decimal.fromDecimal(value);
           this.updateEffect = () => this.effectValue.copyFrom(effect());
         } else {
-          throw new Error(`EffectDisplay config.effect is a function which returns` +
-            ` unsupported type "${typeof effect}"`);
+          // eslint-disable-next-line max-len
+          throw new Error(`EffectDisplay config.effect is a function which returns unsupported type "${typeof effect}"`);
         }
 
         let cap = config.cap;
@@ -125,8 +124,7 @@ export default {
             return;
           }
 
-          throw new Error(`EffectDisplay config.cap is a function which returns` +
-            ` unsupported type "${typeof effect}"`);
+          throw new Error(`EffectDisplay config.cap is a function which returns unsupported type "${typeof effect}"`);
         }
       }
     },

@@ -1,5 +1,5 @@
 import { RebuyableMechanicState, SetPurchasableMechanicState } from "./game-mechanics";
-import { SpeedrunMilestones } from "./speedrun";
+import { SpeedrunMilestone } from "./speedrun";
 
 export class BreakInfinityUpgradeState extends SetPurchasableMechanicState {
   get currency() {
@@ -12,7 +12,7 @@ export class BreakInfinityUpgradeState extends SetPurchasableMechanicState {
 
   onPurchased() {
     if (this.id === "postGalaxy") {
-      SpeedrunMilestones(7).tryComplete();
+      SpeedrunMilestone.upgrade5e11IP.tryComplete();
       PelleStrikes.powerGalaxies.trigger();
     }
   }

@@ -51,27 +51,13 @@ Vue.mixin({
     on$(event, fn) {
       EventHub.ui.on(event, fn, this);
     },
-    format(value, places, placesUnder1000) {
-      return format(value, places, placesUnder1000);
-    },
-    formatInt(value) {
-      return formatInt(value);
-    },
-    formatPercents(value, places) {
-      return formatPercents(value, places);
-    },
-    formatRarity(value) {
-      return formatRarity(value);
-    },
-    formatX(value, places, placesUnder1000) {
-      return formatX(value, places, placesUnder1000);
-    },
-    formatPow(value, places, placesUnder1000) {
-      return formatPow(value, places, placesUnder1000);
-    },
-    formatPostBreak(value, places, placesUnder1000) {
-      return formatPostBreak(value, places, placesUnder1000);
-    },
+    format,
+    formatInt,
+    formatPercents,
+    formatRarity,
+    formatX,
+    formatPow,
+    formatPostBreak,
     pluralize,
     quantify,
     quantifyInt

@@ -154,18 +154,16 @@ export const eternityMilestones = {
         progress is currently disabled`;
       const eternities = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds,
         player.eternities.gte(200));
-      // As far as I can tell, using templates here as Codefactor wants would lead to nested templates,
-      // which seems messy to say the least.
       const realTime = PlayerProgress.seenAlteredSpeed() ? " real-time" : "";
-      // eslint-disable-next-line prefer-template
-      return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest${realTime} Eternity ` +
-        (eternities.gt(0) ? `(Currently ${format(eternities, 2, 2)}/hour)` : "(Inactive)");
+      const effectText = eternities.gt(0) ? `Currently ${format(eternities, 2, 2)}/hour` : "Inactive";
+      return `While offline, gain Eternities at ${formatPercents(0.5)} the rate of your fastest${realTime} Eternity
+        (${effectText})`;
     },
     activeCondition: () => (player.options.offlineProgress
       ? `Must be outside of all Challenges and Dilation, and the Eternity Autobuyer must be set to Eternity at zero EP.
         This milestone's effect is capped at ${formatInt(33)}ms.`
       : ""),
-      pelleUseless: true
+    pelleUseless: true
   },
   autoInfinities: {
     eternities: 1000,
@@ -174,16 +172,15 @@ export const eternityMilestones = {
         progress is currently disabled`;
       const infinities = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds,
         player.eternities.gte(1000));
-      // eslint-disable-next-line prefer-template
-      return `While offline, gain Infinities equal to ${formatPercents(0.5)}
-        your best Infinities/hour this Eternity ` +
-        (infinities.gt(0) ? `(Currently ${format(infinities, 2, 2)}/hour)` : "(Inactive)");
+      const effectText = infinities.gt(0) ? `Currently ${format(infinities, 2, 2)}/hour` : "Inactive";
+      return `While offline, gain Infinities equal to ${formatPercents(0.5)} your best Infinities/hour this Eternity
+        (${effectText})`;
     },
     activeCondition: () => (player.options.offlineProgress
       ? `Must be outside of Normal/Infinity Challenges and outside of EC4 and EC12,
         the Big Crunch Autobuyer must be turned on and set to time mode with ${formatInt(5)} seconds or less,
         and the Eternity Autobuyer must be turned off.`
       : ""),
-      pelleUseless: true
+    pelleUseless: true
   }
 };

@@ -1,5 +1,4 @@
 import { DC } from "./constants";
-import { SpeedrunMilestones } from "./speedrun";
 
 class BlackHoleUpgradeState {
   constructor(config) {

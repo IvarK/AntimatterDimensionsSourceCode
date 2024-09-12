@@ -20,9 +20,9 @@ export class GameMechanicState extends Effect {
         } else {
           effect = new Effect(nested.effect, nested.cap, nested.effectCondition);
         }
-        Object.defineProperty(effect, "canBeApplied", {
+        Object.defineProperty(effect, "isEffectActive", {
           configurable: false,
-          get: () => this.canBeApplied
+          get: () => this.isEffectActive
         });
         this.effects[key] = effect;
       }

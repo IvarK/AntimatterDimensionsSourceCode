@@ -2419,7 +2419,7 @@ export const news = [
       miserable as possible. A slow removal of resources, with unique nerfs just to stop you from progressing. The
       destruction of UI, turning from usable to unusable, arcane and unwieldy, requiring memory and luck to even
       continue this quest. Randomness, against the player for even the simplest actions, to punish the thought of
-      progression. Hooks and traps and disasters and low rolls for a chance see progression, which entirely consists
+      progression. Hooks and traps and disasters and low rolls for a chance to see progression, which entirely consists
       of putting the state of the game further from anything deemed reasonable. A situation where the character is
       broken just to tell you to leave… but the damage is already done, if it is even possible to turn back. And…
       from there, a hard reset probably isn't enough. It would have to be… harder. Not just a hard reset, but a

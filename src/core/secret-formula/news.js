@@ -88,7 +88,7 @@ export const news = [
   },
   {
     id: "a18",
-    text: "!hi"
+    text: "can't believe caseoh hasn't crunched yet smh"
   },
   {
     id: "a19",
@@ -162,7 +162,7 @@ export const news = [
   },
   {
     id: "a35",
-    text: "Above us, there is nothing above, but the stars, above."
+    text: "Above us ඞ"
   },
   {
     id: "a36",
@@ -190,7 +190,7 @@ export const news = [
   {
     id: "a41",
     text:
-      "There must always be an equal amount of matter as compared to antimatter; I guess your mom balances that a bit."
+      "There must always be an equal amount of matter as compared to antimatter; I guess caseoh balances that a bit."
   },
   {
     id: "a42",
@@ -965,7 +965,7 @@ export const news = [
     id: "a178",
     text:
       `WARNING: Use of Antimatter Dimensions may result in Tuberculosis, HIV/AIDS, sudden belief that the 9th
-      dimension is real, spontaneous implosion, Polio, Measles, existential dread, incurable insanity or <span
+      dimension is real, spontaneous implosion, COVID-19, Measles, existential dread, incurable insanity or <span
       style='color: black; background: black;'>REDACTED</span>. Please contact your insurance to see if you are
       covered. By continuing you absolve Antimatter Dimensions of blame should any of the above mentioned, or those
       that have not been mentioned yet, occur to you. Antimatter Dimensions reserves the right to alter this at any
@@ -1071,12 +1071,11 @@ export const news = [
   {
     id: "a195",
     text:
-      `Clowns are unique in that there is no such thing as an anti-clown,
-      it's just another clown. Clowns are their own opposite.`
+      `| |! || |_`
   },
   {
     id: "a196",
-    text: "Gay Time! (click me!)",
+    text: "Gay! (click me!)",
     onClick() {
       let random = Math.random();
       // Golden ratio
@@ -1129,7 +1128,7 @@ export const news = [
   },
   {
     id: "a204",
-    text: "What kind of tea is hard to swallow? Reali-tea."
+    text: "What kind of tea is DEMOCRATIC to swallow? LIBER-TEA. GLORY TO SUPER EARTH!"
   },
   {
     id: "a205",
@@ -1426,7 +1425,7 @@ export const news = [
           picture of him in the background is just rather humorous.`,
         S6:
           `that beautifully animated background just entrances you, and then the subtle tone and
-          colors pull you in and fully immerse you into the game.`,
+          colors pull you in and fully immerse you into the game. Also, you're using the best theme lmao`,
         S7: "I always had fond memories of that background from my childhood.",
         S8: "it makes it a lot easier to sneak in a little gameplay at the office.",
         S9: "lol you can't even ever see this in the game",
@@ -1694,7 +1693,7 @@ export const news = [
   },
   {
     id: "a280",
-    text: "I hate antimatter. It's rough, coarse, irritating, and it gets everywhere."
+    text: "Friend me (the mod dev)! @hydrazine on Discord!"
   },
   {
     id: "a281",

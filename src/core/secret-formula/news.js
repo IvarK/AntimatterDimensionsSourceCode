@@ -104,7 +104,7 @@ export const news = [
   },
   {
     id: "a22",
-    text: "One, two, skip a few, ninety-nine, NaN!"
+    text: "Hatsune Miku has OFFICIALLY beed added to Fortnite: Battle Royale!"
   },
   {
     id: "a23",
@@ -137,11 +137,12 @@ export const news = [
   {
     id: "a29",
     text: `If you are not playing on Kongregate, Steam, or https://ivark.github.io/AntimatterDimensions/,
-      the site is bootleg.`
+      the site is bootleg. Yes, I know this is a "bootleg" lmao- I made this site so I could get around a 
+      .io domain block my school has! if ur here and dont have a block, go to the official site instead!`
   },
   {
     id: "a30",
-    text: "Rate 5 on Kongregate so more people can experience this 5 star rating."
+    text: "I love you, River <3 -Jaiden"
   },
   {
     id: "a31",
@@ -900,7 +901,7 @@ export const news = [
   },
   {
     id: "a170",
-    text: "<a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank'>This link is not a rick roll.</a>"
+    text: "<a href='https://www.youtube.com/watch?v=jhl5afLEKdo' target='_blank'>This link is not Hatsune Miku's \"World is Mine\".</a>"
   },
   {
     id: "a171",
@@ -1075,7 +1076,7 @@ export const news = [
   },
   {
     id: "a196",
-    text: "Disco Time! (click me!)",
+    text: "Gay Time! (click me!)",
     onClick() {
       let random = Math.random();
       // Golden ratio

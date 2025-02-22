@@ -84,9 +84,9 @@ export const eternityChallenges = [
       return "you cannot gain Antimatter Galaxies normally. The cost of upgrading your max Replicanti" +
               " Galaxies is massively reduced.";
     },
-    goal: DC.E850,
+    goal: DC.E800,
     pelleGoal: DC.E1500,
-    goalIncrease: DC.E250,
+    goalIncrease: DC.E225,
     reward: {
       description: "Further reduce Antimatter Dimension cost multiplier growth",
       effect: completions => completions * 0.2,
@@ -116,9 +116,9 @@ export const eternityChallenges = [
     id: 8,
     description: () => `you can only upgrade Infinity Dimensions ${formatInt(50)} times and Replicanti
       upgrades ${formatInt(40)} times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.`,
-    goal: DC.E1300,
+    goal: DC.E1200,
     pelleGoal: DC.E2800,
-    goalIncrease: DC.E900,
+    goalIncrease: DC.E800,
     reward: {
       description: "Infinity Power strengthens Replicanti Galaxies",
       effect: completions => {
@@ -193,9 +193,9 @@ export const eternityChallenges = [
         within a certain amount of time or you will fail the Challenge. ${specialInfinityGlyphDisabledEffectText()}`
       : `the game runs ×${formatInt(1000)} slower. The goal must be reached
         within a certain amount of time or you will fail the Challenge.`),
-    goal: DC.E110000,
+    goal: DC.E100000,
     pelleGoal: DC.E208000,
-    goalIncrease: DC.E12000,
+    goalIncrease: DC.E10000,
     restriction: completions => Math.max(10 - 2 * completions, 1) / 10,
     checkRestriction: restriction => Time.thisEternity.totalSeconds < restriction,
     formatRestriction: restriction => `in ${quantify("in-game second", restriction, 0, 1)} or less.`,

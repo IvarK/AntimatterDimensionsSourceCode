@@ -175,7 +175,7 @@ export const eternityChallenges = [
       Infinity Power and Dimension Boosts (to Antimatter Dimensions). ${specialInfinityGlyphDisabledEffectText()}`,
     goal: DC.E450,
     pelleGoal: DC.E11200,
-    goalIncrease: DC.E200,
+    goalIncrease: DC.E175,
     pelleGoalIncrease: DC.E1400,
     reward: {
       description: "Further reduce Tickspeed cost multiplier growth",

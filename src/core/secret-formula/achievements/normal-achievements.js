@@ -535,7 +535,11 @@ export const normalAchievements = [
     name: "Game Design Is My Passion",
     get description() { return `Beat Infinity Challenge 5 in ${formatInt(15)} seconds or less.`; },
     checkRequirement: () => InfinityChallenge(5).isRunning && Time.thisInfinityRealTime.totalSeconds <= 15,
-    checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE
+    checkEvent: GAME_EVENT.BIG_CRUNCH_BEFORE,
+    get reward() {
+      return `You gain Replicanti ${formatInt(3)} times faster.`;
+    },
+    effect: 3
   },
   {
     id: 82,

@@ -492,8 +492,8 @@ export const normalTimeStudies = [
     cost: 200,
     requirement: [193],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
-    description: () => `You gain Replicanti ${formatInt(20)} times faster`,
-    effect: 20
+    description: () => `You gain Replicanti ${formatInt(50)} times faster`,
+    effect: 50
   },
   {
     id: 214,

@@ -27,8 +27,8 @@ export const eternityChallenges = [
     goalIncrease: DC.E175,
     reward: {
       description: "1st Infinity Dimension multiplier based on Infinity Power",
-      effect: completions => Currency.infinityPower.value.pow(1.5 / (700 - completions * 100)).clampMin(1),
-      cap: DC.E100,
+      effect: completions => Currency.infinityPower.value.pow(0.45 / (700 - completions * 100)).clampMin(1),
+      cap: DC.E1000,
       formatEffect: value => formatX(value, 2, 1)
     }
   },

@@ -9,21 +9,37 @@ export const changelog = [
    * }
    */
   {
+    date: [2025, 2, 23],
+    name: "v0.1 Beta 2: Exterminator",
+    info: `
+<b>Bugs Fixed:</b><br>
+<ul>
+<li>Fixed Remnant Formula so it stops displaying negative Remnant gain (most if the time)</li>
+<li>Nerfed Rebuyable Pelle Upgrade 1 (no more inflation)</li>
+<li>Fixed ECs 6 and 8 (they should work properly again</li>
+<li>Stomped Numerous other bugs (killed so many it almost would've made Hevipelle quit eating ass)</li>
+</ul>
+`
+  },
+  {
     date: [2025, 2, 22],
-    name: "The 'It is Done' Update",
+    name: "v0.1 Beta 1: First Public Release",
     info: `
 <b>Things Changed:</b><br>
 <ul>
-<li>Lots of buffs</li>
-<li>Pelle changed</li>
-<li>Early game changed</li>
-<li>Please report bugs/tpyos</li>
+<li>Achievement Multiplier Buff</li>
+<liBuffed Break Upgrades 1 and 2</li>
+<li>Buffed IC1's Reward</li>
+<li>Gave Achievement r81 3x Rep Speed</li>
+<li>Reduced EC goals</li>
+<li>Buffed TS213 from 20x to 50x</li>
+<li>Changed the Pelle Upgrade Formula</li>
 </ul>
 `
   },
   {
     date: [2024, 9, 6],
-    name: "Rebalance Testing",
+    name: "v0.1.0: Rebalance Testing",
     info: `
 <b>Things Changed:</b><br>
 <ul>

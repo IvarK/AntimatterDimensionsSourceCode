@@ -289,14 +289,14 @@ export const Pelle = {
     }
 
     const gain = (
-      (Math.log10(am + 2) + Math.log10(ip + 2) + Math.log10(ep + 2)) / 2
+      (Math.log10(am + 2) + Math.log10(ip + 2) + Math.log10(ep + 2)) / 1.7
     ) ** 8;
 
     return gain < 1 ? gain : Math.floor(gain - this.cel.remnants);
   },
 
   realityShardGain(remnants) {
-    return Decimal.pow(10, remnants ** (1 / 8) * 4.2).minus(1).div(1e3);
+    return Decimal.pow(10, remnants ** (1 / 8) * 4).minus(1).div(1e3);
   },
 
   get realityShardGainPerSecond() {

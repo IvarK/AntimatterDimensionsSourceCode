@@ -9,6 +9,19 @@ export const changelog = [
    * }
    */
   {
+    date: [2025, 2, 22],
+    name: "The 'It is Done' Update",
+    info: `
+<b>Things Changed:</b><br>
+<ul>
+<li>Lots of buffs</li>
+<li>Pelle changed</li>
+<li>Early game changed</li>
+<li>Please report bugs/tpyos</li>
+</ul>
+`
+  },
+  {
     date: [2024, 9, 6],
     name: "Rebalance Testing",
     info: `

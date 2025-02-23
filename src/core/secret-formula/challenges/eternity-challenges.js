@@ -86,7 +86,7 @@ export const eternityChallenges = [
     },
     goal: DC.E800,
     pelleGoal: DC.E1500,
-    goalIncrease: DC.E225,
+    goalIncrease: DC.E230,
     reward: {
       description: "Further reduce Antimatter Dimension cost multiplier growth",
       effect: completions => completions * 0.2,
@@ -116,9 +116,9 @@ export const eternityChallenges = [
     id: 8,
     description: () => `you can only upgrade Infinity Dimensions ${formatInt(50)} times and Replicanti
       upgrades ${formatInt(40)} times. Infinity Dimension and Replicanti upgrade autobuyers are disabled.`,
-    goal: DC.E1200,
+    goal: DC.E1300,
     pelleGoal: DC.E2800,
-    goalIncrease: DC.E800,
+    goalIncrease: DC.E750,
     reward: {
       description: "Infinity Power strengthens Replicanti Galaxies",
       effect: completions => {

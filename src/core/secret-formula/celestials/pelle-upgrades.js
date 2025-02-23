@@ -24,7 +24,7 @@ export const pelleUpgrades = {
     cost: [10, 250, 41, 10],
     effect: x => Pelle.antimatterDimensionMult(x),
     formatEffect: x => formatX(x, 2, 2),
-    cap: 50
+    cap: 47
   }),
   timeSpeedMult: rebuyable({
     id: "timeSpeedMult",

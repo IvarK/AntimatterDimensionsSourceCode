@@ -56,6 +56,8 @@ export const normalAchievements = [
         : "Buy an 8th Antimatter Dimension.";
     },
     checkEvent: GAME_EVENT.ACHIEVEMENT_EVENT_OTHER,
+    get reward() { return `Multiply all Antimatter Dimensions by Ninty Degrees.`; },
+    effect: 1.57
   },
   {
     id: 21,

@@ -83,7 +83,7 @@ export default {
       // Rarity is handled differently here than usual because this is in contrast with the theme BG, not the glyph BG
       const color = CosmeticGlyphTypes[this.glyph.type].ignoreRarityColor
         ? GlyphAppearanceHandler.getBorderColor(this.type)
-        : getRarity(this.glyph.strength)[Theme.current().isDark() ? "darkColor" : "lightColor"];
+        : GlyphAppearanceHandler.getRarityColor(this.glyph.strength, this.type);
       return {
         color,
         "font-weight": "bold"

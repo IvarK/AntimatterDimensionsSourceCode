@@ -117,7 +117,7 @@ export default {
         class="o-primary-btn--sacrifice"
         @click="sacrifice"
       >
-        <span v-if="isFullyAutomated && disabledCondition !== ''">
+        <span v-if="isFullyAutomated">
           Dimensional Sacrifice is Automated (Achievement 118)
         </span>
         <span v-else-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>

@@ -1,0 +1,586 @@
+.l-time-studies-tab {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+}
+
+.l-time-studies-tab__tree {
+  margin-top: 1.5rem;
+  margin-bottom: 12.5rem;
+}
+
+.l-time-study-options {
+  display: flex;
+  flex-direction: row;
+}
+
+.l-time-study-options > * {
+  margin: 0.2rem;
+}
+
+.l-time-study-tree {
+  position: relative;
+}
+
+.l-time-study {
+  position: absolute;
+  z-index: 1;
+}
+
+.l-time-study-connection {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+/* #region o-time-study */
+
+.c-pelle-useless {
+  width: 18rem;
+  height: 10rem;
+  font-family: Typewriter, serif;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: crimson;
+  border: 0.1rem solid;
+  border-radius: var(--var-border-radius, 0.4rem);
+  transition-duration: 0.2s;
+  text-decoration: line-through;
+}
+
+.c-pelle-useless-available {
+  animation: a-time-study 7s infinite;
+  cursor: pointer;
+}
+
+.c-pelle-useless--unavailable {
+  color: black;
+  filter: grayscale(90%);
+  animation: none;
+}
+
+.c-pelle-useless--unavailable:hover {
+  background-color: var(--color-bad);
+  filter: grayscale(0%);
+  cursor: default;
+}
+
+.c-pelle-useless--bought {
+  background-color: crimson;
+  filter: grayscale(50%);
+}
+
+.o-time-study {
+  width: 18rem;
+  height: 10rem;
+  font-family: Typewriter, serif;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: black;
+  border: 0.1rem solid;
+  border-radius: var(--var-border-radius, 0.4rem);
+  transition-duration: 0.2s;
+}
+
+.o-time-study--available {
+  animation: a-time-study 7s infinite;
+  cursor: pointer;
+}
+
+.o-time-study--available:hover {
+  background-color: #00bcd4;
+  animation: none;
+}
+
+.o-time-study--unavailable {
+  color: black;
+}
+
+.o-time-study--unavailable:hover {
+  background-color: var(--color-bad);
+}
+
+.t-metro .o-time-study--unavailable,
+.t-inverted-metro .o-time-study--unavailable,
+.t-s1 .o-time-study--unavailable,
+.t-s8 .o-time-study--unavailable {
+  box-shadow: 0.1rem 0.1rem 0.1rem 0 black;
+}
+
+.s-base--metro .o-time-study--unavailable,
+.t-s1 .o-time-study--unavailable {
+  color: black;
+  border: none;
+}
+
+@keyframes a-time-study {
+  0% { box-shadow: inset 0 0 0.3rem 0; }
+  50% { box-shadow: inset 0 0 2rem 0; }
+  100% { box-shadow: inset 0 0 0.3rem 0; }
+}
+
+.o-time-study--small {
+  width: 12rem;
+  font-size: 0.85rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+.o-time-study-normal--available {
+  color: var(--color-eternity);
+  border-color: var(--color-eternity);
+}
+
+.o-time-study-normal--available:hover {
+  color: white;
+  background-color: var(--color-eternity);
+  border-color: black;
+}
+
+.o-time-study-antimatter-dim--available {
+  color: #22aa48;
+  border-color: #198036;
+}
+
+.o-time-study-antimatter-dim--available:hover {
+  color: #eeeeee;
+  background-color: #22aa48;
+}
+
+.o-time-study-infinity-dim--available {
+  color: #b67f33;
+  border-color: #8b6227;
+}
+
+.o-time-study-infinity-dim--available:hover {
+  color: #eeeeee;
+  background-color: #b67f33;
+}
+
+.o-time-study-time-dim--available {
+  color: #b241e3;
+  border-color: #951ec8;
+}
+
+.o-time-study-time-dim--available:hover {
+  color: #eeeeee;
+  background-color: #b241e3;
+}
+
+.o-time-study-active--available {
+  color: #e60000;
+  border-color: #cc0000;
+}
+
+.o-time-study-active--available:hover {
+  color: #eeeeee;
+  background-color: #e60000;
+}
+
+.o-time-study-passive--available {
+  color: #5e33b6;
+  border-color: #4b288f;
+}
+
+.o-time-study-passive--available:hover {
+  color: #eeeeee;
+  background-color: #5e33b6;
+}
+
+.o-time-study-idle--available {
+  color: #0080ff;
+  border-color: #0066cc;
+}
+
+.o-time-study-idle--available:hover {
+  color: #eeeeee;
+  background-color: #0080ff;
+}
+
+.o-time-study-dark--available,
+.o-time-study-light--available:hover {
+  color: black;
+  background-color: white;
+  border-color: black;
+}
+
+.o-time-study-light--available,
+.o-time-study-dark--available:hover {
+  color: white;
+  background-color: black;
+  border-color: white;
+}
+
+.o-time-study-eternity-challenge--available {
+  color: #490066;
+  background-color: white;
+  border-color: black;
+}
+
+.o-time-study-eternity-challenge--available:hover {
+  color: white;
+  background-color: #490066;
+}
+
+.o-time-study-eternity-challenge--complete {
+  box-shadow: inset 0 0 3rem var(--color-good-dark);
+}
+
+.o-time-study-dilation--available {
+  color: #64dd17;
+  background-color: black;
+  border-color: #64dd17;
+  animation: a-time-study-dilation 10s infinite;
+}
+
+.o-time-study-dilation--available:hover {
+  color: #64dd17;
+  background-color: white;
+  animation: a-time-study-dilation 10s infinite;
+}
+
+.o-time-study-reality--available {
+  color: var(--color-reality);
+  background-color: white;
+  border-color: var(--color-reality);
+}
+
+.o-time-study-reality--available:hover {
+  color: white;
+  background-color: var(--color-reality);
+}
+
+.o-time-study-triad--available {
+  color: var(--color-v--base);
+  background: black;
+  border-color: black;
+  animation: a-time-study 1.5s infinite;
+}
+
+.o-time-study-triad--available:hover {
+  color: black;
+  background: var(--color-v--base);
+}
+
+@keyframes a-time-study-dilation {
+  0% { box-shadow: inset 0.5rem  0       2rem; }
+  25% { box-shadow: inset 0       0.5rem  2rem; }
+  50% { box-shadow: inset -0.5rem 0       2rem; }
+  75% { box-shadow: inset 0       -0.5rem 2rem; }
+  100% { box-shadow: inset 0.5rem  0       2rem; }
+}
+
+.o-time-study-normal--unavailable {
+  background-color: #9e9e9e;
+}
+
+.t-dark .o-time-study--unavailable:hover,
+.t-s6 .o-time-study--unavailable:hover,
+.t-s10 .o-time-study--unavailable:hover {
+  background-color: var(--color-bad);
+  border-color: var(--color-bad);
+}
+
+.o-time-study-antimatter-dim--unavailable {
+  background-color: #94a89a;
+}
+
+.o-time-study-infinity-dim--unavailable {
+  background-color: #a8a094;
+}
+
+.o-time-study-time-dim--unavailable {
+  background-color: #a294a8;
+}
+
+.o-time-study-active--unavailable {
+  background-color: #a89494;
+}
+
+.o-time-study-passive--unavailable {
+  background-color: #9b94a8;
+}
+
+.o-time-study-idle--unavailable {
+  background-color: #949ea8;
+}
+
+.o-time-study-dark--unavailable {
+  background-color: #858585;
+}
+
+.o-time-study-light--unavailable {
+  background-color: #b8b8b8;
+}
+
+.o-time-study-eternity-challenge--unavailable {
+  background-color: #9e9e9e;
+}
+
+.o-time-study-dilation--unavailable {
+  background-color: #9ca894;
+}
+
+.o-time-study-reality--unavailable {
+  background-color: #94a895;
+}
+
+.o-time-study-triad--unavailable {
+  background-color: #a8a494;
+}
+
+.o-time-study-normal--bought {
+  color: black;
+  background-color: var(--color-eternity);
+  border-color: black;
+}
+
+.o-time-study-antimatter-dim--bought {
+  color: black;
+  background-color: #22aa48;
+  border-color: black;
+}
+
+.o-time-study-infinity-dim--bought {
+  color: black;
+  background-color: #b67f33;
+  border-color: black;
+}
+
+.o-time-study-time-dim--bought {
+  color: black;
+  background-color: #b241e3;
+  border-color: black;
+}
+
+.o-time-study-active--bought {
+  color: black;
+  background-color: #e60000;
+  border-color: black;
+}
+
+.o-time-study-passive--bought {
+  color: black;
+  background-color: #5e33b6;
+  border-color: black;
+}
+
+.o-time-study-idle--bought {
+  color: black;
+  background-color: #0080ff;
+  border-color: black;
+}
+
+.o-time-study-dark--bought {
+  color: white;
+  background-color: black;
+  border-color: white;
+  border-width: 0.3rem;
+  border-style: double;
+}
+
+.o-time-study-light--bought {
+  color: black;
+  background-color: white;
+  border-color: black;
+  border-width: 0.3rem;
+  border-style: double;
+}
+
+.o-time-study-eternity-challenge--bought {
+  color: white;
+  background-color: #490066;
+  border-color: black;
+}
+
+.o-time-study-eternity-challenge--running {
+  color: var(--color-eternity);
+  background-color: black;
+  border: 0.1rem solid var(--color-eternity);
+  animation: a-eternity-challenge-running 6s infinite;
+}
+
+@keyframes a-eternity-challenge-running {
+  0% { box-shadow: inset 1rem  0       3rem #490066; }
+  25% { box-shadow: inset 0     0.5rem  3rem #490066; }
+  50% { box-shadow: inset -1rem 0       3rem #490066; }
+  75% { box-shadow: inset 0     -0.5rem 3rem #490066; }
+  100% { box-shadow: inset 1rem  0       3rem #490066; }
+}
+
+.o-time-study-dilation--bought {
+  color: black;
+  background-color: #64dd17;
+  border-color: black;
+}
+
+.o-time-study-reality--bought {
+  color: black;
+  background-color: var(--color-reality);
+  border-color: black;
+}
+
+.o-time-study-triad--bought {
+  color: black;
+  background-color: var(--color-v--base);
+  border-color: black;
+}
+
+.t-dark .o-time-study-antimatter-dim--bought,
+.t-s6 .o-time-study-antimatter-dim--bought,
+.t-s10 .o-time-study-antimatter-dim--bought {
+  border-color: #198036;
+}
+
+.t-dark .o-time-study-infinity-dim--bought,
+.t-s6 .o-time-study-infinity-dim--bought,
+.t-s10 .o-time-study-infinity-dim--bought {
+  border-color: #8b6227;
+}
+
+.t-dark .o-time-study-time-dim--bought,
+.t-s6 .o-time-study-time-dim--bought,
+.t-s10 .o-time-study-time-dim--bought {
+  border-color: #951ec8;
+}
+
+.t-dark .o-time-study-active--bought,
+.t-s6 .o-time-study-active--bought,
+.t-s10 .o-time-study-active--bought {
+  border-color: #cc0000;
+}
+
+.t-dark .o-time-study-passive--bought,
+.t-s6 .o-time-study-passive--bought,
+.t-s10 .o-time-study-passive--bought {
+  border-color: #4b288f;
+}
+
+.t-dark .o-time-study-idle--bought,
+.t-s6 .o-time-study-idle--bought,
+.t-s10 .o-time-study-idle--bought {
+  border-color: #0066cc;
+}
+
+.o-time-study--secret {
+  opacity: 0;
+  transition: opacity 1s;
+  transition-delay: 1s;
+  cursor: pointer;
+}
+
+.o-time-study--secret-unlocked {
+  opacity: 1;
+  transition: opacity 1s;
+  transition-delay: 0s;
+  cursor: pointer;
+}
+
+.o-time-study--enslaved {
+  opacity: 0.02;
+  background: var(--color-enslaved--base);
+  transition: all 1s;
+  animation: a-time-study 0.5s infinite;
+  cursor: pointer;
+}
+
+.o-time-study--enslaved-unlocked {
+  opacity: 1;
+  background: var(--color-eternity);
+  animation: a-time-study 2s infinite;
+  cursor: default;
+}
+
+/* #endregion o-time-study */
+
+.o-time-study-connection {
+  stroke: #444444;
+  /* This one should be px, because it rem svg behaves weirdly under scale */
+  stroke-width: 16px;
+  transition: stroke 0.3s;
+}
+
+.o-time-study-connection--antimatter-dim {
+  stroke: #37533f;
+}
+
+.o-time-study-connection--infinity-dim {
+  stroke: #534737;
+}
+
+.o-time-study-connection--time-dim {
+  stroke: #4a3753;
+}
+
+.o-time-study-connection--active {
+  stroke: #533737;
+}
+
+.o-time-study-connection--passive {
+  stroke: #403753;
+}
+
+.o-time-study-connection--idle {
+  stroke: #374553;
+}
+
+.o-time-study-connection--eternity-challenge {
+  stroke: #4b3753;
+}
+
+.o-time-study-connection--dilation {
+  stroke: #759362;
+}
+
+.o-time-study-connection--bought {
+  stroke: black;
+}
+
+.s-base--dark .o-time-study-connection--bought {
+  stroke: #bbbbbb;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--antimatter-dim {
+  stroke: #22aa48;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--infinity-dim {
+  stroke: #b67f33;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--time-dim {
+  stroke: #b241e3;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--active {
+  stroke: #ff0100;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--passive {
+  stroke: #5e33b6;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--idle {
+  stroke: #0080ff;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--eternity-challenge {
+  stroke: #490066;
+}
+
+.o-time-study-connection--bought.o-time-study-connection--dilation {
+  stroke: #64dd17;
+}
+
+.o-time-study-connection--secret {
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.o-time-study-connection--secret-unlocked {
+  opacity: 1;
+  transition: opacity 1s;
+  transition-delay: 1s;
+}

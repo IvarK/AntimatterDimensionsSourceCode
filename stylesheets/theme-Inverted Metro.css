@@ -1,0 +1,42 @@
+body.t-inverted-metro {
+  background-color: black;
+}
+
+.t-inverted-metro #container,
+.t-inverted-metro #page,
+.t-inverted-metro #ui-fixed,
+.t-inverted-metro .c-glyph-tooltip {
+  filter: invert(100%);
+}
+
+.t-inverted-metro #realityanimbg {
+  filter: invert(1);
+}
+
+.t-inverted-metro #timetheorems,
+.t-inverted-metro .c-ttshop__save-load-text,
+.t-inverted-metro .minimize-arrow,
+.t-inverted-metro .ttshop-background {
+  color: #bbbbbb;
+}
+
+.t-inverted-metro .c-tt-buy-button--unlocked {
+  color: #00bcd4;
+  background: #212121;
+  border: 0.1rem solid #00bcd4;
+}
+
+.t-inverted-metro .c-tt-buy-button--unlocked:hover {
+  color: #212121;
+  background: #00bcd4;
+}
+
+.t-inverted-metro .c-tt-buy-button--locked {
+  background: #9e9e9e;
+  border: none;
+  box-shadow: 1px 1px 1px 0 #000000;
+}
+
+.t-inverted-metro .c-tt-buy-button--locked:hover {
+  background: #ef5350;
+}

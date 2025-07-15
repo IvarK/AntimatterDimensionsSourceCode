@@ -1,0 +1,73 @@
+* {
+  color: transparent !important;
+  text-shadow: none !important;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* These are needed for the shop not to be blind */
+/* new UI */
+.c-shop-header > span,
+.o-shop-button-description,
+.o-shop-button-multiplier,
+.c-shop-modal .c-modal__title,
+.c-shop-modal .c-modal__close-btn,
+.o-modal-store-label {
+  color: white !important;
+}
+
+.c-shop-header > button,
+.o-shop-button-button,
+.o-modal-store-btn,
+.o-modal-store-btn > span,
+.c-shop-disclaimer {
+  color: black !important;
+}
+
+/* classic UI */
+.l-old-ui .c-shop-header > span,
+.old-ui .c-shop-modal .c-modal__title,
+.old-ui .o-modal-store-label,
+.old-ui .c-shop-modal .c-modal__close-btn {
+  color: black !important;
+}
+
+[ach-tooltip]::before {
+  color: transparent;
+}
+
+::placeholder {
+  opacity: 0;
+}
+
+.o-achievement--normal,
+.o-achievement--secret,
+.o-achievement--cancer {
+  background-image: none;
+}
+
+.o-big-crunch-button:hover span,
+.o-eternity-button:hover span {
+  color: transparent !important;
+}
+
+.o-celestial-nav__symbol {
+  display: none;
+}
+
+.c-effarig-run-button__inner--running {
+  display: none;
+}
+
+.o-laitela-run-button__icon,
+.o-laitela-run-button__icon:hover {
+  background-image: none;
+}
+
+@keyframes a-reality-glyph-description-cycle {
+  0% { color: transparent; }
+}
+
+.o-celestial-nav__legend-text {
+  fill: transparent !important;
+}

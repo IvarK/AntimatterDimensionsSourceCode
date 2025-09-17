@@ -39,8 +39,8 @@ export default {
     buttonText() {
       if (this.lockText !== null) return this.lockText;
       const reset = [];
-      if (!Achievement(111).isUnlocked) reset.push("Dimensions");
-      if (!Achievement(143).isUnlocked) reset.push("Dimension Boosts");
+      if (!Achievement(111).isEffectActive) reset.push("Dimensions");
+      if (!Achievement(143).isEffectActive) reset.push("Dimension Boosts");
       return reset.length === 0
         ? `Increase the power of Tickspeed upgrades`
         : `Reset your ${makeEnumeration(reset)} to increase the power of Tickspeed upgrades`;

@@ -1,0 +1,1 @@
+{"sha":"8b5a34c1211df7cb35969dc8e5d402b0b28b7589","message":"Fix mistake in Infinity Dimension help page (#3474)\n\nInfinity dimensions produce the next *lower* dimension, not the next higher (just like Antimatter Dimensions)","author":"Alan Malloy"}

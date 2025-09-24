@@ -36,9 +36,9 @@ export default {
       this.autobuyersOn = player.auto.autobuyersOn;
       this.showContinuum = Laitela.isUnlocked;
       this.disableContinuum = player.auto.disableContinuum;
-      this.allAutobuyersDisabled = Autobuyers.unlocked.every((autobuyer) => !autobuyer.isActive);
+      this.allAutobuyersDisabled = Autobuyers.unlocked.every(autobuyer => !autobuyer.isActive);
       this.antimatterAutobuyersBuyMax = Autobuyer.antimatterDimension.zeroIndexed.every(
-        (autobuyer) => autobuyer.mode === AUTOBUYER_MODE.BUY_10
+        autobuyer => autobuyer.mode === AUTOBUYER_MODE.BUY_10
       );
     },
     toggleAllAutobuyers() {
@@ -69,7 +69,10 @@ export default {
     >
       {{ allAutobuyersDisabled ? "Enable" : "Disable" }} all autobuyers
     </PrimaryButton>
-    <PrimaryButton class="o-primary-btn--subtab-option" @click="toggleAntimatterSingles()">
+    <PrimaryButton
+      class="o-primary-btn--subtab-option"
+      @click="toggleAntimatterSingles()"
+    >
       Set AD autobuyers to buy {{ antimatterAutobuyersBuyMax ? "singles" : "max" }}
     </PrimaryButton>
     <span v-if="isDoomed">

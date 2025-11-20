@@ -95,7 +95,6 @@ export const credits = {
       roles: 14
     }, {
       name: "AFYINEE",
-      name2: "Gabriel HADDAG",
       roles: 14
     }, {
       name: "Alexitato",

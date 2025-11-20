@@ -1,0 +1,25 @@
+body {
+  background: none !important;
+}
+
+.t-s3 #ui,
+.t-s3 #ui-fixed,
+.t-s3 .c-glyph-tooltip {
+  animation: a-glasses 7s infinite;
+}
+
+@keyframes a-glasses {
+  0% { filter: blur(0); }
+  10% { filter: blur(3px); }
+  20% { filter: blur(0); }
+  30% { transform: rotateZ(0deg); }
+  35% { transform: rotateZ(4deg); }
+  40% { transform: rotateZ(-4deg); }
+  45% { transform: rotateZ(0deg); }
+  55% { filter: invert(0%); }
+  65% { filter: invert(100%); }
+  75% { filter: invert(0%); }
+  85% { filter: opacity(100%); }
+  92.5% { filter: opacity(50%); }
+  100% { filter: opacity(100%); }
+}

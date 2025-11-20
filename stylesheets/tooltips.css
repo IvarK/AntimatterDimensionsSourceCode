@@ -1,0 +1,149 @@
+.general-tooltip {
+  display: block !important;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.general-tooltip .tooltip-inner {
+  width: 20rem;
+  text-align: center;
+  font-family: Typewriter, serif;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  color: white;
+  background: #0d0d0d;
+  border-radius: var(--var-border-radius, 0.3rem);
+  padding: 0.5rem 1rem 0.4rem;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.s-base--dark .general-tooltip .tooltip-inner {
+  border: 0.1rem solid #dddddd;
+}
+
+.tooltip-inner.automator-tooltip {
+  display: inline-block !important;
+  overflow: auto;
+  width: unset;
+  height: 100%;
+  text-align: left;
+}
+
+.automator-tooltip-header {
+  white-space: nowrap;
+  min-width: 16rem;
+  font-weight: bold;
+  padding-bottom: 1rem;
+}
+
+.automator-tooltip-content {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.automator-tooltip-content div {
+  flex-grow: 1;
+  width: 0;
+}
+
+.general-tooltip .tooltip-arrow {
+  width: 0;
+  height: 0;
+  position: absolute;
+  z-index: 1;
+  border: solid #0d0d0d;
+  margin: 5px;
+}
+
+.s-base--dark .general-tooltip .tooltip-arrow {
+  border: solid #dddddd;
+}
+
+.general-tooltip[x-placement^="top"] {
+  margin-bottom: 5px;
+}
+
+.general-tooltip[x-placement^="top"] .tooltip-arrow {
+  bottom: -5px;
+  left: calc(50% - 5px);
+  border-width: 5px 5px 0 !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-left-color: transparent !important;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.general-tooltip[x-placement^="bottom"] {
+  margin-top: 5px;
+}
+
+.general-tooltip[x-placement^="bottom"] .tooltip-arrow {
+  top: -5px;
+  left: calc(50% - 5px);
+  border-width: 0 5px 5px;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-left-color: transparent !important;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.general-tooltip[x-placement^="right"] {
+  margin-left: 5px;
+}
+
+.general-tooltip[x-placement^="right"] .tooltip-arrow {
+  top: calc(50% - 5px);
+  left: -5px;
+  border-width: 5px 5px 5px 0;
+  border-top-color: transparent !important;
+  border-bottom-color: transparent !important;
+  border-left-color: transparent !important;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.general-tooltip[x-placement^="left"] {
+  margin-right: 5px;
+}
+
+.general-tooltip[x-placement^="left"] .tooltip-arrow {
+  top: calc(50% - 5px);
+  right: -5px;
+  border-width: 5px 0 5px 5px;
+  border-top-color: transparent !important;
+  border-right-color: transparent !important;
+  border-bottom-color: transparent !important;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.general-tooltip.popover .popover-inner {
+  color: black;
+  background: #f9f9f9;
+  border-radius: var(--var-border-radius, 5px);
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 10%);
+  padding: 24px;
+}
+
+.general-tooltip.popover .popover-arrow {
+  border-color: #f9f9f9;
+}
+
+.general-tooltip[aria-hidden="true"] {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.general-tooltip[aria-hidden="false"] {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+
+.c-block-automator-error-container .tooltip-inner {
+  width: auto;
+}

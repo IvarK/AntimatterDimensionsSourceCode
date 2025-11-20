@@ -1,0 +1,63 @@
+.t-s6 #stars {
+  display: block;
+
+  /* Setting width & height to auto prevents the browser from stretching or squishing the video */
+  width: auto;
+  height: auto;
+
+  /* Make video to at least 100% wide and tall */
+  min-width: 100%;
+  min-height: 100%;
+
+  /* Center the video */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1000;
+  transform: translate(-50%, -50%);
+}
+
+body.t-s6 {
+  color: #999999;
+  background: black;
+  background-image: url("../images/stars-bg.png");
+  background-position: center;
+  background-size: 100%;
+}
+
+.t-s6 .c-tt-amount {
+  color: #64dd17;
+  text-shadow: 0 0 7px #64dd17;
+}
+
+.t-s6 .c-tt-buy-button--unlocked {
+  color: #3aacd6;
+  background: black;
+  border: 0.1rem solid #3aacd6;
+}
+
+.t-s6 .c-tt-buy-button--unlocked:hover {
+  color: black;
+  background: #3aacd6;
+}
+
+.t-s6 .c-tt-buy-button--locked {
+  color: grey;
+  background: black;
+  border: 0.1rem solid grey;
+}
+
+.t-s6 .c-tt-buy-button--locked:hover {
+  color: black;
+  background: var(--color-bad);
+  border: 0.1rem solid var(--color-bad);
+}
+
+.t-s6 .c-rm-amount__desc {
+  color: #999999;
+}
+
+.t-s6 .c-alchemy-resource-info {
+  color: white;
+  border-color: white;
+}

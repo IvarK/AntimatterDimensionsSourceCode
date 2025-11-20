@@ -1,0 +1,371 @@
+/*
+* This is based on vue-slider-component
+* downloaded from https://github.com/NightCatSama/vue-slider-component
+* It's modified to support showing the slider value in the slider.
+*/
+
+/*
+The MIT License (MIT)
+
+Copyright (c) 2016 NightCatSama.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+:root {
+  --color-slider-blue: #0075ff;
+}
+
+.l-ad-slider {
+  display: flex;
+  width: 100%;
+  position: relative;
+  align-items: center;
+}
+
+.l-ad-slider--horizontal {
+  flex-direction: row;
+}
+
+.l-ad-slider--vertical {
+  flex-direction: column-reverse;
+}
+
+.l-ad-slider__wrap {
+  position: relative;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.l-ad-slider--disabled .l-ad-slider__wrap {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.l-ad-slider--has-label .l-ad-slider__bg {
+  margin-bottom: 1.5rem;
+}
+
+.l-ad-slider--has-label.l-ad-slider--horizontal .l-ad-slider__bg,
+.l-ad-slider--has-label.l-ad-slider--horizontal-reverse .l-ad-slider__bg {
+  top: 0.75rem;
+}
+
+.l-ad-slider--disabled .c-ad-slider__dot {
+  cursor: not-allowed;
+}
+
+.l-ad-slider__bg {
+  display: block;
+  position: relative;
+}
+
+.c-ad-slider__bg {
+  background-color: #cccccc;
+  border-radius: var(--var-border-radius, 1.5rem);
+}
+
+.l-ad-slider__bg::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.l-ad-slider__process {
+  position: absolute;
+  z-index: 1;
+  transition: all 0s;
+}
+
+.c-ad-slider__process {
+  background-color: var(--color-slider-blue);
+  border-radius: var(--var-border-radius, 15px);
+}
+
+.l-ad-slider__wrap .ad-slider-process-draggable {
+  z-index: 3;
+  cursor: pointer;
+}
+
+.l-ad-slider--horizontal .l-ad-slider__process {
+  width: 0;
+  height: 100%;
+  will-change: width;
+  top: 0;
+  left: 0;
+}
+
+.l-ad-slider--vertical .l-ad-slider__process {
+  width: 100%;
+  height: 0;
+  will-change: height;
+  bottom: 0;
+  left: 0;
+}
+
+.l-ad-slider--horizontal-reverse .l-ad-slider__process {
+  width: 0;
+  height: 100%;
+  top: 0;
+  right: 0;
+}
+
+.l-ad-slider--vertical-reverse .l-ad-slider__process {
+  width: 100%;
+  height: 0;
+  top: 0;
+  left: 0;
+}
+
+.l-ad-slider__dot {
+  position: absolute;
+  will-change: transform;
+  z-index: 2;
+  transition: all 0s;
+}
+
+.c-ad-slider__dot {
+  cursor: pointer;
+}
+
+.l-ad-slider__dot-handle {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.c-ad-slider__dot-handle {
+  background-color: #ffffff;
+  border: 0.1rem solid black;
+  border-radius: var(--var-border-radius, 50%) !important;
+  box-shadow: 0.5px 0.5px 2px 1px rgba(0, 0, 0, 32%);
+  transition-duration: 0.2s;
+}
+
+.c-ad-slider__dot-handle:hover {
+  background-color: var(--color-slider-blue);
+}
+
+.l-ad-slider__dot--focus .c-ad-slider__dot-handle {
+  box-shadow: 0 0 2px 1px var(--color-slider-blue);
+}
+
+.l-ad-slider__dot--dragging {
+  z-index: 5;
+}
+
+.l-ad-slider__dot--disabled {
+  z-index: 4;
+}
+
+.l-ad-slider--horizontal .l-ad-slider__dot {
+  left: 0;
+}
+
+.l-ad-slider--vertical .l-ad-slider__dot {
+  bottom: 0;
+}
+
+.l-ad-slider--horizontal-reverse .l-ad-slider__dot {
+  right: 0;
+}
+
+.l-ad-slider--vertical-reverse .l-ad-slider__dot {
+  top: 0;
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip-wrap {
+  display: none;
+  position: absolute;
+  z-index: 9;
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip {
+  display: block;
+  white-space: nowrap;
+  min-width: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #ffffff;
+  background-color: var(--color-slider-blue);
+  border: 0.1rem solid var(--color-slider-blue);
+  border-radius: var(--var-border-radius, 5px);
+  padding: 2px 5px;
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-top {
+  top: -9px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-bottom {
+  bottom: -9px;
+  left: 50%;
+  transform: translate(-50%, 100%);
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-left {
+  top: 50%;
+  left: -9px;
+  transform: translate(-100%, -50%);
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-right {
+  top: 50%;
+  right: -9px;
+  transform: translate(100%, -50%);
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-top .ad-slider-tooltip::before,
+.l-ad-slider__wrap .ad-slider-tooltip-top .vue-merged-tooltip .ad-slider-tooltip::before {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  border: 5px solid transparent;
+  border: 6px solid transparent\0;
+  border-top-color: inherit;
+  transform: translate(-50%, 0);
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip-wrap.vue-merged-tooltip {
+  display: block;
+  visibility: hidden;
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-bottom .ad-slider-tooltip::before,
+.l-ad-slider__wrap .ad-slider-tooltip-bottom .vue-merged-tooltip .ad-slider-tooltip::before {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  border: 5px solid transparent;
+  border: 6px solid transparent\0;
+  border-bottom-color: inherit;
+  transform: translate(-50%, 0);
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-left .ad-slider-tooltip::before,
+.l-ad-slider__wrap .ad-slider-tooltip-left .vue-merged-tooltip .ad-slider-tooltip::before {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  border: 5px solid transparent;
+  border: 6px solid transparent\0;
+  border-left-color: inherit;
+  transform: translate(0, -50%);
+}
+
+.l-ad-slider__wrap .ad-slider-tooltip-wrap.ad-slider-tooltip-right .ad-slider-tooltip::before,
+.l-ad-slider__wrap .ad-slider-tooltip-right .vue-merged-tooltip .ad-slider-tooltip::before {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  border: 5px solid transparent;
+  border: 6px solid transparent\0;
+  border-right-color: inherit;
+  transform: translate(0, -50%);
+}
+
+.l-ad-slider__wrap .l-ad-slider__dot.ad-slider-hover:hover .ad-slider-tooltip-wrap {
+  display: block;
+}
+
+.l-ad-slider__wrap .l-ad-slider__dot.ad-slider-always .ad-slider-tooltip-wrap {
+  display: block !important;
+}
+
+.l-ad-slider__wrap .ad-slider-piecewise {
+  list-style: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.l-ad-slider__wrap .ad-slider-piecewise-item {
+  width: 8px;
+  height: 8px;
+  position: absolute;
+}
+
+.l-ad-slider__wrap .ad-slider-piecewise-dot {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 16%);
+  border-radius: var(--var-border-radius, 50%);
+  transform: translate(-50%, -50%);
+  transition: all 0.3s;
+}
+
+.l-ad-slider__wrap .ad-slider-piecewise-item:first-child .ad-slider-piecewise-dot,
+.l-ad-slider__wrap .ad-slider-piecewise-item:last-child .ad-slider-piecewise-dot {
+  visibility: hidden;
+}
+
+.l-ad-slider--horizontal .ad-slider-piecewise-label,
+.l-ad-slider--horizontal-reverse .ad-slider-piecewise-label {
+  display: inline-block;
+  visibility: visible;
+  white-space: nowrap;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  font-size: 12px;
+  color: #333333;
+  transform: translate(-50%, 8px);
+}
+
+.l-ad-slider--vertical .ad-slider-piecewise-label,
+.l-ad-slider--vertical-reverse .ad-slider-piecewise-label {
+  display: inline-block;
+  visibility: visible;
+  white-space: nowrap;
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  font-size: 12px;
+  color: #333333;
+  transform: translate(8px, -50%);
+}

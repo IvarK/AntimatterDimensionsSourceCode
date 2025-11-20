@@ -1,0 +1,100 @@
+/* Temporary inlined css classes from SFCs to prevent conflicts with old classes from styles.css */
+
+/* HintText.vue */
+
+.o-hint-text {
+  font-size: 1.5rem;
+  color: white;
+  text-shadow:
+    -0.1rem -0.1rem 0 black,
+    -0.1rem -0.1rem 0 black,
+    0.1rem -0.1rem 0 black,
+    0.1rem -0.1rem 0 black,
+    -0.1rem 0.1rem 0 black,
+    -0.1rem 0.1rem 0 black,
+    0.1rem 0.1rem 0 black,
+    0.1rem 0.1rem 0 black;
+  pointer-events: none;
+}
+
+.l-hint-text {
+  position: absolute;
+  top: -1.6rem;
+  left: 0;
+}
+
+/* NewsTicker.vue */
+
+.c-news-ticker {
+  overflow: hidden;
+}
+
+.c-news-ticker__line {
+  padding-left: 100%;
+  transition: transform linear;
+}
+
+.c-disable-ticker-animation > * {
+  animation-play-state: paused !important;
+}
+
+.c-news-line {
+  display: inline-block;
+  white-space: nowrap;
+  text-align: left;
+  font-family: Typewriter, serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.c-news-line a {
+  text-decoration: underline;
+}
+
+.new-ui .c-news-ticker {
+  width: 100%;
+  height: 3.9rem;
+  border-bottom: 0.1rem solid var(--color-accent);
+  padding: 0.8rem 0;
+}
+
+.new-ui .c-news-line {
+  color: var(--color-text);
+}
+
+.old-ui .c-news-ticker {
+  height: 3rem;
+  border: var(--var-border-width, 0.2rem) solid black;
+  border-radius: var(--var-border-radius, 0.4rem);
+  padding: 0.2rem 0;
+}
+
+.old-ui .s-base--metro .c-news-ticker,
+.old-ui .t-s6 .c-news-ticker,
+.old-ui .t-s10 .c-news-ticker {
+  border-width: 0.1rem;
+}
+
+.old-ui .t-dark .c-news-ticker {
+  background-color: #455a64;
+  border-color: #546e7a;
+}
+
+.old-ui .t-dark-metro .c-news-ticker {
+  background-color: #455a64;
+}
+
+.old-ui .t-s1 .c-news-ticker {
+  background-color: #dbd242;
+}
+
+.old-ui .t-s6 .c-news-ticker,
+.old-ui .t-s10 .c-news-ticker {
+  background-color: black;
+}
+
+.old-ui .c-news-line {
+  color: var(--color-text);
+}

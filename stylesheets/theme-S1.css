@@ -1,0 +1,62 @@
+html {
+  align-content: center;
+  background: url("../images/s1-bg.svg") no-repeat;
+  background-attachment: fixed;
+  background-color: #d72621;
+  background-position: center bottom;
+  background-size: 100%;
+}
+
+body.t-s1 {
+  color: black;
+  background: none;
+}
+
+#container.container {
+  color: black !important;
+}
+
+.t-s1 .c-tt-buy-button--unlocked {
+  color: #639565;
+  border-color: #639565;
+}
+
+.t-s1 .c-tt-buy-button--unlocked:hover {
+  color: #232028;
+  background: #639565;
+}
+
+.t-s1 .c-tt-buy-button--locked {
+  border-color: #639565;
+}
+
+.t-s1 .c-tt-buy-button--locked:hover {
+  background: #d72621;
+  border-color: black;
+}
+
+#snow {
+  display: block !important;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  opacity: 1;
+  background-image: url("../images/snow1.png"), url("../images/snow2.png"), url("../images/snow3.png");
+  animation: a-snow 10s linear infinite, a-snow-fade 10s cubic-bezier(0, 0.3, 1, 0.7) infinite;
+  pointer-events: none;
+}
+
+@keyframes a-snow {
+  0% { background-position: 0 0, 0 0, 0 0; }
+  50% { background-position: 500px 500px, 100px 200px, -100px 150px; }
+  100% { background-position: 1000px 1000px, 200px 400px, -200px 300px; }
+}
+
+@keyframes a-snow-fade {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}

@@ -1059,7 +1059,7 @@ export const normalAchievements = [
       return true;
     },
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-    reward: "Galaxies no longer reset Dimension Boosts."
+    reward: "Antimatter Galaxies no longer reset Dimension Boosts."
   },
   {
     id: 144,

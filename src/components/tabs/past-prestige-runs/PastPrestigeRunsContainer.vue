@@ -169,7 +169,7 @@ export default {
       return `${format(run[2], 2)} ${this.points}`;
     },
     prestigeCountGain(run) {
-      return quantify(this.singular, run[3]);
+      return quantify(this.singular, run[3], 2, 1);
     },
     prestigeCurrencyRate(run) {
       if (this.hasIM && this.layer.name === "Reality") return "N/A";

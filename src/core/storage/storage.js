@@ -392,7 +392,7 @@ export const GameStorage = {
       const id = Number(backupKey);
       const storageKey = this.backupDataKey(this.currentSlot, id);
       localStorage.setItem(storageKey, GameSaveSerializer.serialize(backupData[backupKey]));
-      this.backupTimeData[id] = {
+      this.lastBackupTimes[id] = {
         backupTimer: backupData.time[id].backupTimer,
         date: backupData.time[id].date,
       };

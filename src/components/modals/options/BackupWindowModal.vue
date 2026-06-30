@@ -99,7 +99,7 @@ export default {
         >
           Export as file
         </PrimaryButton>
-        <PrimaryButton class="o-btn-file-ops">
+        <PrimaryButton class="o-btn-file-ops c-file-import-button">
           <input
             class="c-file-import"
             type="file"

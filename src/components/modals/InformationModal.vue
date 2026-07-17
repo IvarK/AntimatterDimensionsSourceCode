@@ -49,6 +49,11 @@ export default {
         link="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions"
       />
       <InformationModalButton
+        name="Antimatter Dimensions on App Store"
+        icon="fa-brands fa-app-store-ios"
+        link="https://apps.apple.com/us/app/antimatter-dimensions/id6738206800"
+      />
+      <InformationModalButton
         name="Antimatter Dimensions on Steam"
         icon="fa-brands fa-steam"
         link="https://store.steampowered.com/app/1399720/Antimatter_Dimensions/"

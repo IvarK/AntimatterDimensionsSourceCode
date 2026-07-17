@@ -9,6 +9,27 @@ export const changelog = [
    * }
    */
   {
+    date: [2026, 7, 17],
+    name: "Celebrate iOS Version Release",
+    info: `
+Celebrating the official iOS launch! It's finally time to perform a Big Crunch right in your pocket.
+A massive thank you to all the contributors who helped expand our dimensions to iOS! 
+<br>
+<br>
+<b>Added things:</b><br>
+<ul>
+<li>Added iOS Testers in the Credits</li>
+<li>Added a link to the iOS Version</li>
+</ul>
+<br>
+<b>Text change:</b><br>
+<ul>
+<li>Changed Android Developer to Mobile Developer in the Credits</li>
+</ul>
+<br>
+`
+  },
+  {
     date: [2024, 8, 12],
     name: "Hi Ra",
     info: `

@@ -20,6 +20,7 @@ A massive thank you to all the contributors who helped expand our dimensions to 
 <ul>
 <li>Added iOS Testers in the Credits</li>
 <li>Added a link to the iOS Version</li>
+<li>Added all AD Autobuyers' buy max/singles toggle button</li>
 </ul>
 <br>
 <b>Text change:</b><br>

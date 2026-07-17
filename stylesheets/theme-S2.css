@@ -1,0 +1,23 @@
+html {
+  background: url("../images/s2-bg.svg") no-repeat;
+  background-color: white;
+  background-position-x: 50%;
+  background-position-y: 50%;
+  background-size: 50%;
+}
+
+body {
+  color: white;
+  text-shadow: 1px 1px 1px black, -1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black;
+  background: none !important;
+}
+
+.t-s2 #container,
+.t-s2 #page,
+.t-s2 .l-notification-container,
+.t-s2 .c-modal,
+.t-s2 .time-theorem-buttons,
+.t-s2 .c-modern-sidebar,
+.t-s2 .c-glyph-tooltip {
+  filter: sepia(100%) hue-rotate(180deg) saturate(250%);
+}

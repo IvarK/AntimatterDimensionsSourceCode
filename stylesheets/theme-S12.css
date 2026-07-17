@@ -1,0 +1,326 @@
+body.t-s12 {
+  --s12-taskbar-height: 4.5rem;
+  --s12-border-color: #27221e;
+  --s12-background-gradient:
+    repeating-linear-gradient(
+      50deg,
+      rgba(170, 170, 170, 10%),
+      rgba(170, 170, 170, 10%) 2rem,
+      rgba(255, 255, 255, 10%) 4rem,
+      rgba(255, 255, 255, 10%) 5rem,
+      rgba(170, 170, 170, 10%) 6rem,
+      rgba(170, 170, 170, 10%) 8rem
+    ),
+    linear-gradient(
+      -50deg,
+      rgba(60, 60, 60, 30%),
+      transparent 20%,
+      transparent 80%,
+      rgba(60, 60, 60, 30%)
+    );
+
+  height: 100%;
+  background: url("../images/s12-bg.jpg") no-repeat;
+  background-attachment: fixed;
+  background-color: #1bb9ee;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.t-s12 .container {
+  color: black;
+}
+
+.t-s12 #ui {
+  justify-content: flex-start;
+  /* stylelint-disable-next-line unit-allowed-list */
+  perspective: 200vh;
+
+  scrollbar-gutter: auto;
+}
+
+.t-s12 .ui-wrapper {
+  flex-direction: column;
+  height: 100%;
+}
+
+.c-s12-close-button,
+.t-s12 .c-modal .c-modal__close-btn {
+  display: flex;
+  width: 5rem;
+  height: 1.8rem;
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 0;
+  background-image:
+    url("../images/s12/xmark.png"),
+    linear-gradient(to bottom, rgba(255, 255, 255, 40%) 40%, transparent 60%),
+    radial-gradient(#b43721, #844740);
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 0.15rem solid var(--s12-border-color);
+  border-top: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+  box-shadow: inset 0 0 0.2rem 0.1rem rgba(255, 255, 255, 80%);
+  cursor: pointer;
+}
+
+.c-modal__close-btn--disabled {
+  filter: grayscale(1);
+  cursor: default;
+}
+
+.c-s12-close-button::before,
+.t-s12 .c-modal .c-modal__close-btn:not(.c-modal__close-btn--disabled)::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background-image:
+    url("../images/s12/xmark.png"),
+    linear-gradient(to bottom, transparent 50%, rgba(224, 178, 64, 60%));
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: inherit;
+  box-shadow: 0 0 1rem 0.3rem #d35532;
+  transition: opacity 0.4s;
+}
+
+.c-s12-close-button:hover::before,
+.c-modal__close-btn:hover::before {
+  opacity: 1;
+}
+
+.t-s12 .c-modal {
+  --color-text: black;
+  --color-text-inverted: white;
+  max-width: calc(100% - 10rem);
+  font-family: "Segoe UI", Typewriter;
+  font-weight: normal;
+  background-color: rgba(187, 216, 242, 75%);
+  background-image: var(--s12-background-gradient);
+  border: 0.1rem solid var(--s12-border-color);
+  padding: 2.4rem 1rem 1rem;
+
+  -webkit-backdrop-filter: blur(1rem);
+  backdrop-filter: blur(1rem);
+}
+
+.t-s12 .c-modal__inner:not(.c-credits-modal),
+.t-s12 .c-modal-message,
+.t-s12 .l-h2p-modal,
+.t-s12 .c-information-modal,
+.t-s12 .l-changelog-modal,
+.t-s12 .c-modal-away-progress {
+  align-items: flex-start;
+  text-align: left;
+  font-size: 1.3rem;
+  color: black;
+  background-color: #f0f0f0;
+  border: 0.1rem solid var(--s12-border-color);
+  margin: 0;
+  padding: 1rem;
+}
+
+.t-s12 .modal-progress-bar,
+.t-s12 .c-credits-modal {
+  color: black;
+  background-color: #f0f0f0;
+  border: 0.1rem solid var(--s12-border-color);
+  box-sizing: border-box;
+  padding: 1rem;
+}
+
+.t-s12 .c-modal-options__large {
+  width: 53rem;
+}
+
+.t-s12 .l-singularity-milestone-modal-container-inner .c-laitela-milestone {
+  text-align: center;
+  font-family: Typewriter;
+  font-size: 1.4rem;
+}
+
+.t-s12 .c-modal__title,
+.t-s12 .l-h2p-header,
+.t-s12 .l-changelog-header {
+  display: flex;
+  width: auto;
+  height: 2.2rem;
+  position: absolute;
+  top: 0.2rem;
+  left: 0;
+  align-items: center;
+  font-size: 1.3rem;
+  font-weight: normal;
+  text-shadow: 0 0 0.7rem white;
+  padding-left: 1rem;
+}
+
+.c-credits-modal .c-modal__title {
+  display: inline;
+  position: static;
+}
+
+.c-credits-modal .c-game-header__antimatter {
+  color: black;
+}
+
+.t-s12 .c-h2p-title,
+.t-s12 .c-changelog-title {
+  font-size: 1.3rem;
+  font-weight: normal;
+}
+
+.t-s12 .c-modal__confirmation-toggle {
+  margin-top: 1.5rem;
+}
+
+.t-s12 .c-modal__confirmation-toggle__checkbox {
+  width: 1.6rem;
+  height: 1.6rem;
+  color: #4b6192;
+  background: linear-gradient(-45deg, #ffffffff, #aeb2b5);
+  border: 0.2rem solid white;
+  border-radius: 0;
+  box-shadow: 0 0 0.1rem 0.1rem var(--s12-border-color), inset 0 0 0.1rem 0.1rem #a0a0a0;
+}
+
+.t-s12 .c-modal__confirmation-toggle:hover .c-modal__confirmation-toggle__checkbox {
+  transform: none;
+}
+
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn, .c-autobuyer-box__mode-select),
+.t-s12 .c-new-game-button {
+  position: relative;
+  z-index: 0;
+  align-self: flex-end;
+  text-align: center;
+  font-family: "Segoe UI", Typewriter;
+  font-weight: normal;
+  color: black;
+  background-image: linear-gradient(to bottom, white 45%, #d7d7d7 55%);
+  border: 0.16rem solid #747474;
+  box-shadow: inset 0 0 0.2rem 0.1rem white;
+  padding-top: 0;
+  padding-bottom: 0;
+  transition: box-shadow 0.3s;
+}
+
+.t-s12 .c-new-game-button {
+  padding: 1rem;
+}
+
+.t-s12 .c-modal .o-primary-btn.c-select-notation__item,
+.t-s12 .c-modal .o-primary-btn.c-select-theme__item {
+  background-color: white;
+  background-image: none;
+  border: none;
+  box-shadow: none;
+}
+
+.t-s12 .c-modal .o-primary-btn.c-select-notation__item::before,
+.t-s12 .c-modal .o-primary-btn.c-select-theme__item::before {
+  display: none;
+}
+
+.t-s12 .c-modal .o-primary-btn.c-dropdown-btn {
+  z-index: 1;
+  align-self: center;
+}
+
+.t-s12 .c-modal .l-select-notation,
+.t-s12 .c-modal .l-select-theme {
+  scrollbar-color: #747474 white;
+  border-color: #747474;
+}
+
+.l-select-notation__inner::-webkit-scrollbar,
+.l-select-theme__inner::-webkit-scrollbar {
+  background-color: white;
+}
+
+.t-s12 .c-modal .l-select-notation__inner::-webkit-scrollbar-thumb,
+.t-s12 .c-modal .l-select-theme__inner::-webkit-scrollbar-thumb {
+  background-color: #747474;
+}
+
+.t-s12 .c-modal .o-primary-btn--disabled {
+  opacity: 0.5;
+}
+
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn, .c-autobuyer-box__mode-select)::after,
+.t-s12 .c-new-game-button::after {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background-color: transparent;
+  transition: background-color 0.3s;
+}
+
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn):hover,
+.t-s12 .c-new-game-button:hover {
+  box-shadow: inset 0 0 0.2rem 0.1rem #52d9fb;
+}
+
+.t-s12 .c-modal .o-primary-btn:not(.c-modal__close-btn):hover::after,
+.t-s12 .c-new-game-button:hover::after {
+  background-color: rgba(46, 210, 255, 30%);
+}
+
+.t-s12 .c-modal .o-primary-btn.o-primary-btn.c-select-notation__item:hover,
+.t-s12 .c-modal .o-primary-btn.o-primary-btn.c-select-theme__item:hover {
+  color: white;
+  background-color: #2a90ff;
+  box-shadow: none;
+}
+
+.t-s12 .l-modal-buttons {
+  align-self: flex-end;
+  font-size: 1.2rem;
+}
+
+.t-s12 .c-modal__confirmation-toggle__tooltip {
+  display: none;
+}
+
+.t-s12 .l-modal-options__save-record {
+  align-self: center;
+}
+
+.t-s12 .modal-progress-bar__bg {
+  overflow: hidden;
+  position: relative;
+  background-image: linear-gradient(to right, #cbcbcb 90%, #c0c0c0);
+  border: 0.1rem solid var(--s12-border-color);
+  border-radius: 0.2rem;
+  box-shadow: inset 0 0 0.2rem 0.1rem white;
+}
+
+.t-s12 .modal-progress-bar__bg::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 70%) 30%, transparent 40%);
+}
+
+.t-s12 .modal-progress-bar__fg {
+  background: linear-gradient(to right, #0cb826, #20da3e 20%, #20da3e 80%, #0cb826);
+}
+
+.t-s12 .c-modal .c-autobuyer-box-row {
+  text-align: center;
+  background-color: transparent;
+}

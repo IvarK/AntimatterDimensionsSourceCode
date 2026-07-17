@@ -1,0 +1,44 @@
+* {
+  font-family: Arial, Typewriter;
+  border-width: 1px !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transition-duration: 1ms !important;
+  animation: none !important;
+}
+
+#ui,
+#ui-fixed {
+  filter: saturate(0) !important;
+}
+
+button {
+  color: black !important;
+  text-decoration: none !important;
+  background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+  border: 0.1rem solid #9b9b9b !important;
+  border-radius: 0 !important;
+  padding: 3px !important;
+}
+
+.o-primary-btn {
+  color: black !important;
+  text-decoration: none !important;
+  background-image: linear-gradient(to top, rgb(222, 222, 222) 0%, rgb(246, 246, 246) 100%) !important;
+  border: 0.1rem solid #9b9b9b !important;
+  border-radius: 0 !important;
+  padding: 3px !important;
+}
+
+button:hover {
+  border: 0.1rem solid #737373 !important;
+}
+
+.c-glyph-tooltip {
+  text-shadow: none !important;
+  filter: saturate(0);
+}
+
+.c-glyph-tooltip__effect span {
+  text-shadow: none !important;
+}

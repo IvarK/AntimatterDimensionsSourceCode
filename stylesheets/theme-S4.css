@@ -1,0 +1,34 @@
+* {
+  font-family:
+    "Comic Sans MS",
+    cursive,
+    sans-serif,
+    Typewriter,
+    fas,
+    fab,
+    "Font Awesome 6 Brands",
+    "Font Awesome 6 Free" !important;
+  border-radius: 40% !important;
+  box-shadow: 1px 1px 1px 0 #9e9e9e;
+}
+
+html {
+  color: black !important;
+  background-attachment: fixed;
+  background-color: #ff00ff;
+  background-position: center bottom;
+  border: 0.1rem solid white !important;
+}
+
+#container {
+  cursor: url("cursor.cur"), auto !important;
+}
+
+body {
+  background: #0fff0f !important;
+  border: 0.1rem solid white !important;
+}
+
+.o-achievement {
+  border-radius: 0.8rem !important;
+}

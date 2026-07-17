@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Antimatter Dimensions</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <meta name="Antimatter Dimensions" content="A game about huge numbers and watching them go up." >
+  <link href="https://fonts.googleapis.com/css?family=PT+Mono" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="stylesheets/fontawesome/css/all.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/codemirror.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/show-hint.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/lint.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/panda-syntax.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/codemirror/liquibyte.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/vue-sfc-classes.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/ad-slider-component.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/glyphs.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
+  <link rel="stylesheet" type="text/css" href="stylesheets/automator.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/time-studies.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/tooltips.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/vis-network.css">
+<script defer src="js/chunk-vendors.js"></script><script defer src="js/app.js"></script></head>
+
+<body>
+  <div id="browser-warning">
+    Your browser is not supported.
+    <br>
+    Please update to a newer browser.
+  </div>
+  <div id="loading"></div>
+  <div id="ui"></div>
+  <div id="background-animations">
+    <div class="videocontainer videocontainer--background">
+      <video autoplay muted loop id="stars">
+        <source src="images/stars-bg.webm" type="video/webm">
+      </video>
+    </div>
+    <div id="snow" style="display: none;"></div>
+  </div>
+  <div class="videocontainer">
+    <video preload muted id="realityanimbg" style="opacity: 0; display: none;">
+      <source src="images/realityanimbg.webm" type="video/webm">
+    </video>
+  </div>
+  <div id="performance-stats" class="c-performance-stats" style="display: none;"></div>
+</body>
+<script>
+  // We use an IE only document variable to check here to force it to show the browser warning.
+  // For some reason, IE really does *not* want to cooperate, even when you have a file as a <script> that you load
+  // in the body.
+  // Other browsers will be checked whenever window.onload is ran.
+  if (document.documentMode) {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("browser-warning").style.display = "flex";
+  }
+</script>
+</html>

@@ -12,6 +12,11 @@ function giveEternityRewards(auto) {
     Tab.dimensions.time.show();
   }
 
+  if (player.sidebarCurrencyUnlocks << 2 % 2 === 0) {
+    player.sidebarCurrencyUnlocks += 4;
+    EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
+  }
+
   Currency.eternities.add(newEternities);
 
   Currency.infinitiesBanked.value = Currency.infinitiesBanked.value.plusEffectsOf(

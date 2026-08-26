@@ -86,7 +86,7 @@ export default {
   methods: {
     update() {
       const study = this.study;
-      const isCurrentlyUseless = this.study.id === 192 && Pelle.isDoomed && PelleRifts.vacuum.milestones[1];
+      const isCurrentlyUseless = this.study.id === 192 && Pelle.isDoomed && PelleRifts.vacuum.milestones[1].canBeApplied;
       this.isUseless = Pelle.isDoomed && (isCurrentlyUseless || Pelle.uselessTimeStudies.includes(this.study.id));
       this.isBought = ForceBoughtState.getState(this.forceIsBought, study.isBought);
       this.doomedRealityStudy = study.type === TIME_STUDY_TYPE.DILATION && study.id === 6 && Pelle.isDoomed;

@@ -24,7 +24,14 @@ export default {
     displayValue() {
       // RM + iM seems to cause strange, undesirable linebreaks
       return this.resource.formatValue(this.resourceValue).replace(" + ", "+");
-    }
+    },
+  },
+  created() {
+    this.on$(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED, () => {
+      // This is stupid but calling a recompute didnt work, and this does.
+      this.cycleResource(1);
+      this.cycleResource(-1);
+    });
   },
   methods: {
     update() {

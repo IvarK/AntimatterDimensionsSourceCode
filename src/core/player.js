@@ -910,6 +910,8 @@ window.player = {
       id: false,
     }
   },
+  // This is a bitindex, fwiw
+  sidebarCurrencyUnlocks: 0
 };
 
 export const Player = {

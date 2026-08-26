@@ -49,7 +49,7 @@ export default {
     deleteCompanion() {
       // Yes, this actually deletes a companion glyph at random, but the player can only ever legitimately have one.
       // Passing information into modals seems to require a bunch of refactoring that's not worth it for this one case.
-      const toDelete = player.reality.glyphs.inventory.filter(g => g.type === "companion")[0];
+      const toDelete = player.reality.glyphs.inventory.filter(g => g.idx === ui.chosenCompanionIDx)[0];
       Glyphs.removeFromInventory(toDelete);
     }
   },

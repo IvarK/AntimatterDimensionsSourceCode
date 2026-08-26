@@ -331,6 +331,11 @@ function giveRealityRewards(realityProps) {
     Enslaved.boostReality = false;
   }
 
+  if (player.sidebarCurrencyUnlocks << 4 % 2 === 0) {
+    player.sidebarCurrencyUnlocks += 16;
+    EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
+  }
+
   if (Teresa.isRunning) {
     const current = Teresa.runRewardMultiplier;
     const newMultiplier = Teresa.rewardMultiplier(player.antimatter);

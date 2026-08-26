@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       isVisible: false,
-      effectValue: 0,
+      effectValue: -Number.MAX_VALUE,
       // Number.MAX_VALUE doesn't really matter here, but we need it because
       // undefined values are not allowed for data properties
       cap: Number.MAX_VALUE,

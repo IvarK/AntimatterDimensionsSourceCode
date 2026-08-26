@@ -25,9 +25,9 @@ resulting in being able to have "1 Realities".</li>
 <li>Properly disabled the Eternity Milestones for 200 and 1000 Eternities while Doomed.</li>
 <li>Fixed the second boost from the Vacuum Rift always applying while Doomed, even when the Rift is drained. In turn, enabled ts192
 when this boost is disabled, in order to mitigate any significant changes to balancing.</li>
-<li>Fixed being able to bypass the Paradoxically Atain upgrade lock by obtaining ACHNR. Doing so now will give a warning,
+<li>Fixed being able to bypass the Paradoxically Attain upgrade lock by obtaining ACHNR. Doing so now will give a warning,
 like all other activities that result in breaking the conditions of a lock.</li>
-<li>Added a note that Galaxies are also afected by the Pelle Upgrade that causes Dimension Boosts to no longer reset resources</li>
+<li>Added a note that Galaxies are also affected by the Pelle Upgrade that causes Dimension Boosts to no longer reset resources</li>
 <li>Fixed Automator statements occasionally being skipped for no reason.</li>
 <li>Fixed the Galaxy Generator stating that some Galaxy upgrades were never affordable, as it did not take into account galaxies
 that the player already has, but has not spent.</li>
@@ -38,11 +38,11 @@ prevent the player from pre-emptively accessing certain h2p pages.</li>
 <li>Removed internal "doubleEverything" and "tripleEverything" dev functions, as they were dysfunctional.</li>
 <li>Replaced internal "fixSave" dev function to a more successful/powerful version.</li>
 <li>Fixed the Singularity Upgrade which boosts Dark Energy and Dark Matter based on Dilated Time not stating the boost to Dark Energy.</li>
-<li>Removed useless internal argument which were never used.</li>
+<li>Removed useless internal arguments which were never used.</li>
 <li>Increased the precision of the Imaginary Upgrade "Transcience of Information" to allow a visible change when purchasing
 Rebuyable Imaginary Upgrades.</li>
 <li>Renamed the 3rd Autobuyer challenge to "3rd Antimatter Dimension Autobuyer Challenge" from "3rd Antimatter Dimension Challenge" in order
-to maintain consistancy with all other Normal Challenges.</li>
+to maintain consistency with all other Normal Challenges.</li>
 <li>Fixed the Discord Rich Presence formatting Reality/Imaginary Machines weirdly and inconsistently.</li>
 <li>Fixed cases where some Reality Upgrade requirements were prefixed with a number rather than a letter, causing certain notations which
 start with a character, rather than a number, to be incorrectly capitalised.</li>
@@ -63,11 +63,11 @@ divided by 1.79e308 rather than reset to 0 while Doomed.</li>
 <li>Fixed some text not being bolded properly due to using depreciated tags.</li>
 <li>Fixed flavor text, stating that "Lai'tela's Reality has been destroyed", disappearing once you are able to unlock Omniprescent 
 Obliteration, as it was inconsistent with all other Reality flavor text.</li>
-<li>Fixed the section of the Lai'tela tab below the Singularities part being slightly thinner if you had yet to have a Signularity and 
+<li>Fixed the section of the Lai'tela tab below the Singularities part being slightly thinner if you had yet to have a Singularity and 
 therefore unlock Singularity Milestones.</li>
 <li>Fixed the confirmation modal showing an asterisk when entering Eternity Challenge 6 while in The Nameless Ones' Reality, instead of 
 scrambled text.</li>
-<li>Capped the Replicanti Glyph Doomed effect being able to become Infinite and breaking Replianti, by capping it at 1e308.</li>
+<li>Capped the Replicanti Glyph Doomed effect being able to become Infinite and breaking Replicanti, by capping it at 1e308.</li>
 <li>Capped ts41 in Effarig's Reality during the Eternity layer to 1e50.</li>
 <li>Doomed Achievement 187 (r187) now properly states that its unlock condition is Dilating Time while Dooming, not Unlocking Dilation.</li>
 <li>Fixed the import button in the Automatic Backups Menu having its click detection at the bottom of the page,
@@ -75,7 +75,7 @@ and being broken anyways.</li>
 <li>Fixed accidentally spawning 2 offline progress modals rather than 1</li>
 <li>Fixed the Antimatter Galaxy button sometimes incorrectly stating that certain things would not be reset, when they would be.</li>
 <li>Fixed cases where changing an upgrade but not having a change to its effect would result in the old effect formatting being shown
-untill the player reloaded the subtab (i.e. by changing away and back).</li>
+until the player reloaded the subtab (i.e. by changing away and back).</li>
 <li>Added a note to the h2p tab for Replicanti if ts192 is unlocked.</li>
 <li>Fixed the progress bar at the bottom of the Antimatter Dimensions tab not working properly when in Dilation while Doomed, and showing 
 the progress to gaining more TP, rather than the progress to the Galaxy Generator.</li>
@@ -89,6 +89,9 @@ the player gaining no eternities.</li>
 <li>Removed useless player data.</li>
 <li>Fixed Scour to Empower checking the number of glyphs you had before you did a Reality reset, rather than after.</li>
 <li>Fixed the 3rd Pelle Rift stating that it allowed you to gain 1% of EP every second, rather than 10% of EP every second.</li>
+<li>Fixed the sidebar "Recent Currency" mode not updating upon unlocking a new currency</li>
+<li>Fixed deleting a companion randomly choosing a companion in your inventory (usually prioritising top and left) to delete, instead
+of deleting the glyph that the player selected to delete.</li>
 <li>Fixed some spelling/punctuation, and standardized it elsewhere.</li>
 </ul>
 <br>

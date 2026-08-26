@@ -16,7 +16,13 @@ export const teresa = {
       id: 3,
       price: 1e24,
       description: "Unlock Effarig, Celestial of Ancient Relics.",
-      onUnlock: () => Teresa.quotes.effarig.show(),
+      onUnlock() {
+        if (player.sidebarCurrencyUnlocks << 5 % 2 === 0) {
+          player.sidebarCurrencyUnlocks += 32;
+          EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
+        }
+        return Teresa.quotes.effarig.show();
+      },
     },
     shop: {
       id: 2,

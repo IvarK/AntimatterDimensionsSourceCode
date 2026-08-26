@@ -44,7 +44,7 @@ dev.cancerize = function() {
 // eslint-disable-next-line complexity
 function fixSaveIterator(value, value2) {
   for (const item in value) {
-    if (value[item] instanceof Decimal && value2[item] !== undefined) {
+    if (value[item] instanceof Decimal && value2[item] instanceof Decimal) {
       if (value2[item].neq(0)) {
         // Under some cases, this could reset legitimate values, but this is a very rare (and safe) edge-case
         if (value[item].lt(0) || value[item].exponent > 8e15)
@@ -52,13 +52,20 @@ function fixSaveIterator(value, value2) {
       } else if (value[item].exponent > 8e15)
         value[item] = value2[item];
     }
-    if (value[item] instanceof Number && value2[item] !== undefined) {
+    if (typeof value[item] === "number" && typeof value2[item] === "number") {
       if (value2[item] === 0) {
         if (value[item] > 1e300) {
           value[item] = value2[item];
         }
       } else if (value[item] > 1e300 || value[item] < 0)
         value[item] = value2[item];
+    }
+    // If there is a mismatch (one decimal and one number) just override the item entirely, as it must have been modified through console
+    if (value[item] instanceof Decimal && typeof value2[item] === "number") {
+      value[item] = value2[item];
+    }
+    if (value2[item] instanceof Decimal && typeof value[item] === "number") {
+      value[item] = value2[item];
     }
     if ((value[item] instanceof Object || value[item] instanceof Array) &&
       !(value[item] instanceof Decimal) && value2[item] !== undefined)

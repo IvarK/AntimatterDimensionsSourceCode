@@ -85,6 +85,10 @@ export const Pelle = {
     player.reality.automator.state.repeat = false;
     player.reality.automator.state.forceRestart = false;
     if (BlackHoles.arePaused) BlackHoles.togglePause();
+    if (player.sidebarCurrencyUnlocks << 8 % 2 === 0) {
+      player.sidebarCurrencyUnlocks += 256;
+      EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
+    }
     player.celestials.pelle.doomed = true;
     Pelle.armageddon(false);
     respecTimeStudies(true);

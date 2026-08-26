@@ -9,10 +9,9 @@ export const changelog = [
    * }
    */
   {
-    date: [2026, 7, 21],
+    date: [2026, 8, 26],
     name: "The Great Bugfix",
     info: `
-If you see this, please let whoever pushed this PR know that the date needs changing & this text removed. Thanks in advance - Hexa.<br><br>
 <b>List of changes/fixes:</b><br>
 <ul>
 <li>Fixed Sacrifice stating it was automated if Achievement 118/Sacrifice was disabled, under some conditions.</li>

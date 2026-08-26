@@ -55,7 +55,7 @@ export const MachineHandler = {
   updateIMCap() {
     if (this.uncappedRM.gte(this.baseRMCap)) {
       // There isn't really a better place to put this, sorry
-      if (player.sidebarCurrencyUnlocks << 6 % 2 === 0) {
+      if (player.sidebarCurrencyUnlocks >> 6 % 2 === 0) {
         player.sidebarCurrencyUnlocks += 64;
         EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
       }

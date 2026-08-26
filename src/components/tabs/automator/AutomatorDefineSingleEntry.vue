@@ -141,12 +141,12 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: var(--color-automator-docs-font);
+  background-color: var(--color-automator-controls-inactive);
   border: var(--var-border-width, 0.2rem) solid var(--color-automator-controls-border);
   border-radius: var(--var-border-radius, 0.3rem);
   margin: 0.1rem -0.4rem 0.1rem 0.6rem;
   cursor: pointer;
-  color: var(--color-automator-docs-font);
-  background-color: var(--color-automator-controls-inactive);
 }
 
 .c-delete-button:hover {
@@ -170,11 +170,11 @@ export default {
   display: inline-block;
   font-family: Typewriter, serif;
   font-size: 1.1rem;
+  color: #00ac00;
   background: var(--color-blockmator-block-background);
   border: 0.1rem solid var(--color-blockmator-block-border);
   border-radius: var(--var-border-radius, 0.5rem);
   padding: 0.5rem;
-  color: #00ac00;
 }
 
 .l-error-textbox {
@@ -182,8 +182,8 @@ export default {
 }
 
 .l-limit-textbox {
-  border-style: dotted;
   border-color: var(--color-automator-error-outline);
+  border-style: dotted;
 }
 
 .c-alias {

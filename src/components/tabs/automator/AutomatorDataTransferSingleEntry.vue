@@ -107,9 +107,9 @@ export default {
 
 <style scoped>
 .l-entry-padding {
+  overflow-wrap: break-word;
   border: solid 0.1rem var(--color-automator-docs-font);
   border-radius: var(--var-border-radius, 0.5rem);
-  overflow-wrap: break-word;
   padding: 1rem 1.5rem;
 }
 

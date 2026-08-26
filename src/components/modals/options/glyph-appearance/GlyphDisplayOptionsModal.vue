@@ -170,8 +170,8 @@ export default {
 }
 
 .c-glyph-visual-options {
-  width: 55rem;
   overflow-x: hidden;
+  width: 55rem;
   padding-right: 1rem;
 }
 
@@ -182,8 +182,8 @@ export default {
 }
 
 .c-dropdown-header {
-  padding: 0.9rem;
   height: 6.5rem;
+  padding: 0.9rem;
   user-select: none;
 }
 </style>

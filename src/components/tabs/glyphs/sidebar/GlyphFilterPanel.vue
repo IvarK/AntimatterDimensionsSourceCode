@@ -392,9 +392,9 @@ export default {
 }
 
 .c-filter-extra-btns {
-  position: absolute;
   display: flex;
   flex-direction: row;
+  position: absolute;
   top: 0;
   z-index: 2;
   font-size: 1.3rem;
@@ -410,25 +410,25 @@ export default {
 }
 
 .l-top-left-btn {
-  cursor: pointer;
+  width: 2.5rem;
   border: var(--var-border-width, 0.2rem) solid;
   border-radius: var(--var-border-radius, 0.2rem);
-  width: 2.5rem;
   margin: 0.5rem 0 0 0.5rem;
   padding: 0.5rem;
+  cursor: pointer;
 }
 
 .l-top-right-btn {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  border: var(--var-border-width, 0.2rem) solid;
-  border-radius: var(--var-border-radius, 0.2rem);
   width: 2rem;
   height: 2rem;
+  justify-content: center;
+  align-items: center;
+  border: var(--var-border-width, 0.2rem) solid;
+  border-radius: var(--var-border-radius, 0.2rem);
   margin: 0.5rem 0.5rem 0 0;
   padding: 0.2rem;
+  cursor: pointer;
 }
 
 .o-borderless {

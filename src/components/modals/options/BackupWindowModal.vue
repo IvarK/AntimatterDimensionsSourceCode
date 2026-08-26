@@ -116,8 +116,8 @@ export default {
 
 <style scoped>
 .c-info {
-  width: 60rem;
   overflow-x: hidden;
+  width: 60rem;
   padding-right: 1rem;
 }
 

@@ -245,11 +245,11 @@ export const automatorBlocksMap = automatorBlocks.mapToObject(b => b.cmd, b => b
 .o-automator-block-list {
   display: flex;
   width: 8.7rem;
-  text-align: center;
   height: 5.5rem;
-  font-size: 1.2rem;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  font-size: 1.2rem;
 }
 
 .o-drag-cancel-region {

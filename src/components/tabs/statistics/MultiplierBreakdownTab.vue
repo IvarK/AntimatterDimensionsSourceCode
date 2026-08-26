@@ -111,22 +111,21 @@ export default {
 
 <style scoped>
 .c-list-container {
-  position: relative;
   width: 100rem;
+  position: relative;
 }
 
 .l-multiplier-subtab-btn-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   width: 100rem;
   height: calc(4rem - var(--var-border-radius, 0.2rem));
+  justify-content: space-between;
 }
 
 .c-multiplier-subtab-btn {
   width: 100%;
   height: 4rem;
-  margin: 0 0.5rem -0.1rem;
   z-index: 1;
   text-align: center;
   font-family: Typewriter;
@@ -136,6 +135,7 @@ export default {
   background-color: var(--color-base);
   border: var(--var-border-width, 0.2rem) solid;
   border-radius: var(--var-border-radius, 0.5rem) var(--var-border-radius, 0.5rem) 0 0;
+  margin: 0 0.5rem -0.1rem;
   cursor: pointer;
 }
 
@@ -146,24 +146,24 @@ export default {
 }
 
 .c-multiplier-tab-text-line {
-  color: var(--color-text);
   font-size: 1.3rem;
+  color: var(--color-text);
 }
 
 .c-symbol-overlay {
   display: flex;
   width: 100%;
   height: 100%;
-  top: -5%;
   position: absolute;
+  top: -5%;
+  z-index: 1;
   justify-content: center;
   align-items: center;
   font-size: 40rem;
+  opacity: 0.2;
   color: var(--color-text);
   text-shadow: 0 0 3rem;
   pointer-events: none;
   user-select: none;
-  opacity: 0.2;
-  z-index: 1;
 }
 </style>

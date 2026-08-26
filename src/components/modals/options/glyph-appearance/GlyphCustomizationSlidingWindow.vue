@@ -223,28 +223,28 @@ export default {
   display: flex;
   flex-direction: row;
   width: 49rem;
-  margin: 0.5rem;
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);
+  margin: 0.5rem;
 }
 
 .c-no-options {
   width: 49rem;
-  margin: 0.5rem;
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);
+  margin: 0.5rem;
 }
 
 .c-extra-options {
-  position: relative;
   display: flex;
+  overflow: hidden;
   flex-direction: row;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  position: relative;
+  border-color: var(--color-text);
   border-width: 0.1rem;
   border-left-style: dashed;
-  border-color: var(--color-text);
 }
 
 .c-sliding-window {
@@ -257,17 +257,17 @@ export default {
 }
 
 .o-arrow {
-  position: absolute;
   display: flex;
-  align-items: center;
   height: 100%;
-  padding: 0.3rem;
+  position: absolute;
   z-index: 1;
-  background: var(--color-good);
+  align-items: center;
   color: var(--color-text);
+  background: var(--color-good);
+  padding: 0.3rem;
   transition-duration: 0.3s;
-  cursor: pointer;
   user-select: none;
+  cursor: pointer;
 }
 
 .o-arrow--left {
@@ -308,12 +308,12 @@ export default {
 
 .o-color {
   display: flex;
-  justify-content: center;
-  align-items: center;
   width: 1.5rem;
   height: 1.5rem;
-  margin: 0.5rem;
+  justify-content: center;
+  align-items: center;
   font-weight: bold;
+  margin: 0.5rem;
   user-select: none;
 }
 </style>

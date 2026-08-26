@@ -94,9 +94,9 @@ export default {
 
 <style scoped>
 .c-automator-docs-template--button {
-  margin: 0.4rem;
-  border-radius: var(--var-border-radius, 0.4rem);
   border-width: var(--var-border-width, 0.2rem);
+  border-radius: var(--var-border-radius, 0.4rem);
+  margin: 0.4rem;
   cursor: pointer;
 }
 

@@ -179,8 +179,8 @@ export default {
 <style scoped>
 .c-glyph-customization-group {
   width: 100%;
-  margin-top: 0.5rem;
   text-align: left;
+  margin-top: 0.5rem;
 }
 
 .c-type-selection {

@@ -199,8 +199,8 @@ export default {
 
 <style scoped>
 .max-accent {
-  color: var(--color-dilation);
   font-size: 1.5rem;
+  color: var(--color-dilation);
   text-shadow: 0 0 0.2rem var(--color-reality-dark);
   cursor: default;
 }

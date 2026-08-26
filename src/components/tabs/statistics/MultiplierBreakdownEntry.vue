@@ -463,13 +463,13 @@ export default {
 .c-multiplier-entry-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   width: 100%;
   max-width: 100rem;
-  border: var(--var-border-width, 0.2rem) solid var(--color-text);
-  padding: 0.5rem;
+  justify-content: space-between;
   font-weight: normal;
   background-color: var(--color-base);
+  border: var(--var-border-width, 0.2rem) solid var(--color-text);
+  padding: 0.5rem;
 
   -webkit-tap-highlight-color: transparent;
 }
@@ -479,26 +479,26 @@ export default {
 }
 
 .c-stacked-bars {
-  position: relative;
   width: 5rem;
+  position: relative;
   background-color: var(--color-disabled);
   margin-right: 1.5rem;
 }
 
 .c-bar-overlay {
   display: flex;
+  overflow: hidden;
   width: 100%;
   height: 100%;
-  top: -5%;
   position: absolute;
+  top: -5%;
+  z-index: 1;
   justify-content: center;
   align-items: center;
   font-size: 1.5rem;
+  opacity: 0.8;
   pointer-events: none;
   user-select: none;
-  overflow: hidden;
-  opacity: 0.8;
-  z-index: 1;
 }
 
 .c-bar-highlight {
@@ -515,23 +515,23 @@ export default {
 }
 
 .c-info-list {
-  height: 100%;
   width: 90%;
+  height: 100%;
   padding: 0.2rem;
 }
 
 .c-display-settings {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   width: 8rem;
+  justify-content: space-between;
 }
 
 .c-change-display-btn {
   display: flex;
+  width: 3rem;
   justify-content: center;
   align-items: center;
-  width: 3rem;
   margin: 0 0.5rem;
 }
 
@@ -540,9 +540,9 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-left: 0.5rem;
-  margin-bottom: 1rem;
   color: var(--color-text);
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
 }
 
 .c-no-effect {
@@ -553,16 +553,16 @@ export default {
 .c-single-entry {
   text-align: left;
   color: var(--color-text);
-  padding: 0.2rem 0.5rem;
-  margin: 0.2rem;
   border: 0.1rem dashed;
-  cursor: pointer;
+  margin: 0.2rem;
+  padding: 0.2rem 0.5rem;
   user-select: none;
+  cursor: pointer;
 }
 
 .c-single-entry-highlight {
-  border: 0.1rem solid;
   font-weight: bold;
+  border: 0.1rem solid;
   animation: a-glow-text 2s infinite;
 }
 
@@ -571,8 +571,8 @@ export default {
 }
 
 .c-dilation-entry {
-  border: 0.2rem solid;
   font-weight: bold;
+  border: 0.2rem solid;
   animation: a-glow-dilation-nerf 3s infinite;
 }
 

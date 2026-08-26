@@ -266,7 +266,7 @@ export default {
 }
 
 .modified-cap {
-  margin: -0.8rem 0 0.8rem;
   font-weight: bold;
+  margin: -0.8rem 0 0.8rem;
 }
 </style>

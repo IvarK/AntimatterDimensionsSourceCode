@@ -50,8 +50,8 @@ export default {
 
 <style scoped>
 .l-autobuyer-choice {
-  border-radius: 0;
   border-top: 0;
+  border-radius: 0;
   box-shadow: none;
 }
 

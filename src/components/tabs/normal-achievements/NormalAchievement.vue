@@ -306,8 +306,8 @@ export default {
   width: 1.5rem;
   height: 1.5rem;
   position: absolute;
-  left: 0;
   bottom: 0;
+  left: 0;
   font-size: 1rem;
   color: black;
   background: #5ac467;

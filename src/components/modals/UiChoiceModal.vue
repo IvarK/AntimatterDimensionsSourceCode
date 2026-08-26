@@ -68,6 +68,7 @@ export default {
 .c-visual-change-list-entry {
   display: flex;
   margin-bottom: 0.5rem;
+
   gap: 1rem;
 }
 </style>

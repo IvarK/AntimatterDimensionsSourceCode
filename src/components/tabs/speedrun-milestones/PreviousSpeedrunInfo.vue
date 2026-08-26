@@ -108,10 +108,10 @@ export default {
 }
 
 .c-no-record {
+  width: 100%;
   align-items: center;
   font-size: 1.3rem;
   padding: 0.65rem;
-  width: 100%;
 }
 
 .o-icon {

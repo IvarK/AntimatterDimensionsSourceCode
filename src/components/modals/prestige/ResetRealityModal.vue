@@ -60,8 +60,8 @@ export default {
 
 <style scoped>
 .c-has-rewards {
-  font-weight: bold;
   font-size: 1.5rem;
+  font-weight: bold;
   color: var(--color-bad);
 }
 </style>

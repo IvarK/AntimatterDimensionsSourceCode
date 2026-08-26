@@ -31,7 +31,7 @@
 
 .pl-s .pl-s1 /* string source */,
 .pl-smi      /* storage.modifier.import, storage.modifier.package, storage.type.java, variable.other, variable.parameter.function */ {
-  color: #333;
+  color: #333333;
 }
 
 .pl-ent /* entity.name.tag */ {
@@ -61,13 +61,13 @@
 }
 
 .pl-ii /* invalid.illegal */ {
-  background-color: #b52a1d;
   color: #f8f8f8;
+  background-color: #b52a1d;
 }
 
 .pl-sr .pl-cce /* string.regexp constant.character.escape */ {
-  color: #63a35c;
   font-weight: bold;
+  color: #63a35c;
 }
 
 .pl-ml /* markup.list */ {
@@ -77,8 +77,8 @@
 .pl-mh        /* markup.heading */,
 .pl-mh .pl-en /* markup.heading entity.name */,
 .pl-ms        /* meta.separator */ {
-  color: #1d3e81;
   font-weight: bold;
+  color: #1d3e81;
 }
 
 .pl-mq /* markup.quote */ {
@@ -86,31 +86,30 @@
 }
 
 .pl-mi /* markup.italic */ {
-  color: #333;
   font-style: italic;
+  color: #333333;
 }
 
 .pl-mb /* markup.bold */ {
-  color: #333;
   font-weight: bold;
+  color: #333333;
 }
 
 .pl-md /* markup.deleted, meta.diff.header.from-file */ {
-  background-color: #ffecec;
   color: #bd2c00;
+  background-color: #ffecec;
 }
 
 .pl-mi1 /* markup.inserted, meta.diff.header.to-file */ {
-  background-color: #eaffea;
   color: #55a532;
+  background-color: #eaffea;
 }
 
 .pl-mdr /* meta.diff.range */ {
-  color: #795da3;
   font-weight: bold;
+  color: #795da3;
 }
 
 .pl-mo /* meta.output */ {
   color: #1d3e81;
 }
-

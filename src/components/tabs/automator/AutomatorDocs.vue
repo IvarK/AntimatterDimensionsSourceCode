@@ -375,8 +375,8 @@ export default {
 }
 
 .l-automator__script-names {
-  flex-grow: 1;
   display: flex;
+  flex-grow: 1;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;

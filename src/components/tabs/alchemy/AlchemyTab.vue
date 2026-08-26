@@ -288,14 +288,14 @@ export default {
   position: absolute;
   top: -1.5rem;
   left: 0;
+  z-index: 2;
   justify-content: center;
   align-items: center;
   font-size: 60rem;
+  opacity: 0.8;
   color: var(--color-pelle--base);
   text-shadow: 0 0 3rem;
   pointer-events: none;
   user-select: none;
-  opacity: 0.8;
-  z-index: 2;
 }
 </style>

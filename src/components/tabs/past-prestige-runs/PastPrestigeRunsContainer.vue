@@ -292,11 +292,11 @@ export default {
 
 .c-empty-row {
   display: block;
-  border: 0.05rem solid #999999;
-  color: var(--color-text);
   width: 100.2%;
-  padding: 0.2rem 0;
+  color: var(--color-text);
+  border: 0.05rem solid #999999;
   margin: -0.05rem;
+  padding: 0.2rem 0;
 }
 
 .l-no-records {

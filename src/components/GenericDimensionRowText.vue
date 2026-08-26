@@ -82,27 +82,27 @@ export default {
 <style scoped>
 .l-dimension-text-container {
   display: flex;
+  grid-column: 1 / 5;
   height: 3.5rem;
   align-content: center;
-  grid-column: 1 / 5;
 }
 
 .l-narrow-box {
   display: flex;
-  text-align: left;
-  width: 100%;
   flex-direction: column;
+  width: 100%;
   justify-content: center;
   align-items: flex-start;
+  text-align: left;
 }
 
 .l-wide-box {
   display: flex;
-  text-align: left;
-  width: 100%;
   flex-direction: row;
+  width: 100%;
   justify-content: flex-start;
   align-items: center;
+  text-align: left;
 }
 
 .c-dim-row__large {

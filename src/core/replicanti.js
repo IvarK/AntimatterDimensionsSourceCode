@@ -517,7 +517,7 @@ export const Replicanti = {
   unlock(freeUnlock = false) {
     const cost = DC.E140.dividedByEffectOf(PelleRifts.vacuum.milestones[1]);
     if (player.replicanti.unl) return;
-    if (player.sidebarCurrencyUnlocks >> 1 % 2 === 0) {
+    if ((player.sidebarCurrencyUnlocks >> 1) % 2 === 0) {
       player.sidebarCurrencyUnlocks += 2;
       EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
     }

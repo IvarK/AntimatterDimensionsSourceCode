@@ -97,7 +97,7 @@ class ImaginaryUpgradeState extends BitPurchasableMechanicState {
       // Need to clear before retriggering, or else it won't actually show up on subsequent upgrades
       TabNotification.laitelaUnlock.clearTrigger();
       TabNotification.laitelaUnlock.tryTrigger();
-      if (player.sidebarCurrencyUnlocks >> 7 % 2 === 0) {
+      if ((player.sidebarCurrencyUnlocks >> 7) % 2 === 0) {
         player.sidebarCurrencyUnlocks += 128;
         EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
       }

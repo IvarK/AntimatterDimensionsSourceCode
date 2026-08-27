@@ -62,7 +62,7 @@ export default {
     clickHandler() {
       switch (this.id) {
         case 1:
-          if (player.sidebarCurrencyUnlocks >> 3 % 2 === 0) {
+          if ((player.sidebarCurrencyUnlocks >> 3) % 2 === 0) {
             player.sidebarCurrencyUnlocks += 8;
             EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
           }

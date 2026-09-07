@@ -494,7 +494,9 @@ export const AutomatorBackend = {
     for (const rawLine of lines) {
       const availableConstants = Object.keys(player.reality.automator.constants);
       // Needs a space-padded regex match so that (for example) a constant "unl" doesn't match to an unlock command
-      // Additionally we need a negative lookbehind in order to ignore matches with presets which have the same name
+      // Additionally we need a negative lookbehind in order to ignore matches with presets which have the same name.
+      // This can be inaccurate if people never put a space between constants and characters,
+      // even if the code is valid (i.e. ... purchase const})
       for (const key of availableConstants) {
         if (rawLine.match(`(?<![Nn][Aa][Mm][Ee])\\s${key}(\\s|$)`)) foundConstants.add(key);
       }

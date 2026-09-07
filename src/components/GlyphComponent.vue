@@ -440,7 +440,7 @@ export default {
       const effectIDs = [];
       let remainingEffects = this.glyph.effects >> minEffectID;
       for (let id = 0; remainingEffects > 0; id++) {
-        if ((remainingEffects & 1) === 1) effectIDs.push(id);
+        if ((remainingEffects & 1) === 1 && id !== 27) effectIDs.push(id);
         remainingEffects >>= 1;
       }
       return effectIDs;

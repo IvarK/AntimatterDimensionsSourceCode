@@ -6713,7 +6713,7 @@ kbd {
 .o-v-milestone {
   display: flex;
   flex-direction: column;
-  width: 25rem;
+  width: 32rem;
   height: 10rem;
   justify-content: space-around;
   font-size: 1.2rem;

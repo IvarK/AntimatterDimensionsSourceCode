@@ -92,6 +92,9 @@ the player gaining no eternities.</li>
 <li>Fixed the sidebar "Recent Currency" mode not updating upon unlocking a new currency</li>
 <li>Fixed deleting a companion randomly choosing a companion in your inventory (usually prioritising top and left) to delete, instead
 of deleting the glyph that the player selected to delete.</li>
+<li>Fixed overflow of text on V milestones</li>
+<li>Fixed Pelle's 1e55 Dilation upgrade not stating Capped at 1e9</li>
+<li>Fixed duplicate pips on Time glyphs with Nameless 25 due to Time Shard power + Game Time multiplier </li>
 <li>Fixed some spelling/punctuation, and standardized it elsewhere.</li>
 </ul>
 <br>

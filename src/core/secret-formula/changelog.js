@@ -79,7 +79,7 @@ until the player reloaded the subtab (i.e. by changing away and back).</li>
 <li>Added a note to the h2p tab for Replicanti if ts192 is unlocked.</li>
 <li>Fixed the progress bar at the bottom of the Antimatter Dimensions tab not working properly when in Dilation while Doomed, and showing 
 the progress to gaining more TP, rather than the progress to the Galaxy Generator.</li>
-<li>Fixed rows of tables in the Past Prestige Runs subtab being very slightly thinner then normal if it had stated that you had not done X 
+<li>Fixed rows of tables in the Past Prestige Runs subtab being very slightly thinner than normal if it had stated that you had not done X 
 amount of a prestige yet.</li>
 <li>Fixed some cases where numbers were not being handled as normal, resulting in the Blind theme not making them hidden.</li>
 <li>Fixed the Time Dimension tab stating you had "1 Tickspeed upgrades".</li>

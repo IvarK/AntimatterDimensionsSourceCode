@@ -25,26 +25,26 @@ export default {
 .c-prestige-info-blocks {
   display: flex;
   flex-direction: row;
-  height: 14rem;
   width: 100%;
+  height: 14rem;
   color: var(--color-text);
 }
 
 .l-game-header__eternity {
+  width: 22rem;
   position: absolute;
   left: calc(25% - 22rem);
-  width: 22rem;
 }
 
 .l-game-header__center {
+  width: 50rem;
   position: absolute;
   right: calc(50% - 25rem);
-  width: 50rem;
 }
 
 .l-game-header__infinity {
+  width: 22rem;
   position: absolute;
   right: calc(25% - 22rem);
-  width: 22rem;
 }
 </style>

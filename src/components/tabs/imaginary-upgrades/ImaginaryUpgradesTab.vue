@@ -75,8 +75,8 @@ export default {
 
 <style scoped>
 .c-cap-text {
-  color: var(--color-text);
   font-size: 1.5rem;
+  color: var(--color-text);
 }
 
 .c-info-text {

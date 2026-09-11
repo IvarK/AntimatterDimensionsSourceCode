@@ -131,7 +131,7 @@ export function buyStudiesUntil(id, ec = -1) {
 
   // Don't bother buying any more studies at or below row 22 unless the player has fully finished V, in which case just
   // brute-force all of them up to the specified study. This buys all pre-triads, then triads sequentially up to the id
-  if (id < 221 || !V.isFullyCompleted) return studyArray;
+  if (id < 221 || !V.isFullyCompleted || Pelle.isDoomed) return studyArray;
   studyArray.push(...range(221, Math.max(id, 234)));
   return studyArray;
 }

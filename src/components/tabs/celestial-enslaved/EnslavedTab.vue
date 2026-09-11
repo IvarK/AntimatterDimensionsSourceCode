@@ -352,8 +352,8 @@ export default {
 }
 
 .l-fixed-setting {
-  cursor: pointer;
-  pointer-events: none;
   filter: brightness(70%);
+  pointer-events: none;
+  cursor: pointer;
 }
 </style>

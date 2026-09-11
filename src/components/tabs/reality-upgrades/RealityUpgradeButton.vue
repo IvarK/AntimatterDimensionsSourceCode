@@ -38,6 +38,9 @@ export default {
     config() {
       return this.upgrade.config;
     },
+    prefixedWithNumber() {
+      return Boolean(this.config.prefixedNumber);
+    },
     classObject() {
       return {
         "c-reality-upgrade-btn--useless": this.isUseless,
@@ -106,6 +109,7 @@ export default {
           <br>
           <DescriptionDisplay
             :config="requirementConfig"
+            :number-prefixed="prefixedWithNumber"
             label="Requirement:"
             class="c-reality-upgrade-btn__requirement"
           />

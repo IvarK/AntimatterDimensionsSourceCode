@@ -26,6 +26,11 @@ export default {
       type: String,
       required: false,
       default: ""
+    },
+    numberPrefixed: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
@@ -56,7 +61,7 @@ export default {
         const description = config?.description;
         // Descriptions in config entries are occasionally used both as standalone statements and mid-sentence,
         // so we explicitly capitalize them here because this only shows up in standalone places
-        const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+        const capitalize = str => (this.numberPrefixed ? str : str.charAt(0).toUpperCase() + str.slice(1));
         this.isVisible = description !== undefined;
         if (!this.isVisible) return;
 

@@ -12,7 +12,17 @@ function giveEternityRewards(auto) {
     Tab.dimensions.time.show();
   }
 
+  if ((player.sidebarCurrencyUnlocks >> 2) % 2 === 0) {
+    player.sidebarCurrencyUnlocks += 4;
+    EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
+  }
+
   Currency.eternities.add(newEternities);
+
+  Currency.infinitiesBanked.value = Currency.infinitiesBanked.value.plusEffectsOf(
+    Achievement(131).effects.bankedInfinitiesGain,
+    TimeStudy(191)
+  );
 
   if (EternityChallenge.isRunning) {
     const challenge = EternityChallenge.current;
@@ -42,11 +52,6 @@ function giveEternityRewards(auto) {
   );
   player.records.bestEternity.bestEPminReality =
     player.records.bestEternity.bestEPminReality.max(player.records.thisEternity.bestEPmin);
-
-  Currency.infinitiesBanked.value = Currency.infinitiesBanked.value.plusEffectsOf(
-    Achievement(131).effects.bankedInfinitiesGain,
-    TimeStudy(191)
-  );
 
   if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked) {
     EffarigUnlock.eternity.unlock();

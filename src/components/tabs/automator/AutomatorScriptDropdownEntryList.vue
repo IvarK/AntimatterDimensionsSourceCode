@@ -120,13 +120,13 @@ export default {
 
 <style scoped>
 .l-script-option {
-  border-radius: 0;
   border-bottom: 0;
+  border-radius: 0;
 }
 
 .c-script-option-hover-effect:hover {
-  filter: brightness(70%);
   background-color: var(--color-automator-active-line-background);
+  filter: brightness(70%);
 }
 
 .l-script-option:first-child {

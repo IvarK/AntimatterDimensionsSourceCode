@@ -147,12 +147,12 @@ export default {
 
 .pelle-unlock-requirements {
   width: 50rem;
-  padding: 0.5rem;
   font-size: 2.4rem;
   color: var(--color-pelle--base);
   background: black;
   border: var(--var-border-width, 0.2rem) solid var(--color-pelle--base);
   border-radius: var(--var-border-radius, 0.5rem);
+  padding: 0.5rem;
 }
 
 .pelle-doom-button {

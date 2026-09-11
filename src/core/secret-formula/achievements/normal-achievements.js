@@ -808,7 +808,7 @@ export const normalAchievements = [
   {
     id: 116,
     name: "Do I really need to infinity",
-    get description() { return `Eternity with only ${formatInt(1)} Infinity.`; },
+    get description() { return `Eternity with no more than ${formatInt(1)} Infinity.`; },
     checkRequirement: () => Currency.infinities.lte(1),
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
     reward: "Multiplier to Infinity Points based on Infinities.",
@@ -1059,7 +1059,7 @@ export const normalAchievements = [
       return true;
     },
     checkEvent: GAME_EVENT.ETERNITY_RESET_AFTER,
-    reward: "Galaxies no longer reset Dimension Boosts."
+    reward: "Antimatter Galaxies no longer reset Dimension Boosts."
   },
   {
     id: 144,
@@ -1339,7 +1339,7 @@ export const normalAchievements = [
     checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED,
     // Weirdly specific reward? Yes, its V's ST bonus because we forgot to disable it
     // when balancing Pelle and only realised too late.
-    get reward() { return `All Antimatter Dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
+    get reward() { return `All Antimatter Dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}.`; },
     effect: 1.0812403840463596
   },
   {
@@ -1365,7 +1365,7 @@ export const normalAchievements = [
   {
     id: 187,
     name: "The One with Dilated Time",
-    description: "Unlock Dilation while Doomed.",
+    description: "Dilate Time while Doomed.",
     checkRequirement: () => PelleStrikes.dilation.hasStrike,
     checkEvent: GAME_EVENT.PELLE_STRIKE_UNLOCKED,
     // We forgot to disable a singularity milestone while balancing Pelle; now it's disabled

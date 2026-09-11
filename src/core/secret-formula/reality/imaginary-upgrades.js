@@ -102,6 +102,7 @@ export const imaginaryUpgrades = [
     name: "Suspicion of Interference",
     id: 11,
     cost: 5e7,
+    prefixedNumber: true,
     requirement: () => `${format(1e90)} total Relic Shards
       (You have ${format(player.celestials.effarig.relicShards, 2)})`,
     hasFailed: () => false,
@@ -140,7 +141,7 @@ export const imaginaryUpgrades = [
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "Increase Imaginary Machine Cap based on Imaginary Upgrades purchased",
     effect: () => 1 + ImaginaryUpgrades.totalRebuyables / 20 + ImaginaryUpgrades.totalSinglePurchase / 2,
-    formatEffect: value => `${formatX(value, 2, 1)}`,
+    formatEffect: value => `${formatX(value, 2, 2)}`,
     isDisabledInDoomed: true
   },
   {

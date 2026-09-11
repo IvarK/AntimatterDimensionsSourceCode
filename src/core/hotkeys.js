@@ -91,8 +91,10 @@ export const shortcuts = [
     keys: ["r"],
     type: "bindHotkey",
     function: () => {
-      replicantiGalaxyRequest();
+      // Since this is called every tick that the button is held, we can just throw a return here and be fine
+      if (!Replicanti.galaxies.canBuyMore) return;
       setHoldingR(true);
+      replicantiGalaxyRequest();
     },
     visible: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked()
   }, {
@@ -309,6 +311,7 @@ export const shortcuts = [
     name: "Fullscreen",
     keys: ["F10"],
     type: "bind",
+    // eslint-disable-next-line no-empty-function
     function: () => {},
     visible: () => false
   },

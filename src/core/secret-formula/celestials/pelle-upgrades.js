@@ -102,7 +102,7 @@ export const pelleUpgrades = {
   },
   dimBoostResetsNothing: {
     id: 7,
-    description: "Dimension Boosts no longer reset anything",
+    description: "Dimension Boosts no longer reset anything. Galaxies only reset Dimension Boosts.",
     cost: 1e11,
     formatCost,
   },
@@ -192,7 +192,7 @@ export const pelleUpgrades = {
   },
   replicantiGalaxyEM40: {
     id: 22,
-    description: "Replicanti Galaxies no longer reset anything they normally reset",
+    description: "Replicanti Galaxies no longer reset anything they normally reset, but still reduce Replicanti.",
     cost: 1e30,
     formatCost,
   }

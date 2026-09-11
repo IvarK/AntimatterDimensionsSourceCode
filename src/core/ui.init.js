@@ -54,4 +54,5 @@ export const state = {
   notationName: "",
   formatPreBreak: false,
   lastClickTime: 0,
+  chosenCompanionIDx: 0,
 };

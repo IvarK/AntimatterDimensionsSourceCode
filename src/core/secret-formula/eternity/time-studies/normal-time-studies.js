@@ -103,7 +103,10 @@ export const normalTimeStudies = [
     requirement: [31],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => `All Galaxies give a ${formatX(DC.D1_2, 1, 1)} multiplier to Infinity Points gained`,
-    effect: () => DC.D1_2.pow(Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies),
+    effect: () => {
+      const gain = DC.D1_2.pow(Replicanti.galaxies.total + player.galaxies + player.dilation.totalTachyonGalaxies);
+      return gain.gt(1e50) && Effarig.isRunning && Effarig.currentStage === EFFARIG_STAGES.ETERNITY ? DC.E50 : gain;
+    },
     formatEffect: value => formatX(value, 2, 1)
   },
   {

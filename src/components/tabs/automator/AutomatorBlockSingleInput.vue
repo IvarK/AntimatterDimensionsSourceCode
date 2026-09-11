@@ -367,16 +367,16 @@ export default {
 <style scoped>
 .c-automator-single-block {
   display: flex;
+  white-space: nowrap;
   flex-direction: row;
+  height: 2.8rem;
   justify-content: center;
   align-items: center;
-  height: 2.8rem;
-  white-space: nowrap;
 }
 
 .c-automator-constant-block {
-  background: var(--color-blockmator-block-command);
   color: var(--color-blockmator-editor-background);
+  background: var(--color-blockmator-block-command);
 }
 
 .c-automator-text-input-container {
@@ -389,21 +389,21 @@ export default {
 
 .c-automator-close-text-input {
   position: absolute;
-  color: var(--color-automator-error-outline);
-  font-size: 1.5rem;
-  z-index: 1;
-  right: 0.8rem;
   top: 0.6rem;
+  right: 0.8rem;
+  z-index: 1;
+  font-size: 1.5rem;
+  color: var(--color-automator-error-outline);
 }
 
 .l-error-textbox {
-  background: var(--color-automator-error-background);
   color: yellow;
+  background: var(--color-automator-error-background);
 }
 
 .l-blob {
   font-size: 1.8rem;
+  color: #ffcc22;
   background: black;
-  color: #fc2;
 }
 </style>

@@ -54,6 +54,11 @@ export const MachineHandler = {
   // Use iMCap to store the base cap; applying multipliers separately avoids some design issues the 3xTP upgrade has
   updateIMCap() {
     if (this.uncappedRM.gte(this.baseRMCap)) {
+      // There isn't really a better place to put this, sorry
+      if ((player.sidebarCurrencyUnlocks >> 6) % 2 === 0) {
+        player.sidebarCurrencyUnlocks += 64;
+        EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
+      }
       if (this.baseIMCap > player.reality.iMCap) {
         player.records.bestReality.iMCapSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
         player.reality.iMCap = this.baseIMCap;

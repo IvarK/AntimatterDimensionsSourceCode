@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     isFirstInfinity() {
-      return !PlayerProgress.infinityUnlocked();
+      return !PlayerProgress.infinityUnlocked() && player.records.fullGameCompletions === 0;
     },
     message() {
       const info = this.isFirstInfinity ? this.firstInfinityInfo : ``;

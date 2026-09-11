@@ -89,7 +89,6 @@ export default {
         v-else-if="view.modal.current"
         :modal="view.modal.current"
       />
-      <ModalProgressBar v-if="view.modal.progressBar" />
       <FadeAway v-if="ending" />
       <CreditsContainer v-if="ending" />
       <NewGame v-if="ending" />

@@ -101,7 +101,7 @@ export default {
         </PrimaryButton>
         <PrimaryButton class="o-btn-file-ops">
           <input
-            class="c-file-import"
+            class="c-file-import-backup"
             type="file"
             accept=".txt"
             @change="importAsFile"
@@ -116,8 +116,8 @@ export default {
 
 <style scoped>
 .c-info {
-  width: 60rem;
   overflow-x: hidden;
+  width: 60rem;
   padding-right: 1rem;
 }
 

@@ -67,11 +67,11 @@ export default {
 
 <style scoped>
 .c-automator-button-icon {
-  padding: 0.3rem 0.8rem;
   width: 3.3rem;
-  border: var(--var-border-width, 0.2rem) solid var(--color-automator-controls-border);
-  border-radius: var(--var-border-radius, 0.3rem);
   color: var(--color-automator-docs-font);
   background-color: var(--color-automator-controls-inactive);
+  border: var(--var-border-width, 0.2rem) solid var(--color-automator-controls-border);
+  border-radius: var(--var-border-radius, 0.3rem);
+  padding: 0.3rem 0.8rem;
 }
 </style>

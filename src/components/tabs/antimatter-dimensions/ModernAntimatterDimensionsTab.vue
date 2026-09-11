@@ -86,11 +86,13 @@ export default {
 
       this.multiplierText = `Buy 10 Dimension purchase multiplier: ${formatX(this.buy10Mult, 2, 2)}`;
       if (!isSacrificeUnlocked) return;
-      this.isFullyAutomated = Autobuyer.sacrifice.isActive && Achievement(118).isUnlocked;
-      this.isSacrificeAffordable = Sacrifice.canSacrifice && !this.isFullyAutomated;
+      this.isFullyAutomated = Autobuyer.sacrifice.isActive && Achievement(118).isEffectActive &&
+      Sacrifice.meetsNonBoostConditions;
+      this.isSacrificeAffordable = this.isFullyAutomated || Sacrifice.canSacrifice;
       this.currentSacrifice.copyFrom(Sacrifice.totalBoost);
       this.sacrificeBoost.copyFrom(Sacrifice.nextBoost);
-      this.disabledCondition = Sacrifice.disabledCondition;
+      this.disabledCondition = this.isFullyAutomated ? Sacrifice.nonBoostDisabledCondition
+        : Sacrifice.disabledCondition;
       const sacText = this.isSacrificeUnlocked
         ? ` | Dimensional Sacrifice multiplier: ${formatX(this.currentSacrifice, 2, 2)}`
         : "";
@@ -116,10 +118,10 @@ export default {
         class="o-primary-btn--sacrifice"
         @click="sacrifice"
       >
-        <span v-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
-        <span v-else-if="isFullyAutomated && disabledCondition !== ''">
+        <span v-if="isFullyAutomated">
           Dimensional Sacrifice is Automated (Achievement 118)
         </span>
+        <span v-else-if="isSacrificeAffordable">Dimensional Sacrifice ({{ formatX(sacrificeBoost, 2, 2) }})</span>
         <span v-else>Dimensional Sacrifice Disabled ({{ disabledCondition }})</span>
       </PrimaryButton>
       <button

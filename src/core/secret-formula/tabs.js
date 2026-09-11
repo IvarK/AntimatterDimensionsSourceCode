@@ -89,7 +89,7 @@ export const tabs = [
       },
       {
         key: "challenges",
-        name: "Challenge records",
+        name: "Challenge Records",
         symbol: "<i class='fas fa-stopwatch'></i>",
         component: "ChallengeRecordsTab",
         condition: () =>

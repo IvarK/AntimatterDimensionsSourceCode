@@ -11,10 +11,11 @@ function formatInt(value) {
 
 function formatMachines(realPart, imagPart) {
   const parts = [];
-  if (Decimal.neq(realPart, 0)) parts.push(format(realPart, 2));
+  if (Decimal.neq(realPart, 0)) parts.push(`${format(realPart, 2)}`);
   if (Decimal.neq(imagPart, 0)) parts.push(`${format(imagPart, 2, 2)}i`);
-  if (Decimal.eq(realPart, 0) && Decimal.eq(imagPart, 0)) return format(0);
-  return parts.join(" + ");
+  if (Decimal.eq(realPart, 0) && Decimal.eq(imagPart, 0)) return `${format(0)} Machines`;
+  // This is the way it is displayed in sidebar aswell.
+  return `${parts.join(" + ")} Machines`;
 }
 
 // This is used for Discord Rich Presence, the information which shows up on a person's profile badge in Discord if
@@ -232,7 +233,7 @@ export const discordRichPresence = {
       name: () => Ra.displayName,
       hasReached: () => MachineHandler.isIMUnlocked,
       mainResource: () =>
-        `${format(player.reality.realityMachines)} RM + ${format(player.reality.imaginaryMachines, 2)} iM`,
+        formatMachines(player.reality.realityMachines, player.reality.imaginaryMachines),
       resourceList: [
         () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
         () => `Ra Levels: ${Ra.pets.all.map(p => formatInt(p.level)).join("/")}`
@@ -242,7 +243,7 @@ export const discordRichPresence = {
       name: () => Laitela.displayName,
       hasReached: () => Laitela.isUnlocked,
       mainResource: () =>
-        `${format(player.reality.realityMachines)} RM + ${format(player.reality.imaginaryMachines, 2)} iM`,
+        formatMachines(player.reality.realityMachines, player.reality.imaginaryMachines),
       resourceList: [
         () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
         () => quantify("Singularity", player.celestials.laitela.singularities, 2, 0, format)],

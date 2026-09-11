@@ -418,6 +418,7 @@ export const GlyphAlteration = {
     return this.isUnlocked && this.getSacrificePower(type) >= this.boostingThreshold;
   },
   sacrificeBoost(type) {
+    if (!GlyphAlteration.isBoosted(type)) return 0;
     const capped = Math.clampMax(this.getSacrificePower(type), GlyphSacrificeHandler.maxSacrificeForEffects);
     return Math.log10(Math.clampMin(capped / this.boostingThreshold, 1)) / 2;
   },

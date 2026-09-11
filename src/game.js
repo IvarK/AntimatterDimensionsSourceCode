@@ -924,9 +924,9 @@ export function simulateTime(seconds, real, fast) {
   const infinitiedMilestone = getInfinitiedMilestoneReward(totalGameTime * 1000);
   const eternitiedMilestone = getEternitiedMilestoneReward(totalGameTime * 1000);
 
-  if (eternitiedMilestone.gt(0)) {
+  if (eternitiedMilestone.gt(0) && !Pelle.isDoomed) {
     Currency.eternities.add(eternitiedMilestone);
-  } else if (infinitiedMilestone.gt(0)) {
+  } else if (infinitiedMilestone.gt(0) && !Pelle.isDoomed) {
     Currency.infinities.add(infinitiedMilestone);
   } else {
     Currency.eternityPoints.add(getOfflineEPGain(seconds * 1000));

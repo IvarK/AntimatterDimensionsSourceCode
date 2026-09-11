@@ -27,8 +27,8 @@ export default {
 
 <style scoped>
 .c-entry-border {
-  border-bottom: 0.1rem solid var(--color-text);
   width: 28rem;
+  border-bottom: 0.1rem solid var(--color-text);
   padding-bottom: 1rem;
 }
 

@@ -1,5 +1,7 @@
 import { sha512_256 } from "js-sha512";
 
+import { deepmergeAll } from "../utility/deepmerge";
+
 import { DC } from "./constants";
 import FullScreenAnimationHandler from "./full-screen-animation-handler";
 
@@ -15,37 +17,6 @@ dev.hardReset = function() {
 dev.giveAllAchievements = function() {
   const allAchievements = Achievements.all.concat(SecretAchievements.all);
   for (const achievement of allAchievements) achievement.unlock();
-};
-
-// Know that both dev.doubleEverything and dev.tripleEverything are both broken
-// with this error https://i.imgur.com/ZMEBNTv.png
-
-dev.doubleEverything = function() {
-  Object.keys(player).forEach(key => {
-    if (typeof player[key] === "number") player[key] *= 2;
-    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(2);
-    if (typeof player[key] === "object" && !isFinite(player[key])) {
-      Object.keys(player[key]).forEach(key2 => {
-        if (typeof player[key][key2] === "number") player[key][key2] *= 2;
-        if (typeof player[key][key2] === "object" && player[key][key2].constructor !== Object)
-          player[key][key2] = player[key][key2].times(2);
-      });
-    }
-  });
-};
-
-dev.tripleEverything = function() {
-  Object.keys(player).forEach(key => {
-    if (typeof player[key] === "number") player[key] *= 3;
-    if (typeof player[key] === "object" && player[key].constructor !== Object) player[key] = player[key].times(3);
-    if (typeof player[key] === "object" && !isFinite(player[key])) {
-      Object.keys(player[key]).forEach(key3 => {
-        if (typeof player[key][key3] === "number") player[key][key3] *= 3;
-        if (typeof player[key][key3] === "object" && player[key][key3].constructor !== Object)
-          player[key][key3] = player[key][key3].times(3);
-      });
-    }
-  });
 };
 
 dev.barrelRoll = function() {
@@ -67,17 +38,58 @@ dev.cancerize = function() {
   Notation.emoji.setAsCurrent();
 };
 
-dev.fixSave = function() {
-  const save = JSON.stringify(player, GameSaveSerializer.jsonConverter);
-  const fixed = save.replace(/NaN/gui, "10");
-  const saveData = JSON.parse(fixed);
-  if (!saveData || GameStorage.checkPlayerObject(saveData) !== "") {
-    Modal.message.show("Could not fix the save.");
-    return;
+// Iterates through every item in A and B
+// If A has a broken value in anyway, it will set it to the value in B
+// This could fail if saves are irrepairably damaged, but still worth trying.
+// eslint-disable-next-line complexity
+function fixSaveIterator(value, value2) {
+  for (const item in value) {
+    if (value[item] instanceof Decimal && value2[item] instanceof Decimal) {
+      if (value2[item].neq(0)) {
+        // Under some cases, this could reset legitimate values, but this is a very rare (and safe) edge-case
+        if (value[item].lt(0) || value[item].exponent > 8e15)
+          value[item] = value2[item];
+      } else if (value[item].exponent > 8e15)
+        value[item] = value2[item];
+    }
+    if (typeof value[item] === "number" && typeof value2[item] === "number") {
+      if (value2[item] === 0) {
+        if (value[item] > 1e300) {
+          value[item] = value2[item];
+        }
+      } else if (value[item] > 1e300 || value[item] < 0)
+        value[item] = value2[item];
+    }
+    // If there is a mismatch (one decimal and one number) just override the item entirely, as it must have been modified through console
+    if (value[item] instanceof Decimal && typeof value2[item] === "number") {
+      value[item] = value2[item];
+    }
+    if (value2[item] instanceof Decimal && typeof value[item] === "number") {
+      value[item] = value2[item];
+    }
+    if ((value[item] instanceof Object || value[item] instanceof Array) &&
+      !(value[item] instanceof Decimal) && value2[item] !== undefined)
+      value[item] = fixSaveIterator(value[item], value2[item]);
+    if (value[item] === undefined && value2[item] !== undefined)
+      value[item] = value2[item];
+    // If neither the save nor the default player object can figure out what this prop is,
+    // we probably dont need to keep it
+    if (value[item] === undefined && value2[item] === undefined)
+      delete value[item];
   }
-  GameStorage.loadPlayerObject(saveData);
+  return value;
+}
+
+// This attempts to forcibly fix all player values, and override the existing save
+// This isn't the best persay, but frankly its worth having, because saves do inevitably break.
+dev.fixSave = function(save) {
+  player = deepmergeAll([Player.defaultStart, save ?? player]);
+  player = fixSaveIterator(player, Player.defaultStart);
   GameStorage.save();
 };
+
+// If true, it will attempt to run dev.fixSave on importing a broken save
+dev.attemptFixImports = false;
 
 dev.updateTDCosts = function() {
   for (let tier = 1; tier < 9; tier++) {

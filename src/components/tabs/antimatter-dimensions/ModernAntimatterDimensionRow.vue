@@ -192,14 +192,14 @@ export default {
 }
 
 .o-continuum {
-  border-color: var(--color-laitela--accent);
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
+  border-color: var(--color-laitela--accent);
 }
 
 .o-continuum:hover {
-  border-color: var(--color-laitela--accent);
   color: var(--color-laitela--base);
   background: var(--color-laitela--accent);
+  border-color: var(--color-laitela--accent);
 }
 </style>

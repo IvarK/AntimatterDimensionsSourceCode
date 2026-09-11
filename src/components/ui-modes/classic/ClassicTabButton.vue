@@ -61,8 +61,8 @@ export default {
 
 <style scoped>
 .o-tab-btn {
-  position: relative;
   height: 3.1rem;
+  position: relative;
   vertical-align: middle;
   margin: 0.2rem;
   margin-bottom: 0.7rem;

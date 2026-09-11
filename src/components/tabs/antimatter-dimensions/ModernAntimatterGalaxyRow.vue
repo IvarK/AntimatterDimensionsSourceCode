@@ -34,8 +34,10 @@ export default {
     buttonText() {
       if (this.lockText !== null) return this.lockText;
       const reset = [];
-      if (!Achievement(111).isUnlocked) reset.push("Dimensions");
-      if (!Achievement(143).isUnlocked) reset.push("Dimension Boosts");
+      // eslint-disable-next-line max-len
+      if (!Achievement(111).isEffectActive && !PelleUpgrade.dimBoostResetsNothing.canBeApplied) reset.push("Dimensions");
+      // eslint-disable-next-line max-len
+      if (!Achievement(143).isEffectActive && !PelleUpgrade.galaxyNoResetDimboost.canBeApplied) reset.push("Dimension Boosts");
       return reset.length === 0
         ? `Increase the power of Tickspeed upgrades`
         : `Reset your ${makeEnumeration(reset)} to increase the power of Tickspeed upgrades`;

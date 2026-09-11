@@ -3290,7 +3290,7 @@ export const news = [
   },
   {
     id: "p2",
-    text: 'Die Zahlen gehen hoooch'
+    text: "Die Zahlen gehen hoooch"
   },
   /* eslint-disable max-len */
   {

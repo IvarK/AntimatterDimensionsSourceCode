@@ -252,9 +252,9 @@ export default {
 
 .l-shop-buttons-container {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   width: 93rem;
+  justify-content: center;
   margin: auto;
 }
 

@@ -52,9 +52,6 @@ window.player = {
       requirementBits: 0,
     }
   },
-  infinity: {
-    upgradeBits: 0
-  },
   auto: {
     autobuyersOn: true,
     disableContinuum: false,
@@ -678,7 +675,6 @@ window.player = {
       thisCompletion: 3600,
       fastestCompletion: 3600,
       difficultyTier: 0,
-      upgrades: {},
       darkMatterMult: 1,
       darkEnergy: 0,
       singularitySorting: {
@@ -914,6 +910,8 @@ window.player = {
       id: false,
     }
   },
+  // This is a bitindex, fwiw
+  sidebarCurrencyUnlocks: 0
 };
 
 export const Player = {
@@ -1071,6 +1069,7 @@ export function guardFromNaNValues(obj) {
         enumerable: true,
         configurable: true,
         get: () => value,
+        // eslint-disable-next-line no-loop-func
         set: function guardedSetter(newValue) {
           if (newValue === null || newValue === undefined) {
             throw new Error("null/undefined player property assignment");

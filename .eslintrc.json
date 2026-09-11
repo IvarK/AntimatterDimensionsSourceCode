@@ -189,7 +189,7 @@
     "max-len": [
       "warn",
       {
-        "code": 120
+        "code": 140
       }
     ],
     "max-params": "warn",

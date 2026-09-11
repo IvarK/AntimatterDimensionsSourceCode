@@ -67,9 +67,9 @@ export default {
 }
 
 .c-import-button {
-  margin: 1rem 1rem -1rem;
-  border-radius: var(--var-border-radius, 0.4rem);
   border-width: var(--var-border-width, 0.2rem);
+  border-radius: var(--var-border-radius, 0.4rem);
+  margin: 1rem 1rem -1rem;
   cursor: pointer;
 }
 </style>

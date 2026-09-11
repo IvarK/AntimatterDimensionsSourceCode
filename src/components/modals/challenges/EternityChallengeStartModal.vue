@@ -42,6 +42,11 @@ export default {
       if (typeof conditionOfChallenge === "function") {
         conditionOfChallenge = conditionOfChallenge();
       }
+      if (this.challenge._config.scrambleText) {
+        conditionOfChallenge = conditionOfChallenge
+          .replace("*", this.challenge._config.scrambleText[1]);
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      }
       return `Inside this Eternity Challenge, ${conditionOfChallenge}`;
     }
   },

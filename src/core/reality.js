@@ -163,6 +163,13 @@ export function startManualReality(sacrifice, glyphID) {
 export function processManualReality(sacrifice, glyphID) {
   if (!isRealityAvailable()) return;
 
+  // Get this now so we can access it
+  const realityProps = getRealityProps(false, true);
+  if (RealityUpgrade(24).isLockingMechanics && realityProps.gainedRM.lt(5000)) {
+    RealityUpgrade(24).tryShowWarningModal();
+    return;
+  }
+
   if (player.realities === 0) {
     // If this is our first Reality, lock in the initial seed and then give the companion and starting glyphs
     player.reality.seed = player.reality.initialSeed;
@@ -322,6 +329,11 @@ function giveRealityRewards(realityProps) {
       player.celestials.enslaved.storedReal = 0;
     }
     Enslaved.boostReality = false;
+  }
+
+  if ((player.sidebarCurrencyUnlocks >> 4) % 2 === 0) {
+    player.sidebarCurrencyUnlocks += 16;
+    EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
   }
 
   if (Teresa.isRunning) {

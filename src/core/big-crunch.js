@@ -69,6 +69,11 @@ function bigCrunchGiveRewards() {
   Currency.infinityPoints.add(infinityPoints);
   Currency.infinities.add(gainedInfinities().round());
 
+  if (player.sidebarCurrencyUnlocks % 2 === 0) {
+    player.sidebarCurrencyUnlocks += 1;
+    EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
+  }
+
   bigCrunchTabChange(!PlayerProgress.infinityUnlocked());
   bigCrunchCheckUnlocks();
 }

@@ -23,6 +23,15 @@ export default {
   },
   computed: {
     costIncreases: () => TimeDimension(1).costIncreaseThresholds,
+    timeShardsText() {
+      // Rounding
+      if (this.timeShards.lt(1.05) && this.timeShards.gte(0.95)) return "Time Shard";
+      return "Time Shards";
+    },
+    tickspeedUpgradesText() {
+      if (player.totalTickGained === 1) return "Tickspeed Upgrade";
+      return "Tickspeed Upgrades";
+    },
   },
   methods: {
     update() {
@@ -67,8 +76,8 @@ export default {
     <div>
       <p>
         You have gained
-        <span class="c-time-dim-description__accent">{{ formatInt(totalUpgrades) }}</span> Tickspeed upgrades from
-        <span class="c-time-dim-description__accent">{{ format(timeShards, 2, 1) }}</span> Time Shards.
+        <span class="c-time-dim-description__accent">{{ formatInt(totalUpgrades) }}</span> {{ tickspeedUpgradesText }} from
+        <span class="c-time-dim-description__accent">{{ format(timeShards, 2, 1) }}</span> {{ timeShardsText }}.
       </p>
       <p>
         Next Tickspeed upgrade at

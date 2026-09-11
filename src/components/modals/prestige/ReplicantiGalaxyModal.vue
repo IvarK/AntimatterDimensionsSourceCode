@@ -31,7 +31,7 @@ export default {
   methods: {
     update() {
       this.replicanti.copyFrom(player.replicanti.amount);
-      this.divideReplicanti = Achievement(126).isUnlocked;
+      this.divideReplicanti = Achievement(126).canBeApplied;
       this.canBeBought = Replicanti.galaxies.gain;
       if (this.replicanti.lt(Number.MAX_VALUE)) this.emitClose();
     },

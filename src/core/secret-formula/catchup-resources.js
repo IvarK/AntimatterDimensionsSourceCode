@@ -235,7 +235,7 @@ export const catchupResources = [
   {
     name: "Tesseracts",
     id: 30,
-    requiredStage: PROGRESS_STAGE.ENSLAVED,
+    requiredStage: PROGRESS_STAGE.V,
     description: `Infinity Dimensions cannot be purchased indefinitely and all but the 8th have a hard limit for how
       many times they can be purchased. Each Tesseract permanently increases this limit by a large amount.`
   },

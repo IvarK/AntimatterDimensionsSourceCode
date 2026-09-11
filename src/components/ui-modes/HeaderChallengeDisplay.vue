@@ -233,8 +233,8 @@ export default {
 }
 
 .l-challenge-display--clickable {
-  cursor: pointer;
   user-select: none;
+  cursor: pointer;
 }
 
 .l-challenge-display--clickable:hover {

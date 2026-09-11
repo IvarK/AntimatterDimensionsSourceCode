@@ -580,7 +580,7 @@ applied depends on which Infinity Dimension you purchase. <!-- Sorry Garnet :/ -
 <br>
 <br>
 <b>Infinity Dimension Production:</b> Just like Antimatter Dimensions, each Infinity Dimension produces the
-next lower Infinity Dimension.
+previous Infinity Dimension.
 <br>
 <br>
 Every crunch, your produced Infinity Dimensions are reset to the amount you purchased. While the production
@@ -620,7 +620,7 @@ only unlocking autobuyers, they give you boosts to your various forms of product
 Normal Challenges, the rightmost column of Infinity Upgrades are disabled within Infinity Challenges.
 <br>
 <br>
-Unlike the Normal Challenges, which are all unlocked at once, Infinity Challenges require you to reach a certain
+Unlike the Normal Challenges, which are all unlocked based on Infinities, Infinity Challenges require you to reach a certain
 amount of antimatter before you can attempt them.
 <br>
 <br>
@@ -635,7 +635,8 @@ amount of antimatter before you can attempt them.
       info: () => `
 Replicanti are another resource you unlock at ${format(DC.E140)} IP. Rather
 than producing something else, Replicanti actually produces <i>itself</i> up to a maximum of
-${formatPostBreak(Number.MAX_VALUE, 2)}. Replicanti are produced at their own pace, unaffected by Tickspeed Upgrades.
+${formatPostBreak(Number.MAX_VALUE, 2)}${TimeStudy(192).isBought ? ", which is removed due to Time Study 192" : ""}.
+Replicanti are produced at their own pace, unaffected by Tickspeed Upgrades.
 Each individual Replicanti has a certain chance (initially ${formatPercents(0.01)}) of producing another Replicanti
 every Replicanti tick (initially every second), and both of these can be upgraded by spending IP.
 <br>

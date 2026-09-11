@@ -494,7 +494,9 @@ export const AutomatorBackend = {
     for (const rawLine of lines) {
       const availableConstants = Object.keys(player.reality.automator.constants);
       // Needs a space-padded regex match so that (for example) a constant "unl" doesn't match to an unlock command
-      // Additionally we need a negative lookbehind in order to ignore matches with presets which have the same name
+      // Additionally we need a negative lookbehind in order to ignore matches with presets which have the same name.
+      // This can be inaccurate if people never put a space between constants and characters,
+      // even if the code is valid (i.e. ... purchase const})
       for (const key of availableConstants) {
         if (rawLine.match(`(?<![Nn][Aa][Mm][Ee])\\s${key}(\\s|$)`)) foundConstants.add(key);
       }
@@ -799,6 +801,7 @@ export const AutomatorBackend = {
     // program flow to do something else other than simply advancing to the next line
     switch (this.runCurrentCommand()) {
       case AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION:
+      case AUTOMATOR_COMMAND_STATUS.SAME_INSTRUCTION:
         break;
       case AUTOMATOR_COMMAND_STATUS.HALT:
         this.stop();
@@ -964,6 +967,7 @@ export const AutomatorBackend = {
     this.state.mode = AUTOMATOR_MODE.PAUSE;
   },
 
+  // eslint-disable-next-line no-shadow
   start(scriptID = this.state.topLevelScript, initialMode = AUTOMATOR_MODE.RUN, compile = true) {
     // Automator execution behaves oddly across new games, so we explicitly stop it from running if not unlocked
     if (!Player.automatorUnlocked) return;
@@ -1029,6 +1033,9 @@ export const AutomatorBackend = {
     clear() {
       this._data = [];
       player.reality.automator.state.stack.length = 0;
+    },
+    forEach(fn) {
+      this._data.forEach(fn);
     },
     initializeFromSave(commands) {
       this._data = [];

@@ -125,8 +125,8 @@ export default {
   font-size: 1.1rem;
   border: var(--var-border-width, 0.2rem) solid;
   border-radius: var(--var-border-radius, 0.4rem);
-  padding: 0.5rem 0.3rem;
   margin: 0.3rem;
+  padding: 0.5rem 0.3rem;
 }
 
 .c-fixed-height {

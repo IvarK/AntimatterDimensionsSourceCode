@@ -167,8 +167,9 @@ export default {
 
 <style scoped>
 .c-modern-dim-tooltip-container .c-modern-dim-purchase-count-tooltip {
-  position: absolute;
+  visibility: hidden;
   width: 20rem;
+  position: absolute;
   top: 50%;
   font-size: 1.3rem;
   line-height: 1.6rem;
@@ -176,9 +177,8 @@ export default {
   background: black;
   border: 0.1rem solid var(--color-text);
   border-radius: var(--var-border-width, 0.5rem);
+  padding: 0.5rem;
   /* Buttons are 40rem wide, tooltip is 20rem */
   transform: translate(calc(-175% - 1rem), -50%);
-  padding: 0.5rem;
-  visibility: hidden;
 }
 </style>

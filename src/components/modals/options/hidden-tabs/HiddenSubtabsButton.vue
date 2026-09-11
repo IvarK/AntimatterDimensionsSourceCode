@@ -79,8 +79,8 @@ export default {
 }
 
 .l-hide-modal-button__subtab-icon {
-  font-size: 1.5rem;
   width: 2rem;
+  font-size: 1.5rem;
   margin: 0.2rem;
 }
 

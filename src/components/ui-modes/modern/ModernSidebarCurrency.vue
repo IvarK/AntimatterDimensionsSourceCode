@@ -5,7 +5,9 @@ export default {
     return {
       sidebarID: 0,
       resourceName: "",
-      resourceValue: new Decimal(0)
+      resourceValue: new Decimal(0),
+      fullGameCompletions: 0,
+      hasInit: false
     };
   },
   computed: {
@@ -22,10 +24,25 @@ export default {
     displayValue() {
       // RM + iM seems to cause strange, undesirable linebreaks
       return this.resource.formatValue(this.resourceValue).replace(" + ", "+");
-    }
+    },
+  },
+  created() {
+    this.on$(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED, () => {
+      // This is stupid but calling a recompute didnt work, and this does.
+      this.cycleResource(1);
+      this.cycleResource(-1);
+    });
   },
   methods: {
     update() {
+      if (!this.hasInit) {
+        this.fullGameCompletions = player.records.fullGameCompletions;
+        this.hasInit = true;
+      }
+      if (this.fullGameCompletions !== player.records.fullGameCompletions) {
+        player.options.sidebarResourceID = 2;
+        this.fullGameCompletions = player.records.fullGameCompletions;
+      }
       this.sidebarID = player.options.sidebarResourceID;
       this.resourceName = this.resource.resourceName ?? this.resource.optionName;
       this.resourceValue.copyFrom(this.resource.value());

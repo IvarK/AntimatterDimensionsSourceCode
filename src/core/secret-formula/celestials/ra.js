@@ -111,7 +111,7 @@ export const ra = {
     unlockGlyphAlchemy: {
       id: 8,
       reward: `Unlock Glyph Alchemy, which adds alchemical resources you can increase by Refining Glyphs. You unlock
-        more resources through Effarig levels. Access through a new Reality tab.`,
+        more resources through Effarig levels. Access through a new Reality tab`,
       pet: "effarig",
       level: 2,
       displayIcon: `<span class="fas fa-vial"></span>`
@@ -186,7 +186,7 @@ export const ra = {
     autoPulseTime: {
       id: 17,
       reward: () => `Black Hole charging now only uses ${formatPercents(0.99)} of your game speed and you can
-        automatically discharge ${formatPercents(0.01)} of your stored game time every ${formatInt(5)} ticks.`,
+        automatically discharge ${formatPercents(0.01)} of your stored game time every ${formatInt(5)} ticks`,
       pet: "enslaved",
       level: 10,
       displayIcon: `<span class="fas fa-expand-arrows-alt"></span>`,
@@ -240,7 +240,7 @@ export const ra = {
     },
     vXP: {
       id: 23,
-      reward: "All Memory Chunks produce more Memories based on total Celestial levels.",
+      reward: "All Memory Chunks produce more Memories based on total Celestial levels",
       effect: () => 1 + Ra.totalPetLevel / 50,
       pet: "v",
       level: 5,

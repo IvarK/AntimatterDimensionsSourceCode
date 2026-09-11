@@ -109,6 +109,10 @@ window.GAME_EVENT = {
   // event, not handled by the event hub
   ACHIEVEMENT_EVENT_OTHER: "ACHIEVEMENT_EVENT_OTHER",
 
+  // Used to forcefully update the sidebar. This occurs when the player reaches a new sidebar currency
+  // that has yet to be unlocked. If we don't do this, weird stuff goes on.
+  SIDEBAR_CURRENCY_NEW_UNLOCKED: "SIDEBAR_CURRENCY_NEW_UNLOCKED",
+
   ENTER_PRESSED: "ENTER_PRESSED",
   ARROW_KEY_PRESSED: "ARROW_KEY_PRESSED",
 

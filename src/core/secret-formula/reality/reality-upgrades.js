@@ -105,7 +105,8 @@ export const realityUpgrades = [
     checkRequirement: () => !player.reality.gainedAutoAchievements,
     checkEvent: GAME_EVENT.ETERNITY_RESET_BEFORE,
     canLock: true,
-    // We don't have lockEvent because the modal can never show up for this upgrade
+    // This lock event can only be seen if you are attempting to get ACHNR with the lock on, so we can state ACHNR here
+    lockEvent: "gain an automatic achievement (through ACHNR)",
     description: "Tachyon Particle gain is boosted based on Achievement multiplier",
     effect: () => Math.sqrt(Achievements.power),
     formatEffect: value => formatX(value, 2, 2)
@@ -151,6 +152,7 @@ export const realityUpgrades = [
     name: "The Boundless Flow",
     id: 11,
     cost: 50,
+    prefixedNumber: true,
     requirement: () => `${format(Currency.infinitiesBanked.value, 2)}/${format(DC.E12)} Banked Infinities`,
     checkRequirement: () => Currency.infinitiesBanked.exponent >= 12,
     checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
@@ -195,6 +197,7 @@ export const realityUpgrades = [
     name: "The Eternal Flow",
     id: 14,
     cost: 50,
+    prefixedNumber: true,
     requirement: () => `${format(Currency.eternities.value, 2)}/${format(1e7)} Eternities`,
     checkRequirement: () => Currency.eternities.gte(1e7),
     checkEvent: [GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_FIRST_UNLOCKED],
@@ -282,7 +285,7 @@ export const realityUpgrades = [
       (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g.type !== "companion"))})`,
     hasFailed: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") < 30,
     checkRequirement: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") >= 30,
-    checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
     description: "You can sacrifice Glyphs for permanent bonuses (Shift + click)",
     formatCost: value => format(value, 1, 0)
   },
@@ -290,6 +293,7 @@ export const realityUpgrades = [
     name: "Parity of Singularity",
     id: 20,
     cost: 1500,
+    prefixedNumber: true,
     requirement: () => `${formatInt(100)} days total play time after unlocking the Black Hole
       (Currently: ${Time.timeSinceBlackHole.toStringShort(false)})`,
     hasFailed: () => !BlackHole(1).isUnlocked && Currency.realityMachines.lt(100),
@@ -304,6 +308,7 @@ export const realityUpgrades = [
     name: "Cosmic Conglomerate",
     id: 21,
     cost: 100000,
+    prefixedNumber: true,
     requirement: () => `${formatInt(Replicanti.galaxies.total + player.galaxies +
       player.dilation.totalTachyonGalaxies)}/${formatInt(2800)} total Galaxies from all types`,
     checkRequirement: () =>
@@ -316,6 +321,7 @@ export const realityUpgrades = [
     name: "Temporal Transcendence",
     id: 22,
     cost: 100000,
+    prefixedNumber: true,
     requirement: () => `${format(Currency.timeShards.value, 1)}/${format(DC.E28000)} Time Shards`,
     checkRequirement: () => Currency.timeShards.exponent >= 28000,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -346,7 +352,7 @@ export const realityUpgrades = [
     checkRequirement: () => MachineHandler.gainedRealityMachines.gte(5000) &&
       Glyphs.activeWithoutCompanion.length === 0,
     canLock: true,
-    lockEvent: "equip a non-Companion Glyph",
+    lockEvent: () => `equip a non-Companion Glyph or Reality below ${formatInt(5000)} RM`,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Gain another Glyph slot",
     effect: () => 1

@@ -123,9 +123,9 @@ export default {
 }
 
 .tickspeed-btn {
-  position: relative;
   width: 30rem;
   height: 2.5rem;
+  position: relative;
   padding: 0.25rem;
 }
 
@@ -147,9 +147,9 @@ export default {
 }
 
 .tickspeed-max-btn {
-  margin-left: 0.5rem;
   width: 10rem;
   height: 2.5rem;
+  margin-left: 0.5rem;
   padding: 0.25rem;
 }
 
@@ -158,14 +158,14 @@ export default {
 }
 
 .o-continuum {
-  border-color: var(--color-laitela--accent);
   color: var(--color-laitela--accent);
   background: var(--color-laitela--base);
+  border-color: var(--color-laitela--accent);
 }
 
 .o-continuum:hover {
-  border-color: var(--color-laitela--accent);
   color: var(--color-laitela--base);
   background: var(--color-laitela--accent);
+  border-color: var(--color-laitela--accent);
 }
 </style>

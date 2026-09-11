@@ -13,7 +13,6 @@ export class ECTimeStudyState extends TimeStudyState {
 
   purchase(auto) {
     if (GameEnd.creditsEverClosed) return false;
-    EternityChallenge(this.id).hasUnlocked = true;
     const clickTime = Date.now();
 
     if (this.isBought && player.challenge.eternity.current === 0 && !auto) {
@@ -30,6 +29,7 @@ export class ECTimeStudyState extends TimeStudyState {
       // If you haven't bought it and can buy it, reset the time of click, and
       // send you into the EC, deduct your resources, and move you to the EC tab if that isn't disabled
       ui.lastClickTime = 0;
+      EternityChallenge(this.id).hasUnlocked = true;
 
       player.challenge.eternity.unlocked = this.id;
       if (!auto) {

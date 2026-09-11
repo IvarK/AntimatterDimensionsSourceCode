@@ -82,21 +82,21 @@ export default {
   left: 50vw;
   justify-content: space-between;
   align-items: center;
+  background-color: black;
   border-radius: var(--var-border-radius, 1rem);
   transform: translate(-50%, -50%);
-  background-color: black;
 }
 
 .c-modal-celestial-quote {
-  position: absolute;
+  display: flex;
   width: 100%;
   height: 100%;
+  position: absolute;
   left: 0;
-  display: flex;
   justify-content: center;
   align-items: center;
-  user-select: none;
   border-radius: var(--var-border-radius, 1rem);
+  user-select: none;
 }
 
 .c-modal-celestial-quote__symbol {

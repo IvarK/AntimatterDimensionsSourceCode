@@ -33,6 +33,7 @@ export default {
       return GalaxyGeneratorUpgrades.all;
     },
     galaxyText() {
+      if (Theme.current().name === "S9") return "";
       let text = format(Math.max(this.galaxies, 0), 2);
       if (this.galaxies < 0) text += ` [${format(this.galaxies, 2)}]`;
       return text;
@@ -52,7 +53,7 @@ export default {
       if (this.isCollapsed || !this.isUnlocked) return;
       this.galaxies = player.galaxies + GalaxyGenerator.galaxies;
       this.generatedGalaxies = GalaxyGenerator.generatedGalaxies;
-      this.galaxiesPerSecond = GalaxyGenerator.gainPerSecond;
+      this.galaxiesPerSecond = (Theme.current().name === "S9") ? "" : GalaxyGenerator.gainPerSecond;
       this.cap = GalaxyGenerator.generationCap;
       this.capRift = GalaxyGenerator.capRift;
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
@@ -156,10 +157,10 @@ export default {
 
 <style scoped>
 .c-collapse-icon-clickable {
+  width: 3rem;
   position: absolute;
   top: 50%;
   left: 1.5rem;
-  width: 3rem;
   align-content: center;
   transform: translateY(-50%);
   cursor: pointer;

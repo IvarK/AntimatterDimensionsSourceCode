@@ -58,6 +58,14 @@ class PerkState extends SetPurchasableMechanicState {
     GameCache.buyablePerks.invalidate();
     EventHub.dispatch(GAME_EVENT.PERK_BOUGHT);
   }
+
+  purchase() {
+    if (this.label === "ACHNR" && RealityUpgrade(8).isLockingMechanics) {
+      RealityUpgrade(8).tryShowWarningModal();
+      return;
+    }
+    super.purchase();
+  }
 }
 
 export const Perk = mapGameDataToObject(

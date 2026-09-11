@@ -169,7 +169,7 @@ export default {
       return `${format(run[2], 2)} ${this.points}`;
     },
     prestigeCountGain(run) {
-      return quantify(this.singular, run[3]);
+      return quantify(this.singular, run[3], 2, 1);
     },
     prestigeCurrencyRate(run) {
       if (this.hasIM && this.layer.name === "Reality") return "N/A";
@@ -292,11 +292,11 @@ export default {
 
 .c-empty-row {
   display: block;
-  border: 0.05rem solid #999999;
+  width: 100.2%;
   color: var(--color-text);
-  width: 100%;
+  border: 0.05rem solid #999999;
+  margin: -0.05rem;
   padding: 0.2rem 0;
-  margin: -0.1rem;
 }
 
 .l-no-records {

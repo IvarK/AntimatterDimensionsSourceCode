@@ -161,7 +161,7 @@ export default {
 }
 
 .c-modal-away-progress__realities,
-.c-modal-away-progress__achievement-count,
+.c-modal-away-progress__achievement-amount,
 .c-modal-away-progress__reality-machines,
 .c-modal-away-progress__imaginary-machines {
   color: var(--color-reality);

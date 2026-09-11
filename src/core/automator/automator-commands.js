@@ -9,10 +9,14 @@ const idSplitter = /id[ \t]+(\d)/ui;
 
 function prestigeNotify(flag) {
   if (!AutomatorBackend.isOn) return;
-  const state = AutomatorBackend.stack.top.commandState;
-  if (state && state.prestigeLevel !== undefined) {
-    state.prestigeLevel = Math.max(state.prestigeLevel, flag);
-  }
+
+  // Any frame in the stack may be waiting for a prestige event, so update all of them.
+  AutomatorBackend.stack.forEach(frame => {
+    const state = frame.commandState;
+    if (state && state.prestigeLevel !== undefined) {
+      state.prestigeLevel = Math.max(state.prestigeLevel, flag);
+    }
+  });
 }
 
 EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_AFTER, () => prestigeNotify(T.Infinity.$prestigeLevel));
@@ -459,15 +463,15 @@ export const AutomatorCommands = [
       const prestigeToken = ctx.PrestigeEvent[0].tokenType;
       return () => {
         const available = prestigeToken.$prestigeAvailable();
+        const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
         if (!available) {
           if (!nowait) return AUTOMATOR_COMMAND_STATUS.NEXT_TICK_SAME_INSTRUCTION;
-          AutomatorData.logCommandEvent(`${ctx.PrestigeEvent.image} attempted, but skipped due to NOWAIT`,
+          AutomatorData.logCommandEvent(`${prestigeName} attempted, but skipped due to NOWAIT`,
             ctx.startLine);
           return AUTOMATOR_COMMAND_STATUS.NEXT_INSTRUCTION;
         }
         if (respec) prestigeToken.$respec();
         prestigeToken.$prestige();
-        const prestigeName = ctx.PrestigeEvent[0].image.toUpperCase();
         AutomatorData.logCommandEvent(`${prestigeName} triggered (${findLastPrestigeRecord(prestigeName)})`,
           ctx.startLine);
         // In the prestigeToken.$prestige() line above, performing a reality reset has code internal to the call

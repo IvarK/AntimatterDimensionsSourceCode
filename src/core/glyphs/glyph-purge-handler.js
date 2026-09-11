@@ -21,6 +21,7 @@ export const GlyphSacrificeHandler = {
   handleSpecialGlyphTypes(glyph) {
     switch (glyph.type) {
       case "companion":
+        ui.chosenCompanionIDx = glyph.idx;
         Modal.deleteCompanion.show();
         return true;
       case "cursed":

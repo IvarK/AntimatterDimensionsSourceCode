@@ -28,11 +28,12 @@ export default {
   data() {
     return {
       isVisible: false,
-      effectValue: 0,
+      effectValue: -Number.MAX_VALUE,
       // Number.MAX_VALUE doesn't really matter here, but we need it because
       // undefined values are not allowed for data properties
       cap: Number.MAX_VALUE,
-      hasCap: false
+      hasCap: false,
+      effect: ""
     };
   },
   computed: {
@@ -46,7 +47,10 @@ export default {
       return `${this.reachedCap && !this.ignoreCapped ? "Capped" : this.label}: `;
     },
     effectDisplay() {
-      return this.formatEffect(this.reachedCap ? this.cap : this.effectValue);
+      if (this.effectValue || this.reachedCap)
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.effect = this.formatEffect(this.reachedCap ? this.cap : this.effectValue);
+      return this.effect;
     }
   },
   watch: {
@@ -60,6 +64,7 @@ export default {
         this.isVisible = effect !== undefined && formatEffect !== undefined;
         if (!this.isVisible) return;
         this.formatEffect = formatEffect;
+        this.effectValue = undefined;
 
         if (isNumber(effect)) {
           this.effectValue = effect;

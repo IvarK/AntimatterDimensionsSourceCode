@@ -158,10 +158,10 @@ export default {
 .c-run-page-nav {
   display: flex;
   flex-direction: row;
+  width: 60rem;
   justify-content: space-between;
   align-items: center;
   font-size: 1.3rem;
-  width: 60rem;
 }
 
 .c-previous-runs {
@@ -174,9 +174,9 @@ export default {
 .c-single-run {
   display: flex;
   flex-direction: row;
-  padding: 0.5rem;
-  border: 0.1rem solid;
   width: 100rem;
+  border: 0.1rem solid;
+  padding: 0.5rem;
 }
 
 .o-selected-btn {
@@ -186,17 +186,17 @@ export default {
 .c-legend {
   display: flex;
   flex-direction: row;
+  width: 95rem;
   justify-content: space-around;
   align-items: center;
-  width: 95rem;
 }
 
 .c-legend-cell {
   display: flex;
   flex-direction: row;
+  width: 30rem;
   justify-content: flex-start;
   align-items: center;
-  width: 30rem;
   font-size: 1.5rem;
 }
 
@@ -204,9 +204,9 @@ export default {
   display: grid;
   width: 2rem;
   height: 2rem;
-  margin: 0.3rem;
   border: var(--var-border-width, 0.2rem) solid var(--color-text);
   border-radius: var(--var-border-radius, 0.5rem);
+  margin: 0.3rem;
 }
 
 .l-milestone-none {

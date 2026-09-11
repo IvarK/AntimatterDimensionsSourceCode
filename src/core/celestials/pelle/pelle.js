@@ -85,6 +85,10 @@ export const Pelle = {
     player.reality.automator.state.repeat = false;
     player.reality.automator.state.forceRestart = false;
     if (BlackHoles.arePaused) BlackHoles.togglePause();
+    if ((player.sidebarCurrencyUnlocks >> 8) % 2 === 0) {
+      player.sidebarCurrencyUnlocks += 256;
+      EventHub.dispatch(GAME_EVENT.SIDEBAR_CURRENCY_NEW_UNLOCKED);
+    }
     player.celestials.pelle.doomed = true;
     Pelle.armageddon(false);
     respecTimeStudies(true);
@@ -191,7 +195,7 @@ export const Pelle = {
   },
 
   get uselessTimeStudies() {
-    return [32, 33, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 192, 213];
+    return [32, 33, 41, 51, 61, 62, 121, 122, 123, 141, 142, 143, 213];
   },
 
   get disabledRUPGs() {
@@ -200,7 +204,7 @@ export const Pelle = {
 
   get uselessPerks() {
     return [10, 12, 13, 14, 15, 16, 17, 30, 40, 41, 42, 43, 44, 45, 46, 51, 52,
-      53, 60, 61, 62, 80, 81, 82, 83, 100, 103, 104, 105, 106, 201, 202, 203, 204];
+      53, 60, 61, 62, 80, 81, 82, 83, 100, 103, 104, 105, 106, 107, 201, 202, 203, 204];
   },
 
   get specialGlyphEffect() {
@@ -217,7 +221,7 @@ export const Pelle = {
         ? Currency.eternityPoints.value.plus(1).pow(0.3)
         : DC.D1,
       replication: isActive("replication")
-        ? 10 ** 53 ** (PelleRifts.vacuum.percentage)
+        ? Math.min(1e308, 10 ** 53 ** (PelleRifts.vacuum.percentage))
         : 1,
       dilation: isActive("dilation")
         ? Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1)
@@ -241,7 +245,7 @@ export const Pelle = {
         return `Eternity Point gain ${formatX(Currency.eternityPoints.value.plus(1).pow(0.3), 2)}
           (based on current EP)`;
       case "replication":
-        return `Replication speed ${formatX(10 ** 53 ** (PelleRifts.vacuum.percentage), 2)} \
+        return `Replication speed ${formatX(Math.min(1e308, 10 ** 53 ** (PelleRifts.vacuum.percentage)), 2)} \
         (based on ${wordShift.wordCycle(PelleRifts.vacuum.name)})`;
       case "dilation":
         return `Dilated Time gain ${formatX(Decimal.pow(player.dilation.totalTachyonGalaxies, 1.5).max(1), 2)}

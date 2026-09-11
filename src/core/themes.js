@@ -16,7 +16,7 @@ export const Theme = function Theme(name, config) {
   this.isSecret = config.isSecret;
 
   this.isDefault = function() {
-    return name === "Normal";
+    return name === "Normal" || name === "S9";
   };
 
   this.isAvailable = function() {
@@ -27,7 +27,7 @@ export const Theme = function Theme(name, config) {
 
   this.displayName = function() {
     if (!this.isSecret || !this.isAvailable()) return name;
-    // Secret themes are stored as "S9Whatever", so we need to strip the SN part
+    // Secret themes are stored as "S9Whatever", so we need to strip the S9 part
     return player.secretUnlocks.themes.find(theme => theme.match(/^S[0-9]*/u)[0] === name).replace(/^S[0-9]*/u, "");
   };
 
@@ -133,6 +133,8 @@ Theme.create = function(name, settings) {
   return new Theme(name, config);
 };
 
+/* eslint-disable no-inline-comments */
+/* eslint-disable line-comment-position */
 export const Themes = {
   all: [
     /* eslint-disable no-multi-spaces */
@@ -145,18 +147,18 @@ export const Themes = {
     Theme.create("Inverted Metro",  {              metro: true,                               }),
     Theme.create("AMOLED",          { dark: true,                                             }),
     Theme.create("AMOLED Metro",    { dark: true,  metro: true,                               }),
-    Theme.create("S1",              {                           animated: true, secret: true, }),
-    Theme.create("S2",              {                                           secret: true, }),
-    Theme.create("S3",              {                                           secret: true, }),
-    Theme.create("S4",              {                                           secret: true, }),
-    Theme.create("S5",              {                                           secret: true, }),
-    Theme.create("S6",              { dark: true,               animated: true, secret: true, }),
-    Theme.create("S7",              {              metro: true,                 secret: true, }),
-    Theme.create("S8",              {              metro: true,                 secret: true, }),
-    Theme.create("S9",              {                                           secret: true, }),
-    Theme.create("S10",             { dark: true,  metro: true, animated: true, secret: true, }),
-    Theme.create("S11",             { dark: true,               animated: true, secret: true, }),
-    Theme.create("S12",             {                                           secret: true, }),
+    Theme.create("S1",              {                           animated: true, secret: true, }), // Christmas
+    Theme.create("S2",              {                                           secret: true, }), // Finnish
+    Theme.create("S3",              {                                           secret: true, }), // Confused
+    Theme.create("S4",              {                                           secret: true, }), // Design
+    Theme.create("S5",              {                                           secret: true, }), // Nicolas
+    Theme.create("S6",              { dark: true,               animated: true, secret: true, }), // Galactic
+    Theme.create("S7",              {              metro: true,                 secret: true, }), // Work
+    Theme.create("S8",              {              metro: true,                 secret: true, }), // Bliss
+    Theme.create("S9",              {                                           secret: true, }), // Blind
+    Theme.create("S10",             { dark: true,  metro: true, animated: true, secret: true, }), // Stellar
+    Theme.create("S11",             { dark: true,               animated: true, secret: true, }), // Blob
+    Theme.create("S12",             {                                           secret: true, }), // Aero
     /* eslint-enable no-multi-spaces */
   ],
 

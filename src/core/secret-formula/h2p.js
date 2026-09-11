@@ -620,7 +620,7 @@ only unlocking autobuyers, they give you boosts to your various forms of product
 Normal Challenges, the rightmost column of Infinity Upgrades are disabled within Infinity Challenges.
 <br>
 <br>
-Unlike the Normal Challenges, which are all unlocked at once, Infinity Challenges require you to reach a certain
+Unlike the Normal Challenges, which are all unlocked based on Infinities, Infinity Challenges require you to reach a certain
 amount of antimatter before you can attempt them.
 <br>
 <br>

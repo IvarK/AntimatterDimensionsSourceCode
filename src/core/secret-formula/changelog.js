@@ -12,6 +12,9 @@ export const changelog = [
     date: [2026, 8, 26],
     name: "The Great Bugfix",
     info: `
+PS: This date needs updating. New stuff was added, and it wasn't released on that date.
+Let whoever pushed this to live know this needs to be changed. - Hexa
+(PS for PR person: Don't change this until you are about to push. You will forget to fix it otherwise.)
 <b>List of changes/fixes:</b><br>
 <ul>
 <li>Fixed Sacrifice stating it was automated if Achievement 118/Sacrifice was disabled, under some conditions.</li>
@@ -92,9 +95,10 @@ the player gaining no eternities.</li>
 <li>Fixed the sidebar "Recent Currency" mode not updating upon unlocking a new currency</li>
 <li>Fixed deleting a companion randomly choosing a companion in your inventory (usually prioritising top and left) to delete, instead
 of deleting the glyph that the player selected to delete.</li>
-<li>Fixed overflow of text on V milestones</li>
-<li>Fixed Pelle's 1e55 Dilation upgrade not stating Capped at 1e9</li>
-<li>Fixed duplicate pips on Time glyphs with Nameless 25 due to Time Shard power + Game Time multiplier </li>
+<li>Fixed overflow of text on V milestones.</li>
+<li>Fixed Pelle's 1e55 Dilation upgrade not stating Capped at 1e9.</li>
+<li>Fixed duplicate pips on Time glyphs with Nameless 25 due to Time Shard power + Game Time multiplier.</li>
+<li>The buy10 multiplier from Power glyphs now correctly states its effect as additive not multiplicative.</li>
 <li>Fixed some spelling/punctuation, and standardized it elsewhere.</li>
 </ul>
 <br>

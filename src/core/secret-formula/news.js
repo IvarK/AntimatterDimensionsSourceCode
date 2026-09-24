@@ -1094,8 +1094,8 @@ export const news = [
   {
     id: "a198",
     text:
-      `Hey there! Just to let you know, there a speck of dust on your screen. Can you help wipe it off?
-      It bothers me when l'm not clean. Thanks a lot!`
+      `Hey there! Just to let you know, there's a speck of dust on your screen. Can you help wipe it off?
+      It bothers me when I'm not clean. Thanks a lot!`
   },
   {
     id: "a199",

@@ -596,7 +596,7 @@ export const AutomatorCommands = [
       $.CONSUME(T.Studies);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.CONSUME(T.Purchase);
-      $.SUBRULE($.studyList); 
+      $.SUBRULE($.studyList);
     },
     validate: (ctx, V) => {
       ctx.startLine = ctx.Studies[0].startLine;

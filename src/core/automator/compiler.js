@@ -294,8 +294,20 @@ class Validator extends BaseVisitor {
   }
 
   studyListEntry(ctx, studiesOut) {
+    if (ctx.Identifier) {
+      if (!this.isValidVarFormat(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES)) {
+        this.addError(ctx, `Constant ${ctx.Identifier[0].image} is not a valid Time Study constant`,
+          `Ensure that ${ctx.Identifier[0].image} is a properly-formatted Time Study string`);
+        return;
+      }
+      const varInfo = this.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES);
+      studiesOut.normal.push(...varInfo.value.normal);
+      studiesOut.ec = varInfo.value.ec;
+      studiesOut.startEC = varInfo.value.startEC;
+      return;
+    }
     if (ctx.studyRange) {
-      this.visit(ctx.studyRange, studiesOut);
+      this.visit(ctx.studyRange, studiesOut.normal);
       return;
     }
     if (ctx.NumberLiteral) {
@@ -304,27 +316,27 @@ class Validator extends BaseVisitor {
         return;
       }
       const id = this.checkTimeStudyNumber(ctx.NumberLiteral[0]);
-      if (id) studiesOut.push(id);
+      if (id) studiesOut.normal.push(id);
       return;
     }
     if (ctx.StudyPath) {
       const pathId = ctx.StudyPath[0].tokenType.$studyPath;
       const pathStudies = NormalTimeStudies.paths[pathId];
-      studiesOut.push(...pathStudies);
+      studiesOut.normal.push(...pathStudies);
     }
   }
 
   studyList(ctx) {
     if (ctx.$cached !== undefined) return ctx.$cached;
-    const studiesOut = [];
-    for (const sle of ctx.studyListEntry) this.visit(sle, studiesOut);
     const positionRange = Validator.getPositionRange(ctx);
     ctx.$cached = {
-      normal: studiesOut,
+      normal: [],
       image: this.rawText.substr(positionRange.startOffset, positionRange.endOffset - positionRange.startOffset + 1),
       ec: 0,
       startEC: false,
     };
+    for (const sle of ctx.studyListEntry) this.visit(sle, ctx.$cached);
+
     if (ctx.ECNumber) {
       if (ctx.ECNumber.isInsertedInRecovery) {
         this.addError(ctx.Pipe[0], "Missing Eternity Challenge number",

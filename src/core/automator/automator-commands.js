@@ -596,25 +596,11 @@ export const AutomatorCommands = [
       $.CONSUME(T.Studies);
       $.OPTION(() => $.CONSUME(T.Nowait));
       $.CONSUME(T.Purchase);
-      $.OR([
-        { ALT: () => $.SUBRULE($.studyList) },
-        { ALT: () => $.CONSUME1(T.Identifier) },
-      ]);
+      $.SUBRULE($.studyList); 
     },
     validate: (ctx, V) => {
       ctx.startLine = ctx.Studies[0].startLine;
-      if (ctx.Identifier) {
-        if (!V.isValidVarFormat(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES)) {
-          V.addError(ctx, `Constant ${ctx.Identifier[0].image} is not a valid Time Study constant`,
-            `Ensure that ${ctx.Identifier[0].image} is a properly-formatted Time Study string`);
-          return false;
-        }
-        const varInfo = V.lookupVar(ctx.Identifier[0], AUTOMATOR_VAR_TYPES.STUDIES);
-        ctx.$studies = varInfo.value;
-        ctx.$studies.image = ctx.Identifier[0].image;
-      } else if (ctx.studyList) {
-        ctx.$studies = V.visit(ctx.studyList);
-      }
+      ctx.$studies = V.visit(ctx.studyList);
       return true;
     },
     compile: ctx => {

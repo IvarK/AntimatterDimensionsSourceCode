@@ -102,6 +102,7 @@ class AutomatorParser extends Parser {
         { ALT: () => $.SUBRULE($.studyRange) },
         { ALT: () => $.CONSUME(T.NumberLiteral) },
         { ALT: () => $.CONSUME(T.StudyPath) },
+        { ALT: () => $.CONSUME(T.Identifier) },
       ]);
       $.OPTION(() => $.CONSUME(T.Comma));
     });
